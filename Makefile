@@ -7,7 +7,7 @@ MKOCTFILE=mkoctfile
 HAVE_GINAC=1
 endif
 
-SRC=symbols.cc ov-ex.cc ov-sym.cc ov-vpa.cc
+SRC=symbols.cc ov-ex.cc ov-sym.cc ov-vpa.cc ov-ex-mat.cc
 OBJ=$(SRC:.cc=.o)
 
 %.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) -c $<
@@ -21,7 +21,7 @@ FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
           Cos Sin Tan aCos aSin aTan Cosh Sinh Tanh aCosh\
           aSinh aTanh Exp Log subs differentiate expand\
           collect coeff lcoeff tcoeff degree ldegree quotient\
-          remainder premainder Pi
+          remainder premainder Pi ex_matrix
 OBJLINKS=$(addsuffix .oct,$(FUNCTIONS))
 
 all: symbols.oct
