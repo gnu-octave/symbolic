@@ -1,19 +1,21 @@
 /*
-Copyright (C) 2000 Benjamin Sapp
 
-This is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2, or (at your option) any
-later version.
+Copyright (C) 2002 Ben Sapp
 
-This is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-You can have receive a copy of the GNU General Public License.  Write 
-to the Free Software Foundation, 59 Temple Place - Suite 330, 
-Boston, MA  02111-1307, USA.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 */
 
 #if !defined (octave_vpa_h)
@@ -21,14 +23,7 @@ Boston, MA  02111-1307, USA.
 
 // GiNaC
 #include <ginac/ginac.h>
-
-class Octave_map;
-class octave_value_list;
-
-class tree_walker;
-
-void install_vpa_type();
-void install_vpa_ops();
+#include <octave/ov-base.h>
 
 // vpa values.
 
@@ -37,30 +32,11 @@ octave_vpa : public octave_base_value
 {
 public:
 
-  octave_vpa (void):octave_base_value()
-    {
-      scalar = GiNaC::numeric(0);
-    }
-  
-  octave_vpa (int i):octave_base_value()
-    { 
-      scalar = GiNaC::numeric(0);
-    }
-  
-  octave_vpa (const octave_vpa& s):octave_base_value()
-    { 
-      scalar = s.scalar;
-    }
-  
-  octave_vpa (const GiNaC::numeric& s):octave_base_value()
-    {
-      scalar = s;
-    }
-  
-  octave_vpa( const GiNaC::ex& x):octave_base_value()
-    {
-      scalar = GiNaC::ex_to<GiNaC::numeric>(x);
-    }
+  octave_vpa (void);  
+  octave_vpa (int i);
+  octave_vpa (const octave_vpa& s);
+  octave_vpa (const GiNaC::numeric& s);
+  octave_vpa( const GiNaC::ex& x);
 
   ~octave_vpa (void) { }
 

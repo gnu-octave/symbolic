@@ -1,49 +1,38 @@
 /*
-Copyright (C) 2000 Benjamin Sapp
 
-This is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2, or (at your option) any
-later version.
+Copyright (C) 2002 Ben Sapp
 
-This is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-You can have receive a copy of the GNU General Public License.  Write 
-to the Free Software Foundation, 59 Temple Place - Suite 330, 
-Boston, MA  02111-1307, USA.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 */
 
 #if !defined (octave_sym_h)
 #define octave_sym_h 1
 
 #include <ginac/ginac.h>
-#include "ov.h"
 #include "ov-base.h"
-#include "ov-ex.h"
 
-class Octave_map;
-class octave_value_list;
-class tree_walker;
-
-void install_sym_type();
-void install_sym_ops();
+class octave_ex;
 
 class 
 octave_sym : public octave_base_value
 {
 public:
   octave_sym(void){}
-
-  octave_sym(char *str)
-  {
-    x = GiNaC::symbol(str);
-  }
-
+  octave_sym(char *str);
   octave_sym(const octave_sym &xtmp):x(xtmp.x){}
-
   octave_sym(GiNaC::symbol xtmp):x(xtmp){}
 
   ~octave_sym (void) {}
@@ -52,12 +41,9 @@ public:
 
   GiNaC::symbol sym_value(void) const;
 
-  octave_value uminus (void){ return (new octave_ex(-x));}
+  octave_value uminus (void); 
 
-  void print(ostream& os,bool pr_as_read_syntax) const
-  {
-    os << x;
-  }
+  void print(ostream& os,bool pr_as_read_syntax) const;
 
   int rows (void) const { return 1; }
   int columns (void) const { return 1; }

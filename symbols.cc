@@ -1,43 +1,39 @@
+/*
+
+Copyright (C) 2002 Ben Sapp
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
 
 // 2001-09-18 Paul Kienzle <pkienzle@users.sf.net>
 // * use GiNaC::is_a<GiNaC::blah>(x) rather than is_ex_of_type(x, blah)
 // * use GiNaC::ex_to<GiNaC::blah>(x) rather than ex_to_blah(x)
 
 #include <octave/config.h>
-#include <cstdlib>
-
-#include <string>
-
-class ostream;
-class octave_sym;
-
-#include <octave/lo-mappers.h>
-#include <octave/lo-utils.h>
-#include <octave/mx-base.h>
-#include <octave/str-vec.h>
-
 #include <octave/defun-dld.h>
 #include <octave/error.h>
 #include <octave/gripes.h>
 #include <octave/oct-obj.h>
-#include <octave/ops.h>
-#include <octave/ov-base.h>
-#include <octave/ov-typeinfo.h>
-#include <octave/ov.h>
-#include <octave/ov-scalar.h>
-#include <octave/pager.h>
-#include <octave/pr-output.h>
-#include <octave/symtab.h>
-#include <octave/variables.h>
-#include <iostream>
-#include <fstream>
-
 #include <ginac/ginac.h>
-
 #include "ov-vpa.h"
 #include "ov-ex.h"
 #include "ov-sym.h"
-#include "ov-ex-mat.h" 
+#include "ov-ex-mat.h"
+#include "ov-relational.h"
+#include "sym-ops.h"
 #include "symbols.h"
 
 bool get_expression(const octave_value arg, GiNaC::ex& expression)
@@ -119,128 +115,16 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
 DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
 {
   octave_value retval;
-  install_ex_matrix_type();
-  install_ex_type();
-  install_sym_type();
-  install_vpa_type();
+  octave_vpa::register_type ();
+  octave_sym::register_type ();
+  octave_ex::register_type (); 
+  octave_ex_matrix::register_type ();
+  octave_relational::register_type (); 
+
   install_ex_matrix_ops();
   install_ex_ops();
   install_sym_ops();
   install_vpa_ops();
-  return retval;
-}
-
-DEFUN_DLD (vpa, args, ,
-"-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {n =} vpa(@var{s})\n\
-\n\
-Creates a variable precision arithmetic variable from @var{s}.\n\
-@var{s} can be a scalar, vpa value, string or a ex value that \n\
-is a number.\n\
-@end deftypefn\n\
-")
-{
-  octave_value retval;
-  GiNaC::numeric d;
-  int nargin = args.length();
-  
-  try 
-    {
-      if (nargin == 1)
-	{
-	  if (!get_numeric (args(0), d))
-	    {
-	      gripe_wrong_type_arg ("vpa", args(0));
-	      return retval;
-	    } 
-	}
-      else
-	{
-	  print_usage("vpa");
-	  return retval;
-	}
-
-      retval = octave_value(new octave_vpa(d));
-    }
-  catch (exception &e)
-    { 
-      error(e.what());
-      retval = octave_value (); 
-    } 
-    
-  return retval;
-}
-
-DEFUN_DLD (ex_matrix, args, ,
-"-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {n =} ex_matrix(@var{rows}, @var{cols}, ... )\n\
-\n\
-Creates a variable precision arithmetic variable from @var{s}.\n\
-@var{s} can be a scalar, vpa value, string or a ex value that \n\
-is a number.\n\
-@end deftypefn\n\
-")
-{
-  octave_value retval;
-  GiNaC::ex expression;
-  int nargin = args.length();
-  int rows, cols,k; 
-
-  if (nargin < 2)
-    {
-      print_usage("ex_matrix");
-      return retval; 
-    }
-
-  if(args(0).is_real_scalar())
-    {
-      rows = int(args(0).double_value());
-    }
-  else
-    {
-      error("You must supply a scalar for the first argument.");
-      return retval;
-    }
-
-  if(args(1).is_real_scalar())
-    {
-      cols = int(args(1).double_value());
-    }
-  else
-    {
-      error("You must supply a scalar for the first argument.");
-      return retval;
-    }
-
-  try 
-    {
-      GiNaC::matrix a = GiNaC::matrix(rows,cols);
-      k = 2;
-      for (int i = 0; i < rows; i++)
-      {
-	for (int j = 0; j < cols; j++, k++)
-	  {
-	    if (k < nargin)
-	      {
-		if (!get_expression(args(k),expression))
-		  {
-		    error("unable to turn an argument into a symbolic expression");
-		    return retval;
-		  }
-		a(i,j) = expression;
-	      }
-	    else
-	      break;
-	  }
-      }
-      retval = octave_value(new octave_ex_matrix(a));
-    }
-  catch (exception &e)
-    {
-      error(e.what());
-      retval = octave_value (); 
-    } 
-    
   return retval;
 }
 
@@ -345,109 +229,6 @@ Pi evaluated to the current value of Digits\n\
   return retval;
 }
 
-DEFUN_DLD(is_vpa, args, ,
-"Return true if an object is of type vpa, false otherwise.\n")
-{
-  bool retval;
-  retval = (args(0).type_id() == octave_vpa::static_type_id());
-  return octave_value(retval);
-}
-
-DEFUN_DLD (sym,args, , 
-"-*- texinfo -*-\n\
-Create an object of type symbol\n")
-{
-  octave_value retval;
-  int nargin = args.length ();
-
-  if (nargin != 1)
-    {
-      error("one argument expected\n");
-      return octave_value ();
-    }
-  try 
-    {
-      GiNaC::symbol xtmp(args(0).string_value());
-      octave_sym x(xtmp);
-      retval = octave_value(new octave_sym(x));
-    }
-  catch (exception &e)
-    {
-      error(e.what());
-      retval = octave_value ();
-    }
-
-  return retval;
-}
-
-DEFUN_DLD(is_sym,args, ,"Return true if an object is of type sym false otherwise.\n")
-{
-  bool retval;
-  retval = (args(0).type_id() == octave_sym::static_type_id());
-  return octave_value(retval);
-}
-
-DEFUN_DLD(differentiate,args,,
-"-*- texinfo -*-\n\
-@deftypefn Loadable Function {da_dx =} differentiate(@var{a},@var{x} [, @var{n}])\n\
-\n\
-Return the @var{n}th derivative of @var{a} with respect to @var{x}. If @var{n} is not\n\
-supplied then a default value of 1 is used.\n\
-@end deftypefn")
-{
-  GiNaC::ex expression;
-  GiNaC::symbol variable;
-  GiNaC::numeric num;
-  int order;
-  octave_value retval;
-  int nargin = args.length();
-
-  if ((nargin < 2) || (nargin > 3))
-    {
-      print_usage ("differentiate");
-      return retval;
-    }
-  try 
-    { 
-      if (!get_expression (args(0), expression))
-	{
-	  print_usage ("differentiate");
-	  return retval;
-	}
-      
-      if (!get_symbol (args(1), variable))
-	{
-	  print_usage ("differentiate");
-	  return retval;
-	}
-      
-      if (nargin == 3)
-	{
-	  if (!get_numeric (args(2), num))
-	    {
-	      print_usage ("differentiate");
-	      return retval;
-	    }
-	  order = int(num.to_double ());
-	  if (order < 0)
-	    {
-	      error("must supply an integer greater than zero\n");
-	      return retval;
-	    }
-	}
-      else
-	order = 1;
-
-      retval = octave_value(new octave_ex(expression.diff(variable,order)));
-    }
-  catch(exception &e)
-    {
-      error(e.what ());
-      retval = octave_value ();
-    }
-
-  return retval;
-}
 
 DEFUN_DLD_EX_GINAC_FUNCTION(Cos,cos,"cosine");
 DEFUN_DLD_EX_GINAC_FUNCTION(Sin,sin,"sine");
@@ -473,19 +254,6 @@ DEFUN_DLD_EX_SYM_GINAC_FUNCTION(lcoeff, lcoeff, "leading coefficient");
 DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(quotient,quo,"quotient");
 DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(remainder,rem,"remainder");
 DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(premainder,prem,"pseudo-remainder");
-
-DEFUN_DLD(is_ex,args,,
-"-*- texinfo -*-\n\
-@deftypefn Loadable Function {bool =} is_ex(@var{a})\n\
-\n\
-Return true if an object is of type ex.\n\
-@seealso{is_sym, is_vpa}\n\
-@end deftypefn")
-{
-  bool retval;
-  retval = (args(0).type_id() == octave_ex::static_type_id());
-  return octave_value(retval);
-}
 
 DEFUN_DLD(subs,args,,
 "-*- texinfo -*-\n\
@@ -727,7 +495,7 @@ DEFUN_DLD(Gcd,args,,
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {b =} collect(@var{a},@var{x})\n\
 \n\
-collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
+Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 @table @var\n\
 @item a\n\
  The expresion in which the collection will occur.\n\
