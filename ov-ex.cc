@@ -18,24 +18,72 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
+// 2003-05-1 Willem Atsma <watsma@users.sf.net>
+// * Modified the constructors and the destructor and added a symbol list
+//   and symbol reference count. New members are:
+//        void assign_symbol_to_list(GiNaC::symbol &sym);
+//        class symbol_list_item;
+//        static std::vector<symbol_list_item> symbol_list;
+//   This is a work-around for the fact that GiNaC can have different symbols
+//   with the same string name, while in octave you want a symbol that
+//   appears the same to actually be the same. It works great as long as
+//   symbols are declared in octave. It is still possible to have same-name
+//   symbols that are different to GiNaC, if a symbol goes out of scope in
+//   octave without it being defined in octave's workspace. This could be fixed
+//   by also keeping reference counts for symbols in expressions.
+
+
 #include <octave/config.h>
 #include <ginac/ginac.h>
 #include "ov-ex.h"
 #include "ov-vpa.h"
 
+std::vector<octave_ex::symbol_list_item> octave_ex::symbol_list;
+
+// A list of symbols is maintained to ensure all symbols that look the
+// same in octave are in fact the same to GiNaC. The destructor removes
+// items if the reference count goes to zero.
+void octave_ex::assign_symbol_to_list(GiNaC::symbol &sym)
+{
+	unsigned int i;
+	std::string name = sym.get_name();
+	// check if new symbol already exists
+	for(i=0;i<symbol_list.size();i++) {
+		if(symbol_list[i].sym.get_name() == name) {
+			symbol_list[i].refcount++;
+			sym = symbol_list[i].sym;
+			return;
+		}
+	}
+	// add new symbol to list
+	symbol_list_item new_item(sym,1);
+	symbol_list.push_back(new_item);
+}
+
 octave_ex::octave_ex(octave_ex &ox)
 {
-  x = ox.x;
+  if(GiNaC::is_a<GiNaC::symbol>(ox.x)) {
+  	GiNaC::symbol sym = GiNaC::ex_to<GiNaC::symbol>(ox.x);
+	assign_symbol_to_list(sym);
+	x = sym;
+  } else
+    x = ox.x;
 }
 
 octave_ex::octave_ex(GiNaC::ex expression)
 {
-  x = expression;
+  if(GiNaC::is_a<GiNaC::symbol>(expression)) {
+  	GiNaC::symbol sym = GiNaC::ex_to<GiNaC::symbol>(expression);
+	assign_symbol_to_list(sym);
+	x = sym;
+  } else
+    x = expression;
 }
 
 octave_ex::octave_ex(GiNaC::symbol sym)
 {
-  x = sym;
+	assign_symbol_to_list(sym);
+	x = sym;
 }
 
 octave_ex::octave_ex(octave_complex &cmplx)
@@ -58,6 +106,22 @@ octave_ex::octave_ex(octave_scalar &s)
 octave_ex::octave_ex(double d)
 {
   x = d;
+}
+
+// If this is a symbol, remove list entry if it exists.
+octave_ex::~octave_ex()
+{
+	if((GiNaC::is_a<GiNaC::symbol>(x)) && (!symbol_list.empty())) {
+		GiNaC::symbol sym = GiNaC::ex_to<GiNaC::symbol>(x);
+		std::vector<symbol_list_item>::iterator iter_symlist;
+		for(iter_symlist=symbol_list.begin();iter_symlist<symbol_list.end();iter_symlist++) {
+			if(sym == iter_symlist->sym) {
+				iter_symlist->refcount --;
+				if(iter_symlist->refcount==0)
+					symbol_list.erase(iter_symlist);
+			}
+		}
+	}
 }
 
 void 

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if !defined (octave_ex_h)
 #define octave_ex_h 1
 
+#include <vector>
 #include <ginac/ginac.h>
 #include <octave/ov-complex.h>
 #include <octave/ov-scalar.h>
@@ -44,7 +45,7 @@ public:
   octave_ex(octave_scalar &s);
   octave_ex(double d);
 
-  ~octave_ex() {}
+  ~octave_ex();
   
   octave_ex& operator=(const octave_ex&);
 
@@ -78,6 +79,18 @@ public:
   
 private:
   GiNaC::ex x;
+  
+  void assign_symbol_to_list(GiNaC::symbol &sym);
+
+  class symbol_list_item {
+  public:
+  	symbol_list_item() {}
+	symbol_list_item(GiNaC::symbol s, int c) {sym=s; refcount=c;}
+  	GiNaC::symbol sym;
+	int refcount;
+  };
+  
+  static std::vector<symbol_list_item> symbol_list;
 
   DECLARE_OCTAVE_ALLOCATOR
 
