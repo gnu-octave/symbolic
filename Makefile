@@ -12,7 +12,7 @@ endif
 #	ov-ex.cc ov-sym.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
 #	op-ex-mat.cc op-ex.cc op-sym.cc op-vpa.cc 
 SRC=symbols.cc probably_prime.cc differentiate.cc \
-	findsymbols.cc numden.cc syminfo.cc symlsolve.cc sumterms.cc\
+	findsymbols.cc numden.cc syminfo.cc symlsolve.cc\
 	sym-bool.cc sym-create.cc \
 	ov-ex.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
 	op-ex-mat.cc op-ex.cc op-vpa.cc 
