@@ -39,19 +39,19 @@ public:
 
   octave_relational (const GiNaC::ex & lhs, 
 		   const GiNaC::ex & rhs, 
-		   GiNaC::relational::operators op=GiNaC::relational::equal);
+		   GiNaC::relational::operators op);
 
   octave_relational (const octave_ex & lhs, 
 		   const octave_ex & rhs, 
-		   GiNaC::relational::operators op=GiNaC::relational::equal);
+		   GiNaC::relational::operators op);
 
   octave_relational (const octave_ex & lhs, 
 		   const GiNaC::ex & rhs, 
-		   GiNaC::relational::operators op=GiNaC::relational::equal);
+		   GiNaC::relational::operators op);
 
   octave_relational (const GiNaC::ex & lhs, 
 		   const octave_ex & rhs, 
-		   GiNaC::relational::operators op=GiNaC::relational::equal);
+		   GiNaC::relational::operators op);
 
   ~octave_relational (void) { }
 
