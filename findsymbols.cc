@@ -48,7 +48,7 @@ static void append_symbols(octave_value_list& symlist,const GiNaC::ex& expressio
 				/* have to convert back to compare: */
 				get_symbol(symlist(j),ex_sym);
 				sym = GiNaC::ex_to<GiNaC::symbol>(ex_sym);
-				if(sym==sym_new) {
+				if(GiNaC::operator == (sym,sym_new)) {
 					unique = false;
 					break;
 				} else {

@@ -115,7 +115,7 @@ octave_ex::~octave_ex()
 		GiNaC::symbol sym = GiNaC::ex_to<GiNaC::symbol>(x);
 		std::vector<symbol_list_item>::iterator iter_symlist;
 		for(iter_symlist=symbol_list.begin();iter_symlist<symbol_list.end();iter_symlist++) {
-			if(sym == iter_symlist->sym) {
+		  if(GiNaC::operator == (sym, iter_symlist->sym)) {
 				iter_symlist->refcount --;
 				if(iter_symlist->refcount==0)
 					symbol_list.erase(iter_symlist);
