@@ -157,9 +157,9 @@ Convert a vpa, string, ex or string type to a double.\n\
       
       retval = octave_value(num.to_double ());
     }
-  catch (exception &e)
+  catch (std::exception &e)
     { 
-      error(e.what());
+      error (e.what ());
       retval = octave_value (); 
     } 
 
@@ -200,9 +200,9 @@ Change the precision for the vpa type\n\
       retval = octave_value(dig);
 
     }
-  catch (exception &e)
+  catch (std::exception &e)
     { 
-      error(e.what());
+      error (e.what ());
       retval = octave_value (); 
     } 
 
@@ -220,9 +220,9 @@ Pi evaluated to the current value of Digits\n\
     {
       retval = octave_value(new octave_vpa(GiNaC::ex_to<GiNaC::numeric>(GiNaC::Pi.evalf())));
     }
-  catch(exception &e)
+  catch (std::exception &e)
     {
-      error(e.what());
+      error (e.what ());
       retval = octave_value (); 
     }
 
@@ -308,9 +308,9 @@ Substitute a number for a variables in an expression\n\
       tmp = expression.subs(the_sym == ex_sub);
       retval = octave_value (new octave_ex(tmp));
     }
-  catch (exception e)
+  catch (std::exception &e)
     {
-      e.what ();
+      error (e.what ());
       retval = octave_value ();
     }
 
@@ -357,9 +357,9 @@ Expand an expression\n\
       result = expression.expand();
       retval = octave_value(new octave_ex(result));
     }
-  catch (exception &e)
+  catch (std::exception &e)
     {
-      error(e.what ());
+      error (e.what ());
       retval = octave_value ();
     }
   
@@ -423,9 +423,9 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.
 
       retval = octave_value (new octave_ex (expression.coeff(sym,n)));
     }
-  catch(exception &e)
+  catch (std::exception &e)
     {
-      error(e.what ());
+      error (e.what ());
       retval = octave_value ();
     } 
 
@@ -482,9 +482,9 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
       retval = new octave_ex(expression.collect(the_sym));
 
     }
-  catch(exception &e)
+  catch (std::exception &e)
     {
-      error(e.what()); 
+      error (e.what ()); 
       retval = octave_value (); 
     }
 

@@ -31,9 +31,9 @@ with error 1 in 2^100.\n\
         }
       retval(0) = GiNaC::is_prime(value);
    }
-  catch (exception e)
+  catch (std::exception &e)
     {
-      e.what ();
+      error (e.what ());
       return retval;
     }
   return retval;

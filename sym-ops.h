@@ -47,9 +47,9 @@ void install_ex_matrix_ops(void);
         return octave_value \
           (new octave_ex_matrix (r1.op (r2))); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -70,9 +70,9 @@ void install_ex_matrix_ops(void);
         return octave_value \
           (new octave_ex_matrix (r2.transpose ().inverse ().mul (r1).transpose ())); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -94,9 +94,9 @@ void install_ex_matrix_ops(void);
       return octave_value \
           (new octave_ex_matrix (result)); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -118,9 +118,9 @@ void install_ex_matrix_ops(void);
         return octave_value \
           (new octave_ex_matrix (result)); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -142,9 +142,9 @@ void install_ex_matrix_ops(void);
       return octave_value \
           (new octave_ex_matrix (result)); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -161,9 +161,9 @@ void install_ex_matrix_ops(void);
         return octave_value \
           (new octave_ex (result)); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }
@@ -180,9 +180,9 @@ void install_ex_matrix_ops(void);
         return octave_value \
           (new octave_ex (result)); \
       } \
-    catch (exception &e) \
+    catch (std::exception &e) \
       { \
-        error(e.what()); \
+        error (e.what ()); \
         return octave_value (); \
       } \
   }

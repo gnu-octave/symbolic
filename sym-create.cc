@@ -60,9 +60,9 @@ is a number.\n\
 
       retval = octave_value(new octave_vpa(d));
     }
-  catch (exception &e)
+  catch (std::exception &e)
     { 
-      error(e.what());
+      error (e.what ());
       retval = octave_value (); 
     } 
     
@@ -87,9 +87,9 @@ Create an object of type symbol\n")
       octave_sym x(xtmp);
       retval = octave_value(new octave_sym(x));
     }
-  catch (exception &e)
+  catch (std::exception &e)
     {
-      error(e.what());
+      error (e.what ());
       retval = octave_value ();
     }
 
@@ -162,9 +162,9 @@ is a number.\n\
       }
       retval = octave_value(new octave_ex_matrix(a));
     }
-  catch (exception &e)
+  catch (std::exception &e)
     {
-      error(e.what());
+      error (e.what ());
       retval = octave_value (); 
     } 
     

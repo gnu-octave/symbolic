@@ -32,9 +32,9 @@ Return the " description " of a symbolic expression.\n\
       r = new octave_ex(GiNaC::ginac_name (expression)); \
       retval = octave_value (r); \
     } \
-  catch (exception &e) \
+  catch (std::exception &e) \
     { \
-      e.what (); \
+      error (e.what ()); \
       retval = octave_value (); \
     } \
  \
@@ -78,10 +78,10 @@ Return the " description " of a symbolic expression.\n\
       r = new octave_ex(expression.ginac_name(sym)); \
  \
     } \
-  catch(exception &e) \
+  catch (std::exception &e) \
     { \
       octave_value_list empty; \
-      error(e.what()); \
+      error (e.what ()); \
       return empty; \
     } \
  \
@@ -135,10 +135,10 @@ Return the " description " of a symbolic expression.\n\
       r = new octave_ex(ginac_name (expression0, expression1, sym)); \
  \
     } \
-  catch(exception &e) \
+  catch (std::exception &e) \
     { \
       octave_value_list empty; \
-      error(e.what()); \
+      error (e.what ()); \
       return empty; \
     }\
  \

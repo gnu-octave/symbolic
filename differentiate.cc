@@ -79,9 +79,9 @@ supplied then a default value of 1 is used.\n\
 
       retval = octave_value(new octave_ex(expression.diff(variable,order)));
     }
-  catch(exception &e)
+  catch (std::exception &e)
     {
-      error(e.what ());
+      error (e.what ());
       retval = octave_value ();
     }
 
