@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "ov-ex.h"
 #include "ov-sym.h"
 
-class ostream;
+// class ostream;
 
 octave_sym::octave_sym(char *str)
 {
@@ -42,7 +42,7 @@ octave_sym::uminus (void)
 } 
   
 void 
-octave_sym::print(ostream& os,bool pr_as_read_syntax) const
+octave_sym::print(std::ostream& os,bool pr_as_read_syntax) const
 {
   os << x;
 }

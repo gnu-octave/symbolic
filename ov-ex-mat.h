@@ -72,7 +72,7 @@ public:
    
   octave_value uminus (void) const { return new octave_ex_matrix(-x); } 
 
-  void print(ostream& os,bool pr_as_read_syntax) const;
+  void print(std::ostream& os,bool pr_as_read_syntax) const;
   
 private:
   GiNaC::matrix x;

@@ -50,7 +50,7 @@ octave_relational::octave_relational (const GiNaC::ex & lhs,
 }
 
 void
-octave_relational::print (ostream& os, bool pr_as_read_syntax) const
+octave_relational::print (std::ostream& os, bool pr_as_read_syntax) const
 {
   GiNaC::print_context pr(os);
  

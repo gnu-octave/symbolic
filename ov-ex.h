@@ -76,7 +76,7 @@ public:
 
   void decrement (void) { x = x-1;}
   
-  void print(ostream& os,bool pr_as_read_syntax) const;
+  void print(std::ostream& os,bool pr_as_read_syntax) const;
   
 private:
   GiNaC::ex x;

@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/config.h>
 #include "ov-vpa.h"
 
-class ostream;
+// class ostream;
 
 octave_vpa::octave_vpa(void):octave_base_value()
 {
@@ -49,7 +49,7 @@ octave_vpa::octave_vpa( const GiNaC::ex& x):octave_base_value()
 }
 
 void
-octave_vpa::print (ostream& os, bool pr_as_read_syntax) const
+octave_vpa::print (std::ostream& os, bool pr_as_read_syntax) const
 {
   os << scalar;
 }

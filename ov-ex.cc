@@ -67,7 +67,7 @@ octave_ex::octave_ex(double d)
 }
 
 void 
-octave_ex::print(ostream& os,bool pr_as_read_syntax) const
+octave_ex::print(std::ostream& os,bool pr_as_read_syntax) const
 {
   os << x;
 }

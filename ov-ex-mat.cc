@@ -91,7 +91,7 @@ octave_ex_matrix::octave_ex_matrix(octave_complex_matrix ov)
 
 
 void 
-octave_ex_matrix::print(ostream& os,bool pr_as_read_syntax) const
+octave_ex_matrix::print(std::ostream& os,bool pr_as_read_syntax) const
 {
   os << x;
 }

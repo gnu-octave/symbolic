@@ -43,7 +43,7 @@ public:
 
   octave_value uminus (void); 
 
-  void print(ostream& os,bool pr_as_read_syntax) const;
+  void print(std::ostream& os,bool pr_as_read_syntax) const;
 
   int rows (void) const { return 1; }
   int columns (void) const { return 1; }

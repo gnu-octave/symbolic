@@ -71,7 +71,7 @@ public:
 
   GiNaC::relational relational_value (bool = false) const { return rel; }
 
-  void print (ostream& os, bool pr_as_read_syntax = false) const;
+  void print (std::ostream& os, bool pr_as_read_syntax = false) const;
 
 private:
   
