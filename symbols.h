@@ -1,4 +1,3 @@
-
 bool get_expression(const octave_value arg, GiNaC::ex& expression);
 bool get_symbol(const octave_value arg, GiNaC::symbol& sym);
 bool get_numeric(const octave_value arg, GiNaC::numeric& number);
@@ -31,15 +30,15 @@ Return the " description " of a symbolic expression.\n\
         } \
  \
       r = new octave_ex(GiNaC::ginac_name (expression)); \
- \
+      retval = octave_value (r); \
     } \
-  catch (exception e) \
+  catch (exception &e) \
     { \
       e.what (); \
-      return octave_value (); \
+      retval = octave_value (); \
     } \
  \
-  return octave_value(r); \
+  return retval; \
 }
 
 #define DEFINE_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
@@ -62,19 +61,29 @@ Return the " description " of a symbolic expression.\n\
       return retval; \
     } \
  \
-  if(!get_expression(args(0), expression)) \
+  try \
     { \
-      print_usage(# oct_name); \
-      return retval; \
-    } \
+      if(!get_expression(args(0), expression)) \
+        { \
+          print_usage(# oct_name); \
+          return retval; \
+        } \
  \
-  if (!get_symbol(args(1), sym)) \
+      if (!get_symbol(args(1), sym)) \
+        { \
+          print_usage(# oct_name); \
+          return retval; \
+        } \
+ \
+      r = new octave_ex(expression.ginac_name(sym)); \
+ \
+    } \
+  catch(exception &e) \
     { \
-      print_usage(# oct_name); \
-      return retval; \
+      octave_value_list empty; \
+      error(e.what()); \
+      return empty; \
     } \
- \
-  r = new octave_ex(expression.ginac_name(sym)); \
  \
   return octave_value(r); \
 }
@@ -100,28 +109,38 @@ Return the " description " of a symbolic expression.\n\
       return retval; \
     } \
  \
-  if(!get_expression(args(0), expression0)) \
+  try \
     { \
-      gripe_wrong_type_arg(# oct_name, args(0)); \
-      print_usage(# oct_name); \
-      return retval; \
-    } \
+      if(!get_expression(args(0), expression0)) \
+        { \
+          gripe_wrong_type_arg(# oct_name, args(0)); \
+          print_usage(# oct_name); \
+          return retval; \
+        } \
  \
-  if(!get_expression(args(1), expression1)) \
+      if(!get_expression(args(1), expression1)) \
+        { \
+          gripe_wrong_type_arg(# oct_name, args(1)); \
+          print_usage(# oct_name); \
+          return retval; \
+        } \
+ \
+      if (!get_symbol(args(2), sym)) \
+        { \
+          gripe_wrong_type_arg(# oct_name, args(2)); \
+          print_usage(# oct_name); \
+          return retval; \
+        } \
+ \
+      r = new octave_ex(ginac_name (expression0, expression1, sym)); \
+ \
+    } \
+  catch(exception &e) \
     { \
-      gripe_wrong_type_arg(# oct_name, args(1)); \
-      print_usage(# oct_name); \
-      return retval; \
-    } \
- \
-  if (!get_symbol(args(2), sym)) \
-    { \
-      gripe_wrong_type_arg(# oct_name, args(2)); \
-      print_usage(# oct_name); \
-      return retval; \
-    } \
- \
-  r = new octave_ex(ginac_name (expression0, expression1, sym)); \
+      octave_value_list empty; \
+      error(e.what()); \
+      return empty; \
+    }\
  \
   return octave_value(r); \
 }

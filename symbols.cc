@@ -42,7 +42,7 @@ class octave_sym;
 bool get_expression(const octave_value arg, GiNaC::ex& expression)
 {
   const octave_value& rep = (arg).get_rep();
-  
+
   if (arg.type_id () == octave_vpa::static_type_id ())
     {
       GiNaC::numeric x = ((octave_vpa& ) rep).vpa_value();
@@ -141,22 +141,30 @@ is a number.\n\
   GiNaC::numeric d;
   int nargin = args.length();
   
-  if (nargin == 1)
+  try 
     {
-      if (!get_numeric (args(0), d))
+      if (nargin == 1)
 	{
-	  gripe_wrong_type_arg ("vpa", args(0));
+	  if (!get_numeric (args(0), d))
+	    {
+	      gripe_wrong_type_arg ("vpa", args(0));
+	      return retval;
+	    } 
+	}
+      else
+	{
+	  print_usage("vpa");
 	  return retval;
-	} 
-    }
-  else
-    {
-      print_usage("vpa");
-      return retval;
-    }
+	}
 
-  retval = octave_value(new octave_vpa(d));
-
+      retval = octave_value(new octave_vpa(d));
+    }
+  catch (exception &e)
+    { 
+      error(e.what());
+      retval = octave_value (); 
+    } 
+    
   return retval;
 }
 
@@ -179,13 +187,21 @@ Convert a vpa, string, ex or string type to a double.\n\
       return retval;
     }
 
-  if (!get_numeric (args(0), num))
+  try 
     {
-      print_usage("to_double");
-      return retval;
+      if (!get_numeric (args(0), num))
+	{
+	  print_usage("to_double");
+	  return retval;
+	}
+      
+      retval = octave_value(num.to_double ());
     }
-
-  retval = octave_value(num.to_double ());
+  catch (exception &e)
+    { 
+      error(e.what());
+      retval = octave_value (); 
+    } 
 
   return retval;
 }
@@ -205,21 +221,31 @@ Change the precision for the vpa type
       error("you must supply 0 or 1 arguments\n");
       return(retval);
     }
-  
-  if(nargin == 1)
-    {
-      if(args(0).is_real_scalar())
-	{
-	  GiNaC::Digits = int(args(0).double_value());
-	}
-      else
-	{
-	  print_usage("digits");
-	}
-    }
 
-  double dig = double(GiNaC::Digits);
-  retval = octave_value(dig);
+  try 
+    {     
+      if(nargin == 1)
+	{
+	  if(args(0).is_real_scalar())
+	    {
+	      GiNaC::Digits = int(args(0).double_value());
+	    }
+	  else
+	    {
+	      print_usage("digits");
+	    }
+	}
+
+      double dig = double(GiNaC::Digits);
+      retval = octave_value(dig);
+
+    }
+  catch (exception &e)
+    { 
+      error(e.what());
+      retval = octave_value (); 
+    } 
+
   return(retval);
 }
 
@@ -229,7 +255,18 @@ Pi evaluated to the current value of Digits\n\
 \n\
 @seealso{digits}")
 {
-  return octave_value(new octave_vpa(GiNaC::ex_to<GiNaC::numeric>(GiNaC::Pi.evalf())));
+  octave_value retval; 
+  try 
+    {
+      retval = octave_value(new octave_vpa(GiNaC::ex_to<GiNaC::numeric>(GiNaC::Pi.evalf())));
+    }
+  catch(exception &e)
+    {
+      error(e.what());
+      retval = octave_value (); 
+    }
+
+  return retval;
 }
 
 DEFUN_DLD(is_vpa, args, ,
@@ -244,6 +281,7 @@ DEFUN_DLD (sym,args, ,
 "-*- texinfo -*-\n\
 Create an object of type symbol\n")
 {
+  octave_value retval;
   int nargin = args.length ();
 
   if (nargin != 1)
@@ -251,10 +289,19 @@ Create an object of type symbol\n")
       error("one argument expected\n");
       return octave_value ();
     }
+  try 
+    {
+      GiNaC::symbol xtmp(args(0).string_value());
+      octave_sym x(xtmp);
+      retval = octave_value(new octave_sym(x));
+    }
+  catch (exception &e)
+    {
+      error(e.what());
+      retval = octave_value ();
+    }
 
-  GiNaC::symbol xtmp(args(0).string_value());
-  octave_sym x(xtmp);
-  return octave_value(new octave_sym(x));
+  return retval;
 }
 
 DEFUN_DLD(is_sym,args, ,"Return true if an object is of type sym false otherwise.\n")
@@ -284,37 +331,46 @@ supplied then a default value of 1 is used.\n\
       print_usage ("differentiate");
       return retval;
     }
- 
-  if (!get_expression (args(0), expression))
-    {
-      print_usage ("differentiate");
-      return retval;
-    }
-
-  if (!get_symbol (args(1), variable))
-    {
-      print_usage ("differentiate");
-      return retval;
-    }
-
-  if (nargin == 3)
-    {
-      if (!get_numeric (args(2), num))
+  try 
+    { 
+      if (!get_expression (args(0), expression))
 	{
 	  print_usage ("differentiate");
 	  return retval;
 	}
-      order = int(num.to_double ());
-      if (order < 0)
+      
+      if (!get_symbol (args(1), variable))
 	{
-	  error("must supply an integer greater than zero\n");
+	  print_usage ("differentiate");
 	  return retval;
 	}
-    }
-  else
-    order = 1;
+      
+      if (nargin == 3)
+	{
+	  if (!get_numeric (args(2), num))
+	    {
+	      print_usage ("differentiate");
+	      return retval;
+	    }
+	  order = int(num.to_double ());
+	  if (order < 0)
+	    {
+	      error("must supply an integer greater than zero\n");
+	      return retval;
+	    }
+	}
+      else
+	order = 1;
 
-  return octave_value(new octave_ex(expression.diff(variable,order)));
+      retval = octave_value(new octave_ex(expression.diff(variable,order)));
+    }
+  catch(exception &e)
+    {
+      error(e.what ());
+      retval = octave_value ();
+    }
+
+  return retval;
 }
 
 DEFINE_EX_GINAC_FUNCTION(Cos,cos,"cosine");
@@ -410,7 +466,7 @@ Substitute a number for a variables in an expression\n\
   catch (exception e)
     {
       e.what ();
-      return octave_value ();
+      retval = octave_value ();
     }
 
   return retval;
@@ -439,19 +495,32 @@ Expand an expression\n\
       print_usage("expand");
       return retval;
     }
-  if(args(0).type_id() == octave_ex::static_type_id())
-    {
-      const octave_value& rep1 = args(0).get_rep();
-      expression = ((const octave_ex& ) rep1).ex_value();
-    }
-  else
-    {
-      gripe_wrong_type_arg("expand",args(0));
-    }
 
-  result = expression.expand();
-  return octave_value(new octave_ex(result));
+  try 
+    {
+
+      if(args(0).type_id() == octave_ex::static_type_id())
+	{
+	  const octave_value& rep1 = args(0).get_rep();
+	  expression = ((const octave_ex& ) rep1).ex_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("expand",args(0));
+	}
+      
+      result = expression.expand();
+      retval = octave_value(new octave_ex(result));
+    }
+  catch (exception &e)
+    {
+      error(e.what ());
+      retval = octave_value ();
+    }
+  
+  return retval;
 }
+
 
 DEFUN_DLD(coeff,args,,
 "-*- texinfo -*-
@@ -473,44 +542,111 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.
       return retval;
     }
 
-  if(args(0).type_id() == octave_ex::static_type_id())
+  try 
     {
-      const octave_value& rep0 = args(0).get_rep();
-      expression = ((const octave_ex& ) rep0).ex_value();
-    }
-  else
-    {
-      gripe_wrong_type_arg("coeff",args(0));
-      return retval;
-    }
+      if(args(0).type_id() == octave_ex::static_type_id())
+	{
+	  const octave_value& rep0 = args(0).get_rep();
+	  expression = ((const octave_ex& ) rep0).ex_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("coeff",args(0));
+	  return retval;
+	}
 
-  if(args(1).type_id() == octave_sym::static_type_id())
-    {
-      const octave_value& rep1 = args(1).get_rep();
-      sym = ((const octave_sym& ) rep1).sym_value();
-    }
-  else
-    {
-      gripe_wrong_type_arg("coeff",args(1));
-      return retval;
-    }
+      if(args(1).type_id() == octave_sym::static_type_id())
+	{
+	  const octave_value& rep1 = args(1).get_rep();
+	  sym = ((const octave_sym& ) rep1).sym_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("coeff",args(1));
+	  return retval;
+	}
 
-  if(args(2).is_real_scalar())
-    {
-      n = (int )args(2).double_value();
-    }
-  else
-    {
-      gripe_wrong_type_arg("coeff",args(2));
-      return retval;
-    }
+      if(args(2).is_real_scalar())
+	{
+	  n = (int )args(2).double_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("coeff",args(2));
+	  return retval;
+	}
 
-  retval = octave_value (new octave_ex (expression.coeff(sym,n)));
+      retval = octave_value (new octave_ex (expression.coeff(sym,n)));
+    }
+  catch(exception &e)
+    {
+      error(e.what ());
+      retval = octave_value ();
+    } 
 
   return retval;
 }
 
 DEFUN_DLD(collect,args,,
+"-*- texinfo -*-\n\
+@deftypefn Loadable Function {b =} collect(@var{a},@var{x})\n\
+\n\
+collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
+@table @var\n\
+@item a\n\
+ The expresion in which the collection will occur.\n\
+@item x\n\
+ The variable that will be collected.\n\
+@end table\n\
+\n\
+@end deftypefn\n\
+")
+{
+  octave_value retval;
+  GiNaC::ex expression;
+  GiNaC::symbol the_sym;
+
+  if(args.length() != 2)
+    {
+      print_usage("collect");
+      return retval;
+    }
+
+  try 
+    {
+      if(args(0).type_id() == octave_ex::static_type_id())
+	{
+	  const octave_value& rep1 = args(0).get_rep();
+	  expression = ((const octave_ex& ) rep1).ex_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("collect",args(0));
+	}
+      
+      if(args(1).type_id() == octave_sym::static_type_id())
+	{
+	  const octave_value& rep2 = args(1).get_rep();
+	  the_sym = ((octave_sym& ) rep2).sym_value();
+	}
+      else
+	{
+	  gripe_wrong_type_arg("collect",args(1));
+	}
+
+      retval = new octave_ex(expression.collect(the_sym));
+
+    }
+  catch(exception &e)
+    {
+      error(e.what()); 
+      retval = octave_value (); 
+    }
+
+  return retval;
+}
+
+DEFUN_DLD(Gcd,args,,
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {b =} collect(@var{a},@var{x})\n\
 \n\
@@ -559,5 +695,3 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 
   return retval;
 }
-
-

@@ -56,8 +56,16 @@ class octave_sym;
 #define DEFUNOP_OP(name, t, op) \
   UNOPDECL (name, a) \
   { \
-    CAST_UNOP_ARG (const octave_ ## t&); \
-    return octave_value (new octave_ex (op v.t ## _value ())); \
+    try \
+      { \
+        CAST_UNOP_ARG (const octave_ ## t&); \
+        return octave_value (new octave_ex (op v.t ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 DEFUNOP_OP (uminus, ex, -)
@@ -72,9 +80,17 @@ DEFNCUNOP_METHOD (decr, ex, decrement)
 #define DEFBINOP_OP(name, t1, t2, op) \
   BINOPDECL (name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 #ifdef DEFBINOP_POW
@@ -84,9 +100,17 @@ DEFNCUNOP_METHOD (decr, ex, decrement)
 #define DEFBINOP_POW(name, t1, t2) \
   BINOPDECL(name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 // Addition operations

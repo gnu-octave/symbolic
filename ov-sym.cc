@@ -52,8 +52,16 @@ class ostream;
 #define DEFUNOP_OP(name, t, op) \
   UNOPDECL (name, a) \
   { \
-    CAST_UNOP_ARG (const octave_ ## t&); \
-    return octave_value (new octave_ex (op v.t ## _value ())); \
+    try \
+      { \
+        CAST_UNOP_ARG (const octave_ ## t&); \
+        return octave_value (new octave_ex (op v.t ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 DEFUNOP_OP (uminus, sym, -)
@@ -66,9 +74,17 @@ DEFUNOP_OP (uminus, sym, -)
 #define DEFBINOP_OP(name, t1, t2, op) \
   BINOPDECL (name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 #ifdef DEFBINOP_POW
@@ -78,9 +94,17 @@ DEFUNOP_OP (uminus, sym, -)
 #define DEFBINOP_POW(name, t1, t2) \
   BINOPDECL(name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 // Addition operations
@@ -126,9 +150,9 @@ GiNaC::symbol octave_sym::sym_value() const
 
 void 
 install_sym_type()
-{ 
+{
   octave_sym::register_type();
-  
+
   cerr << "installing sym type at type-id = " 
        << octave_sym::static_type_id() << "\n";
 }

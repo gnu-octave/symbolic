@@ -61,9 +61,19 @@ octave_vpa::print (ostream& os, bool pr_as_read_syntax) const
 #define DEFUNOP_OP(name, t, op) \
   UNOPDECL (name, a) \
   { \
-    CAST_UNOP_ARG (const octave_ ## t&); \
-    return octave_value (new octave_vpa (op v.t ## _value ())); \
-  }
+    try \
+      { \
+        CAST_UNOP_ARG (const octave_ ## t&); \
+        return octave_value (new octave_vpa (op v.t ## _value ())); \
+      } \
+    catch(exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
+  }  
+
+  
 
 // DEFUNOP_OP (not, vpa, !)
 DEFUNOP_OP (uminus, vpa, -)
@@ -80,25 +90,49 @@ DEFNCUNOP_METHOD (decr, vpa, decrement)
 #define DEFBINOP_OP(name, t1, t2, op) \
   BINOPDECL (name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_vpa (v1.t1 ## _value () op v2.t2 ## _value ())); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_vpa (v1.t1 ## _value () op v2.t2 ## _value ())); \
+      } \
+    catch(exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 #define DEFBINOP_OP_NUM(name, t1, t2, op) \
   BINOPDECL (name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_vpa (v1.t1 ## _value () op v2.t2 ## _value ())); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_vpa (v1.t1 ## _value () op v2.t2 ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 #define DEFBINOP_OP_EX(name, t1, t2, op) \
   BINOPDECL (name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (v1.t1 ## _value () op v2.t2 ## _value ())); \
+      } \
+    catch (exception &e) \
+      { \
+        error(e.what()); \
+        return octave_value (); \
+      } \
   }
 
 
@@ -109,9 +143,18 @@ DEFNCUNOP_METHOD (decr, vpa, decrement)
 #define DEFBINOP_POW(name, t1, t2) \
   BINOPDECL(name, a1, a2) \
   { \
-    CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-    return octave_value \
-      (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+        return octave_value \
+          (new octave_ex (pow(v1.t1 ## _value (), v2.t2 ## _value ()))); \
+      } \
+    catch (exception &e) \
+      { \
+        octave_value_list empty; \
+        error(e.what()); \
+        return empty; \
+      } \
   }
 
 // relational ops.
