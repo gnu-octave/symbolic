@@ -30,6 +30,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/gripes.h>
 #include <octave/oct-obj.h>
 #include <octave/pager.h>
+
+#ifdef NEED_OCTAVE_QUIT
+#define OCTAVE_QUIT do {} while (0)
+#else
+#include <octave/quit.h>
+#endif
+
 #include <ginac/ginac.h>
 #include "ov-vpa.h"
 #include "ov-ex.h"
@@ -324,6 +331,7 @@ w = subs (f,@{x,y@},@{1,vpa(1/3)@})\n\
 			}
 			tmp = expression;
 			for(i=0;i<symlist.length();i++) {
+				OCTAVE_QUIT;
 				if (!get_symbol (symlist(i),the_sym)) {
 					gripe_wrong_type_arg("subs",symlist(i));
 					return retval;

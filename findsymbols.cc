@@ -18,6 +18,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <octave/oct.h>
 
+#ifdef NEED_OCTAVE_QUIT
+#define OCTAVE_QUIT do {} while (0)
+#else
+#include <octave/quit.h>
+#endif
+
 #include <ginac/ginac.h>
 #include "ov-vpa.h"
 #include "ov-ex.h"
@@ -38,6 +44,7 @@ static void append_symbols(octave_value_list& symlist,const GiNaC::ex& expressio
 			GiNaC::symbol sym, sym_new = GiNaC::ex_to<GiNaC::symbol>(expression.op(i));
 			std::string sym_name,sym_name_new = sym_new.get_name();
 			for(j=0;j<symlist.length();j++) {
+				OCTAVE_QUIT;
 				/* have to convert back to compare: */
 				get_symbol(symlist(j),ex_sym);
 				sym = GiNaC::ex_to<GiNaC::symbol>(ex_sym);
