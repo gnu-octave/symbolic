@@ -1,8 +1,8 @@
 
 sinclude ../../Makeconf
 
-ifndef MKOCTFILE
-	# assumptions to make if not using ./configure script
+# assumptions to make if not using ./configure script
+ifndef OCTAVE_FORGE
 	MKOCTFILE=mkoctfile
 	HAVE_GINAC=1
 endif
@@ -30,14 +30,13 @@ endif
 
 all: $(PROGS)
 
-symbols.oct: Makefile $(OBJ)
-	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LD_FLAGS) ; \
+$(PROGS): Makefile
 
-$(SYMBOLS_LINKS): Makefile
+symbols.oct: $(OBJ)
+	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LD_FLAGS)
+
+$(SYMBOLS_LINKS):
 	-$(RM) $@
 	$(LN_S) symbols.oct $@
 
-clean:
-	$(RM) *.o *.oct core octave-core *~
-
-
+clean: ; $(RM) *.o core octave-core *.oct *~

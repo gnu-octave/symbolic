@@ -1,1 +1,4 @@
+# Define HAVE_GINAC=1 if GINAC is available.  Other packages might 
+# need to define search paths for headers and libraries here, but GiNaC
+# defines the script ginac-config to report these.
 @DEFHAVE_GINAC@

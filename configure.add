@@ -1,22 +1,40 @@
 
 if test -e main/symbolic/NOINSTALL ; then
-	dnl Not installing so don't test for it.
-	DEFHAVE_GINAC=
-	STATUS=noinstall
-else
-	AC_SUBST(DEFHAVE_GINAC)
 
+	dnl Not installing so don't test for GiNaC.
+	STATUS=noinstall
+
+else
+
+	dnl Checking if the ginac-config program exists.  See the autoconf
+	dnl manual for an extensive list of checks available.  The results
+	dnl of the check are held in have_ginac.
 	AC_DEFINE(have_ginac)
 	AC_CHECK_PROG(have_ginac, ginac-config, yes, no)
 
 	if test $have_ginac = no ; then
-	    DEFHAVE_GINAC=
+
+	    dnl ginac-config doesn't exist: instruct the user how to install
 	    STATUS="GiNaC not found --- see main/symbolic/INSTALL"
+
 	else
-	    DEFHAVE_GINAC="HAVE_GINAC=1"
+
+	    dnl ginac-config exists: cheer
 	    STATUS=yes
+
+	    dnl Let Makeconf.add know that ginac-config exists.	We don't
+	    dnl need to report the library location since ginac-config
+	    dnl does that.  AC_SUBST says replace @VAR@ in the substituted
+	    dnl file with the value of VAR.
+	    AC_SUBST(DEFHAVE_GINAC)
+	    DEFHAVE_GINAC="HAVE_GINAC=1"
+
 	fi
 fi
+
+dnl Append the status message to the global status message.  This will
+dnl be displayed at the end of configuration so that the user doesn't
+dnl have to scan the list for critical details.
 
 STATUS_MSG="$STATUS_MSG
    symbolic toolbox: $STATUS"
