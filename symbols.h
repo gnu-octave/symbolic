@@ -2,7 +2,7 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression);
 bool get_symbol(const octave_value arg, GiNaC::symbol& sym);
 bool get_numeric(const octave_value arg, GiNaC::numeric& number);
 
-#define DEFINE_EX_GINAC_FUNCTION(oct_name,ginac_name,description) \
+#define DEFUN_DLD_EX_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {r =}" # oct_name "(@var{x})\n\
@@ -41,7 +41,7 @@ Return the " description " of a symbolic expression.\n\
   return retval; \
 }
 
-#define DEFINE_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
+#define DEFUN_DLD_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {r =}" # oct_name "(@var{a}, @var{x})\n\
@@ -88,7 +88,7 @@ Return the " description " of a symbolic expression.\n\
   return octave_value(r); \
 }
 
-#define DEFINE_EX_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
+#define DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {r =}" # oct_name "(@var{a}, @var{x})\n\

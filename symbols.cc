@@ -285,7 +285,7 @@ Convert a vpa, string, ex or string type to a double.\n\
 DEFUN_DLD(digits, args, , 
 "-*- texinfo -*-\n\
 @deftypefn {Loadable Function} {@var{dgts} =} digits([@var{num}])\n\
-Change the precision for the vpa type
+Change the precision for the vpa type\n\
 @end deftypefn\n\
 ")
 {
@@ -449,37 +449,38 @@ supplied then a default value of 1 is used.\n\
   return retval;
 }
 
-DEFINE_EX_GINAC_FUNCTION(Cos,cos,"cosine");
-DEFINE_EX_GINAC_FUNCTION(Sin,sin,"sine");
-DEFINE_EX_GINAC_FUNCTION(Tan,tan,"tangent");
-DEFINE_EX_GINAC_FUNCTION(aCos,acos,"inverse cosine");
-DEFINE_EX_GINAC_FUNCTION(aSin,asin,"inverse sine");
-DEFINE_EX_GINAC_FUNCTION(aTan,atan,"inverse tangent");
-DEFINE_EX_GINAC_FUNCTION(Cosh,cosh,"hyperbolic cosine");
-DEFINE_EX_GINAC_FUNCTION(Sinh,sinh,"hyperbolic sine");
-DEFINE_EX_GINAC_FUNCTION(Tanh,tanh,"hyperbolic tangent");
-DEFINE_EX_GINAC_FUNCTION(aCosh,acosh,"inverse hyperbolic cosine");
-DEFINE_EX_GINAC_FUNCTION(aSinh,asinh,"inverse hyperbolic sine");
-DEFINE_EX_GINAC_FUNCTION(aTanh,atanh,"inverse hyperbolic tangent");
-DEFINE_EX_GINAC_FUNCTION(Exp,exp,"exponential");
-DEFINE_EX_GINAC_FUNCTION(Log,log,"logarithm");
-DEFINE_EX_GINAC_FUNCTION(Abs,abs,"absolute value");
+DEFUN_DLD_EX_GINAC_FUNCTION(Cos,cos,"cosine");
+DEFUN_DLD_EX_GINAC_FUNCTION(Sin,sin,"sine");
+DEFUN_DLD_EX_GINAC_FUNCTION(Tan,tan,"tangent");
+DEFUN_DLD_EX_GINAC_FUNCTION(aCos,acos,"inverse cosine");
+DEFUN_DLD_EX_GINAC_FUNCTION(aSin,asin,"inverse sine");
+DEFUN_DLD_EX_GINAC_FUNCTION(aTan,atan,"inverse tangent");
+DEFUN_DLD_EX_GINAC_FUNCTION(Cosh,cosh,"hyperbolic cosine");
+DEFUN_DLD_EX_GINAC_FUNCTION(Sinh,sinh,"hyperbolic sine");
+DEFUN_DLD_EX_GINAC_FUNCTION(Tanh,tanh,"hyperbolic tangent");
+DEFUN_DLD_EX_GINAC_FUNCTION(aCosh,acosh,"inverse hyperbolic cosine");
+DEFUN_DLD_EX_GINAC_FUNCTION(aSinh,asinh,"inverse hyperbolic sine");
+DEFUN_DLD_EX_GINAC_FUNCTION(aTanh,atanh,"inverse hyperbolic tangent");
+DEFUN_DLD_EX_GINAC_FUNCTION(Exp,exp,"exponential");
+DEFUN_DLD_EX_GINAC_FUNCTION(Log,log,"logarithm");
+DEFUN_DLD_EX_GINAC_FUNCTION(Abs,abs,"absolute value");
 
-DEFINE_EX_SYM_GINAC_FUNCTION(degree, degree,"degree");
-DEFINE_EX_SYM_GINAC_FUNCTION(ldegree, ldegree,"low degree");
-DEFINE_EX_SYM_GINAC_FUNCTION(tcoeff, tcoeff, "trailing coeffiecient");
-DEFINE_EX_SYM_GINAC_FUNCTION(lcoeff, lcoeff, "leading coefficient");
+DEFUN_DLD_EX_SYM_GINAC_FUNCTION(degree, degree,"degree");
+DEFUN_DLD_EX_SYM_GINAC_FUNCTION(ldegree, ldegree,"low degree");
+DEFUN_DLD_EX_SYM_GINAC_FUNCTION(tcoeff, tcoeff, "trailing coeffiecient");
+DEFUN_DLD_EX_SYM_GINAC_FUNCTION(lcoeff, lcoeff, "leading coefficient");
 
-DEFINE_EX_EX_SYM_GINAC_FUNCTION(quotient,quo,"quotient");
-DEFINE_EX_EX_SYM_GINAC_FUNCTION(remainder,rem,"remainder");
-DEFINE_EX_EX_SYM_GINAC_FUNCTION(premainder,prem,"pseudo-remainder");
+DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(quotient,quo,"quotient");
+DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(remainder,rem,"remainder");
+DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(premainder,prem,"pseudo-remainder");
 
 DEFUN_DLD(is_ex,args,,
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {bool =} is_ex(@var{a})\n\
 \n\
 Return true if an object is of type ex.\n\
-@seealso{is_sym, is_vpa}")
+@seealso{is_sym, is_vpa}\n\
+@end deftypefn")
 {
   bool retval;
   retval = (args(0).type_id() == octave_ex::static_type_id());
