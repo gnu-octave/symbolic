@@ -32,7 +32,7 @@ octave_relational::octave_relational (const octave_ex & lhs,
 				  const octave_ex & rhs, 
 				  GiNaC::relational::operators op=GiNaC::relational::equal)
 {
-  rel = GiNaC::relational(lhs.ex_value (), rhs.ex_value ());
+  rel = GiNaC::relational(lhs.ex_value (), rhs.ex_value (), op);
 }
 
 octave_relational::octave_relational (const octave_ex & lhs, 
@@ -53,8 +53,8 @@ void
 octave_relational::print (std::ostream& os, bool pr_as_read_syntax) const
 {
   GiNaC::print_context pr(os);
- 
-  rel.print(pr); 
+
+  rel.print(pr);
 }
 
 

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define sym_ops_h 1
 
 #include <octave/ops.h>
+#include <octave/ov-bool.h>
 
 /* This file defines macros used in the op-X.cc files to define functions
  */
@@ -186,6 +187,31 @@ void install_ex_matrix_ops(void);
       } \
   }
 
+#define DEFBINOP_EX_EX_BOOL_OP(name, t1, t2, op) \
+  BINOPDECL (name, a1, a2) \
+  { \
+    try \
+      { \
+        CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
+	GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
+	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        if (GiNaC::is_exactly_a<GiNaC::numeric>(r1) && \
+	    GiNaC::is_exactly_a<GiNaC::numeric>(r2)) \
+          { \
+            bool tmp_bool = GiNaC::relational(r1, r2, op); \
+            return octave_value(tmp_bool); \
+	  } \
+        return octave_value \
+          (new octave_relational (r1, r2, op)); \
+      } \
+    catch (std::exception &e) \
+      { \
+        error (e.what ()); \
+        return octave_value (); \
+      } \
+  }
+
+
 #define DEFINE_MATRIX_EX_OPS(TYPE1, TYPE2) \
 DEFBINOP_MATRIX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _add, TYPE1, TYPE2, +) \
 DEFBINOP_MATRIX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _sub, TYPE1, TYPE2, -) \
@@ -215,18 +241,30 @@ INSTALL_BINOP(op_div, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ##
 // INSTALL_BINOP(op_pow, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _pow)
 
 #define DEFINE_EX_EX_OPS(TYPE1, TYPE2) \
-DEFBINOP_EX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _add, TYPE1, TYPE2, +) \
-DEFBINOP_EX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _sub, TYPE1, TYPE2, -) \
-DEFBINOP_EX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _mul, TYPE1, TYPE2, *) \
-DEFBINOP_EX_EX_OP  (TYPE1 ## _ ## TYPE2 ## _div, TYPE1, TYPE2, /) \
-DEFBINOP_EX_EX_POW (TYPE1 ## _ ## TYPE2 ## _pow, TYPE1, TYPE2)
+DEFBINOP_EX_EX_OP     (TYPE1 ## _ ## TYPE2 ## _add,              TYPE1, TYPE2, +) \
+DEFBINOP_EX_EX_OP     (TYPE1 ## _ ## TYPE2 ## _sub,              TYPE1, TYPE2, -) \
+DEFBINOP_EX_EX_OP     (TYPE1 ## _ ## TYPE2 ## _mul,              TYPE1, TYPE2, *) \
+DEFBINOP_EX_EX_OP     (TYPE1 ## _ ## TYPE2 ## _div,              TYPE1, TYPE2, /) \
+DEFBINOP_EX_EX_POW    (TYPE1 ## _ ## TYPE2 ## _pow,              TYPE1, TYPE2) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _equal,            TYPE1, TYPE2, GiNaC::relational::equal) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _not_equal,        TYPE1, TYPE2, GiNaC::relational::not_equal) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _less,             TYPE1, TYPE2, GiNaC::relational::less) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _less_or_equal,    TYPE1, TYPE2, GiNaC::relational::less_or_equal) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _greater,          TYPE1, TYPE2, GiNaC::relational::greater) \
+DEFBINOP_EX_EX_BOOL_OP(TYPE1 ## _ ## TYPE2 ## _greater_or_equal, TYPE1, TYPE2, GiNaC::relational::greater_or_equal)
 
 #define INSTALL_EX_EX_OPS(TYPE1, TYPE2) \
 INSTALL_BINOP(op_add, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _add) \
 INSTALL_BINOP(op_sub, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _sub) \
 INSTALL_BINOP(op_mul, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _mul) \
 INSTALL_BINOP(op_div, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _div) \
-INSTALL_BINOP(op_pow, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _pow)
+INSTALL_BINOP(op_pow, octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _pow) \
+INSTALL_BINOP(op_eq,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _equal) \
+INSTALL_BINOP(op_ne,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _not_equal) \
+INSTALL_BINOP(op_lt,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _less) \
+INSTALL_BINOP(op_le,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _less_or_equal) \
+INSTALL_BINOP(op_gt,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _greater) \
+INSTALL_BINOP(op_ge,  octave_ ## TYPE1, octave_ ## TYPE2, TYPE1 ## _ ## TYPE2 ## _greater_or_equal);
 
 #define DEFINE_MATRIX_MATRIX_OPS(TYPE1, TYPE2) \
 DEFBINOP_MATRIX_MATRIX_OP  (TYPE1 ## _ ## TYPE2 ## _add, TYPE1, TYPE2, add) \

@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-re-mat.h>
 #include <octave/ov-cx-mat.h>
 #include "sym-ops.h"
+#include "ov-relational.h"
 #include "ov-vpa.h"
 #include "ov-ex.h"
 #include "ov-ex-mat.h"
@@ -59,7 +60,7 @@ install_ex_ops()
   INSTALL_MATRIX_EX_OPS(matrix, ex);
   INSTALL_EX_EX_OPS(scalar, ex);
   INSTALL_EX_EX_OPS(complex, ex);
-
+ 
 #if 0
   INSTALL_UNOP(op_uminus, octave_ex, uminus);             // -x
   

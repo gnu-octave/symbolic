@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-re-mat.h>
 #include <octave/ov-cx-mat.h>
 #include "sym-ops.h"
+#include "ov-relational.h"
 #include "ov-vpa.h"
 #include "ov-ex.h"
 #include "ov-ex-mat.h"
