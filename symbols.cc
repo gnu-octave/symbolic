@@ -240,6 +240,7 @@ Pi evaluated to the current value of Digits\n\
 }
 
 
+DEFUN_DLD_EX_GINAC_FUNCTION(Sqrt,sqrt,"square root");
 DEFUN_DLD_EX_GINAC_FUNCTION(Cos,cos,"cosine");
 DEFUN_DLD_EX_GINAC_FUNCTION(Sin,sin,"sine");
 DEFUN_DLD_EX_GINAC_FUNCTION(Tan,tan,"tangent");

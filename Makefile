@@ -22,7 +22,7 @@ OBJ=$(SRC:.cc=.o)
 
 FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
           Cos Sin Tan aCos aSin aTan Cosh Sinh Tanh aCosh\
-          aSinh aTanh Exp Log subs differentiate expand\
+          aSinh aTanh Exp Log Sqrt subs differentiate expand\
           collect coeff lcoeff tcoeff degree ldegree quotient\
           remainder premainder Pi ex_matrix probably_prime\
 	  findsymbols numden syminfo symlsolve sumterms

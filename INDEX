@@ -11,7 +11,7 @@ Expression manipulation
  subs collect expand lcoeff numden findsymbols findsym
 Special Functions
  Abs Cos Cosh Exp Gcd Log Sin Sinh Tan Tanh aCos aCosh aSin aSinh
- aTan aTanh
+ aTan aTanh Sqrt
 Polynomials
  tcoeff coeff degree ldegree sym2poly poly2sym sumterms
 Calculus
