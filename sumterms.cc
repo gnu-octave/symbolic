@@ -18,6 +18,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include <octave/oct.h>
 
+#ifdef NEED_OCTAVE_QUIT
+#define OCTAVE_QUIT do {} while (0)
+#else
+#include <octave/quit.h>
+#endif
+
 #include <ginac/ginac.h>
 #include "ov-ex.h"
 #include "symbols.h" 
