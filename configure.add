@@ -1,0 +1,12 @@
+
+AC_SUBST(DEFHAVE_GINAC)
+
+AC_DEFINE(have_ginac)
+AC_CHECK_PROG(have_ginac, ginac-config, yes, no)
+
+if test $have_ginac = no ; then
+    DEFHAVE_GINAC=
+    AC_MSG_WARN([GiNaC not found; symbolic toolbox not built])
+else
+    DEFHAVE_GINAC="HAVE_GINAC=1"
+fi

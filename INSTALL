@@ -1,0 +1,29 @@
+
+Prerequisites
+-------------
+You will need GiNaC installed before you can install this package. Go to
+the GiNaC web site http://www.ginac.de and follow the download 
+instructions.  It will tell you how to get cln and also how to build 
+GiNaC once you have built cln.  
+
+You will also need a version of Octave that was compiled without the 
+-fno-rtti or -fno-exceptions.  Versions below octave-2.1.33 have these 
+options by default.  These options are typically loacated in the 
+Makeconf file in the top level directory.  After configure and before 
+compile you can remove these options if you want to use an older 
+version of octave. 
+
+Compiling
+----------  
+Make sure that the correct version of mkoctfile is in your path.  Then 
+just type gmake(or whatever you call you version of GNU Make) in the 
+top level directory.  
+
+Installing
+----------
+Just type "gmake INSTALL_PATH=/your/path install" and it will install 
+all the .oct files and .m files in /your/path.  Add /your/path to your 
+octave path.  Once you have it installed you will need to type symbols 
+at the octave command prompt each session to initialize the toolbox.  
+Then you can use all of the commands in the toolbox.  Command completion
+will not work on the commands until after yopu have used them once.  
