@@ -29,8 +29,9 @@ DEFUN_DLD(symlsolve,args,nargout,
 @deftypefn Loadable Function {@var{sols} =} symlsolve(@var{eqns},@var{vars})\n\
 \n\
 Apply the GiNaC lsolve() method to the given linear system of equations and\n\
-variables. @var{sols}, @var{eqns} and @var{vars} must be symbolic expressions\n\
-or lists of these.\n\
+variables. @var{eqns} and @var{vars} must be single symbolic expressions or\n\
+lists/cell-arrays of these. The return value @var{sols} is a list of\n\
+symbolic solutions corresponding  in order to @var{vars}.\n\
 @end deftypefn")
 {
 	GiNaC::lst eqns, vars;
@@ -46,7 +47,7 @@ or lists of these.\n\
 	}
 	
 	try {
-		if(args(0).is_list()) {
+		if(args(0).is_list() || args(0).is_cell()) {
 			octave_value_list oct_eqn_list(args(0).list_value());
 			for(i=0;i<oct_eqn_list.length();i++) {
 				if(!get_relation(oct_eqn_list(i),relation)) {
@@ -67,7 +68,7 @@ or lists of these.\n\
 			eqns.append(relation);
 		}
 
-		if(args(1).is_list()) {
+		if(args(1).is_list() || args(1).is_cell()) {
 			octave_value_list oct_vars(args(1).list_value());
 			for(i=0;i<oct_vars.length();i++) {
 				if(!get_symbol(oct_vars(i),expression)) {
@@ -84,7 +85,7 @@ or lists of these.\n\
 			vars.append(expression);
 		}
 		sols = lsolve(eqns,vars);
-		for(i=0;i<(int)sols.nops();i++) oct_sols.append(new octave_ex(sols[i]));
+		for(i=0;i<(int)sols.nops();i++) oct_sols.append(new octave_ex(sols[i].rhs()));
 		retval = oct_sols;
 	} catch (std::exception &e) {
 		error (e.what ());
