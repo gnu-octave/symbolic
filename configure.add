@@ -11,7 +11,7 @@ else
 
 	if test $have_ginac = no ; then
 	    DEFHAVE_GINAC=
-	    STATUS="GiNaC not found"
+	    STATUS="GiNaC not found --- see main/symbolic/INSTALL"
 	else
 	    DEFHAVE_GINAC="HAVE_GINAC=1"
 	    STATUS=yes
