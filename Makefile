@@ -12,6 +12,7 @@ endif
 #	ov-ex.cc ov-sym.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
 #	op-ex-mat.cc op-ex.cc op-sym.cc op-vpa.cc 
 SRC=symbols.cc probably_prime.cc differentiate.cc \
+	findsymbols.cc numden.cc syminfo.cc symlsolve.cc sumterms.cc\
 	sym-bool.cc sym-create.cc \
 	ov-ex.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
 	op-ex-mat.cc op-ex.cc op-vpa.cc 
@@ -23,7 +24,9 @@ FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
           Cos Sin Tan aCos aSin aTan Cosh Sinh Tanh aCosh\
           aSinh aTanh Exp Log subs differentiate expand\
           collect coeff lcoeff tcoeff degree ldegree quotient\
-          remainder premainder Pi ex_matrix probably_prime 
+          remainder premainder Pi ex_matrix probably_prime\
+	  findsymbols numden syminfo symlsolve sumterms
+	  
 SYMBOLS_LINKS=$(addsuffix .oct,$(FUNCTIONS))
 
 ifdef HAVE_GINAC
