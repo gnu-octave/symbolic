@@ -1,0 +1,23 @@
+symbolic >> Symbolic algebra
+Symbols
+ symbols sym
+ ex_matrix Pi
+Extended precision arithmetic
+ digits	
+ vpa to_double
+Properties
+ is_ex is_ex_matrix is_sym is_vpa
+Expression manipulation
+  subs collect expand lcoeff
+Special Functions
+ Abs Cos Cosh Exp Gcd Log Sin Sinh Tan Tanh aCos aCosh aSin aSinh
+ aTan aTanh
+Polynomials
+ tcoeff coeff degree ldegree
+Calculus
+ differentiate
+Number theory
+  probably_prime
+  quotient remainder premainder
+Plot
+  splot
