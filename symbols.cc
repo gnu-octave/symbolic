@@ -358,7 +358,7 @@ Expand an expression\n\
 
 
 DEFUN_DLD(coeff,args,,
-"-*- texinfo -*-
+"-*- texinfo -*-\n\
 @deftypefn {Loadable Function} {b =} coeff(@var{a},@var{x},@var{n})\n\
 \n\
 Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.  
