@@ -121,7 +121,7 @@ DEFBINOP_POW(sym_ex_pow,sym,ex)
 GiNaC::symbol octave_sym::sym_value() const 
 {
   // This is ugly
-  return ex_to_symbol(GiNaC::ex(*(x.duplicate ())));
+  return GiNaC::ex_to<GiNaC::symbol>(GiNaC::ex(*(x.duplicate ())));
 }
 
 void 

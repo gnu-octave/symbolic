@@ -59,7 +59,7 @@ public:
   
   octave_vpa( const GiNaC::ex& x):octave_base_value()
     {
-      scalar = GiNaC::ex_to_numeric(x);
+      scalar = GiNaC::ex_to<GiNaC::numeric>(x);
     }
 
   ~octave_vpa (void) { }

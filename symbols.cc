@@ -229,7 +229,7 @@ Pi evaluated to the current value of Digits\n\
 \n\
 @seealso{digits}")
 {
-  return octave_value(new octave_vpa(GiNaC::ex_to_numeric(GiNaC::Pi.evalf())));
+  return octave_value(new octave_vpa(GiNaC::ex_to<GiNaC::numeric>(GiNaC::Pi.evalf())));
 }
 
 DEFUN_DLD(is_vpa, args, ,
