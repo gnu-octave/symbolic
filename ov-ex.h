@@ -48,6 +48,16 @@ public:
       x = expression;
     }
   
+  octave_ex(Complex z)
+    {
+      x = z.real () + GiNaC::I*z.imag ();
+    }
+
+  octave_ex(double d)
+    {
+      x = d;
+    }
+
   ~octave_ex() {}
   
   octave_ex& operator=(const octave_ex&);
