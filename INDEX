@@ -13,7 +13,7 @@ Special Functions
  Abs Cos Cosh Exp Gcd Log Sin Sinh Tan Tanh aCos aCosh aSin aSinh
  aTan aTanh
 Polynomials
- tcoeff coeff degree ldegree
+ tcoeff coeff degree ldegree sym2poly poly2sym sumterms
 Calculus
  differentiate
 Solving Equations
