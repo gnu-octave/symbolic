@@ -37,6 +37,7 @@ class octave_sym;
 #include "ov-vpa.h"
 #include "ov-ex.h"
 #include "ov-sym.h"
+#include "ov-ex-mat.h" 
 #include "symbols.h"
 
 bool get_expression(const octave_value arg, GiNaC::ex& expression)
@@ -118,9 +119,11 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
 DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
 {
   octave_value retval;
+  install_ex_matrix_type();
   install_ex_type();
   install_sym_type();
   install_vpa_type();
+  install_ex_matrix_ops();
   install_ex_ops();
   install_sym_ops();
   install_vpa_ops();
@@ -161,6 +164,79 @@ is a number.\n\
     }
   catch (exception &e)
     { 
+      error(e.what());
+      retval = octave_value (); 
+    } 
+    
+  return retval;
+}
+
+DEFUN_DLD (ex_matrix, args, ,
+"-*- texinfo -*-\n\
+@deftypefn {Loadable Function} {n =} ex_matrix(@var{rows}, @var{cols}, ... )\n\
+\n\
+Creates a variable precision arithmetic variable from @var{s}.\n\
+@var{s} can be a scalar, vpa value, string or a ex value that \n\
+is a number.\n\
+@end deftypefn\n\
+")
+{
+  octave_value retval;
+  GiNaC::ex expression;
+  int nargin = args.length();
+  int rows, cols,k; 
+
+  if (nargin < 2)
+    {
+      print_usage("ex_matrix");
+      return retval; 
+    }
+
+  if(args(0).is_real_scalar())
+    {
+      rows = int(args(0).double_value());
+    }
+  else
+    {
+      error("You must supply a scalar for the first argument.");
+      return retval;
+    }
+
+  if(args(1).is_real_scalar())
+    {
+      cols = int(args(1).double_value());
+    }
+  else
+    {
+      error("You must supply a scalar for the first argument.");
+      return retval;
+    }
+
+  try 
+    {
+      GiNaC::matrix a = GiNaC::matrix(rows,cols);
+      k = 2;
+      for (int i = 0; i < rows; i++)
+      {
+	for (int j = 0; j < cols; j++, k++)
+	  {
+	    if (k < nargin)
+	      {
+		if (!get_expression(args(k),expression))
+		  {
+		    error("unable to turn an argument into a symbolic expression");
+		    return retval;
+		  }
+		a(i,j) = expression;
+	      }
+	    else
+	      break;
+	  }
+      }
+      retval = octave_value(new octave_ex_matrix(a));
+    }
+  catch (exception &e)
+    {
       error(e.what());
       retval = octave_value (); 
     } 
