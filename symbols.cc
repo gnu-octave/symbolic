@@ -27,10 +27,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/error.h>
 #include <octave/gripes.h>
 #include <octave/oct-obj.h>
+#include <octave/pager.h>
 #include <ginac/ginac.h>
 #include "ov-vpa.h"
 #include "ov-ex.h"
-#include "ov-sym.h"
 #include "ov-ex-mat.h"
 #include "ov-relational.h"
 #include "sym-ops.h"
@@ -43,11 +43,6 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression)
   if (arg.type_id () == octave_vpa::static_type_id ())
     {
       GiNaC::numeric x = ((octave_vpa& ) rep).vpa_value();
-      expression = x+0;
-    }
-  else if (arg.type_id () == octave_sym::static_type_id ())
-    {
-      GiNaC::symbol x = ((octave_sym& ) rep).sym_value();
       expression = x+0;
     }
   else if (arg.type_id () == octave_ex::static_type_id ())
@@ -68,20 +63,17 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression)
   return true;
 }
 
-bool get_symbol(const octave_value arg, GiNaC::symbol& sym)
+bool get_symbol(const octave_value arg, GiNaC::ex& sym)
 {
   const octave_value& rep = arg.get_rep ();
-     
-  if (arg.type_id () == octave_sym::static_type_id ())
-    sym = ((octave_sym& ) rep).sym_value();
-  else if (arg.type_id () == octave_ex::static_type_id ())
-    {
-      GiNaC::ex x = ((octave_ex& ) rep).ex_value();
-      if(GiNaC::is_a<GiNaC::symbol>(x))
-	sym = GiNaC::ex_to<GiNaC::symbol>(x);
-      else
-	return false;
-    }
+  GiNaC::ex x; 
+  if (arg.type_id () == octave_ex::static_type_id ())
+    x = ((octave_ex& ) rep).ex_value();
+  else
+    return false;
+
+  if (GiNaC::is_a<GiNaC::symbol>(x))
+    sym = x;
   else
     return false;
 
@@ -116,14 +108,12 @@ DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
 {
   octave_value retval;
   octave_vpa::register_type ();
-  octave_sym::register_type ();
   octave_ex::register_type (); 
   octave_ex_matrix::register_type ();
   octave_relational::register_type (); 
 
   install_ex_matrix_ops();
   install_ex_ops();
-  install_sym_ops();
   install_vpa_ops();
   return retval;
 }
@@ -273,7 +263,7 @@ Substitute a number for a variables in an expression\n\
 ")
 {
   GiNaC::ex expression;
-  GiNaC::symbol the_sym;
+  GiNaC::ex the_sym;
   GiNaC::ex ex_sub;
   GiNaC::ex tmp;
   int nargin = args.length ();
@@ -378,7 +368,7 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.
 {
   octave_value retval;
   GiNaC::ex expression;
-  GiNaC::symbol sym;
+  GiNaC::ex sym;
   int n;
 
   if(args.length () != 3)
@@ -389,23 +379,13 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.
 
   try 
     {
-      if(args(0).type_id() == octave_ex::static_type_id())
-	{
-	  const octave_value& rep0 = args(0).get_rep();
-	  expression = ((const octave_ex& ) rep0).ex_value();
-	}
-      else
+      if(!get_expression(args(0), expression))
 	{
 	  gripe_wrong_type_arg("coeff",args(0));
 	  return retval;
 	}
 
-      if(args(1).type_id() == octave_sym::static_type_id())
-	{
-	  const octave_value& rep1 = args(1).get_rep();
-	  sym = ((const octave_sym& ) rep1).sym_value();
-	}
-      else
+      if(!get_symbol (args(1), sym))
 	{
 	  gripe_wrong_type_arg("coeff",args(1));
 	  return retval;
@@ -449,7 +429,7 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 {
   octave_value retval;
   GiNaC::ex expression;
-  GiNaC::symbol the_sym;
+  GiNaC::ex the_sym;
 
   if(args.length() != 2)
     {
@@ -459,22 +439,12 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 
   try 
     {
-      if(args(0).type_id() == octave_ex::static_type_id())
-	{
-	  const octave_value& rep1 = args(0).get_rep();
-	  expression = ((const octave_ex& ) rep1).ex_value();
-	}
-      else
+      if(!get_expression(args(0), expression))
 	{
 	  gripe_wrong_type_arg("collect",args(0));
 	}
       
-      if(args(1).type_id() == octave_sym::static_type_id())
-	{
-	  const octave_value& rep2 = args(1).get_rep();
-	  the_sym = ((octave_sym& ) rep2).sym_value();
-	}
-      else
+      if(!get_symbol(args(1), the_sym))
 	{
 	  gripe_wrong_type_arg("collect",args(1));
 	}
@@ -508,7 +478,7 @@ Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 {
   octave_value retval;
   GiNaC::ex expression;
-  GiNaC::symbol the_sym;
+  GiNaC::ex the_sym;
 
   if(args.length() != 2)
     {
@@ -516,27 +486,17 @@ Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
       return retval;
     }
 
-  if(args(0).type_id() == octave_ex::static_type_id())
-    {
-      const octave_value& rep1 = args(0).get_rep();
-      expression = ((const octave_ex& ) rep1).ex_value();
-    }
-  else
+  if(!get_expression(args(0), expression))
     {
       gripe_wrong_type_arg("collect",args(0));
     }
 
-  if(args(1).type_id() == octave_sym::static_type_id())
-    {
-      const octave_value& rep2 = args(1).get_rep();
-      the_sym = ((octave_sym& ) rep2).sym_value();
-    }
-  else
+  if(!get_symbol(args(0), the_sym))
     {
       gripe_wrong_type_arg("collect",args(1));
     }
 
-  retval = new octave_ex(expression.collect(the_sym));
+  retval = new octave_ex(expression.collect(GiNaC::ex_to<GiNaC::symbol>(the_sym)));
 
   return retval;
 }

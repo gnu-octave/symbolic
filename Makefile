@@ -7,10 +7,14 @@ ifndef OCTAVE_FORGE
 	HAVE_GINAC=1
 endif
 
+#SRC=symbols.cc probably_prime.cc differentiate.cc \
+#	sym-bool.cc sym-create.cc \
+#	ov-ex.cc ov-sym.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
+#	op-ex-mat.cc op-ex.cc op-sym.cc op-vpa.cc 
 SRC=symbols.cc probably_prime.cc differentiate.cc \
 	sym-bool.cc sym-create.cc \
-	ov-ex.cc ov-sym.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
-	op-ex-mat.cc op-ex.cc op-sym.cc op-vpa.cc 
+	ov-ex.cc ov-vpa.cc ov-ex-mat.cc ov-relational.cc \
+	op-ex-mat.cc op-ex.cc op-vpa.cc 
 OBJ=$(SRC:.cc=.o)
 
 %.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) -c $<

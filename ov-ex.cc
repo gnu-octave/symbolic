@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/config.h>
 #include <ginac/ginac.h>
 #include "ov-ex.h"
-#include "ov-sym.h"
 #include "ov-vpa.h"
 
 octave_ex::octave_ex(octave_ex &ox)
@@ -32,11 +31,6 @@ octave_ex::octave_ex(octave_ex &ox)
 octave_ex::octave_ex(GiNaC::ex expression)
 {
   x = expression;
-}
-
-octave_ex::octave_ex(octave_sym &osym) 
-{
-  x = osym.sym_value () + 0; 
 }
 
 octave_ex::octave_ex(GiNaC::symbol sym)

@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <ginac/ginac.h>
 #include <octave/ov-complex.h>
 #include <octave/ov-scalar.h>
-#include "ov-sym.h"
 #include "ov-vpa.h"
 
 
@@ -39,7 +38,6 @@ public:
 
   octave_ex(octave_ex &ox);
   octave_ex(GiNaC::ex expression);
-  octave_ex(octave_sym &osym);
   octave_ex(GiNaC::symbol sym);
   octave_ex(octave_complex &cmplx);
   octave_ex(Complex z);

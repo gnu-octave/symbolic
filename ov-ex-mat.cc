@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-cx-mat.h>
 #include "ov-ex.h"
 #include "ov-ex-mat.h"
-#include "ov-sym.h"
 #include "ov-vpa.h"
 
 octave_ex_matrix::octave_ex_matrix(octave_ex_matrix &ox)

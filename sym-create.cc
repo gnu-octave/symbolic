@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/defun-dld.h>
 #include <octave/oct-obj.h> 
 #include "ov-vpa.h" 
-#include "ov-sym.h"
 #include "ov-ex.h"
 #include "ov-ex-mat.h" 
 #include "symbols.h" 
@@ -84,8 +83,8 @@ Create an object of type symbol\n")
   try 
     {
       GiNaC::symbol xtmp(args(0).string_value());
-      octave_sym x(xtmp);
-      retval = octave_value(new octave_sym(x));
+      octave_ex x(xtmp);
+      retval = octave_value(new octave_ex(x));
     }
   catch (std::exception &e)
     {

@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/oct-obj.h>
 #include <ginac/ginac.h>
 #include "ov-vpa.h"
-#include "ov-sym.h" 
 #include "ov-ex.h"
 #include "symbols.h" 
 
@@ -35,7 +34,7 @@ supplied then a default value of 1 is used.\n\
 @end deftypefn")
 {
   GiNaC::ex expression;
-  GiNaC::symbol variable;
+  GiNaC::ex variable;
   GiNaC::numeric num;
   int order;
   octave_value retval;
@@ -77,7 +76,9 @@ supplied then a default value of 1 is used.\n\
       else
 	order = 1;
 
-      retval = octave_value(new octave_ex(expression.diff(variable,order)));
+      retval = octave_value(new octave_ex
+			    (expression.diff
+			     (GiNaC::ex_to<GiNaC::symbol>(variable),order)));
     }
   catch (std::exception &e)
     {

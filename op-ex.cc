@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-cx-mat.h>
 #include "sym-ops.h"
 #include "ov-vpa.h"
-#include "ov-sym.h"
 #include "ov-ex.h"
 #include "ov-ex-mat.h"
 
@@ -36,7 +35,6 @@ DEFINE_EX_MATRIX_OPS(ex, complex_matrix)
 DEFINE_EX_EX_OPS(ex, scalar)
 DEFINE_EX_EX_OPS(ex, complex)
 DEFINE_EX_EX_OPS(ex, vpa)
-DEFINE_EX_EX_OPS(ex, sym)
 DEFINE_EX_EX_OPS(ex, ex)
 
 /* extra operators need for octave builtin types */ 
@@ -54,7 +52,6 @@ install_ex_ops()
   INSTALL_EX_EX_OPS(ex, scalar);
   INSTALL_EX_EX_OPS(ex, complex);
   INSTALL_EX_EX_OPS(ex, vpa);
-  INSTALL_EX_EX_OPS(ex, sym);
   INSTALL_EX_EX_OPS(ex, ex);
 
   /* extra operators need for octave builtin types */ 

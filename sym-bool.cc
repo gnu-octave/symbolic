@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/defun-dld.h>
 #include <octave/oct-obj.h> 
 #include "ov-vpa.h" 
-#include "ov-sym.h"
 #include "ov-ex.h"
 #include "ov-ex-mat.h" 
 
@@ -38,7 +37,10 @@ DEFUN_DLD(is_vpa, args, ,
 DEFUN_DLD(is_sym,args, ,"Return true if an object is of type sym false otherwise.\n")
 {
   bool retval;
-  retval = (args(0).type_id() == octave_sym::static_type_id());
+  const octave_value& rep = args(0).get_rep();
+
+  retval = args(0).type_id () == octave_ex::static_type_id () &&
+	    GiNaC::is_a<GiNaC::symbol>(((octave_ex& ) rep).ex_value ());
   return octave_value(retval);
 }
 
