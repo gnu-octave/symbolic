@@ -6,9 +6,9 @@ Extended precision arithmetic
  digits	
  vpa to_double
 Properties
- is_ex is_ex_matrix is_sym is_vpa
+ is_ex is_ex_matrix is_sym is_vpa syminfo
 Expression manipulation
-  subs collect expand lcoeff
+ subs collect expand lcoeff numden findsymbols findsym
 Special Functions
  Abs Cos Cosh Exp Gcd Log Sin Sinh Tan Tanh aCos aCosh aSin aSinh
  aTan aTanh
@@ -16,8 +16,11 @@ Polynomials
  tcoeff coeff degree ldegree
 Calculus
  differentiate
+Solving Equations
+ symlsolve
+ symfsolve
 Number theory
-  probably_prime
-  quotient remainder premainder
+ probably_prime
+ quotient remainder premainder
 Plot
   splot
