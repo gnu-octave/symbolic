@@ -1,6 +1,7 @@
 bool get_expression(const octave_value arg, GiNaC::ex& expression);
 bool get_symbol(const octave_value arg, GiNaC::ex& sym);
 bool get_numeric(const octave_value arg, GiNaC::numeric& number);
+bool get_relation(const octave_value arg, GiNaC::relational& rel);
 
 #define DEFUN_DLD_EX_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \

@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // 2001-09-18 Paul Kienzle <pkienzle@users.sf.net>
 // * use GiNaC::is_a<GiNaC::blah>(x) rather than is_ex_of_type(x, blah)
 // * use GiNaC::ex_to<GiNaC::blah>(x) rather than ex_to_blah(x)
+// 2003-04-19 Willem Atsma <watsma@users.sf.net>
+// * added get_relational()
 
 #include <octave/config.h>
 #include <octave/defun-dld.h>
@@ -102,6 +104,17 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
     return false;
 
   return true;
+}
+
+bool get_relation(const octave_value arg, GiNaC::relational& relation)
+{
+	const octave_value& rep = arg.get_rep();
+	if (arg.type_id () == octave_relational::static_type_id ()) {
+		GiNaC::relational x = ((octave_relational& ) rep).relational_value();
+		relation = x;
+	} else return false;
+	
+	return true;
 }
 
 DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
@@ -249,62 +262,86 @@ DEFUN_DLD(subs,args,,
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {b =} subs(@var{a},@var{x},@var{n})\n\
 \n\
-Substitute a number for a variables in an expression\n\
+Substitute variables in an expression.\n\
 @table @var\n\
 @item a\n\
  The expresion in which the substition will occur.\n\
 @item x\n\
- The variable that will be substituted.\n\
+ The variables that will be substituted.\n\
 @item n\n\
- The expression,vpa value or scalar that will replace x.\n\
+ The expressions, vpa values or scalars that will replace @var{x}.\n\
 @end table\n\
+\n\
+Multiple substitutions can be made by using lists or cell-arrays for\n\
+@var{x} and @var{n}.\n\
+\n\
+Examples:\n\
+@example\n\
+symbols\n\
+x=sym(\"x\"); y=sym(\"y\"); f=x^2+3*x*y-y^2;\n\
+v = subs (f,x,1)\n\
+w = subs (f,@{x,y@},@{1,vpa(1/3)@})\n\
+@end example\n\
 \n\
 @end deftypefn\n\
 ")
 {
-  GiNaC::ex expression;
-  GiNaC::ex the_sym;
-  GiNaC::ex ex_sub;
-  GiNaC::ex tmp;
-  int nargin = args.length ();
-  octave_value retval;
+	GiNaC::ex expression;
+	GiNaC::ex the_sym;
+	GiNaC::ex ex_sub;
+	GiNaC::ex tmp;
+	int nargin = args.length ();
+	octave_value retval;
 
-  if (nargin != 3)
-    {
-      error("need three arguments\n");
-      return retval;
-    }
-
-  try 
-    {
-      if (!get_expression (args(0), expression))
-	{
-	  gripe_wrong_type_arg ("subs",args(0));
-	  return retval;
+	if (nargin != 3) {
+		error("need three arguments\n");
+		return retval;
 	}
 
-      if (!get_symbol (args(1), the_sym))
-	{
-	  gripe_wrong_type_arg("subs",args(1));
-	  return retval;
+	try {
+		if (!get_expression (args(0), expression)) {
+			gripe_wrong_type_arg ("subs",args(0));
+			return retval;
+		}
+		if (!(args(1).is_list() || args(1).is_cell())) {
+			if (!get_symbol (args(1), the_sym)) {
+				gripe_wrong_type_arg("subs",args(1));
+				return retval;
+			}
+			if (!get_expression (args(2), ex_sub)) {
+				gripe_wrong_type_arg ("subs",args(2));
+				return retval;
+			}
+			tmp = expression.subs(the_sym == ex_sub);
+		} else {
+			octave_value_list symlist, sublist;
+			int i;
+			symlist = args(1).list_value();
+			sublist = args(2).list_value();
+			if(symlist.length()!=sublist.length()) {
+				error("Number of expressions and substitutes must be the same.");
+				return retval;
+			}
+			tmp = expression;
+			for(i=0;i<symlist.length();i++) {
+				if (!get_symbol (symlist(i),the_sym)) {
+					gripe_wrong_type_arg("subs",symlist(i));
+					return retval;
+				}
+				if (!get_expression (sublist(i),ex_sub)) {
+					gripe_wrong_type_arg("subs",sublist(i));
+					return retval;
+				}
+				tmp = tmp.subs(the_sym == ex_sub);
+			}
+		}
+		retval = octave_value (new octave_ex(tmp));
+	} catch (std::exception &e) {
+		error (e.what ());
+		retval = octave_value ();
 	}
 
-      if (!get_expression (args(2), ex_sub))
-	{
-	  gripe_wrong_type_arg ("subs",args(2));
-	  return retval;
-	}
-
-      tmp = expression.subs(the_sym == ex_sub);
-      retval = octave_value (new octave_ex(tmp));
-    }
-  catch (std::exception &e)
-    {
-      error (e.what ());
-      retval = octave_value ();
-    }
-
-  return retval;
+	return retval;
 }
 
 DEFUN_DLD(expand,args,,
@@ -361,7 +398,7 @@ DEFUN_DLD(coeff,args,,
 "-*- texinfo -*-\n\
 @deftypefn {Loadable Function} {b =} coeff(@var{a},@var{x},@var{n})\n\
 \n\
-Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.  
+Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.\n\
 \n\
 @end deftypefn\n\
 ")
