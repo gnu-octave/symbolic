@@ -18,7 +18,7 @@ SRC=symbols.cc probably_prime.cc differentiate.cc \
 	op-ex-mat.cc op-ex.cc op-vpa.cc 
 OBJ=$(SRC:.cc=.o)
 
-%.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) -c $<
+%.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) $(HAVE_ND_ARRAYS) -c $<
 
 FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
           Cos Sin Tan aCos aSin aTan Cosh Sinh Tanh aCosh\

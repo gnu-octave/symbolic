@@ -59,6 +59,9 @@ public:
       return new octave_ex (*this); 
     }
   
+#ifdef HAVE_ND_ARRAYS
+  dim_vector dims (void) const { static dim_vector dv (1, 1); return dv; }
+#endif
   int rows (void) const { return 1; }
   int columns (void) const { return 1; }
   

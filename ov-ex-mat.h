@@ -60,6 +60,9 @@ public:
       return new octave_ex_matrix (*this); 
     }
   
+#ifdef HAVE_ND_ARRAYS
+  dim_vector dims (void) const {dim_vector dv (x.rows(), x.cols()); return dv; }
+#endif
   int rows (void) const { return x.rows (); }
   int columns (void) const { return x.cols (); }
   
