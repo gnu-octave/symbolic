@@ -27,7 +27,7 @@ FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
           remainder premainder Pi ex_matrix probably_prime\
 	  findsymbols numden syminfo symlsolve sumterms
 	  
-SYMBOLS_LINKS=$(addsuffix .oct,$(FUNCTIONS))
+SYMBOLS_LINKS=$(addsuffix $(OCTLINK),$(FUNCTIONS))
 
 ifdef HAVE_GINAC
 	PROGS=symbols.oct $(SYMBOLS_LINKS)
@@ -47,6 +47,6 @@ symbols.oct: $(OBJ)
 
 $(SYMBOLS_LINKS):
 	-$(RM) $@
-	$(LN_S) symbols.oct $@
+	$(MKOCTLINK) symbols.oct $@
 
 clean: ; $(RM) *.o core octave-core *.oct *~
