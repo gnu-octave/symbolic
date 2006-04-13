@@ -26,6 +26,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-base.h>
 #include "ov-ex.h"
 
+#ifndef OV_REP_TYPE
+#define OV_REP_TYPE octave_value
+#endif
+
 // relational values.
 
 class
@@ -55,7 +59,7 @@ public:
 
   ~octave_relational (void) { }
 
-  octave_value *clone (void) { return new octave_relational (*this); }
+  OV_REP_TYPE *clone (void) { return new octave_relational (*this); }
 
 #ifdef HAVE_ND_ARRAYS
   dim_vector dims (void) const { static dim_vector dv (1, 1); return dv; }

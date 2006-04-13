@@ -27,6 +27,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-scalar.h>
 #include "ov-vpa.h"
 
+#ifndef OV_REP_TYPE
+#define OV_REP_TYPE octave_value
+#endif
 
 class octave_complex;
 class octave_scalar;
@@ -54,7 +57,7 @@ public:
       return x;
     }
   
-  octave_value *clone (void) 
+  OV_REP_TYPE *clone (void) 
     { 
       return new octave_ex (*this); 
     }

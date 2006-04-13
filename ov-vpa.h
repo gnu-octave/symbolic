@@ -25,6 +25,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <ginac/ginac.h>
 #include <octave/ov-base.h>
 
+#ifndef OV_REP_TYPE
+#define OV_REP_TYPE octave_value
+#endif
+
 // vpa values.
 
 class
@@ -40,7 +44,7 @@ public:
 
   ~octave_vpa (void) { }
 
-  octave_value *clone (void) { return new octave_vpa (*this); }
+  OV_REP_TYPE *clone (void) { return new octave_vpa (*this); }
 
 #if 0
   void *operator new (size_t size);

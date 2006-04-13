@@ -23,6 +23,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <ginac/ginac.h>
 
+#ifndef OV_REP_TYPE
+#define OV_REP_TYPE octave_value
+#endif
+
 class octave_matrix;
 class octave_complex_matrix;
 
@@ -55,7 +59,7 @@ public:
       return GiNaC::ex(x);
     }
   
-  octave_value *clone (void) 
+  OV_REP_TYPE *clone (void) 
     { 
       return new octave_ex_matrix (*this); 
     }
