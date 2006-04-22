@@ -37,7 +37,7 @@ DEFUN_DLD(is_vpa, args, ,
 DEFUN_DLD(is_sym,args, ,"Return true if an object is of type sym false otherwise.\n")
 {
   bool retval;
-  const octave_value& rep = args(0).get_rep();
+  const OV_REP_TYPE& rep = args(0).get_rep();
 
   retval = args(0).type_id () == octave_ex::static_type_id () &&
 	    GiNaC::is_a<GiNaC::symbol>(((octave_ex& ) rep).ex_value ());

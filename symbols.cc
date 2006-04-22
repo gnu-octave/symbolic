@@ -47,7 +47,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 bool get_expression(const octave_value arg, GiNaC::ex& expression)
 {
-  const octave_value& rep = (arg).get_rep();
+  const OV_REP_TYPE& rep = (arg).get_rep();
 
   if (arg.type_id () == octave_vpa::static_type_id ())
     {
@@ -74,7 +74,7 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression)
 
 bool get_symbol(const octave_value arg, GiNaC::ex& sym)
 {
-  const octave_value& rep = arg.get_rep ();
+  const OV_REP_TYPE& rep = arg.get_rep ();
   GiNaC::ex x; 
   if (arg.type_id () == octave_ex::static_type_id ())
     x = ((octave_ex& ) rep).ex_value();
@@ -91,7 +91,7 @@ bool get_symbol(const octave_value arg, GiNaC::ex& sym)
 
 bool get_numeric(const octave_value arg, GiNaC::numeric& number)
 {
-  const octave_value& rep = arg.get_rep ();
+  const OV_REP_TYPE& rep = arg.get_rep ();
 
   if (arg.type_id () == octave_ex::static_type_id ())
     {
@@ -115,7 +115,7 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
 
 bool get_relation(const octave_value arg, GiNaC::relational& relation)
 {
-	const octave_value& rep = arg.get_rep();
+	const OV_REP_TYPE& rep = arg.get_rep();
 	if (arg.type_id () == octave_relational::static_type_id ()) {
 		GiNaC::relational x = ((octave_relational& ) rep).relational_value();
 		relation = x;
@@ -382,7 +382,7 @@ Expand an expression\n\
 
       if(args(0).type_id() == octave_ex::static_type_id())
 	{
-	  const octave_value& rep1 = args(0).get_rep();
+	  const OV_REP_TYPE& rep1 = args(0).get_rep();
 	  expression = ((const octave_ex& ) rep1).ex_value();
 	}
       else

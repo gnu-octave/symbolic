@@ -23,10 +23,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 // GiNaC
 #include <ginac/ginac.h>
-#include <octave/ov-base.h>
+#include <octave/ov.h>
+#include <octave/oct-alloc.h>
+#include <octave/ov-typeinfo.h>
 
-#ifndef OV_REP_TYPE
+#ifdef OV_REP_TYPE
+#define TYPE_CONV_FCN OV_REP_TYPE::type_conv_fcn
+#else
 #define OV_REP_TYPE octave_value
+#define TYPE_CONV_FCN type_conv_fcn
 #endif
 
 // vpa values.
@@ -44,7 +49,7 @@ public:
 
   ~octave_vpa (void) { }
 
-  OV_REP_TYPE *clone (void) { return new octave_vpa (*this); }
+  OV_REP_TYPE *clone (void) const { return new octave_vpa (*this); }
 
 #if 0
   void *operator new (size_t size);
