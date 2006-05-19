@@ -35,7 +35,7 @@ Return the numerator and denominator of symbolic expression @var{f}.\n\
 	octave_value_list retval;
 	int nargin = args.length();
 	if (nargin != 1) {
-		print_usage ("numden");
+		print_usage ();
 		return retval;
 	}
 	try { 

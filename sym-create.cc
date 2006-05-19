@@ -53,7 +53,7 @@ is a number.\n\
 	}
       else
 	{
-	  print_usage("vpa");
+	  print_usage ();
 	  return retval;
 	}
 
@@ -114,7 +114,7 @@ is a number.\n\
 
   if (nargin < 2)
     {
-      print_usage("ex_matrix");
+      print_usage ();
       return retval; 
     }
 

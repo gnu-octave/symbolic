@@ -33,7 +33,7 @@ with error 1 in 2^100.\n\
 
   if (nargin != 1)
     {
-      print_usage("probably_prime");
+      print_usage ();
       return retval;
     }
 
@@ -41,7 +41,7 @@ with error 1 in 2^100.\n\
    {
       if(!get_numeric(args(0), value))
         {
-          print_usage("probably_prime");
+          print_usage ();
           return retval;
         }
       retval(0) = GiNaC::is_prime(value);

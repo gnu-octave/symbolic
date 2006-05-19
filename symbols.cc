@@ -153,7 +153,7 @@ Convert a vpa, string, ex or string type to a double.\n\
 
   if (nargin != 1)
     {
-      print_usage("to_double");
+      print_usage ();
       return retval;
     }
 
@@ -161,7 +161,7 @@ Convert a vpa, string, ex or string type to a double.\n\
     {
       if (!get_numeric (args(0), num))
 	{
-	  print_usage("to_double");
+	  print_usage ();
 	  return retval;
 	}
       
@@ -202,7 +202,7 @@ Change the precision for the vpa type\n\
 	    }
 	  else
 	    {
-	      print_usage("digits");
+	      print_usage ();
 	    }
 	}
 
@@ -373,7 +373,7 @@ Expand an expression\n\
 
   if(args.length() != 1)
     {
-      print_usage("expand");
+      print_usage ();
       return retval;
     }
 
@@ -419,7 +419,7 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.\n\
 
   if(args.length () != 3)
     {
-      print_usage("coeff");
+      print_usage ();
       return retval;
     }
 
@@ -479,7 +479,7 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 
   if(args.length() != 2)
     {
-      print_usage("collect");
+      print_usage ();
       return retval;
     }
 
@@ -528,7 +528,7 @@ Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 
   if(args.length() != 2)
     {
-      print_usage("collect");
+      print_usage ();
       return retval;
     }
 

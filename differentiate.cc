@@ -42,20 +42,20 @@ supplied then a default value of 1 is used.\n\
 
   if ((nargin < 2) || (nargin > 3))
     {
-      print_usage ("differentiate");
+      print_usage ();
       return retval;
     }
   try 
     { 
       if (!get_expression (args(0), expression))
 	{
-	  print_usage ("differentiate");
+	  print_usage ();
 	  return retval;
 	}
       
       if (!get_symbol (args(1), variable))
 	{
-	  print_usage ("differentiate");
+	  print_usage ();
 	  return retval;
 	}
       
@@ -63,7 +63,7 @@ supplied then a default value of 1 is used.\n\
 	{
 	  if (!get_numeric (args(2), num))
 	    {
-	      print_usage ("differentiate");
+	      print_usage ();
 	      return retval;
 	    }
 	  order = int(num.to_double ());
