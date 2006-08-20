@@ -1,5 +1,5 @@
 
-sinclude ../../Makeconf
+sinclude Makeconf
 
 # assumptions to make if not using ./configure script
 ifndef OCTAVE_FORGE

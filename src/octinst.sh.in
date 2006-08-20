@@ -1,0 +1,93 @@
+#! /bin/sh
+
+# octinst.sh source mpath opath xpath [altmpath altopath]
+
+# Copies all m-files and oct-files from the source directory to the
+# mpath and opath respectively.  Preserves links.  Files in
+# source/data are copied to mpath.  Files in the source/bin are copied
+# to xpath. m-files and oct-files in source/alternatives are copied to 
+# altmpath and altopath respectively
+
+if test $# -lt 4 ; then
+    echo 'Not enough arguments'
+    exit 1
+fi
+
+# interpret input parameters
+source=$1; shift
+mpath=$1; shift
+opath=$1; shift
+xpath=$1; shift
+if test $# -ge 1; then altmpath=$1; shift; fi
+if test $# -ge 1; then altopath=$1; shift; fi
+INSTALL="@INSTALL@"
+INSTALL_DATA="@INSTALL_DATA@"
+INSTALL_PROGRAM="@INSTALL_PROGRAM@"
+INSTALL_SCRIPT="@INSTALL_SCRIPT@"
+MKPKGADD="@TOPDIR@/admin/mkpkgadd"
+COPY_FLAGS="@COPY_FLAGS@"
+
+# grab the m-files
+files=`echo $source/*.m`
+if test "$files" != "$source/*.m" ; then
+    $INSTALL -d $mpath
+    $INSTALL_DATA $files $mpath
+fi
+
+# grab the oct-files
+files=`echo $source/*.oct`
+if test "$files" != "$source/*.oct" ; then
+    $INSTALL -d $opath
+## Grrr... install doesn't preserve links.  Hope this works.
+    cp $COPY_FLAGS $files $opath
+fi
+
+# install alternatives
+if test -d "$source/alternatives" ; then
+    # m-files
+    files=`echo $source/alternatives/*.m`
+    if test "$files" != "$source/alternatives/*.m" ; then
+        $INSTALL -d $altmpath
+	$INSTALL_DATA $files $altmpath
+    fi
+    # oct-files
+    files=`echo $source/alternatives/*.oct`
+    if test "$files" != "$source/alternatives/*.oct" ; then
+        $INSTALL -d $altopath
+	$INSTALL_DATA $files $altopath
+    fi
+fi
+
+# Create PKG_ADD, and destroy it immediately if it is empty
+# XXX FIXME XXX no PKG_ADD created if only oct-files and no m-files.
+if test -d "$mpath" ; then
+    $MKPKGADD $source > $mpath/PKG_ADD
+    if test -z "`cat $mpath/PKG_ADD`" ; then rm -f $mpath/PKG_ADD;  fi
+fi
+# PKG_ADD for alternatives
+if test -d "$source/alternatives" -a -d "$altmpath" ; then
+    $MKPKGADD $source/alternatives > $altmpath/PKG_ADD
+    if test -z "`cat $altmpath/PKG_ADD`" ; then rm $altmpath/PKG_ADD; fi
+fi
+
+# grab the data files, skipping the CVS directory
+files=`echo $source/data/* | sed -e "s/[^ ]*CVS//"`
+if test -n "$files" -a "$files" != "$source/data/*" ; then
+    $INSTALL -d $mpath
+    $INSTALL_DATA $files $mpath
+fi
+
+# grab the executable files, skipping the CVS directory
+files=`echo $source/bin/* | sed -e "s/[^ ]*CVS//"`
+if test -n "$files" -a "$files" != "$source/bin/*" ; then
+    $INSTALL -d $xpath
+    $INSTALL_PROGRAM $files $xpath
+fi
+
+# grab the script files, skipping the CVS directory
+files=`echo $source/scripts/* | sed -e "s/[^ ]*CVS//"`
+if test -n "$files" -a "$files" != "$source/scripts/*" ; then
+    $INSTALL -d $xpath
+    $INSTALL_SCRIPT $files $xpath
+fi
+
