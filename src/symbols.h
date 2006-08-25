@@ -18,7 +18,7 @@ Return the " description " of a symbolic expression.\n\
  \
   if (nargin != 1) \
     { \
-      print_usage(# oct_name); \
+      print_usage(); \
       return retval; \
     } \
  \
@@ -26,7 +26,7 @@ Return the " description " of a symbolic expression.\n\
    { \
       if(!get_expression(args(0), expression)) \
         { \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \
@@ -66,13 +66,13 @@ Return the " description " of a symbolic expression.\n\
     { \
       if(!get_expression(args(0), expression)) \
         { \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \
       if (!get_symbol(args(1), sym)) \
         { \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \
@@ -116,21 +116,21 @@ Return the " description " of a symbolic expression.\n\
       if(!get_expression(args(0), expression0)) \
         { \
           gripe_wrong_type_arg(# oct_name, args(0)); \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \
       if(!get_expression(args(1), expression1)) \
         { \
           gripe_wrong_type_arg(# oct_name, args(1)); \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \
       if (!get_symbol(args(2), sym)) \
         { \
           gripe_wrong_type_arg(# oct_name, args(2)); \
-          print_usage(# oct_name); \
+          print_usage(); \
           return retval; \
         } \
  \

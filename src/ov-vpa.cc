@@ -56,11 +56,7 @@ octave_vpa::print (std::ostream& os, bool pr_as_read_syntax) const
 
 DEFINE_OCTAVE_ALLOCATOR (octave_vpa);
 
-#ifdef TYPEID_HAS_CLASS
 DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_vpa, "vpa", "sym");
-#else
-DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_vpa, "vpa");
-#endif
 
 /*
 ;;; Local Variables: ***

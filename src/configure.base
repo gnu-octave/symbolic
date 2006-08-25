@@ -229,34 +229,6 @@ TRY_MKOCTFILE([for F77_FUNC],
 [int F77_FUNC (hello, HELLO) (const int &n);],,
 [MKOCTFILE="$MKOCTFILE -DF77_FUNC=F77_FCN"])
 
-dnl
-dnl Check if octave still uses SLList.h
-dnl
-TRY_MKOCTFILE([for SLList.h],[#include <octave/SLList.h>],
-[MKOCTFILE="$MKOCTFILE -DHAVE_SLLIST_H"],)
-
-dnl
-dnl Check if octave has lo_ieee_nan_value
-dnl
-TRY_MKOCTFILE([for lo_ieee_nan_value],
-[ #include <octave/lo-ieee.h>
-int test(void) { lo_ieee_nan_value(); }],,
-[MKOCTFILE="$MKOCTFILE -DUSE_OCTAVE_NAN"])
-
-dnl
-dnl Check if octave is needs octave_idx_type
-dnl
-TRY_MKOCTFILE([for octave_idx_type],
-[#include <octave/oct-types.h>
-octave_idx_type test(void) { octave_idx_type idx = 1; return idx; }],,
-[MKOCTFILE="$MKOCTFILE -Doctave_idx_type=int"])
-
-dnl
-dnl Check if octave uses quit.h
-dnl
-TRY_MKOCTFILE([for quit.h],[#include <octave/quit.h>],,
-[MKOCTFILE="$MKOCTFILE -DNEED_OCTAVE_QUIT"])
-
 dnl **********************************************************
 
 dnl Evaluate an expression in octave
@@ -326,170 +298,25 @@ case "$canonical_host_type" in
     ;;
 esac
 
-dnl Things needed to link to X11 programs
-dnl defines X_CFLAGS, X_LIBS
-AC_SUBST(DEFHAVE_X)
-AC_SUBST(X_LIBS)
-AC_SUBST(X_CFLAGS)
-AC_PATH_XTRA
-if test "$no_x" = yes ; then
-	DEFHAVE_X=
-	XSTATUS="no (plot/g{input,text,zoom,rab} will not work)"
+dnl Checking if the ginac-config program exists.  See the autoconf
+dnl manual for an extensive list of checks available.  The results
+dnl of the check are held in have_ginac.
+AC_DEFINE(have_ginac)
+AC_CHECK_PROG(have_ginac, ginac-config, yes, no)
+
+if test $have_ginac = no ; then
+
+    dnl ginac-config doesn't exist: instruct the user how to install
+    GINACSTATUS="GiNaC not found --- see main/symbolic/INSTALL"
+
 else
-	DEFHAVE_X="HAVE_X=1"
-	X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
-	XSTATUS="yes"
+
+    dnl ginac-config exists: cheer
+    GINACSTATUS=yes
+    AC_SUBST(DEFHAVE_GINAC)
+    DEFHAVE_GINAC="HAVE_GINAC=1"
+
 fi
-
-OCTAVE_CHECK_EXIST(autoload,[
-	HAVE_AUTOLOAD="yes"
-	OCTLINK=.octlink
-	MKOCTLINK=$TOPDIR/admin/octlink.sh
-],[
-	HAVE_AUTOLOAD="no"
-	OCTLINK=.oct
-	MKOCTLINK=$LN_S
-])
-AC_SUBST(HAVE_AUTOLOAD)
-AC_SUBST(OCTLINK)
-AC_SUBST(MKOCTLINK)
-
-OCTAVE_CHECK_EXIST(do_fortran_indexing,
-	[HAVE_DO_FORTRAN_INDEXING="-DHAVE_DO_FORTRAN_INDEXING"],)
-AC_SUBST(HAVE_DO_FORTRAN_INDEXING)
-
-OCTAVE_CHECK_EXIST(propagate_empty_matrices,
-	[PROPAGATE_EMPTY_MATRICES="-DHAVE_PROPAGATE_EMPTY_MATRICES"],)
-AC_SUBST(HAVE_PROPAGATE_EMPTY_MATRICES)
-
-OCTAVE_CHECK_EXIST(ok_to_lose_imaginary_part,
-  [HAVE_OK_TO_LOSE_IMAGINARY_PART="-DHAVE_OK_TO_LOSE_IMAGINARY_PART"],)
-AC_SUBST(HAVE_OK_TO_LOSE_IMAGINARY_PART)
-
-dnl Test for N-dimensional Arrays
-TRY_MKOCTFILE([for N-dim arrays],
-[#include <octave/dim-vector.h>],
-[HAVE_ND_ARRAYS="-DHAVE_ND_ARRAYS"],)
-AC_SUBST(HAVE_ND_ARRAYS)
-
-OCTAVE_CHECK_EXIST(class,[TYPEID_HAS_CLASS="-DTYPEID_HAS_CLASS"],)
-AC_SUBST(TYPEID_HAS_CLASS)
-
-dnl Test for load/save functions in class
-TRY_MKOCTFILE([for load/save functions in class],
-[#include <octave/ov-scalar.h>
-int main (void) { octave_scalar a; a.load_ascii(std::cin); }],
-[CLASS_HAS_LOAD_SAVE="-DCLASS_HAS_LOAD_SAVE"],)
-AC_SUBST(CLASS_HAS_LOAD_SAVE)
-
-TRY_MKOCTFILE([for Octave_map indexing],
-[#include <octave/oct-map.h>
-int main(void) { Octave_map a; a[["key"]]; }],
-[HAVE_OCTAVE_MAP_INDEX="-DHAVE_OCTAVE_MAP_INDEX"],)
-AC_SUBST(HAVE_OCTAVE_MAP_INDEX)
-
-TRY_MKOCTFILE([for old Octave concatenation],
-[#include <octave/dNDArray.h>
-int main(void) { NDArray a(dim_vector(1,1)); Array<int> idx(2,0); a=concat(a,a,idx); }],
-[HAVE_OCTAVE_CONCAT="-DHAVE_OLD_OCTAVE_CONCAT"],)
-
-TRY_MKOCTFILE([for Octave concatenation],
-[#include <octave/dNDArray.h>
-int main(void) { NDArray a(dim_vector(1,1)); Array<int> idx(2,0); a=a.concat(a,idx); }],
-[HAVE_OCTAVE_CONCAT="-DHAVE_OCTAVE_CONCAT"],)
-AC_SUBST(HAVE_OCTAVE_CONCAT)
-
-TRY_MKOCTFILE([for swap_8_bytes],
-[#include <sys/types.h>
-#include <octave/config.h>
-#include <octave/byte-swap.h>
-int main(void) {long long a = 1; swap_8_bytes (&a,1);}],,
-[HAVE_SWAP_BYTES="-DHAVE_SWAP_BYTES"])
-AC_SUBST(HAVE_SWAP_BYTES)
-
-TRY_MKOCTFILE([for op_uplus],
-[#include <octave/config.h>
-#include <octave/ov.h>
-int main(void) {int i = octave_value::op_uplus;}],
-[HAVE_OCTAVE_UPLUS="-DHAVE_OCTAVE_UPLUS"],)
-AC_SUBST(HAVE_OCTAVE_UPLUS)
-
-dnl Test for the makeinfo program
-AC_CHECK_PROG(MAKEINFO,makeinfo,makeinfo)
-if [ test -n "$MAKEINFO" ]; then
-	dnl Check whether the makeinfo command accepts the 
-	dnl "--no-split" option
-	touch conftest.texi
-	AC_MSG_CHECKING([for makeinfo --no-split])
-	ac_try="$MAKEINFO --no-split conftest.texi"
-	if AC_TRY_EVAL(ac_try) ; then
-		MAKEINFO="$MAKEINFO --no-split"
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
-	rm -f conftest.*
-fi
-
-dnl Test for the texi2dvi program
-AC_CHECK_PROG(TEXI2DVI,texi2dvi,texi2dvi)
-if [ test -n "$TEXI2DVI" ]; then
-	dnl Check whether the texi2dvi command accepts the 
-	dnl "--clean" option
-	cat > conftest.texi <<EOF
-\input texinfo
-@bye
-EOF
-	AC_MSG_CHECKING([that texi2dvi runs])
-	ac_try="$TEXI2DVI conftest.texi > /dev/null"
-	if AC_TRY_EVAL(ac_try) ; then
-	    AC_MSG_RESULT(yes)
-	    AC_MSG_CHECKING([for texi2dvi --clean])
-	    ac_try="$TEXI2DVI --clean conftest.texi > /dev/null"
-	    if AC_TRY_EVAL(ac_try) ; then
-		TEXI2DVI="$TEXI2DVI --clean"
-		AC_MSG_RESULT(yes)
-	    else
-		AC_MSG_RESULT(no)
-	    fi
-	else
-	    TEXI2DVI=""
-	    AC_MSG_RESULT(no)
-	fi
-	rm -f conftest.*
-fi
-
-dnl Test for the texi2html program
-AC_CHECK_PROG(TEXI2HTML,texi2html,texi2html)
-if [ test -n "$TEXI2HTML" ]; then
-	STATUS="yes"
-	dnl Check whether the texi2html command accepts the 
-	dnl "-split_chapter -number" option
-	touch conftest.texi
-	AC_MSG_CHECKING([for texi2html --clean])
-	ac_try="$TEXI2HTML -split_chapter -number conftest.texi"
-	if AC_TRY_EVAL(ac_try) ; then
-		TEXI2HTML="$TEXI2HTML -split_chapter -number"
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
-	rm -f conftest.*
-        dnl TeTex 3.0 on Suse is leaving a conftest directory
-	rm -rf conftest
-fi
-
-dnl Test for the dvipdf program
-AC_CHECK_PROG(DVIPDF,dvipdf,dvipdf)
-
-dnl Test for the dvips program
-AC_CHECK_PROG(DVIPS,dvips,dvips)
-
-MKDOC=$TOPDIR/admin/mkdoc
-AC_SUBST(MKDOC)
-
-MKTEXI=$TOPDIR/admin/mktexi
-AC_SUBST(MKTEXI)
 
 CONFIGURE_OUTPUTS="Makeconf octinst.sh"
 STATUS_MSG="
@@ -510,11 +337,4 @@ shell commands will install into the following directories:
 octave-forge is configured with
    octave:      $OCTAVE (version $OCTAVE_VERSION)
    mkoctfile:	$MKOCTFILE for Octave $subver
-   X11 support:	$XSTATUS
-   makeinfo:    $MAKEINFO
-   texi2dvi:    $TEXI2DVI
-   texi2html:   $TEXI2HTML
-   mkdoc:       $MKDOC
-   mktexi:      $MKTEXI
-   dvips:       $DVIPS
-   dvipdf:      $DVIPDF"
+   symbolic toolbox: $GINACSTATUS"

@@ -60,11 +60,7 @@ octave_relational::print (std::ostream& os, bool pr_as_read_syntax) const
 
 DEFINE_OCTAVE_ALLOCATOR (octave_relational);
 
-#ifdef TYPEID_HAS_CLASS
 DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_relational, "relational", "sym");
-#else
-DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_relational, "relational");
-#endif
 
 /*
 ;;; Local Variables: ***

@@ -20,33 +20,22 @@ OBJ=$(SRC:.cc=.o)
 
 %.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) $(HAVE_ND_ARRAYS) $(TYPEID_HAS_CLASS) -c $<
 
-FUNCTIONS=vpa sym is_vpa is_sym is_ex to_double digits\
-          Cos Sin Tan aCos aSin aTan Cosh Sinh Tanh aCosh\
-          aSinh aTanh Exp Log Sqrt subs differentiate expand\
-          collect coeff lcoeff tcoeff degree ldegree quotient\
-          remainder premainder Pi ex_matrix probably_prime\
-	  findsymbols numden syminfo symlsolve sumterms
-	  
-SYMBOLS_LINKS=$(addsuffix $(OCTLINK),$(FUNCTIONS))
-
 ifdef HAVE_GINAC
-	PROGS=symbols.oct $(SYMBOLS_LINKS)
+PROGS=symbols.oct
 	GINAC_CPP_FLAGS=$(shell ginac-config --cppflags)
 	GINAC_LD_FLAGS=$(shell ginac-config --libs)
-else
-	PROGS=
-endif
-
 
 all: $(PROGS)
+else
+all:
+	@echo "Ginac library or headers not found"
+	false
+
+endif
 
 $(PROGS): Makefile
 
 symbols.oct: $(OBJ)
 	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LD_FLAGS)
-
-$(SYMBOLS_LINKS):
-	-$(RM) $@
-	$(MKOCTLINK) symbols.oct $@
 
 clean: ; $(RM) *.o core octave-core *.oct *~

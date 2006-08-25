@@ -27,10 +27,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/ov-scalar.h>
 #include "ov-vpa.h"
 
-#ifndef OV_REP_TYPE
-#define OV_REP_TYPE octave_value
-#endif
-
 class octave_complex;
 class octave_scalar;
 
@@ -62,9 +58,7 @@ public:
       return new octave_ex (*this); 
     }
   
-#ifdef HAVE_ND_ARRAYS
   dim_vector dims (void) const { static dim_vector dv (1, 1); return dv; }
-#endif
   int rows (void) const { return 1; }
   int columns (void) const { return 1; }
   

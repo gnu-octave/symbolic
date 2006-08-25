@@ -27,13 +27,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/oct-alloc.h>
 #include <octave/ov-typeinfo.h>
 
-#ifdef OV_REP_TYPE
-#define TYPE_CONV_FCN OV_REP_TYPE::type_conv_fcn
-#else
-#define OV_REP_TYPE octave_value
-#define TYPE_CONV_FCN type_conv_fcn
-#endif
-
 // vpa values.
 
 class
@@ -56,9 +49,7 @@ public:
   void operator delete (void *p, size_t size);
 #endif 
 
-#ifdef HAVE_ND_ARRAYS
   dim_vector dims (void) const { static dim_vector dv (1, 1); return dv; }
-#endif
   int rows (void) const { return 1; }
   int columns (void) const { return 1; }
 

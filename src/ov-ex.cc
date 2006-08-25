@@ -138,11 +138,7 @@ octave_ex& octave_ex::operator=(const octave_ex& a)
 
 DEFINE_OCTAVE_ALLOCATOR (octave_ex);
 
-#ifdef TYPEID_HAS_CLASS
 DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_ex, "ex", "sym");
-#else
-DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_ex, "ex");
-#endif
 
 /*
 ;;; Local Variables: ***

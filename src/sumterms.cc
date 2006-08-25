@@ -16,13 +16,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-#include <octave/oct.h>
 
-#ifdef NEED_OCTAVE_QUIT
-#define OCTAVE_QUIT do {} while (0)
-#else
+#include <octave/oct.h>
 #include <octave/quit.h>
-#endif
 
 #include <ginac/ginac.h>
 #include "ov-ex.h"

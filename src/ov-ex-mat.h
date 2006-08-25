@@ -23,10 +23,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <ginac/ginac.h>
 
-#ifndef OV_REP_TYPE
-#define OV_REP_TYPE octave_value
-#endif
-
 class octave_matrix;
 class octave_complex_matrix;
 
@@ -64,9 +60,7 @@ public:
       return new octave_ex_matrix (*this); 
     }
   
-#ifdef HAVE_ND_ARRAYS
   dim_vector dims (void) const {dim_vector dv (x.rows(), x.cols()); return dv; }
-#endif
   int rows (void) const { return x.rows (); }
   int columns (void) const { return x.cols (); }
   
