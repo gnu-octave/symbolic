@@ -7,7 +7,7 @@ cat configure.base >> configure.in
 cat <<EOF >> configure.in
   AC_OUTPUT(\$CONFIGURE_OUTPUTS)
   dnl XXX FIXME XXX chmod is not in autoconf's list of portable functions
-  chmod 0771 octinst.sh
+
   echo " "
   echo "  \"\\\$prefix\" is \$prefix"
   echo "  \"\\\$exec_prefix\" is \$exec_prefix"
