@@ -5,6 +5,7 @@ Author: Various Authors
 Maintainer: The Octave Community
 Title: Symbolic Computations.
 Description: Add a description to this package!
+BuildRequires: GiNaC-devel [Mandriva] libginac1.3_0-devel
 Depends: octave (>= 2.9.7)
 License: GPL version 2 or later
 Url: http://octave.sf.net
