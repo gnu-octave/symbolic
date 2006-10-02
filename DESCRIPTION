@@ -4,7 +4,7 @@ Date: 2006-08-05
 Author: Various Authors
 Maintainer: The Octave Community
 Title: Symbolic Computations.
-Description: Add a description to this package!
+Description: Symbolic toolbox based on GiNaC and CLN.
 BuildRequires: GiNaC-devel [Mandriva] libginac1.3_0-devel
 Depends: octave (>= 2.9.7)
 License: GPL version 2 or later
