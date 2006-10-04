@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <octave/oct-obj.h>
 #include <octave/pager.h>
 #include <octave/quit.h>
+#include <octave/variables.h>
 
 #include <ginac/ginac.h>
 #include "ov-vpa.h"
@@ -119,17 +120,39 @@ bool get_relation(const octave_value arg, GiNaC::relational& relation)
 	return true;
 }
 
+static bool symbolic_type_loaded = false;
+
+void
+load_symbolic_type (void)
+{
+  if (! symbolic_type_loaded)
+    {
+      octave_vpa::register_type ();
+      octave_ex::register_type (); 
+      octave_ex_matrix::register_type ();
+      octave_relational::register_type (); 
+
+      install_ex_matrix_ops();
+      install_ex_ops();
+      install_vpa_ops();
+      symbolic_type_loaded = true;
+
+      // We should lock the constructor functions of this type in place,
+      // otherwise something like
+      // "symbols(); a=sym('V_max'); clear functions; a" generates
+      // a seg-fault. Note this relies on the fact that Fsym, Fex_matrix
+      // and Fvpa are linked into the symbols.oct file. If th
+      // moved to this locking needs to be rethought.
+      mlock ("sym");
+      mlock ("ex_matrix");
+      mlock ("vpa");
+    }
+}
+
 DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
 {
   octave_value retval;
-  octave_vpa::register_type ();
-  octave_ex::register_type (); 
-  octave_ex_matrix::register_type ();
-  octave_relational::register_type (); 
-
-  install_ex_matrix_ops();
-  install_ex_ops();
-  install_vpa_ops();
+  load_symbolic_type ();
   return retval;
 }
 
