@@ -114,12 +114,15 @@ octave_ex::~octave_ex()
 	if((GiNaC::is_a<GiNaC::symbol>(x)) && (!symbol_list.empty())) {
 		GiNaC::symbol sym = GiNaC::ex_to<GiNaC::symbol>(x);
 		std::vector<symbol_list_item>::iterator iter_symlist;
-		for(iter_symlist=symbol_list.begin();iter_symlist<symbol_list.end();iter_symlist++) {
+		for(iter_symlist=symbol_list.begin();iter_symlist<symbol_list.end();) {
 		  if(GiNaC::operator == (sym, iter_symlist->sym)) {
 				iter_symlist->refcount --;
-				if(iter_symlist->refcount==0)
-					symbol_list.erase(iter_symlist);
+				if(iter_symlist->refcount==0) {
+					iter_symlist = symbol_list.erase(iter_symlist);
+					continue;
+				}
 			}
+		  iter_symlist++;
 		}
 	}
 }
