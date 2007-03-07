@@ -17,4 +17,10 @@ find . -name NOINSTALL -print    # shows which toolboxes won't be installed
 ])
 EOF
 
-autoconf && rm -f configure.in
+autoconf configure.in > configure.tmp
+if diff configure.tmp configure >& /dev/null; then
+  rm -f configure.tmp;
+else
+  mv -f configure.tmp configure
+fi
+rm -f configure.in
