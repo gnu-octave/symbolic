@@ -22,5 +22,6 @@ if diff configure.tmp configure >& /dev/null; then
   rm -f configure.tmp;
 else
   mv -f configure.tmp configure
+  chmod 0755 configure
 fi
 rm -f configure.in
