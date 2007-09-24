@@ -61,6 +61,8 @@ ALTMPATH = @altmpath@
 ALTOPATH = @altopath@
 
 @DEFHAVE_GINAC@ 
+GINAC_CFLAGS = @GINAC_CFLAGS@
+GINAC_LIBS = @GINAC_LIBS@
 
 %.o: %.c ; $(MKOCTFILE) -c $<
 %.o: %.f ; $(MKOCTFILE) -c $<

@@ -18,12 +18,10 @@ SRC=symbols.cc probably_prime.cc differentiate.cc \
 	op-ex-mat.cc op-ex.cc op-vpa.cc 
 OBJ=$(SRC:.cc=.o)
 
-%.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CPP_FLAGS) $(HAVE_ND_ARRAYS) $(TYPEID_HAS_CLASS) -c $<
+%.o: %.cc ; $(MKOCTFILE) -v $(GINAC_CFLAGS) $(HAVE_ND_ARRAYS) $(TYPEID_HAS_CLASS) -c $<
 
 ifdef HAVE_GINAC
 PROGS=symbols.oct
-	GINAC_CPP_FLAGS=$(shell ginac-config --cppflags)
-	GINAC_LD_FLAGS=$(shell ginac-config --libs)
 
 all: $(PROGS)
 else
@@ -36,6 +34,6 @@ endif
 $(PROGS): Makefile
 
 symbols.oct: $(OBJ)
-	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LD_FLAGS)
+	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LIBS)
 
 clean: ; $(RM) *.o core octave-core *.oct *~
