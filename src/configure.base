@@ -197,7 +197,7 @@ dnl is appropriate for the most recent version of Octave.
 dnl Define the following macro:
 dnl    OF_CHECK_LIB(lib,fn,true,false,helpers)
 dnl This is just like AC_CHECK_LIB, but it doesn't update LIBS
-AC_DEFUN(OF_CHECK_LIB,
+AC_DEFUN([OF_CHECK_LIB],
 [save_LIBS="$LIBS"
 AC_CHECK_LIB($1,$2,$3,$4,$5)
 LIBS="$save_LIBS"
@@ -206,7 +206,7 @@ LIBS="$save_LIBS"
 dnl Define the following macro:
 dnl    TRY_MKOCTFILE(msg,program,action_if_true,action_if_false)
 dnl
-AC_DEFUN(TRY_MKOCTFILE,
+AC_DEFUN([TRY_MKOCTFILE],
 [AC_MSG_CHECKING($1)
 cat > conftest.cc << EOF
 #include <octave/config.h>
@@ -235,7 +235,7 @@ dnl Evaluate an expression in octave
 dnl
 dnl OCTAVE_EVAL(expr,var) -> var=expr
 dnl
-AC_DEFUN(OCTAVE_EVAL,
+AC_DEFUN([OCTAVE_EVAL],
 [AC_MSG_CHECKING([for $1 in Octave])
 $2=`echo "disp($1)" | $OCTAVE -qf`
 AC_MSG_RESULT($$2)
@@ -246,7 +246,7 @@ dnl Check status of an octave variable
 dnl
 dnl OCTAVE_CHECK_EXIST(variable,action_if_true,action_if_false)
 dnl
-AC_DEFUN(OCTAVE_CHECK_EXIST,
+AC_DEFUN([OCTAVE_CHECK_EXIST],
 [AC_MSG_CHECKING([for $1 in Octave])
 if test `echo 'disp(exist("$1"))' | $OCTAVE -qf`X != 0X ; then
    AC_MSG_RESULT(yes)
@@ -298,20 +298,18 @@ case "$canonical_host_type" in
     ;;
 esac
 
-dnl Checking if the ginac-config program exists.  See the autoconf
-dnl manual for an extensive list of checks available.  The results
-dnl of the check are held in have_ginac.
+dnl Checking for ginac library
 AC_DEFINE(have_ginac)
-AC_CHECK_PROG(have_ginac, ginac-config, yes, no)
+PKG_CHECK_MODULES(GINAC, ginac, [have_ginac=yes], [have_ginac=no])
 
 if test $have_ginac = no ; then
 
-    dnl ginac-config doesn't exist: instruct the user how to install
+    dnl ginac doesn't exist: instruct the user how to install
     GINACSTATUS="GiNaC not found --- see main/symbolic/INSTALL"
 
 else
 
-    dnl ginac-config exists: cheer
+    dnl ginac exists: cheer
     GINACSTATUS=yes
     AC_SUBST(DEFHAVE_GINAC)
     DEFHAVE_GINAC="HAVE_GINAC=1"
