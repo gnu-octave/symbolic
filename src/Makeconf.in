@@ -17,6 +17,7 @@ libdir = @libdir@
 datadir = @datadir@
 infodir = @infodir@
 includedir = @includedir@
+datarootdir = @datarootdir@
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
