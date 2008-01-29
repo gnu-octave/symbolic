@@ -18,7 +18,7 @@ find . -name NOINSTALL -print    # shows which toolboxes won't be installed
 EOF
 
 aclocal && autoconf configure.in > configure.tmp
-if diff configure.tmp configure >& /dev/null; then
+if [ diff configure.tmp configure > /dev/null 2>&1 ]; then
   rm -f configure.tmp;
 else
   mv -f configure.tmp configure
