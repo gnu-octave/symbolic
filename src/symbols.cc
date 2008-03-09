@@ -22,6 +22,8 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 // * use GiNaC::ex_to<GiNaC::blah>(x) rather than ex_to_blah(x)
 // 2003-04-19 Willem Atsma <watsma@users.sf.net>
 // * added get_relational()
+// 2008-03-09 Nils Bluethgen <bluethgen (AT) users.sourceforge.net>
+// * added get_char() and to_char()
 
 #include <octave/config.h>
 #include <octave/defun-dld.h>
@@ -39,6 +41,8 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 #include "ov-relational.h"
 #include "sym-ops.h"
 #include "symbols.h"
+#include <string>
+#include <sstream>
 
 bool get_expression(const octave_value arg, GiNaC::ex& expression)
 {
@@ -64,6 +68,18 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression)
       return false;
     }
 
+  return true;
+}
+			   
+
+bool get_char(const octave_value arg, std::string& str)
+{
+  GiNaC::ex ex;
+  if (!get_expression(arg, ex)) 
+    return false;
+  std::stringstream strstr;
+  strstr << GiNaC::dflt << ex;
+  str = strstr.str();
   return true;
 }
 
@@ -154,6 +170,45 @@ DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
   load_symbolic_type ();
   return retval;
 }
+
+DEFUN_DLD(to_char,args, , 
+"-*- texinfo -*-\n\
+@deftypefn {Loadable Function} {d =} to_char(@var{n})\n\
+\n\
+Convert a vpa, string, ex or string type to a string.\n\
+\n\
+@end deftypefn\n\
+")
+{
+  octave_value retval;
+  int nargin = args.length();
+  std::string str;
+
+  if (nargin != 1)
+    {
+      print_usage ();
+      return retval;
+    }
+
+  try 
+    {
+      if (!get_char (args(0), str))
+	{
+	  print_usage ();
+	  return retval;
+	}
+      retval = octave_value(str);
+    }
+  catch (std::exception &e)
+    { 
+      error (e.what ());
+      retval = octave_value (); 
+    } 
+
+  return retval;
+}
+
+
 
 DEFUN_DLD(to_double,args, , 
 "-*- texinfo -*-\n\

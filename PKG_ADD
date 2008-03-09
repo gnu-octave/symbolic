@@ -3,6 +3,7 @@ autoload ("sym", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("is_vpa", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("is_sym", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("is_ex", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
+autoload ("to_char", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("to_double", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("digits", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("Cos", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
