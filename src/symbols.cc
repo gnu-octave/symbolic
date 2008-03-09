@@ -175,7 +175,7 @@ DEFUN_DLD(to_char,args, ,
 "-*- texinfo -*-\n\
 @deftypefn {Loadable Function} {d =} to_char(@var{n})\n\
 \n\
-Convert a vpa, string, ex or string type to a string.\n\
+Convert a vpa, string, ex type to a string.\n\
 \n\
 @end deftypefn\n\
 ")
