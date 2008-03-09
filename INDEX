@@ -23,4 +23,6 @@ Number theory
  probably_prime
  quotient remainder premainder
 Plot
-  splot
+ splot
+Conversion
+ to_char
