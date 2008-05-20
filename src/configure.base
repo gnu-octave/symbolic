@@ -7,4 +7,4 @@ dnl Checking for ginac library
 PKG_CHECK_MODULES(GINAC, ginac, , [AC_MSG_ERROR([GINAC not found])])
   
 dnl Check for gmp library
-AC_CHECK_LIB(gmp, __gmpz_init, , [AC_MSG_ERROR([GNU MP not found])])
+dnl AC_CHECK_LIB(gmp, __gmpz_init, , [AC_MSG_ERROR([GNU MP not found])])

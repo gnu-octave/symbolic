@@ -34,6 +34,6 @@ endif
 $(PROGS): Makefile
 
 symbols.oct: $(OBJ)
-	$(MKOCTFILE) -v -o $@ $(OBJ) $(GINAC_LIBS)
+	$(MKOCTFILE) -v -o $@ $(OBJ) `pkg-config --libs ginac`
 
 clean: ; $(RM) *.o core octave-core *.oct *~
