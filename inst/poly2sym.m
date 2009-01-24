@@ -45,7 +45,7 @@ endif
 
 N = length(c);
 
-if !iscell(c) & !is_list(c)
+if !iscell(c) & !islist(c)
 	tmp = c;
 	c = list;
 	for i=1:N
