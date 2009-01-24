@@ -82,3 +82,12 @@ else
 	endfor
 
 endif
+% test the example
+%!test
+%! symbols
+%! x=sym("x"); y=sym("y"); f=x^2+3*x*y-y^2;
+%! vars = findsym (f);
+%! assert(vars, 'x,y');
+%! vars2 = findsym (f,1);
+%! assert(vars2, 'x');
+

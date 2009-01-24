@@ -28,7 +28,7 @@
 ## @example
 ## symbols
 ## x=sym("x"); y=sym("y");
-## c = sym2poly (x^2+3*x-4);    # c = [2,3,-4]
+## c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
 ## c = sym2poly (x^2+y*x,x);    # c = list(2,y,0)
 ## @end example
 ##
@@ -145,3 +145,11 @@ if all_numeric
 else
 	c = c_ex;
 endif
+
+% test examples
+%!test
+%! symbols
+%! x=sym("x"); y=sym("y");
+%! c = sym2poly (x^2+3*x-4);
+%! assert(c, [1,3,-4]);
+
