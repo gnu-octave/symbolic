@@ -158,3 +158,19 @@ function [ x,inf,msg ] = symfsolve (varargin)
 	[x,inf,msg] = fsolve("symfn",X0);
 
 endfunction
+
+%!shared
+% x = sym ("x");
+% y = sym ("y");
+% f = x ^ 2 + 3 * x - 1;
+% g = x * y - y ^ 2 + 3;
+%!test
+% assert (symfsolve (f, g), [0.30278; -1.58727]', 1e-5);
+%!test
+% assert (symfsolve (f, g, x, 1, y, 5), [0.30278; 1.89004]', 1e-5);
+%!test
+% assert (symfsolve (f, g, {x==1,y==5}), [0.30278; 1.89004]', 1e-5);
+%!test
+% assert (symfsolve (f, g, [1 5]), [0.30278; 1.89004]', 1e-5);
+%!test
+% assert (symfsolve ({f, g}, {y==1,x==2}), [1.89004; 0.30278]', 1e-5);
