@@ -44,7 +44,7 @@
 ## @end example
 ##
 ## The system of equations to solve for can be given as separate arguments or
-## as a single list/cell-array:
+## as a single cell-array:
 ##
 ## @example
 ## a = symfsolve(@{f,g@},@{y==1,x==2@});  # here y=a(1), x=a(2)
@@ -52,7 +52,7 @@
 ##
 ## If the variables are not specified explicitly with the initial conditions,
 ## they are placed in alphabetic order. The system of equations can be comma-
-## separated or given in a list or cell-array. The return-values are those of
+## separated or given in a cell-array. The return-values are those of
 ## fsolve; @var{x} holds the found roots.
 ## @end deftypefn
 ## @seealso{fsolve}
@@ -65,12 +65,12 @@
 function [ x,inf,msg ] = symfsolve (varargin)
 
 	#separate variables and equations
-	eqns = list;
-	vars = list;
+	eqns = cell();
+	vars = cell();
 
-	if iscell(varargin{1}) | islist(varargin{1})
+	if iscell(varargin{1})
 		if !strcmp(typeinfo(varargin{1}{1}),"ex")
-			error("First argument must be (a cell-array/list of) symbolic expressions.")
+			error("First argument must be (a cell-array of) symbolic expressions.")
 		endif
 		eqns = varargin{1};
 		arg_count = 1;
@@ -78,7 +78,7 @@ function [ x,inf,msg ] = symfsolve (varargin)
 		arg_count = 0;
 		for i=1:nargin
 			tmp = disp(varargin{i});
-			if( iscell(varargin{i}) | islist(varargin{i}) | ...
+			if( iscell(varargin{i}) | ...
 					all(isalnum(tmp) | tmp=="_" | tmp==",") | ...
 					!strcmp(typeinfo(varargin{i}),"ex") )
 				break;
@@ -129,8 +129,8 @@ function [ x,inf,msg ] = symfsolve (varargin)
 		if nvars!=nevars
 			error("The number of initial conditions does not match the number of free variables.")
 		endif
-		if iscell(varargin{arg_count+1}) | islist(varargin{arg_count+1})
-			# List/cell-array of relations - this should work for a list of strings ("x==3") too.
+		if iscell(varargin{arg_count+1})
+			# cell-array of relations - this should work for a list of strings ("x==3") too.
 			for i=1:nvars
 				tmp = disp(varargin{arg_count+1}{i});
 				vars = append(vars,sym(strtok(tmp,"==")));

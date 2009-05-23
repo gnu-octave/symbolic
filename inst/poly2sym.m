@@ -19,7 +19,7 @@
 ## @deftypefn {Function File} {} @var{p} = poly2sym (@var{c}, @var{x})
 ## Creates a symbolic polynomial expression @var{p} with coefficients @var{c}.
 ## If @var{p} is not specified, the free variable is set to sym("x"). @var{c}
-## may be a vector or a list/cell-array of symbols. @var{x} may be a symbolic
+## may be a vector or a cell-array of symbols. @var{x} may be a symbolic
 ## expression or a string.
 ## The coefficients correspond to decreasing exponent of the free variable.
 ##
@@ -28,7 +28,7 @@
 ## symbols
 ## x=sym("x"); y=sym("y");
 ## p = poly2sym ([2,5,-3]);         # p = 2*x^2+5*x-3
-## c = poly2sym (list(2*y,5,-3),x); # p = 2*y*x^2+5*x-3
+## c = poly2sym ({2*y,5,-3},x); # p = 2*y*x^2+5*x-3
 ## @end example
 ##
 ## @end deftypefn
@@ -45,9 +45,9 @@ endif
 
 N = length(c);
 
-if !iscell(c) & !islist(c)
+if !iscell(c)
 	tmp = c;
-	c = list;
+	c = cell;
 	for i=1:N
 		c(i) = tmp(i);
 	endfor

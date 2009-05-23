@@ -21,7 +21,7 @@
 ## as a vector. If there is only one free variable in @var{p} the
 ## coefficient vector @var{c} is a plain numeric vector. If there is more
 ## than one free variable in @var{p}, a second argument @var{x} specifies the
-## free variable and the function returns a list of symbolic expressions.
+## free variable and the function returns a cell vector of symbolic expressions.
 ## The coefficients correspond to decreasing exponent of the free variable.
 ##
 ## Example:
@@ -29,7 +29,7 @@
 ## symbols
 ## x=sym("x"); y=sym("y");
 ## c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
-## c = sym2poly (x^2+y*x,x);    # c = list(2,y,0)
+## c = sym2poly (x^2+y*x,x);    # c = {2,y,0}
 ## @end example
 ##
 ## If @var{p} is not a polynomial the result has no warranty.
@@ -94,7 +94,7 @@ endfor
 p = expand(p);
 p_terms = sumterms(p);
 # if this is well behaved, I can find the coefficients by dividing with x
-c_ex = list;
+c_ex = cell;
 for i=1:length(p_terms)
 	tmp = p_terms{i};
 	for j=1:BADPOLY_COEFF_LIMIT
@@ -146,10 +146,10 @@ else
 	c = c_ex;
 endif
 
-% test examples
+%!shared
+% symbols
+% x=sym("x"); y=sym("y");
 %!test
-%! symbols
-%! x=sym("x"); y=sym("y");
-%! c = sym2poly (x^2+3*x-4);
-%! assert(c, [1,3,-4]);
-
+% assert(sym2poly (x^2+3*x-4), [1,3,-4]);
+%!test
+% assert (sym2poly (x^2+y*x,x), {2,y,0})
