@@ -17,6 +17,7 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <octave/oct.h>
 #include <octave/config.h>
 #include <octave/gripes.h>
 #include <octave/defun-dld.h>
@@ -36,6 +37,7 @@ is a number.\n\
 @end deftypefn\n\
 ")
 {
+  mlock ();
   octave_value retval;
   GiNaC::numeric d;
   int nargin = args.length();
@@ -71,6 +73,7 @@ DEFUN_DLD (sym,args, ,
 "-*- texinfo -*-\n\
 Create an object of type symbol\n")
 {
+  mlock ();
   octave_value retval;
   int nargin = args.length ();
 
@@ -106,6 +109,7 @@ is a number.\n\
 @end deftypefn\n\
 ")
 {
+  mlock ();
   octave_value retval;
   GiNaC::ex expression;
   int nargin = args.length();

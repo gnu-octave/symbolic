@@ -151,16 +151,6 @@ load_symbolic_type (void)
       install_ex_ops();
       install_vpa_ops();
       symbolic_type_loaded = true;
-
-      // We should lock the constructor functions of this type in place,
-      // otherwise something like
-      // "symbols(); a=sym('V_max'); clear functions; a" generates
-      // a seg-fault. Note this relies on the fact that Fsym, Fex_matrix
-      // and Fvpa are linked into the symbols.oct file. If th
-      // moved to this locking needs to be rethought.
-      mlock ("sym");
-      mlock ("ex_matrix");
-      mlock ("vpa");
     }
 }
 
