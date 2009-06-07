@@ -6,7 +6,7 @@ Maintainer: The Octave Community
 Title: Symbolic Computations.
 Description: Symbolic toolbox based on GiNaC and CLN.
 BuildRequires: ginac-devel
-Depends: octave (>= 2.9.7)
+Depends: octave (>= 3.1.55)
 Autoload: yes
 License: GPL version 2 or later
 Url: http://octave.sf.net
