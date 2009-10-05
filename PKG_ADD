@@ -41,3 +41,4 @@ autoload ("numden", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct")
 autoload ("syminfo", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("symlsolve", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
 autoload ("sumterms", fullfile (fileparts (mfilename ("fullpath")), "symbols.oct"));
+symbols ();
