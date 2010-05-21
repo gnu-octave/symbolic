@@ -83,7 +83,7 @@ function [ x,inf,msg ] = symfsolve (varargin)
 					!strcmp(typeinfo(varargin{i}),"ex") )
 				break;
 			endif
-			eqns=append(eqns,varargin{i});
+			eqns{end+1} = varargin{i};
 			arg_count = arg_count+1;
 		endfor
 	endif
@@ -117,7 +117,7 @@ function [ x,inf,msg ] = symfsolve (varargin)
 		for i=(arg_count+1):2:nargin
 			tmp = disp(varargin{i});
 			if all(isalnum(tmp) | tmp=="_" | tmp==",")
-				vars=append(vars,varargin{i});
+				vars{end+1} = varargin{i};
 				X0((i-arg_count+1)/2)=varargin{i+1};
 			else
 				error("Error in symbol-value pair arguments.")
@@ -133,7 +133,7 @@ function [ x,inf,msg ] = symfsolve (varargin)
 			# cell-array of relations - this should work for a list of strings ("x==3") too.
 			for i=1:nvars
 				tmp = disp(varargin{arg_count+1}{i});
-				vars = append(vars,sym(strtok(tmp,"==")));
+				vars{end+1} = {sym(strtok(tmp,"=="))};
 				X0(i) = str2num(tmp((findstr(tmp,"==")+2):length(tmp)));
 			endfor
 		else

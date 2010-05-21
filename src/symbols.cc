@@ -373,7 +373,8 @@ w = subs (f,@{x,y@},@{1,vpa(1/3)@})\n\
 			gripe_wrong_type_arg ("subs",args(0));
 			return retval;
 		}
-		if (!(args(1).is_list() || args(1).is_cell())) {
+		//if (!(args(1).is_list() || args(1).is_cell())) {
+		if (!(args(1).is_cell())) {
 			if (!get_symbol (args(1), the_sym)) {
 				gripe_wrong_type_arg("subs",args(1));
 				return retval;

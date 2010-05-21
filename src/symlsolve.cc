@@ -46,7 +46,7 @@ symbolic solutions corresponding  in order to @var{vars}.\n\
 	}
 	
 	try {
-		if(args(0).is_list() || args(0).is_cell()) {
+		if(args(0).is_cell()) {
 			octave_value_list oct_eqn_list(args(0).list_value());
 			for(i=0;i<oct_eqn_list.length();i++) {
 				if(!get_relation(oct_eqn_list(i),relation)) {
@@ -67,7 +67,7 @@ symbolic solutions corresponding  in order to @var{vars}.\n\
 			eqns.append(relation);
 		}
 
-		if(args(1).is_list() || args(1).is_cell()) {
+		if(args(1).is_cell()) {
 			octave_value_list oct_vars(args(1).list_value());
 			for(i=0;i<oct_vars.length();i++) {
 				if(!get_symbol(oct_vars(i),expression)) {
