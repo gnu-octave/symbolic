@@ -29,7 +29,7 @@
 ## symbols
 ## x=sym("x"); y=sym("y");
 ## c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
-## c = sym2poly (x^2+y*x,x);    # c = {2,y,0}
+## c = sym2poly (x^2+y*x,x);    # c = @{2,y,0@}
 ## @end example
 ##
 ## If @var{p} is not a polynomial the result has no warranty.
@@ -71,7 +71,7 @@ if isempty(pvars)
 endif
 nvars = length(pvars); 
 
-if nvars>1 & exist("x")!=1
+if nvars>1 && exist("x")!=1
 	error("Symbolic expression has more than 1 free variable; no variable specified.")
 elseif exist("x")!=1
 	x = pvars{1};

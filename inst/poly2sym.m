@@ -28,7 +28,7 @@
 ## symbols
 ## x=sym("x"); y=sym("y");
 ## p = poly2sym ([2,5,-3]);         # p = 2*x^2+5*x-3
-## c = poly2sym ({2*y,5,-3},x); # p = 2*y*x^2+5*x-3
+## c = poly2sym (@{2*y,5,-3@},x);     # p = 2*y*x^2+5*x-3
 ## @end example
 ##
 ## @end deftypefn
