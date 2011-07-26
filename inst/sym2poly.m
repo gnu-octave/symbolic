@@ -16,7 +16,7 @@
 ## see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} @var{c} = sym2poly (@var{p}, @var{x})
+## @deftypefn {Function File} @var{c} = sym2poly (@var{p}, @var{x})
 ## Returns the coefficients of the symbolic polynomial expression @var{p}
 ## as a vector. If there is only one free variable in @var{p} the
 ## coefficient vector @var{c} is a plain numeric vector. If there is more
@@ -27,15 +27,15 @@
 ## Example:
 ## @example
 ## symbols
-## x=sym("x"); y=sym("y");
+## x = sym("x"); y=sym("y");
 ## c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
 ## c = sym2poly (x^2+y*x,x);    # c = @{2,y,0@}
 ## @end example
 ##
 ## If @var{p} is not a polynomial the result has no warranty.
 ##
-## @end deftypefn
 ## @seealso{poly2sym,polyval,roots}
+## @end deftypefn
 
 ## Author: Willem J. Atsma <watsma(at)users.sf.net>
 ## Created: 18 April 2003

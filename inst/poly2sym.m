@@ -16,7 +16,7 @@
 ## see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} @var{p} = poly2sym (@var{c}, @var{x})
+## @deftypefn {Function File} @var{p} = poly2sym (@var{c}, @var{x})
 ## Creates a symbolic polynomial expression @var{p} with coefficients @var{c}.
 ## If @var{p} is not specified, the free variable is set to sym("x"). @var{c}
 ## may be a vector or a cell-array of symbols. @var{x} may be a symbolic
@@ -31,8 +31,8 @@
 ## c = poly2sym (@{2*y,5,-3@},x);     # p = 2*y*x^2+5*x-3
 ## @end example
 ##
-## @end deftypefn
 ## @seealso{sym2poly,polyval,roots}
+## @end deftypefn
 
 ## Author: Willem J. Atsma <watsma(at)users.sf.net>
 ## Created: April 2003
