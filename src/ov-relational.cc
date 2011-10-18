@@ -1,6 +1,6 @@
 /*
  
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,29 +21,29 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 #include "ov-relational.h"
 
 octave_relational::octave_relational (const GiNaC::ex & lhs, 
-				  const GiNaC::ex & rhs, 
-				  GiNaC::relational::operators op=GiNaC::relational::equal)
+                                      const GiNaC::ex & rhs, 
+                                      GiNaC::relational::operators op=GiNaC::relational::equal)
 {
   rel = GiNaC::relational(lhs, rhs, op);
 }
 
 octave_relational::octave_relational (const octave_ex & lhs, 
-				  const octave_ex & rhs, 
-				  GiNaC::relational::operators op=GiNaC::relational::equal)
+                                      const octave_ex & rhs, 
+                                      GiNaC::relational::operators op=GiNaC::relational::equal)
 {
   rel = GiNaC::relational(lhs.ex_value (), rhs.ex_value (), op);
 }
 
 octave_relational::octave_relational (const octave_ex & lhs, 
-				  const GiNaC::ex & rhs, 
-				  GiNaC::relational::operators op=GiNaC::relational::equal)
+                                      const GiNaC::ex & rhs, 
+                                      GiNaC::relational::operators op=GiNaC::relational::equal)
 {
   rel = GiNaC::relational(lhs.ex_value (), rhs, op);
 }
 
 octave_relational::octave_relational (const GiNaC::ex & lhs, 
-				  const octave_ex & rhs, 
-				  GiNaC::relational::operators op=GiNaC::relational::equal)
+                                      const octave_ex & rhs, 
+                                      GiNaC::relational::operators op=GiNaC::relational::equal)
 {
   rel = GiNaC::relational(lhs, rhs.ex_value (), op); 
 }

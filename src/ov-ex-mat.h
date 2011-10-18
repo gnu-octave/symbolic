@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public:
 
   octave_ex_matrix(octave_ex_matrix &ox);
   octave_ex_matrix(octave_ex &ox);
-  octave_ex_matrix(GiNaC::symbol sym);  
+  octave_ex_matrix(GiNaC::symbol sym);
   octave_ex_matrix(GiNaC::matrix ex_mat);
   octave_ex_matrix(GiNaC::ex expression);
   octave_ex_matrix(int rows, int columns);
@@ -70,7 +70,7 @@ public:
 
   bool is_true(void) const { return true; }
    
-  octave_value uminus (void) const { return new octave_ex_matrix(-x); } 
+  octave_value uminus (void) const { return new octave_ex_matrix(-x); }
 
   void print(std::ostream& os,bool pr_as_read_syntax) const;
   
@@ -79,7 +79,7 @@ private:
 
   DECLARE_OCTAVE_ALLOCATOR
 
-  DECLARE_OV_TYPEID_FUNCTIONS_AND_DATA  
+  DECLARE_OV_TYPEID_FUNCTIONS_AND_DATA
 
 };
 

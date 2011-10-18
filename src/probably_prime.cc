@@ -1,4 +1,4 @@
-// Copyright (C) 2001 Paul Kienzle
+// Copyright (C) 2001 Paul Kienzle <pkienzle@users.sf.net>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 DEFUN_DLD(probably_prime, args, ,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {r =} is_prime(@var{x})\n\
+@deftypefn Loadable Function {@vars{r} =} is_prime(@var{x})\n\
 Return true if the variable precision number is probably prime,\n\
 with error 1 in 2^100.\n\
 @end deftypefn\n\
 ")
 {
   int nargin = args.length ();
-  octave_value_list retval; 
+  octave_value_list retval;
   GiNaC::numeric value;
 
   if (nargin != 1)

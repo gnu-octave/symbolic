@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,20 +37,20 @@ public:
   octave_relational (GiNaC::relational & orel) : octave_base_value () { rel = orel;}
 
   octave_relational (const GiNaC::ex & lhs, 
-		   const GiNaC::ex & rhs, 
-		   GiNaC::relational::operators op);
+                     const GiNaC::ex & rhs, 
+                     GiNaC::relational::operators op);
 
   octave_relational (const octave_ex & lhs, 
-		   const octave_ex & rhs, 
-		   GiNaC::relational::operators op);
+                     const octave_ex & rhs, 
+                     GiNaC::relational::operators op);
 
   octave_relational (const octave_ex & lhs, 
-		   const GiNaC::ex & rhs, 
-		   GiNaC::relational::operators op);
+                     const GiNaC::ex & rhs, 
+                     GiNaC::relational::operators op);
 
   octave_relational (const GiNaC::ex & lhs, 
-		   const octave_ex & rhs, 
-		   GiNaC::relational::operators op);
+                     const octave_ex & rhs, 
+                     GiNaC::relational::operators op);
 
   ~octave_relational (void) { }
 

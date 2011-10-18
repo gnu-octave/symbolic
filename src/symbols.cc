@@ -1,6 +1,9 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2001 Paul Kienzle <pkienzle@users.sf.net>
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
+Copyright (C) 2003 Willem Atsma <watsma@users.sf.net>
+Copyright (C) 2008 Nils Bluethgen <bluethgen@users.sourceforge.net>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,7 +73,7 @@ bool get_expression(const octave_value arg, GiNaC::ex& expression)
 
   return true;
 }
-			   
+
 
 bool get_char(const octave_value arg, std::string& str)
 {
@@ -108,9 +111,9 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
     {
       GiNaC::ex x = ((octave_ex& ) rep).ex_value();
       if(GiNaC::is_a<GiNaC::numeric>(x))
-	number = GiNaC::ex_to<GiNaC::numeric>(x);
+        number = GiNaC::ex_to<GiNaC::numeric>(x);
       else
-	return false;
+        return false;
     }
   else if (arg.type_id () == octave_vpa::static_type_id ())
     number = ((const octave_vpa &) rep).vpa_value ();
@@ -126,13 +129,13 @@ bool get_numeric(const octave_value arg, GiNaC::numeric& number)
 
 bool get_relation(const octave_value arg, GiNaC::relational& relation)
 {
-	const OV_REP_TYPE& rep = arg.get_rep();
-	if (arg.type_id () == octave_relational::static_type_id ()) {
-		GiNaC::relational x = ((octave_relational& ) rep).relational_value();
-		relation = x;
-	} else return false;
-	
-	return true;
+  const OV_REP_TYPE& rep = arg.get_rep();
+  if (arg.type_id () == octave_relational::static_type_id ()) {
+    GiNaC::relational x = ((octave_relational& ) rep).relational_value();
+    relation = x;
+  } else return false;
+
+  return true;
 }
 
 static bool symbolic_type_loaded = false;
@@ -143,9 +146,9 @@ load_symbolic_type (void)
   if (! symbolic_type_loaded)
     {
       octave_vpa::register_type ();
-      octave_ex::register_type (); 
+      octave_ex::register_type ();
       octave_ex_matrix::register_type ();
-      octave_relational::register_type (); 
+      octave_relational::register_type ();
 
       install_ex_matrix_ops();
       install_ex_ops();
@@ -163,7 +166,7 @@ DEFUN_DLD(symbols,args,,"Initialize symbolic manipulation")
 
 DEFUN_DLD(to_char,args, , 
 "-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {d =} to_char(@var{n})\n\
+@deftypefn {Loadable Function} {@var{d} =} to_char(@var{n})\n\
 \n\
 Convert a vpa, string, ex type to a string.\n\
 \n\
@@ -180,20 +183,20 @@ Convert a vpa, string, ex type to a string.\n\
       return retval;
     }
 
-  try 
+  try
     {
       if (!get_char (args(0), str))
-	{
-	  print_usage ();
-	  return retval;
-	}
+  {
+    print_usage ();
+    return retval;
+  }
       retval = octave_value(str);
     }
   catch (std::exception &e)
-    { 
+    {
       error (e.what ());
-      retval = octave_value (); 
-    } 
+      retval = octave_value ();
+    }
 
   return retval;
 }
@@ -202,7 +205,7 @@ Convert a vpa, string, ex type to a string.\n\
 
 DEFUN_DLD(to_double,args, , 
 "-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {d =} to_double(@var{n})\n\
+@deftypefn {Loadable Function} {@var{d} =} to_double(@var{n})\n\
 \n\
 Convert a vpa, string, ex or string type to a double.\n\
 \n\
@@ -222,18 +225,18 @@ Convert a vpa, string, ex or string type to a double.\n\
   try 
     {
       if (!get_numeric (args(0), num))
-	{
-	  print_usage ();
-	  return retval;
-	}
+  {
+    print_usage ();
+    return retval;
+  }
       
       retval = octave_value(num.to_double ());
     }
   catch (std::exception &e)
-    { 
+    {
       error (e.what ());
-      retval = octave_value (); 
-    } 
+      retval = octave_value ();
+    }
 
   return retval;
 }
@@ -257,16 +260,16 @@ Change the precision for the vpa type\n\
   try 
     {     
       if(nargin == 1)
-	{
-	  if(args(0).is_real_scalar())
-	    {
-	      GiNaC::Digits = int(args(0).double_value());
-	    }
-	  else
-	    {
-	      print_usage ();
-	    }
-	}
+  {
+    if(args(0).is_real_scalar())
+      {
+        GiNaC::Digits = int(args(0).double_value());
+      }
+    else
+      {
+        print_usage ();
+      }
+  }
 
       double dig = double(GiNaC::Digits);
       retval = octave_value(dig);
@@ -330,7 +333,7 @@ DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(premainder,prem,"pseudo-remainder");
 
 DEFUN_DLD(subs,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {b =} subs(@var{a},@var{x},@var{n})\n\
+@deftypefn Loadable Function {@var{b} =} subs(@var{a},@var{x},@var{n})\n\
 \n\
 Substitute variables in an expression.\n\
 @table @var\n\
@@ -356,69 +359,69 @@ w = subs (f,@{x,y@},@{1,vpa(1/3)@})\n\
 @end deftypefn\n\
 ")
 {
-	GiNaC::ex expression;
-	GiNaC::ex the_sym;
-	GiNaC::ex ex_sub;
-	GiNaC::ex tmp;
-	int nargin = args.length ();
-	octave_value retval;
+  GiNaC::ex expression;
+  GiNaC::ex the_sym;
+  GiNaC::ex ex_sub;
+  GiNaC::ex tmp;
+  int nargin = args.length ();
+  octave_value retval;
 
-	if (nargin != 3) {
-		error("need three arguments\n");
-		return retval;
-	}
+  if (nargin != 3) {
+    error("need three arguments\n");
+    return retval;
+  }
 
-	try {
-		if (!get_expression (args(0), expression)) {
-			gripe_wrong_type_arg ("subs",args(0));
-			return retval;
-		}
-		//if (!(args(1).is_list() || args(1).is_cell())) {
-		if (!(args(1).is_cell())) {
-			if (!get_symbol (args(1), the_sym)) {
-				gripe_wrong_type_arg("subs",args(1));
-				return retval;
-			}
-			if (!get_expression (args(2), ex_sub)) {
-				gripe_wrong_type_arg ("subs",args(2));
-				return retval;
-			}
-			tmp = expression.subs(the_sym == ex_sub);
-		} else {
-			octave_value_list symlist, sublist;
-			int i;
-			symlist = args(1).list_value();
-			sublist = args(2).list_value();
-			if(symlist.length()!=sublist.length()) {
-				error("Number of expressions and substitutes must be the same.");
-				return retval;
-			}
-			tmp = expression;
-			for(i=0;i<symlist.length();i++) {
-				OCTAVE_QUIT;
-				if (!get_symbol (symlist(i),the_sym)) {
-					gripe_wrong_type_arg("subs",symlist(i));
-					return retval;
-				}
-				if (!get_expression (sublist(i),ex_sub)) {
-					gripe_wrong_type_arg("subs",sublist(i));
-					return retval;
-				}
-				tmp = tmp.subs(the_sym == ex_sub);
-			}
-		}
-		retval = octave_value (new octave_ex(tmp));
-	} catch (std::exception &e) {
-		error (e.what ());
-		retval = octave_value ();
-	}
+  try {
+    if (!get_expression (args(0), expression)) {
+      gripe_wrong_type_arg ("subs",args(0));
+      return retval;
+    }
+    //if (!(args(1).is_list() || args(1).is_cell())) {
+    if (!(args(1).is_cell())) {
+      if (!get_symbol (args(1), the_sym)) {
+        gripe_wrong_type_arg("subs",args(1));
+        return retval;
+      }
+      if (!get_expression (args(2), ex_sub)) {
+        gripe_wrong_type_arg ("subs",args(2));
+        return retval;
+      }
+      tmp = expression.subs(the_sym == ex_sub);
+    } else {
+      octave_value_list symlist, sublist;
+      int i;
+      symlist = args(1).list_value();
+      sublist = args(2).list_value();
+      if(symlist.length()!=sublist.length()) {
+        error("Number of expressions and substitutes must be the same.");
+        return retval;
+      }
+      tmp = expression;
+      for(i=0;i<symlist.length();i++) {
+        OCTAVE_QUIT;
+        if (!get_symbol (symlist(i),the_sym)) {
+          gripe_wrong_type_arg("subs",symlist(i));
+          return retval;
+        }
+        if (!get_expression (sublist(i),ex_sub)) {
+          gripe_wrong_type_arg("subs",sublist(i));
+          return retval;
+        }
+        tmp = tmp.subs(the_sym == ex_sub);
+      }
+    }
+    retval = octave_value (new octave_ex(tmp));
+  } catch (std::exception &e) {
+    error (e.what ());
+    retval = octave_value ();
+  }
 
-	return retval;
+  return retval;
 }
 
 DEFUN_DLD(expand,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {b =} expand(@var{a})\n\
+@deftypefn Loadable Function {@var{b} =} expand(@var{a})\n\
 \n\
 Expand an expression\n\
 @table @var\n\
@@ -444,14 +447,14 @@ Expand an expression\n\
     {
 
       if(args(0).type_id() == octave_ex::static_type_id())
-	{
-	  const OV_REP_TYPE& rep1 = args(0).get_rep();
-	  expression = ((const octave_ex& ) rep1).ex_value();
-	}
+  {
+    const OV_REP_TYPE& rep1 = args(0).get_rep();
+    expression = ((const octave_ex& ) rep1).ex_value();
+  }
       else
-	{
-	  gripe_wrong_type_arg("expand",args(0));
-	}
+  {
+    gripe_wrong_type_arg("expand",args(0));
+  }
       
       result = expression.expand();
       retval = octave_value(new octave_ex(result));
@@ -468,7 +471,7 @@ Expand an expression\n\
 
 DEFUN_DLD(coeff,args,,
 "-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {b =} coeff(@var{a},@var{x},@var{n})\n\
+@deftypefn {Loadable Function} {@var{b} =} coeff(@var{a},@var{x},@var{n})\n\
 \n\
 Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.\n\
 \n\
@@ -489,26 +492,26 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.\n\
   try 
     {
       if(!get_expression(args(0), expression))
-	{
-	  gripe_wrong_type_arg("coeff",args(0));
-	  return retval;
-	}
+  {
+    gripe_wrong_type_arg("coeff",args(0));
+    return retval;
+  }
 
       if(!get_symbol (args(1), sym))
-	{
-	  gripe_wrong_type_arg("coeff",args(1));
-	  return retval;
-	}
+  {
+    gripe_wrong_type_arg("coeff",args(1));
+    return retval;
+  }
 
       if(args(2).is_real_scalar())
-	{
-	  n = (int )args(2).double_value();
-	}
+  {
+    n = (int )args(2).double_value();
+  }
       else
-	{
-	  gripe_wrong_type_arg("coeff",args(2));
-	  return retval;
-	}
+  {
+    gripe_wrong_type_arg("coeff",args(2));
+    return retval;
+  }
 
       retval = octave_value (new octave_ex (expression.coeff(sym,n)));
     }
@@ -523,7 +526,7 @@ Obtain the @var{n}th coefficient of the variable @var{x} in @var{a}.\n\
 
 DEFUN_DLD(collect,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {b =} collect(@var{a},@var{x})\n\
+@deftypefn Loadable Function {@var{b} =} collect(@var{a},@var{x})\n\
 \n\
 collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 @table @var\n\
@@ -549,14 +552,14 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
   try 
     {
       if(!get_expression(args(0), expression))
-	{
-	  gripe_wrong_type_arg("collect",args(0));
-	}
+  {
+    gripe_wrong_type_arg("collect",args(0));
+  }
       
       if(!get_symbol(args(1), the_sym))
-	{
-	  gripe_wrong_type_arg("collect",args(1));
-	}
+  {
+    gripe_wrong_type_arg("collect",args(1));
+  }
 
       retval = new octave_ex(expression.collect(the_sym));
 
@@ -572,7 +575,7 @@ collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 
 DEFUN_DLD(Gcd,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {b =} collect(@var{a},@var{x})\n\
+@deftypefn Loadable Function {@var{b} =} collect(@var{a},@var{x})\n\
 \n\
 Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 @table @var\n\

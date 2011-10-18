@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -83,17 +83,17 @@ private:
 
   class symbol_list_item {
   public:
-  	symbol_list_item() {}
-	symbol_list_item(GiNaC::symbol s, int c) {sym=s; refcount=c;}
-  	GiNaC::symbol sym;
-	int refcount;
+    symbol_list_item() {}
+  symbol_list_item(GiNaC::symbol s, int c) {sym=s; refcount=c;}
+    GiNaC::symbol sym;
+  int refcount;
   };
   
   static std::vector<symbol_list_item> symbol_list;
 
   DECLARE_OCTAVE_ALLOCATOR
 
-  DECLARE_OV_TYPEID_FUNCTIONS_AND_DATA  
+  DECLARE_OV_TYPEID_FUNCTIONS_AND_DATA
 
 };
 

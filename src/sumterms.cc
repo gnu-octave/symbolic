@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2003 Willem J. Atsma
+Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,35 +31,35 @@ DEFUN_DLD(sumterms,args, ,
 Returns a list of terms that are summed in expression @var{f}.\n\
 @end deftypefn")
 {
-	GiNaC::ex expression;
-	octave_value retval;
-	octave_value_list termlist;
-	int nargin = args.length();
+  GiNaC::ex expression;
+  octave_value retval;
+  octave_value_list termlist;
+  int nargin = args.length();
 
-	if (nargin != 1) {
-		error("Need one argument.");
-		return retval;
-	}
-	try {
-		if (!get_expression (args(0), expression)) {
-			error("Argument must be a symbolic expression.");
-			return retval;
-		}
-		if(GiNaC::is_a<GiNaC::add>(expression)) {
-			int i, n = expression.nops();
-			for(i=0;i<n;i++) {
-				OCTAVE_QUIT;
-				termlist.append(octave_value(new octave_ex(expression.op(i))));
-			}
-		} else {
-			// no sum terms, return expression
-			termlist.append(octave_value(new octave_ex(expression)));
-		}
-		retval = termlist;
-	} catch (std::exception &e) {
-		error (e.what ());
-		retval = octave_value ();
-	}
+  if (nargin != 1) {
+    error("Need one argument.");
+    return retval;
+  }
+  try {
+    if (!get_expression (args(0), expression)) {
+      error("Argument must be a symbolic expression.");
+      return retval;
+    }
+    if(GiNaC::is_a<GiNaC::add>(expression)) {
+      int i, n = expression.nops();
+      for(i=0;i<n;i++) {
+        OCTAVE_QUIT;
+        termlist.append(octave_value(new octave_ex(expression.op(i))));
+      }
+    } else {
+      // no sum terms, return expression
+      termlist.append(octave_value(new octave_ex(expression)));
+    }
+    retval = termlist;
+  } catch (std::exception &e) {
+    error (e.what ());
+    retval = octave_value ();
+  }
 
-	return retval;
+  return retval;
 }

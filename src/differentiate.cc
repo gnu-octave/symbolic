@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 DEFUN_DLD(differentiate,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {da_dx =} differentiate(@var{a},@var{x} [, @var{n}])\n\
+@deftypefn Loadable Function {@var{da_dx} =} differentiate(@var{a},@var{x} [, @var{n}])\n\
 \n\
 Return the @var{n}th derivative of @var{a} with respect to @var{x}. If @var{n} is not\n\
 supplied then a default value of 1 is used.\n\
@@ -47,37 +47,37 @@ supplied then a default value of 1 is used.\n\
   try 
     { 
       if (!get_expression (args(0), expression))
-	{
-	  print_usage ();
-	  return retval;
-	}
+    {
+      print_usage ();
+      return retval;
+    }
       
       if (!get_symbol (args(1), variable))
-	{
-	  print_usage ();
-	  return retval;
-	}
+    {
+      print_usage ();
+      return retval;
+    }
       
       if (nargin == 3)
-	{
-	  if (!get_numeric (args(2), num))
-	    {
-	      print_usage ();
-	      return retval;
-	    }
-	  order = int(num.to_double ());
-	  if (order < 0)
-	    {
-	      error("must supply an integer greater than zero\n");
-	      return retval;
-	    }
-	}
+    {
+      if (!get_numeric (args(2), num))
+        {
+          print_usage ();
+          return retval;
+        }
+      order = int(num.to_double ());
+      if (order < 0)
+        {
+          error("must supply an integer greater than zero\n");
+          return retval;
+        }
+    }
       else
-	order = 1;
+    order = 1;
 
       retval = octave_value(new octave_ex
-			    (expression.diff
-			     (GiNaC::ex_to<GiNaC::symbol>(variable),order)));
+                (expression.diff
+                 (GiNaC::ex_to<GiNaC::symbol>(variable),order)));
     }
   catch (std::exception &e)
     {

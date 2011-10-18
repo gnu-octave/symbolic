@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,14 +39,14 @@ DEFUN_DLD(is_sym,args, ,"Return true if an object is of type sym false otherwise
   const OV_REP_TYPE& rep = args(0).get_rep();
 
   retval = args(0).type_id () == octave_ex::static_type_id () &&
-	    GiNaC::is_a<GiNaC::symbol>(((octave_ex& ) rep).ex_value ());
+      GiNaC::is_a<GiNaC::symbol>(((octave_ex& ) rep).ex_value ());
   return octave_value(retval);
 }
 
 
 DEFUN_DLD(is_ex,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {bool =} is_ex(@var{a})\n\
+@deftypefn Loadable Function {@var{bool} =} is_ex(@var{a})\n\
 \n\
 Return true if an object is a symbolic expression.\n\
 @seealso{is_vpa, is_sym, is_ex_matrix}\n\
@@ -60,7 +60,7 @@ Return true if an object is a symbolic expression.\n\
 
 DEFUN_DLD(is_ex_matrix,args,,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {bool =} is_ex_matrix(@var{a})\n\
+@deftypefn Loadable Function {@var{bool} =} is_ex_matrix(@var{a})\n\
 \n\
 Return true if an object is a symbolic matrix.\n\
 @seealso{is_vpa, is_sym, is_ex}\n\

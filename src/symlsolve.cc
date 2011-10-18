@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2003 Willem J. Atsma
+Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; If not, see <http://www.gnu.org/licenses/>.
 
-Based on differentiate.cc by Ben Sapp (2002).
+Based on differentiate.cc by Ben Sapp (2002) <bsapp@nua.lampf.lanl.gov>
 */
 #include <octave/oct.h>
 
@@ -27,68 +27,68 @@ DEFUN_DLD(symlsolve,args,nargout,
 "-*- texinfo -*-\n\
 @deftypefn Loadable Function {@var{sols} =} symlsolve(@var{eqns},@var{vars})\n\
 \n\
-Apply the GiNaC lsolve() method to the given linear system of equations and\n\
+Apply the GiNaC @command{lsolve()} method to the given linear system of equations and\n\
 variables. @var{eqns} and @var{vars} must be single symbolic expressions or\n\
 lists/cell-arrays of these. The return value @var{sols} is a list of\n\
 symbolic solutions corresponding  in order to @var{vars}.\n\
 @end deftypefn")
 {
-	GiNaC::lst eqns, vars;
-	GiNaC::relational relation;
-	GiNaC::ex expression, sols;
-	octave_value_list oct_sols;
-	octave_value retval;
-	int i, nargin = args.length();
-	
-	if (nargin != 2) {
-		error("Need 2 arguments.");
-		return retval;
-	}
-	
-	try {
-		if(args(0).is_cell()) {
-			octave_value_list oct_eqn_list(args(0).list_value());
-			for(i=0;i<oct_eqn_list.length();i++) {
-				if(!get_relation(oct_eqn_list(i),relation)) {
-					if(!get_expression(oct_eqn_list(i),expression)) {
-						error("Equation %d is not a valid expression.",i+1);
-						return retval;
-					} else relation = (expression==0);
-				}
-				eqns.append(relation);
-			}
-		} else {
-			if(!get_relation(args(0),relation)) {
-				if(!get_expression(args(0),expression)) {
-					error("Equation is not a valid expression.");
-					return retval;
-				} else relation = (expression==0);
-			}
-			eqns.append(relation);
-		}
+  GiNaC::lst eqns, vars;
+  GiNaC::relational relation;
+  GiNaC::ex expression, sols;
+  octave_value_list oct_sols;
+  octave_value retval;
+  int i, nargin = args.length();
+  
+  if (nargin != 2) {
+    error("Need 2 arguments.");
+    return retval;
+  }
+  
+  try {
+    if(args(0).is_cell()) {
+      octave_value_list oct_eqn_list(args(0).list_value());
+      for(i=0;i<oct_eqn_list.length();i++) {
+        if(!get_relation(oct_eqn_list(i),relation)) {
+          if(!get_expression(oct_eqn_list(i),expression)) {
+            error("Equation %d is not a valid expression.",i+1);
+            return retval;
+          } else relation = (expression==0);
+        }
+        eqns.append(relation);
+      }
+    } else {
+      if(!get_relation(args(0),relation)) {
+        if(!get_expression(args(0),expression)) {
+          error("Equation is not a valid expression.");
+          return retval;
+        } else relation = (expression==0);
+      }
+      eqns.append(relation);
+    }
 
-		if(args(1).is_cell()) {
-			octave_value_list oct_vars(args(1).list_value());
-			for(i=0;i<oct_vars.length();i++) {
-				if(!get_symbol(oct_vars(i),expression)) {
-					error("Variable %d is not a valid symbol.",i+1);
-					return retval;
-				}
-				vars.append(expression);
-			}
-		} else {
-			if(!get_symbol(args(1),expression)) {
-				error("Variable is not a valid symbol.");
-				return retval;
-			}
-			vars.append(expression);
-		}
-		sols = lsolve(eqns,vars);
-		for(i=0;i<(int)sols.nops();i++) oct_sols.append(new octave_ex(sols[i].rhs()));
-		retval = oct_sols;
-	} catch (std::exception &e) {
-		error (e.what ());
-		retval = octave_value ();
-	}
-	return retval;
+    if(args(1).is_cell()) {
+      octave_value_list oct_vars(args(1).list_value());
+      for(i=0;i<oct_vars.length();i++) {
+        if(!get_symbol(oct_vars(i),expression)) {
+          error("Variable %d is not a valid symbol.",i+1);
+          return retval;
+        }
+        vars.append(expression);
+      }
+    } else {
+      if(!get_symbol(args(1),expression)) {
+        error("Variable is not a valid symbol.");
+        return retval;
+      }
+      vars.append(expression);
+    }
+    sols = lsolve(eqns,vars);
+    for(i=0;i<(int)sols.nops();i++) oct_sols.append(new octave_ex(sols[i].rhs()));
+    retval = oct_sols;
+  } catch (std::exception &e) {
+    error (e.what ());
+    retval = octave_value ();
+  }
+  return retval;
 }

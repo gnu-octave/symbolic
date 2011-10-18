@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 DEFUN_DLD (vpa, args, ,
 "-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {n =} vpa(@var{s})\n\
+@deftypefn {Loadable Function} {@var{n} =} vpa(@var{s})\n\
 \n\
 Creates a variable precision arithmetic variable from @var{s}.\n\
 @var{s} can be a scalar, vpa value, string or a ex value that \n\
@@ -45,18 +45,18 @@ is a number.\n\
   try 
     {
       if (nargin == 1)
-	{
-	  if (!get_numeric (args(0), d))
-	    {
-	      gripe_wrong_type_arg ("vpa", args(0));
-	      return retval;
-	    } 
-	}
+  {
+    if (!get_numeric (args(0), d))
+      {
+        gripe_wrong_type_arg ("vpa", args(0));
+        return retval;
+      } 
+  }
       else
-	{
-	  print_usage ();
-	  return retval;
-	}
+  {
+    print_usage ();
+    return retval;
+  }
 
       retval = octave_value(new octave_vpa(d));
     }
@@ -101,7 +101,7 @@ Create an object of type symbol\n")
 
 DEFUN_DLD (ex_matrix, args, ,
 "-*- texinfo -*-\n\
-@deftypefn {Loadable Function} {n =} ex_matrix(@var{rows}, @var{cols}, ... )\n\
+@deftypefn {Loadable Function} {@var{n} =} ex_matrix(@var{rows}, @var{cols}, @dots{})\n\
 \n\
 Creates a variable precision arithmetic variable from @var{s}.\n\
 @var{s} can be a scalar, vpa value, string or a ex value that \n\
@@ -147,20 +147,20 @@ is a number.\n\
       k = 2;
       for (int i = 0; i < rows; i++)
       {
-	for (int j = 0; j < cols; j++, k++)
-	  {
-	    if (k < nargin)
-	      {
-		if (!get_expression(args(k),expression))
-		  {
-		    error("unable to turn an argument into a symbolic expression");
-		    return retval;
-		  }
-		a(i,j) = expression;
-	      }
-	    else
-	      break;
-	  }
+  for (int j = 0; j < cols; j++, k++)
+    {
+      if (k < nargin)
+        {
+    if (!get_expression(args(k),expression))
+      {
+        error("unable to turn an argument into a symbolic expression");
+        return retval;
+      }
+    a(i,j) = expression;
+        }
+      else
+        break;
+    }
       }
       retval = octave_value(new octave_ex_matrix(a));
     }

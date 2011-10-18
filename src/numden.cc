@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2003 Willem J. Atsma
+Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,29 +25,29 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 DEFUN_DLD(numden,args,nargout,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {[num,den] =} numden(@var{f})\n\
+@deftypefn Loadable Function {[@var{num}, @var{den}] =} numden(@var{f})\n\
 \n\
 Return the numerator and denominator of symbolic expression @var{f}.\n\
 @end deftypefn")
 {
-	GiNaC::ex expression, numden_list;
-	octave_value_list retval;
-	int nargin = args.length();
-	if (nargin != 1) {
-		print_usage ();
-		return retval;
-	}
-	try { 
-		if (!get_expression (args(0), expression)) {
-			error("Argument must be a symbolic expression.");
-			return retval;
-		}
-		numden_list = expression.numer_denom();
-		retval.append(new octave_ex(numden_list[0]));
-		retval.append(new octave_ex(numden_list[1]));
-	} catch(std::exception &e) {
-		error (e.what ());
-		retval = octave_value ();
-	}
-	return retval;
+  GiNaC::ex expression, numden_list;
+  octave_value_list retval;
+  int nargin = args.length();
+  if (nargin != 1) {
+    print_usage ();
+    return retval;
+  }
+  try {
+    if (!get_expression (args(0), expression)) {
+      error("Argument must be a symbolic expression.");
+      return retval;
+    }
+    numden_list = expression.numer_denom();
+    retval.append(new octave_ex(numden_list[0]));
+    retval.append(new octave_ex(numden_list[1]));
+  } catch(std::exception &e) {
+    error (e.what ());
+    retval = octave_value ();
+  }
+  return retval;
 }

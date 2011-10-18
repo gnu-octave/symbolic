@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,12 +37,12 @@ void install_ex_matrix_ops(void);
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
         GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
-	GiNaC::matrix r2 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
+        GiNaC::matrix r2 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
         if ( (r1.rows () != r2.rows ()) || (r1.cols () != r2.cols ()) ) \
           { \
-	    error("nonconformant arguments\n"); \
-	    return octave_value (); \
-	  } \
+            error("nonconformant arguments\n"); \
+            return octave_value (); \
+          } \
         return octave_value \
           (new octave_ex_matrix (r1.op (r2))); \
       } \
@@ -60,12 +60,12 @@ void install_ex_matrix_ops(void);
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
         GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
-	GiNaC::matrix r2 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
+        GiNaC::matrix r2 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
         if ( (r1.rows () != r2.rows ()) || (r1.cols () != r2.cols ()) ) \
           { \
-	    error("nonconformant arguments\n"); \
-	    return octave_value (); \
-	  } \
+            error("nonconformant arguments\n"); \
+            return octave_value (); \
+          } \
         return octave_value \
           (new octave_ex_matrix (r2.transpose ().inverse ().mul (r1).transpose ())); \
       } \
@@ -82,14 +82,14 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::matrix r1 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
-	GiNaC::ex r2 = octave_ex(v1.t1 ## _value ()).ex_value (); \
+        GiNaC::matrix r1 = octave_ex_matrix(v2.t2 ## _value ()).ex_matrix_value (); \
+        GiNaC::ex r2 = octave_ex(v1.t1 ## _value ()).ex_value (); \
         int rows = int(r1.rows ()); \
         int cols = int(r1.cols ()); \
-	GiNaC::matrix result(rows, cols); \
+        GiNaC::matrix result(rows, cols); \
         for (int i = 0; i < rows; i++) \
-	  for (int j = 0; j < cols; j++) \
-	    result(i,j) = r1(i,j) op r2; \
+          for (int j = 0; j < cols; j++) \
+            result(i,j) = r1(i,j) op r2; \
       return octave_value \
           (new octave_ex_matrix (result)); \
       } \
@@ -106,14 +106,14 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
-	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
+        GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
         int rows = int(r1.rows ()); \
         int cols = int(r1.cols ()); \
-	GiNaC::matrix result(rows, cols); \
+        GiNaC::matrix result(rows, cols); \
         for (int i = 0; i < rows; i++) \
-	  for (int j = 0; j < cols; j++) \
-	    result(i,j) = r1(i,j) op r2; \
+          for (int j = 0; j < cols; j++) \
+            result(i,j) = r1(i,j) op r2; \
         return octave_value \
           (new octave_ex_matrix (result)); \
       } \
@@ -130,14 +130,14 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
-	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        GiNaC::matrix r1 = octave_ex_matrix(v1.t1 ## _value ()).ex_matrix_value (); \
+        GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
         int rows = int(r1.rows ()); \
         int cols = int(r1.cols ()); \
-	GiNaC::matrix result(rows, cols); \
+        GiNaC::matrix result(rows, cols); \
         for (int i = 0; i < rows; i++) \
-	  for (int j = 0; j < cols; j++) \
-	    result(i,j) = GiNaC::pow(r1(i,j), r2); \
+          for (int j = 0; j < cols; j++) \
+            result(i,j) = GiNaC::pow(r1(i,j), r2); \
       return octave_value \
           (new octave_ex_matrix (result)); \
       } \
@@ -154,9 +154,9 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
-	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
-	GiNaC::ex result = r1 op r2; \
+        GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
+        GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        GiNaC::ex result = r1 op r2; \
         return octave_value \
           (new octave_ex (result)); \
       } \
@@ -173,9 +173,9 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
-	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
-	GiNaC::ex result = pow(r1,r2); \
+        GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
+        GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        GiNaC::ex result = pow(r1,r2); \
         return octave_value \
           (new octave_ex (result)); \
       } \
@@ -192,14 +192,14 @@ void install_ex_matrix_ops(void);
     try \
       { \
         CAST_BINOP_ARGS (const octave_ ## t1&, const octave_ ## t2&); \
-	GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
-	GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
+        GiNaC::ex r1 = octave_ex(v1.t1 ## _value ()).ex_value (); \
+        GiNaC::ex r2 = octave_ex(v2.t2 ## _value ()).ex_value (); \
         if (GiNaC::is_exactly_a<GiNaC::numeric>(r1) && \
-	    GiNaC::is_exactly_a<GiNaC::numeric>(r2)) \
+            GiNaC::is_exactly_a<GiNaC::numeric>(r2)) \
           { \
             bool tmp_bool = GiNaC::relational(r1, r2, op); \
             return octave_value(tmp_bool); \
-	  } \
+          } \
         return octave_value \
           (new octave_relational (r1, r2, op)); \
       } \

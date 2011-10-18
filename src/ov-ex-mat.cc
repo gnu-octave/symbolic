@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ octave_ex_matrix::octave_ex_matrix(octave_ex_matrix &ox)
 octave_ex_matrix::octave_ex_matrix(octave_ex &ox)
 {
   x = GiNaC::matrix(1,1);
-  x(0,0) = ox.ex_value (); 
+  x(0,0) = ox.ex_value ();
 }
 
 octave_ex_matrix::octave_ex_matrix(GiNaC::symbol sym)
@@ -85,7 +85,7 @@ octave_ex_matrix::octave_ex_matrix(octave_complex_matrix ov)
     
     for (int i = 0; i < rows; i++)
       for (int j = 0; j < cols; j++)
-	x(i,j) = GiNaC::ex(mat(i,j).real ()) + GiNaC::I*GiNaC::ex(mat(i,j).imag ());
+        x(i,j) = GiNaC::ex(mat(i,j).real ()) + GiNaC::I*GiNaC::ex(mat(i,j).imag ());
 }
 
 

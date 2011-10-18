@@ -6,7 +6,7 @@ bool get_relation(const octave_value arg, GiNaC::relational& rel);
 #define DEFUN_DLD_EX_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {r =}" # oct_name "(@var{x})\n\
+@deftypefn Loadable Function {@var{r} =}" # oct_name "(@var{x})\n\
 Return the " description " of a symbolic expression.\n\
 @end deftypefn\n\
 ") \
@@ -45,7 +45,7 @@ Return the " description " of a symbolic expression.\n\
 #define DEFUN_DLD_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {r =}" # oct_name "(@var{a}, @var{x})\n\
+@deftypefn Loadable Function {@var{r} =}" # oct_name "(@var{a}, @var{x})\n\
 Return the " description " of a symbolic expression.\n\
 @end deftypefn\n\
 ") \
@@ -77,7 +77,7 @@ Return the " description " of a symbolic expression.\n\
         } \
  \
       r = new octave_ex(expression.ginac_name \
-			(GiNaC::ex_to<GiNaC::symbol>(sym))); \
+      (GiNaC::ex_to<GiNaC::symbol>(sym))); \
  \
     } \
   catch (std::exception &e) \
@@ -93,7 +93,7 @@ Return the " description " of a symbolic expression.\n\
 #define DEFUN_DLD_EX_EX_SYM_GINAC_FUNCTION(oct_name,ginac_name,description) \
 DEFUN_DLD(oct_name, args, , \
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {r =}" # oct_name "(@var{a}, @var{x})\n\
+@deftypefn Loadable Function {@var{r} =}" # oct_name "(@var{a}, @var{x})\n\
 Return the " description " of a symbolic expression.\n\
 @end deftypefn\n\
 ") \
@@ -135,8 +135,8 @@ Return the " description " of a symbolic expression.\n\
         } \
  \
       r = new octave_ex(ginac_name (expression0, \
-				    expression1, \
-				    GiNaC::ex_to<GiNaC::symbol>(sym) )); \
+            expression1, \
+            GiNaC::ex_to<GiNaC::symbol>(sym) )); \
  \
     } \
   catch (std::exception &e) \

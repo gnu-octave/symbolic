@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2002 Ben Sapp
+Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ octave_vpa : public octave_base_value
 {
 public:
 
-  octave_vpa (void);  
+  octave_vpa (void);
   octave_vpa (int i);
   octave_vpa (const octave_vpa& s);
   octave_vpa (const GiNaC::numeric& s);
