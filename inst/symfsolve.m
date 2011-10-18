@@ -1,4 +1,4 @@
-## Copyright (C) 2003 Willem J. Atsma
+## Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
 ## 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
 ## along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[ @var{x},@var{inf},@var{msg} ] =} symfsolve (...)
-## Solve a set of symbolic equations using fsolve(). There are a number of
+## @deftypefn {Function File} {[@var{x}, @var{inf}, @var{msg}] =} symfsolve (@dots{})
+## Solve a set of symbolic equations using @command{fsolve}. There are a number of
 ## ways in which this function can be called.
 ##
 ## This solves for all free variables, initial values set to 0:
@@ -57,105 +57,100 @@
 ## @end deftypefn
 ## @seealso{fsolve}
 
-## Author: Willem J. Atsma <watsma(at)users.sf.net>
-## 
-## 2003-04-22 Willem J. Atsma <watsma(at)users.sf.net>
-## * Initial revision
-
 function [ x,inf,msg ] = symfsolve (varargin)
 
-	#separate variables and equations
-	eqns = cell();
-	vars = cell();
+  ## separate variables and equations
+  eqns = cell();
+  vars = cell();
 
-	if iscell(varargin{1})
-		if !strcmp(typeinfo(varargin{1}{1}),"ex")
-			error("First argument must be (a cell-array of) symbolic expressions.")
-		endif
-		eqns = varargin{1};
-		arg_count = 1;
-	else
-		arg_count = 0;
-		for i=1:nargin
-			tmp = disp(varargin{i});
-			if( iscell(varargin{i}) || ...
-					all(isalnum(tmp) || tmp=="_" || tmp==",") || ...
-					!strcmp(typeinfo(varargin{i}),"ex") )
-				break;
-			endif
-			eqns{end+1} = varargin{i};
-			arg_count = arg_count+1;
-		endfor
-	endif
-	neqns = length(eqns);
-	if neqns==0
-		error("No equations specified.")
-	endif
+  if iscell(varargin{1})
+    if !strcmp(typeinfo(varargin{1}{1}),"ex")
+      error("First argument must be (a cell-array of) symbolic expressions.")
+    endif
+    eqns = varargin{1};
+    arg_count = 1;
+  else
+    arg_count = 0;
+    for i=1:nargin
+      tmp = disp(varargin{i});
+      if( iscell(varargin{i}) || ...
+          all(isalnum(tmp) || tmp=="_" || tmp==",") || ...
+          !strcmp(typeinfo(varargin{i}),"ex") )
+        break;
+      endif
+      eqns{end+1} = varargin{i};
+      arg_count = arg_count+1;
+    endfor
+  endif
+  neqns = length(eqns);
+  if neqns==0
+    error("No equations specified.")
+  endif
 
-	# make a list with all variables from equations
-	tmp=eqns{1};
-	for i=2:neqns
-		tmp = tmp+eqns{i};
-	endfor
-	evars = findsymbols(tmp);
-	nevars=length(evars);
+  ## make a list with all variables from equations
+  tmp=eqns{1};
+  for i=2:neqns
+    tmp = tmp+eqns{i};
+  endfor
+  evars = findsymbols(tmp);
+  nevars=length(evars);
 
-	# After the equations may follow initial values. The formats are:
-	# 	[0 0.3 -3 ...]
-	# 	x,0,y,0.3,z,-3,...
-	# 	{x==0, y==0.3, z==-3 ...}
-	# 	none - default of al zero initial values
+  ## After the equations may follow initial values. The formats are:
+  ##   [0 0.3 -3 ...]
+  ##   x,0,y,0.3,z,-3,...
+  ##   {x==0, y==0.3, z==-3 ...}
+  ##   none - default of al zero initial values
 
-	if arg_count==nargin
-		vars = evars;
-		nvars = nevars;
-		X0 = zeros(nvars,1);
-	elseif (nargin-arg_count)>1
-		if mod(nargin-arg_count,2)
-			error("Initial value symbol-value pairs don't match up.")
-		endif
-		for i=(arg_count+1):2:nargin
-			tmp = disp(varargin{i});
-			if all(isalnum(tmp) | tmp=="_" | tmp==",")
-				vars{end+1} = varargin{i};
-				X0((i-arg_count+1)/2)=varargin{i+1};
-			else
-				error("Error in symbol-value pair arguments.")
-			endif
-		endfor
-		nvars = length(vars);
-	else
-		nvars = length(varargin{arg_count+1});
-		if nvars!=nevars
-			error("The number of initial conditions does not match the number of free variables.")
-		endif
-		if iscell(varargin{arg_count+1})
-			# cell-array of relations - this should work for a list of strings ("x==3") too.
-			for i=1:nvars
-				tmp = disp(varargin{arg_count+1}{i});
-				vars{end+1} = {sym(strtok(tmp,"=="))};
-				X0(i) = str2num(tmp((findstr(tmp,"==")+2):length(tmp)));
-			endfor
-		else
-			# straight numbers, match up with symbols in alphabetic order
-			vars = evars;
-			X0 = varargin{arg_count+1};
-		endif
-	endif
+  if arg_count==nargin
+    vars = evars;
+    nvars = nevars;
+    X0 = zeros(nvars,1);
+  elseif (nargin-arg_count)>1
+    if mod(nargin-arg_count,2)
+      error("Initial value symbol-value pairs don't match up.")
+    endif
+    for i=(arg_count+1):2:nargin
+      tmp = disp(varargin{i});
+      if all(isalnum(tmp) | tmp=="_" | tmp==",")
+        vars{end+1} = varargin{i};
+        X0((i-arg_count+1)/2)=varargin{i+1};
+      else
+        error("Error in symbol-value pair arguments.")
+      endif
+    endfor
+    nvars = length(vars);
+  else
+    nvars = length(varargin{arg_count+1});
+    if nvars!=nevars
+      error("The number of initial conditions does not match the number of free variables.")
+    endif
+    if iscell(varargin{arg_count+1})
+      ## cell-array of relations - this should work for a list of strings ("x==3") too.
+      for i=1:nvars
+        tmp = disp(varargin{arg_count+1}{i});
+        vars{end+1} = {sym(strtok(tmp,"=="))};
+        X0(i) = str2num(tmp((findstr(tmp,"==")+2):length(tmp)));
+      endfor
+    else
+      ## straight numbers, match up with symbols in alphabetic order
+      vars = evars;
+      X0 = varargin{arg_count+1};
+    endif
+  endif
 
-	# X0 is now a vector, vars a list of variables.
-	# create temporary function:
-	symfn = sprintf("function Y=symfn(X) ");
-	for i=1:nvars
-		symfn = [symfn sprintf("%s=X(%d); ",disp(vars{i}),i)];
-	endfor
-	for i=1:neqns
-		symfn = [symfn sprintf("Y(%d)=%s; ",i,disp(eqns{i}))];
-	endfor
-	symfn = [symfn sprintf("endfunction")];
+  ## X0 is now a vector, vars a list of variables.
+  ## create temporary function:
+  symfn = sprintf("function Y=symfn(X) ");
+  for i=1:nvars
+    symfn = [symfn sprintf("%s=X(%d); ",disp(vars{i}),i)];
+  endfor
+  for i=1:neqns
+    symfn = [symfn sprintf("Y(%d)=%s; ",i,disp(eqns{i}))];
+  endfor
+  symfn = [symfn sprintf("endfunction")];
 
-	eval(symfn);
-	[x,inf,msg] = fsolve("symfn",X0);
+  eval(symfn);
+  [x,inf,msg] = fsolve("symfn",X0);
 
 endfunction
 
