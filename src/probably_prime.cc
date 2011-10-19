@@ -20,7 +20,7 @@
 
 DEFUN_DLD(probably_prime, args, ,
 "-*- texinfo -*-\n\
-@deftypefn Loadable Function {@vars{r} =} is_prime(@var{x})\n\
+@deftypefn Loadable Function {@var{r} =} is_prime(@var{x})\n\
 Return true if the variable precision number is probably prime,\n\
 with error 1 in 2^100.\n\
 @end deftypefn\n\
