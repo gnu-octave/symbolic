@@ -338,7 +338,7 @@ DEFUN_DLD(subs,args,,
 Substitute variables in an expression.\n\
 @table @var\n\
 @item a\n\
- The expresion in which the substition will occur.\n\
+ The expression in which the substition will occur.\n\
 @item x\n\
  The variables that will be substituted.\n\
 @item n\n\
@@ -426,7 +426,7 @@ DEFUN_DLD(expand,args,,
 Expand an expression\n\
 @table @var\n\
 @item a\n\
- The expresion in which the expansion will occur.\n\
+ The expression in which the expansion will occur.\n\
 @end table\n\
 \n\
 @end deftypefn\n\
@@ -531,7 +531,7 @@ DEFUN_DLD(collect,args,,
 collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 @table @var\n\
 @item a\n\
- The expresion in which the collection will occur.\n\
+ The expression in which the collection will occur.\n\
 @item x\n\
  The variable that will be collected.\n\
 @end table\n\
@@ -580,7 +580,7 @@ DEFUN_DLD(Gcd,args,,
 Collect the terms in @var{a} as a univariate polynomial in @var{x}\n\
 @table @var\n\
 @item a\n\
- The expresion in which the collection will occur.\n\
+ The expression in which the collection will occur.\n\
 @item x\n\
  The variable that will be collected.\n\
 @end table\n\
