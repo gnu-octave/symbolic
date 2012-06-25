@@ -37,7 +37,7 @@
 
 function VARS = findsym(F,Nout)
 
-  symlist = findsymbols(F);
+  symlist = { findsymbols(F) };
   Nlist = length(symlist);
   if Nlist==0
     warning("No symbols were found.")
