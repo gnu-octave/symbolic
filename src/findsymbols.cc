@@ -88,7 +88,7 @@ The list is sorted in alphabetical order.\n\
     }
     /* Add 1 to so this works for symbols too. */
     append_symbols(symlist,expression+1);
-    retval = symlist;
+    retval = Cell (symlist);
   } catch (std::exception &e) {
     error (e.what ());
     retval = octave_value ();
