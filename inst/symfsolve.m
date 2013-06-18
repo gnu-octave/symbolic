@@ -128,7 +128,7 @@ function [ x,inf,msg ] = symfsolve (varargin)
       ## cell-array of relations - this should work for a list of strings ("x==3") too.
       for i=1:nvars
         tmp = disp(varargin{arg_count+1}{i});
-        vars{end+1} = {sym(strtok(tmp,"=="))};
+        vars{end+1} = sym (strtok (tmp, "=="));
         X0(i) = str2num(tmp((findstr(tmp,"==")+2):length(tmp)));
       endfor
     else
