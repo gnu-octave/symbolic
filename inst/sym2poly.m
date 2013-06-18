@@ -30,7 +30,7 @@
 ## x = sym("x");
 ## y = sym("y");
 ## c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
-## c = sym2poly (x^2+y*x,x);    # c = @{2,y,0@}
+## c = sym2poly (x^2+y*x,x);    # c = @{sym("1"),y,sym("0.0")@}
 ## @end example
 ##
 ## If @var{p} is not a polynomial the result has no warranty.
@@ -148,10 +148,8 @@ function c = sym2poly(p,x)
 
 endfunction
 
-%!shared
-% symbols
-% x=sym("x"); y=sym("y");
-%!test
-% assert(sym2poly (x^2+3*x-4), [1,3,-4]);
-%!test
-% assert (sym2poly (x^2+y*x,x), {2,y,0})
+%!shared x, y
+%! symbols
+%! x = sym ("x"); y = sym ("y");
+%!assert (sym2poly (x^2+3*x-4), [1, 3, -4]);
+%!assert (sym2poly (x^2+y*x, x), {sym("1"), y, sym("0.0")})
