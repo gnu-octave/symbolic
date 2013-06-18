@@ -55,7 +55,7 @@ Returns a list of terms that are summed in expression @var{f}.\n\
       // no sum terms, return expression
       termlist.append(octave_value(new octave_ex(expression)));
     }
-    retval = termlist;
+    retval = Cell (termlist);
   } catch (std::exception &e) {
     error (e.what ());
     retval = octave_value ();
