@@ -136,7 +136,7 @@ function c = sym2poly(p,x)
     endif
   endfor
 
-  c_ex = reverse(c_ex);
+  c_ex = c_ex(end:-1: 1);
 
   if all_numeric
     for i=1:(order+1)
