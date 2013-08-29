@@ -26,13 +26,13 @@ along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 
 inline static void
-add_info_field(Octave_map& info,const GiNaC::ex& exp,std::string field,int info_flag)
+add_info_field(octave_scalar_map& info,const GiNaC::ex& exp,std::string field,int info_flag)
 {
   bool flag = exp.info(info_flag);
   info.assign(field,octave_value(flag));
 }
 
-static void get_info(Octave_map& oct_info, const GiNaC::ex& gobj)
+static void get_info(octave_scalar_map& oct_info, const GiNaC::ex& gobj)
 {
   add_info_field(oct_info,gobj,"numeric",GiNaC::info_flags::numeric);
   add_info_field(oct_info,gobj,"real",GiNaC::info_flags::real);
@@ -64,7 +64,7 @@ Returns information regarding the nature of symbolic expression @var{eqn} in\n\
 a structure. Uses the @command{GiNaC::info()} function.\n\
 @end deftypefn")
 {
-  Octave_map oct_info;
+  octave_scalar_map oct_info;
   octave_value retval;
   int nargin = args.length();
   
