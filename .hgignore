@@ -3,13 +3,13 @@ syntax: regexp
 # to mean "at any directory" while the ^ idiom means "from the
 # project's top-level directory".
 
-(^|/)*\.dvi$
-(^|/)*\.pdf$
-(^|/)*\.o$
-(^|/)*\.oct$
-(^|/)*\.octlink$
+(^|/).*\.dvi$
+(^|/).*\.pdf$
+(^|/).*\.o$
+(^|/).*\.oct$
+(^|/).*\.octlink$
 (^|/)octave-core$
-(^|/)*.tar.gz$
+(^|/).*\.tar\.gz$
 
 (^|/)aclocal\.m4$
 (^|/)configure$
@@ -27,4 +27,4 @@ syntax: regexp
 (^|/)semantic.cache$
 
 # Other text editors often create these
-(^|/)~*
+(^|/)~.*
