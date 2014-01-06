@@ -2,11 +2,10 @@ Name: Symbolic
 Version: 1.1.0
 Date: 2011-10-18
 Author: Various Authors
-Maintainer: The Octave Community
+Maintainer: Octave-Forge community <maintainers@octave.org>
 Title: Symbolic Computations.
 Description: Symbolic toolbox based on GiNaC and CLN.
-BuildRequires: ginac-devel
-Depends: octave (>= 3.1.55)
-Autoload: yes
-License: GPL version 2 or later
+BuildRequires: ginac-devel [Debian] libginac-dev
+Depends: octave (>= 3.2.0)
+License: GPLv3+
 Url: http://octave.sf.net

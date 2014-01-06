@@ -1,0 +1,5 @@
+ Summary of important changes for image-acquisition 1.X.0 (yyyy/mm/dd):
+------------------------------------------------------------------------
+
+ ** Package is no longer autoloaded.
+

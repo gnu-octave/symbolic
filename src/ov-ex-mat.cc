@@ -4,7 +4,7 @@ Copyright (C) 2002 Ben Sapp <bsapp@nua.lampf.lanl.gov>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
+the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -103,3 +103,4 @@ octave_ex_matrix& octave_ex_matrix::operator=(const octave_ex_matrix& a)
 DEFINE_OCTAVE_ALLOCATOR (octave_ex_matrix);
 
 DEFINE_OV_TYPEID_FUNCTIONS_AND_DATA (octave_ex_matrix, "symbolic matrix","sym");
+

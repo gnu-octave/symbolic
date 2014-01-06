@@ -7,7 +7,7 @@ Copyright (C) 2008 Nils Bluethgen <bluethgen@users.sourceforge.net>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
+the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -19,14 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program; If not, see <http://www.gnu.org/licenses/>.
 
 */
-
-// 2001-09-18 Paul Kienzle <pkienzle@users.sf.net>
-// * use GiNaC::is_a<GiNaC::blah>(x) rather than is_ex_of_type(x, blah)
-// * use GiNaC::ex_to<GiNaC::blah>(x) rather than ex_to_blah(x)
-// 2003-04-19 Willem Atsma <watsma@users.sf.net>
-// * added get_relational()
-// 2008-03-09 Nils Bluethgen <bluethgen (AT) users.sourceforge.net>
-// * added get_char() and to_char()
 
 #include <octave/config.h>
 #include <octave/defun-dld.h>

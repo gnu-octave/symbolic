@@ -1,8 +1,8 @@
-dnl autoconf 2.13 certainly doesn't work! What is the minimum requirement?
-AC_PREREQ(2.2)
+AC_PREREQ([2.2])
+AC_INIT([Octave-Forge symbolic package], [1.1.0+])
 
-AC_INIT(configure.base)
-  
+AC_PROG_CXX
+
 dnl Checking for ginac library
 PKG_CHECK_MODULES(GINAC, ginac, , [AC_MSG_ERROR([GINAC not found])])
   
