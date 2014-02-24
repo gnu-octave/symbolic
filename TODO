@@ -1,0 +1,38 @@
+## equality
+
+"==" tests for "exact equality".  Maybe want Eq(x,y)?
+
+## double
+
+python generates C "%a" formatting:
+
+  0.11 -> '0x1.c28f5c28f5c29p-4'
+
+java might work, or write some custom code.  In first instance, I'll
+use a string
+
+
+## symfuns, DE solving
+
+symfun: probably this is:
+
+f = Function('f')
+
+## matrices
+
+Fundamental choice:
+(1) make a matrix array of sym objects; or
+(2) use sp.Matrix in sympy.
+
+(1+) seems easy to start with
+(1-) but then sin(x) for example will need to call sin for each entry
+
+(2-) requires some effort for functions:  A.applyfunc(sp.sin)
+(2+) renders nicely already
+
+essential issue is that scalars are not (1,1) matrices in sympy.  Could do that but, e.g., diff might not work, well we could just generate the code to make it work!
+
+
+you can make a size.m
+function b = size(x)
+  b = 6
