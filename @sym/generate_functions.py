@@ -56,3 +56,10 @@ for f in L:
     fd.write("  f2 = %s(1);\n" % f)
     fd.write("  r = abs(double(f1) - f2) < 1e-15;\n\n")
     fd.close()
+
+# Output list for .gitignore file
+print "**** Optional: copy/paste to update this list in .gitignore ****"
+for f in L:
+    print "@sym/%s.m" % f;
+for f in L:
+    print "unittests/test_%s.m" % f;
