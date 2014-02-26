@@ -17,11 +17,13 @@ function display(obj)
 
   elseif (length(d) == 2)
     %% 2D Array
-    fprintf ('%s = [%s 2D array]\n', inputname (1), class (obj));
     [n,m] = size(obj);
+    fprintf ('%s = [%s %dx%d matrix]\n', inputname (1), ...
+             class (obj), n, m);
     for i=1:n
       fprintf ('[')
-      fprintf ('%s\t', obj(i,:).text)
+      fprintf ('%s\t', obj(i,1:end-1).text)
+      fprintf ('%s', obj(i,end).text)
       fprintf (']\n')
     end
   else
