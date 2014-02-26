@@ -6,7 +6,7 @@
 # TODO: make a template which we process would be nicer than this
 
 L = """
-sqrt exp abs
+sqrt exp log
 sin sinh asin asinh
 cos cosh acos acosh
 tan tanh atan atanh
