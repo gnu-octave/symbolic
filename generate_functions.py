@@ -19,7 +19,7 @@ floor ceil
 L = L.split();
 
 for f in L:
-    fname = '%s.m' % f;
+    fname = '@sym/%s.m' % f;
     print fname
 
     fd = open(fname, "w")
@@ -44,7 +44,7 @@ for f in L:
 
 # Now make simple unit tests
 for f in L:
-    fname = '../unittests/test_%s.m' % f;
+    fname = 'unittests/test_%s.m' % f;
     print fname
     fd = open(fname, "w")
     fd.write ("function r = test_%s()\n" % f)
