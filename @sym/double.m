@@ -1,21 +1,13 @@
-function y = double(x)
+function y = double2(x)
 %DOUBLE   Convert symbolic to doubles
 
-  fd = fopen('sym_python_temp.py', 'w');
-  fprintf(fd, 'import sympy as sp\nimport pickle\n');
-  fprintf(fd, 'x = pickle.loads("""%s""")\n', x.pickle);
-  fprintf(fd, 'y = sp.N(x,30)\n');
-  fprintf(fd, 's = "%%.30g" %% y\n');
-  fprintf(fd, 'print "__________"\n');
-  fprintf(fd, 'print s\n');
-  fclose(fd);
-  [status,out] = system('python sym_python_temp.py');
-  if status ~= 0
-    error('failed');
-    out
-  end
-  A = regexp(out, '__________\n(.*)\n', 'tokens');
-  y = str2double (A{1}{1});
+  cmd = [ 'def fcn(ins):\n'  ...
+          '    (x,) = ins\n'  ...
+          '    y = sp.N(x,30)\n'  ...
+          '    return (y,)\n' ];
+  A = python_sympy_cmd_raw(cmd, x);
+  y = str2double (A{1});
   if (isnan (y))
     error('conversion failed?');
   end
+
