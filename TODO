@@ -1,6 +1,17 @@
 ## equality
 
-"==" tests for "exact equality".  Maybe want Eq(x,y)?
+MST: ==, define equations
+SymPy: ??
+
+MST: logical(), "structural" equivalence
+SymPy: ==
+
+MST: isAlways(), "mathematical" equivalence
+SymPy: bool(LHS.expand() == RHS.expand())
+> If .expand() does not help, try simplify(), trigsimp(), etc, which
+> attempt more advanced transformations. For example,
+[https://github.com/sympy/sympy/wiki/Faq]
+
 
 ## double
 
