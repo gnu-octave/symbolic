@@ -25,10 +25,13 @@ function varargout = python_sympy_cmd(cmd, varargin)
   % provide a way for constructor to take these inputs?
 
   for i=1:nargout
-    s = [];
-    s.text = A{2*i-1};
-    s.pickle = A{2*i};
-    s = class(s, 'sym');
+    %s = [];
+    %s.text = A{2*i-1};
+    %s.pickle = A{2*i};
+    %s = class(s, 'sym');
+    text = A{2*i-1};
+    pickle = A{2*i};
+    s = sym(text, pickle);
     varargout{i} = s;
   end
 
