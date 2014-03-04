@@ -11,13 +11,17 @@ function r = test_isAlways_and_logical()
   c=c+1; r(c) = logical(expr);
   c=c+1; r(c) = isAlways(expr);
 
+  expr = x - x == 0;
+  c=c+1; r(c) = logical(expr);
+  c=c+1; r(c) = isAlways(expr);
+
   expr = 1 + x == x + 1;
   c=c+1; r(c) = logical(expr);
   c=c+1; r(c) = isAlways(expr);
 
   expr = x*(1+y) == x*(y+1);
   c=c+1; r(c) = logical(expr);
-  c=c+1; r(c) = isAlways(expr);
+
 
   %% Now for some differences
   % simplest example from SymPy FAQ
@@ -34,4 +38,3 @@ function r = test_isAlways_and_logical()
   c=c+1; r(c) = logical(expr) == 0;
   c=c+1; r(c) = isAlways(expr);
 
-  

@@ -1,12 +1,17 @@
 function r = isAlways(p)
 %ISALWAYS   Test is expression is mathematically true
 %   Example:
+%      syms x
 %      isAlways(x*(1+y) == x+x*y)
 %   which returns 'true', in contrast with:
 %      logical(x*(1+y) == x+x*y)
 %   which returns 'false'.
 %
-%   See also, logical()
+%   Note using this in practice often falls back to @logical/isAlways
+%   (which we provide, essentially a no-op), is case the result has
+%   already simplified to double == double.  For example:
+%      syms x
+%      isAlways (sin(x) - sin(x) == 0)
 %
 %   TODO: trigsimp() etc etc?
 
@@ -25,6 +30,6 @@ function r = isAlways(p)
     r = false;
   else
     keyboard
-    error('cannot happen?  wrong pickle?  Bug?')
+    error('Bug!  Perhaps wrong true/false pickles?')
   end
 
