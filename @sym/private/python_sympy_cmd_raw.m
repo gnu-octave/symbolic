@@ -16,8 +16,20 @@ function A = python_sympy_cmd_raw(cmd, varargin)
   fprintf(fd, 'ins = []\n\n');
   for i=1:length(varargin)
     x = varargin{i};
-    fprintf(fd, '# Load pickle %d\n', i);
-    fprintf(fd, 'ins.append(pickle.loads("""%s"""))\n\n', x.pickle);
+    if (isa(x,'sym'))
+      fprintf(fd, '# Load %d: pickle\n', i);
+      fprintf(fd, 'ins.append(pickle.loads("""%s"""))\n\n', x.pickle);
+    elseif (ischar(x))
+      fprintf(fd, '# Load %d: string\n', i);
+      fprintf(fd, 'ins.append("%s"))\n\n', x);
+    elseif (isnumeric(x) && isscalar(x))
+      % TODO: should pass tye actual double, see comments elsewhere
+      % for this same problem in other direction
+      fprintf(fd, '# Load %d: double\n', i);
+      fprintf(fd, 'ins.append(%.24g)\n\n', x);
+    else
+      error('don''t know how to move that variable to python');
+    end
   end
 
   %% the actual command
