@@ -6,12 +6,16 @@ function display(obj)
     fprintf ('%s = [%s] ', inputname (1), class (obj));
     fprintf ('%s', obj.text);
     % trim newlines
-    s = regexprep (obj.pickle, '\n', '\\n');
+    %s = regexprep (obj.pickle, '\n', '\\n');
+    s = regexprep (obj.pickle, '\n', '\');
     len = length (s);
     if len < 100
       ellipsize = s;
     else
-      ellipsize = ['…' s(1:100) '…'];
+      % todo: ok to use unicode?
+      ellipsize = ['…' s(13:45) '…'];
+      %ellipsize = [s(1:33) '…'];
+      %ellipsize = [s(1:33) '...'];
     end
     fprintf('  [%s]\n', ellipsize);
 
