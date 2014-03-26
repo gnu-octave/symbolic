@@ -10,6 +10,7 @@ function syms(varargin)
 %   Careful: this code runs evalin(): you should not use it
 %   (programmatically) on strings you don't trust.
 
+  % todo, support symfuns via syms y(x)
   for i = 1:nargin
     cmd = sprintf('%s = sym(''%s'');', varargin{i}, varargin{i});
     %disp(['evaluating command: ' cmd])
