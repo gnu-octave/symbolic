@@ -1,3 +1,46 @@
+## assumptions
+
+http://docs.sympy.org/dev/modules/assumptions/assume.html
+
+You can define integers at creation:
+
+>>> x, y, z, t = symbols('x y z t')
+>>> k, m, n = symbols('k m n', integer=True)
+>>> f, g, h = symbols('f g h', cls=Function)
+
+>>> x = Symbol('x', real=True, positive=True)
+
+In Matlab's SMT, assumptions effect expressions already defined.  This seems a bit at odds with Sympy (also c.f., global_assumptions).  The easier approach is to put them in Symbol()
+
+
+
+## Global assumptions don't apply "automatically"?
+
+
+from sympy.assumptions.assume import global_assumptions
+from sympy import Q
+GA = global_assumptions
+x = sp.Symbol('x')
+
+In [23]: sp.sqrt(x**2)
+Out[23]: sqrt(x**2)
+
+GA.add(Q.positive(x))
+
+In [29]: sp.sqrt(x**2)
+Out[29]: sqrt(x**2)
+
+In [31]: sp.refine(sp.sqrt(x**2))
+Out[31]: x
+
+## Assumptions on variables in the constructor
+
+This works well.  But how to map this onto the assume() and
+alsoAssume() commands?  Proposal: set assume to generate help text and
+a warning.  And extend the constructor instead to work like sympy...
+
+
+
 ## equality
 
 MST: ==, define equations
@@ -30,6 +73,7 @@ symfun: probably this is:
 
 f = Function('f')
 
+todo: can't pickle f (!)   solution seems to be to use "dill".
 
 ## matrices
 
