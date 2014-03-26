@@ -1,7 +1,5 @@
 function z = mrdivide(x,y)
-
-  x = sym (x);
-  y = sym (y);
+%/   forward slash division
 
   cmd = [ 'def fcn(ins):\n'  ...
           '    (x,y) = ins\n'  ...

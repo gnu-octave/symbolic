@@ -1,13 +1,27 @@
-function z = plus(a, b)
+function z = plus(x, y)
 %+   Plus
-%   X + Y adds syms X and Y.  If only one input is a sym, trys to
-%   coerce the other to a sym.
+%   X + Y adds sym X and sym Y.
 
-  a = sym (a);
-  b = sym (b);
+  if isscalar(x) && isscalar(y)
+    cmd = [ 'def fcn(ins):\n'  ...
+            '    (x,y) = ins\n'  ...
+            '    return (x+y,)\n' ];
+    z = python_sympy_cmd(cmd, x, y);
 
-  cmd = [ 'def fcn(ins):\n'  ...
-          '    (a,b) = ins\n'  ...
-          '    return (a+b,)\n' ];
+  elseif isscalar(x) && ~isscalar(y)
+    z = y;
+    for i = 1:numel(y)
+      z(i) = x + y(i);
+    end
 
-  z = python_sympy_cmd (cmd, a, b);
+  elseif ~isscalar(x) && isscalar(y)
+    z = y + x;
+
+  else  % both are arrays
+    assert_same_shape(x,y);
+    z = x;  % todo: bug here if x dbl and y sym
+    for j = 1:numel(x)
+      z(j) = x(j) + y(j);
+    end
+  end
+

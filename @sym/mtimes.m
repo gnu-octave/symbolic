@@ -3,8 +3,6 @@ function z = mtimes(x, y)
 %
 
   if isscalar(x) && isscalar(y)
-    x = sym(x);
-    y = sym(y);
     cmd = [ 'def fcn(ins):\n'  ...
             '    (a,b) = ins\n'  ...
             '    return (a*b,)\n' ];
@@ -20,5 +18,5 @@ function z = mtimes(x, y)
     z = times(y,x);
 
   else  % two array's case
-    error('TODO: not implemented yet');
+    error('TODO: matrix mult not implemented yet');
   end

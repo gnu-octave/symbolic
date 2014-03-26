@@ -1,4 +1,4 @@
-function t = eq(a,b)
+function t = eq(x,y)
 %EQ   Test for symbolic equality, or define equation
 %   a == b tries to convert both a and b to numbers and compare them
 %   as doubles.  If this fails, it defines a symbolic expression for a
@@ -17,14 +17,32 @@ function t = eq(a,b)
 %      users.  Not sure what can be done other than make a subclass
 %      for expressions with equals signs...
 
-  try
-    a = double(a);
-    b = double(b);
-    t = a == b;
-    return
-  catch
-    %disp('caught double failure')
+
+
+  if isscalar(x) && isscalar(y)
+    try
+      a = double(x);
+      b = double(y);
+      t = a == b;
+      return
+    catch
+      %disp('caught double failure')
+    end
+    warning('possibly confusing result for Matlab Symbolic Toolbox users')
+    t = x - y;
+
+
+  elseif isscalar(x) && ~isscalar(y)
+    error('todo')
+
+  elseif ~isscalar(x) && isscalar(y)
+    t = (y == x);
+
+  else  % both are arrays
+    assert_same_shape(x,y);
+    t = x;
+    for j = 1:numel(x)
+      t(j) = (x(j) == y(j));
+    end
   end
-  warning('possibly confusing result for Matlab Symbolic Toolbox users')
-  t = a - b;
 

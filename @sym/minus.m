@@ -1,14 +1,30 @@
-function z = minus(a, b)
-%+   Minus
-%   X - Y subtracts sym Y from sym X.  If only one input is a sym, try
-%   to coerce the other to a sym.
+function z = minus(x, y)
+%-   Minus
+%   X - Y subtracts sym Y from sym X.
 
-  a = sym(a);
-  b = sym(b);
+  if isscalar(x) && isscalar(y)
+    cmd = [ 'def fcn(ins):\n'  ...
+            '    (x,y) = ins\n'  ...
+            '    return (x-y,)\n' ];
+    z = python_sympy_cmd(cmd, x, y);
 
-  cmd = [ 'def fcn(ins):\n'  ...
-          '    (a,b) = ins\n'  ...
-          '    return (a-b,)\n' ];
+  elseif isscalar(x) && ~isscalar(y)
+    z = y;
+    for i = 1:numel(y)
+      z(i) = x - y(i);
+    end
 
-  z = python_sympy_cmd(cmd, a, b);
+  elseif ~isscalar(x) && isscalar(y)
+    z = x;
+    for i = 1:numel(x)
+      z(i) = x(i) - y;
+    end
+
+  else  % both are arrays
+    assert_same_shape();
+    z = x;
+    for j = 1:numel(x)
+      z(j) = x(j) - y(j);
+    end
+  end
 
