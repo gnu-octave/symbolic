@@ -47,6 +47,7 @@ function s = sym(x, varargin)
     return
   end
 
+  % todo: may not want to expose this in constructor: private usage
   if (nargin == 2)
     s.text = x;
     s.pickle = varargin{1};
@@ -80,7 +81,7 @@ function s = sym(x, varargin)
       cmd = 'z = -sp.oo\n';
     else
       if (~isempty((strfind(x, '.'))))
-        warning('possible unintended decimal point in constructor string');
+        warning('possibly unintended decimal point in constructor string');
       end
       cmd = sprintf('z = sp.S("%s")\n', x);
       %xd = str2double(x);

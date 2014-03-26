@@ -3,7 +3,6 @@
 # Yo dawg, I heard you like code generation so I wrote a code
 # generator to write your code generators!
 
-# TODO: make a template which we process would be nicer than this
 
 L = """
 sqrt exp log
@@ -17,14 +16,13 @@ cot coth acot acoth|acoth|2
 floor
 ceil|ceiling|3/2
 """
-# todo: ceil->ceiling, abs->Abs (maybe mod is not abs in sympy)
-#ceil
 # sec, csc don't have hyperbolic or arc
 #sech asec asech
 #csch acsc acsch
 
-LL = L.split();
 
+# replace L with a list of dictionaries
+LL = L.split();
 L = [];
 for it in LL:
     it = it.split('|')
@@ -36,6 +34,8 @@ for it in LL:
         d = {'name':f,'sname':f,'testval':'1'};
     L.append(d);
 
+
+# autogenerate functions
 for d in L:
     f = d['name'];
     fname = '@sym/%s.m' % f
