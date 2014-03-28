@@ -17,9 +17,14 @@ function y = double(x)
     end
   end
 
+  % special case for nan so we can later detect if str2double finds a double
+  if (strcmp(A{1}, 'nan'))
+    y = NaN;
+    return
+  end
+
   y = str2double (A{1});
   if (isnan (y))
-    A
-    error('conversion failed?');
+    error('Failed to convert %s ''%s'' to double', class(x), x.text);
   end
 
