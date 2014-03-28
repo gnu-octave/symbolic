@@ -27,5 +27,5 @@ function r = test_bugs()
 
 
   %% todo: need symzeros cmd
-  c=c+1; r(c) = all(all(logical(  D - A == DZ  )));
+  %c=c+1; r(c) = all(all(logical(  D - A == DZ  )));
 

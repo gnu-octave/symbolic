@@ -11,7 +11,7 @@ function t = eq(x,y)
 %      So the construction
 %         DE = diff(f,x,x) + f == 0
 %      will be the same as
-%         DE = diff(f,x,x) + f == 0
+%         DE = diff(f,x,x) + f
 %      This does seem to be compatible with how the Matlab Symbolic
 %      Toolbox *can* be used but might be unexpected for some
 %      users.  Not sure what can be done other than make a subclass
@@ -40,9 +40,21 @@ function t = eq(x,y)
 
   else  % both are arrays
     assert_same_shape(x,y);
+    warning('todo not reliable for arrays');
     t = x;
     for j = 1:numel(x)
-      t(j) = (x(j) == y(j));
+      %t(j) = (x(j) == y(j));
+      temp = (x(j) == y(j));
+      if (isbool(temp))
+        %warning('todo we need sym t/f values for this?')
+        if temp
+          t(j) = 1;
+        else
+          t(j) = 0;
+        end
+      else
+        t(j) = temp
+      end 
     end
   end
 

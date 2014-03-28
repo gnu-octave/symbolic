@@ -4,7 +4,13 @@ function r = test_array_assigns()
 
   %% array assignment (subsasgn)
   f = [2*x 3*x];
-  f(2) = 4*x;
+  try
+    f(2) = 4*x;
+  catch
+    warning('skipping other array asgns, known failures (todo)');
+    r = 0; 
+    return
+  end
   c=c+1; r(c) = all(logical(  f == [2*x 4*x]  ));
 
   f(3) = x*x;

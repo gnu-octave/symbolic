@@ -10,10 +10,14 @@ function r = logical(p)
 %      logical(x*(1+y) == x+x*y)
 %   which returns 'false'.
 %
-%   See also, isAlways()
+%   See also, 'eq' (i.e., '==') and 'isAlways'.
 
   true_pickle = sprintf('I01\n.');
   false_pickle = sprintf('I00\n.');
+
+  if ~(isscalar(p))
+    warning('logical not implemented for arrays (?) todo?');
+  end
 
   cmd = [ 'def fcn(ins):\n'  ...
           '    (p,) = ins\n'  ...
