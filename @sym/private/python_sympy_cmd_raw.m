@@ -11,7 +11,8 @@ function A = python_sympy_cmd_raw(cmd, varargin)
   % first thing is printf the cmd for newlines
   cmd = sprintf(cmd);
 
-  headers = sprintf('import sympy as sp\nimport pickle\n\n');
+  %headers = sprintf('import sympy as sp\nimport pickle\n\n');
+  headers = sprintf('import sympy as sp\nimport dill as pickle\n\n');
 
   %% load all the inputs into python as pickles
   s = sprintf('ins = []\n\n');
