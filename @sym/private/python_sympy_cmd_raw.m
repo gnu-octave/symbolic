@@ -15,10 +15,12 @@ function A = python_sympy_cmd_raw(cmd, varargin)
 
   %% load all the inputs into python as pickles
   s = sprintf('ins = []\n\n');
+
   for i=1:length(varargin)
     x = varargin{i};
     if (isa(x,'sym'))
       s = sprintf('%s# Load %d: pickle\n', s, i);
+      % need to be careful here: pickle might have escape codes
       s = sprintf('%sins.append(pickle.loads("""%s"""))\n\n', s, x.pickle);
     elseif (ischar(x))
       s = sprintf('%s# Load %d: string\n', s, i);
@@ -39,7 +41,7 @@ function A = python_sympy_cmd_raw(cmd, varargin)
   s = sprintf('%sout = fcn(ins)\n\n', s);
 
   %debug
-  s = sprintf('%sprint out\n\n', s);
+  %s = sprintf('%sprint out\n\n', s);
 
   %% output
 
@@ -52,7 +54,7 @@ function A = python_sympy_cmd_raw(cmd, varargin)
   s = sprintf('%s    print str(item)\n', s);
   s = sprintf('%s    print "%s"\n', s, etag);
   s = sprintf('%s    print "%s"\n', s, stag);
-  s = sprintf('%s    print pickle.dumps(item)\n', s);
+  s = sprintf('%s    print pickle.dumps(item, 0)\n', s);
   s = sprintf('%s    print "%s"\n\n', s, etag);
   s = sprintf('%sprint "%s"\n', s, ebtag);
 
