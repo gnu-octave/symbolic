@@ -21,7 +21,7 @@ function z = minus(x, y)
     end
 
   else  % both are arrays
-    assert_same_shape();
+    assert_same_shape(x,y);
     z = x;
     for j = 1:numel(x)
       z(j) = x(j) - y(j);
