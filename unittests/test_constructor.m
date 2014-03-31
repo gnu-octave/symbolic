@@ -5,10 +5,10 @@ function r = test_constructor()
   x = sym('2');
   y = sym(2);
   c=c+1;  r(c) = double(x) == 2;
-  c=c+1;  r(c) = logical(x - y);
+  c=c+1;  r(c) = logical(x == y);
 
   % infinity
-  for x = {'inf', '-inf', inf, -inf}
+  for x = {'inf', '-inf', inf, -inf, 'Inf'}
     y = sym(x{1});
     c=c+1;  r(c) = isinf(double(y));
   end

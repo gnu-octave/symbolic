@@ -3,26 +3,26 @@ function r = test_infnan()
 
   % make sure their pickles contain infinity, otherwise just symbols
   oo = sym(inf);
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
   oo = sym(-inf);
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
   oo = sym('inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
   oo = sym('-inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
   oo = sym('Inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
   oo = sym('INF');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') )
+  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
 
   oo = sym(nan);
-  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') )
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('nan');
-  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') )
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('NaN');
-  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') )
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('NAN');
-  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') )
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
 
 
   snan = sym(nan);
