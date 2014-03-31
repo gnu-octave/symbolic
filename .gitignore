@@ -32,6 +32,7 @@ outlog.txt
 @sym/acoth.m
 @sym/floor.m
 @sym/ceil.m
+@sym/sign.m
 unittests/test_sqrt.m
 unittests/test_exp.m
 unittests/test_log.m
@@ -56,4 +57,5 @@ unittests/test_acot.m
 unittests/test_acoth.m
 unittests/test_floor.m
 unittests/test_ceil.m
+unittests/test_sign.m
 

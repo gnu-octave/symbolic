@@ -15,6 +15,7 @@ sec
 cot coth acot acoth|acoth|2
 floor
 ceil|ceiling|3/2
+sign
 """
 # sec, csc don't have hyperbolic or arc
 #sech asec asech
