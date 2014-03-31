@@ -9,6 +9,18 @@ function r = test_double()
   x = sym(pi);
   c=c+1;  r(c) = abs(double(x) - pi) < 2*eps;
 
+  oo = sym(inf);
+  zoo = sym('zoo');
+  c=c+1;  r(c) = double(oo) == inf;
+  c=c+1;  r(c) = double(-oo) == -inf;
+  c=c+1;  r(c) = double(zoo) == inf;
+  c=c+1;  r(c) = double(-zoo) == inf;
+  c=c+1;  r(c) = isnan(double(0*oo));
+  c=c+1;  r(c) = isnan(double(0*zoo));
+
+  snan = sym(nan);
+  c=c+1;  r(c) = isnan(double(snan));
+
   % should fail with error for non-double
   x = sym('x');
   try

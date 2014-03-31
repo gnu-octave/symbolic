@@ -23,6 +23,11 @@ function y = double(x)
     return
   end
 
+  % special case for zoo which at least sympy 0.7.4
+  if (strcmp(A{1}, 'zoo'))
+    y = Inf;
+    return
+  end
   y = str2double (A{1});
   if (isnan (y))
     error('Failed to convert %s ''%s'' to double', class(x), x.text);

@@ -65,6 +65,8 @@ function s = sym(x, varargin)
       cmd = 'z = sp.oo\n';
     elseif (isinf(x)) && (x < 0)
       cmd = 'z = -sp.oo\n';
+    elseif (isnan(x))
+      cmd = 'z = sp.nan\n';
     elseif (mod(x,1) == 0)
       % is integer
       cmd = sprintf('z = sp.Rational("%d")\n', x);
@@ -84,10 +86,12 @@ function s = sym(x, varargin)
     end
     if (strcmp(x, 'pi'))
       cmd = 'z = sp.pi\n';
-    elseif (strcmp(x, 'inf')) || (strcmp(x, '+inf'))
+    elseif (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
       cmd = 'z = sp.oo\n';
-    elseif (strcmp(x, '-inf'))
+    elseif (strcmpi(x, '-inf'))
       cmd = 'z = -sp.oo\n';
+    elseif (strcmpi(x, 'nan'))
+      cmd = 'z = sp.nan\n';
     else
       if (~isempty((strfind(x, '.'))))
         warning('possibly unintended decimal point in constructor string');
