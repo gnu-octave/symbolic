@@ -30,7 +30,7 @@ function A = python_sympy_cmd_raw(cmd, varargin)
       s = sprintf('%sins.append(pickle.loads("""%s"""))\n\n', s, x.pickle);
     elseif (ischar(x))
       s = sprintf('%s# Load %d: string\n', s, i);
-      s = sprintf('%sins.append("%s"))\n\n', s, x);
+      s = sprintf('%sins.append("%s")\n\n', s, x);
     elseif (isnumeric(x) && isscalar(x))
       % TODO: should pass tye actual double, see comments elsewhere
       % for this same problem in other direction
