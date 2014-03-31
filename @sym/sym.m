@@ -73,6 +73,14 @@ function s = sym(x, varargin)
       % I don't trust this behaviour much.
     end
   elseif (isa (x, 'char'))
+    if (strfind(x, '('))
+      % symfun spagetti code :-(
+      disp('hack: rhs is hopefully for a symfun');
+      s = sym(1);
+      s.text = {'UGLY HACK', x};
+      %s = x;  % fails to call subsasgn
+      return
+    end
     if (strcmp(x, 'pi'))
       cmd = 'z = sp.pi\n';
     elseif (strcmp(x, 'inf')) || (strcmp(x, '+inf'))

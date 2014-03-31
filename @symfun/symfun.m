@@ -23,15 +23,26 @@
 %%
 %% Examples:
 %%
-%% x = sym ('x')
+%% x = sym('x')
 %% y(x) = x^2
-%% f(x) = sym(y(x))  % todo check this matches MST notation
+%%
+%% y(x) = sym(y(x))  % todo does this work in SMT?
+%%
+%% x = sym('x')
+%% y = sym('y')
+%% f(x) = sym('f(x)')
+%% g(x,y) = sym('g(x,y)')
+%%
+%% or
+%%
+%% syms f(x) g(x,y)   % todo needs x y syms in SMT?
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
 
 function f = symfun(expr, vars, varargin)
 %SYMFUN  Symbolic function class implemented with sympy
+%   Don't call directly.
 %
 
   if (nargin == 0)
@@ -41,21 +52,10 @@ function f = symfun(expr, vars, varargin)
   end
 
 
-  if ~(isa( expr, 'sym'))
-    error('hmmmm?')
+  if (isa( expr, 'sym'))
+    f.vars = vars;
+    f = class(f, 'symfun', expr);
+    superiorto ('sym');
     return
   end
-
-  %fullcmd = [ 'def fcn(ins):\n'  ...
-  %            '    ' cmd  ...
-  %            '    return (z,)\n' ];
-  %A = python_sympy_cmd_raw(fullcmd);
-  %s.text = A{1};
-  %s.pickle = A{2};
-  %f.text = ['symfun: ' expr.text];  % todo
-  %f.pickle = expr.pickle;
-  %f.expr = expr;
-  f.vars = vars;
-  
-  f = class(f, 'symfun', expr);
 
