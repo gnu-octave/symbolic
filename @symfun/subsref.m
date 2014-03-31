@@ -11,7 +11,7 @@ function out = subsref (f, idx)
       else
         %out = sym/subsref(f, idx);
         %out = f.sym.fld;
-        warning(' is there a better way to call the superclass fcn?')
+        %warning(' is there a better way to call the superclass fcn?')
         out = subsref(f.sym,idx);
       end
 
@@ -19,5 +19,6 @@ function out = subsref (f, idx)
       error ('@symfun/subsref: invalid subscript type ''%s''', idx.type);
 
   end
+
 
 

@@ -16,8 +16,10 @@ function r = test_diff()
   % Note this fails in sympy: it works in SMT but does anyone care?
   % TODO: start document about behaviour differneces from SMT
   warning('known failure');
-  c=c+1; r(c) = diff(sym(1)) == 0;
+  %c=c+1; r(c) = diff(sym(1)) == 0;
+  c=c+1; r(c) = 0;
 
   % octave's vector difference still works
   c=c+1; r(c) = isempty(diff(1));
   c=c+1; r(c) = (diff([2 6]) == 4);
+
