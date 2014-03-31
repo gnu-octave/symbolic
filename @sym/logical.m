@@ -1,8 +1,11 @@
 function r = logical(p)
-%LOGICAL   Test is expression is "structurally" true
+%LOGICAL   Test if expression is "structurally" true
+%   todo: should be used with if/else flow ctrl
 %   Example:
 %      logical(x*(1+y) == x*(y+1))
 %   return 'true'
+%      logical(x == y)
+%   return 'false'
 %
 %   Example:
 %      isAlways(x*(1+y) == x+x*y)
@@ -12,16 +15,16 @@ function r = logical(p)
 %
 %   See also, 'eq' (i.e., '==') and 'isAlways'.
 
-  true_pickle = sprintf('I01\n.');
-  false_pickle = sprintf('I00\n.');
-
   if ~(isscalar(p))
     warning('logical not implemented for arrays (?) todo?');
   end
 
-  cmd = [ 'def fcn(ins):\n'  ...
-          '    (p,) = ins\n'  ...
-          '    r = bool(p == 0)\n'  ...
+  true_pickle = sprintf('I01\n.');
+  false_pickle = sprintf('I00\n.');
+
+  cmd = [ 'def fcn(_ins):\n'  ...
+          '    (e,) = _ins\n'  ...
+          '    r = bool(e.lhs == e.rhs)\n'  ...
           '    return (r,)\n' ];
   z = python_sympy_cmd (cmd, p);
   if (strcmp(z.pickle, true_pickle))
@@ -32,3 +35,4 @@ function r = logical(p)
     keyboard
     error('cannot happen?  wrong pickle?  Bug?')
   end
+  %disp('called logical')
