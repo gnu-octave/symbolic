@@ -1,3 +1,15 @@
+# TODO List
+
+## commands
+
+nchoosek binomial
+
+taylor
+
+isinf for oo,zoo, also symum unittext
+ isnan(double(sym('NaN'))) fails but nan works
+
+
 ## assumptions
 
 http://docs.sympy.org/dev/modules/assumptions/assume.html
