@@ -51,6 +51,7 @@ function s = sym(x, varargin)
   if (nargin == 2)
     s.text = x;
     s.pickle = varargin{1};
+    s.extra = [];
     s = class(s, 'sym');
     return
   end
@@ -109,5 +110,6 @@ function s = sym(x, varargin)
   A = python_sympy_cmd_raw(fullcmd);
   s.text = A{1};
   s.pickle = A{2};
+  s.extra = [];
   s = class(s, 'sym');
 
