@@ -1,6 +1,6 @@
 function S = symsum(f,n,a,b)
 %SYMSUM   symbolic summation
-%   todo: symfum(f, [a b])
+%   todo: symsum(f, [a b])
 
   %if (nargin == 3)
   %  n = symvar
