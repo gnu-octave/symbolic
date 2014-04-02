@@ -1,5 +1,9 @@
-function y = double(x)
+function y = double(x, failerr)
 %DOUBLE   Convert symbolic to doubles
+
+  if (nargin == 1)
+    failerr = true;
+  end
 
   cmd = [ 'def fcn(ins):\n'  ...
           '    (x,) = ins\n'  ...
@@ -30,6 +34,9 @@ function y = double(x)
   end
   y = str2double (A{1});
   if (isnan (y))
-    error('Failed to convert %s ''%s'' to double', class(x), x.text);
+    y = [];
+    if (failerr)
+      error('Failed to convert %s ''%s'' to double', class(x), x.text);
+    end
   end
 
