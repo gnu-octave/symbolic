@@ -56,7 +56,19 @@ function s = sym(x, varargin)
     return
   end
 
+
   if (isa (x, 'double'))
+
+    if ~isscalar(x)
+      %warning('nonscalar')
+      s = sym(x(1));
+      for i=1:numel(x)
+        s(i) = sym(x(i));
+      end
+      s = reshape(s, size(x));
+      return
+    end
+
     % TODO: maybe cleaner to generate a string and then call the
     % constructor again....
     if (x == pi)

@@ -16,7 +16,9 @@ function out = subsasgn (val, idx, rhs)
         out = symfun(rhs, idx.subs);
 
       else   % f(double) = ..., array assignment
-        error('todo: subscript array assignment broken')
+        % black magic for me, how does it call a superclass ()?
+        out = val;
+        out(idx.subs{:}) = sym(rhs);
       end
 
     otherwise

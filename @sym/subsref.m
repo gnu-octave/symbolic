@@ -2,8 +2,12 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
-      error('todo: () subs ref: not for scalar @sym');
- 
+      if (isa(idx.subs, 'sym'))
+        error('todo: indexing by @sym, can this happen? what is subindex for then?')
+      else
+        % what magic stops this from calls subsref recursively?
+        out = f(idx.subs{:});
+      end
     case '.'
       fld = idx.subs;
       if (strcmp (fld, 'pickle'))
