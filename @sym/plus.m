@@ -9,7 +9,7 @@ function z = plus(x, y)
     z = python_sympy_cmd(cmd, x, y);
 
   elseif isscalar(x) && ~isscalar(y)
-    z = y;
+    z = make_zeros(size(y));
     for i = 1:numel(y)
       z(i) = x + y(i);
     end
@@ -19,7 +19,7 @@ function z = plus(x, y)
 
   else  % both are arrays
     assert_same_shape(x,y);
-    z = x;  % todo: bug here if x dbl and y sym
+    z = make_zeros(size(x));
     for j = 1:numel(x)
       z(j) = x(j) + y(j);
     end

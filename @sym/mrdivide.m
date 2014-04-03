@@ -1,8 +1,16 @@
 function z = mrdivide(x,y)
 %/   forward slash division
 
-  cmd = [ 'def fcn(ins):\n'  ...
-          '    (x,y) = ins\n'  ...
-          '    return (x/y,)\n' ];
+  if isscalar(x) && isscalar(y)
+    z = rdivide(x, y);
 
-  z = python_sympy_cmd (cmd, x, y);
+  elseif isscalar(x) && ~isscalar(y)
+    error('TODO: scalar/array not implemented yet');
+
+  elseif ~isscalar(x) && isscalar(y)
+    z = rdivide(x, y);
+
+  else  % two array's case
+    error('TODO: array/array not implemented yet');
+  end
+

@@ -1,22 +1,13 @@
 function z = mtimes(x, y)
 %*   Matrix multiplication of inputs
-%
 
   if isscalar(x) && isscalar(y)
-    cmd = [ 'def fcn(ins):\n'  ...
-            '    (a,b) = ins\n'  ...
-            '    return (a*b,)\n' ];
-    z = python_sympy_cmd(cmd, x, y);
-
+    z = times(x,y);
   elseif isscalar(x) && ~isscalar(y)
-    x = sym(x);
-    z = y;
-    for i = 1:numel(y)
-      z(i) = x * y(i);
-    end
+    z = times(x,y);
   elseif ~isscalar(x) && isscalar(y)
     z = times(y,x);
-
-  else  % two array's case
+  else  % both are arrays
     error('TODO: matrix mult not implemented yet');
   end
+
