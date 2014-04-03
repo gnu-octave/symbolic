@@ -18,6 +18,10 @@ function A = python_sympy_cmd_raw(cmd, varargin)
                       'import dill as pickle\n' ...
                       '\n']);
 
+  % wrap loading of vars in a big try catch block
+  % todo: s = appendline(s, indent, str, varargin)
+  % append one newline by default
+  % todo this is not just fprintf b/c of the no-open case?
 
   %% load all the inputs into python as pickles
   s = sprintf('ins = []\n\n');

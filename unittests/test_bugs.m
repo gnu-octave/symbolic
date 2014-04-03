@@ -29,3 +29,11 @@ function r = test_bugs()
   %% todo: need symzeros cmd
   %c=c+1; r(c) = all(all(logical(  D - A == DZ  )));
 
+
+  % todo: bug? boolean not converted to sym
+  c=c+1; r(c) = 0;
+  %sym(1==1)
+  %sym(1==0)
+  %x - (1==1)
+  %x - (1==0)
+

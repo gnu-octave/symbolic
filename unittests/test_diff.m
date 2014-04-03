@@ -14,7 +14,7 @@ function r = test_diff()
 
   % symbolic diff of constant
   % Note this fails in sympy: it works in SMT but does anyone care?
-  % TODO: start document about behaviour differneces from SMT
+  % TODO: start document about behaviour differences from SMT
   warning('known failure');
   %c=c+1; r(c) = diff(sym(1)) == 0;
   c=c+1; r(c) = 0;
