@@ -1,14 +1,16 @@
 function t = neweq(x,y)
-%EQ   Test for symbolic equality, or define equation
+%EQ   Test for symbolic equality, and/or define equation
 %   a == b tries to convert both a and b to numbers and compare them
-%   as doubles.  If this fails, it defines a symbolic expression for a
-%   == b.
+%   as doubles.  If this fails, it defines a symbolic expression for
+%   a == b.  When each happens is a potential source of bugs!
 %
-
+%   NOTE: array case it hardcoded only check for equality (see logical()).
+%   One could try to vectorize this defining equations but I think it gets
+%   complicated when only some parts of the system reduce to bools.
+%   todo: check how SMT behaves.
 
   if isscalar(x) && isscalar(y)
-    x = sym(x);  % todo
-    y = sym(y);  % todo
+    %x = sym(x); y = sym(y);
 
     true_pickle = sprintf('I01\n.');
     false_pickle = sprintf('I00\n.');
@@ -25,29 +27,39 @@ function t = neweq(x,y)
       t = z;   % the releq
     end
 
+
   elseif isscalar(x) && ~isscalar(y)
-    error('todo')
+    t = zeros(size(y), 'logical');
+    for j = 1:numel(y)
+      t(j) = logical(x == y(j));
+    end
+
 
   elseif ~isscalar(x) && isscalar(y)
     t = (y == x);
 
+
   else  % both are arrays
     assert_same_shape(x,y);
-    warning('todo not reliable for arrays');
-    t = x;
+    t = zeros(size(x), 'logical');
     for j = 1:numel(x)
-      %t(j) = (x(j) == y(j));
+      t(j) = logical(x(j) == y(j));
+    end
+  end
+  return
+
+
+    % see comments above
+    for j = 1:numel(x)
       temp = (x(j) == y(j));
       if (isbool(temp))
-        %warning('todo we need sym t/f values for this?')
         if temp
           t(j) = 1;
         else
           t(j) = 0;
         end
       else
-        t(j) = temp
-      end 
+        t(j) = temp;
+      end
     end
-  end
 
