@@ -1,4 +1,4 @@
-function t = neweq(x,y)
+function t = eq(x,y)
 %EQ   Test for symbolic equality, and/or define equation
 %   a == b tries to convert both a and b to numbers and compare them
 %   as doubles.  If this fails, it defines a symbolic expression for
@@ -29,7 +29,7 @@ function t = neweq(x,y)
 
 
   elseif isscalar(x) && ~isscalar(y)
-    t = zeros(size(y), 'logical');
+    t = logical(zeros(size(y)));
     for j = 1:numel(y)
       t(j) = logical(x == y(j));
     end
@@ -41,7 +41,7 @@ function t = neweq(x,y)
 
   else  % both are arrays
     assert_same_shape(x,y);
-    t = zeros(size(x), 'logical');
+    t = logical(zeros(size(x)));
     for j = 1:numel(x)
       t(j) = logical(x(j) == y(j));
     end
