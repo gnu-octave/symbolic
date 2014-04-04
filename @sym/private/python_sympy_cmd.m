@@ -31,6 +31,7 @@ function varargout = python_sympy_cmd(cmd, varargin)
     %s = class(s, 'sym');
     text = A{2*i-1};
     pickle = A{2*i};
+    %pickle = undo_string_escapes (A{2*i});
     s = sym(text, pickle);
     varargout{i} = s;
   end
