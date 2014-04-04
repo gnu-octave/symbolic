@@ -129,3 +129,36 @@ e.g., check what SMT does here
 probably such fcns should sym()
 
 how about python comand defaults to syming arugements
+
+## IPC
+
+Currently we have two approaches implemented:
+
+* Using system()
+
+* Using popen2().  Octave has this but it might be unix-specific.
+
+
+There are quite a few options out there:
+
+* http://code.google.com/p/python-matlab-wormholes/
+
+* http://algoholic.eu/matpy/
+
+* Jython: very promising as there is already a rsympy: sympy in R using this.
+
+* http://stackoverflow.com/questions/1707780/call-python-function-from-matlab?rq=1
+
+
+
+## Limitations of system()
+
+Currently we create a temporary file and execute it with system().
+Would be nicer to pass the command itself on the command line with
+"python -c".  But I couldn't make this work with multiline pickles.
+
+* http://stackoverflow.com/questions/11392033/passing-python-array-to-bash-script-and-passing-bash-variable-to-python-functio
+
+* http://stackoverflow.com/questions/2043453/executing-python-multi-line-statements-in-the-one-line-command-line
+
+* http://superuser.com/questions/607367/raw-multiline-string-in-bash
