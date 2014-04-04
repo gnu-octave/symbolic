@@ -61,7 +61,7 @@ function s = do_list(s, indent, in, L)
       inn = [in 'n'];
       s = sprintf('%s%s%s = []\n', s, sp, inn);
       s = sprintf('%s%s%s.append(%s)\n', s, sp, in, inn);
-      s = do_list(s, inn, x);
+      s = do_list(s, indent, inn, x);
     else
       i, x
       error('don''t know how to move that variable to python');
