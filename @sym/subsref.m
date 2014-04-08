@@ -5,8 +5,7 @@ function out = subsref (f, idx)
       if (isa(idx.subs, 'sym'))
         error('todo: indexing by @sym, can this happen? what is subindex for then?')
       else
-        % what magic stops this from calls subsref recursively?
-        out = f(idx.subs{:});
+        out = mat_access2(f,idx.subs);
       end
     case '.'
       fld = idx.subs;
