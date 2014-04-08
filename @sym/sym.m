@@ -60,12 +60,7 @@ function s = sym(x, varargin)
   if (isa (x, 'double'))
 
     if ~isscalar(x)
-      %warning('nonscalar')
-      s = sym(x(1));
-      for i=1:numel(x)
-        s(i) = sym(x(i));
-      end
-      s = reshape(s, size(x));
+      s = double_mat_to_sympy_mat(x);
       return
     end
 
