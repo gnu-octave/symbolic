@@ -1,8 +1,7 @@
 function display(obj)
-  d = size(obj);
-
-  %if (length(d) == 2) && (d(1) == 1) && (d(2) == 1)
-  if (isscalar(obj))
+  %d = size(obj);
+  %if (isscalar(obj))
+  if(1==1)
     fprintf ('%s = [%s] ', inputname (1), class (obj));
     fprintf ('%s', obj.text);
     % trim newlines
