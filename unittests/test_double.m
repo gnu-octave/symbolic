@@ -21,6 +21,11 @@ function r = test_double()
   snan = sym(nan);
   c=c+1;  r(c) = isnan(double(snan));
 
+  % arrays
+  a = [1 2; 3 4];
+  c=c+1;  r(c) = isequal(  double(sym(a)), a  );
+  c=c+1;  r(c) = isequal(  double(sym(a)), a  );
+
   % should fail with error for non-double
   x = sym('x');
   try
@@ -31,9 +36,8 @@ function r = test_double()
   end
 
   try
-    double(2*x);
+    double([1 2 x]);
     c=c+1;  r(c) = 0;
   catch
     c=c+1;  r(c) = 1;
   end
-

@@ -2,14 +2,13 @@ function r = test_eq()
   c = 0; r = [];
   syms x
 
-  c=c+1; r(c) = logical(  x == x  );
-  c=c+1; r(c) = x == x;
   c=c+1; r(c) = x - x == 0;
   c=c+1; r(c) = isAlways(  x == x  );
 
-  warning('2 known failures: todo: becomes false rather than defining an eqn')
-  c=c+1; r(c) = ~isa(x - 5 == x - 3, 'logical');
+  warning('3 known failures: todo: becomes false rather than defining an eqn')
+  c=c+1; r(c) = isa(x == x, 'sym');
   c=c+1; r(c) = isa(x - 5 == x - 3, 'sym');
+  c=c+1; r(c) = ~isa(x - 5 == x - 3, 'logical');
 
 
   % using eq for == and "same obj" is strange:
