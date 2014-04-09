@@ -5,6 +5,18 @@ function y = double(x, failerr)
     failerr = true;
   end
 
+  if ~(isscalar(x))
+    % sympy N() works fine on matrices but it gives objects like "Matrix([[1.0,2.0]])"
+    y = zeros(size(x));
+    for j = 1:numel(x)
+      idx.type = '()';
+      idx.subs = {j};
+      y(j) = double(subsref(x,idx));
+    end
+    return
+  end
+
+
   cmd = [ 'def fcn(ins):\n'  ...
           '    (x,) = ins\n'  ...
           '    y = sp.N(x,30)\n'  ...
@@ -27,7 +39,7 @@ function y = double(x, failerr)
     return
   end
 
-  % special case for zoo which at least sympy 0.7.4
+  % special case for zoo which at least sympy 0.7.4, 0.7.5
   if (strcmp(A{1}, 'zoo'))
     y = Inf;
     return
@@ -36,6 +48,7 @@ function y = double(x, failerr)
   if (isnan (y))
     y = [];
     if (failerr)
+      %A{1}
       error('Failed to convert %s ''%s'' to double', class(x), x.text);
     end
   end
