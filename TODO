@@ -103,10 +103,6 @@ essential issue is that scalars are not (1,1) matrices in sympy.
 Could do that but, e.g., diff might not work... well we could just
 generate the code to make it work.
 
-% size.m:
-function b = size(x)
-  b = 6
-
 
 
 ## converting to .m function
