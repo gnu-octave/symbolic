@@ -37,7 +37,9 @@ function t = eq(x,y)
             '    else:\n'                        ...
             '        return (d,)\n' ];
 
-    z = python_sympy_cmd (cmd, x, y);
+    % todo: x or y might not be a sym here: should be careful
+    % perhaps its convenient but better to fix the ctor?
+    z = python_sympy_cmd (cmd, sym(x), sym(y));
 
     if (strcmp(z.pickle, true_pickle))
       t = true;

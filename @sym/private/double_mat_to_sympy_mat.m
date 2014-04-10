@@ -4,7 +4,13 @@ function z = double_mat_to_sympy_mat(A)
   [n,m] = size(A);
   Ac = cell(n,1);
   for i=1:n
-    Ac{i} = num2cell(A(i,:));
+    % todo: this is fast and works great for ints but in general we
+    % want all sym creation to go through the ctor.
+    %Ac{i} = num2cell(A(i,:));
+    Ac{i} = cell(m,1);
+    for j=1:m
+      Ac{i}{j} = sym(A(i,j));
+    end
   end
 
   %Ac = {{x 2}; {3 4}; {8 9}};
