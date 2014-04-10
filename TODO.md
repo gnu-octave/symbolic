@@ -130,6 +130,12 @@ probably such fcns should sym()
 
 how about python comand defaults to syming arugements
 
+Sympy: S(zoo) should be inf?
+
+sympy: nan==nan returning True sounds about given == symantics, but Eq(nan,nan) giving True seems undesirable.
+
+parsing errors in octave: need to test on 3.8
+
 ## IPC
 
 Currently we have two approaches implemented:
