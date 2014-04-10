@@ -1,5 +1,15 @@
 function y = double(x, failerr)
 %DOUBLE   Convert symbolic to doubles
+%   Convert a sym x to double:
+%      y = double(x)
+%   If conversion fails, you get an error.
+%
+%   You can pass an optional "false" to return an empty array if
+%   conversion fails on any component.
+%      syms x
+%      a = [1 2 x];
+%      b = double(a, false)
+%      isempty(b)
 
   if (nargin == 1)
     failerr = true;
@@ -11,7 +21,12 @@ function y = double(x, failerr)
     for j = 1:numel(x)
       idx.type = '()';
       idx.subs = {j};
-      y(j) = double(subsref(x,idx));
+      temp = double(subsref(x,idx), failerr);
+      if (isempty(temp))
+        y = [];
+        return
+      end
+      y(j) = temp;
     end
     return
   end
