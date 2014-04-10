@@ -2,6 +2,13 @@ function r = test_bugs()
   c = 0; r = [];
   syms x
 
+  % Issue #5, scalar expansion
+  a = sym(1);
+  a(2) = 2;
+  c=c+1; r(c) = isequal(a, [1 2]);
+
+
+
   warning('todo known failures to fix')
 
 
