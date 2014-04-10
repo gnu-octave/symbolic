@@ -1,6 +1,5 @@
 function r = test_array_refs()
   c = 0; r = [];
-  %syms x
 
   % basically a random matrix
   a = reshape( round(50*(sin(1:20)+1)),  5,4);

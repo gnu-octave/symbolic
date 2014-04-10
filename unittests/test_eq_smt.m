@@ -23,8 +23,6 @@ function r = test_eq_smt()
   c=c+1; r(c) = ~islogical( [x 1] == 1 );
   c=c+1; r(c) = ~islogical( [x 1] == x );
   c=c+1; r(c) = ~islogical( [x x] == x );
-r,pause
   %c=c+1; r(c) = isequal( [x x] == sym([1 2]), [x==1 x==2] );
-  c=c+1; r(c) = isequal( [x x] == [1 2], [x==1 x==2] );
-
+  %c=c+1; r(c) = isequal( [x x] == [1 2], [x==1 x==2] );
 
