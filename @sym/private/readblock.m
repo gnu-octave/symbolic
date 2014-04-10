@@ -1,13 +1,12 @@
 function A = readblock(fout, sbtag, ebtag);
-  wait_disp_thres = 0.1;  
+  wait_disp_thres = 0.01;
   EAGAIN = errno ("EAGAIN");
   done = false;
   started = false;
   nwaits = 0;
   dispw = false;
-  A = '';
 
-fclear (fout);  % otherwise, fails on next call
+  fclear (fout);  % otherwise, fails on next call
 
   do
     s = fgets (fout);
@@ -16,9 +15,10 @@ fclear (fout);  % otherwise, fails on next call
       if (started)
         A = [A s];
       end
-      % if we see the end tag, we're done
+      % here is the <start block> tag, so start recording output
       if (strncmp(s, sbtag, length(sbtag)))
         started = true;
+        A = s;
       end
       % if we see the end tag, we're done
       if (strncmp(s, ebtag, length(ebtag)))
@@ -40,7 +40,7 @@ fclear (fout);  % otherwise, fails on next call
       nwaits = nwaits + 1;
     else
       errno ()
-      error ('oh snap, maybe python failure?')
+      error ('Failed to read python output, perhaps an error in the command?')
     end
     %disp('paused'); pause
   until (done)
