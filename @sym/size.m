@@ -1,4 +1,4 @@
-function d = size(x)
+function [n,m] = size(x)
 
   cmd = [ 'def fcn(_ins):\n'  ...
           '    x = _ins[0]\n'  ...
@@ -12,5 +12,9 @@ function d = size(x)
 
   % do we need raw here?  todo: w/o size is called recursively?
   A = python_sympy_cmd_raw(cmd, x);
-  d = [str2double(A{1}) str2double(A{3})];
+  n = str2double(A{1});
+  m = str2double(A{3});
+  if (nargout <= 1)
+    n = [n m];
+  end
 
