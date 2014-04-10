@@ -16,9 +16,7 @@ function out = subsasgn (val, idx, rhs)
         out = symfun(rhs, idx.subs);
 
       else   % f(double) = ..., array assignment
-        % black magic for me, how does it call a superclass ()?
-        out = val;
-        out(idx.subs{:}) = sym(rhs);
+        out = mat_replace2(val, idx.subs, sym(rhs));
       end
 
     otherwise

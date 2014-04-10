@@ -1,4 +1,5 @@
 function Z = make_zeros(n,m)
+  warning('prob invalid call to make zeros')
   if (nargin==1)
     m = n(2);
     n = n(1);
@@ -10,3 +11,4 @@ function Z = make_zeros(n,m)
       Z(i,j) = z;
     end
   end
+  %Z

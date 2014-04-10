@@ -4,20 +4,42 @@ function t = eq(x,y)
 %   as doubles.  If this fails, it defines a symbolic expression for
 %   a == b.  When each happens is a potential source of bugs!
 %
-%   NOTE: array case it hardcoded only check for equality (see logical()).
-%   One could try to vectorize this defining equations but I think it gets
-%   complicated when only some parts of the system reduce to bools.
-%   todo: check how SMT behaves.
+%   Notes from SMT
+%     * If any varibles appear in the matrix, then you get a matrix
+%       of equalities:  syms x; a = sym([1 2; 3 x]); a == 1
+%     * x==x is an equality, rather than "true".
+%   We currently satisfy neither of these (TODO).
+%
+%   todo: from reading "Eq??", the following would seem to work:
+%    >>> e = relational.Relational.__new__(relational.Eq, x, x)
+%   (but passing this to solve() is still different from SMT
+%
+%   TODO: array case is hardcoded only to check for equality (see logical()).
+%   to get the SMT, could do two passes through the array.
+
 
   if isscalar(x) && isscalar(y)
     %x = sym(x); y = sym(y);
 
     true_pickle = sprintf('I01\n.');
     false_pickle = sprintf('I00\n.');
-    cmd = [ 'def fcn(_ins):\n'  ...
+
+    % Note: sympy 0.7.4 Eq() returns python native bools,
+    % but in 0.7.5 it has its own bool type.  Hence the d==True
+    % stuff below
+
+    cmd = [ 'def fcn(_ins):\n'                   ...
             '    d = sp.Eq(_ins[0], _ins[1])\n'  ...
-            '    return (d,)\n' ];
-    z = python_sympy_cmd (cmd, x, y);
+            '    if (d==True):\n'                ...
+            '        return (True,)\n'           ...
+            '    elif (d==False):\n'             ...
+            '        return (False,)\n'          ...
+            '    else:\n'                        ...
+            '        return (d,)\n' ];
+
+    % todo: x or y might not be a sym here: should be careful
+    % perhaps its convenient but better to fix the ctor?
+    z = python_sympy_cmd (cmd, sym(x), sym(y));
 
     if (strcmp(z.pickle, true_pickle))
       t = true;
@@ -29,9 +51,13 @@ function t = eq(x,y)
 
 
   elseif isscalar(x) && ~isscalar(y)
+    %disp('eq matrix to scalar')
     t = logical(zeros(size(y)));
     for j = 1:numel(y)
-      t(j) = logical(x == y(j));
+      idx.type = '()';
+      idx.subs = {j};
+      %t(j) = logical(x == y(j));
+      t(j) = logical(x == subsref(y, idx));
     end
 
 
@@ -40,10 +66,16 @@ function t = eq(x,y)
 
 
   else  % both are arrays
+    % bug? for some reason, can't use () here, wtf?
+    %x(1)
     assert_same_shape(x,y);
+    %disp('eq two arrays: after assert')
     t = logical(zeros(size(x)));
     for j = 1:numel(x)
-      t(j) = logical(x(j) == y(j));
+      idx.type = '()';
+      idx.subs = {j};
+      %t(j) = logical(x(j) == y(j));   % wtf!
+      t(j) = logical(subsref(x,idx) == subsref(y,idx));
     end
   end
   return

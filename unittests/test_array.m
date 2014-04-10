@@ -33,3 +33,4 @@ function r = test_array()
     c=c+1; r(c) = 0;
   end
 
+

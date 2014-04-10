@@ -55,7 +55,7 @@ a warning.  And extend the constructor instead to work like sympy...
 
 ## equality
 
-MST: ==, define equations
+MST: ==, define equations, equality test only when both sides become double
 SymPy: relationalequality, eq()
 
 MST: logical(), "structural" equivalence

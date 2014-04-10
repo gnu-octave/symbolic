@@ -39,5 +39,8 @@ function r = test_bugs()
   %x - (1==1)
   %x - (1==0)
 
-  %stop
-
+  % bug!  inf/nan in array ctor makes wrong matrix
+  a = sym([nan 1 2]);
+  c=c+1;  r(c) = isequaln(  a, [nan 1 2]  );
+  a = sym([1 inf]);
+  c=c+1;  r(c) = isequaln(  a, [1 inf]  );

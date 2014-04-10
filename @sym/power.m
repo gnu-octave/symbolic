@@ -1,26 +1,19 @@
 function z = power(x, y)
 %.^  Componentwise exponentiation
 
-  if isscalar(x) && isscalar(y)
-    z = mpower(x,y);
-
-  elseif isscalar(x) && ~isscalar(y)
-    z = make_zeros(size(y));
-    for i = 1:numel(y)
-      z(i) = x ^ y(i);
-    end
-
-  elseif ~isscalar(x) && isscalar(y)
-    z = make_zeros(size(x));
-    for i = 1:numel(x)
-      z(i) = x(i) ^ y;
-    end
-
-  else  % both are arrays
-    assert_same_shape(x,y);
-    z = make_zeros(size(x));
-    for j = 1:numel(x)
-      z(j) = x(j)^y(j);
-    end
-  end
+  cmd = [ 'def fcn(_ins):\n'                                      ...
+          '    (x,y) = _ins\n'                                    ...
+          '    if x.is_Matrix and y.is_Matrix:\n'                 ...
+          '        # todo need a copy?\n'                         ...
+          '        for i in range(0, len(x)):\n'                  ...
+          '            x[i] = x[i]**y[i]\n'                       ...
+          '        return ( x ,)\n'                               ...
+          '    if x.is_Matrix and not y.is_Matrix:\n'             ...
+          '        return ( x.applyfunc(lambda a: a**y) ,)\n'     ...
+          '    if not x.is_Matrix and y.is_Matrix:\n'             ...
+          '        return ( y.applyfunc(lambda a: x**a) ,)\n'     ...
+          '    else:\n'                                           ...
+          '        return ( x**y ,)\n' ];
+ 
+  z = python_sympy_cmd(cmd, sym(x), sym(y));
 
