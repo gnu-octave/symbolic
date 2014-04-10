@@ -10,6 +10,11 @@ Goals
 Feature parity with the other symbolic toolboxes.
 
 
+Status
+------
+
+"Alpha" quality at best!  Contributions welcome.
+
 
 Implementation
 --------------
@@ -25,8 +30,14 @@ Python) implementation.
 Communication
 -------------
 
-Currently, we open a new Python process for each operation.  This
-could surely be improved.
+We have two IPC mechanisms between Octave and Python.  One option is
+calling "system()".  The other uses "popen2()".
 
 
+Related Projects
+----------------
+
+* The Octave-Forge symbolic toolbox [http://octave.sourceforge.net/symbolic/index.html].  VPA is pretty good.
+
+* "SymPy CAS" by Jonathan Lister [http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab].  Calls SymPy commands using calls to system().
 
