@@ -3,7 +3,7 @@ function out = subsref (f, idx)
   switch idx.type
     case '()'
       out = subs(f, f.vars, idx.subs);
- 
+
     case '.'
       fld = idx.subs;
       if (strcmp (fld, 'vars'))

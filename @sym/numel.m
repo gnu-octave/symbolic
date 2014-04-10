@@ -1,6 +1,7 @@
 function n = numel(x)
-%todo: broken
+%NUMEL   Number of elements in symbolic array
 
+  %disp('numel call')
   d = size(x);
   n = prod(d);
 
