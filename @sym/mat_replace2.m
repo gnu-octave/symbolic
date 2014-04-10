@@ -1,10 +1,19 @@
 function z = mat_replace2(A,subs,b)
-
-  disp('in replace');
+%a private helper fcn
 
   if (length(subs) == 1)
-    % special case for linear indices (or teach sympy to use column-based)
-    [r, c] = ind2sub (size(A), subs{1});
+    % can use a single index to grow a vector, so we carefully deal with
+    % vector vs linear index to matrix (not required for access)
+    [n,m] = size(A);
+    if (n == 1)
+      r = 1;  c = subs{1};
+    elseif (m == 1)
+      r = subs{1};  c = 1;
+    else
+      % special case for linear indices (or teach sympy to use column-based)
+      [r, c] = ind2sub (size(A), subs{1});
+    end
+
   elseif (length(subs) == 2)
     r = subs{1};
     c = subs{2};
