@@ -23,7 +23,7 @@ function r = test_array_more_hv_cat()
     c=c+1; r(c) = 1;
   catch
     c=c+1; r(c) = 0;
-    warning('some tests failed, skipping: known bug on Octave 3.6')
+    warning('some tests failed, skipping: this is a known bug on Octave 3.6')
     return
   end
 

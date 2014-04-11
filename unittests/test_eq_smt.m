@@ -2,7 +2,8 @@ function r = test_eq_smt()
   c = 0; r = [];
   syms x
 
-  % some tests based on what SMT does
+  %% some tests based on what SMT does
+
   c=c+1; r(c) = islogical( sym(1) == sym(1) );
   c=c+1; r(c) = islogical( sym(1) == 1 );
   c=c+1; r(c) = islogical( sym(1) == 0 );
