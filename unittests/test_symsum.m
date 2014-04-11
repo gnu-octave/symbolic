@@ -4,6 +4,7 @@ function r = test_symsum()
   oo = sym(inf);
 
   c=c+1; r(c) = symsum(n,n,1,10) == 55;
+  c=c+1; r(c) = isa(symsum(n,n,1,10), 'sym');
   c=c+1; r(c) = symsum(n,n,sym(1),sym(10)) == 55;
   c=c+1; r(c) = symsum(n,n,sym(1),sym(10)) == 55;
   c=c+1; r(c) = symsum(1/n,n,1,10) == sym(7381)/2520;

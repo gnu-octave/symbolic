@@ -118,13 +118,7 @@ etc.
 
 potential: double values are passdd directly to python in many spaces: potential problems with not going thru sym constructor
 
-e.g., check what SMT does here
- symsum(pi,n,1,10)
- symsum(pi,n,1,inf)   [error]
-
-probably such fcns should sym()
-
-how about python comand defaults to syming arugements
+Maybe the python command defaults to syming argements?
 
 Sympy: S(zoo) should be inf?
 
