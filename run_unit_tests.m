@@ -11,14 +11,14 @@ for i=1:length(tests)
   % helper files)
   if ( (~tests(i).isdir) && strncmp(test, 'test', 4) && test(end) ~= '~')
     testtime = cputime();
-    f = str2func(test(1:end-2));
+    str = test(1:end-2);
+    f = str2func(str);
     num_tests = num_tests + 1;
     disp(['** Running test(s) in: ' test ]);
-    %[pass,str] = f();
-    pass = f(); str = 'dummy';
+    pass = f();
     testtime = cputime() - testtime;
     if all(pass)
-      %fprintf('** PASS: %s  [%g sec]\n', str, testtime);
+      fprintf('** PASS: %s  [%g sec]\n', str, testtime);
     else
       fprintf('** FAIL: %s  [%g sec]\n', str, testtime);
       num_failed = num_failed + 1;
