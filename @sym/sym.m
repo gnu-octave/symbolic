@@ -42,10 +42,6 @@ function s = sym(x, varargin)
     return
   end
 
-  if (strcmp (class (x), 'sym'))
-    s = x;
-    return
-  end
 
   % todo: may not want to expose this in constructor: private usage
   if (nargin == 2)
@@ -57,13 +53,19 @@ function s = sym(x, varargin)
   end
 
 
-  if (isa (x, 'double'))
+  if (strcmp (class (x), 'sym'))   % not a subclass, exactly a sym, not symfun
+    s = x;
+    return
 
-    if ~isscalar(x)
-      s = double_mat_to_sympy_mat(x);
-      return
-    end
+  elseif (iscell (x))
+    s = cell_array_to_sym (x);
+    return
 
+  elseif (isa (x, 'double')  &&  ~isscalar (x) )
+    s = double_array_to_sym (x);
+    return
+
+  elseif (isa (x, 'double'))
     % TODO: maybe cleaner to generate a string and then call the
     % constructor again....
     if (x == pi)
@@ -112,6 +114,8 @@ function s = sym(x, varargin)
       %end
     end
   else
+    x
+    class(x)
     error('conversion from that type to symbolic not (yet) supported');
   end
 

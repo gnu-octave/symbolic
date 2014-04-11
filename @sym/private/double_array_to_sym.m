@@ -1,4 +1,6 @@
-function z = double_mat_to_sympy_mat(A)
+function z = double_array_to_sym(A)
+%private helper for sym ctor
+%   convert an array to syms, currently on 1D, 2D.
 
   % todo: split to fcn mat2list()
   [n,m] = size(A);
