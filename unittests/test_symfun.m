@@ -44,6 +44,6 @@ function r = test_symfun()
   c=c+1; r(c) = isa(f, 'symfun');
   c=c+1; r(c) = isa(g, 'symfun');
 
-  % todo: reset python make still works
+  % todo: reset python make still work
 
 

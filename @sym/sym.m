@@ -53,7 +53,9 @@ function s = sym(x, varargin)
   end
 
 
-  if (strcmp (class (x), 'sym'))   % not a subclass, exactly a sym, not symfun
+  % not a subclass, exactly a sym, not symfun
+  %if (strcmp (class (x), 'sym'))
+  if (isa (x, 'sym'))
     s = x;
     return
 
