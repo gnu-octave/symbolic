@@ -14,7 +14,12 @@ function r = test_subs()
   c=c+1; r(c) = isequal(  subs(f, {x y}, {16 t}),  16*t  );
   c=c+1; r(c) = isequal(  subs(f, {x y}, {2 16}),  32  );
 
-
+  % vectors
   c=c+1; r(c) = isequal( subs(f, [x y], [t t]),  t*t  );
   c=c+1; r(c) = isequal( subs(f, [x y], [t 16]),  16*t  );
   c=c+1; r(c) = isequal( subs(f, [x y], [2 16]),  32  );
+
+  % anything you can think of
+  c=c+1; r(c) = isequal( subs(f, [x y], {t t}),  t*t  );
+  c=c+1; r(c) = isequal( subs(f, {x y}, [t t]),  t*t  );
+  c=c+1; r(c) = isequal( subs(f, {x; y}, [t; t]),  t*t  );

@@ -10,7 +10,9 @@ function g = subs(f, in, out)
 %
 %   F = [x x*y; 2*x*y y];
 %   subs(F, {x y}, {2 sym(pi)})
-%
+%   subs(F, {x y}, [2 sym(pi)])
+%   subs(F, [x y], [2 sym(pi)])
+%   subs(F, [x y], {2 sym(pi)})
 
   %% Simple code for scalar x
   % The more general code would work fine, but maybe this makes some
@@ -28,38 +30,30 @@ function g = subs(f, in, out)
   %% In general
   % We build a list of of pairs of substitutions.
 
-  %in = sym(in);      % no, might be cell arrays
-  %out = sym(out);
+  in = sym(in);
+  out = sym(out);
 
 
-  if (iscell(in))   % cell input, any size
+
+  if ( (iscell(in))  ||  (numel(in) >= 2) )
     assert_same_shape(in,out)
-    assert(iscell(out))   % Actually, SMT allows mix of array and cell
     sublist = cell(1, numel(in));
     for i = 1:numel(in)
-      sublist{i} = {sym(in{i}), sym(out{i})};
-    end
-
-  elseif (numel(in) >= 2)  % array input, non scalar
-    % Note: annoyingly similar ways to build sublist but I counldn't
-    % make it work with just one.
-    assert_same_shape(in,out)
-    assert(~iscell(out))
-    sublist = cell(1, numel(in));
-    for i = 1:numel(in)
-      idx.type = '()';
-      idx.subs = {i};
-      sublist{i} = {sym(subsref(in, idx)), sym(subsref(out, idx))};
+      if (iscell(in)),  idx1.type = '{}'; else idx1.type = '()'; end
+      if (iscell(out)), idx2.type = '{}'; else idx2.type = '()'; end
+      idx1.subs = {i};
+      idx2.subs = {i};
+      sublist{i} = { subsref(in, idx1), subsref(out, idx2) };
     end
 
   elseif (numel(in) == 1)  % scalar, non-cell input
     assert(~iscell(out))
     % out could be an array (although this doesn't work b/c of
     % Issue #10)
-    sublist = {{sym(in), sym(out)}};
+    sublist = { {in, out} };
 
   else
-    error('not a valid sort of subs input (?)');
+    error('not a valid sort of subs input');
   end
 
   % simultaneous=True is important so we can do subs(f,[x y], [y x])
