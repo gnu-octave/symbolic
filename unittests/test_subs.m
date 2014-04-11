@@ -4,29 +4,17 @@ function r = test_subs()
 
   f = x*y;
 
-  c=c+1; r(c) = logical( subs(f, x, y) - y^2 == 0 );
+  c=c+1; r(c) = isequal(  subs(f, x, y),  y^2  );
+  c=c+1; r(c) = isequal(  subs(f, y, sin(x)),  x*sin(x)  );
+  c=c+1; r(c) = isequal(  subs(f, x, 16),  16*y  );
 
-  c=c+1; r(c) = logical( subs(f, y, sin(x)) - x*sin(x) == 0 );
-
-  c=c+1; r(c) = logical( subs(f, x, 16) - 16*y == 0 );
-
-  c=c+1; r(c) = logical( subs(f, {x y}, {t t}) - t*t == 0 );
-
-  c=c+1; r(c) = logical( subs(f, {x y}, {t 16}) - 16*t == 0 );
-
-  c=c+1; r(c) = logical( subs(f, {x y}, {16 t}) - 16*t == 0 );
-
-  c=c+1; r(c) = logical( subs(f, {x y}, {2 16}) - 32 == 0 );
+  c=c+1; r(c) = isequal(  subs(f, {x}, {t}),  y*t  );
+  c=c+1; r(c) = isequal(  subs(f, {x y}, {t t}),  t*t  );
+  c=c+1; r(c) = isequal(  subs(f, {x y}, {t 16}),  16*t  );
+  c=c+1; r(c) = isequal(  subs(f, {x y}, {16 t}),  16*t  );
+  c=c+1; r(c) = isequal(  subs(f, {x y}, {2 16}),  32  );
 
 
-  warning('todo known failures');
-  c=c+1; r(c) = 0;
-  %c=c+1; r(c) = logical( subs(f, [x y], [t t]) - t*t == 0 );
-
-  %c=c+1; r(c) = logical( subs(f, [x y], [t 16]) - 16*t == 0 );
-
-  %c=c+1; r(c) = logical( subs(f, [x y], [2 16]) - 32 == 0 );
-
-  % does this work in SMT?
-  %c=c+1; r(c) = logical( subs(f, [x y], [y x]) - x*y == 0 );
-
+  c=c+1; r(c) = isequal( subs(f, [x y], [t t]),  t*t  );
+  c=c+1; r(c) = isequal( subs(f, [x y], [t 16]),  16*t  );
+  c=c+1; r(c) = isequal( subs(f, [x y], [2 16]),  32  );

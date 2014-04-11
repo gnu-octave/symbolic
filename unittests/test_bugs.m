@@ -42,3 +42,9 @@ function r = test_bugs()
   % these seem to work
   c=c+1; r(c) = islogical(sym(inf) == 1);
   c=c+1; r(c) = (sym(inf) == 1) == false;
+
+
+  %% Issue #10
+  %a = sym([1 2; 3 4])
+  %f = sin(y);
+  %subs(f, y, a);
