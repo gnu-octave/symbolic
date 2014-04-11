@@ -1,4 +1,4 @@
-function z = diff(f,varargin)
+function z = diff(f, varargin)
 %DIFF   Symbolic differentiation
 %   diff(f, x);
 %     differentiate symbolic expression f w.r.t. symbol x.
@@ -15,8 +15,8 @@ function z = diff(f,varargin)
           '    d = sp.diff(*_ins)\n'                              ...
           '    return (d,)\n' ];
 
-  z = python_sympy_cmd (cmd, f, varargin{:});
-
+  varargin = sym(varargin);
+  z = python_sympy_cmd (cmd, sym(f), varargin{:});
 
   % simpler version but gives error on differentiating a constant
   % e.g. diff(sym(1))

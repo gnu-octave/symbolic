@@ -10,7 +10,7 @@ function r = test_diff()
   c=c+1; r(c) = logical( diff(sin(x),x,2) + sin(x) == 0 );
   c=c+1; r(c) = logical( diff(sym(1),x) == 0 );
   c=c+1; r(c) = logical( diff(1,x) == 0 );
-  c=c+1; r(c) = logical( diff(1.1,x) == 0 );
+  c=c+1; r(c) = logical( diff(pi,x) == 0 );
 
   % symbolic diff of constant w/o variable fails in sympy, but worked around
   c=c+1; r(c) = logical( diff(sym(1)) == 0 );
