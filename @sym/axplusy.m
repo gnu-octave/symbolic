@@ -14,6 +14,6 @@ function z = axplusy(a, x, y)
           '        return ( a*x*sp.ones(*y.shape) + y ,)\n' ...
           '    else:\n' ...
           '        return ( a*x + y ,)\n' ];
- 
+
   z = python_sympy_cmd(cmd, sym(a), sym(x), sym(y));
 

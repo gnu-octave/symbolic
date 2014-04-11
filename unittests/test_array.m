@@ -7,7 +7,7 @@ function r = test_array()
     [x x];
     [x 1];
     [1 x];
-    c=c+1; r(c) = 1;  
+    c=c+1; r(c) = 1;
   catch
     c=c+1; r(c) = 0;
   end
@@ -18,7 +18,7 @@ function r = test_array()
     sym([1 2]);
     sym([1 x]);
     sym([1 2; 3 4]);
-    c=c+1; r(c) = 1;  
+    c=c+1; r(c) = 1;
   catch
     c=c+1; r(c) = 0;
   end
@@ -28,9 +28,7 @@ function r = test_array()
     [x x; x x];
     [x x x; x x x];
     [x; x; x];
-    c=c+1; r(c) = 1;  
+    c=c+1; r(c) = 1;
   catch
     c=c+1; r(c) = 0;
   end
-
-
