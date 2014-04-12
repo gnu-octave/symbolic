@@ -47,7 +47,8 @@ function s = do_list(s, indent, in, L)
     if (isa(x,'sym')) %&& isscalar(x))   % wrong for mat sympys
       s = sprintf('%s%s# Load %d: pickle\n', s, sp, i);
       % need to be careful here: pickle might have escape codes
-      s = sprintf('%s%s%s.append(pickle.loads("""%s"""))\n', s, sp, in, x.pickle);
+      %s = sprintf('%s%s%s.append(pickle.loads("""%s"""))\n', s, sp, in, x.pickle);
+      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, x.pickle);
     elseif (ischar(x))
       s = sprintf('%s%s# Load %d: string\n', s, sp, i);
       s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);

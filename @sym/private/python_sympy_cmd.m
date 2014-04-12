@@ -33,8 +33,10 @@ function varargout = python_sympy_cmd(cmd, varargin)
     pickle = A{2*i};
     %pickle = undo_string_escapes (A{2*i});
 
-    true_pickle = sprintf('I01\n.');
-    false_pickle = sprintf('I00\n.');
+    %true_pickle = sprintf('I01\n.');
+    %false_pickle = sprintf('I00\n.');
+    true_pickle = sprintf('True');
+    false_pickle = sprintf('False');
 
     if (strcmp(pickle, true_pickle))
       s = true;
