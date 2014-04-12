@@ -19,10 +19,6 @@ function t = eq(x,y)
 
 
   if isscalar(x) && isscalar(y)
-    %x = sym(x); y = sym(y);
-
-    true_pickle = sprintf('I01\n.');
-    false_pickle = sprintf('I00\n.');
 
     % Note: sympy 0.7.4 Eq() returns python native bools,
     % but in 0.7.5 it has its own bool type.  Hence the d==True
@@ -37,17 +33,8 @@ function t = eq(x,y)
             '    else:\n'                        ...
             '        return (d,)\n' ];
 
-    % todo: x or y might not be a sym here: should be careful
-    % perhaps its convenient but better to fix the ctor?
-    z = python_sympy_cmd (cmd, sym(x), sym(y));
-
-    if (strcmp(z.pickle, true_pickle))
-      t = true;
-    elseif (strcmp(z.pickle, false_pickle))
-      t = false;
-    else
-      t = z;   % the releq
-    end
+    % note: t could be bool or sym here
+    t = python_sympy_cmd (cmd, sym(x), sym(y));
 
 
   elseif isscalar(x) && ~isscalar(y)

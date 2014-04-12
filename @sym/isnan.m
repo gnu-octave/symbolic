@@ -5,21 +5,14 @@ function r = isnan(x)
   %r = isnan (double (x, false));
 
   if isscalar(x)
-    % todo: this true pickle paradigm overused, deal with bools properly!
-    true_pickle = sprintf('I01\n.');
-    false_pickle = sprintf('I00\n.');
 
     cmd = [ 'def fcn(_ins):\n'              ...
             '    d = _ins[0] == sp.nan\n'  ...
             '    return (d,)\n' ];
 
-    z = python_sympy_cmd (cmd, x);
+    r = python_sympy_cmd (cmd, x);
 
-    if (strcmp(z.pickle, true_pickle))
-      r = true;
-    elseif (strcmp(z.pickle, false_pickle))
-      r = false;
-    else
+    if (~ islogical(r))
       error('nonboolean return from python');
     end
 

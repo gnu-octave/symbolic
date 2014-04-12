@@ -17,21 +17,14 @@ function t = isequaln(x,y,varargin)
 
   % sympy's == is not componentwise so no special case for arrays
 
-  true_pickle = sprintf('I01\n.');
-  false_pickle = sprintf('I00\n.');
-
   cmd = [ 'def fcn(_ins):\n'  ...
           '    d = _ins[0] == _ins[1]\n'  ...
           '    return (d,)\n' ];
 
-  z = python_sympy_cmd (cmd, sym(x), sym(y));
+  t = python_sympy_cmd (cmd, sym(x), sym(y));
 
-  if (strcmp(z.pickle, true_pickle))
-    t = true;
-  elseif (strcmp(z.pickle, false_pickle))
-    t = false;
-  else
-    error('Monsieur! Ce nes pas possible!');
+  if (~ islogical(t))
+    error('nonboolean return from python');
   end
 
   %else  % both are arrays
