@@ -3,17 +3,17 @@ function r = test_infnan()
 
   % make sure their pickles contain infinity, otherwise just symbols
   oo = sym(inf);
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym(-inf);
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('-inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('Inf');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
   oo = sym('INF');
-  c=c+1;  r(c) = ~isempty( strfind(oo.pickle, 'Infinity') );
+  c=c+1;  r(c) = isempty( strfind(oo.pickle, 'Symbol') );
 
   % must NOT contain the work 'symbol', we want the nan object
   x = sym(nan);

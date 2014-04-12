@@ -17,7 +17,9 @@ function r = test_symprod()
   % sympy 0.7.5: gives NaN  [https://github.com/sympy/sympy/wiki/Release-Notes-for-0.7.5]
   % SMT R2013b: gives 1
   c=c+1; r(c) = isnan(1^oo);
-
+  if (~ r(c))
+    warning('1 known failure on SymPy 0.7.4, fixed in 0.7.5')
+  end
 
   %% a^zoo, when a == 1
   % on both sympy 0.7.4 and 0.7.5 this is 1

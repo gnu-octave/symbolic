@@ -8,15 +8,15 @@ function display(obj)
     %s = regexprep (obj.pickle, '\n', '\\n');
     s = regexprep (obj.pickle, '\n', '\');
     len = length (s);
-    if len < 100
+    if len < 40
       ellipsize = s;
     else
       % todo: ok to use unicode?
-      ellipsize = ['…' s(13:45) '…'];
-      %ellipsize = [s(1:33) '…'];
-      %ellipsize = [s(1:33) '...'];
+      %ellipsize = ['…' s(13:45) '…'];
+      ellipsize = [s(1:40) '…'];
+      %ellipsize = [s(1:40) '...'];
     end
-    fprintf('  [%s]\n', ellipsize);
+    fprintf('   "%s"\n', ellipsize);
 
   elseif (length(d) == 2)
     %% 2D Array

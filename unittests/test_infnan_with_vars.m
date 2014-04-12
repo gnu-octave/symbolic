@@ -10,13 +10,13 @@ function r = test_infnan_with_vars()
   warning('known issues here: but should be follow SMT?');
   y = x+oo;
   c=c+1;  r(c) = isinf(y);
-  c=c+1;  r(c) = ~isempty( strfind(y.pickle, 'core.add') );
+  c=c+1;  r(c) = ~isempty( strfind(lower(y.pickle), 'add') );
 
   y = x-zoo;
   c=c+1;  r(c) = isinf(y);
-  c=c+1;  r(c) = ~isempty( strfind(y.pickle, 'core.add') );
+  c=c+1;  r(c) = ~isempty( strfind(lower(y.pickle), 'add') );
 
   y = x*oo;
   c=c+1;  r(c) = isinf(y);
-  c=c+1;  r(c) = ~isempty( strfind(y.pickle, 'core.mul') );
+  c=c+1;  r(c) = ~isempty( strfind(lower(y.pickle), 'mul') );
 

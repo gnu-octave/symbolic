@@ -17,16 +17,16 @@ function expr = make_undecl_symfun_rhs(s, vars)
   end
   fname = s(1:(i-1));
 
-  extra = sprintf('%s = sp.symbols("%s", cls=sp.Function)', fname, fname);
+  %extra = sprintf('%s = sp.symbols("%s", cls=sp.Function)', fname, fname);
 
   cmd = sprintf( [ 'def fcn(_ins):\n'  ...
                    '    x = _ins\n' ] );
-  %cmd = sprintf ('%s    _f = sp.Function("%s")(*x)\n', cmd, fname);
-  cmd = sprintf ('%s    _f = %s(*x)\n', cmd, fname);
+  cmd = sprintf ('%s    _f = sp.Function("%s")(*x)\n', cmd, fname);
+  %cmd = sprintf ('%s    _f = %s(*x)\n', cmd, fname);
   cmd = sprintf ('%s    return (_f,)\n', cmd);
     
   %hack
-  cmd = [extra '\n\n' cmd];
+  %cmd = [extra '\n\n' cmd];
 
   %cmd, vars
   expr = python_sympy_cmd(cmd, vars{:});
