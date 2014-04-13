@@ -17,11 +17,6 @@ function r = test_bugs()
   end
 
 
-  %% size issues(?), "any()" not implemented
-  D = [0 1; 2 3];
-  A = sym(D);
-  c=c+1; r(c) = isequal( size(any(A-D)), [1 2] );
-
 
   %% todo: bug? boolean not converted to sym
   c=c+1; r(c) = 0;

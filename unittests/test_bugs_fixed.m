@@ -10,6 +10,14 @@ function r = test_bugs_fixed()
 
 
 
+  %% "any, all" not implemented
+  D = [0 1; 2 3];
+  A = sym(D);
+  c=c+1; r(c) = isequal( size(any(A-D)), [1 2] );
+  c=c+1; r(c) = isequal( size(all(A-D,2)), [2 1] );
+
+
+
   %% double wasn't implemented correctly for arrays
   D = [0 1; 2 3];
   A = sym(D);
