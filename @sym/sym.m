@@ -17,18 +17,20 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% Usage: [X] = sym (Y)
-%% Define symbols and numbers as symbolic expressions.
-%% Y can be an integer, a string or one of several special
-%% double values.
+%% -- Loadable Function: X = sym (Y)
+%%     Define symbols and numbers as symbolic expressions.
 %%
-%% Examples:
+%%     Y can be an integer, a string or one of several special
+%%     double values.  It can also be a double matrix or a cell array.
 %%
-%% x = sym ('x')
-%% y = sym ('2')
-%% y = sym (3)
-%% y = sym (inf)
-%% y = sym (pi)
+%%     Examples:
+%%
+%%     x = sym ('x')
+%%     y = sym ('2')
+%%     y = sym (3)
+%%     y = sym (inf)
+%%     y = sym (pi)
+%%     y = sym ( sym (pi))   % idempotent
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
