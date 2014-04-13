@@ -5,7 +5,7 @@ function z = mat_replace2(A,subs,b)
     % can use a single index to grow a vector, so we carefully deal with
     % vector vs linear index to matrix (not required for access)
     [n,m] = size(A);
-    if (n == 1)
+    if (n == 0 || n == 1)
       r = 1;  c = subs{1};
     elseif (m == 1)
       r = subs{1};  c = 1;
