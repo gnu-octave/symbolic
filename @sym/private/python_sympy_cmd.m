@@ -21,10 +21,10 @@ function varargout = python_sympy_cmd(cmd, varargin)
 
   A = python_sympy_cmd_raw(cmd, varargin{:});
 
-  % TODO: constructing sym() outside of contructor feels crude,
-  % provide a way for constructor to take these inputs?
-
-  for i=1:nargout
+  M = length(A)/2;
+  assert(rem(M,1) == 0)
+  varargout = cell(1,M);
+  for i=1:M
     %s = [];
     %s.text = A{2*i-1};
     %s.pickle = A{2*i};
@@ -49,3 +49,6 @@ function varargout = python_sympy_cmd(cmd, varargin)
     varargout{i} = s;
   end
 
+  if nargout ~= M
+    warning('number of outputs don''t match, was this intentional?')
+  end
