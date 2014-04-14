@@ -42,7 +42,7 @@ end
 function s = do_list(s, indent, in, L)
 
   sp = char(' ' * ones(indent, 1));
-  for i=1:length(L)
+  for i=1:numel(L)
     x = L{i};
     if (isa(x,'sym')) %&& isscalar(x))   % wrong for mat sympys
       s = sprintf('%s%s# Load %d: pickle\n', s, sp, i);
