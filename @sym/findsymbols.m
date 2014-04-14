@@ -25,19 +25,25 @@
 %%     Note E, I, pi, etc are not counted as symbols.
 
 %% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols
+%% Keywords: symbolic, symbols, find
 
 function L = findsymbols(x)
 
   cmd = [ 'def fcn(_ins):\n'                                          ...
           '    #sys.stderr.write("pydebug: " + str(_ins) + "\\n")\n'   ...
-          '    s = _ins[0].free_symbols\n'                                  ...
-          '    l = list(s)\n'                                  ...
-          '    l.sort()\n'                                  ...
+          '    x = _ins[0]\n'                           ...
+          '    if not x.is_Matrix:\n'                   ...
+          '        s = x.free_symbols\n'                ...
+          '    else:\n'                                 ...
+          '        s = set()\n'                         ...
+          '        for i in x.values():\n'              ...
+          '            s = s.union(i.free_symbols)\n'   ...
+          '    l = list(s)\n'                           ...
+          '    l.sort()\n'                              ...
           '    #sys.stderr.write("pydebug: " + str(l) + "\\n")\n'      ...
-          '    return (l)\n' ];
+          '    return (l,)\n' ];
 
-  L = python_sympy_cmd_retcell (cmd, x);
+  L = python_sympy_cmd (cmd, x);
 
 
 %!test
@@ -45,9 +51,16 @@ function L = findsymbols(x)
 %! z = a*x + b*pi*sin (n) + exp (y) + exp (sym (1)) + arlo;
 %! s = findsymbols (z);
 %! assert (isequal ([s{:}], [a,arlo,b,n,x,y]))
-%!test syms x
+%!test
+%! syms x
 %! s = findsymbols (x);
 %! assert (isequal (s{1}, x))
+%!test
+%! syms z x y a
+%! s = findsymbols ([x y; 1 a]);
+%! assert (isequal ([s{:}], [a x y]))
+%!assert (isempty (findsymbols (sym (1))))
+%!assert (isempty (findsymbols (sym ([1 2]))))
 %!assert (isempty (findsymbols (sym (nan))))
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
