@@ -51,13 +51,15 @@ function p = poly2sym(c,x)
     endfor
   endif
 
-  p = vpa(0);
+  # we don't have vpa yet
+  #p = vpa(0);
+  p = sym(0);
   for i=1:N
-    if isnumeric(c{i})
-      p = p*x+vpa(c{i});
-    else
+    #if isnumeric(c{i})
+    #  p = p*x+vpa(c{i});
+    #else
       p = p*x+c{i};
-    endif
+    #endif
   endfor
 
 endfunction
