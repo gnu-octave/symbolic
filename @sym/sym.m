@@ -126,9 +126,5 @@ function s = sym(x, varargin)
   fullcmd = [ 'def fcn(ins):\n'  ...
               '    ' cmd  ...
               '    return (z,)\n' ];
-  A = python_sympy_cmd_raw(fullcmd);
-  s.text = A{1};
-  s.pickle = A{2};
-  s.extra = [];
-  s = class(s, 'sym');
+  s = python_sympy_cmd(fullcmd);
 

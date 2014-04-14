@@ -13,11 +13,11 @@ function s = python_copy_vars_from(out)
   s = sprintf('%sfor item in %s:\n', s, out);
   s = sprintf('%s    print "%s"\n', s, stag);
   s = sprintf('%s    print str(item)\n', s);
-  %s = sprintf('%s    print sp.pprint(item)\n', s);
   s = sprintf('%s    print "%s"\n', s, etag);
   s = sprintf('%s    print "%s"\n', s, stag);
   s = sprintf('%s    #print pickle.dumps(item, 0)\n', s);
-  s = sprintf('%s    print sp.srepr(item)\n', s);
+  s = sprintf('%s    #print sp.srepr(item)\n', s);
+  s = sprintf('%s    print "tmp = " + octcmd(item) + ";"\n', s);
   s = sprintf('%s    print "%s"\n\n', s, etag);
   s = sprintf('%sprint "%s"\n\n', s, ebtag);
 
