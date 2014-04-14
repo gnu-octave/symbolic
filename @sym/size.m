@@ -10,11 +10,7 @@ function [n,m] = size(x)
           '    #sys.stderr.write("pydb: size of " + str(x) + " is " + str(d) + "\\n")\n'  ...      
           '    return (d[0],d[1],)\n' ];
 
-  % do we need raw here?  todo: w/o size is called recursively?
-  A = python_sympy_cmd_raw(cmd, x);
-  n = str2double(A{1});
-  m = str2double(A{3});
+  [n,m] = python_sympy_cmd(cmd, x);
   if (nargout <= 1)
     n = [n m];
   end
-
