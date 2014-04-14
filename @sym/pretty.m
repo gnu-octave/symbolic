@@ -4,16 +4,13 @@ function varargout = pretty(x)
 %   todo: wrapping column?
 
   cmd = [ 'def fcn(_ins):\n'  ...
-          '    dbout(_ins)\n'  ...
           '    d = sp.pretty(*_ins)\n'  ...
           '    return (d,)\n' ];
-  s = python_sympy_cmd_raw (cmd, x);
-  s = s{1};
+
+  s = python_sympy_cmd (cmd, x);
 
   if (nargout == 0)
     disp(s)
   else
     varargout = {s};
   end
-
-

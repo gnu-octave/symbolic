@@ -31,12 +31,18 @@ function y = double(x, failerr)
     return
   end
 
+  % FIXME: maybe its better to do the special casing, etc on the
+  % python end?  Revisit this when fixing proper movement of
+  % doubles (Bug #11).
 
   cmd = [ 'def fcn(ins):\n'  ...
           '    (x,) = ins\n'  ...
           '    y = sp.N(x,30)\n'  ...
+          '    y = str(y)\n'  ...
           '    return (y,)\n' ];
-  A = python_sympy_cmd_raw(cmd, x);
+
+  A = python_sympy_cmd (cmd, x);
+  assert(ischar(A))
 
   % workaround for Octave 3.6.4 where str2double borks on "inf"
   % instead of "Inf".
@@ -44,27 +50,26 @@ function y = double(x, failerr)
   %if (is_octave())
   if exist('octave_config_info', 'builtin');
     if (compare_versions (OCTAVE_VERSION (), '3.8.0', '<'))
-      A{1} = strrep(A{1}, 'inf', 'Inf');
+      A = strrep(A, 'inf', 'Inf');
     end
   end
 
   % special case for nan so we can later detect if str2double finds a double
-  if (strcmp(A{1}, 'nan'))
+  if (strcmp(A, 'nan'))
     y = NaN;
     return
   end
 
-  % special case for zoo which at least sympy 0.7.4, 0.7.5
-  if (strcmp(A{1}, 'zoo'))
+  % special case for zoo, at least in sympy 0.7.4, 0.7.5
+  if (strcmp(A, 'zoo'))
     y = Inf;
     return
   end
-  y = str2double (A{1});
+
+  y = str2double (A);
   if (isnan (y))
     y = [];
     if (failerr)
-      %A{1}
       error('Failed to convert %s ''%s'' to double', class(x), x.text);
     end
   end
-
