@@ -10,6 +10,7 @@ function out = solve(varargin)
 %   todo: out is a python list
 
   n = nargin;
+  varargin = sym(varargin);
   eqn = varargin(1:n/2)
   vars = varargin(n/2+1:n)
 

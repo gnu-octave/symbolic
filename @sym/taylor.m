@@ -11,5 +11,5 @@ function s = taylor(f,x,a,varargin)
             '    (f,x,a,n) = _ins\n'  ...
             '    s = f.series(x,a,n).removeO()\n'  ...
             '    return (s,)\n' ];
-  s = python_sympy_cmd(cmd, f, x, a, n);
+  s = python_sympy_cmd(cmd, sym(f), sym(x), sym(a), n);
 

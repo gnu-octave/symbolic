@@ -10,5 +10,5 @@ function F = fourier(f,x,k)
           '    d = sp.fourier_transform(*_ins)\n'                 ...
           '    return (d,)\n' ];
 
-  F = python_sympy_cmd (cmd, f, x, k);
+  F = python_sympy_cmd (cmd, sym(f), sym(x), sym(k));
 

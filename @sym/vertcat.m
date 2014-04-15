@@ -11,8 +11,6 @@ function h = vertcat(varargin)
           '    M = sp.Matrix.vstack(*_proc)\n'  ...
           '    return (M,)\n' ];
 
-  for i=1:nargin
-    varargin{i} = sym(varargin{i}); % make each a sym
-  end
+  varargin = sym(varargin);
   h = python_sympy_cmd(cmd, varargin{:});
 

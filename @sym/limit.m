@@ -35,5 +35,11 @@ function L = limit(f,x,a,dir)
             '    (f,x,a,pdir) = ins\n'  ...
             '    g = f.limit(x,a,dir=pdir)\n'  ...
             '    return (g,)\n' ];
-  L = python_sympy_cmd(cmd, f, x, a, pdir);
+  L = python_sympy_cmd(cmd, sym(f), sym(x), sym(a), pdir);
+
+
+%!shared x
+%! syms x
+%!assert(isa(limit(x,x,pi), 'sym'))
+%!assert(isequal(limit(x,x,pi), sym(pi)))
 

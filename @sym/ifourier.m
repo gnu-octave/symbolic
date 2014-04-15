@@ -10,5 +10,5 @@ function f = ifourier(F,k,x)
           '    d = sp.inverse_fourier_transform(*_ins)\n'            ...
           '    return (d,)\n' ];
 
-  f = python_sympy_cmd (cmd, F, k, x);
+  f = python_sympy_cmd (cmd, sym(F), sym(k), sym(x));
 
