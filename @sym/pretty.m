@@ -1,7 +1,12 @@
 function varargout = pretty(x)
-%PRETTY   ascii-art/unicode of an expression
+%PRETTY   ascii-art/unicode of a symbolic expression
+%
+%   Note: pretty(x) works like disp(x) (makes output even if has a
+%   semicolon)
+%
 %   todo: use_unicode as a global var?, use_unicode=False)
 %   todo: wrapping column?
+%
 
   % FIXME: how to access format compact/loose setting?
   loose = true;
@@ -29,7 +34,7 @@ function print_indented(s, n)
   end
   pad = char (double (' ')*ones (1,n));
   fprintf (pad);
-  %FIXME: extra sprintf needed on Octave 3.6.4, seems harmless on 3.8.1?
+  %FIXME: sprintf needed on Octave 3.6.4, seems harmless on 3.8.1.
   %s = regexprep (s, '\n', ['\n' pad]);
   s = regexprep (s, '\n', sprintf ('\n%s', pad));
   fprintf ('%s', s);
