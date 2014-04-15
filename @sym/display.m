@@ -1,36 +1,43 @@
 function display(obj)
-  %d = size(obj);
-  %if (isscalar(obj))
-  if(1==1)
-    fprintf ('%s = [%s] ', inputname (1), class (obj));
+
+  d = size (obj);
+  if (isscalar (obj))
+  %if(1==1)
+    fprintf ('%s = (%s) ', inputname (1), class (obj));
     fprintf ('%s', obj.text);
-    % trim newlines
+
+  elseif (length (d) == 2)
+    %% 2D Array
+    [n m] = deal (d(1), d(2));
+    fprintf ('%s = (%s %dx%d matrix) ...\n', inputname (1), ...
+             class (obj), n, m);
+    fprintf ('%s', obj.text);
+
+ else
+    %% nD Array
+    % (not possible with sympy matrix)
+    fprintf ('%s = (%s nD array) ...\n', inputname (1), class (obj));
+    fprintf ('%s', obj.text);
+  end
+
+
+  %% possibly show a bit of the SymPy representation
+  display_partial_pickle = true;
+  if (display_partial_pickle)
+    % trim newlines (if there are any)
     %s = regexprep (obj.pickle, '\n', '\\n');
     s = regexprep (obj.pickle, '\n', '\');
     len = length (s);
-    if len < 40
-      ellipsize = s;
-    else
-      % todo: ok to use unicode?
-      %ellipsize = ['…' s(13:45) '…'];
-      ellipsize = [s(1:40) '…'];
-      %ellipsize = [s(1:40) '...'];
+    if len > 40
+      % FIXME: use some preference for unicode here
+      if (1==1)
+        s = [s(1:40) '…'];
+        %s = ['…' s(13:(13+40)) '…'];
+      else
+        %s = [s(1:40) '...'];
+      end
     end
-    fprintf('   "%s"\n', ellipsize);
-
-  elseif (length(d) == 2)
-    %% 2D Array
-    [n,m] = size(obj);
-    fprintf ('%s = [%s %dx%d matrix]\n', inputname (1), ...
-             class (obj), n, m);
-    for i=1:n
-      fprintf ('[')
-      fprintf ('%s\t', obj(i,1:end-1).text)
-      fprintf ('%s', obj(i,end).text)
-      fprintf (']\n')
-    end
+    fprintf('   "%s"\n', s);
   else
-    %% nD Array: TODO: how do we want this displayed?
-    fprintf ('%s = [%s nD array]\n', inputname (1), class (obj));
-    disp(struct(obj))
+    fprintf('\n');
   end
