@@ -2,8 +2,13 @@ function L = limit(f,x,a,dir)
 %LIMIT   Evaluate symbolic limits
 %   L = limit(expr, x, a, dir)
 %      limit of 'expr' as 'x' tends to 'a' from 'dir' ('left' or 'right')
-%      'dir' defaults to 'right'.
-%      todo: check default behavior on SMT
+%
+%   'dir' defaults to 'right'.  Note this is different from Matlab's
+%   Symbolic Math Toolbox which returns NaN for limit(1/x, x, 0)
+%   (and +/-inf if you specify 'left'/'right').  I'm not sure how to get
+%   this nicer behaviour from SymPy.
+%
+%
 %   Examples:
 %   syms x
 %   L = limit(sin(x)/x, x, 0)
@@ -11,7 +16,7 @@ function L = limit(f,x,a,dir)
 %   L = limit(1/x, x, 0, 'left')
 %   L = limit(1/x, x, 0, 'right')
 %
-%   MATLAB Symbolic Toolbox supports omitting 'x' and then 'a'
+%   Symbolic Math Toolbox supports omitting 'x' and then 'a'
 %   but we don't currently support that.
 
   if (nargin < 4)
