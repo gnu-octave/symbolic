@@ -39,6 +39,8 @@ function g = subs(f, in, out)
     assert_same_shape(in,out)
     sublist = cell(1, numel(in));
     for i = 1:numel(in)
+      % not really Bug #17, but I doubt if I'd have done it this
+      % way w/o that bug.
       if (iscell(in)),  idx1.type = '{}'; else idx1.type = '()'; end
       if (iscell(out)), idx2.type = '{}'; else idx2.type = '()'; end
       idx1.subs = {i};

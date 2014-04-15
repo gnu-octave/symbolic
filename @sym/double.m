@@ -19,6 +19,7 @@ function y = double(x, failerr)
     % sympy N() works fine on matrices but it gives objects like "Matrix([[1.0,2.0]])"
     y = zeros(size(x));
     for j = 1:numel(x)
+      % Bug #17
       idx.type = '()';
       idx.subs = {j};
       temp = double(subsref(x,idx), failerr);
