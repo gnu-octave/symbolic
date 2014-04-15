@@ -1,44 +1,54 @@
 function display(obj)
+%DISPLAY  Display contents of a symbolic expression
+
+%   Note: if you edit this, make sure you edit disp.m as well
 
   %% Settings
-  display_snippet = false;
+  display_snippet = true;
   % FIXME: how to access format compact/loose setting?
   loose = true;
+  unicode_decorations = true;
 
   d = size (obj);
   if (isscalar (obj))
-    fprintf ('%s = (%s) ', inputname (1), class (obj));
-    fprintf ('%s', obj.text);
+    fprintf ('%s = (%s)', inputname (1), class (obj))
+    fprintf (' %s', obj.text)
 
     if (display_snippet)
-      snippet_of_sympy (obj)
+      fprintf ('     ')
+      snippet_of_sympy (obj, unicode_decorations)
     else
       fprintf ('\n')
     end
 
   elseif (length (d) == 2)
     %% 2D Array
-    [n m] = deal (d(1), d(2));
-    fprintf ('%s = (%s %dx%d matrix) ...\n', inputname (1), ...
-             class (obj), n, m);
-
-    if (loose), fprintf ('\n'); end
-
-    print_indented (obj.text)
+    if (unicode_decorations)
+      formatstr = '%s = (%s %d×%d matrix)';
+    else
+      formatstr = '%s = (%s %dx%d matrix)';
+    end
+    fprintf (formatstr, inputname (1), class (obj), d(1), d(2))
 
     if (display_snippet)
-      snippet_of_sympy (obj)
+      fprintf ('        ')
+      snippet_of_sympy (obj, unicode_decorations)
     else
       fprintf ('\n')
     end
 
     if (loose), fprintf ('\n'); end
 
+    print_indented (obj.text)
+    fprintf ('\n')
+
+    if (loose), fprintf ('\n'); end
+
   else
     %% nD Array
     % (not possible with sympy matrix)
-    fprintf ('%s = (%s nD array) ...\n', inputname (1), class (obj));
-    fprintf ('%s', obj.text);
+    fprintf ('%s = (%s nD array) ...\n', inputname (1), class (obj))
+    fprintf ('%s', obj.text)
   end
 end
 
@@ -55,19 +65,21 @@ function print_indented(s, n)
 end
 
 
-function snippet_of_sympy(obj)
+function snippet_of_sympy(obj, unicode_decorations)
+
+  if (unicode_decorations)
+    ell = '…';
+    lquot = '“'; rquot = '”';
+  else
+    ell = '...';
+    lquot = '"'; rquot = lq;
+  end
   % trim newlines (if there are any)
   %s = regexprep (obj.pickle, '\n', '\\n');
   s = regexprep (obj.pickle, '\n', '\');
   len = length (s);
-  if len > 40
-    % FIXME: use some preference for unicode here
-    if (1==1)
-      s = [s(1:40) '…'];
-      %s = ['…' s(13:(13+40)) '…'];
-    else
-      %s = [s(1:40) '...'];
-    end
+  if len > 42
+    s = [s(1:42) ell];
   end
-  fprintf ('   "%s"\n', s);
+  fprintf ([lquot '%s' rquot '\n'], s);
 end
