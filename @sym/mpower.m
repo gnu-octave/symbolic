@@ -6,7 +6,7 @@ function z = mpower(x, y)
           '    return (a**b,)\n' ];
 
   if isscalar(x) && isscalar(y)
-    z = python_sympy_cmd(cmd, x, y);
+    z = python_sympy_cmd(cmd, sym(x), sym(y));
 
   elseif isscalar(x) && ~isscalar(y)
     error('TODO: scalar^array not implemented yet');
@@ -18,3 +18,8 @@ function z = mpower(x, y)
   else  % two array's case
     error('TODO: array^array not implemented yet');
   end
+
+
+%!shared x
+%! syms x
+%!assert(isequal(x^(4/5), x^(sym(4)/5)))
