@@ -1,5 +1,15 @@
 function z = reshape(a, n, m)
-%RESHAPE   Change the shape of an array
+%RESHAPE   Change the shape of a symbolic array
+
+  % reshaping a double array with sym sizes
+  if ~(isa(a, 'sym'))
+    if (nargin == 2)
+      z = reshape(a, double(n));
+    else
+      z = reshape(a, double(n), double(m));
+    end
+    return
+  end
 
   if (nargin == 2)
     m = n(2);
@@ -15,5 +25,5 @@ function z = reshape(a, n, m)
           '    else:\n' ...
           '        return ( A ,)\n' ];
  
-  z = python_sympy_cmd(cmd, a, n, m);
+  z = python_sympy_cmd(cmd, sym(a), n, m);
 
