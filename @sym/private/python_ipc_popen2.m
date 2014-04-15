@@ -7,13 +7,13 @@ function A = python_ipc_popen2(cmd, varargin)
   etag='</output_item>';
   ebtag='</output_block>';
 
-  headers = python_header();
 
   if isempty(pid)
       disp('we have popen2: opening new pipe for two-way ipc')
       [fin, fout, pid] = popen2 ('/bin/python','-i')
       %[fin, fout, pid] = popen2 ('/home/cbm/mydebugpython.sh')
       %[fin, fout, pid] = popen2 ('/bin/python','-i -c "x=1; print x"')
+      headers = python_header();
       fputs (fin, headers);
       fprintf (fin, 'print "hello"\n');
       fflush(fin);
