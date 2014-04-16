@@ -21,18 +21,17 @@
 %% as a vector.
 %%
 %% If there is only one free variable in @var{p} the
-%% coefficient vector @var{c} is a plain numeric vector. If there is more
+%% coefficient vector @var{c} is a plain numeric vector (double).  If there is more
 %% than one free variable in @var{p}, a second argument @var{x} specifies the
 %% free variable and the function returns a row vector of symbolic expressions.
 %% The coefficients correspond to decreasing exponent of the free variable.
 %%
 %% Example:
 %% @example
-%% symbols
-%% x = sym("x");
-%% y = sym("y");
-%% c = sym2poly (x^2+3*x-4);    # c = [1,3,-4]
-%% c = sym2poly (x^2+y*x,x);    # c = [sym(1),y,sym(0)]
+%% x = sym ('x');
+%% y = sym ('y');
+%% c = sym2poly (x^2 + 3*x - 4);    % c = [1 3 -4]
+%% c = sym2poly (x^2 + y*x, x);     % c = [sym(1) y sym(0)]
 %% @end example
 %%
 %% If @var{p} is not a polynomial the result has no warranty.  SymPy can
