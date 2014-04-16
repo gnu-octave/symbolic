@@ -69,6 +69,10 @@ function s = sym(x, varargin)
     s = double_array_to_sym (x);
     return
 
+  elseif (isa (x, 'double')  &&  iscomplex (x) )
+    s = sym(real(x)) + sym('I')*sym(imag(x));
+    return
+
   elseif (isa (x, 'double'))
     % TODO: maybe cleaner to generate a string and then call the
     % constructor again....
@@ -105,6 +109,8 @@ function s = sym(x, varargin)
       cmd = 'z = -sp.oo\n';
     elseif (strcmpi(x, 'nan'))
       cmd = 'z = sp.nan\n';
+    elseif (strcmpi(x, 'i'))
+      cmd = 'z = sp.I\n';
     else
       if (~isempty((strfind(x, '.'))))
         warning('possibly unintended decimal point in constructor string');
