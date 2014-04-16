@@ -74,24 +74,28 @@ function s = sym(x, varargin)
     return
 
   elseif (isa (x, 'double'))
-    % TODO: maybe cleaner to generate a string and then call the
-    % constructor again....
     if (x == pi)
-      cmd = 'z = sp.pi\n';
+      s = sym('pi');
     elseif (isinf(x)) && (x > 0)
-      cmd = 'z = sp.oo\n';
+      s = sym('inf');
     elseif (isinf(x)) && (x < 0)
-      cmd = 'z = -sp.oo\n';
+      s = sym('-inf');
     elseif (isnan(x))
-      cmd = 'z = sp.nan\n';
-    elseif (mod(x,1) == 0)
-      % is integer
-      cmd = sprintf('z = sp.Rational("%d")\n', x);
+      s = sym('nan');
+    elseif (mod(x,1) == 0)   % is integer
+      s = sym(sprintf('%d', x));
     else
-      error('use quoted input for fractions');
-      % TODO: matlab SMT allows 1/3 and other "small" fractions, but
+      % Allow 1/3 and other "small" fractions.
+      % FIXME: good if this waring were configurable, personally I like
+      % it to at least warn so I can catch bugs.
+      % Matlab SMT also does this (w/o warning).
       % I don't trust this behaviour much.
+      warning('Using rats() for rational approx, did you really mean to pass a noninteger?');
+      s = sym(rats(x));
     end
+    return
+
+
   elseif (isa (x, 'char'))
     if (strfind(x, '('))
       % symfun spagetti code :-(
@@ -116,12 +120,6 @@ function s = sym(x, varargin)
         warning('possibly unintended decimal point in constructor string');
       end
       cmd = sprintf('z = sp.S("%s")\n', x);
-      %xd = str2double(x);
-      %if (isnan (xd))
-      %  cmd = sprintf('z = sp.Symbol("%s")\n', x);
-      %else
-      %  cmd = sprintf('z = sp.Rational("%d")\n', xd);
-      %end
     end
   else
     x
