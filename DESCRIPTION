@@ -1,0 +1,18 @@
+Name: octsympy
+Version: 0.0.1
+Date: 2007-18-04
+Author: Colin B. Macdonald <cbm@m.fsf.org>
+Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
+Title: Octave Symbolic SymPy
+Description: Adds symbolic calculation features to GNU Octave.
+ These include common Computer Algebra System tools such as algrebraic
+ operations, calculus, equation solving, Fourier and Laplace transforms,
+ and other features.  Tne package uses SymPy [www.sympy.org], a
+ Python-based Computer Algebra System.  No knowledge of Python is
+ required and the package aims to be compatible with other symbolic
+ packages.
+Categories: symbolic
+Url: http://github.com/cbm755/octave-symbolic-sympy
+SystemRequirements: sympy (>= 0.7.3)
+BuildRequires: python
+
