@@ -1,5 +1,7 @@
 function out = subsref (f, idx)
+%SUBSREF  Access entries of a symbolic array
 
+  %disp('call to @sym/subsref')
   switch idx.type
     case '()'
       if (isa(idx.subs, 'sym'))

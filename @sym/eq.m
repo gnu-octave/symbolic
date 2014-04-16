@@ -45,9 +45,10 @@ function t = eq(x,y)
     %disp('eq matrix to scalar')
     t = logical(zeros(size(y)));
     for j = 1:numel(y)
+      % Bug #17
+      %t(j) = logical(x == y(j));
       idx.type = '()';
       idx.subs = {j};
-      %t(j) = logical(x == y(j));
       t(j) = logical(x == subsref(y, idx));
     end
 
@@ -63,9 +64,10 @@ function t = eq(x,y)
     %disp('eq two arrays: after assert')
     t = logical(zeros(size(x)));
     for j = 1:numel(x)
+      % Bug #17, the original
+      %t(j) = logical(x(j) == y(j));   % wtf!
       idx.type = '()';
       idx.subs = {j};
-      %t(j) = logical(x(j) == y(j));   % wtf!
       t(j) = logical(subsref(x,idx) == subsref(y,idx));
     end
   end

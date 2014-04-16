@@ -30,6 +30,7 @@ function t = isequaln(x,y,varargin)
   %else  % both are arrays
   %  t = logical(zeros(size(x)));
   %  for j = 1:numel(x)
+  %    % Bug #17
   %    idx.type = '()';
   %    idx.subs = {j};
   %    t(j) = isequaln(subsref(x,idx),subsref(y,idx));

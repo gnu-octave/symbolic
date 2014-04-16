@@ -19,6 +19,7 @@ function r = isnan(x)
   else  % array
     r = logical(zeros(size(x)));
     for j = 1:numel(x)
+      % Bug #17
       idx.type = '()';
       idx.subs = {j};
       r(j) = isnan(subsref(x, idx));
