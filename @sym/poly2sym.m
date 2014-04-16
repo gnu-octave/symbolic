@@ -18,16 +18,17 @@
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{p} =} poly2sym (@var{c}, @var{x})
 %% Creates a symbolic polynomial expression @var{p} with coefficients @var{c}.
-%% If @var{p} is not specified, the free variable is set to sym("x"). @var{c}
-%% may be a vector or a cell-array of symbols. @var{x} may be a symbolic
-%% expression or a string.
+%%
+%% If @var{p} is not specified, the free variable is set to sym('x'). @var{c}
+%% may be a vector of doubles or syms.  It can also be a cell array
+%% vector.  @var{x} may be a symbolic
+%% expression or something that converts to onea string.
 %% The coefficients correspond to decreasing exponent of the free variable.
 %%
 %% Example:
 %% @example
-%% symbols
-%% x = sym("x");
-%% y = sym("y");
+%% x = sym('x');
+%% y = sym('y');
 %% p = poly2sym ([2,5,-3]);         % p = 2*x^2+5*x-3
 %% c = poly2sym (@{2*y,5,-3@},x);     % p = 2*y*x^2+5*x-3
 %% @end example
@@ -39,6 +40,8 @@ function p = poly2sym(c,x)
 
   if (nargin == 1)
     x = sym('x');
+  else
+    x = sym(x);
   end
 
   N = length(c);
@@ -59,11 +62,9 @@ function p = poly2sym(c,x)
   %p = vpa(0);
   p = sym(0);
   for i=1:N
-    %if isnumeric(c{i})
-    %  p = p*x+vpa(c{i});
-    %else
-      p = p*x+c{i};
-    %endif
+    % horner form
+    p = p*x+c{i};
+    %p = p + c{i} * x^(i-1);
   end
 
 end
@@ -79,4 +80,7 @@ end
 %!assert(isAlways(  poly2sym([1 2 3 4],5) == subs(p,x,5) ))
 %!assert(isAlways(  poly2sym([1]) == 1  ))
 %!assert(isAlways(  poly2sym([]) == 0  ))
+%% todo
+% assert(isAlways(  poly2sym({1}) == 1  ))
+% assert(isAlways(  poly2sym({}) == 0  ))
 %!assert(isAlways(  poly2sym(sym([1 2 3 4]),x) == p  ))

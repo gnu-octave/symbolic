@@ -17,8 +17,10 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{c} =} sym2poly (@var{p}, @var{x})
-%% Returns the coefficients of the symbolic polynomial expression @var{p}
-%% as a vector. If there is only one free variable in @var{p} the
+%% Returns coefficients of symbolic polynomial @var{p}
+%% as a vector.
+%%
+%% If there is only one free variable in @var{p} the
 %% coefficient vector @var{c} is a plain numeric vector. If there is more
 %% than one free variable in @var{p}, a second argument @var{x} specifies the
 %% free variable and the function returns a row vector of symbolic expressions.
