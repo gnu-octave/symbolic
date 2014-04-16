@@ -1,6 +1,7 @@
 addpath(pwd)
-tests = dir('unittests');
-cd('unittests');
+base = 'unittests';
+files = dir(base);
+cd(base);
 
 % usually I'd just use cputime(), but some of our IPC mechanisms are
 % light on CPU and heavy on IO.
@@ -8,16 +9,16 @@ totaltime = time();
 totalcputime = cputime();
 num_tests = 0;
 num_failed = 0;
-for i=1:length(tests)
-  test = tests(i).name;
+for i=1:length(files)
+  mfile = files(i).name;
   % detect tests b/c directory contains other stuff (e.g., surdirs and
   % helper files)
-  if ( (~tests(i).isdir) && strncmp(test, 'test', 4) && test(end) ~= '~')
+  if ( (~files(i).isdir) && strncmp(mfile, 'test', 4) && mfile(end) ~= '~')
     testtime = time();
-    str = test(1:end-2);
+    str = mfile(1:end-2);
     f = str2func(str);
     num_tests = num_tests + 1;
-    disp(['** Running test(s) in: ' test ]);
+    disp(['** Running test(s) in: ' mfile ]);
     pass = f();
     testtime = time() - testtime;
     if all(pass)
