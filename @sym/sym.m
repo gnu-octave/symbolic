@@ -69,7 +69,7 @@ function s = sym(x, varargin)
     s = double_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double')  &&  iscomplex (x) )
+  elseif (isa (x, 'double')  &&  ~isreal (x) )
     s = sym(real(x)) + sym('I')*sym(imag(x));
     return
 
