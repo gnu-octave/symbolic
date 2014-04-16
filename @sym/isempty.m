@@ -21,6 +21,13 @@
 %%     Does a symbolic array have size 0 x 0
 %%
 
+function r = isempty(x)
+
+  d = size(x);
+  r = isequal(d, [0 0]);
+
+end
+
 
 %% Tests
 %!shared se, a
@@ -30,18 +37,11 @@
 %!assert (isempty (sym (se)))
 %!assert (isempty (se == []))
 %
-%% fixme: need slicing and subindex
-%!xtest assert (isempty (a([])))
-%!xtest assert (isempty (a([se])))
+%% FIXME: need slicing and subindex, Bug #14
+%  xtest assert (isempty (a([])))
+%  xtest assert (isempty (a([se])))
 %
 %% Growing an empty symfun into a scalar
 %!test se(1) = 10;
 %!test assert ( isa (se, 'sym'))
-%!xtest assert ( isequal (se, 10))
-
-
-function r = isempty(x)
-
-  d = size(x);
-  r = isequal(d, [0 0]);
-
+%!test assert ( isequal (se, 10))
