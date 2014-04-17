@@ -10,7 +10,8 @@ function display(obj)
   unicode_decorations = true;
 
   d = size (obj);
-  if (isscalar (obj))
+  %if (isscalar (obj))   % avoid two calls to size()
+  if (length(d) == 2 && d(1) == 1 && d(2) == 1)
     fprintf ('%s = (%s)', inputname (1), class (obj))
     fprintf (' %s', obj.text)
 

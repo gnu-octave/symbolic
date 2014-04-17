@@ -5,8 +5,8 @@ function A = python_ipc_popen2(what, cmd, varargin)
   if (strcmp(what, 'reset'))
     disp('Closing the Python pipe...');
     pid = []
-    close(fin)
-    close(fout)
+    fclose(fin)
+    fclose(fout)
     A = true;
     return
   end
