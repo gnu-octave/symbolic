@@ -1,4 +1,4 @@
 % fixme, doesn't work properly
-autoload ('poly2sym', which ('@sym/poly2sym'))
+%autoload ('poly2sym', which ('@sym/poly2sym'))
 
 
