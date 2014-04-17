@@ -10,6 +10,7 @@ Goals
 
 Feature parity with the other symbolic toolboxes.
 
+![ScreenShot](/screenshot.png)
 
 
 Status
