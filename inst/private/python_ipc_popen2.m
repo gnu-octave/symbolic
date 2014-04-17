@@ -4,10 +4,17 @@ function A = python_ipc_popen2(what, cmd, varargin)
 
   if (strcmp(what, 'reset'))
     disp('Closing the Python pipe...');
-    pid = []
-    fclose(fin)
-    fclose(fout)
-    A = true;
+    pid = [];
+    if (~isempty(fin))
+      t = fclose(fin); fin = [];
+      A = (t == 0);
+    else
+      A = true;
+    end
+    if (~isempty(fout))
+      t = fclose(fout); fout = [];
+      A = A && (t == 0);
+    end
     return
   end
 
