@@ -43,7 +43,7 @@ function varargout = python_sympy_cmd(cmd, varargin)
   cmd = sprintf('%s_outs = fcn(_ins)\n\n', cmd);
 
 
-  A = python_sympy_cmd_raw(cmd, varargin{:});
+  A = python_sympy_cmd_raw('run', cmd, varargin{:});
 
   % FIXME: for legacy reasons, there were two strings per output,
   % clean this up sometime.

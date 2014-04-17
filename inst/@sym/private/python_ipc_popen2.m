@@ -1,28 +1,45 @@
-function A = python_ipc_popen2(cmd, varargin)
+function A = python_ipc_popen2(what, cmd, varargin)
 
   persistent fin fout pid
+
+  if (strcmp(what, 'reset'))
+    disp('Closing the Python pipe...');
+    pid = []
+    close(fin)
+    close(fout)
+    A = true;
+    return
+  end
+
+  if ~(strcmp(what, 'run'))
+    error('unsupported command')
+  end
 
   tag = ipc_misc_params();
 
   if isempty(pid)
-      disp('we have popen2: opening new pipe for two-way ipc')
-      [fin, fout, pid] = popen2 ('/bin/python','-i')
-      %[fin, fout, pid] = popen2 ('/home/cbm/mydebugpython.sh')
-      %[fin, fout, pid] = popen2 ('/bin/python','-i -c "x=1; print x"')
-      headers = python_header();
-      fputs (fin, headers);
-      fprintf (fin, 'print "hello"\n');
-      fflush(fin);
-      %sleep(2)
-      %ab = fgets(fout)
-      %disp(ab)
-      %keyboard
-      %disp('paused'); pause
-      % todo print a block and read it to make sure we're live
-    %else
-      %disp('we have existing popen2 pipe')
-      %fin, fout,pid
-    end
+    disp('##')
+    disp('##  OctSymPy: Initializing SymPy communication...')
+    disp('##');
+    disp('##  We have popen2(): opening a new pipe for two-way IPC with SymPy...')
+    disp('##');
+
+    [fin, fout, pid] = popen2 ('/bin/python','-i');
+    %[fin, fout, pid] = popen2 ('/home/cbm/mydebugpython.sh');
+    %[fin, fout, pid] = popen2 ('/bin/python','-i -c "x=1; print x"');
+
+    fprintf('##  Technical info: fin = %d, fout = %d, pid = %d\n', fin, fout, pid)
+    disp('##');
+    disp('##  Python should be starting, you may see a few lines of output')
+    disp('##  from it which can probably be ignored until your prompt returns.')
+    disp('##')
+
+    headers = python_header();
+    fputs (fin, headers);
+    fprintf (fin, 'print "hello"\n');
+    fflush(fin);
+    % todo print a block and read it to make sure we're live
+  end
 
 
 

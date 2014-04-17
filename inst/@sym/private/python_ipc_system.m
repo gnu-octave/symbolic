@@ -1,4 +1,28 @@
-function A = python_ipc_system(cmd, varargin)
+function A = python_ipc_system(what, cmd, varargin)
+
+  persistent show_msg
+
+  %if strcmp(what, 'initialize')
+  if (strcmp(what, 'reset'))
+    show_msg = [];
+    A = true;
+    return
+  end
+
+  if ~(strcmp(what, 'run'))
+    error('unsupported command')
+  end
+
+  if (isempty(show_msg))
+    disp('')
+    disp('  Initializing SymPy communication...')
+    disp('')
+    disp('  You are using system()-based IPC mechanism to communicate with SymPy.')
+    disp('  This will be slow.  Every round-trip involves creating a temporary')
+    disp('  file and executing a new Python process.')
+    disp('')
+    show_msg = true;
+  end
 
   tag = ipc_misc_params();
 
