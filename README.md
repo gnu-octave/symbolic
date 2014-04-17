@@ -1,5 +1,5 @@
-Octave-Symbolic-SymPy
-=====================
+OctSymPy
+========
 
 An implementation of a symbolic toolbox using SymPy.
 
