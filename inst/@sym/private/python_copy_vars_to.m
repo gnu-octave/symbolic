@@ -5,36 +5,29 @@ function s = python_copy_vars_to(in, varargin)
   if 1==0
   s = sprintf('%s%s = []\n\n', s, in);
   s = do_list(s, 0, in, varargin);
-
   else
-    % todo move these somewhere static/global
-  sbtag='<output_block>';
-  stag='<output_item>';
-  etag='</output_item>';
-  ebtag='</output_block>';
+  tag = ipc_misc_params();
 
   s = sprintf('%stry:\n', s);
   s = sprintf('%s    %s = []\n', s, in);
   s = do_list(s, 4, in, varargin);
-  s = sprintf('%s    print "%s"\n', s, sbtag);
-  s = sprintf('%s    print "%s"\n', s, stag);
-  s = sprintf('%s    print "%s"\n', s, etag);
-  s = sprintf('%s    print "%s"\n', s, stag);
+  s = sprintf('%s    print "%s"\n', s, tag.block);
+  s = sprintf('%s    print "%s\\n%s"\n', s, tag.item, tag.enditem);
+  s = sprintf('%s    print "%s"\n', s, tag.item);
   s = sprintf('%s    print "PYTHON: successful variable import"\n', s);
-  s = sprintf('%s    print "%s"\n', s, etag);
-  s = sprintf('%s    print "%s"\n', s, ebtag);
+  s = sprintf('%s    print "%s"\n', s, tag.enditem);
+  s = sprintf('%s    print "%s"\n', s, tag.endblock);
 
   s = sprintf('%sexcept:\n', s);
   s = sprintf('%s    print\n', s);
-  s = sprintf('%s    print "%s"\n', s, sbtag);
-  s = sprintf('%s    print "%s"\n', s, stag);
-  s = sprintf('%s    print "%s"\n', s, stag);
-  s = sprintf('%s    print "%s"\n', s, etag);
+  s = sprintf('%s    print "%s"\n', s, tag.block);
+  s = sprintf('%s    print "%s\\n%s"\n', s, tag.item, tag.enditem);
+  s = sprintf('%s    print "%s"\n', s, tag.item);
   s = sprintf('%s    print "PYTHON: Error in variable import"\n', s);
-  s = sprintf('%s    print "%s"\n', s, etag);
-  s = sprintf('%s    print "%s"\n', s, ebtag);
+  s = sprintf('%s    print "%s"\n', s, tag.enditem);
+  s = sprintf('%s    print "%s"\n', s, tag.endblock);
   s = sprintf('%s\n\n', s);
-  %s = sprintf('%s    rethrow\n\n', s, ebtag);
+  %s = sprintf('%s    rethrow\n\n', s, tag.endblock);
   end
 end
 

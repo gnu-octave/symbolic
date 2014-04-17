@@ -36,6 +36,13 @@ function varargout = python_sympy_cmd(cmd, varargin)
 % you want to run this w/o having the SymPy package, you'd need
 %  to hack a bit.
 
+  % ensure we printf the cmd to get newlines
+  cmd = sprintf(cmd);
+
+  cmd = sprintf('%s\n\n', cmd);
+  cmd = sprintf('%s_outs = fcn(_ins)\n\n', cmd);
+
+
   A = python_sympy_cmd_raw(cmd, varargin{:});
 
   % FIXME: for legacy reasons, there were two strings per output,

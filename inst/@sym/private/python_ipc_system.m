@@ -1,22 +1,20 @@
 function A = python_ipc_system(cmd, varargin)
 
-  sbtag='<output_block>';
-  stag='<output_item>';
-  etag='</output_item>';
-  ebtag='</output_block>';
+  tag = ipc_misc_params();
 
   headers = python_header();
 
-  %% load all the inputs into python as pickles
-  s1 = python_copy_vars_to('ins', varargin{:});
 
+  %% load all the inputs into python as pickles
+  s1 = python_copy_vars_to('_ins', varargin{:});
 
   %% the actual command
+  % this will do something with _ins and produce _outs
   s2 = sprintf('%s\n\n', cmd);
-  s2 = sprintf('%sout = fcn(ins)\n\n', s2);
 
   %% output
-  s3 = python_copy_vars_from('out');
+  s3 = python_copy_vars_from('_outs');
+
 
   %% use a temp file
   % todo must be a way to pass string to python -c w/o temp file
@@ -37,6 +35,6 @@ function A = python_ipc_system(cmd, varargin)
     error('failed');
   end
 
-  A = extractblock(out);
+  A = extractblock(out, tag.item, tag.enditem);
   % cut the "import variables success message"
   A = A(3:end);

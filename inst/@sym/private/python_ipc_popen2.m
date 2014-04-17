@@ -2,11 +2,7 @@ function A = python_ipc_popen2(cmd, varargin)
 
   persistent fin fout pid
 
-  sbtag='<output_block>';
-  stag='<output_item>';
-  etag='</output_item>';
-  ebtag='</output_block>';
-
+  tag = ipc_misc_params();
 
   if isempty(pid)
       disp('we have popen2: opening new pipe for two-way ipc')
@@ -36,31 +32,29 @@ function A = python_ipc_popen2(cmd, varargin)
   % todo this is not just fprintf b/c of the no-open case?
 
   %% load all the inputs into python as pickles
-  s = python_copy_vars_to('ins', varargin{:});
+  % they will be in the list '_ins'
+  s = python_copy_vars_to('_ins', varargin{:});
 
   fputs (fin, s);
   fflush(fin);
   %disp('paused before read'); pause
-  out = readblock(fout, sbtag, ebtag);
-  A = extractblock(out);
+  out = readblock(fout, tag.block, tag.endblock);
+  A = extractblock(out, tag.item, tag.enditem);
   if ~(strfind(A{1}, 'successful'))
     error('failed to import variables to python?')
   end
 
   %% the actual command
-  % todo: wrap this in try catch too
+  % this will do something with _ins and produce _outs
+  % FIXME: wrap this in try catch too
   s = sprintf('%s\n\n', cmd);
-  s = sprintf('%sout = fcn(ins)\n\n', s);
-
-  %debug
-  %s = sprintf('%sprint out\n\n', s);
 
   %% output
-  s2 = python_copy_vars_from('out');
+  s2 = python_copy_vars_from('_outs');
   s = [s s2];
 
   fputs (fin, s);
   fflush(fin);
   %disp('paused before read'); pause
-  out = readblock(fout, sbtag, ebtag);
-  A = extractblock(out);
+  out = readblock(fout, tag.block, tag.endblock);
+  A = extractblock(out, tag.item, tag.enditem);

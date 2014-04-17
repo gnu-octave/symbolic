@@ -1,4 +1,6 @@
-function A = readblock(fout, sbtag, ebtag);
+function A = readblock(fout, tagblock, tagendblock)
+%private function
+
   wait_disp_thres = 0.01;
   EAGAIN = errno ("EAGAIN");
   done = false;
@@ -16,12 +18,12 @@ function A = readblock(fout, sbtag, ebtag);
         A = [A s];
       end
       % here is the <start block> tag, so start recording output
-      if (strncmp(s, sbtag, length(sbtag)))
+      if (strncmp(s, tagblock, length(tagblock)))
         started = true;
         A = s;
       end
       % if we see the end tag, we're done
-      if (strncmp(s, ebtag, length(ebtag)))
+      if (strncmp(s, tagendblock, length(tagendblock)))
         done = true;
       end
 
