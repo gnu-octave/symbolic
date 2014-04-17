@@ -23,52 +23,77 @@
 %%
 %% FIXME: this should control unicode too.
 %%
-%% Example:
+%% Communication mechanism:
 %% @example
-%% octsympy_config ipc_default  % default, autodetected IPC
-%% octsympy_config ipc_system   % use slow, but reliable (?) IPC
-%% octsympy_config ipc_popen2   % force the popen2() ipc
-%% w = octsympy_config('ipc')   % query the ipc mechanism
+%% octsympy_config ipc default   % default, autodetected
+%% octsympy_config ipc system    % slow, but maybe more robust?
+%% octsympy_config ipc popen2    % force the popen2() ipc
+%% w = octsympy_config('ipc')    % query the ipc mechanism
+%% @end example
+%%
+%% Snippets: when displaying a sym object, we show the first
+%% few characters of the SymPy string representation.
+%% @example
+%% octsympy_config snippet 1|0   % or true/false
 %% @end example
 %%
 %% @seealso{sym, syms, octsympy_reset}
 %% @end deftypefn
 
-function varargout = octsympy_config(cmd)
+function varargout = octsympy_config(cmd, arg)
 
-  persistent OCTSYMPY_CONFIG
+  persistent settings
 
-  if (isempty(OCTSYMPY_CONFIG))
-    OCTSYMPY_CONFIG = [];
-    OCTSYMPY_CONFIG.ipc = 'default';
+  if (isempty(settings))
+    settings = 42;
+    octsympy_config('defaults')
   end
 
   if (nargin == 0)
-    varargout{1} = OCTSYMPY_CONFIG;
+    varargout{1} = settings;
     return
   end
 
 
   switch lower(cmd)
-    case 'ipc'
-      varargout{1} = OCTSYMPY_CONFIG.ipc;
+    case 'defaults'
+      settings = [];
+      settings.ipc = 'default';
+      settings.snippet = true;
 
-    case 'ipc_default'
-      disp('Choosing the default octsympy communication mechanism [autodetect]');
-      OCTSYMPY_CONFIG.ipc = 'default';
-      octsympy_reset()
-    case 'ipc_system'
-      disp('Forcing the system() octsympy communication mechanism');
-      OCTSYMPY_CONFIG.ipc = 'system';
-      octsympy_reset()
-    case 'ipc_popen2'
-      disp('Forcing the popen2() octsympy communication mechanism');
-      OCTSYMPY_CONFIG.ipc = 'popen2';
-      octsympy_reset()
+    case 'snippet'
+      if (nargin == 1)
+        varargout{1} = settings.snippet;
+      elseif ischar(arg)
+        settings.snippet = strcmp(arg, 'true');
+      else
+        settings.snippet = logical(arg);
+      end
+
+    case 'ipc'
+      if (nargin == 1)
+        varargout{1} = settings.ipc;
+      else
+        octsympy_reset()
+        settings.ipc = arg;
+        switch arg
+          case 'default'
+            disp('Choosing the default [autodetect] octsympy communication mechanism')
+          case 'system'
+            disp('Forcing the system() octsympy communication mechanism')
+          case 'popen2'
+            disp('Forcing the popen2() octsympy communication mechanism')
+          otherwise
+          warning(['Unknown IPC mechanism: hope you know what you''re doing'])
+        end
+      end
+
     otherwise
       error ('invalid input')
   end
 end
 
 
-%!assert(octsympy_config('ipc'), 'default')
+%!test
+%! octsympy_config('defaults')
+%! assert(octsympy_config('ipc'), 'default')

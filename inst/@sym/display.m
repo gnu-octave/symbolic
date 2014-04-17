@@ -4,10 +4,9 @@ function display(obj)
 %   Note: if you edit this, make sure you edit disp.m as well
 
   %% Settings
-  display_snippet = true;
-  % FIXME: how to access format compact/loose setting?
-  loose = true;
   unicode_decorations = true;
+  display_snippet = octsympy_config('snippet');
+  loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
   d = size (obj);
   %if (isscalar (obj))   % avoid two calls to size()
