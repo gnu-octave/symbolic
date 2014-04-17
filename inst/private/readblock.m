@@ -1,8 +1,10 @@
 function A = readblock(fout, tagblock, tagendblock)
 %private function
 
-  wait_disp_thres = 0.01;
-  EAGAIN = errno ("EAGAIN");
+  % how long to wait before displaying "Waiting..."
+  wait_disp_thres = 0.05;
+
+  EAGAIN = errno ('EAGAIN');
   done = false;
   started = false;
   nwaits = 0;
