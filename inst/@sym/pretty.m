@@ -8,8 +8,7 @@ function varargout = pretty(x)
 %   todo: wrapping column?
 %
 
-  % FIXME: how to access format compact/loose setting?
-  loose = true;
+  loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
   cmd = [ 'def fcn(_ins):\n'  ...
           '    d = sp.pretty(*_ins, use_unicode=True)\n'  ...
