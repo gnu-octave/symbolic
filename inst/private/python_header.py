@@ -20,29 +20,34 @@ def objectfilter(x):
 
 
 # Single quotes must be replaced with two copies, escape not enough
-# FIXME: unicode strings probably do not have enough escaping
+# No extra blank lines with in fcns please (breaks interp from stdin)
+# FIXME: unicode probably do not have enough escaping, but cannot string_escape
+# FIXME: safe to string_escape srepr?
 def octcmd(x):
     x = objectfilter(x)
-    if isinstance(x, sp.Expr):
-        # works on Octave where " is valid for enclosing strings
-        #s = "sym(\\"" + str(x) + "\\", \\"" + sp.srepr(x) + "\\")"
-        s = "sym('" +   sp.srepr(x).replace("'", "''")   + "'" + \
-            ", [1 1]" + \
-            ", '" +   str(x).replace("'", "''")   + "'" + \
-            ", '" +   str(x).replace("'", "''")   + "'" + \
-            ")"
-        # possibly str(x).encode("string_escape")
-    elif isinstance(x, sp.Matrix):
-        _d = x.shape
-        _pretty_ascii = sp.pretty(x,use_unicode=False).encode("string_escape")
+    if isinstance(x, (sp.Basic,sp.Matrix)):
+        _srepr = sp.srepr(x).replace("'", "''")
+        #_str = str(x).replace("'", "''")
+        _str = str(x).encode("string_escape").replace("'", "''")
+        _pretty_ascii = \
+        sp.pretty(x,use_unicode=False).encode("string_escape").replace("'", "''")
         _pretty_unicode = \
-            sp.pretty(x,use_unicode=True).encode("utf-8").replace("\n","\\n")
-
-        s = "sym('" +   sp.srepr(x).replace("'", "''")   + "'" + \
-            ", [" +   str(_d[0]) + ' ' + str(_d[1])   + ']' + \
-            ", '" +   str(x).replace("'", "''")   + "'" + \
-            ", sprintf('" +   _pretty_ascii.replace("'", "''")   + "')" + \
-            ")"
+        sp.pretty(x,use_unicode=True).encode("utf-8").replace("\n","\\n").replace("'", "''")
+        if isinstance(x, sp.Matrix):
+            _d = x.shape
+            s = "sym('" +  _srepr  + "'" + \
+                ", [" +  str(_d[0]) + ' ' + str(_d[1])  + ']' + \
+                ", '" +  _str  + "'" + \
+                ", sprintf('" +  _pretty_ascii  + "')" + \
+                ")"
+        else:
+            if not isinstance(x, sp.Expr):
+                dbout("Treating unknown sympy as scalar: " + str(type(x)))
+            s = "sym('" +  _srepr  + "'" + \
+                ", [1 1]" + \
+                ", '" +  _str  + "'" + \
+                ", sprintf('" +  _pretty_ascii  + "')" + \
+                ")"
     elif isinstance(x, bool) and x:
         s = "true"
     elif isinstance(x, bool) and not x:
@@ -64,6 +69,6 @@ def octcmd(x):
         s = "sprintf('" + \
           x.encode("utf-8").replace("\n","\\n").replace("'", "''") + "')"
     else:
-        s = "error('python does not know how to export that')"
+        s = "error('python does not know how to export type " + str(type(x)).replace("'", "''") + "')"
     return s
 
