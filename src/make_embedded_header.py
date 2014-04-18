@@ -20,7 +20,7 @@ if 1==1:
 
     fd = open(foutname, "w")
 
-    fd.write("function s = %s()\n" % base)
+    fd.write("function s = %s_embed()\n" % base)
     fd.write("%")
     fd.write("%s  private\n" % base.upper())
     fd.write("%\n%")
