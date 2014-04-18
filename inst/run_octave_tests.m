@@ -3,7 +3,7 @@ files = dir(base);
 
 % usually I'd just use cputime(), but some of our IPC mechanisms are
 % light on CPU and heavy on IO.
-totaltime = time();
+totaltime = clock();
 totalcputime = cputime();
 
 num_tests = 0;
@@ -11,7 +11,6 @@ num_passed = 0;
 for i=1:length(files)
   mfile = files(i).name;
   if ( (~files(i).isdir) && strcmp(mfile(end-1:end), '.m') )
-    testtime = time();
     str = mfile(1:end-2);
     fprintf('**** Looking for tests in: %s\n', mfile);
     [N,MAX] = test([base '/' str]); %, 'quiet');
@@ -25,7 +24,7 @@ for i=1:length(files)
   end
 end
 
-totaltime = time() - totaltime;
+totaltime = etime(clock(), totaltime);
 totalcputime = cputime() - totalcputime;
 fprintf('\n***** Passed %d/%d tests passed, %g seconds (%gs CPU) *****\n', ...
         num_passed, num_tests, totaltime, totalcputime);
