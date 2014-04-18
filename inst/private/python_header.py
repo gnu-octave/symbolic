@@ -70,7 +70,7 @@ def octcmd(x):
           x.encode("utf-8").replace("\n","\\n").replace("'", "''") + "')"
     elif isinstance(x, dict):
         # Note: the dict cannot be too complex: the keys need to be convertable
-        # to strings with str().  E.g., cannot be integers or (complicated) sym.
+        # to strings with str().
         s = "struct("
         for key,val in x.iteritems():
             s = s + "'" + str(key) + "', " + octcmd(val) + ", "
