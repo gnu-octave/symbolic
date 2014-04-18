@@ -24,22 +24,23 @@ def octcmd(x):
     if isinstance(x, sp.Expr):
         # works on Octave where " is valid for enclosing strings
         #s = "sym(\\"" + str(x) + "\\", \\"" + sp.srepr(x) + "\\")"
-        s = "sym('" + sp.srepr(x).replace("'", "''") + \
-            "', [1 1]" + \
-            ", '" + str(x) + "'" + \
-            ", '" + str(x) + "'" + \
+        s = "sym('" +   sp.srepr(x).replace("'", "''")   + "'" + \
+            ", [1 1]" + \
+            ", '" +   str(x).replace("'", "''")   + "'" + \
+            ", '" +   str(x).replace("'", "''")   + "'" + \
             ")"
         # possibly str(x).encode("string_escape")
     elif isinstance(x, sp.Matrix):
-        d = x.shape
-        s = "sym('" + sp.srepr(x).replace("'", "''") + \
-            "', [" + str(d[0]) + ' ' + str(d[1]) + ']' + \
-            ", '" + str(x) + "'" + \
-            ", sprintf('" + \
-              sp.pretty(x,use_unicode=False).encode("string_escape") \
-              + "')" + \
+        _d = x.shape
+        _pretty_ascii = sp.pretty(x,use_unicode=False).encode("string_escape")
+        _pretty_unicode = \
+            sp.pretty(x,use_unicode=True).encode("utf-8").replace("\n","\\n")
+
+        s = "sym('" +   sp.srepr(x).replace("'", "''")   + "'" + \
+            ", [" +   str(_d[0]) + ' ' + str(_d[1])   + ']' + \
+            ", '" +   str(x).replace("'", "''")   + "'" + \
+            ", sprintf('" +   _pretty_ascii.replace("'", "''")   + "')" + \
             ")"
-        #s = "sym(sprintf(''" + sp.pretty(x,use_unicode=True).encode("utf-8").replace("\\n","\\\\n") + "''), ''" + sp.srepr(x).replace("''", "''''") + "'')"
     elif isinstance(x, bool) and x:
         s = "true"
     elif isinstance(x, bool) and not x:
