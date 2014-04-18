@@ -30,7 +30,7 @@ if 1==1:
     for i in range(0, len(l)):
       #fd.write(l[i].encode("string_escape"))
       # bit odd, order matters, octave ok with \'' but not \'\'
-      fd.write( l[i].encode("string_escape").replace("'","''") )
+      fd.write( l[i].encode("string_escape").replace("'","''").replace("%","%%") )
     fd.write("';\n");
     fd.write("\ns = sprintf(s);\n")
     fd.close()

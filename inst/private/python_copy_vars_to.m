@@ -41,11 +41,14 @@ function s = do_list(s, indent, in, L)
       s = sprintf('%s%s# Load %d: pickle\n', s, sp, i);
       % need to be careful here: pickle might have escape codes
       %s = sprintf('%s%s%s.append(pickle.loads("""%s"""))\n', s, sp, in, x.pickle);
-      % a workaround: otherwise this calls size/numel and starts a recursion
+      % subsref is a workaround: otherwise this calls size/numel,
+      % starts a recursion if size not cached in the sym.
       idx.type = '.';
       idx.subs = 'pickle';
       %s = sprintf('%s%s%s.append(%s)\n', s, sp, in, x.pickle);
-      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, subsref(x, idx));
+      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, sprintf(subsref(x, idx)));
+      % The extra printf around the pickle helps if it still has
+      % escape codes (and seems harmless if it does not)
     elseif (ischar(x))
       s = sprintf('%s%s# Load %d: string\n', s, sp, i);
       s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);

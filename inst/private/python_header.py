@@ -20,14 +20,14 @@ def objectfilter(x):
 
 
 # Single quotes must be replaced with two copies, escape not enough
-# No extra blank lines with in fcns please (breaks interp from stdin)
+# Please no extra blank lines within functions (breaks interpret from stdin)
 # FIXME: unicode probably do not have enough escaping, but cannot string_escape
-# FIXME: safe to string_escape srepr?
 def octcmd(x):
     x = objectfilter(x)
     if isinstance(x, (sp.Basic,sp.Matrix)):
+        # could escape, but does single quotes too
+        #_srepr = sp.srepr(x).encode("string_escape").replace("'", "''")
         _srepr = sp.srepr(x).replace("'", "''")
-        #_str = str(x).replace("'", "''")
         _str = str(x).encode("string_escape").replace("'", "''")
         _pretty_ascii = \
         sp.pretty(x,use_unicode=False).encode("string_escape").replace("'", "''")
@@ -60,8 +60,8 @@ def octcmd(x):
     elif isinstance(x, int):
         s = str(x)
     elif isinstance(x, float):
-        s = str(x)
-        # FIXME
+        # FIXME: see Bug #11
+        s = "%.20g" % x
     elif isinstance(x, str):
         s = "sprintf('" + x.encode("string_escape").replace("'", "''") + "')"
     elif isinstance(x, unicode):
