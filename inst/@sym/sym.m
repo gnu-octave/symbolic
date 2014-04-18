@@ -119,6 +119,16 @@ function s = sym(x, varargin)
       cmd = 'z = sp.nan\n';
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I\n';
+    %% Symbols with special meanings in SymPy: Issue #23
+    elseif (strcmp(x, 'beta')),   cmd = 'z = sp.abc.beta\n';
+    elseif (strcmp(x, 'gamma')),  cmd = 'z = sp.abc.gamma\n';
+    elseif (strcmp(x, 'zeta')),   cmd = 'z = sp.abc.zeta\n';
+    elseif (strcmp(x, 'lambda')), cmd = 'z = sp.Symbol("lamda")\n'; %not typo
+    elseif (strcmp(x, 'Lambda')), cmd = 'z = sp.Symbol("Lamda")\n'; %not typo
+    elseif (strcmp(x, 'Chi')),    cmd = 'z = sp.Symbol("Chi")\n';
+    elseif (strcmp(x, 'S')),      cmd = 'z = sp.Symbol("S")\n';  % possibly
+    elseif (strcmp(x, 'N')),      cmd = 'z = sp.Symbol("N")\n';  % a bad
+    elseif (strcmp(x, 'Q')),      cmd = 'z = sp.Symbol("Q")\n';  % idea!
     else
       if (~isempty((strfind(x, '.'))))
         warning('possibly unintended decimal point in constructor string');
