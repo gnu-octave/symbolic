@@ -19,6 +19,8 @@ def objectfilter(x):
     return y
 
 
+# Single quotes must be replaced with two copies, escape not enough
+# FIXME: unicode strings probably do not have enough escaping
 def octcmd(x):
     x = objectfilter(x)
     if isinstance(x, sp.Expr):
@@ -56,10 +58,11 @@ def octcmd(x):
         s = str(x)
         # FIXME
     elif isinstance(x, str):
-        s = "sprintf('" + x.encode("string_escape") + "')"
+        s = "sprintf('" + x.encode("string_escape").replace("'", "''") + "')"
     elif isinstance(x, unicode):
         # not .encode("string_escape")
-        s = "sprintf('" + x.encode("utf-8").replace("\n","\\n") + "')"
+        s = "sprintf('" + \
+          x.encode("utf-8").replace("\n","\\n").replace("'", "''") + "')"
     else:
         s = "error('python does not know how to export that')"
     return s
