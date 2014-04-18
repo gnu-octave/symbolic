@@ -36,24 +36,28 @@
 %% Keywords: symbolic, symbols, CAS
 
 function s = sym(x, varargin)
-%SYM  Symbolic class implemented with sympy
-%
 
   if (nargin == 0)
     s = sym(0);
     return
   end
 
-
-  % todo: may not want to expose this in constructor: private usage
-  if (nargin == 2)
-    s.text = x;
-    s.pickle = varargin{1};
+  %% The actual class constructor
+  % tempting to put this elsewhere (the 'private ctor') but we need
+  % to access it from the python ipc stuff: outside the class.
+  if (nargin > 1)
+    s.pickle = x;
+    s.size = varargin{1};
+    s.flattext = varargin{2};
+    s.text = varargin{3};
     s.extra = [];
     s = class(s, 'sym');
     return
   end
 
+
+  %% User interface for defining sym
+  % sym(1), sym('x'), etc.
 
   % not a subclass, exactly a sym, not symfun
   %if (strcmp (class (x), 'sym'))

@@ -15,8 +15,13 @@ function out = subsref (f, idx)
         out = f.pickle;
       elseif (strcmp (fld, 'text'))
         out = f.text;
-      elseif (strcmp (fld, 'extra'))
-        out = f.extra;
+      elseif (strcmp (fld, 'flattext'))
+        out = f.flattext;
+      % not part of the interface
+      %elseif (strcmp (fld, 'size'))
+      %  out = f.size;
+      %elseif (strcmp (fld, 'extra'))
+      %  out = f.extra;
       else
         error ('@sym/subsref: invalid property ''%s''', fld);
       end

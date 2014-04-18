@@ -3,7 +3,12 @@ function varargout = disp(obj)
 
 %   Note: if you edit this, make sure you edit display.m as well
 
-  s = make_indented(obj.text);
+  if (isscalar (obj))
+    s = obj.flattext;
+  else
+    s = obj.text;
+  end
+  s = make_indented(s);
 
   if (nargout == 0)
     disp(s)
