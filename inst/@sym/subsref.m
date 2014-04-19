@@ -51,6 +51,8 @@ end
 %!assert(isequal( a(1:2,1:3), a(1:2,1:3) ))
 %!assert(isequal( a(1:2:3,[1 2 4]), b(1:2:3,[1 2 4]) ))
 %!assert(isequal( a(1:2:3,[4 2 3 1]), b(1:2:3,[4 2 3 1]) ))
+% repeats
+%!assert(isequal( a(1:2:3,[4 1 1 1]), b(1:2:3,[4 1 1 1]) ))
 
 %!assert(isequal( a([],:), b([],:) ))
 %!assert(isequal( size(a([],:)), [0 4] ))

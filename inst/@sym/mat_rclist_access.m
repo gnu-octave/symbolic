@@ -1,7 +1,9 @@
 function z = mat_rclist_access(A, r, c)
 %MAT_RCLIST_ACCESS  private helper routine
+%   (r(i),c(i)) specify entries of the matrix A.
+%   Returns a column vector of these extracted from A.
 
-  if (length(r) ~= length(c))
+  if ~( isvector(r) && isvector(c) && (length(r) == length(c)) )
     error('this routine is for a list of rows and cols');
   end
 

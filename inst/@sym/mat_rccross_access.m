@@ -2,6 +2,9 @@ function z = mat_rccross_access(A, r, c)
 %MAT_RCCROSS_ACCESS  private helper routine
 %   Access entries of A that are the cross product of vectors r and c
 %   r and c could be strings.  Namely ':' and ':'
+%
+%   r and c could contain duplicates.  This is one reason by this
+%   code doesn't easily replace mat_rclist_access().
 
   if ((r == ':') && (c == ':'))
     z = A;
@@ -13,12 +16,12 @@ function z = mat_rccross_access(A, r, c)
 
   [n,m] = size(A);
   if (r == ':')
-    r = [1:n];
+    r = 1:n;
   elseif ischar(r)
     error('unknown row?')
   end
   if (c == ':')
-    c = [1:m];
+    c = 1:m;
   elseif ischar(c)
     error('unknown column?')
   end
