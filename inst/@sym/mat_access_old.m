@@ -1,4 +1,5 @@
-function z = mat_access2(A,subs)
+function z = mat_access_old(A, subs)
+%private
 
   if (length(subs) == 1)
     % special case for linear indices (or teach sympy to use column-based)
