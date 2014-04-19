@@ -39,7 +39,16 @@ function z = mat_access(A, subs)
       error('what?');
     end
     [r, c] = ind2sub (size(A), i);
-    z = mat_rccross_access(A, r, c);
+    z = mat_rclist_access(A, r, c);
+    % output shape, see logic in comments in mat_mask_access.m
+    if (isrow(A))
+      z = reshape(z, 1, length(c));
+    elseif (iscolumn(A))
+      assert(iscolumn(z))
+    else
+      error('Tertium Non Datur')
+    end
+    return
 
   elseif (length(subs) == 2)
     r = subs{1};
@@ -47,6 +56,7 @@ function z = mat_access(A, subs)
     assert( isvector(r) || isempty(r) || strcmp(r, ':') )
     assert( isvector(c) || isempty(c) || strcmp(c, ':') )
     z = mat_rccross_access(A, r, c);
+    return
 
   else
     error('Unknown indexing')

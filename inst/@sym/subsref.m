@@ -71,3 +71,8 @@ end
 %!assert(isempty( e([]) ))
 %!assert(isequal( e([]), sym([]) ))
 
+
+%!shared a,b
+%! b = 1:5; a = sym(b);
+%!assert(isequal(  a([1 2 5]),  b([1 2 5])  ))
+%!assert(isequal(  a([1; 2; 5]),  b([1; 2; 5])  ))

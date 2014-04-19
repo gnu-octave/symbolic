@@ -6,8 +6,8 @@ function Z = mat_mask_access(A, I)
 %
 %   1) If A is a vector, Z always has the same orientation as A.
 %
-%   2) If A is a matrix and if I is a vector than Z has the same horiz/vert
-%   shape as I.
+%   2) If A is a matrix and if I is a vector than Z has the same
+%   orientation as I.
 %
 %   3) In all other cases (?) result is a column vector
 
