@@ -24,7 +24,9 @@
 function r = isempty(x)
 
   d = size(x);
-  r = isequal(d, [0 0]);
+  % Octave can have n x 0 and 0 x m empty arrays
+  %r = isequal(d, [0 0]);
+  r = prod(d) == 0;
 
 end
 
