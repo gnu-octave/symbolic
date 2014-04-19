@@ -16,7 +16,7 @@ function out = subsasgn (val, idx, rhs)
         out = symfun(rhs, idx.subs);
 
       else   % f(double) = ..., array assignment
-        out = mat_replace2(val, idx.subs, sym(rhs));
+        out = mat_replace(val, idx.subs, sym(rhs));
       end
 
     otherwise
@@ -28,5 +28,20 @@ function out = subsasgn (val, idx, rhs)
       out = 42;
 
   end
+end
 
 
+%!shared a,b
+%! b = [1:4];
+%! a = sym(b);
+%!test a(1) = 10; b(1) = 10;
+%! assert(isequal( a, b ))
+%!test I = logical([1 0 1 0]);
+%! a(I) = 2; b(I) = 2;
+%! assert(isequal( a, b ))
+%!test I = logical([1 0 1 0]);
+%! a(I) = [2 4]; b(I) = [2 4];
+%! assert(isequal( a, b ))
+%!test I = logical([1 0 1 0]);
+%! a(I) = [2; 4]; b(I) = [2; 4];
+%! assert(isequal( a, b ))

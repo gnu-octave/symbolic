@@ -1,7 +1,12 @@
-function z = mat_replace2(A,subs,b)
-%a private helper fcn
+function z = mat_replace(A, subs, b)
+%MAT_REPLACE  private helper routine
 
-  if (length(subs) == 1)
+  if ( (length(subs) == 1) && (islogical(subs{1})) )
+    %% A(logical) = B
+    z = mat_mask_asgn(A, subs{1}, b);
+    return
+
+  elseif (length(subs) == 1)
     % can use a single index to grow a vector, so we carefully deal with
     % vector vs linear index to matrix (not required for access)
     [n,m] = size(A);
