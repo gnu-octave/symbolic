@@ -22,30 +22,24 @@ function z = mat_replace(A, subs, b)
   elseif (length(subs) == 2)
     r = subs{1};
     c = subs{2};
+    assert( isvector(r) || isempty(r) || strcmp(r, ':') )
+    assert( isvector(c) || isempty(c) || strcmp(c, ':') )
+    [n,m] = size(A);
+    if (r == ':')
+      r = 1:n;
+    end
+    if (c == ':')
+      c = 1:m;
+    end
+    [r,c] = ndgrid(r,c);
+    if ~ (is_same_shape (r, b))
+      error('A(I,J,...) = X: dimensions mismatch')
+    end
+    r = r(:);
+    c = c(:);
   else
     error('unknown indexing')
   end
 
-  if (ischar(r) || ischar(c))
-    subs
-    error('todo: sympy supports : slicing but how to do it programmatically?');
-  end
-  if ~(isscalar(r) && isscalar(c))
-    subs
-    error('todo: sympy supports slicing but how to do it programmatically?');
-  end
-
-  % Note: we expand by making a new big enough matrix and calling
-  % .copyin_matrix.  Easiest as: c[0,0] = b
-
-  cmd = [ 'def fcn(_ins):\n'                                                ...
-          '    (A,r,c,b) = _ins\n'                                          ...
-          '    if not A.is_Matrix:\n'                                       ...
-          '        A = sp.Matrix([[A]])\n'                                  ...
-          '    AA = sp.Matrix.zeros( max(r+1,A.rows), max(c+1,A.cols) )\n'  ...
-          '    AA[0,0] = A\n'                                               ...
-          '    AA[r,c] = b\n'                                               ...
-          '    return (AA,)\n' ];
-
-  z = python_sympy_cmd(cmd, A, r-1, c-1, b);
+  z = mat_rclist_asgn(A, r, c, b);
 
