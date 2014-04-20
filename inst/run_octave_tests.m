@@ -16,6 +16,8 @@ for i=1:length(files)
     [N,MAX] = test([base '/' str]); %, 'quiet');
     num_tests = num_tests + MAX;
     num_passed = num_passed + N;
+    % this doesn't really work, bug in Octave?  MAX,N always zero
+    % if failures.  https://savannah.gnu.org/bugs/?42150
     if (MAX > 0)
       fprintf('**** %s Passed %d of %d\n', mfile, N, MAX);
       fprintf('%s\n\n', char('_'*ones(1,80)));
