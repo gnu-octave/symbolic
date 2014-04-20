@@ -84,6 +84,5 @@ end
 %test
 % rhs = [10 11; 12 13];
 % b(1:2,1:2) = rhs;
-% rhs = rhs(:);
-% a(1:2,1:2) = rhs;
+% a(1:2,1:2) = rhs(:);
 % assert(isequal( a, b ))

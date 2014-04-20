@@ -33,6 +33,7 @@ function z = mat_replace(A, subs, b)
     end
     [r,c] = ndgrid(r,c);
     if ~ (is_same_shape (r, b))
+      % Octave/Matlab both do this for double so we will to
       error('A(I,J,...) = X: dimensions mismatch')
     end
     r = r(:);
