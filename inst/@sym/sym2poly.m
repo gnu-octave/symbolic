@@ -83,6 +83,9 @@ function c = sym2poly(p,x)
     error('Empty python output, can this happen?  A bug.')
   end
 
+  % FIXME: should be able to convert c2 to array faster than array
+  % expansion!  Particularly in the case where we just convert to
+  % double anyway!
   c = sym([]);
   for j = 1:numel(c2)
     % Bug #17
