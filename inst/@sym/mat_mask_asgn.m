@@ -7,6 +7,24 @@ function z = mat_mask_asgn(A, I, B)
   if (numel(A) ~= numel(I))
     error('size A not compatible w/ size I in A(I)')
   end
+
+  % issue #18 fix a(t/f)=6
+  if (isscalar(A))
+    if (I)
+      z = B;
+    else
+      z = A;
+    end
+    return
+  end
+
+  % this messes with the later sanity checks
+  if (nnz(I) == 0)
+    z = A;
+    return
+  end
+
+
   if (numel(B) == 1)
     B = B*ones(nnz(I),1);
   end
@@ -19,7 +37,7 @@ function z = mat_mask_asgn(A, I, B)
   end
   if (~isvector(B))
     % apparently this is ok
-    warning('B not vector is A(I)=B: this is unusual, did you intend this?')
+    warning('B not vector in A(I)=B: this is unusual, did you intend this?')
   end
 
   % I think .T makes a copy, but be careful: in general may need a

@@ -34,6 +34,10 @@ function z = mat_access(A, subs)
       z = sym([]);
       return
     end
+    if (isscalar(A) && (i == 1))
+      z = A;
+      return
+    end
     if (~isvector(i) || ischar(i))
       size(i), i
       error('what?');

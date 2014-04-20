@@ -76,3 +76,18 @@ end
 %! b = 1:5; a = sym(b);
 %!assert(isequal(  a([1 2 5]),  b([1 2 5])  ))
 %!assert(isequal(  a([1; 2; 5]),  b([1; 2; 5])  ))
+
+%!shared x
+%! syms x
+
+%% logical with empty result
+%!test
+%! assert(isempty( x(false) ))
+%! a = [x x];
+%! assert(isempty( a([false false]) ))
+
+%% issue 18, scalar access
+%!test
+%! assert(isequal( x(1), x ))
+%! assert(isequal( x(true), x ))
+

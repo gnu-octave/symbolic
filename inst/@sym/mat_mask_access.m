@@ -21,6 +21,16 @@ function Z = mat_mask_access(A, I)
     warning('A and I in A(I) not same shape: did you intend this?')
   end
 
+  % issue #18 fix a(t/f)=6
+  if (isscalar(A))
+    if (I)
+      Z = A;
+    else
+      Z = sym([]);
+    end
+    return
+  end
+
   % careful, if you have persistence/caching, do these need .copy?
   cmd = [ '(A,mask,n,m) = _ins\n'  ...
           '# transpose b/c SymPy is row-based\n' ...

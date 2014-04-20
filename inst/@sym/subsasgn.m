@@ -127,4 +127,25 @@ end
 %! b(I, J) = 100;
 %! a(I, J) = 100;
 %! assert(isequal( a, b ))
+
+%!shared x
+%! syms x
+
+%% logical with all false
 %!test
+%! y = x;
+%! y(false) = 6;
+%! assert(isequal( y, x ));
+%! a = [x x];
+%! a([false false]) = [6 6];
+%! assert(isequal( a, [x x] ));
+
+%% issue 18, scalar access
+%!test
+%! x(1) = sym(6);
+%! assert(isequal( x, sym(6) ));
+%! x(1) = 6;
+%! assert(isequal( x, sym(6) ));
+%! x(true) = 88;
+%! assert(isequal( x, sym(88) ));
+
