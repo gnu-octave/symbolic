@@ -6,9 +6,8 @@ function f = ifourier(F,k,x)
     warning('todo: check SMT for 2nd argument behavoir');
   end
 
-  cmd = [ 'def fcn(_ins):\n'                                      ...
-          '    d = sp.inverse_fourier_transform(*_ins)\n'            ...
-          '    return (d,)\n' ];
+  cmd = [ 'd = sp.inverse_fourier_transform(*_ins)\n' ...
+          'return (d,)' ];
 
-  f = python_sympy_cmd (cmd, sym(F), sym(k), sym(x));
+  f = python_cmd (cmd, sym(F), sym(k), sym(x));
 

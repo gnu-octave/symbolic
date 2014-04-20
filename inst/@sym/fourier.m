@@ -6,9 +6,8 @@ function F = fourier(f,x,k)
     warning('todo: check SMT for 2nd argument behavoir');
   end
 
-  cmd = [ 'def fcn(_ins):\n'                                      ...
-          '    d = sp.fourier_transform(*_ins)\n'                 ...
-          '    return (d,)\n' ];
+  cmd = [ 'd = sp.fourier_transform(*_ins)\n' ...
+          'return (d,)' ];
 
-  F = python_sympy_cmd (cmd, sym(f), sym(x), sym(k));
+  F = python_cmd (cmd, sym(f), sym(x), sym(k));
 

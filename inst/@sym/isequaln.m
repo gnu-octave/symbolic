@@ -17,11 +17,9 @@ function t = isequaln(x,y,varargin)
 
   % sympy's == is not componentwise so no special case for arrays
 
-  cmd = [ 'def fcn(_ins):\n'  ...
-          '    d = _ins[0] == _ins[1]\n'  ...
-          '    return (d,)\n' ];
+  cmd = 'return (_ins[0] == _ins[1],)';
 
-  t = python_sympy_cmd (cmd, sym(x), sym(y));
+  t = python_cmd (cmd, sym(x), sym(y));
 
   if (~ islogical(t))
     error('nonboolean return from python');

@@ -1,19 +1,17 @@
 function z = mpower(x, y)
 %^   Matrix power
 
-  cmd = [ 'def fcn(ins):\n'  ...
-          '    (a,b) = ins\n'  ...
-          '    return (a**b,)\n' ];
+  cmd = 'return _ins[0]**_ins[1],';
 
   if isscalar(x) && isscalar(y)
-    z = python_sympy_cmd(cmd, sym(x), sym(y));
+    z = python_cmd (cmd, sym(x), sym(y));
 
   elseif isscalar(x) && ~isscalar(y)
     error('TODO: scalar^array not implemented yet');
 
   elseif ~isscalar(x) && isscalar(y)
     % todo: sympy can do int and rat, then MatPow, check MST
-    z = python_sympy_cmd(cmd, sym(x), sym(y));
+    z = python_cmd (cmd, sym(x), sym(y));
 
   else  % two array's case
     error('TODO: array^array not implemented yet');

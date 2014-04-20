@@ -125,15 +125,14 @@ def autogen_functions(L):
 """
         fd.write(s)
         fd.write("%s\n\n" % d['extra_code'])
-        fd.write("  cmd = [ 'def fcn(_ins):\\n'    ...\n" )
-        fd.write("          '    (x,) = _ins\\n'   ...\n" )
-        fd.write("          '    if x.is_Matrix:\\n'   ...\n" )
-        fd.write("          '        z = x.applyfunc(lambda a: sp.%s(a))\\n'  ...\n" % d['spname'])
-        fd.write("          '    else:\\n'   ...\n" )
-        fd.write("          '        z = sp.%s(x)\\n'  ...\n" % d['spname'])
-        fd.write("          '    return (z,)\\n' ];\n")
+        fd.write("  cmd = [ '(x,) = _ins\\n'   ...\n" )
+        fd.write("          'if x.is_Matrix:\\n'   ...\n" )
+        fd.write("          '    z = x.applyfunc(lambda a: sp.%s(a))\\n'  ...\n" % d['spname'])
+        fd.write("          'else:\\n'   ...\n" )
+        fd.write("          '    z = sp.%s(x)\\n'  ...\n" % d['spname'])
+        fd.write("          'return (z,)' ];\n")
         fd.write("\n");
-        fd.write("  z = python_sympy_cmd(cmd, x);\n\n")
+        fd.write("  z = python_cmd (cmd, x);\n\n")
         fd.close()
 
 

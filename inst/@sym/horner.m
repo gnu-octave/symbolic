@@ -36,11 +36,8 @@
 
 function y = horner(x)
 
-  cmd = [ 'def fcn(_ins):\n'  ...
-          '    y = sp.horner(*_ins)\n'  ...
-          '    return (y,)\n' ];
+  y = python_cmd ('return ( sp.horner(*_ins), )', x);
 
-  y = python_sympy_cmd (cmd, x);
 end
 
 

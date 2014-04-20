@@ -40,10 +40,9 @@
 
 function y = simplify(x)
 
-  cmd = [ 'def fcn(_ins):\n'  ...
-          '    y = sp.simplify(*_ins)\n'  ...
-          '    return (y,)\n' ];
-  y = python_sympy_cmd (cmd, x);
+  cmd = [ 'y = sp.simplify(*_ins)\n'  ...
+          'return (y,)' ];
+  y = python_cmd (cmd, x);
 end
 
 

@@ -10,11 +10,10 @@ function varargout = pretty(x)
 
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
-  cmd = [ 'def fcn(_ins):\n'  ...
-          '    d = sp.pretty(*_ins, use_unicode=True)\n'  ...
-          '    return (d,)\n' ];
+  cmd = [ 'd = sp.pretty(*_ins, use_unicode=True)\n'  ...
+          'return (d,)' ];
 
-  s = python_sympy_cmd (cmd, x);
+  s = python_cmd (cmd, x);
 
   if (nargout == 0)
     if (loose), fprintf ('\n'); end

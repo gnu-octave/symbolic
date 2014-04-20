@@ -36,6 +36,8 @@ function varargout = python_sympy_cmd(cmd, varargin)
 % you want to run this w/o having the SymPy package, you'd need
 %  to hack a bit.
 
+  warning('python_sympy_cmd() deprecated, move to python_cmd()')
+
   % ensure we printf the cmd to get newlines
   cmd = sprintf(cmd);
 

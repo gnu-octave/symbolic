@@ -1,9 +1,10 @@
 function expr = make_undecl_symfun_rhs(s, vars)
 %private
 %
-% todo: to move this code to the symfun constructor, need access to python_cmd
+% FIXME: to move this code to the symfun constructor, need access to
+% python_cmd (which we now have).
 
-  %_f = Function("f")(x) 
+  %_f = Function("f")(x)
   %cmd = sprintf('f = sp.Function("%s")(%s)\n', fname, fargs);
 
   if ~(isa (s, 'char'))
@@ -19,14 +20,12 @@ function expr = make_undecl_symfun_rhs(s, vars)
 
   %extra = sprintf('%s = sp.symbols("%s", cls=sp.Function)', fname, fname);
 
-  cmd = sprintf( [ 'def fcn(_ins):\n'  ...
-                   '    x = _ins\n' ] );
-  cmd = sprintf ('%s    _f = sp.Function("%s")(*x)\n', cmd, fname);
-  %cmd = sprintf ('%s    _f = %s(*x)\n', cmd, fname);
-  cmd = sprintf ('%s    return (_f,)\n', cmd);
-    
+  %cmd = sprintf ('_f = %s(*_ins)\n', fname);
+  cmd = sprintf ('_f = sp.Function("%s")(*_ins)\n', fname);
+  cmd = sprintf ('%sreturn (_f,)', cmd);
+
   %hack
   %cmd = [extra '\n\n' cmd];
 
   %cmd, vars
-  expr = python_sympy_cmd(cmd, vars{:});
+  expr = python_cmd (cmd, vars{:});

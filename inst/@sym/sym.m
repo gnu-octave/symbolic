@@ -110,30 +110,30 @@ function s = sym(x, varargin)
       return
     end
     if (strcmp(x, 'pi'))
-      cmd = 'z = sp.pi\n';
+      cmd = 'z = sp.pi';
     elseif (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
-      cmd = 'z = sp.oo\n';
+      cmd = 'z = sp.oo';
     elseif (strcmpi(x, '-inf'))
-      cmd = 'z = -sp.oo\n';
+      cmd = 'z = -sp.oo';
     elseif (strcmpi(x, 'nan'))
-      cmd = 'z = sp.nan\n';
+      cmd = 'z = sp.nan';
     elseif (strcmpi(x, 'i'))
-      cmd = 'z = sp.I\n';
+      cmd = 'z = sp.I';
     %% Symbols with special meanings in SymPy: Issue #23
-    elseif (strcmp(x, 'beta')),   cmd = 'z = sp.abc.beta\n';
-    elseif (strcmp(x, 'gamma')),  cmd = 'z = sp.abc.gamma\n';
-    elseif (strcmp(x, 'zeta')),   cmd = 'z = sp.abc.zeta\n';
-    elseif (strcmp(x, 'lambda')), cmd = 'z = sp.Symbol("lamda")\n'; %not typo
-    elseif (strcmp(x, 'Lambda')), cmd = 'z = sp.Symbol("Lamda")\n'; %not typo
-    elseif (strcmp(x, 'Chi')),    cmd = 'z = sp.Symbol("Chi")\n';
-    elseif (strcmp(x, 'S')),      cmd = 'z = sp.Symbol("S")\n';  % possibly
-    elseif (strcmp(x, 'N')),      cmd = 'z = sp.Symbol("N")\n';  % a bad
-    elseif (strcmp(x, 'Q')),      cmd = 'z = sp.Symbol("Q")\n';  % idea!
+    elseif (strcmp(x, 'beta')),   cmd = 'z = sp.abc.beta';
+    elseif (strcmp(x, 'gamma')),  cmd = 'z = sp.abc.gamma';
+    elseif (strcmp(x, 'zeta')),   cmd = 'z = sp.abc.zeta';
+    elseif (strcmp(x, 'lambda')), cmd = 'z = sp.Symbol("lamda")'; %not typo
+    elseif (strcmp(x, 'Lambda')), cmd = 'z = sp.Symbol("Lamda")'; %not typo
+    elseif (strcmp(x, 'Chi')),    cmd = 'z = sp.Symbol("Chi")';
+    elseif (strcmp(x, 'S')),      cmd = 'z = sp.Symbol("S")';  % possibly
+    elseif (strcmp(x, 'N')),      cmd = 'z = sp.Symbol("N")';  % a bad
+    elseif (strcmp(x, 'Q')),      cmd = 'z = sp.Symbol("Q")';  % idea!
     else
       if (~isempty((strfind(x, '.'))))
         warning('possibly unintended decimal point in constructor string');
       end
-      cmd = sprintf('z = sp.S("%s")\n', x);
+      cmd = sprintf('z = sp.S("%s")', x);
     end
   else
     x
@@ -141,8 +141,5 @@ function s = sym(x, varargin)
     error('conversion from that type to symbolic not (yet) supported');
   end
 
-  fullcmd = [ 'def fcn(ins):\n'  ...
-              '    ' cmd  ...
-              '    return (z,)\n' ];
-  s = python_sympy_cmd(fullcmd);
+  s = python_cmd ([ cmd '\nreturn (z,)' ]);
 

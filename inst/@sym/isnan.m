@@ -6,11 +6,9 @@ function r = isnan(x)
 
   if isscalar(x)
 
-    cmd = [ 'def fcn(_ins):\n'              ...
-            '    d = _ins[0] == sp.nan\n'  ...
-            '    return (d,)\n' ];
+    cmd = 'return (_ins[0] == sp.nan,)';
 
-    r = python_sympy_cmd (cmd, x);
+    r = python_cmd (cmd, x);
 
     if (~ islogical(r))
       error('nonboolean return from python');
