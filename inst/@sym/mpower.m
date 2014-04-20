@@ -20,6 +20,6 @@ function z = mpower(x, y)
   end
 
 
-%!shared x
+%!test
 %! syms x
-%!assert(isequal(x^(4/5), x^(sym(4)/5)))
+%! assert(isequal(x^(sym(4)/5), x.^(sym(4)/5)))
