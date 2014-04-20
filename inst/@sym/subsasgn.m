@@ -113,3 +113,15 @@ end
 %! assert(isequal( c, x ))
 %! c(2) = 2*x;
 %! assert(isequal( c, [x 2*x] ))
+
+%% 2d logical indexing, ref and asgn
+%!shared a,b,I,J
+%! b = 1:4; b = [b; 3*b; 5*b];  a = sym(b);
+%! I = logical([1 0 1]);
+%! J = logical([1 0 1 0]);
+%!assert(isequal( a(I,J), b(I,J) ))
+%!test
+%! rhs = [90 91; 92 93]
+%! b(I, J) = rhs
+%! a(I, J) = rhs
+%! assert(isequal( a, b ))
