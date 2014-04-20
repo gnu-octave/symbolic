@@ -77,6 +77,17 @@ end
 %! b([1 end+1],end:end+1) = rhs;
 %! assert(isequal( a, b ))
 
+%% linear indices of 2D
+%!test
+%! b = 1:4; b = [b; 2*b; 3*b];
+%! a = sym(b);
+%! b(1:4) = [10 11 12 13];
+%! a(1:4) = [10 11 12 13];
+%! assert(isequal( a, b ))
+%! b(1:4) = [10 11; 12 13];
+%! a(1:4) = [10 11; 12 13];
+%! assert(isequal( a, b ))
+
 %% Wrong shape RHS
 % Matlab/Octave don't allow this on doubles, but if you do
 % this is the right answer (Matlab SMT 2013b gets it wrong)
@@ -93,3 +104,12 @@ end
 %! g(3:4) = [67 68];
 %! g(end:end+1) = [12 14];
 %! assert(isequal( g, [1 2 67 12 14] ))
+
+%% expanding empty and scalar
+%!test
+%! syms x
+%! c = sym([]);
+%! c(1) = x;
+%! assert(isequal( c, x ))
+%! c(2) = 2*x;
+%! assert(isequal( c, [x 2*x] ))

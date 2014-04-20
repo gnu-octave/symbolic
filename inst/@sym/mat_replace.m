@@ -15,7 +15,7 @@ function z = mat_replace(A, subs, b)
     elseif (m == 1)
       r = subs{1};  c = one(size(r));
     else
-      % special case for linear indices (or teach sympy to use column-based)
+      % linear indices into 2D array
       [r, c] = ind2sub (size(A), subs{1});
     end
 
