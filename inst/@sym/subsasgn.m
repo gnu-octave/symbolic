@@ -67,6 +67,16 @@ end
 %! b(:,2:3) = rhs;
 %! assert(isequal( a, b ))
 
+%% grow 2D
+%!shared a,b
+%! b = 1:4; b = [b; 2*b];
+%! a = sym(b);
+%!test
+%! rhs = [10 11; 12 13];
+%! a([1 end+1],end:end+1) = rhs;
+%! b([1 end+1],end:end+1) = rhs;
+%! assert(isequal( a, b ))
+
 %% Wrong shape RHS
 % Matlab/Octave don't allow this on doubles, but if you do
 % this is the right answer (Matlab SMT 2013b gets it wrong)
