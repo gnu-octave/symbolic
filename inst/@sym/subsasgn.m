@@ -86,3 +86,10 @@ end
 % b(1:2,1:2) = rhs;
 % a(1:2,1:2) = rhs(:);
 % assert(isequal( a, b ))
+
+%% 1D growth and 'end'
+%!test
+%! g = sym([1 2 3]);
+%! g(3:4) = [67 68];
+%! g(end:end+1) = [12 14];
+%! assert(isequal( g, [1 2 67 12 14] ))

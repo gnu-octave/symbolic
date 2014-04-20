@@ -11,9 +11,9 @@ function z = mat_replace(A, subs, b)
     % vector vs linear index to matrix (not required for access)
     [n,m] = size(A);
     if (n == 0 || n == 1)
-      r = 1;  c = subs{1};
+      c = subs{1};  r = ones(size(c));
     elseif (m == 1)
-      r = subs{1};  c = 1;
+      r = subs{1};  c = one(size(r));
     else
       % special case for linear indices (or teach sympy to use column-based)
       [r, c] = ind2sub (size(A), subs{1});
