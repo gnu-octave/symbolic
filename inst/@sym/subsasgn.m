@@ -20,13 +20,11 @@ function out = subsasgn (val, idx, rhs)
       end
 
     otherwise
-      disp('todo: support other forms of subscripted assignment here?')
+      disp('FIXME: do we need to support any other forms of subscripted assignment?')
       idx
       rhs
       val
-      warning('broken');
-      out = 42;
-
+      error('broken');
   end
 end
 
@@ -121,7 +119,12 @@ end
 %! J = logical([1 0 1 0]);
 %!assert(isequal( a(I,J), b(I,J) ))
 %!test
-%! rhs = [90 91; 92 93]
-%! b(I, J) = rhs
-%! a(I, J) = rhs
+%! rhs = [90 91; 92 93];
+%! b(I, J) = rhs;
+%! a(I, J) = rhs;
 %! assert(isequal( a, b ))
+%!test
+%! b(I, J) = 100;
+%! a(I, J) = 100;
+%! assert(isequal( a, b ))
+%!test

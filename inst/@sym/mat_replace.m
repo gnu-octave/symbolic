@@ -22,15 +22,30 @@ function z = mat_replace(A, subs, b)
   elseif (length(subs) == 2)
     r = subs{1};
     c = subs{2};
-    assert( isvector(r) || isempty(r) || strcmp(r, ':') )
-    assert( isvector(c) || isempty(c) || strcmp(c, ':') )
     [n,m] = size(A);
-    if (r == ':')
+
+    if (isnumeric(r) && ((isvector(r) || isempty(r))))
+      % no-op
+    elseif (strcmp(r,':'))
       r = 1:n;
+    elseif (islogical(r) && isvector(r) && (length(r) == n))
+      I = r;
+      r = 1:n;  r = r(I);
+    else
+      error('unknown 2d-indexing in rows')
     end
-    if (c == ':')
+
+    if (isnumeric(c) && ((isvector(c) || isempty(c))))
+      % no-op
+    elseif (strcmp(c,':'))
       c = 1:m;
+    elseif (islogical(c) && isvector(c) && (length(c) == m))
+      J = c;
+      c = 1:m;  c = c(J);
+    else
+      error('unknown 2d-indexing in columns')
     end
+
     [r,c] = ndgrid(r,c);
     if ~ (is_same_shape (r, b))
       % Octave/Matlab both do this for double so we will to
@@ -43,4 +58,3 @@ function z = mat_replace(A, subs, b)
   end
 
   z = mat_rclist_asgn(A, r, c, b);
-

@@ -15,15 +15,27 @@ function z = mat_rccross_access(A, r, c)
   % FIXME: Could optimize these cases
 
   [n,m] = size(A);
-  if (r == ':')
+
+  if (isnumeric(r) && ((isvector(r) || isempty(r))))
+    % no-op
+  elseif (strcmp(r,':'))
     r = 1:n;
-  elseif ischar(r)
-    error('unknown row?')
+  elseif (islogical(r) && isvector(r) && (length(r) == n))
+    I = r;
+    r = 1:n;  r = r(I);
+  else
+    error('unknown 2d-indexing in rows')
   end
-  if (c == ':')
+
+  if (isnumeric(c) && ((isvector(c) || isempty(c))))
+    % no-op
+  elseif (strcmp(c,':'))
     c = 1:m;
-  elseif ischar(c)
-    error('unknown column?')
+  elseif (islogical(c) && isvector(c) && (length(c) == m))
+    J = c;
+    c = 1:m;  c = c(J);
+  else
+    error('unknown 2d-indexing in columns')
   end
 
   cmd = [ '(A,rr,cc) = _ins\n'  ...
