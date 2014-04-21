@@ -72,9 +72,11 @@
 %%
 %% Possible output types:
 %%    SymPy objects (Matrix and Expr at least);
+%%    int;
 %%    float;
 %%    string;
 %%    unicode strings;
+%%    bool;
 %%    dict (converted to structs);
 %%    lists/tuples (converted to cell vectors).
 %%
@@ -123,3 +125,50 @@ function varargout = python_cmd(cmd, varargin)
   if nargout ~= M
     warning('number of outputs don''t match, was this intentional?')
   end
+end
+
+
+%% general test
+%!test
+%! x = 10; y = 6;
+%! cmd = '(x,y) = _ins; return (x+y,x-y)';
+%! [a,b] = python_cmd (cmd, x, y);
+%! assert (a == x + y && b == x - y)
+
+%% bool
+%!test
+%! assert (python_cmd ('return True,'))
+%! assert (~python_cmd ('return False,'))
+
+%% float
+%!test
+%! assert (python_cmd ('return 1.0/3,'), 1/3, 1e-15)
+
+%% int
+%!test
+%! assert (python_cmd ('return 123456,'), 123456)
+
+%% string
+%!test
+%! x = 'octave';
+%! cmd = 's = _ins[0]; return s.capitalize(),';
+%! y = python_cmd (cmd, x);
+%! assert (strcmp(y, 'Octave'))
+
+%% unicode
+%!test
+%! s1 = '我爱你';
+%! s2 = python_cmd ('return u"\\u6211\\u7231\\u4f60",');
+%! assert (strcmp (s1,s2))
+
+%% list, tuple
+%!assert (python_cmd ('return [1,2,3],'), {1, 2, 3})
+%!assert (python_cmd ('return (4,5),'), {4, 5})
+%!assert (python_cmd ('return (6,),'), {6,})
+%!assert (python_cmd ('return [],'), {})
+
+%% dict
+%!test
+%! cmd = 'd = dict(); d["a"] = 6; d["b"] = 10; return d,';
+%! d = python_cmd (cmd);
+%! assert (d.a == 6 && d.b == 10)
