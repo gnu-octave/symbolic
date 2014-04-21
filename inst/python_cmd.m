@@ -1,50 +1,97 @@
-function varargout = python_cmd(cmd, varargin)
-%PYTHON_CMD  Run Python command and return objects
-%   Run a Python command which takes some Octave objects as
-%   inputs and returns Octave objects as
-%   outputs.
-%
-%      [a,b,c,...] = python_cmd (cmd, x, y, z, ...)
-%
-%   where x,y,z can be sym objects, strings (char), or scalar doubles.
-%   The can also be cell arrays of these items.  Multi-D cell arrays
-%   may not work properly.  Ouputs
-%
-%   Example:
-%      cmd = '(x,y) = _ins; return (x+y,x-y)';
-%      [a,b] = python_cmd (cmd, x, y);
-%      % now a == x + y and b = x - y
-%
-%   Here 'cmd' is a string consisting of python code.  The inputs will
-%   be in a list called '_ins'.  The command should end by outputing a
-%   tuple of return arguments.
-%
-%   If you have just one return value, you probably want to append
-%   an extra comma as in this example:
-%      cmd = '(x,y) = _ins; return (x+y,)';
-%   (Python gurus will know why).
-%
+%% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% You can also append to the (initially empty) Python list
-%% '_outs' which will be returned if you don't return anything.
+%% This file is part of OctSymPy
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn {Function File}  {[@var{a}, @var{b}, ...] =} python_cmd (@var{cmd}, @var{x}, @var{y}, ...)
+%% Run some Python command on some objects and return other objects.
+%%
+%% Here @var{cmd} is a string of Python code.
+%% Inputs @var{x}@, @var{y}@, ... can be a variety of objects
+%% (possible types listed below). Outputs @var{a}, @var{b}, ... are
+%% converted from Python objects: not all types are possible, see
+%% below.
+%%
+%% Example:
+%% @example
+%% cmd = '(x,y) = _ins; return (x+y,x-y)';
+%% [a,b] = python_cmd (cmd, x, y);
+%% % now a == x + y and b == x - y
+%% @end example
+%%
+%% The inputs will be in a list called '_ins'.  The command should
+%% end by outputing a tuple of return arguments.
+%% If you have just one return value, you probably want to append
+%% an extra comma.  Either of these approaches will work:
+%% @example
+%% cmd = '(x,y) = _ins; return (x+y,)'
+%% cmd = '(x,y) = _ins; return x+y,'
+%% a = python_cmd (cmd, x, y)
+%% @end example
+%% (Python gurus will know why).
+%%
+%% Instead of @code{return}, you can append to the Python list
+%% @code{_outs}@:
+%% @example
+%% cmd = '(x,y) = _ins; _outs.append(x**y)'
+%% a = python_cmd (cmd, x, y)
+%% @end example
 %%
 %% The string can have newlines for longer commands but be careful
-%% with whitespace: its pythpn!
-%%  cmd = [ '(x,) = _ins\n'  ...
-%%          'if x.is_Matrix:\n'  ...
-%%          '    return ( x.T ,)\n' ...
-%%          'else:\n' ...
-%%          '    return ( x ,)\n' ];
+%% with whitespace: its Python!
+%% @example
+%% cmd = [ '(x,) = _ins\n'  ...
+%%         'if x.is_Matrix:\n'  ...
+%%         '    return ( x.T ,)\n' ...
+%%         'else:\n' ...
+%%         '    return ( x ,)' ];
+%% @end example
+%% FIXME: at least for the popen2 IPC mechanism, @var{cmd}@ should
+%% not contain blank lines.
 %%
+%% Possible input types:
+%%    sym objects;
+%%    strings (char);
+%%    scalar doubles.
+%% They can also be cell arrays of these items.  Multi-D cell
+%% arrays may not work properly.
 %%
-%   FIXME: add a py_config to change the header?  The python environment
-%   defined in python_header.py.  Changing it is currently harder than it
-%   should be.
-%
-% Note: if you don't pass in any sym's, this won't (shouldn't
-% anyway) use SymPy.  But it still imports it in that case.  If
-% you want to run this w/o having the SymPy package, you'd need
-%  to hack a bit.
+%% Possible output types:
+%%    SymPy objects (Matrix and Expr at least);
+%%    float;
+%%    string;
+%%    unicode strings;
+%%    dict (converted to structs);
+%%    lists/tuples (converted to cell vectors).
+%%
+%% FIXME: add a py_config to change the header?  The python
+%% environment is defined in python_header.py.  Changing it is
+%% currently harder than it should be.
+%%
+%% Note: if you don't pass in any sym's, this shouldn't need SymPy.
+%% But it still imports it in that case.  If  you want to run this
+%% w/o having the SymPy package, you'd need to hack a bit.
+%% @seealso{evalpy}
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: python
+
+function varargout = python_cmd(cmd, varargin)
 
 
   newl = sprintf('\n');
