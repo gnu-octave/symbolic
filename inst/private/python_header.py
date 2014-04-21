@@ -9,6 +9,17 @@ def dbout(l):
     sys.stderr.write("pydebug: " + str(l) + "\n")
 
 
+# Used by evalpy()
+def dictdiff(a, b):
+    """ keys from a that are not in b """
+    n = dict()
+    for k in a:
+        print str(k)
+        if not k in b:
+            n[k] = a[k]
+    return n
+
+
 def objectfilter(x):
     """Perform final fixes before passing objects back to Octave"""
     if isinstance(x, sp.Matrix) and x.shape == (1,1):
