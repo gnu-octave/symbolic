@@ -70,19 +70,24 @@ function vars = symvar(F, Nout)
       error('number of requested symbols should be positive')
     end
 
-    %% This sorting code is written by:
-    % Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
-    % License: GPL-3
 
-    if Nlist<Nout
-      warning('Asked for %d variables, but only %d found.',Nout,Nlist);
-      Nout=Nlist;
+    if (Nlist < Nout)
+      if (Nout == 1)
+        warning('Asked for one variable, but none found.');
+      else
+        warning('Asked for %d variables, but only %d found.',Nout,Nlist);
+      end
+      Nout = Nlist;
     end
 
     vars = sym([]);
     if (Nout == 0)
       return
     end
+
+    %% This sorting code is written by:
+    % Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
+    % License: GPL-3
 
     %% If Nout is specified, sort anew from x.
     symstrings = strtrim(disp(symlist{1}));

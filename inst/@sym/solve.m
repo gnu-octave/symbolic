@@ -18,7 +18,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{sol} =} solve (@var{eqn, var})
+%% @deftypefn  {Function File} {@var{sol} =} solve (@var{eqn, var})
 %% Symbolic solutions of equations and systems
 %%
 %% Examples
@@ -58,6 +58,9 @@
 %% @seealso{dsolve}
 %% @end deftypefn
 
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function out = solve(varargin)
 
   n = nargin;
@@ -86,4 +89,4 @@ end
 %!test
 %! d = solve(e, 2*x);
 %! s = d{1}.('2*x');
-%! assert (isequal (s, 4*y))  % won't work on Matlab
+%! assert (isequal (s, 4*y))  % won't work on Matlab/Octave 3.6
