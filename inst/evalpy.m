@@ -38,7 +38,7 @@
 %% z   % 2.25 (double)
 %% @end example
 %%
-%% All arguments can be accessed as @code{i0}@, @code{i1}@, etc.
+%% All arguments can be accessed as @code{i0}, @code{i1}, etc.
 %% This is useful if they don't have inputnames:
 %% @example
 %% x = 10
@@ -47,7 +47,7 @@
 %% @end example
 %%
 %% If you need a variable in Python but don't want it passed back
-%% to Octave, put a @code{_}@ (underscore) at the beginning or end.
+%% to Octave, put an @code{_} (underscore) at the beginning or end.
 %% @example
 %% x = 20
 %% evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
@@ -69,13 +69,15 @@
 %% Notes:
 %% @itemize
 %% @item if you assign to @var{x} but don't change its value,
-%% @var{x} will not appear in the "new/changed vars:" list.
-%% @item using print is a bad idea.  For now, use @code{dbout(x)}
-%% to print @code{x} to stderr which should appear in the terminal
-%% (FIXME).
-%% @item evalpy is a bit of a work-in-progress and subject to chance.  For
-%% example, with a proper IPC mechanism, you could grab the values
-%% of @var{x} etc when needed and not need to specify them as args.
+%%   it will not be assigned to and will not appear in the
+%%   Variables effected:" list.
+%% @item using print is probably a bad idea.  For now, use
+%%   @code{dbout(x)} to print @code{x} to stderr which should
+%%   appear in the terminal (FIXME).
+%% @item evalpy is a bit of a work-in-progress and subject to
+%%   change.  For example, with a proper IPC mechanism, you could
+%%   grab the values of @var{x} etc when needed and not need to
+%%   specify them as args.
 %% @end itemize
 %%
 %% @seealso{python_cmd}

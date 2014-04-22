@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {[@var{a}, @var{b}, ...] =} python_cmd (@var{cmd}, @var{x}, @var{y}, ...)
+%% @deftypefn  {Function File}  {[@var{a}, @var{b}, ...] =} python_cmd (@var{cmd}, @var{x}, @var{y}, ...)
 %% Run some Python command on some objects and return other objects.
 %%
 %% Here @var{cmd} is a string of Python code.
@@ -60,8 +60,8 @@
 %%         'else:\n' ...
 %%         '    return ( x ,)' ];
 %% @end example
-%% FIXME: at least for the popen2 IPC mechanism, @var{cmd}@ should
-%% not contain blank lines.
+%% It might be a good idea to avoid blank lines (FIXME: this used to
+%% be a problem, can't reproduce).
 %%
 %% Possible input types:
 %%    sym objects;
@@ -87,6 +87,7 @@
 %% Note: if you don't pass in any sym's, this shouldn't need SymPy.
 %% But it still imports it in that case.  If  you want to run this
 %% w/o having the SymPy package, you'd need to hack a bit.
+%%
 %% @seealso{evalpy}
 %% @end deftypefn
 

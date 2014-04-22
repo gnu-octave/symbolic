@@ -1,7 +1,33 @@
-function display(obj)
-%DISPLAY  Display contents of a symbolic expression
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
 
-%   Note: if you edit this, make sure you edit disp.m as well
+%% -*- texinfo -*-
+%% @deftypefn {Function File}  {} display (@var{x})
+%% Display, on command line, the contents of a symbolic expression
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
+function display(obj)
+
+  % Note: if you edit this, make sure you edit disp.m as well
 
   %% Settings
   unicode_decorations = true;
