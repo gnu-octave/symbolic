@@ -1,5 +1,7 @@
 import sys
 sys.ps1 = ""; sys.ps2 = ""
+import sympy
+import sympy.abc
 import sympy as sp
 from sympy import *
 #import dill as pickle

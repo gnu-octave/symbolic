@@ -120,15 +120,15 @@ function s = sym(x, varargin)
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I';
     %% Symbols with special meanings in SymPy: Issue #23
-    elseif (strcmp(x, 'beta')),   cmd = 'z = sp.abc.beta';
-    elseif (strcmp(x, 'gamma')),  cmd = 'z = sp.abc.gamma';
-    elseif (strcmp(x, 'zeta')),   cmd = 'z = sp.abc.zeta';
-    elseif (strcmp(x, 'lambda')), cmd = 'z = sp.Symbol("lamda")'; %not typo
-    elseif (strcmp(x, 'Lambda')), cmd = 'z = sp.Symbol("Lamda")'; %not typo
-    elseif (strcmp(x, 'Chi')),    cmd = 'z = sp.Symbol("Chi")';
-    elseif (strcmp(x, 'S')),      cmd = 'z = sp.Symbol("S")';  % possibly
-    elseif (strcmp(x, 'N')),      cmd = 'z = sp.Symbol("N")';  % a bad
-    elseif (strcmp(x, 'Q')),      cmd = 'z = sp.Symbol("Q")';  % idea!
+    elseif (strcmp(x, 'beta')),   cmd = 'z = sympy.abc.beta';
+    elseif (strcmp(x, 'gamma')),  cmd = 'z = sympy.abc.gamma';
+    elseif (strcmp(x, 'zeta')),   cmd = 'z = sympy.abc.zeta';
+    elseif (strcmp(x, 'lambda')), cmd = 'z = sympy.Symbol("lamda")'; %not typo
+    elseif (strcmp(x, 'Lambda')), cmd = 'z = sympy.Symbol("Lamda")'; %not typo
+    elseif (strcmp(x, 'Chi')),    cmd = 'z = sympy.Symbol("Chi")';
+    elseif (strcmp(x, 'S')),      cmd = 'z = sympy.Symbol("S")';  % possibly
+    elseif (strcmp(x, 'N')),      cmd = 'z = sympy.Symbol("N")';  % a bad
+    elseif (strcmp(x, 'Q')),      cmd = 'z = sympy.Symbol("Q")';  % idea!
     else
       if (~isempty((strfind(x, '.'))))
         warning('possibly unintended decimal point in constructor string');
