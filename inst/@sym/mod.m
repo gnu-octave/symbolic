@@ -37,15 +37,12 @@ function z = mod(x, n)
     cmd = [ '(x,n) = _ins\n' ...
             def_each_elem_binary() ...
             'def _op(a,b):\n' ...
-            '    return a %% b\n' ...
+            '    return a % b\n' ...
             'return _each_elem_binary(x,n,_op)' ];
     z = python_cmd (cmd, sym(x), sym(n));
 
     % or you can use a lambda:
-    % return _each_elem_binary(x,n,lambda a,b: a %% b)
-
-    % FIXME char % rem in py, Issue #26
-
+    % return _each_elem_binary(x,n,lambda a,b: a % b)
 
   else
     %% its not constant, assume everything is poly and mod the coefficients
