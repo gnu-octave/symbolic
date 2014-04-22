@@ -17,29 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{b} =} bernoulli (@var{n})
-%% @deftypefnx {Function File} {@var{p} =} bernoulli (@var{n}, @var{x})
-%% Return Bernouilli numbers and polynomials
+%% @deftypefn  {Function File} {@var{f} =} fibonacci (@var{n})
+%% @deftypefnx {Function File} {@var{p} =} fibonacci (@var{n}, @var{x})
+%% Return Fibonacci numbers and polynomials
 %%
 %%
-%% @seealso{euler}
+%% @seealso{euler, bernouilli}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = bernoulli(n, x)
+function r = fibonacci(n, x)
 
   if (nargin == 1)
-    r = python_cmd ('return sp.bernoulli(*_ins),', n);
+    r = python_cmd ('return sp.fibonacci(*_ins),', n);
   else
-    r = python_cmd ('return sp.bernoulli(*_ins),', n, sym(x));
+    r = python_cmd ('return sp.fibonacci(*_ins),', n, sym(x));
   end
 
 end
 
 
-%!assert (isequal (bernoulli (8), -sym(1)/30))
-%!assert (isequal (bernoulli (9), 0))
+%!assert (isequal ( fibonacci (sym(0)), 0))
+%!assert (isequal ( fibonacci (sym(14)), sym(377)))
+%!assert (isequal ( fibonacci (14), 377))
 %!test syms x
-%! assert (isequal (bernoulli(3,x), x^3 - 3*x^2/2 + x/2))
+%! assert (isequal (fibonacci (5,x), x^4 + 3*x^2 + 1))
