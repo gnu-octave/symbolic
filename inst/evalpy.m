@@ -97,7 +97,7 @@ function evalpy(cmd, varargin)
     name = inputname(i+1);
     if ~isempty(name)
       s = sprintf('%s%s = _ins[%d]\n', s, name, i-1);
-      s = sprintf('%s%s_ = %s\n', s, name, name);
+      s = sprintf('%s_%s_orig = %s\n', s, name, name);
     end
   end
   vars2py = s;
@@ -108,7 +108,7 @@ function evalpy(cmd, varargin)
   for i = 1:(nargin-1)
     name = inputname(i+1);
     if ~isempty(name)
-      s = sprintf('%sif not %s == %s_:\n', s, name, name);
+      s = sprintf('%sif not %s == _%s_orig:\n', s, name, name);
       s = sprintf('%s    _newvars["%s"] = %s\n', s, name, name);
     end
   end
@@ -172,7 +172,7 @@ function evalpy(cmd, varargin)
     if (length(names) == 0)
       fprintf('no variables changed\n');
     else
-      fprintf('Variables new/changed by evalpy: %s\n', varnames);
+      fprintf('Variables effected: %s\n', varnames);
     end
   end
 end
