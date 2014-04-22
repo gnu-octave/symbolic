@@ -1,7 +1,8 @@
 function r = test_bugs()
+% unit test
+
   c = 0; r = [];
   syms x
-
 
 
   %% Issue #8

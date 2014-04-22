@@ -1,5 +1,7 @@
 function r = test_subs_ordering()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x y t
 
   f = sin(x)*y;

@@ -1,5 +1,7 @@
 function r = test_symsum()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms n
   oo = sym(inf);
 

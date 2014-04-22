@@ -1,5 +1,7 @@
 function r = test_construct_rationals()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
 
   x = sym(1) / 3;
   c=c+1; r(c) = 3*x - 1 == 0;

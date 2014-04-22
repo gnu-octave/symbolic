@@ -1,4 +1,6 @@
 function r = test_infnan()
+% unit test
+
   c = 0;  r = [];
 
   % make sure their pickles contain infinity, otherwise just symbols

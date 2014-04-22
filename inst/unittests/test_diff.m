@@ -1,5 +1,7 @@
 function r = test_diff()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x y z
 
   c=c+1; r(c) = logical( diff(sin(x)) - cos(x) == 0 );

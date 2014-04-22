@@ -1,5 +1,7 @@
 function r = test_symfun()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
 
   syms x
   f(x) = 2*x;
@@ -7,8 +9,8 @@ function r = test_symfun()
   c=c+1; r(c) = isa(f, 'sym');
   c=c+1; r(c) = logical( f(3) - 6 == 0 );
   c=c+1; r(c) = logical( f(sin(x)) - 2*sin(x) == 0 );
-  
-%% y(x) = sym(y(x))  % todo does this work in SMT?
+
+  %% y(x) = sym(y(x))  % todo does this work in SMT?
 
   x = sym('x');
   y = sym('y');

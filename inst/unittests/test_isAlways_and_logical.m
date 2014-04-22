@@ -1,5 +1,7 @@
 function r = test_isAlways_and_logical()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x y
 
   %% this first examples are true in both

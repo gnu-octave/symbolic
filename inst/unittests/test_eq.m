@@ -1,4 +1,6 @@
 function r = test_eq()
+% unit test
+
   c = 0; r = [];
   syms x
 

@@ -1,5 +1,7 @@
 function r = test_subs()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x y t
 
   f = x*y;

@@ -1,5 +1,7 @@
 function r = test_limit()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x
   oo = sym(inf);
 

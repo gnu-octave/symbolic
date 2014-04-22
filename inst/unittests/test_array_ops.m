@@ -1,4 +1,6 @@
 function r = test_array_ops()
+% unit test
+
   c = 0; r = [];
   syms x
 

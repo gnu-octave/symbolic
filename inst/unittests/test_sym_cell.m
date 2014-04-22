@@ -1,5 +1,7 @@
 function r = test_sym_cell()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x
 
   % these tests are pretty weak (how to compare two cells?) but

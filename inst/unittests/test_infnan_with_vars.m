@@ -1,4 +1,6 @@
 function r = test_infnan_with_vars()
+% unit test
+
   c = 0; r = [];
 
   snan = sym(nan);

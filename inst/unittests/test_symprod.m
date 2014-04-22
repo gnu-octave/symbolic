@@ -1,5 +1,7 @@
 function r = test_symprod()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms n a
   oo = sym(inf);
   zoo = sym('zoo');

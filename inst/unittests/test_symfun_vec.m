@@ -1,5 +1,7 @@
 function r = test_symfun_vec()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
 
   syms x y
   F(x,y) = [1; 2*x; y; y*sin(x)];

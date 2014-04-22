@@ -1,5 +1,7 @@
 function r = test_double()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   x = sym(2);
   c=c+1;  r(c) = double(x) == 2;
 

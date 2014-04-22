@@ -1,4 +1,6 @@
 function r = test_array()
+% unit test
+
   c = 0; r = [];
   syms x
 

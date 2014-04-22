@@ -1,5 +1,5 @@
 function r = test_array_slice()
-%tests
+% unit test
 
   c = 0; r = [];
   syms x

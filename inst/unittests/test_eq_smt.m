@@ -1,4 +1,6 @@
 function r = test_eq_smt()
+% unit test
+
   c = 0; r = [];
   syms x
 

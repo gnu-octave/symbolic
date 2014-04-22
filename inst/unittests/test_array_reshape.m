@@ -1,4 +1,6 @@
 function r = test_array_reshape()
+% unit tests
+
   c = 0; r = [];
 
   d = [2 4 6; 8 10 12];

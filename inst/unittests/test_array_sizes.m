@@ -1,4 +1,6 @@
 function r = test_array_sizes()
+% unit test
+
   c = 0; r = [];
 
   a = sym([1 2 3]);

@@ -1,5 +1,7 @@
 function r = test_constructor()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
 
   % integers
   x = sym('2');

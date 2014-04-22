@@ -1,4 +1,6 @@
 function r = test_subs_doubles()
+% unit test
+
   c = 0;  r = [];
   syms x y
   f = x*y;

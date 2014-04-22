@@ -1,4 +1,6 @@
 function r = test_array_refs()
+% unit test
+
   c = 0; r = [];
 
   % basically a random matrix

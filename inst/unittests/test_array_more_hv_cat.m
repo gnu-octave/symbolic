@@ -1,4 +1,6 @@
 function r = test_array_more_hv_cat()
+% unit test
+
   c = 0; r = [];
   syms x
 

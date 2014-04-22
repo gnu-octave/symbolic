@@ -1,5 +1,7 @@
 function r = test_int()
-  c = 0;
+% unit test
+
+  c = 0; r = [];
   syms x y a
 
   c=c+1; r(c) = logical(int(cos(x)) - sin(x) == 0);
