@@ -34,6 +34,12 @@ function display(obj)
   display_snippet = octsympy_config('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
+  if (unicode_decorations)
+    timesstr = '×';
+  else
+    timesstr = '×';
+  end
+
   d = size (obj);
   if (isscalar (obj))
     fprintf ('%s = (%s)', inputname (1), class (obj))
@@ -46,13 +52,24 @@ function display(obj)
       fprintf ('\n')
     end
 
+  elseif (isempty (obj))
+    % Examples of 2x0 and 0x2 empty matrices:
+    % a = sym([1 2; 3 4])
+    % a([true true], [false false])
+    % a([false false],[true true])
+    formatstr = [ '%s = (%s) %s (empty %d' timesstr '%d matrix)' ];
+    fprintf (formatstr, inputname (1), class (obj), obj.text, d(1), d(2))
+
+    if (display_snippet)
+      fprintf ('     ')
+      snippet_of_sympy (obj, unicode_decorations)
+    else
+      fprintf ('\n')
+    end
+
   elseif (length (d) == 2)
     %% 2D Array
-    if (unicode_decorations)
-      formatstr = '%s = (%s %d×%d matrix)';
-    else
-      formatstr = '%s = (%s %dx%d matrix)';
-    end
+    formatstr = [ '%s = (%s %d' timesstr '%d matrix)' ];
     fprintf (formatstr, inputname (1), class (obj), d(1), d(2))
 
     if (display_snippet)
