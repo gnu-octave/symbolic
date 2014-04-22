@@ -97,9 +97,12 @@
 function varargout = python_cmd(cmd, varargin)
 
 
+  %% a big of preprocessing
+  % the user might or might not have escaped newlines.  We want to
+  % reliably intend this code to put it inside a Python function.
   newl = sprintf('\n');
-  cmd = sprintf(cmd);   % ensure we printf the cmd to get newlines
-  cmd = strtrim(cmd);   % trims whitespace and newlines from beginning and end
+  cmd = strrep(cmd, '\n', newl);
+  cmd = strtrim(cmd);  % I think this is not important
   cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
 
   cmd = sprintf( [ 'def _fcn(_ins):\n' ...
@@ -108,6 +111,10 @@ function varargout = python_cmd(cmd, varargin)
                    '    return _outs\n' ...
                    '\n' ...
                    '_outs = _fcn(_ins)\n\n' ], cmd);
+
+  %fprintf('\n*** <CODE> ***\n')
+  %disp(cmd)
+  %fprintf('\n*** </CODE> ***\n\n')
 
   A = python_sympy_cmd_raw('run', cmd, varargin{:});
 

@@ -122,8 +122,11 @@ function evalpy(cmd, varargin)
   %end
 
   %% Examine end of cmd
-  % strip newline from end of cmd, and any leading/trailing whitespace
-  cmd = sprintf(cmd);  % ensure we printf the cmd to unescape newlines
+  % The user might or might not have escaped newlines.
+  % Strip newline from end of cmd, and any leading/trailing
+  % whitespace.  Then we can count semicolons.
+  newl = sprintf('\n');
+  cmd = strrep(cmd, '\n', newl);
   cmd = strtrim(cmd);
   if strcmp(cmd(end-1:end),';;')
     verbosity = 0;
@@ -150,7 +153,7 @@ function evalpy(cmd, varargin)
 
   %% debugging
   %fprintf('\n*** <CODE> ***\n')
-  %fprintf(fullcmd)
+  %disp(fullcmd)
   %fprintf('\n*** </CODE> ***\n\n')
 
   [names,values] = python_cmd (fullcmd, varargin{:});
