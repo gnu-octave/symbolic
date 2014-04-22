@@ -18,22 +18,19 @@ function varargout = pretty(x)
   if (nargout == 0)
     if (loose), fprintf ('\n'); end
     print_indented (s)
-    fprintf ('\n');
     if (loose), fprintf ('\n'); end
   else
     varargout = {s};
   end
 end
 
-
 function print_indented(s, n)
   if (nargin == 1)
     n = 3;
   end
   pad = char (double (' ')*ones (1,n));
-  fprintf (pad);
-  %FIXME: sprintf needed on Octave 3.6.4, seems harmless on 3.8.1.
-  %s = regexprep (s, '\n', ['\n' pad]);
-  s = regexprep (s, '\n', sprintf ('\n%s', pad));
-  fprintf ('%s', s);
+  newl = sprintf('\n');
+  s = strrep (s, newl, [newl pad]);
+  s = [pad s];  % first line
+  disp(s)
 end

@@ -23,10 +23,7 @@ function s = make_indented(s, n)
     n = 3;
   end
   pad = char (double (' ')*ones (1,n));
-
-  s2 = pad;
-  %FIXME: extra sprintf needed on Octave 3.6.4, seems harmless on 3.8.1?
-  %s = regexprep (s, '\n', ['\n' pad]);
-  s = regexprep (s, '\n', sprintf ('\n%s', pad));
-  s = [pad s];
+  newl = sprintf('\n');
+  s = strrep (s, newl, [newl pad]);
+  s = [pad s];  % first line
 end
