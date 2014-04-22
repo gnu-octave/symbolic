@@ -47,6 +47,7 @@ inst/@sym/erfcinv.m
 inst/@sym/erfi.m
 inst/@sym/heaviside.m
 inst/@sym/dirac.m
+inst/@sym/nextprime.m
 inst/unittests/test_autogen_sqrt.m
 inst/unittests/test_autogen_exp.m
 inst/unittests/test_autogen_log.m
@@ -81,3 +82,4 @@ inst/unittests/test_autogen_erfcinv.m
 inst/unittests/test_autogen_erfi.m
 inst/unittests/test_autogen_heaviside.m
 inst/unittests/test_autogen_dirac.m
+inst/unittests/test_autogen_nextprime.m
