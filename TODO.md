@@ -149,9 +149,10 @@ There are quite a few options out there:
 
 ## Limitations of system()
 
-Currently we create a temporary file and execute it with system().
-Would be nicer to pass the command itself on the command line with
-"python -c".  But I couldn't make this work with multiline pickles.
+We used to create a temporary file and execute it with system().  But
+its nicer to pass the command itself on the command line with "python
+-c".  IIRC, I couldn't make this work with multiline pickles (i.e.,
+most of them).
 
 * http://stackoverflow.com/questions/11392033/passing-python-array-to-bash-script-and-passing-bash-variable-to-python-functio
 

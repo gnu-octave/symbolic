@@ -3,6 +3,7 @@ sys.ps1 = ""; sys.ps2 = ""
 import sympy
 import sympy.abc
 import sympy as sp
+# FIXME: how to reactivate from srepr w/o this?
 from sympy import *
 #import dill as pickle
 
