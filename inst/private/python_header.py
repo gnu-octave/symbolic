@@ -25,6 +25,7 @@ def dictdiff(a, b):
 
 def objectfilter(x):
     """Perform final fixes before passing objects back to Octave"""
+    #FIXME: replace immutable matrices here?
     if isinstance(x, sp.Matrix) and x.shape == (1,1):
         #dbout("Note: replaced 1x1 mat with scalar")
         y = x[0,0]
@@ -47,7 +48,9 @@ def octcmd(x):
         sp.pretty(x,use_unicode=False).encode("string_escape").replace("'", "''")
         _pretty_unicode = \
         sp.pretty(x,use_unicode=True).encode("utf-8").replace("\n","\\n").replace("'", "''")
-        if isinstance(x, sp.Matrix):
+        if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
+            if isinstance(x, sp.ImmutableMatrix):
+                dbout("Warning: ImmutableMatrix")
             _d = x.shape
             s = "sym('" +  _srepr  + "'" + \
                 ", [" +  str(_d[0]) + ' ' + str(_d[1])  + ']' + \
