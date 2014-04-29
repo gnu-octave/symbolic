@@ -1,12 +1,11 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -17,20 +16,29 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% -- Loadable Function: X = sym (Y)
-%%     Define symbols and numbers as symbolic expressions.
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
+%% @deftypefnx {Function File} {@var{x} =} sym (...)
+%% Define symbols and numbers as symbolic expressions.
 %%
-%%     Y can be an integer, a string or one of several special
-%%     double values.  It can also be a double matrix or a cell array.
+%% @var{y} can be an integer, a string or one of several special
+%% double values.  It can also be a double matrix or a cell
+%% array.
 %%
-%%     Examples:
+%% FIXME: needs more documentation.
 %%
-%%     x = sym ('x')
-%%     y = sym ('2')
-%%     y = sym (3)
-%%     y = sym (inf)
-%%     y = sym (pi)
-%%     y = sym ( sym (pi))   % idempotent
+%% Examples:
+%% @example
+%% x = sym ('x')
+%% y = sym ('2')
+%% y = sym (3)
+%% y = sym (inf)
+%% y = sym (pi)
+%% y = sym (sym (pi))   % idempotent
+%% @end example
+%%
+%% @seealso{syms}
+%% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
@@ -143,3 +151,9 @@ function s = sym(x, varargin)
 
   s = python_cmd ([ cmd '\nreturn (z,)' ]);
 
+end
+
+
+%!test
+%! assert (isa (sym (pi), 'sym'))
+%!assert (isa (sym ('beta'), 'sym'))

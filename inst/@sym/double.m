@@ -1,15 +1,56 @@
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{y} =} double (@var{x})
+%% @deftypefnx {Function File} {@var{y} =} double (@var{x}, false)
+%% Convert symbolic to doubles.
+%%
+%% Example:
+%% @example
+%% x = sym(1) / 3
+%% double (x)
+%% @end example
+%%
+%% If conversion fails, you get an error:
+%% @example
+%% syms x
+%% double (x)
+%% @end example
+%%
+%% You can pass an optional second argument of @code{false} to
+%% return an empty array if conversion fails on any component.
+%%
+%% Example:
+%% @example
+%% syms x
+%% a = [1 2 x];
+%% b = double (a, false)
+%% isempty (b)
+%% @end example
+%%
+%% @seealso{sym}
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function y = double(x, failerr)
-%DOUBLE   Convert symbolic to doubles
-%   Convert a sym x to double:
-%      y = double(x)
-%   If conversion fails, you get an error.
-%
-%   You can pass an optional "false" to return an empty array if
-%   conversion fails on any component.
-%      syms x
-%      a = [1 2 x];
-%      b = double(a, false)
-%      isempty(b)
 
   if (nargin == 1)
     failerr = true;
@@ -73,3 +114,11 @@ function y = double(x, failerr)
       error('Failed to convert %s ''%s'' to double', class(x), x.text);
     end
   end
+end
+
+
+%!assert (double (sym(10) == 10))
+%!assert (double (sym([10 12]) == [10 12]))
+%!test
+% assert (isempty (double (sym('x'), false)))
+% assert (isempty (double (sym([10 12 sym('x')]), false)))

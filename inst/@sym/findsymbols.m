@@ -1,12 +1,11 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -17,18 +16,26 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% -- Loadable Function: L = findsymbols (X)
-%%     Return a list (cell array) of the symbols in a symbolic expression
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
+%% Return a list (cell array) of the symbols in a symbolic expression.
 %%
-%%     The list is sorted alphabetically..
+%% The list is sorted alphabetically.
 %%
-%%     Note E, I, pi, etc are not counted as symbols.
+%% Note E, I, pi, etc are not counted as symbols.
+
+%% Similar behaviour to the built-in @code{all} with regard to
+%% matrices and the second argument.
+%%
+%% Throws an error if any entries are non-numeric.
+%%
+%% @seealso{symvar, findsym}
+%% @end deftypefn
 
 %% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, find
+%% Keywords: symbolic
 
 function L = findsymbols(x)
-
 
   cmd = [ 'x = _ins[0]\n'                       ...
           'if not x.is_Matrix:\n'               ...
@@ -42,6 +49,8 @@ function L = findsymbols(x)
           'return (l,)' ];
 
   L = python_cmd (cmd, x);
+
+end
 
 
 %!test

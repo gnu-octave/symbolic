@@ -1,12 +1,11 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -17,12 +16,32 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% -- Loadable Function: Y = all (X)
-%%     "all" for symbolic arrays
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{y} =} all (@var{x})
+%% @deftypefnx {Function File} {@var{y} =} all (@var{x}, @var{dim})
+%% Return true if all entries of a symbolic vector are nonzero.
 %%
-%%     Similar behaviour to the built-in "all".
+%% Similar behaviour to the built-in @code{all} with regard to
+%% matrices and the second argument.
 %%
-%%     Throws an error if any entries are non-numeric.
+%% Throws an error if any entries are non-numeric.
+%%
+%% @seealso{any}
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
+function z = all(x, varargin)
+
+  z = double (x, false);
+  if (isempty (z))
+    error ('indeterminable')
+  else
+    z = all (z, varargin{:});
+  end
+
+end
 
 
 %% Tests
@@ -50,12 +69,3 @@
 %! catch
 %! end
 
-
-function z = all(x, varargin)
-
-  z = double (x, false);
-  if (isempty (z))
-    error ('indeterminable')
-  else
-    z = all (z, varargin{:});
-  end

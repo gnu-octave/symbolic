@@ -1,12 +1,11 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -17,33 +16,38 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% Usage: y = symfun (Y)
-%% Define a symbolic function in terms of a symbolic expression Y, but
-%% usually you need not call this directly.
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{y} =} symfun (@var{x})
+%% Define a symbolic function (not usually called directly).
 %%
-%% Examples:
-%%
-%% x = sym('x')
+%% Example: note the symfun() constructor is not called directly.
+%% @example
+%% syms x
 %% y(x) = x^2
+%% y(2)
+%% @end example
 %%
-%% y(x) = sym(y(x))  % todo does this work in SMT?
+%% Unknown function examples:
+%% @example:
+%% syms x y     % FIXME: this unnecessary in the Matlab SMT?
+%% syms f(x) g(x,y)
+%% @end example
 %%
+%% Equivalently:
+%% @example
 %% x = sym('x')
 %% y = sym('y')
 %% f(x) = sym('f(x)')
 %% g(x,y) = sym('g(x,y)')
+%% @end example
 %%
-%% or
-%%
-%% syms f(x) g(x,y)   % todo needs x y syms in SMT?
+%% @seealso{sym, syms}
+%% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
 
 function f = symfun(expr, vars, varargin)
-%SYMFUN  Symbolic function class implemented with sympy
-%   Don't call directly.
-%
 
   if (nargin == 0)
     % octave docs say need a no argument default for loading from files

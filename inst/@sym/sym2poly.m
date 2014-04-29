@@ -49,8 +49,8 @@
 %%    Removed the attempt to use ldegree(), degree() and coeff() - results
 %%     with these are inconsistent.
 %% Changed: 16 April 2014
-%%    Used the comment header and tests in Octave-Symbolic-SymPy, but rewrote
-%%    the body using SymPy (by Colin Macdonald).
+%%    Used the comment header and tests in OctSymPy, but rewrote
+%%    the body (by Colin Macdonald).
 
 function c = sym2poly(p,x)
 
