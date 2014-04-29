@@ -11,11 +11,10 @@ num_passed = 0;
 for i=1:length(methods_list)
   m = methods_list{i};
   fprintf('**** Looking for tests in: %s\n', m);
-  [N,MAX] = test([base '/' m]); %, 'quiet');
+  % Must use this calling mode, https://savannah.gnu.org/bugs/?42150
+  [N,MAX] = test([base '/' m], [], stdout);
   num_tests = num_tests + MAX;
   num_passed = num_passed + N;
-  % this doesn't really work, bug in Octave?  MAX,N always zero
-  % if failures.  https://savannah.gnu.org/bugs/?42150
   if (MAX > 0)
     fprintf('**** %s Passed %d of %d\n', m, N, MAX);
     fprintf('%s\n\n', char('_'*ones(1,80)));
