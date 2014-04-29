@@ -21,6 +21,15 @@
 %%     Does a symbolic array have size 0 x 0
 %%
 
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{r} =} isempty (@var{x})
+%% Return true a symbolic array is empty (one dimension is zero).
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function r = isempty(x)
 
   d = size(x);
@@ -38,11 +47,10 @@ end
 %!assert (~isempty (sym (1)))
 %!assert (isempty (sym (se)))
 %!assert (isempty (se == []))
-%
-%% FIXME: need slicing and subindex, Bug #14
-%  xtest assert (isempty (a([])))
-%  xtest assert (isempty (a([se])))
-%
+%!test
+% assert (isempty (a([])))
+% assert (isempty (a([se])))
+
 %% Growing an empty symfun into a scalar
 %!test se(1) = 10;
 %!test assert ( isa (se, 'sym'))
