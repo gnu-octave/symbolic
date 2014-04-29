@@ -1,6 +1,7 @@
 #!/bin/sh
 
-VER=0.0.2
+VER=0.0.3
+TAG=v${VER}
 PKG=octsympy-$VER
 DIR=$PKG
 
@@ -13,7 +14,7 @@ read -p "Press [Enter] to git clone and make packages..."
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 pushd octsympy
-git checkout tags/v0.0.2
+git checkout tags/${TAG}
 popd
 
 
