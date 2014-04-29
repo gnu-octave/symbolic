@@ -14,8 +14,11 @@ read -p "Press [Enter] to git clone and make packages..."
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 pushd octsympy
+# for testing before tagging
+#git checkout master
 git checkout tags/${TAG}
 popd
+
 
 
 # clean up
