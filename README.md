@@ -26,11 +26,11 @@ How to Install
 1. The only dependencies are Python and SymPy.  Consult the SymPy
 website (e.g., "yum install sympy" on Fedora)
 
-2. Download the octsympy source as a .tar.gz.
+2. Download the latest release, e.g., octsympy-0.0.3.tar.gz
 
-3. Run Octave in the folder containing the octsympy-x.y.z.tar.gz file.
+3. Run Octave in the folder containing the octsympy-0.0.3.tar.gz file.
 
-4. At Octave prompt, type "pkg install octsympy-x.y.z.tar.gz".
+4. At Octave prompt, type "pkg install octsympy-0.0.03.tar.gz".
 
 5. At Octave prompt, type "pkg load octsympy".
 
@@ -45,8 +45,7 @@ Generate Python code to do the actual work.  Sym objects keep a text
 field for display purposes and a string (currently an SymPy ``srepr'')
 of their python object.  The objects are communicated between Python
 and Octave by passing the srepr's back-and-forth.  Currently pure
-m-file (and Python) implementation.
-
+m-file (and Python) implementation, no code to be compiled.
 
 
 Communication
@@ -61,7 +60,7 @@ implemented.
 Related Projects
 ----------------
 
-* The Octave-Forge symbolic toolbox [http://octave.sourceforge.net/symbolic/index.html].  VPA is pretty good.
+* The Octave-Forge symbolic toolbox [http://octave.sourceforge.net/symbolic/index.html].  My impression is the VPA is pretty good.
 
 * "SymPy CAS" by Jonathan Lister [http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab].  Calls SymPy commands using calls to system().
 
