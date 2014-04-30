@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald and others
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
 %% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
-%% Find symbols in expression and return them as a symbolic vector
+%% Find symbols in expression and return them as a symbolic vector.
 %%
 %% The symbols are sorted in alphabetic order with capital letters
 %% first.  If @var{n} is specified, the @var{n} symbols closest to

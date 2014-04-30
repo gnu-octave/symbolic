@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File}  {@var{g}} factor (@var{f})
 %% @deftypefnx {Function File}  {@var{p,m}} factor (@var{f})
-%% Factor a symbolic polynomial or integer
+%% Factor a symbolic polynomial or integer.
 %%
 %% @seealso{expand}
 %% @end deftypefn

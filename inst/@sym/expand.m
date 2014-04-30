@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File}  {@var{y}} expand (@var{x})
-%% Combine parts of a symbolic product
+%% Combine parts of a symbolic product.
 %%
 %% @seealso{factor}
 %% @end deftypefn

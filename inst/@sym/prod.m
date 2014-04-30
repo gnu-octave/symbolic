@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{y} =} prod (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} prod (@var{x}, @var{n})
-%% Product of symbolic expressions
+%% Product of symbolic expressions.
 %%
 %% Can specify row or column sums using @var{n}.
 %%
@@ -33,6 +33,7 @@
 %% f = prod([x y; x z], 2)
 %% @end example
 %%
+%% @seealso{sum}
 %% @end deftypefn
 
 function y = prod(x, n)

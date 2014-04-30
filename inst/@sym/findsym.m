@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{S} =} findsym (@var{expr})
 %% @deftypefnx {Function File} {@var{S} =} findsym (@var{expr}, @var{n})
-%% Find symbols in expression, return them as comma-separated string
+%% Find symbols in expression, return them as comma-separated string.
 %%
 %% See @code{symvar}, this just concatenates its output into a
 %% string.

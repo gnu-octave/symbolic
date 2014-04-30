@@ -1,18 +1,50 @@
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
+%% Replace symbols in an expression with other expressions.
+%%
+%% Example replacing x with y.
+%% @example
+%% f = x*y;
+%% subs(f, x, y)
+%% @end example
+%%
+%% @example
+%% subs(f, x, sin(x))
+%% subs(f, @{x y@}, @{sin(x) 16@})
+%%
+%% F = [x x*y; 2*x*y y];
+%% subs(F, @{x y@}, @{2 sym(pi)@})
+%% subs(F, @{x y@}, [2 sym(pi)])
+%% subs(F, [x y], [2 sym(pi)])
+%% subs(F, [x y], @{2 sym(pi)@})
+%% @end example
+%%
+%% @seealso{symfun}
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic, substitution
+
+
 function g = subs(f, in, out)
-%SUBS   replace symbols in an expression with other expressions
-%   f = x*y;
-%   subs(f, x, y)
-%      replaces x with y.
-%
-%   subs(f, x, sin(x))
-%
-%   subs(f, {x y}, {sin(x) 16})
-%
-%   F = [x x*y; 2*x*y y];
-%   subs(F, {x y}, {2 sym(pi)})
-%   subs(F, {x y}, [2 sym(pi)])
-%   subs(F, [x y], [2 sym(pi)])
-%   subs(F, [x y], {2 sym(pi)})
 
   %% Simple code for scalar x
   % The more general code would work fine, but maybe this makes some

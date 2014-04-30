@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File}  {} pretty (@var{x})
 %% @deftypefnx {Function File}  {@var{s} =} pretty (@var{x})
-%% Return or display ASCII-art/unicode representation of a symbolic expression
+%% Return/display ASCII-art representation of symbolic expression.
 %%
 %% Note: pretty(x) works like disp(x) (makes output even if has a
 %% semicolon)

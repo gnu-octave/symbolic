@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{b} =} bernoulli (@var{n})
 %% @deftypefnx {Function File} {@var{p} =} bernoulli (@var{n}, @var{x})
-%% Return Bernouilli numbers and polynomials
+%% Return Bernouilli numbers and polynomials.
 %%
 %%
 %% @seealso{euler}

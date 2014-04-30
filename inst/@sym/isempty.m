@@ -16,10 +16,6 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% -- Loadable Function: isempty (X)
-%%     Does a symbolic array have size 0 x 0
-%%
-
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{r} =} isempty (@var{x})
 %% Return true a symbolic array is empty (one dimension is zero).

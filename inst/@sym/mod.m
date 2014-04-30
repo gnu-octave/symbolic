@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{y} =} mod (@var{x}, @var{n})
-%% Element-wise modular arithmetic on symbolic arrays and polynomials
+%% Element-wise modular arithmetic on symbolic arrays and polynomials.
 %%
 %% If any of the entries contain variables, we assume they are
 %% polynomials and convert their coefficients to mod @var{n}.

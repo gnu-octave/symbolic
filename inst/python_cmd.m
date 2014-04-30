@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -21,7 +21,7 @@
 %% Run some Python command on some objects and return other objects.
 %%
 %% Here @var{cmd} is a string of Python code.
-%% Inputs @var{x}@, @var{y}@, ... can be a variety of objects
+%% Inputs @var{x}, @var{y}, ... can be a variety of objects
 %% (possible types listed below). Outputs @var{a}, @var{b}, ... are
 %% converted from Python objects: not all types are possible, see
 %% below.

@@ -1,6 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
 %%
-%% This file is part of OctSymPy
+%% This file is part of OctSymPy.
 %%
 %% OctSymPy is free software; you can redistribute it and/or modify
 %% it under the terms of the GNU General Public License as published
@@ -23,7 +23,7 @@
 %% The list is sorted alphabetically.
 %%
 %% Note E, I, pi, etc are not counted as symbols.
-
+%%
 %% Similar behaviour to the built-in @code{all} with regard to
 %% matrices and the second argument.
 %%
