@@ -107,10 +107,10 @@ def remove_all(L):
 
 
 
-def autogen_functions(L):
+def autogen_functions(L, where):
     for d in L:
         f = d['name'];
-        fname = '../inst/@sym/%s.m' % f
+        fname = '%s/@sym/%s.m' % (where,f)
         print fname
 
         fd = open(fname, "w")
@@ -137,11 +137,11 @@ def autogen_functions(L):
         fd.close()
 
 
-def make_unit_tests(L):
+def make_unit_tests(L, where):
     """make simple unit tests"""
     for d in L:
         f = d['name'];
-        fname = '../inst/unittests/test_autogen_%s.m' % f
+        fname = '%s/unittests/test_autogen_%s.m' % (where, f)
         print fname
         fd = open(fname, "w")
         fd.write ("function r = test_autogen_%s()\n" % f)
@@ -188,6 +188,7 @@ def print_usage():
     print """
   Run this script with one argument:
     python generate_functions install:  make m files in ../inst/@sym
+    python generate_functions ml_install:  make m files in ../matlab/@sym
     python generate_functions clean:  remove them from above
     python generate_functions gitignore:  generate lines for gitignore (for devs)
 """
@@ -200,9 +201,14 @@ if __name__ == "__main__":
 
     elif sys.argv[1] == 'install':
         print "***** Generating code for .m files from template ****"
-        autogen_functions(L)
+        autogen_functions(L, '../inst')
         # FIXME where to put the unit tests?
-        make_unit_tests(L)
+        make_unit_tests(L, '../inst')
+    elif sys.argv[1] == 'ml_install':
+        print "***** Generating code for .m files from template ****"
+        autogen_functions(L, '../matlab')
+        # FIXME where to put the unit tests?
+        make_unit_tests(L, '../matlab')
     elif sys.argv[1] == 'clean':
         print "cleaning up"
         remove_all(L)

@@ -7,11 +7,15 @@ FIXME: move .py file here to src/ eventually?
 import sys
 import os
 
-#def embed():
-if 1==1:
+if __name__ == "__main__":
     base = 'python_header'
-    finname = '../inst/private/%s.py' % base
-    foutname = '../inst/private/%s_embed.m' % base
+
+    if sys.argv[1] == 'oct':
+        finname = '../inst/private/%s.py' % base
+        foutname = '../inst/private/%s_embed.m' % base
+    elif sys.argv[1] == 'ml':
+        finname = '../matlab/private/%s.py' % base
+        foutname = '../matlab/private/%s_embed.m' % base
 
 
     fd = open(finname, "r")
