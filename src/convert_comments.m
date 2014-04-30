@@ -20,7 +20,7 @@ function convert_comments (basedir, subdir, dirout)
         else
           octname = [subdir '/' name ext];
         end
-        fprintf('**** PROCESSING %s ****\n', octname)
+        fprintf('**** Processing %s ****\n', octname)
         r = convert_oct_2_ml (octname, [dirout octname]);
         if ~r
           [status, msg, msgid] = copyfile (octname, [dirout octname], 'f');
