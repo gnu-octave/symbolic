@@ -20,6 +20,8 @@
 %% @deftypefn  {Function File} {} cat ()
 %% Overloaded cat for sym class, perhaps unnecessary.
 %%
+%% FIXME: do we need this?
+%%
 %% @seealso{vertcat,horzcat}
 %% @end deftypefn
 

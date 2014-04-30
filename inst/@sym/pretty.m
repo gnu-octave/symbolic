@@ -27,7 +27,7 @@
 %% FIXME: use_unicode as a global var?, use_unicode=False)
 %% FIXME: wrapping column?
 %%
-%% @seealso{disp}
+%% @seealso{disp,latex}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
