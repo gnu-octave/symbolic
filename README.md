@@ -3,6 +3,7 @@ OctSymPy
 
 An implementation of a symbolic toolbox using SymPy.
 
+[https://github.com/cbm755/octsympy]
 
 
 Goals
@@ -11,6 +12,7 @@ Goals
 Feature parity with the other symbolic toolboxes.
 
 ![ScreenShot](/screenshot.png)
+
 
 
 Status
@@ -38,6 +40,35 @@ website (e.g., "yum install sympy" on Fedora)
 
 
 
+How to Install on Matlab
+------------------------
+
+Although OctSymPy is designed for GNU Octave, it will work with
+Matlab.  Currently only the slower system()-based communication is
+available.
+
+1.  Download the latest release.
+
+2.  Unzip is somewhere and add it to your Matlab Path.
+
+The .m files for Matlab have been reformatted for Matlab comment
+conventions, but are otherwise the same as the Octave source.
+
+
+
+How to Hack
+-----------
+
+1.  Clone the repo.
+
+2.  Go to octsympy/src/ and type "make".  (You only need to do this
+again if you change the inst/private/python_header.py or various
+autogeneration scripts in src/.)
+
+3.  Run Octave or Matlab in octsympy/inst/.
+
+
+
 Implementation
 --------------
 
@@ -46,6 +77,7 @@ field for display purposes and a string (currently an SymPy ``srepr'')
 of their python object.  The objects are communicated between Python
 and Octave by passing the srepr's back-and-forth.  Currently pure
 m-file (and Python) implementation, no code to be compiled.
+
 
 
 Communication
