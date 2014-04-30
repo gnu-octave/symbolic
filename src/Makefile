@@ -38,6 +38,7 @@ ml_copy: ml_convert
 	cp -af ../COPYING ../matlab/
 	cp -af ../matlab_smt_differences.md ../matlab/
 	cp -af ../README.md ../matlab/
+	cp -af ../README.matlab.md ../matlab/
 
 ml_convert:
 	mkdir -p ../matlab/@sym/
