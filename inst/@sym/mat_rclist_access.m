@@ -1,7 +1,34 @@
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{z}} mat_rclist_access (@var{A}, @var{r}, @var{c})
+%% Private helper routine for sym array access via lists of row/col.
+%%
+%% @code{(r(i),c(i))} specify entries of the matrix @var{A}.
+%% Returns a column vector of these extracted from @var{A}.
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function z = mat_rclist_access(A, r, c)
-%MAT_RCLIST_ACCESS  private helper routine
-%   (r(i),c(i)) specify entries of the matrix A.
-%   Returns a column vector of these extracted from A.
 
   if ~( isvector(r) && isvector(c) && (length(r) == length(c)) )
     error('this routine is for a list of rows and cols');

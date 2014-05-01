@@ -1,15 +1,39 @@
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{z}} mat_mask_access (@var{A}, @var{I})
+%% Private helper routine for symbolic array access via mask.
+%%
+%% Notes on shape, from observing Matlab/Octave behaviour on doubles:
+%% @itemize
+%% @item If A is a vector, Z always has the same orientation as A.
+%% @item If A is a matrix and if I is a vector than Z has the same
+%%       orientation as I.
+%% @item In all other cases (?) result is a column vector.
+%% @end itemize
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function Z = mat_mask_access(A, I)
-%MAT_MASK_ACCESS  Private helper routine
-%   Z = mat_mask_access(A, I)
-%
-%   Notes on shape, from observing Matlab/Octave behaviour on doubles:
-%
-%   1) If A is a vector, Z always has the same orientation as A.
-%
-%   2) If A is a matrix and if I is a vector than Z has the same
-%   orientation as I.
-%
-%   3) In all other cases (?) result is a column vector
 
   if (~islogical(I))
     error('subscript indices must be either positive integers or logicals')

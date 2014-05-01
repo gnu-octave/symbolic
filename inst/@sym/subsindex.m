@@ -17,25 +17,16 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} axplusy (@var{a}, @var{x}, @var{y})
-%% Helper function: scalar a times sym x plus sym y.
+%% @deftypefn  {Function File} {} subsindex ()
+%% Used to implement indexing by sym, FIXME not implemented.
+%%
+%% FIXME: issue #34.
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = axplusy(a, x, y)
+function subsindex(varargin)
 
-  cmd = [ '(a,x,y) = _ins\n'  ...
-          'if x.is_Matrix and y.is_Matrix:\n'  ...
-          '    return ( a*x+y ,)\n' ...
-          'if x.is_Matrix and not y.is_Matrix:\n'  ...
-          '    return ( a*x + y*sp.ones(*x.shape) ,)\n' ...
-          'if not x.is_Matrix and y.is_Matrix:\n'  ...
-          '    return ( a*x*sp.ones(*y.shape) + y ,)\n' ...
-          'else:\n' ...
-          '    return ( a*x + y ,)' ];
-
-  z = python_cmd (cmd, sym(a), sym(x), sym(y));
-
+  error('Fail!  FIXME: implement subindex.  Issue #14 and Issue #34 on Github')

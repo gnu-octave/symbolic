@@ -1,10 +1,39 @@
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{z}} mat_rccross_access (@var{A}, @var{r}, @var{c})
+%% Private helper routine for symbolic array access.
+%%
+%% Access entries of @var{A} that are the cross product of vectors
+%% @var{r} and @var{c}.  @var{r} and @var{c} could be strings.
+%% Namely @code{':'}.
+%%
+%% @var{r} and @var{c} could contain duplicates.  This is one
+%% reason by this code doesn't easily replace
+%% @code{mat_rclist_access}.
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
+
 function z = mat_rccross_access(A, r, c)
-%MAT_RCCROSS_ACCESS  private helper routine
-%   Access entries of A that are the cross product of vectors r and c
-%   r and c could be strings.  Namely ':' and ':'
-%
-%   r and c could contain duplicates.  This is one reason by this
-%   code doesn't easily replace mat_rclist_access().
 
   if ((r == ':') && (c == ':'))
     z = A;
