@@ -53,7 +53,7 @@ function s = sym(x, varargin)
   %% The actual class constructor
   % tempting to put this elsewhere (the 'private ctor') but we need
   % to access it from the python ipc stuff: outside the class.
-  if (nargin > 1)
+  if (nargin > 2)
     s.pickle = x;
     s.size = varargin{1};
     s.flattext = varargin{2};
@@ -63,6 +63,23 @@ function s = sym(x, varargin)
     return
   end
 
+  % FIXME not careful enough with the x argument here?
+  if (nargin == 2)
+    disp('make w/ assumptions')
+    asm = varargin{1};
+    if (~ischar(x))
+      error('invalid input');
+    end
+    if strcmp(asm, 'real')
+      cmd = sprintf('z = sympy.Symbol("%s", real=True)', x)
+    elseif strcmp(asm, 'positive')
+      cmd = sprintf('z = sympy.symbols("%s", positive=True)', x)
+    else
+      error('that assumption not supported')
+    end
+    s = python_cmd ([ cmd '\nreturn (z,)' ]);
+    return
+  end
 
   %% User interface for defining sym
   % sym(1), sym('x'), etc.
