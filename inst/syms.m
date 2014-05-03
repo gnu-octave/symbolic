@@ -43,10 +43,23 @@
 
 function syms(varargin)
 
-  % todo, support symfuns via syms y(x)
-  for i = 1:nargin
-    cmd = sprintf('%s = sym(''%s'');', varargin{i}, varargin{i});
-    %disp(['evaluating command: ' cmd])
-    evalin('caller', cmd)
+  % output names of symbolic vars
+  if (nargin == 0)
+    S = evalin('caller', 'whos');
+    for i=1:numel(S)
+      %S(i)
+      if strcmp(S(i).class, 'sym')
+        disp(S(i).name)
+      elseif strcmp(S(i).class, 'symfun')
+        disp([S(i).name ' (symfun)'])
+      end
+    end
+
+  else
+    for i = 1:nargin
+      cmd = sprintf('%s = sym(''%s'');', varargin{i}, varargin{i});
+      %disp(['evaluating command: ' cmd])
+      evalin('caller', cmd)
+    end
   end
 
