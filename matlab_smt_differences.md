@@ -36,3 +36,6 @@ Differences
 * SMT's sym() constructor allows big string expressions: we don't
   really support that (and its not the way modern SMT is used either).
   Build your expressions like sym(x)/2 rather than sym('x/2').
+* OctSymPy has [p,m] = factor(a) which returns an array of the
+  prime factors and their multiplicities.  Matlab 'factor' has
+  this but strangely SMT does not.
