@@ -74,6 +74,12 @@ function s = sym(x, varargin)
       cmd = sprintf('z = sympy.Symbol("%s", real=True)', x)
     elseif strcmp(asm, 'positive')
       cmd = sprintf('z = sympy.symbols("%s", positive=True)', x)
+    elseif strcmp(asm, 'integer')
+      cmd = sprintf('z = sympy.symbols("%s", integer=True)', x)
+    elseif strcmp(asm, 'even')
+      cmd = sprintf('z = sympy.symbols("%s", even=True)', x)
+    elseif strcmp(asm, 'odd')
+      cmd = sprintf('z = sympy.symbols("%s", odd=True)', x)
     else
       error('that assumption not supported')
     end

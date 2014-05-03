@@ -23,6 +23,37 @@ def dictdiff(a, b):
     return n
 
 
+import sympy.printing
+
+class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
+    def _print_Symbol(self, expr):
+        asm = expr.assumptions0
+        # Not strictly necessary but here are some common cases so we
+        # can abbreviate them.  Even better would be some
+        # "minimal_assumptions" code, but I didn't see such a thing.
+        asm_default = {'commutative':True}
+        asm_real = {'commutative':True, 'complex':True, 'hermitian':True, 'imaginary':False, 'real':True}
+        asm_pos = {'commutative':True, 'complex':True, 'hermitian':True, 'imaginary':False, 'negative':False, 'nonnegative':True, 'nonpositive':False, 'nonzero':True, 'positive':True, 'real':True, 'zero':False}
+        #
+        if asm == asm_default:
+            xtra = ""
+        elif asm == asm_real:
+            xtra = ", real=True"
+        elif asm == asm_pos:
+            xtra = ", positive=True"
+        else:
+            xtra = ""
+            for (key,val) in asm.iteritems():
+                xtra = xtra + ", %s=%s" % (key,val)
+        return "%s(%s%s)" %  (expr.__class__.__name__, self._print(expr.name), xtra)
+
+
+
+def my_srepr(expr, **settings):
+    """return expr in repr form w/ assumptions listed"""
+    return _ReprPrinter_w_asm(settings).doprint(expr)
+
+
 def objectfilter(x):
     """Perform final fixes before passing objects back to Octave"""
     #FIXME: replace immutable matrices here?
@@ -42,7 +73,7 @@ def octcmd(x):
     if isinstance(x, (sp.Basic,sp.Matrix)):
         # could escape, but does single quotes too
         #_srepr = sp.srepr(x).encode("string_escape").replace("'", "''")
-        _srepr = sp.srepr(x).replace("'", "''")
+        _srepr = my_srepr(x).replace("'", "''")
         _str = str(x).encode("string_escape").replace("'", "''")
         _pretty_ascii = \
         sp.pretty(x,use_unicode=False).encode("string_escape").replace("'", "''")
