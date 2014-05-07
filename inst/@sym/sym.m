@@ -162,9 +162,9 @@ function s = sym(x, varargin)
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I';
     %% Symbols with special meanings in SymPy: Issue #23
-    elseif (strcmp(x, 'beta')),   cmd = 'z = sympy.abc.beta';
-    elseif (strcmp(x, 'gamma')),  cmd = 'z = sympy.abc.gamma';
-    elseif (strcmp(x, 'zeta')),   cmd = 'z = sympy.abc.zeta';
+    elseif (strcmp(x, 'beta')),   cmd = 'z = sympy.Symbol("beta")';
+    elseif (strcmp(x, 'gamma')),  cmd = 'z = sympy.Symbol("gamma")';
+    elseif (strcmp(x, 'zeta')),   cmd = 'z = sympy.Symbol("zeta")';
     elseif (strcmp(x, 'lambda')), cmd = 'z = sympy.Symbol("lamda")'; %not typo
     elseif (strcmp(x, 'Lambda')), cmd = 'z = sympy.Symbol("Lamda")'; %not typo
     elseif (strcmp(x, 'Chi')),    cmd = 'z = sympy.Symbol("Chi")';
