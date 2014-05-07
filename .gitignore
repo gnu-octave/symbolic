@@ -9,6 +9,7 @@ outlog.txt
 
 #fixme: workaround for pkg-add issue
 inst/poly2sym.m
+inst/assumptions.m
 
 inst/private/python_header_embed.m
 

@@ -14,8 +14,10 @@ codegen:
 
 workaround:
 	cp -fa ../inst/@sym/poly2sym.m ../inst/
+	cp -fa ../inst/@sym/assumptions.m ../inst/
 ml_workaround: ml_copy
 	cp -fa ../matlab/@sym/poly2sym.m ../matlab/
+	cp -fa ../inst/@sym/assumptions.m ../matlab/
 
 
 codegen_clean:
@@ -24,6 +26,7 @@ codegen_clean:
 
 workaround_undo:
 	rm -f ../inst/poly2sym.m
+	rm -f ../inst/assumptions.m
 
 ml_codegen: ml_copy
 	python generate_functions.py ml_install
