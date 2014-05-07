@@ -37,7 +37,16 @@
 %% y = sym (sym (pi))   % idempotent
 %% @end example
 %%
-%% @seealso{syms}
+%% A second argument provides an assumption @xref{assumptions},
+%% or restriction on the type of the symbol.
+%% @example
+%% x = sym ('x', 'positive')
+%% @end example
+%% The following options are supported:
+%% 'real', 'positive', 'integer', 'even', 'odd', 'rational'.
+%% Others are supported in SymPy but not exposed here.
+%%
+%% @seealso{syms,assumption}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -65,21 +74,23 @@ function s = sym(x, varargin)
 
   % FIXME not careful enough with the x argument here?
   if (nargin == 2)
-    disp('make w/ assumptions')
+    %disp('make w/ assumptions')
     asm = varargin{1};
     if (~ischar(x))
       error('invalid input');
     end
     if strcmp(asm, 'real')
-      cmd = sprintf('z = sympy.Symbol("%s", real=True)', x)
+      cmd = sprintf('z = sympy.Symbol("%s", real=True)', x);
     elseif strcmp(asm, 'positive')
-      cmd = sprintf('z = sympy.symbols("%s", positive=True)', x)
+      cmd = sprintf('z = sympy.Symbol("%s", positive=True)', x);
     elseif strcmp(asm, 'integer')
-      cmd = sprintf('z = sympy.symbols("%s", integer=True)', x)
+      cmd = sprintf('z = sympy.Symbol("%s", integer=True)', x);
     elseif strcmp(asm, 'even')
-      cmd = sprintf('z = sympy.symbols("%s", even=True)', x)
+      cmd = sprintf('z = sympy.Symbol("%s", even=True)', x);
     elseif strcmp(asm, 'odd')
-      cmd = sprintf('z = sympy.symbols("%s", odd=True)', x)
+      cmd = sprintf('z = sympy.Symbol("%s", odd=True)', x);
+    elseif strcmp(asm, 'rational')
+      cmd = sprintf('z = sympy.Symbol("%s", rational=True)', x);
     else
       error('that assumption not supported')
     end
