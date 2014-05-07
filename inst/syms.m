@@ -19,6 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {} syms @var{x}
 %% @deftypefnx {Function File} {} syms @var{f(x)}
+%% @deftypefnx {Function File} {} syms
 %% Create symbolic variables and symbolic functions.
 %%
 %% This is a convenience function.  For example:
@@ -32,8 +33,17 @@
 %% z = sym('z');
 %% @end example
 %%
-%% Careful: this code runs evalin(): you should not use it
-%% (programmatically) on strings you don't trust.
+%% The last argument can provide an assumption (type or
+%% restriction) on the variable (@xref{sym}, for details.)
+%% @example
+%% syms x y z positive
+%% @end example
+%%
+%% Called without arguments, @code{syms} displays a list of
+%% all symbolic functions defined in the current workspace.
+%%
+%% Careful: this code runs @code{evalin()}: you should not
+%% use it (programmatically) on strings you don't trust.
 %%
 %% @seealso{sym}
 %% @end deftypefn
@@ -51,15 +61,23 @@ function syms(varargin)
       if strcmp(S(i).class, 'sym')
         disp(S(i).name)
       elseif strcmp(S(i).class, 'symfun')
+        % FIXME improve display of symfun
         disp([S(i).name ' (symfun)'])
       end
     end
+    return
+  end
 
+  asm = varargin{end};
+  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || strcmp(asm, 'even') || strcmp(asm, 'odd'))
+    asm = [', ''' asm ''''];
+    last = nargin-1;
   else
-    for i = 1:nargin
-      cmd = sprintf('%s = sym(''%s'');', varargin{i}, varargin{i});
-      %disp(['evaluating command: ' cmd])
-      evalin('caller', cmd)
-    end
+    asm = '';
+    last = nargin;
+  end
+  for i = 1:last
+    cmd = sprintf('%s = sym(''%s''%s);', varargin{i}, varargin{i}, asm);
+    evalin('caller', cmd)
   end
 
