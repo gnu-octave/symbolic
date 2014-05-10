@@ -53,7 +53,8 @@
 
 function syms(varargin)
 
-  % output names of symbolic vars
+  %% No inputs
+  %output names of symbolic vars
   if (nargin == 0)
     S = evalin('caller', 'whos');
     for i=1:numel(S)
@@ -69,7 +70,7 @@ function syms(varargin)
   end
 
   asm = varargin{end};
-  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || strcmp(asm, 'even') || strcmp(asm, 'odd'))
+  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || strcmp(asm, 'even') || strcmp(asm, 'odd') || strcmp(asm, 'rational'))
     asm = [', ''' asm ''''];
     last = nargin-1;
   else

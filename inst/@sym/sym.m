@@ -44,7 +44,15 @@
 %% @end example
 %% The following options are supported:
 %% 'real', 'positive', 'integer', 'even', 'odd', 'rational'.
-%% Others are supported in SymPy but not exposed here.
+%% Others are supported in SymPy but not exposed directly here.
+%%
+%% Caution: it is possible to create multiple variants of the
+%% same symbol with different assumptions.
+%% @example
+%% x1 = sym('x')
+%% x2 = sym('x', 'positive')
+%% x1 == x2   % false
+%% @end example
 %%
 %% @seealso{syms,assumption}
 %% @end deftypefn
@@ -73,13 +81,19 @@ function s = sym(x, varargin)
   end
 
   % FIXME not careful enough with the x argument here?
+  % for example, see lambda->lamda below
   if (nargin == 2)
     %disp('make w/ assumptions')
     asm = varargin{1};
     if (~ischar(x))
       error('invalid input');
     end
-    if strcmp(asm, 'real')
+    if isstruct(asm) && isscalar(asm)
+      % we have an assumptions dict
+      cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
+      s = python_cmd (cmd, asm);
+      return
+    elseif strcmp(asm, 'real')
       cmd = sprintf('z = sympy.Symbol("%s", real=True)', x);
     elseif strcmp(asm, 'positive')
       cmd = sprintf('z = sympy.Symbol("%s", positive=True)', x);

@@ -19,53 +19,127 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{A} =} assumptions ()
 %% @deftypefnx {Function File} {@var{A} =} assumptions (@var{x})
+%% @deftypefnx {Function File} {@var{v} @var{d} =} assumptions (@var{x}, 'dict')
 %% List assumptions on symbolic variables.
 %%
 %% The assumptions are turned as a cell-array of strings.
 %%
-%% FIXME: could also have a flag to return the assumption
-%% dictionaries.
+%% With the optional second argument set to @code{'dict'},
+%% return the assumption dictionaries in @var{d} corresponding
+%% to the variables in @var{v}.
 %%
-%% @seealso{assume, sym}
+%% @seealso{sym, syms, assume, assumeAlso}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function A = assumptions(F)
+function [A,B] = assumptions(F, outp)
 
-  if (nargin == 1)
-    cmd = [ ...
+  if ((nargin == 0) || isempty(F))
+    find_all_free_symbols = true;
+  else
+    find_all_free_symbols = false;
+  end
+  if (nargin <= 1)
+    outp = 'no';
+  end
+  if ((nargin >= 1) && ~isempty(F))
+    assert(isa(F, 'sym'))
+  end
+
+
+  if (find_all_free_symbols)
+    %% no input arguments
+    % find all syms, check each for free symbols
+    alls = {}; c = 0;
+    S = evalin('caller', 'whos');
+    for i = 1:numel(S)
+      if strcmp(S(i).class, 'sym')
+        v=evalin('caller', S(i).name);
+        t = findsymbols(v);
+        alls(end+1:end+length(t)) = t(:);
+      elseif strcmp(S(i).class, 'symfun')
+        warning('FIXME: need to do anything special for symfun vars?')
+        v=evalin('caller', S(i).name);
+        t = findsymbols(v);
+        alls(end+1:end+length(t)) = t(:);
+      end
+    end
+    F = [alls{:}];
+    % F probably has dups but that doesn't matter for next step
+  end
+
+
+  % Note: we abbreviate certain assumptions dicts to shorter
+  % equivalent forms.  Probably should have some central
+  % py fcn for this (FIXME: maybe SymPy has already?)
+  % See also, sym.m and syms.m.
+  % Could also return abbreviated dicts here?  Although that
+  % is bound to cause trouble for someone....
+  cmd = [ ...
     'x = _ins[0]\n'...
+    'outputdict = _ins[1]\n'...
     '# saved cases to abbreviate later\n'...
-    'asm_default = {"commutative":True}\n'...
-    'asm_real = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "real":True}\n'...
-    'asm_pos = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "negative":False, "nonnegative":True, "nonpositive":False, "nonzero":True, "positive":True, "real":True, "zero":False}\n'...
-    'asm = x.assumptions0\n'...
-    'if asm == asm_default:\n'...
-    '    xtra = ""\n'...
-    'elif asm == asm_real:\n'...
-    '    #xtra = {"real":True}\n'...
-    '    xtra = "real"\n'...
-    'elif asm == asm_pos:\n'...
-    '    xtra = "positive"\n'...
+    'adict_default = {"commutative":True}\n'...
+    'adict_real = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "real":True}\n'...
+    'adict_pos = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "negative":False, "nonnegative":True, "nonpositive":False, "nonzero":True, "positive":True, "real":True, "zero":False}\n'...
+    'adict_odd = {"even":False, "nonzero":True, "commutative":True, "noninteger":False, "hermitian":True, "zero":False, "complex":True, "rational":True, "real":True, "integer":True, "imaginary":False, "odd":True, "irrational":False}\n'...
+    'adict_even = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}\n'...
+    'adict_integer = {"real":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "irrational":False}\n'...
+    'adict_rational = {"real":True, "commutative":True, "hermitian":True, "complex":True, "rational":True, "imaginary":False, "irrational":False}\n'...
+    'adict = x.assumptions0\n'...
+    'if adict == adict_default:\n'...
+    '    astr = ""\n'...
+    '    #adict={}\n'...
+    'elif adict == adict_real:\n'...
+    '    astr = "real"\n'...
+    '    #adict = {"real":True}\n'...
+    'elif adict == adict_pos:\n'...
+    '    astr = "positive"\n'...
+    '    #adict = {"positive":True}\n'...
+    'elif adict == adict_integer:\n'...
+    '    astr = "integer"\n'...
+    '    #adict = {"integer":True}\n'...
+    'elif adict == adict_even:\n'...
+    '    astr = "even"\n'...
+    '    #adict = {"even":True}\n'...
+    'elif adict == adict_odd:\n'...
+    '    astr = "odd"\n'...
+    '    #adict = {"odd":True}\n'...
+    'elif adict == adict_rational:\n'...
+    '    astr = "rational"\n'...
+    '    #adict = {"rational":True}\n'...
     'else:\n'...
-    '    xtra = str(asm)\n'...
-    '    xtra = xtra.replace("True","1").replace("False","0").replace(": ",":")\n'...
-    '#xtra = str(x) + ": " + xtra\n'...
-    '#return (xtra,asm)\n'...
-    'return (xtra,)\n'...
-    ];
-    s = findsymbols(F);
-    c = 0; A = {};
-    for i=1:length(s)
+    '    astr = str(adict)\n'...
+    '    astr = astr.replace("True","1").replace("False","0").replace(" ",":")\n'...
+    '#astr = str(x) + ": " + astr\n'...
+    'if outputdict:\n'...
+    '    return (astr,adict)\n'...
+    'else:\n'...
+    '    return (astr,)\n'...
+  ];
+  c = 0; A = {}; B = {};
+  if (isempty(F))
+    return
+  end
+  s = findsymbols(F);
+  for i=1:length(s)
       x = s{i};
-      %[astr,adict] = python_cmd(cmd, x);
-      astr = python_cmd(cmd, x);
+      if strcmp(outp, 'dict')
+        [astr, adict] = python_cmd(cmd, x, true);
+      else
+        astr = python_cmd(cmd, x, false);
+      end
       if ~isempty(astr)
-        str = deblank([disp(x) ': ' disp(astr)]);
+        str = strtrim([disp(x) ': ' disp(astr)]);
         c = c + 1;
-        A{c} = str;
+        if strcmp(outp, 'dict')
+          B{c} = adict;
+          A{c} = s;
+        else
+          A{c} = str;
+        end
         %if c == 1
         %  A = str;
         %elseif c == 2
@@ -74,31 +148,7 @@ function A = assumptions(F)
         %  A{c} = str;
         %end
       end
-    end
-    return
   end
-
-  %% no input arguments
-  % find all syms, check each
-  alls = {}; c = 0;
-  S = evalin('caller', 'whos');
-  for i = 1:numel(S)
-    if strcmp(S(i).class, 'sym')
-      v=evalin('caller', S(i).name);
-      t = findsymbols(v);
-      alls(end+1:end+length(t)) = t(:);
-    elseif strcmp(S(i).class, 'symfun')
-      warning('FIXME: need to do anything special for symfun vars?')
-      v=evalin('caller', S(i).name);
-      t = findsymbols(v);
-      alls(end+1:end+length(t)) = t(:);
-    end
-  end
-  alls = [alls{:}];
-  % de-dupe: could call unique if we had that overloaded
-  alls = findsymbols (alls);
-  alls = [alls{:}];
-  A = assumptions (alls);
 
 end
 
@@ -106,10 +156,26 @@ end
 %!test
 %! syms x
 %! assert(isempty(assumptions(x)))
+
 %!test
 %! x = sym('x', 'positive');
 %! a = assumptions(x);
 %! assert(strfind(a{1}, 'positive'))
+
+%!test
+%! syms x
+%! assert(isempty(assumptions(x)))
+
+%!assert(isempty(assumptions()))
+
+%!test
+%! A = {'real' 'positive' 'integer' 'even' 'odd' 'rational'};
+%! for i = 1:length(A)
+%!   x = sym('x', A{i});
+%!   a = assumptions(x);
+%!   assert(strcmp(a{1}, ['x: ' A{i}] ))
+%! end
+
 %!test
 %! syms x positive
 %! syms y real
