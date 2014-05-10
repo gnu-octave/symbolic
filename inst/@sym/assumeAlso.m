@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} assume (@var{x}, @var{cond})
-%% @deftypefnx {Function File} {@var}x} =} assume (@var{x}, @var{cond})
-%% New assumptions on a symbolic variable (replace old if any).
+%% @deftypefn  {Function File} {} assumeAlso (@var{x}, @var{cond})
+%% @deftypefnx {Function File} {@var}x} =} assumeAlso (@var{x}, @var{cond})
+%% Add additional assumptions on a symbolic variable.
 %%
 %% Note: operates on the caller's workspace via evalin/assignin.
 %% So if you call this from other functions, it will operate in
@@ -28,13 +28,24 @@
 %% FIXME: idea of rewriting all sym vars is a bit of a hack, not
 %% well tested (for example, with global vars.)
 %%
-%% @seealso{assumeAlso, assumptions, sym, syms}
+%% @seealso{assume, assumptions, sym, syms}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assume(x, cond, varargin)
+function varargout = assumeAlso(x, cond, varargin)
+
+  [tilde,ca] = assumptions(x, 'dict');
+
+  if isempty(ca)
+    ca = [];
+  elseif (length(ca)==1)
+    ca = ca{1};
+  else
+    ca
+    error('expected at most one dict')
+  end
 
   ca.(cond) = true;
 
@@ -86,12 +97,13 @@ end
 
 %!test
 %! syms x
-%! assume(x, 'positive')
+%! assumeAlso(x, 'positive')
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: positive'))
-%! assume(x, 'even')
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: even'))
-%! assume(x, 'odd')
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: odd'))
+
+%!test
+%! syms x positive
+%! assumeAlso(x, 'integer')
+%! [tilde,a] = assumptions(x, 'dict');
+%! assert(a{1}.integer)
+%! assert(a{1}.positive)
