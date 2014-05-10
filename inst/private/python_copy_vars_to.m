@@ -52,6 +52,13 @@ function s = do_list(s, indent, in, L)
     elseif (ischar(x))
       s = sprintf('%s%s# Load %d: string\n', s, sp, i);
       s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);
+    elseif (islogical(x))
+      s = sprintf('%s%s# Load %d: bool\n', s, sp, i);
+      if (x)
+        s = sprintf('%s%s%s.append(True)\n', s, sp, in);
+      else
+        s = sprintf('%s%s%s.append(False)\n', s, sp, in);
+      end
     elseif (isnumeric(x) && isscalar(x))
       % TODO: should pass the actual double, see comments elsewhere
       % for this same problem in other direction
@@ -63,6 +70,15 @@ function s = do_list(s, indent, in, L)
       s = sprintf('%s%s%s = []\n', s, sp, inn);
       s = sprintf('%s%s%s.append(%s)\n', s, sp, in, inn);
       s = do_list(s, indent, inn, x);
+    elseif (isstruct(x) && isscalar(x))
+      s = sprintf('%s%s# Load %d: struct to dict\n', s, sp, i);
+      inkeys = [in 'k'];
+      invalues = [in 'v'];
+      s = sprintf('%s%s%s = []\n', s, sp, inkeys);
+      s = do_list(s, indent, inkeys, fieldnames(x));
+      s = sprintf('%s%s%s = []\n', s, sp, invalues);
+      s = do_list(s, indent, invalues, struct2cell(x));
+      s = sprintf('%s%s%s.append(dict(zip(%s,%s)))\n', s, sp, in, inkeys, invalues);
     else
       i, x
       error('don''t know how to move that variable to python');
