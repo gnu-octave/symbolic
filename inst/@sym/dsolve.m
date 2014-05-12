@@ -35,7 +35,7 @@ function soln = dsolve(de, y, ic)
 
   % Usually we cast to sym in the _cmd call, but want to be
   % careful here b/c of symfuns
-  if ~ (isa(de, 'sym') && isa(y, 'sym')
+  if ~ (isa(de, 'sym') && isa(y, 'sym'))
     error('inputs must be sym or symfun')
   end
 
