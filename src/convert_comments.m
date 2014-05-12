@@ -178,7 +178,7 @@ function success = convert_oct_2_ml (fname, foutname)
   remstr = '-- Function File: ';
   for i=1:length(use)
     if strfind(use{i}, remstr);
-      if isempty(strfind(use{i}, [' ' fcn ' ']))
+      if isempty(strfind(use{i}, [' ' fcn]))
         error('function @deftypefn line doesn''t include function name')
       end
     end

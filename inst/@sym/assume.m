@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {} assume (@var{x}, @var{cond})
-%% @deftypefnx {Function File} {@var}x} =} assume (@var{x}, @var{cond})
+%% @deftypefnx {Function File} {@var{x} =} assume (@var{x}, @var{cond})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% Note: operates on the caller's workspace via evalin/assignin.
