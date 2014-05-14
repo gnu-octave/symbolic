@@ -43,8 +43,8 @@ function out = subsasgn (val, idx, rhs)
           % just a standard sym, we don't have to do this.
           if (iscell(A) && strcmp(A{1}, 'MAKING SYMFUN HACK'))
             %disp('DEBUG: oh good, you are!')
-            % FIXME: move this to the symfun constructor!
-            rhs = make_undecl_symfun_rhs(A{2}, idx.subs);
+            out = symfun(A{2}, idx.subs);
+            return
           end
         else
           % rhs is, e.g., a double, then we call the constructor

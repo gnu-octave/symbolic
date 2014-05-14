@@ -160,7 +160,7 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'char'))
     if (strfind(x, '('))
-      %% Start making an undeclared symfun
+      %% Start making an abstract symfun
       % If we see parentheses, we assume user is making a symfun.  We
       % don't do it directly here, but instead return a specially
       % tagged sym.  Essentially, the contents of this sym are
