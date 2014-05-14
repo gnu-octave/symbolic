@@ -47,10 +47,10 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
 
-function f = symfun(expr, vars, varargin)
+function f = symfun(expr, vars)
 
   if (nargin == 0)
-    % octave docs say need a no argument default for loading from files
+    % octave docs say need a no-argument default for loading from files
     expr = sym(0)
     vars = sym('x')
   end
@@ -60,6 +60,7 @@ function f = symfun(expr, vars, varargin)
     f.vars = vars;
     f = class(f, 'symfun', expr);
     superiorto ('sym');
-    return
+  else
+    error('first argument of symfun constructor must be a sym')
   end
 

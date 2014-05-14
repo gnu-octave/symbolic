@@ -27,6 +27,9 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function subsindex(varargin)
+function varargout = subsindex(varargin)
 
+  nargin
+  nargout
+  varargin
   error('Fail!  FIXME: implement subindex.  Issue #14 and Issue #34 on Github')

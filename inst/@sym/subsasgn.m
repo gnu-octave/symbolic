@@ -29,16 +29,26 @@ function out = subsasgn (val, idx, rhs)
 
   switch idx.type
     case '()'
+      %% symfun constructor
+      % f(x) = rhs
+      %   f is val
+      %   x is idx.subs{1}
+      % This also gets called for "syms f(x)"
+
       if (isa(idx.subs{1}, 'sym'))  % f(sym) = ..., define symfun
-        if (isempty(val))
-          disp('making a symfun')
+        if (isa(rhs, 'sym'))
+          myidx.type = '.'; myidx.subs = {'extra'};
+          A = subsref(rhs, myidx);
+          % here's the hack for nonspecific functions.  If rhs is
+          % just a standard sym, we don't have to do this.
+          if (iscell(A) && strcmp(A{1}, 'MAKING SYMFUN HACK'))
+            %disp('DEBUG: oh good, you are!')
+            % FIXME: move this to the symfun constructor!
+            rhs = make_undecl_symfun_rhs(A{2}, idx.subs);
+          end
         else
-          disp('replacing a symfun')
-        end
-        %idx.subs  % the arguments of the symfun
-        if (iscell(rhs.text) && strcmp(rhs.text{1}, 'UGLY HACK'))
-          disp('ugly hack concluded')
-          rhs = make_undecl_symfun_rhs(rhs.text{2}, idx.subs);
+          % rhs is, e.g., a double, then we call the constructor
+          rhs = sym(rhs);
         end
         out = symfun(rhs, idx.subs);
 
@@ -176,3 +186,25 @@ end
 %! x(true) = 88;
 %! assert(isequal( x, sym(88) ));
 
+
+%% symfun creation (generic function)
+%!test
+%! syms x
+%! g(x) = x*x;
+%! assert(isa(g,'symfun'))
+
+%% symfun creation (generic function)
+%!test
+%! syms x g(x)
+%! assert(isa(g,'symfun'))
+
+%% symfun creation when g already exists and is a sym/symfun
+%!test
+%! syms x
+%! g = x;
+%! syms g(x)
+%! assert(isa(g,'symfun'))
+%! clear g
+%! g(x) = x;
+%! g(x) = x*x;
+%! assert(isa(g,'symfun'))

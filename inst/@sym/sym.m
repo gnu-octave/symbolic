@@ -160,11 +160,20 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'char'))
     if (strfind(x, '('))
-      % symfun spagetti code :-(
-      disp('hack: rhs is hopefully for a symfun');
-      s = sym(1);
-      s.text = {'UGLY HACK', x};
-      %s = x;  % fails to call subsasgn
+      %% Start making an undeclared symfun
+      % If we see parentheses, we assume user is making a symfun.  We
+      % don't do it directly here, but instead return a specially
+      % tagged sym.  Essentially, the contents of this sym are
+      % irrelevant except for the special contents of the "extra"
+      % field.  subasgn can then note this and actually build the
+      % symfun: it will know the arguments from the LHS of "g(x) =
+      % sym('g(x)')".  If the user calls "g = sym('g(x)')", I see no
+      % easy way to throw an error, so we just make the symbol itself
+      % a plea to read the docs ;-)
+      %disp('DEBUG: I hope you are using this sym for the rhs of a symfun...');
+      s = sym('pleaseReadHelpSymFun');
+      s.extra = {'MAKING SYMFUN HACK', x};
+      %s = x;  % this would be nicer, but it fails to call subsasgn
       return
     end
     if (strcmp(x, 'pi'))

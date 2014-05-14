@@ -43,13 +43,13 @@ function out = subsref (f, idx)
         out = f.text;
       elseif (strcmp (fld, 'flattext'))
         out = f.flattext;
+      elseif (strcmp (fld, 'extra'))
+        out = f.extra;
       % not part of the interface
       %elseif (strcmp (fld, 'size'))
       %  out = f.size;
-      %elseif (strcmp (fld, 'extra'))
-      %  out = f.extra;
       else
-        error ('@sym/subsref: invalid property ''%s''', fld);
+        error ('@sym/subsref: invalid or nonpublic property ''%s''', fld);
       end
 
     otherwise
