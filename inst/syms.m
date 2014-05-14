@@ -70,7 +70,9 @@ function syms(varargin)
   end
 
   asm = varargin{end};
-  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || strcmp(asm, 'even') || strcmp(asm, 'odd') || strcmp(asm, 'rational'))
+  if ( strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || ...
+       strcmp(asm, 'even') || strcmp(asm, 'odd') || strcmp(asm, 'rational') || ...
+       strcmp(asm, 'clear') )
     asm = [', ''' asm ''''];
     last = nargin-1;
   else

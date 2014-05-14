@@ -105,6 +105,8 @@ function s = sym(x, varargin)
       cmd = sprintf('z = sympy.Symbol("%s", odd=True)', x);
     elseif strcmp(asm, 'rational')
       cmd = sprintf('z = sympy.Symbol("%s", rational=True)', x);
+    elseif strcmp(asm, 'clear')
+      error('Not implemented, Issue #37');
     else
       error('that assumption not supported')
     end
