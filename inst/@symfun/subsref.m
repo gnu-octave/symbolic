@@ -47,5 +47,21 @@ function out = subsref (f, idx)
 
   end
 
+end
 
+
+%!test
+%! syms x
+%! f(x) = x^2;
+%! v = f.vars;
+%! assert(iscell(v))
+%! assert(length(v)==1)
+%! assert(isequal(v{1},x))
+
+%% pass through to sym properties
+%!test
+%! syms x
+%! f(x) = x^2;
+%! y = x^2;    % not a symfun
+%! assert(strcmp(f.flattext, y.flattext))
 
