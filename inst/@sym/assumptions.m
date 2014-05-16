@@ -169,7 +169,9 @@ end
 %! syms x
 %! assert(isempty(assumptions(x)))
 
-%!assert(isempty(assumptions()))
+%!test
+%! clear
+%! assert(isempty(assumptions()))
 
 %!test
 %! A = {'real' 'positive' 'integer' 'even' 'odd' 'rational'};

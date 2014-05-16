@@ -120,5 +120,5 @@ end
 %!assert (double (sym(10) == 10))
 %!assert (double (sym([10 12]) == [10 12]))
 %!test
-% assert (isempty (double (sym('x'), false)))
-% assert (isempty (double (sym([10 12 sym('x')]), false)))
+%! assert (isempty (double (sym('x'), false)))
+%! assert (isempty (double (sym([10 12 sym('x')]), false)))
