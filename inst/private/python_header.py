@@ -6,6 +6,7 @@ import sympy as sp
 # FIXME: how to reactivate from srepr w/o this?
 from sympy import *
 #import dill as pickle
+import copy
 
 
 def dbout(l):

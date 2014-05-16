@@ -97,7 +97,7 @@ function evalpy(cmd, varargin)
     name = inputname(i+1);
     if ~isempty(name)
       s = sprintf('%s%s = _ins[%d]\n', s, name, i-1);
-      s = sprintf('%s_%s_orig = %s.copy()\n', s, name, name);
+      s = sprintf('%s_%s_orig = copy.copy(%s)\n', s, name, name);
     end
   end
   vars2py = s;
