@@ -58,8 +58,8 @@ end
 %! assert(length(v)==1)
 %! assert(isequal(v{1},x))
 
-%% pass through to sym properties
 %!test
+%! %% pass through to sym properties
 %! syms x
 %! f(x) = x^2;
 %! y = x^2;    % not a symfun

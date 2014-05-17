@@ -116,7 +116,7 @@ function vars = symvar(F, Nout)
 end
 
 
-%% some corner cases
+%! %% some corner cases
 %!assert (isempty (symvar (sym(1))));
 %!test
 %! disp('*** One warning expected')
@@ -135,33 +135,35 @@ end
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;
 %!assert (isequal (symvar (f), [x y]));
 %!assert (isequal (symvar (f, 1), x));
-%% closest to x
-%!test
+
+%!test %% closest to x
 %! syms x y a b c alpha xx
 %! assert (isequal (symvar (b*xx*exp(alpha) + c*sin(a*y), 2), [xx y]))
 
-%% tests to match Matlab R2013b
+%! %% tests to match Matlab R2013b
 %!shared x,y,z,a,b,c,X,Y,Z
 %! syms x y z a b c X Y Z
 
-%% X,Y,Z first if no 2nd argument
 %!test
+%! %% X,Y,Z first if no 2nd argument
 %! s = prod([x y z a b c X Y Z]);
 %! assert (isequal( symvar (s), [X Y Z a b c x y z] ))
 
-%% uppercase have *low* priority with argument?
 %!test
+%! %% uppercase have *low* priority with argument?
 %! s = prod([x y z a b c X Y Z]);
 %! assert (isequal (symvar (s,4), [x, y, z, c] ))
 
-%% closest to x
-%!xtest
-%! s = prod([y z a b c Y Z]);
-%! assert (isequal( symvar (s,6), [ y, z, c, b, a, Y] ))
-%! s = prod([a b c Y Z]);
-%! assert (isequal( symvar (s,4), [ c, b, a, Y] ))
 
-%% another broken case
-%!xtest
-%! s = X*Y*Z;
-%! assert (isequal( symvar (s,3), [X Y Z] ))
+%% FIXME: disabled for ml export
+%%!xtest
+%%! %% closest to x
+%%! s = prod([y z a b c Y Z]);
+%%! assert (isequal( symvar (s,6), [ y, z, c, b, a, Y] ))
+%%! s = prod([a b c Y Z]);
+%%! assert (isequal( symvar (s,4), [ c, b, a, Y] ))
+
+%%!xtest
+%%! %% another broken case
+%%! s = X*Y*Z;
+%%! assert (isequal( symvar (s,3), [X Y Z] ))

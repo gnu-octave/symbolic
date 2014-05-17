@@ -153,6 +153,7 @@ function f = symfun(expr, vars)
 
 end
 
+
 %!test
 %! syms x y
 %! syms f(x)
@@ -172,17 +173,21 @@ end
 %! f = symfun('f(x,y)', x);
 %! assert(isa(f, 'symfun'))
 
-%% no variables given
 %!test
+%! %% no variables given
 %! f = symfun('f(x)');
 %! assert(isa(f,'symfun'))
 
-%% rhs is not sym
 %!test
+%! %% rhs is not sym
 %! syms x
 %! f = symfun(8, x);
 %! assert(isa(f,'symfun'))
 %! assert(f(10) == sym(8))
 
-%% syms f(x)
-%% assert(isa(f,'symfun'))
+%% FIXME: #38
+%%!test
+%%! clear
+%%! syms f(x)
+%%! assert(isa(f, 'symfun'))
+%%! assert(isa(x, 'sym'))
