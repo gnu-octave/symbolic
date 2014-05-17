@@ -166,7 +166,8 @@ end
 %% unicode
 %!test
 %! s1 = '我爱你';
-%! s2 = python_cmd ('return u"\\u6211\\u7231\\u4f60",');
+%! cmd = 'return u"\u6211\u7231\u4f60",';
+%! s2 = python_cmd (cmd);
 %! assert (strcmp (s1,s2))
 
 %% list, tuple

@@ -49,6 +49,7 @@ function A = python_ipc_popen2(what, cmd, varargin)
   end
 
 
+  newl = sprintf('\n');
 
   % wrap loading of vars in a big try catch block
   % todo: s = appendline(s, indent, str, varargin)
@@ -71,7 +72,7 @@ function A = python_ipc_popen2(what, cmd, varargin)
   %% the actual command
   % this will do something with _ins and produce _outs
   % FIXME: wrap this in try catch too
-  s = sprintf('%s\n\n', cmd);
+  s = [cmd newl newl];
 
   %% output
   s2 = python_copy_vars_from('_outs');
