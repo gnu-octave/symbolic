@@ -122,12 +122,14 @@ end
 %! disp('*** One warning expected')
 %! assert (isempty (symvar (sym(1),1)));
 %!test
+%! % should fail on symbols
 %! try
-%!   symvar(sym(1),0);
-%!   assert(false);
+%!   symvar (sym (1), 0);
+%!   waserr = false;
 %! catch
-%!   assert(true)
+%!   waserr = true;
 %! end
+%! assert (waserr)
 
 %!shared x,y,f
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;

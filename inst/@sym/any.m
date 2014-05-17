@@ -63,8 +63,11 @@ end
 %! syms x
 %! s=sym([0 1 x]);
 %!test
+%! % should fail on symbols
 %! try
-%!   any(s)
-%!   error('should fail with symbols')
+%!   any (s)
+%!   waserr = false;
 %! catch
+%!   waserr = true;
 %! end
+%! assert (waserr)
