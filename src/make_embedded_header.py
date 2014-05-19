@@ -10,13 +10,8 @@ import os
 if __name__ == "__main__":
     base = 'python_header'
 
-    if sys.argv[1] == 'oct':
-        finname = '../inst/private/%s.py' % base
-        foutname = '../inst/private/%s_embed.m' % base
-    elif sys.argv[1] == 'ml':
-        finname = '../matlab/private/%s.py' % base
-        foutname = '../matlab/private/%s_embed.m' % base
-
+    finname = '../inst/private/%s.py' % base
+    foutname = '../inst/private/%s_embed.m' % base
 
     fd = open(finname, "r")
     l = fd.readlines()

@@ -2,7 +2,7 @@
 
 all: codegen
 
-matlab: ml_copy ml_codegen
+matlab: all ml_copy ml_convert ml_extract_tests ml_cleanup
 
 clean: codegen_clean matlab_clean
 
@@ -10,20 +10,26 @@ clean: codegen_clean matlab_clean
 
 codegen:
 	python generate_functions.py install
-	python make_embedded_header.py oct
+	python make_embedded_header.py
 
 codegen_clean:
 	python generate_functions.py clean
 	rm -f ../inst/private/python_header_embed.m
 
-ml_codegen: ml_copy
-	python make_embedded_header.py ml
+ml_cleanup: ml_copy ml_convert ml_extract_tests
+	rm -f ../matlab/extract_tests_for_matlab.m
+	rm -f ../matlab/run_octave_tests.m
 
+ml_extract_tests: ml_copy
+	mkdir -p ../matlab/tests_matlab/
+	cp -ra extract_tests_for_matlab.m ../matlab/
+	cp -ra run_tests_matlab.m ../matlab/
+	cd ../matlab/; octave -q --eval "extract_tests_for_matlab"
 
 ml_copy: ml_convert
 	cp -ra ../inst/private ../matlab/
 	cp -ra ../inst/@sym/private ../matlab/@sym/
-	cp -ra ../inst/unittests ../matlab/
+	cp -ra ../inst/unittests ../matlab/  # FIXME: remove
 	cp -af ../CONTRIBUTORS ../matlab/
 	cp -af ../COPYING ../matlab/
 	cp -af ../matlab_smt_differences.md ../matlab/
