@@ -2,7 +2,7 @@
 
 all: codegen
 
-matlab: all ml_copy ml_convert ml_extract_tests ml_cleanup
+matlab: all ml_copy ml_convert ml_extract_tests ml_tidyup
 
 clean: codegen_clean matlab_clean
 
@@ -16,7 +16,7 @@ codegen_clean:
 	python generate_functions.py clean
 	rm -f ../inst/private/python_header_embed.m
 
-ml_cleanup: ml_copy ml_convert ml_extract_tests
+ml_tidyup: ml_copy ml_convert ml_extract_tests
 	rm -f ../matlab/extract_tests_for_matlab.m
 	rm -f ../matlab/run_octave_tests.m
 
@@ -55,4 +55,5 @@ matlab_clean:
 	rm -rf ../matlab/@logical
 	rm -rf ../matlab/private
 	rm -rf ../matlab/unittests
+	rm -rf ../matlab/tests_matlab
 
