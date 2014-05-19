@@ -74,8 +74,18 @@ function L = limit(f,x,a,dir)
 end
 
 
-%!shared x
+%!shared x, oo
 %! syms x
+%! oo = sym(inf);
 %!assert(isa(limit(x,x,pi), 'sym'))
 %!assert(isequal(limit(x,x,pi), sym(pi)))
 
+%!assert(limit(sin(x)/x, x, 0) == 1);
+%!assert(limit(1/x, x, 0, 'right') == oo);
+%!assert(limit(1/x, x, 0) == oo);
+%!assert(limit(1/x, x, 0, 'left') == -oo);
+%!assert(limit(1/x, x, oo) == 0);
+%!assert(limit(sign(x), x, 0, 'left') == -1);
+%!assert(limit(sign(x), x, 0, 'right') == 1);
+%!assert(limit(sign(x), x, 0, '-') == -1);
+%!assert(limit(sign(x), x, 0, '+') == 1);
