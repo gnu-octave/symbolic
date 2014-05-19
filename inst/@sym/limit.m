@@ -67,7 +67,10 @@ function L = limit(f,x,a,dir)
   end
 
   cmd = [ '(f,x,a,pdir) = _ins\n'  ...
-          'g = f.limit(x,a,dir=pdir)\n'  ...
+          'if f.is_Matrix:\n'   ...
+          '    g = f.applyfunc(lambda b: b.limit(x,a,dir=pdir))\n'...
+          'else:\n' ...
+          '    g = f.limit(x,a,dir=pdir)\n'  ...
           'return (g,)' ];
   L = python_cmd (cmd, sym(f), sym(x), sym(a), pdir);
 
@@ -89,3 +92,9 @@ end
 %!assert(limit(sign(x), x, 0, 'right') == 1);
 %!assert(limit(sign(x), x, 0, '-') == -1);
 %!assert(limit(sign(x), x, 0, '+') == 1);
+
+%!test
+%! % matrix
+%! syms y
+%! A = [x 1/x x*y];
+%! assert(isequal(limit(A,x,3),sym([3 sym(1)/3 3*y])))

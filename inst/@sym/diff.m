@@ -55,6 +55,19 @@ function z = diff(f, varargin)
   % simpler version, but gives error on differentiating a constant
   %cmd = 'return sp.diff(*_ins),';
 
+
+  if ~(isscalar(f))
+    z = f;
+    for j = 1:numel(f)
+      idx.type = '()';
+      idx.subs = {j};
+      % z(j) = diff(f(j), varargin{:});
+      temp = diff(subsref(f, idx), varargin{:});
+      z = subsasgn(z, idx, temp);
+    end
+    return
+  end
+
   cmd = [ '# special case for one-arg constant\n'             ...
           'if (len(_ins)==1 and _ins[0].is_constant()):\n'    ...
           '    return (sp.numbers.Zero(),)\n'                 ...
@@ -63,3 +76,14 @@ function z = diff(f, varargin)
 
   varargin = sym(varargin);
   z = python_cmd (cmd, sym(f), varargin{:});
+
+end
+
+
+%!shared x,y
+%! syms x y
+%!test
+%! % matrix
+%! A = [x sin(x); x*y 10];
+%! B = [1 cos(x); y 0];
+%! assert(isequal(diff(A,x),B))
