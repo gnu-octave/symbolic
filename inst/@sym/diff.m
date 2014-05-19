@@ -80,8 +80,26 @@ function z = diff(f, varargin)
 end
 
 
-%!shared x,y
-%! syms x y
+%!shared x,y,z
+%! syms x y z
+
+%!assert(logical( diff(sin(x)) - cos(x) == 0 ))
+%!assert(logical( diff(sin(x),x) - cos(x) == 0 ))
+%!assert(logical( diff(sin(x),x,x) + sin(x) == 0 ))
+
+%! % these fail when doubles are not converted to sym
+%!assert(logical( diff(sin(x),x,2) + sin(x) == 0 ))
+%!assert(logical( diff(sym(1),x) == 0 ))
+%!assert(logical( diff(1,x) == 0 ))
+%!assert(logical( diff(pi,x) == 0 ))
+
+%! % symbolic diff of const (w/o variable) fails in sympy, but we work around
+%!assert(logical( diff(sym(1)) == 0 ))
+
+%! % octave's vector difference still works
+%!assert(isempty(diff(1)))
+%!assert((diff([2 6]) == 4))
+
 %!test
 %! % matrix
 %! A = [x sin(x); x*y 10];
