@@ -29,7 +29,6 @@ workaround_undo:
 	rm -f ../inst/assumptions.m
 
 ml_codegen: ml_copy
-	python generate_functions.py ml_install
 	python make_embedded_header.py ml
 
 
