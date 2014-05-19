@@ -36,3 +36,21 @@ function z = transpose(x)
 
   z = python_cmd (cmd, x);
 
+end
+
+
+%!test
+%! x = sym(1);
+%! assert(x.' == x)
+%!assert(sym([]).' == sym([]))
+
+%!test
+%! syms x;
+%! assert(x.' == x)
+
+%!test
+%! A = [1 2; 3 4];
+%! assert(sym(A).' == sym(A.'))
+%!test
+%! A = [1 2] + 1i;
+%! assert(sym(A).' == sym(A.'))

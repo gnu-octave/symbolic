@@ -49,3 +49,34 @@ function S = symprod(f,n,a,b)
           'return (S,)' ];
   S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
 
+end
+
+
+%!shared n,a,oo,zoo
+%! syms n a
+%! oo = sym(inf);
+%! zoo = sym('zoo');
+
+%!assert(symprod(n, n, 1, 10) - factorial(sym(10)) == 0)
+%!assert(symprod(n, n, sym(1), sym(10)) - factorial(10) == 0)
+%!assert(symprod(a, n, 1, oo) - a^oo == 0)
+%!assert(symprod(a, n, 1, inf) - a^oo == 0)
+%! % not with oo, but true with zoo, see below
+%!assert(symprod(1, n, 1, zoo) == 1)
+%!assert(symprod(1, n, 1, 'zoo') == 1)
+
+%!test
+%! %% a^oo, when a == 1
+%! % sympy 0.7.4: gives 1
+%! % sympy 0.7.5: gives NaN  [https://github.com/sympy/sympy/wiki/Release-Notes-for-0.7.5]
+%! % SMT R2013b: gives 1
+%! if (~isnan(1^oo))
+%!   warning('1 known failure on SymPy 0.7.4, fixed in 0.7.5')
+%! end
+%! assert(isnan(1^oo))
+
+%!test
+%! %% a^zoo, when a == 1
+%! % on both sympy 0.7.4 and 0.7.5 this is 1
+%! assert(islogical(1^zoo == 1))
+%! assert(1^zoo == 1)

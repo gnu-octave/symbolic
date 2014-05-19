@@ -39,3 +39,8 @@ function z = axplusy(a, x, y)
 
   z = python_cmd (cmd, sym(a), sym(x), sym(y));
 
+end
+
+
+%! % Should be tested by the functions that use it...
+%!assert(isequal(axplusy(sym(3),4,5), sym(3)*4+5))

@@ -36,3 +36,31 @@ function z = ctranspose(x)
 
   z = python_cmd (cmd, x);
 
+end
+
+
+%!test
+%! x = sym(1);
+%! assert(x' == x)
+%!assert(sym([])' == sym([]))
+
+%!test
+%! syms x real;
+%! assert(x' == x)
+
+%% FIXME: Bug #19
+%%!test
+%%! syms x;
+%%! assert(x' == conj(x))
+%%!test
+%%! syms x;
+%%! A = [x 2*x];
+%%! B = [conj(x); 2*conj(x)];
+%%! assert(isequal(A', B))
+
+%!test
+%! A = [1 2; 3 4];
+%! assert(sym(A)' == sym(A'))
+%!test
+%! A = [1 2] + 1i;
+%! assert(sym(A)' == sym(A'))

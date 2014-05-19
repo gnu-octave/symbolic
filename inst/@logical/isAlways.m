@@ -33,3 +33,8 @@ function r = isAlways(p)
 
   r = p;
 
+end
+
+
+%!assert(isAlways(true))
+%!assert(~isAlways(false))

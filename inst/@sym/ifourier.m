@@ -40,3 +40,8 @@ function f = ifourier(F,k,x)
 
   f = python_cmd (cmd, sym(F), sym(k), sym(x));
 
+end
+
+
+%! % tests in fourier.m
+%!assert(true)

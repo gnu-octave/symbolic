@@ -40,3 +40,12 @@ function F = fourier(f,x,k)
 
   F = python_cmd (cmd, sym(f), sym(x), sym(k));
 
+end
+
+
+%!test
+%! syms x k
+%! f = exp(-x^2);
+%! F = fourier(f,x,k);
+%! g = ifourier(F,k,x);
+%! assert(isequal(f,g))
