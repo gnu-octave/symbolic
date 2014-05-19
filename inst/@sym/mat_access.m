@@ -72,10 +72,10 @@ function z = mat_access(A, subs)
     [r, c] = ind2sub (size(A), i);
     z = mat_rclist_access(A, r, c);
     % output shape, see logic in comments in mat_mask_access.m
-    if (isrow(A))
+    if (my_isrow(A))
       z = reshape(z, 1, length(c));
-    elseif (iscolumn(A))
-      assert(iscolumn(z))
+    elseif (my_iscolumn(A))
+      assert(my_iscolumn(z))
     else
       error('Tertium Non Datur')
     end

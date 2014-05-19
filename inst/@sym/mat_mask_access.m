@@ -74,13 +74,13 @@ function Z = mat_mask_access(A, I)
   end
 
   % output shape, see logic in comments above
-  if (isrow(A))
+  if (my_isrow(A))
     n = 1;  m = nnz(I);
-  elseif (iscolumn(A))
+  elseif (my_iscolumn(A))
     n = nnz(I);  m = 1;
-  elseif (isrow(I))
+  elseif (my_isrow(I))
     n = 1;  m = nnz(I);
-  elseif (iscolumn(I))
+  elseif (my_iscolumn(I))
     n = nnz(I);  m = 1;
   else
     n = nnz(I);  m = 1;

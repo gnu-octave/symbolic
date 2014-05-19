@@ -42,9 +42,9 @@ function y = prod(x, n)
     y = x;
   else
     if (nargin == 1)
-      if (isrow(x))
+      if (my_isrow(x))
         n = 2;
-      elseif (iscolumn(x))
+      elseif (my_iscolumn(x))
         n = 1;
       else
         n = 1;
