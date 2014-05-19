@@ -1,10 +1,10 @@
 # the three main targets, all, matlab and clean
 
-all: codegen workaround
+all: codegen
 
-matlab: ml_copy ml_workaround ml_codegen
+matlab: ml_copy ml_codegen
 
-clean: codegen_clean workaround_undo matlab_clean
+clean: codegen_clean matlab_clean
 
 #######################################################
 
@@ -12,21 +12,9 @@ codegen:
 	python generate_functions.py install
 	python make_embedded_header.py oct
 
-workaround:
-	cp -fa ../inst/@sym/poly2sym.m ../inst/
-	cp -fa ../inst/@sym/assumptions.m ../inst/
-ml_workaround: ml_copy
-	cp -fa ../matlab/@sym/poly2sym.m ../matlab/
-	cp -fa ../matlab/@sym/assumptions.m ../matlab/
-
-
 codegen_clean:
 	python generate_functions.py clean
 	rm -f ../inst/private/python_header_embed.m
-
-workaround_undo:
-	rm -f ../inst/poly2sym.m
-	rm -f ../inst/assumptions.m
 
 ml_codegen: ml_copy
 	python make_embedded_header.py ml
