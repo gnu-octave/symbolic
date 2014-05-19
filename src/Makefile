@@ -17,7 +17,7 @@ workaround:
 	cp -fa ../inst/@sym/assumptions.m ../inst/
 ml_workaround: ml_copy
 	cp -fa ../matlab/@sym/poly2sym.m ../matlab/
-	cp -fa ../inst/@sym/assumptions.m ../matlab/
+	cp -fa ../matlab/@sym/assumptions.m ../matlab/
 
 
 codegen_clean:
