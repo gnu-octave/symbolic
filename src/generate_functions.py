@@ -131,6 +131,7 @@ def autogen_functions(L, where):
         fd.write("  z = python_cmd (cmd, x);\n\n")
         fd.write("end\n")
 
+        # tests
         fd.write("\n\n%!shared d,x\n")
         fd.write("%%! d = %s;\n" % d['test_in_val'])
         fd.write("%%! x = sym('%s');\n" % d['test_in_val'])
@@ -149,6 +150,7 @@ def autogen_functions(L, where):
         if d['out_val_from_oct']:
             fd.write("%%! f2 = %s(D);\n" % f)
         else:
+            fd.write("%%! f2 = %s;\n" % d['test_out_val'])
             fd.write("%! f2 = [f2 f2; f2 f2];\n")
         fd.write("%! assert( all(all( abs(double(f1) - f2) < 1e-15 )))\n")
 
