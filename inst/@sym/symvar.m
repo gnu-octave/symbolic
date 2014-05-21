@@ -35,21 +35,13 @@
 %%
 %% Compatibility with other implementations: the output should
 %% match the order of the equivalent command in the Matlab Symbolic
-%% Toolbox.  Their documentation (as of 2013b) says "closest to
-%% @code{x} or @code{X}", but it seems to be just @code{x} (which
-%% is what we implement).
-%%
-%% FIXME: capitalized variables are not sorted correctly in the 2nd
-%% form:
-%% @example
-%% symvar(X*Y*Z, 2)   % returns [Z Y] instead of [X Y]
-%% @end example
-%%
+%% Toolbox version 2014a, as documented here:
+%% http://www.mathworks.co.uk/help/symbolic/symvar.html
 %%
 %% @seealso{findsym, findsymbols}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald, Willem J. Atsma
+%% Author: Colin B. Macdonald, Willem J. Atsma (previous versions)
 %% Keywords: symbolic
 
 function vars = symvar(F, Nout)
@@ -85,33 +77,36 @@ function vars = symvar(F, Nout)
       return
     end
 
-    %% This sorting code is written by:
-    % Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
-    % License: GPL-3
-
-    %% If Nout is specified, sort anew from x.
-    symstrings = strtrim(disp(symlist{1}));
-    for i=2:Nlist
-      symstrings = [symstrings ; strtrim(disp(symlist{i}))];
+    symstrings = {};
+    for i=1:Nlist
+      symstrings{i} = strtrim(disp(symlist{i}));
     end
 
-    symasc = toascii(symstrings);
-
-    symasc(:,1) = abs(toascii('x')-symasc(:,1));
-
-    %% Sort by creating an equivalent number for each entry
-    Nc = length(symasc(1,:));
-    powbase=zeros(Nc,1); powbase(Nc)=1;
-    for i=(Nc-1):-1:1
-      powbase(i) = powbase(i+1)*128;
+    %% define a map for resorting
+    sortorder = 'xywzvutsrqponmlkjihgfedcbaXYWZVUTSRQPONMLKJIHGFEDCBA';
+    AZaz      = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    assert(length(AZaz) == length(sortorder))
+    for i=1:length(sortorder)
+      map.(sortorder(i)) = AZaz(i);
     end
-    [xs,I]=sort(symasc*powbase);
+
+    symstr_forsort = {};
+    for i=1:Nlist
+      str = symstrings{i};
+      first = str(1);
+      str(1) = map.(first);
+      symstr_forsort{i} = str;
+    end
+    symstr_forsort;
+
+    [xs,I] = sort(symstr_forsort);
 
     for i=1:Nout
       %vars(i) = symlist{i};
       idx.type = '()'; idx.subs = {i};
       vars = subsasgn(vars, idx, symlist{I(i)});
     end
+
   end
 end
 
@@ -154,16 +149,14 @@ end
 %! s = prod([x y z a b c X Y Z]);
 %! assert (isequal (symvar (s,4), [x, y, z, c] ))
 
+%!test
+%! %% closest to x
+%! s = prod([y z a b c Y Z]);
+%! assert (isequal( symvar (s,6), [ y, z, c, b, a, Y] ))
+%! s = prod([a b c Y Z]);
+%! assert (isequal( symvar (s,4), [ c, b, a, Y] ))
 
-%% FIXME: disabled for ml export
-%%!xtest
-%%! %% closest to x
-%%! s = prod([y z a b c Y Z]);
-%%! assert (isequal( symvar (s,6), [ y, z, c, b, a, Y] ))
-%%! s = prod([a b c Y Z]);
-%%! assert (isequal( symvar (s,4), [ c, b, a, Y] ))
-
-%%!xtest
-%%! %% another broken case
-%%! s = X*Y*Z;
-%%! assert (isequal( symvar (s,3), [X Y Z] ))
+%!test
+%! %% upper case letters in correct order
+%! s = X*Y*Z;
+%! assert (isequal( symvar (s,3), [X Y Z] ))
