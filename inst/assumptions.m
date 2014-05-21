@@ -135,7 +135,7 @@ function [A,B] = assumptions(F, outp)
         astr = python_cmd(cmd, x, false);
       end
       if ~isempty(astr)
-        str = strtrim([disp(x) ': ' disp(astr)]);
+        str = strtrim([disp(x) ': ' astr]);
         c = c + 1;
         if strcmp(outp, 'dict')
           A{c} = s;
@@ -163,7 +163,7 @@ end
 %!test
 %! x = sym('x', 'positive');
 %! a = assumptions(x);
-%! assert(strfind(a{1}, 'positive'))
+%! assert(~isempty(strfind(a{1}, 'positive')))
 
 %!test
 %! syms x
@@ -188,5 +188,5 @@ end
 %! f = x*y*z;
 %! a = assumptions(f);
 %! assert(length(a) == 2)
-%! assert(strfind(a{1}, 'positive'))
-%! assert(strfind(a{2}, 'real'))
+%! assert(~isempty(strfind(a{1}, 'positive')))
+%! assert(~isempty(strfind(a{2}, 'real')))

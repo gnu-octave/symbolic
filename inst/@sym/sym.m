@@ -159,7 +159,7 @@ function s = sym(x, varargin)
 
 
   elseif (isa (x, 'char'))
-    if (strfind(x, '('))
+    if (~isempty (strfind (x, '(') ))
       %% Start making an abstract symfun
       % If we see parentheses, we assume user is making a symfun.  We
       % don't do it directly here, but instead return a specially

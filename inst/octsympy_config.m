@@ -95,4 +95,4 @@ end
 
 %!test
 %! octsympy_config('defaults')
-%! assert(octsympy_config('ipc'), 'default')
+%! assert(strcmp(octsympy_config('ipc'), 'default'))

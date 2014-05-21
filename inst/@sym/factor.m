@@ -69,11 +69,19 @@ end
 
 
 %!test
-%! n = 152862;
-%! [p,m] = factor(n);
+%! % n = 152862;
+%! % [p,m] = factor(n);  % only works on Octave, no Matlab as of 2014a
+%! n = 330;  % so we use an output without repeated factors
+%! p = factor(n); m = ones(size(p));
 %! [ps,ms] = factor(sym(n));
 %! assert (isequal (p, ps))
 %! assert (isequal (m, ms))
+
+%!test
+%! n = sym(2)^4*13;
+%! [p,m] = factor(n);
+%! assert (isequal (p, [2 13]))
+%! assert (isequal (m, [4 1]))
 
 %!test syms x
 %! assert( logical (factor(x^2 + 6*x + 5) == (x+5)*(x+1)))

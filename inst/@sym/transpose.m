@@ -42,7 +42,7 @@ end
 %!test
 %! x = sym(1);
 %! assert(x.' == x)
-%!assert(sym([]).' == sym([]))
+%!assert(isempty(sym([]).'))
 
 %!test
 %! syms x;
@@ -50,7 +50,7 @@ end
 
 %!test
 %! A = [1 2; 3 4];
-%! assert(sym(A).' == sym(A.'))
+%! assert(isequal( sym(A).' , sym(A.') ))
 %!test
 %! A = [1 2] + 1i;
-%! assert(sym(A).' == sym(A.'))
+%! assert(isequal( sym(A).' , sym(A.') ))

@@ -56,12 +56,12 @@ function s = findsym(varargin)
 end
 
 
-%!assert( findsym(sym(2)), '');
+%!assert (strcmp (findsym (sym(2)), ''));
 %!shared x,y,f
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;
-%!assert( findsym (f), 'x,y');
-%!assert( findsym (f,1), 'x');
+%!assert (strcmp (findsym (f), 'x,y'));
+%!assert (strcmp (findsym (f,1), 'x'));
 %% closest to x
 %!test
 %! syms x y a b c alpha xx
-%! assert(findsym(b*xx*exp(alpha) + c*sin(a*y), 2), 'xx,y')
+%! assert (strcmp (findsym(b*xx*exp(alpha) + c*sin(a*y), 2), 'xx,y'))

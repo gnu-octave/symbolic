@@ -65,7 +65,7 @@ function A = python_ipc_popen2(what, cmd, varargin)
   %disp('paused before read'); pause
   out = readblock(fout, tag.block, tag.endblock);
   A = extractblock(out, tag.item, tag.enditem);
-  if ~(strfind(A{1}, 'successful'))
+  if (isempty(strfind(A{1}, 'successful')))
     error('failed to import variables to python?')
   end
 

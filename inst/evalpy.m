@@ -157,7 +157,7 @@ function evalpy(cmd, varargin)
   %fprintf('\n*** </CODE> ***\n\n')
 
   [names,values] = python_cmd (fullcmd, varargin{:});
-  assert (length(names), length(values))
+  assert (length(names) == length(values))
 
   %fprintf('assigning to %s...\n', names{i})
   for i=1:length(names)
@@ -189,7 +189,7 @@ end
 %!test
 %! x = 6;
 %! evalpy('y = 2*x; x = 10; z = 3*x;;', x);
-%! assert( [x y z], [10 12 30] )
+%! assert( isequal( [x y z], [10 12 30] ))
 
 %% underscore variables not returned
 %!test
@@ -200,5 +200,5 @@ end
 %!test
 %! evalpy('_y = "GNU Octave Rocks"; z = _y.split();;');
 %! assert( iscell(z) )
-%! assert( z, {'GNU', 'Octave','Rocks'} )
+%! assert( isequal (z, {'GNU', 'Octave','Rocks'} ))
 

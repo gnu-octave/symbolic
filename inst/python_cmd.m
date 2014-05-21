@@ -150,11 +150,11 @@ end
 
 %% float
 %!test
-%! assert (python_cmd ('return 1.0/3,'), 1/3, 1e-15)
+%! assert (abs(python_cmd ('return 1.0/3,') - 1/3) < 1e-15)
 
 %% int
 %!test
-%! assert (python_cmd ('return 123456,'), 123456)
+%! assert (python_cmd ('return 123456,') == 123456)
 
 %% string
 %!test
@@ -171,10 +171,10 @@ end
 %! assert (strcmp (s1,s2))
 
 %% list, tuple
-%!assert (python_cmd ('return [1,2,3],'), {1, 2, 3})
-%!assert (python_cmd ('return (4,5),'), {4, 5})
-%!assert (python_cmd ('return (6,),'), {6,})
-%!assert (python_cmd ('return [],'), {})
+%!assert (isequal (python_cmd ('return [1,2,3],'), {1, 2, 3}))
+%!assert (isequal (python_cmd ('return (4,5),'), {4, 5}))
+%!assert (isequal (python_cmd ('return (6,),'), {6,}))
+%!assert (isequal (python_cmd ('return [],'), {}))
 
 %% dict
 %!test
