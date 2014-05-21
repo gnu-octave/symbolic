@@ -117,7 +117,7 @@ function f = symfun(expr, vars)
   % (If we have a concrete function, it will be passed in to expr,
   % here we just deal with the abstract function case.)
   if (ischar (expr))
-    tok = strsplit(expr, {'(', ')', ','});
+    tok = mystrsplit(expr, {'(', ')', ','});
     fname = strtrim(tok{1});
 
     cmd = sprintf( ['_f = sp.Function("%s")(*_ins)\n' ...
