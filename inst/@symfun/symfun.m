@@ -238,13 +238,20 @@ end
 %! assert (isa (f, 'symfun'))
 %! assert (isa (g, 'symfun'))
 
-
 %%!test
-%%! % FIXME: Bug #41, enable this later, when Octave >= 4.0 is standard.
-%%! % Octave <= 3.8 parser fails without quotes around 2D fcn
-%%! syms x y
-%%! syms g(x,y)
-%%! assert (isa (g, 'symfun'))
+%%! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
+%%! % FIXME: b/c its a parse error, even wrapping as below won't help.
+%%! if exist('octave_config_info', 'builtin');
+%%!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
+%%!     syms x y
+%%!     syms g(x,y)
+%%!     assert (isa (g, 'symfun'))
+%%!   end
+%%! else  % matlab
+%%!   syms x y
+%%!   syms g(x,y)
+%%!   assert (isa (g, 'symfun'))
+%%! end
 
 %%!test
 %%! % FIXME: Bug #38, syms f(x) without defining x

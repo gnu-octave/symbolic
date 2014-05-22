@@ -85,7 +85,13 @@ end
 %!test
 %! d = solve(e, y);
 %! assert (isequal (d{1}.y, x/2))
+
 %!test
-%! d = solve(e, 2*x);
-%! s = d{1}.('2*x');
-%! assert (isequal (s, 4*y))  % won't work on Matlab/Octave 3.6
+%! % solve for 2*x (won't work on Matlab/Octave 3.6)
+%! if exist('octave_config_info', 'builtin');
+%!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
+%!     d = solve(e, 2*x);
+%!     s = d{1}.('2*x');
+%!     assert (isequal (s, 4*y))
+%!   end
+%! end

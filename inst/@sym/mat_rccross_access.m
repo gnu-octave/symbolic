@@ -35,7 +35,7 @@
 
 function z = mat_rccross_access(A, r, c)
 
-  if ((r == ':') && (c == ':'))
+  if (ischar(r) && ischar(c) && (r == ':') && (c == ':'))
     z = A;
     return
   end

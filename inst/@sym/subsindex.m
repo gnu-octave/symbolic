@@ -44,12 +44,12 @@ end
 %!test
 %! i = sym([1 3 5]);
 %! a = 1:10;
-%! assert(a(i)==[1 3 5]);
+%! assert( isequal (a(i), [1 3 5]))
 
 %!test
 %! i = sym([1 3 5]);
 %! a = sym(1:10);
-%! assert(isequal(a(i),sym([1 3 5])));
+%! assert( isequal (a(i), sym([1 3 5])));
 
 %!test
 %! % should be an error if it doesn't convert to double
