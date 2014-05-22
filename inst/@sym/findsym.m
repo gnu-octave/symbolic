@@ -63,7 +63,7 @@ end
 %!assert (strcmp (findsym (f,1), 'x'));
 %!
 %!test
-%! closest to x
+%! % test order of returned vars
 %! syms x y a b c xx
 %! % https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730
 %! alpha = sym('alpha');
