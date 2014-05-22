@@ -56,4 +56,4 @@ end
 %!assert (~isprime (sym(4)))
 %!test
 %! a = [5 7 6; 1 2 337];
-%! assert (isprime (a), [true true false; false true true])
+%! assert (isequal (isprime (a), [true true false; false true true]))

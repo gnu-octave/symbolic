@@ -29,7 +29,8 @@ ml_extract_tests: ml_copy
 ml_copy: ml_convert
 	cp -ra ../inst/private ../matlab/
 	cp -ra ../inst/@sym/private ../matlab/@sym/
-	cp -ra ../inst/unittests ../matlab/  # FIXME: remove
+	cp -ra ../inst/@symfun/private ../matlab/@symfun/
+	cp -ra ../inst/unittests ../matlab/  # FIXME: remove later once unused
 	cp -af ../CONTRIBUTORS ../matlab/
 	cp -af ../COPYING ../matlab/
 	cp -af ../matlab_smt_differences.md ../matlab/
@@ -54,6 +55,6 @@ matlab_clean:
 	rm -rf ../matlab/@symfun
 	rm -rf ../matlab/@logical
 	rm -rf ../matlab/private
-	rm -rf ../matlab/unittests
+	rm -rf ../matlab/unittests  # FIXME: remove later
 	rm -rf ../matlab/tests_matlab
 
