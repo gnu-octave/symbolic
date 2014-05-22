@@ -99,7 +99,7 @@ function varargout = python_cmd(cmd, varargin)
 
   %% a big of preprocessing
   % the user might or might not have escaped newlines.  We want to
-  % reliably intend this code to put it inside a Python function.
+  % reliably indent this code to put it inside a Python function.
   newl = sprintf('\n');
   cmd = strrep(cmd, '\n', newl);
   cmd = strtrim(cmd);  % I think this is not important
