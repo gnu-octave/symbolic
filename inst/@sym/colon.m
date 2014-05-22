@@ -40,12 +40,18 @@ function y = colon(a,step,b)
   tilde = double(b);
   tilde = double(step);
 
-  % much faster (for ipc) in python
+  % A slower approach (more ipc)
   %y = sym( double(a):double(step):double(b) );
-  evalpy('y = range(a,b+sign(step)*1,step);;', a, b, step);
-  % FIXME: if evalpy learned arrays, could drop this...
+
+  cmd = ['(a,b,step) = _ins\n'...
+         'y = range(a,b+sign(step)*1,step)\n'...
+         'return y,'];
+  y = python_cmd(cmd, a, b, step);
+  % FIXME: if we had arrays, could drop this...
   y = cell2mat(y);
+
 end
+
 
 %!test
 %! a = sym(1):5;

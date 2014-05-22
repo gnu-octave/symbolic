@@ -39,7 +39,7 @@ function [p,m] = factor(f)
       % FIXME: this is fragile, even pretty(y) causes it to expand
       % SMT is less fragile.   but how do they expose vector output?
       % They don't, how strange, given Matlab's factor(double) command!
-      evalpy('p = factorint(i0, visual=True);;', f)
+      p = python_cmd ('return factorint(_ins[0], visual=True),', f);
     else
       if (~isscalar(f))
         error('vector output factorization only for scalar integers')
@@ -56,8 +56,7 @@ function [p,m] = factor(f)
 
   else
     %% symbols, polynomial factorization
-    % FIXME; symvar? opional s2nd argument
-    %evalpy('p = factor(f);;', f)
+    % FIXME; symvar? optional 2nd argument
     cmd = [ 'p = factor(_ins[0])\n' ...
             'if isinstance(p, sp.ImmutableMatrix):\n' ...
             '    p = p.as_mutable()\n' ...
@@ -92,3 +91,8 @@ end
 %! g = [ x^2*(2*x - 1)*(3*x + 4)/12   (x+1)*(x-1)  10];
 %! assert (isequal (factor(f), g))
 
+%!test
+%! % "fragile form" works
+%! A = factor(sym(124));
+%! B = strtrim(disp(A));
+%! assert (strcmp (B, '2**2*31**1'))
