@@ -42,8 +42,15 @@
 %% Called without arguments, @code{syms} displays a list of
 %% all symbolic functions defined in the current workspace.
 %%
-%% Careful: this code runs @code{evalin()}: you should not
-%% use it (programmatically) on strings you don't trust.
+%% Caution: this code runs @code{evalin()}, which has some implications:
+%% @itemize
+%% @item You should not use it (programmatically) on strings you don't trust.
+%% @item On Matlab, you may not want to use @code{syms} within functions.
+%%   In particular, if you shadow a function name, you may get
+%%   hard-to-track-down bugs.  For example, instead of writing
+%%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
+%%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
+%% @end itemize
 %%
 %% @seealso{sym}
 %% @end deftypefn

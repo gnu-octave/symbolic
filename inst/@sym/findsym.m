@@ -61,7 +61,10 @@ end
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;
 %!assert (strcmp (findsym (f), 'x,y'));
 %!assert (strcmp (findsym (f,1), 'x'));
-%% closest to x
+%!
 %!test
-%! syms x y a b c alpha xx
+%! closest to x
+%! syms x y a b c xx
+%! % https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730
+%! alpha = sym('alpha');
 %! assert (strcmp (findsym(b*xx*exp(alpha) + c*sin(a*y), 2), 'xx,y'))
