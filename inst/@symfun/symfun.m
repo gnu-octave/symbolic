@@ -163,6 +163,15 @@ end
 %! assert(isa(f,'symfun'))
 
 %!test
+%! % symfuns are syms as well
+%! syms x
+%! f(x) = 2*x;
+%! assert (isa (f, 'symfun'))
+%! assert (isa (f, 'sym'))
+%! assert (isequal (f(3), 6))
+%! assert (isequal (f(sin(x)), 2*sin(x)))
+
+%!test
 %! syms x y
 %! f = symfun('f', {x});
 %! assert(isa(f, 'symfun'))
@@ -185,9 +194,72 @@ end
 %! assert(isa(f,'symfun'))
 %! assert(f(10) == sym(8))
 
-%% FIXME: #38
+%!test
+%! % vector symfun
+%! syms x y
+%! F(x,y) = [1; 2*x; y; y*sin(x)];
+%! assert (isa (F, 'symfun'))
+%! assert (isa (F, 'sym'))
+%! assert (isequal (F(sym(pi)/2,4) , [sym(1); sym(pi); 4; 4] ))
+
+%!test
+%! x = sym('x');
+%! y = sym('y');
+%! f(x) = sym('f(x)');
+%! g(x,y) = sym('g(x,y)');
+%! % make sure these don't fail
+%! f(1);
+%! g(1,2);
+%! g(x,y);
+%! diff(g, x);
+%! diff(g, y);
+
+%!test
+%! % defining 1D symfun in terms of a 2D symfun
+%! syms x y t
+%! syms 'g(x,y)'
+%! f(t) = g(t,t);
+%! f(5);
+%! assert (length(f.vars) == 1)
+%! assert (isequal( diff(f,x), sym(0)))
+
+%!test
+%! % replace g with shorter and specific fcn
+%! syms x g(x)
+%! g;
+%! g(x) = 2*x;
+%! assert( isequal (g(5), 10))
+
+%!test
+%! % octave <= 3.8 needs quotes on 2D symfuns, so make sure it works
+%! syms x y
+%! syms 'f(x)'
+%! syms 'g(x,y)'
+%! assert (isa (f, 'symfun'))
+%! assert (isa (g, 'symfun'))
+
+
 %%!test
+%%! % FIXME: Bug #41, enable this later, when Octave >= 4.0 is standard.
+%%! % Octave <= 3.8 parser fails without quotes around 2D fcn
+%%! syms x y
+%%! syms g(x,y)
+%%! assert (isa (g, 'symfun'))
+
+%%!test
+%%! % FIXME: Bug #38, syms f(x) without defining x
 %%! clear
 %%! syms f(x)
 %%! assert(isa(f, 'symfun'))
 %%! assert(isa(x, 'sym'))
+
+%%!test
+%%! % FIXME: Bug #40: ops on symfuns return pure syms
+%%! syms x y
+%%! f(x) = x^2;
+%%! g(x,y) = sym('g(x,y)')
+%%! f2 = 2*f;
+%%! assert( isequal (f2(4), 32))
+%%! assert( isa(f2, 'symfun'))
+%%! assert( isa(2*g, 'symfun'))
+%%! assert( isa(0*g, 'symfun'))  % in SMT, this is the zero symfun
