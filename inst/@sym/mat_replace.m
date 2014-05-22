@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} mat_replace (@var{A}, @var{subs}, @var{rhs})
+%% @deftypefn  {Function File} {@var{z} =} mat_replace (@var{A}, @var{subs}, @var{rhs})
 %% Private helper routine for setting symbolic array entries.
 %%
 %% @end deftypefn

@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} mat_rclist_asgn (@var{A}, @var{r}, @var{c}, @var{B})
+%% @deftypefn  {Function File} {@var{z} =} mat_rclist_asgn (@var{A}, @var{r}, @var{c}, @var{B})
 %% Private helper routine for sym array assigment using lists.
 %%
 %% @code{(R(i),C(i))} specify entries of the matrix @var{A}.

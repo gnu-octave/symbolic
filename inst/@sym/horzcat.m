@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} horzcat (@var{x}, @var{y}, ...)
+%% @deftypefn  {Function File} {@var{z} =} horzcat (@var{x}, @var{y}, ...)
 %% Horizontally concatentate symbolic arrays.
 %%
 %% @seealso{vertcat}

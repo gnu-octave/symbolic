@@ -17,8 +17,8 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{g}} factor (@var{f})
-%% @deftypefnx {Function File}  {@var{p,m}} factor (@var{f})
+%% @deftypefn  {Function File}  {@var{g} =} factor (@var{f})
+%% @deftypefnx {Function File}  {[@var{p},@var{m}] =} factor (@var{f})
 %% Factor a symbolic polynomial or integer.
 %%
 %% @seealso{expand}

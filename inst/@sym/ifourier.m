@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{f}} ifourier (@var{FF}, @var{k}, @var{x})
+%% @deftypefn  {Function File} {@var{f} =} ifourier (@var{FF}, @var{k}, @var{x})
 %% Symbolic inverse Fourier transform.
 %%
 %% FIXME: doc, examples

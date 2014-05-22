@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x}} end (@var{x})
+%% @deftypefn  {Function File} {@var{y} =} end (@var{x})
 %% Overloaded end for sym arrays.
 %%
 %% @end deftypefn

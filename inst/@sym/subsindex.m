@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{i}} subsindex (@var{x})
+%% @deftypefn  {Function File} {@var{i} =} subsindex (@var{x})
 %% Used to implement indexing by sym.
 %%
 %% @end deftypefn

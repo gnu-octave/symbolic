@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{FF}} fourier (@var{f}, @var{x}, @var{k})
+%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
 %% Symbolic Fourier transform.
 %%
 %% FIXME: doc, examples

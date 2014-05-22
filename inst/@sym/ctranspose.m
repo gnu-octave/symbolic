@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y}} ctranspose (@var{x})
+%% @deftypefn  {Function File} {@var{y} =} ctranspose (@var{x})
 %% Conjugate (Hermitian) transpose of a symbolic array.
 %%
 %% @seealso{transpose}

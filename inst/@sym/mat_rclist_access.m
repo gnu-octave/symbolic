@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} mat_rclist_access (@var{A}, @var{r}, @var{c})
+%% @deftypefn  {Function File} {@var{z} =} mat_rclist_access (@var{A}, @var{r}, @var{c})
 %% Private helper routine for sym array access via lists of row/col.
 %%
 %% @code{(r(i),c(i))} specify entries of the matrix @var{A}.

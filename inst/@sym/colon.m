@@ -17,8 +17,8 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x}} colon (@var{a},@var{b})
-%% @deftypefnx {Function File} {@var{x}} colon (@var{a},@var{step},@var{b})
+%% @deftypefn  {Function File} {@var{x} =} colon (@var{a},@var{b})
+%% @deftypefnx {Function File} {@var{x} =} colon (@var{a},@var{step},@var{b})
 %% Generate a range of syms.
 %%
 %% FIXME: should this generate intervals?  Check what SMT does?

@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out}} subsref (@var{f}, @var{idx})
+%% @deftypefn  {Function File} {@var{out} =} subsref (@var{f}, @var{idx})
 %% Access entries of a symbolic array.
 %%
 %% @end deftypefn

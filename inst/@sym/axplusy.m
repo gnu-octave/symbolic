@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} axplusy (@var{a}, @var{x}, @var{y})
+%% @deftypefn  {Function File} {@var{z} =} axplusy (@var{a}, @var{x}, @var{y})
 %% Helper function: scalar a times sym x plus sym y.
 %%
 %% @end deftypefn

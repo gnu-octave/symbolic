@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{A} =} assumptions ()
 %% @deftypefnx {Function File} {@var{A} =} assumptions (@var{x})
-%% @deftypefnx {Function File} {@var{v} @var{d} =} assumptions (@var{x}, 'dict')
+%% @deftypefnx {Function File} {[@var{v}, @var{d}] =} assumptions (@var{x}, 'dict')
 %% List assumptions on symbolic variables.
 %%
 %% The assumptions are turned as a cell-array of strings.

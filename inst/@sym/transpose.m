@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y}} transpose (@var{x})
+%% @deftypefn  {Function File} {@var{y} =} transpose (@var{x})
 %% Transpose of a symbolic array.
 %%
 %% @seealso{ctranspose}

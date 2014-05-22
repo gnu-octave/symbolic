@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out}} subsasgn (@var{val}, @var{idx}, @var{rhs})
+%% @deftypefn  {Function File} {@var{out} =} subsasgn (@var{val}, @var{idx}, @var{rhs})
 %% Assign to entries of a symbolic array.
 %%
 %% @end deftypefn

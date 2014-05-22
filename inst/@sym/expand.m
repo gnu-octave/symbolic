@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{y}} expand (@var{x})
+%% @deftypefn  {Function File}  {@var{y} =} expand (@var{x})
 %% Combine parts of a symbolic product.
 %%
 %% @seealso{factor}

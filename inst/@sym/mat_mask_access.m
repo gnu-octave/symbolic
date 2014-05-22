@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z}} mat_mask_access (@var{A}, @var{I})
+%% @deftypefn  {Function File} {@var{z} =} mat_mask_access (@var{A}, @var{I})
 %% Private helper routine for symbolic array access via mask.
 %%
 %% Notes on shape, from observing Matlab/Octave behaviour on doubles:
