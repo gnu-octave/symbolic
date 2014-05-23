@@ -55,3 +55,42 @@ function z = reshape(a, n, m)
 
   z = python_cmd(cmd, sym(a), n, m);
 
+end
+
+
+%!test
+%! d = [2 4 6; 8 10 12];
+%! a = sym(d);
+%! assert (isequal (reshape(a, [1 6]), reshape(d, [1 6])))
+%! assert (isequal (reshape(a, 1, 6), reshape(d, 1, 6)))
+%! assert (isequal (reshape(a, 2, 3), reshape(d, 2, 3)))
+%! assert (isequal (reshape(a, 3, 2), reshape(d, 3, 2)))
+%! assert (isequal (reshape(a, 6, 1), reshape(d, 6, 1)))
+
+%!shared x, a, d
+%! syms x
+%! a = [1 x^2 x^4; x x^3 x^5];
+%! d = [0 2 4; 1 3 5];
+%!
+%!test
+%! b = reshape(a, [1 6]);
+%! assert (isequal (size(b), [1 6]))
+%! assert (isequal (b, x.^reshape(d,1,6)))
+%!
+%!test
+%! b = reshape(a, [6 1]);
+%! assert (isequal (size(b), [6 1]))
+%! assert (isequal (b, x.^reshape(d,6,1)))
+%! b = reshape(b, size(a));
+%! assert (isequal (size(b), [2 3]))
+%! assert (isequal (b, a))
+%!
+%!test
+%! b = a(:);
+%! assert( isequal (size(b), [6 1]))
+%! assert( isequal (b, x.^(d(:))))
+%!
+%!test
+%! % reshape scalar
+%! assert (logical( reshape(x, 1, 1) == x ))
+%! assert (logical( reshape(x, [1 1]) == x ))

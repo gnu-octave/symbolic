@@ -61,3 +61,20 @@ function z = int(f,x,a,b)
     z = python_cmd (cmd, sym(f), sym(x), sym(a), sym(b));
   end
 
+end
+
+
+%!shared x,y,a
+%! syms x y a
+%!assert(logical(int(cos(x)) - sin(x) == 0))
+%!assert(logical(int(cos(x),x) - sin(x) == 0))
+%!assert(logical(int(cos(x),x,0,1) - sin(sym(1)) == 0))
+
+%!test
+%! %% limits might be syms
+%! assert( isequal (int(cos(x),x,sym(0),sym(1)), sin(sym(1))))
+%! assert( isequal (int(cos(x),x,0,a), sin(a)))
+
+%!test
+%! %% other variables present
+%! assert( isequal (int(y*cos(x),x), y*sin(x)))

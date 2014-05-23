@@ -20,7 +20,7 @@
 %% @deftypefn {Function File}  {@var{s} =} latex (@var{x})
 %% Return LaTeX typesetting code for a symbolic expression.
 %%
-%% @seealso{disp,pretty}
+%% @seealso{disp, pretty}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -38,3 +38,12 @@ function varargout = latex(x)
   else
     varargout = {s};
   end
+
+end
+
+
+%!test
+%! syms x
+%! y = sin(x)
+%! assert ( strcmp( latex(y), '\sin{\left (x \right )}'))
+%! assert ( strcmp( latex(exp(x)), 'e^{x}'))
