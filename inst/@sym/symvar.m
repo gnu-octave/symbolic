@@ -131,9 +131,12 @@ end
 %!assert (isequal (symvar (f), [x y]));
 %!assert (isequal (symvar (f, 1), x));
 
-%!test %% closest to x
-%! syms x y a b c alpha xx
-%! assert (isequal (symvar (b*xx*exp(alpha) + c*sin(a*y), 2), [xx y]))
+%!test
+%! %% closest to x
+%! syms x y a b c xx
+%! alpha = sym('alpha');
+%! % https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730
+%! assert( isequal (symvar (b*xx*exp(alpha) + c*sin(a*y), 2), [xx y]))
 
 %! %% tests to match Matlab R2013b
 %!shared x,y,z,a,b,c,X,Y,Z
