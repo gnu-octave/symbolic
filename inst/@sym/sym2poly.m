@@ -98,13 +98,13 @@ function c = sym2poly(p,x)
 
 %!shared x,y,a,b,c
 %! syms x y a b c
-%!assert (sym2poly (x^2 + 3*x - 4), [1 3 -4]);
-%!assert (sym2poly (x^6 - x^3), [1 0 0 -1 0 0 0]);
-%!assert (isequal (sym2poly (x^2 + 3*x - 4, x), [1 3 -4]));
-%!assert (sym2poly (pi*x^2 + exp(sym(1))), [pi 0 exp(1)]);
+%!assert (isequal (sym2poly (x^2 + 3*x - 4), [1 3 -4]))
+%!assert (isequal (sym2poly (x^6 - x^3), [1 0 0 -1 0 0 0]))
+%!assert (isequal (sym2poly (x^2 + 3*x - 4, x), [1 3 -4]))
+%!assert (norm (sym2poly (pi*x^2 + exp(sym(1))) - [pi 0 exp(1)]) < 10*eps)
 %% types
-%!assert (isa(sym2poly (x^2 + 3*x - 4), 'double'))
-%!assert (isa(sym2poly (x^2 + 3*x - 4, x), 'sym'))
+%!assert (isa (sym2poly (x^2 + 3*x - 4), 'double'))
+%!assert (isa (sym2poly (x^2 + 3*x - 4, x), 'sym'))
 %% tests with other vars
 %!assert (isequal (sym2poly (x^2+y*x, x), [sym(1) y sym(0)]))
 %!assert (isequal (sym2poly (x^2+y*x, y), [x x^2]))
