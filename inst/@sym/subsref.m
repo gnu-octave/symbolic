@@ -30,11 +30,15 @@ function out = subsref (f, idx)
   %disp('call to @sym/subsref')
   switch idx.type
     case '()'
-      if (isa(idx.subs, 'sym'))
-        error('todo: indexing by @sym, can this happen? what is subindex for then?')
-      else
-        out = mat_access(f, idx.subs);
+      % sym(sym) indexing in Matlab gets here (on Octave, subsindex
+      % does it)
+      for i=1:length(idx.subs)
+        if (isa(idx.subs{i}, 'sym'))
+          idx.subs{i} = subsindex(idx.subs{i})+1;
+        end
       end
+      out = mat_access(f, idx.subs);
+
     case '.'
       fld = idx.subs;
       if (strcmp (fld, 'pickle'))
