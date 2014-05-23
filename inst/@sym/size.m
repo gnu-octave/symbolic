@@ -19,20 +19,25 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{d} =} size (@var{x})
 %% @deftypefnx {Function File} {[@var{n}, @var{m}] =} size (@var{x})
+%% @deftypefnx {Function File} {@var{d} =} size (@var{x}, @var{dim})
 %% Return the size of a symbolic array.
 %%
-%% @seealso{length,numel}
+%% @seealso{length, numel}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function [n,m] = size(x)
+function [n, m] = size(x, dim)
 
   n = x.size;
-  if (nargout == 2)
+  if (nargin >= 2) && (nargout >= 2)
+    error('invalid size call')
+  elseif (nargout == 2)
     m = n(2);
     n = n(1);
+  elseif (nargin == 2)
+    n = n(dim);
   end
 
   return
@@ -50,3 +55,43 @@ function [n,m] = size(x)
   if (nargout <= 1)
     n = [n m];
   end
+
+end
+
+
+%!test
+%! a = sym([1 2 3]);
+%! [n,m] = size(a);
+%! assert (n == 1 && m == 3)
+
+%!test
+%! a = sym([1 2 3]);
+%! n = size(a);
+%! assert (isequal (n, [1 3]))
+
+%!test
+%! %% size, numel, length
+%! a = sym([1 2 3; 4 5 6]);
+%! assert (isa (size(a), 'double'))
+%! assert (isa (numel(a), 'double'))
+%! assert (isa (length(a), 'double'))
+%! assert (isequal (size(a), [2 3]))
+%! assert (length(a) == 3)
+%! assert (numel(a) == 6)
+%! a = sym([1; 2; 3]);
+%! assert (isequal (size(a), [3 1]))
+%! assert (length(a) == 3)
+%! assert (numel(a) == 3)
+
+%!test
+%! %% size by dim
+%! a = sym([1 2 3; 4 5 6]);
+%! n = size(a, 1);
+%! assert (n == 2)
+%! m = size(a, 2);
+%! assert (m == 3)
+%! a = sym([1 2 3]');
+%! n = size(a, 1);
+%! assert (n == 3)
+%! m = size(a, 2);
+%! assert (m == 1)
