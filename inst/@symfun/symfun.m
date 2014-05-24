@@ -75,18 +75,8 @@
 %% f = symfun('f', x)
 %% g = symfun('g', [x y])
 %% @end example
-%%
-%% FIXME: but currently can include @code{(x,y)}.
-%% FIXME: and in fact the 2nd argument can be omitted in that case.
-%% FIXME: remove this feature?
-%% @example
-%% x = sym('x')
-%% y = sym('y')
-%% f = symfun('f(x)', x)
-%% g = symfun('g(x,y)', [x y])
-%% f = symfun('f(x)')
-%% g = symfun('g(x,y)')
-%% @end example
+%% However, for interaction with @code{sym()}, it currently can
+%% include the @code{(x,y)}.
 %%
 %%
 %% @seealso{sym, syms}
@@ -99,12 +89,14 @@ function f = symfun(expr, vars)
 
   if (nargin == 0)
     % octave docs say need a no-argument default for loading from files
-    expr = sym(0)
-    vars = sym('x')
+    expr = sym(0);
+    vars = sym('x');
+  elseif (nargin == 1)
+    error('takes two input arguments')
   end
 
   % if the vars are in a sym array, put them in a cell array
-  if ((nargin > 1) && (isa( vars, 'sym')))
+  if (isa( vars, 'sym'))
     varsarray = vars;
     vars = cell(1,numel(varsarray));
     for i=1:numel(varsarray)
@@ -119,22 +111,10 @@ function f = symfun(expr, vars)
   if (ischar (expr))
     tok = mystrsplit(expr, {'(', ')', ','});
     fname = strtrim(tok{1});
+    assert (isvarname (fname))
 
     cmd = sprintf( ['_f = sp.Function("%s")(*_ins)\n' ...
                     'return (_f,)' ], fname);
-
-    % FIXME: if arguments are not provided we create them here (why?
-    % Matlab doesn't)
-    if (nargin == 1)
-      vars = {};  c = 0;
-      for i = 2:length(tok)
-        vs = strtrim(tok{i});
-        if ~isempty(vs)
-          c = c + 1;
-          vars{c} = sym(vs);
-        end
-      end
-    end
 
     expr = python_cmd (cmd, vars{:});
   end
@@ -175,17 +155,10 @@ end
 %! syms x y
 %! f = symfun('f', {x});
 %! assert(isa(f, 'symfun'))
-%! f = symfun('f(x)', {x});
+%! f = symfun('f', [x y]);
 %! assert(isa(f, 'symfun'))
-%! f = symfun('f(x,y)', [x y]);
+%! f = symfun('f', {x y});
 %! assert(isa(f, 'symfun'))
-%! f = symfun('f(x,y)', x);
-%! assert(isa(f, 'symfun'))
-
-%!test
-%! %% no variables given
-%! f = symfun('f(x)');
-%! assert(isa(f,'symfun'))
 
 %!test
 %! %% rhs is not sym
@@ -238,27 +211,27 @@ end
 %! assert (isa (f, 'symfun'))
 %! assert (isa (g, 'symfun'))
 
-%%!test
-%%! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
-%%! % FIXME: b/c its a parse error, even wrapping as below won't help.
-%%! if exist('octave_config_info', 'builtin');
-%%!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
-%%!     syms x y
-%%!     syms g(x,y)
-%%!     assert (isa (g, 'symfun'))
-%%!   end
-%%! else  % matlab
-%%!   syms x y
-%%!   syms g(x,y)
-%%!   assert (isa (g, 'symfun'))
-%%! end
+%!test
+%! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
+%! % (put inside eval to hide from 3.6 parser)
+%! if exist('octave_config_info', 'builtin');
+%!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
+%!     syms x y
+%!     eval('syms g(x,y)')
+%!     assert (isa (g, 'symfun'))
+%!   end
+%! else  % matlab
+%!   syms x y
+%!   eval('syms g(x,y)')
+%!   assert (isa (g, 'symfun'))
+%! end
 
-%%!test
-%%! % FIXME: Bug #38, syms f(x) without defining x
-%%! clear
-%%! syms f(x)
-%%! assert(isa(f, 'symfun'))
-%%! assert(isa(x, 'sym'))
+%!test
+%! % syms f(x) without defining x
+%! clear
+%! syms f(x)
+%! assert(isa(f, 'symfun'))
+%! assert(isa(x, 'sym'))
 
 %%!test
 %%! % FIXME: Bug #40: ops on symfuns return pure syms

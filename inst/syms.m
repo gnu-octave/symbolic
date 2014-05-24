@@ -39,18 +39,23 @@
 %% syms x y z positive
 %% @end example
 %%
+%% Symfun's represent abstract or concrete functions.  Abstract
+%% symfun's can be created with @code{syms}:
+%% @example
+%% syms f(x)
+%% @end example
+%% If @code{x} does not exost in the callers workspace, it
+%% is created as a @strong{side effect} in that workspace.
+%%
 %% Called without arguments, @code{syms} displays a list of
 %% all symbolic functions defined in the current workspace.
 %%
-%% Caution: this code runs @code{evalin()}, which has some implications:
-%% @itemize
-%% @item You should not use it (programmatically) on strings you don't trust.
-%% @item On Matlab, you may not want to use @code{syms} within functions.
+%% Caution: On Matlab, you may not want to use @code{syms} within
+%% functions.
 %%   In particular, if you shadow a function name, you may get
 %%   hard-to-track-down bugs.  For example, instead of writing
 %%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
-%% @end itemize
 %%
 %% @seealso{sym}
 %% @end deftypefn
@@ -64,30 +69,67 @@ function syms(varargin)
   %output names of symbolic vars
   if (nargin == 0)
     S = evalin('caller', 'whos');
+    disp('Symbolic variables in current scope:')
     for i=1:numel(S)
       %S(i)
       if strcmp(S(i).class, 'sym')
-        disp(S(i).name)
+        disp(['  ' S(i).name])
       elseif strcmp(S(i).class, 'symfun')
         % FIXME improve display of symfun
-        disp([S(i).name ' (symfun)'])
+        disp(['  ' S(i).name ' (symfun)'])
       end
     end
     return
   end
 
+  % Check if final input is assumption
   asm = varargin{end};
   if ( strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || ...
        strcmp(asm, 'even') || strcmp(asm, 'odd') || strcmp(asm, 'rational') || ...
        strcmp(asm, 'clear') )
-    asm = [', ''' asm ''''];
     last = nargin-1;
   else
     asm = '';
     last = nargin;
   end
+
+  % loop over each input
   for i = 1:last
-    cmd = sprintf('%s = sym(''%s''%s);', varargin{i}, varargin{i}, asm);
-    evalin('caller', cmd)
+    expr = varargin{i};
+
+    % look for parenthesis: check if we're making a symfun
+    if (isempty (strfind (expr, '(') ))  % no
+      assert(isvarname(expr)); % help prevent malicious strings
+      if isempty(asm)
+        assignin('caller', expr, sym(expr))
+      else
+        assignin('caller', expr, sym(expr, asm))
+      end
+
+    else  % yes, this is a symfun
+      assert(isempty(asm), 'mixing symfuns and assumptions not supported')
+      tok = mystrsplit(varargin{i}, {'(', ')', ','});
+      name = strtrim(tok{1});
+      vars = {};  varnames = {};  c = 0;
+      for i = 2:length(tok)
+        vs = strtrim(tok{i});
+        if ~isempty(vs)
+          assert(isvarname(vs)); % help prevent malicious strings
+          exists = evalin('caller',['exist(''' vs ''', ''var'')']);
+          if (exists)
+            vs_sym = evalin('caller', vs);
+          else
+            vs_sym = sym(vs);
+            assignin('caller', vs, vs_sym);
+          end
+          c = c + 1;
+          vars{c} = vs_sym;;
+          varnames{c} = vs;
+        end
+      end
+      sf = symfun(name, vars);
+      assignin('caller', name, sf);
+    end
+
   end
 
