@@ -80,62 +80,28 @@ function s = sym(x, varargin)
     return
   end
 
-  % FIXME not careful enough with the x argument here?
-  % for example, see lambda->lamda below
-  if (nargin == 2)
-    %disp('make w/ assumptions')
-    asm = varargin{1};
-    if (~ischar(x))
-      error('invalid input');
-    end
-    if isstruct(asm) && isscalar(asm)
-      % we have an assumptions dict
-      cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
-      s = python_cmd (cmd, asm);
-      return
-    elseif strcmp(asm, 'real')
-      cmd = sprintf('z = sympy.Symbol("%s", real=True)', x);
-    elseif strcmp(asm, 'positive')
-      cmd = sprintf('z = sympy.Symbol("%s", positive=True)', x);
-    elseif strcmp(asm, 'integer')
-      cmd = sprintf('z = sympy.Symbol("%s", integer=True)', x);
-    elseif strcmp(asm, 'even')
-      cmd = sprintf('z = sympy.Symbol("%s", even=True)', x);
-    elseif strcmp(asm, 'odd')
-      cmd = sprintf('z = sympy.Symbol("%s", odd=True)', x);
-    elseif strcmp(asm, 'rational')
-      cmd = sprintf('z = sympy.Symbol("%s", rational=True)', x);
-    elseif strcmp(asm, 'clear')
-      error('Not implemented, Issue #37');
-    else
-      error('that assumption not supported')
-    end
-    s = python_cmd ([ cmd '\nreturn (z,)' ]);
-    return
-  end
-
   %% User interface for defining sym
   % sym(1), sym('x'), etc.
 
   % not a subclass, exactly a sym, not symfun
   %if (strcmp (class (x), 'sym'))
-  if (isa (x, 'sym'))
+  if (isa (x, 'sym')  &&  nargin==1)
     s = x;
     return
 
-  elseif (iscell (x))
+  elseif (iscell (x)  &&  nargin==1)
     s = cell_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double')  &&  ~isscalar (x) )
+  elseif (isa (x, 'double')  &&  ~isscalar (x)  &&  nargin==1)
     s = double_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double')  &&  ~isreal (x) )
+  elseif (isa (x, 'double')  &&  ~isreal (x)  &&  nargin==1)
     s = sym(real(x)) + sym('I')*sym(imag(x));
     return
 
-  elseif (isa (x, 'double'))
+  elseif (isa (x, 'double')  &&  nargin==1)
     if (x == pi)
       s = sym('pi');
     elseif (isinf(x)) && (x > 0)
@@ -148,7 +114,7 @@ function s = sym(x, varargin)
       s = sym(sprintf('%d', x));
     else
       % Allow 1/3 and other "small" fractions.
-      % FIXME: good if this waring were configurable, personally I like
+      % FIXME: good if this warning were configurable, personally I like
       % it to at least warn so I can catch bugs.
       % Matlab SMT also does this (w/o warning).
       % I don't trust this behaviour much.
@@ -159,6 +125,17 @@ function s = sym(x, varargin)
 
 
   elseif (isa (x, 'char'))
+    useSymbolNotS = false;
+    cmd = [];
+
+    % first check if we have assumptions
+    asm = [];
+    if (nargin == 2)
+      asm = varargin{1};
+      useSymbolNotS = true;
+    end
+
+    % check if we're making a symfun
     if (~isempty (strfind (x, '(') ))
       %% Start making an abstract symfun
       % If we see parentheses, we assume user is making a symfun.  We
@@ -167,15 +144,18 @@ function s = sym(x, varargin)
       % irrelevant except for the special contents of the "extra"
       % field.  subasgn can then note this and actually build the
       % symfun: it will know the arguments from the LHS of "g(x) =
-      % sym('g(x)')".  If the user calls "g = sym('g(x)')", I see no
-      % easy way to throw an error, so we just make the symbol itself
-      % a plea to read the docs ;-)
+      % sym('g(x)')".  Rather, if the user calls "g = sym('g(x)')",
+      % I see no easy way to throw an error, so we just make the
+      % symbol itself a plea to read the docs ;-)
       %disp('DEBUG: I hope you are using this sym for the rhs of a symfun...');
       s = sym('pleaseReadHelpSymFun');
       s.extra = {'MAKING SYMFUN HACK', x};
       %s = x;  % this would be nicer, but it fails to call subsasgn
+      assert(isempty(asm))
       return
     end
+
+    % various special cases for x
     if (strcmp(x, 'pi'))
       cmd = 'z = sp.pi';
     elseif (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
@@ -187,25 +167,54 @@ function s = sym(x, varargin)
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I';
     %% Symbols with special meanings in SymPy: Issue #23
-    elseif (strcmp(x, 'beta')),   cmd = 'z = sympy.Symbol("beta")';
-    elseif (strcmp(x, 'gamma')),  cmd = 'z = sympy.Symbol("gamma")';
-    elseif (strcmp(x, 'zeta')),   cmd = 'z = sympy.Symbol("zeta")';
-    elseif (strcmp(x, 'lambda')), cmd = 'z = sympy.Symbol("lamda")'; %not typo
-    elseif (strcmp(x, 'Lambda')), cmd = 'z = sympy.Symbol("Lamda")'; %not typo
-    elseif (strcmp(x, 'Chi')),    cmd = 'z = sympy.Symbol("Chi")';
-    elseif (strcmp(x, 'S')),      cmd = 'z = sympy.Symbol("S")';  % possibly
-    elseif (strcmp(x, 'N')),      cmd = 'z = sympy.Symbol("N")';  % a bad
-    elseif (strcmp(x, 'Q')),      cmd = 'z = sympy.Symbol("Q")';  % idea!
-    else
-      if (~isempty((strfind(x, '.'))))
-        warning('possibly unintended decimal point in constructor string');
-      end
-      cmd = sprintf('z = sp.S("%s")', x);
+    elseif (strcmp(x, 'beta') || strcmp(x, 'gamma') || ...
+            strcmp(x, 'zeta') || strcmp(x, 'Chi') || ...
+            strcmp(x, 'S') || strcmp(x, 'N') || strcmp(x, 'Q'))
+      useSymbolNotS = true;
+    elseif (strcmp(x, 'lambda'))
+      x = 'lamda';
+      useSymbolNotS = true;
+    elseif (strcmp(x, 'Lambda'))
+      x = 'Lamda';
+      useSymbolNotS = true;
     end
+
+    if (~useSymbolNotS)
+      % if we're not forcing Symbol() then we use S(), unless
+      % cmd already set.
+      if (isempty(cmd))
+        if (~isempty(strfind(x, '.')))
+          warning('possibly unintended decimal point in constructor string');
+        end
+        cmd = sprintf('z = sympy.S("%s")', x);
+      end
+    else % useSymbolNotS
+      assert(isempty(cmd), 'inconsistent input')
+      if isempty(asm)
+        cmd = sprintf('z = sympy.Symbol("%s")', x);
+      elseif isstruct(asm) && isscalar(asm)
+        % we have an assumptions dict
+        cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
+        s = python_cmd (cmd, asm);
+        return
+      elseif strcmp(asm, 'clear')
+        % implement in its own m file
+        % FIXME does SMT allow this in sym or only syms
+        error('clear is not implemented, Issue #37');
+      elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
+              strcmp(asm, 'integer') || strcmp(asm, 'even') || ...
+              strcmp(asm, 'odd') || strcmp(asm, 'rational'))
+        cmd = sprintf('z = sympy.Symbol("%s", %s=True)', x, asm);
+      else
+        error('that assumption not supported')
+      end
+    end % useSymbolNotS
+
   else
     x
     class(x)
-    error('conversion from that type to symbolic not (yet) supported');
+    nargin
+    error('conversion to symbolic with those arguments not (yet) supported');
   end
 
   s = python_cmd ([ cmd '\nreturn (z,)' ]);
