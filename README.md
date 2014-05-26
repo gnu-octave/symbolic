@@ -28,15 +28,15 @@ How to Install
 1. The only dependencies are Python and SymPy.  Consult the SymPy
 website (e.g., "yum install sympy" on Fedora)
 
-2. Download the latest release, e.g., octsympy-0.0.3.tar.gz
+2. Download the latest release, e.g., octsympy-0.0.4.tar.gz
 
-3. Run Octave in the folder containing the octsympy-0.0.3.tar.gz file.
+3. Run Octave in the folder containing the octsympy-0.0.4.tar.gz file.
 
-4. At Octave prompt, type "pkg install octsympy-0.0.03.tar.gz".
+4. At Octave prompt, type "pkg install octsympy-0.0.4.tar.gz".
 
 5. At Octave prompt, type "pkg load octsympy".
 
-6. At Octave prompt, type "syms x", then "(sin(x/2))^3".
+6. At Octave prompt, type "syms x", then "f = (sin(x/2))^3", "diff(f,x)", etc.
 
 
 
