@@ -24,7 +24,7 @@
 %%
 %% Search expressions in the callers workspace for variables with
 %% same name as @var{oldx} and substitutes @var{newx}.
-%% If @var{oldx} is omitted, @var{newx} is used instead. 
+%% If @var{oldx} is omitted, @var{newx} is used instead.
 %%
 %% Note: operates on the caller's workspace via evalin/assignin.
 %% So if you call this from other functions, it will operate in
@@ -38,26 +38,25 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = symreplace(oldx, newx, caller)
+function varargout = symreplace(oldx, newx, context)
 
   if (nargin < 3)
-    caller = 'caller';
+    context = 'caller';
   end
   if (nargin == 1)
     newx = oldx;
   end
 
-  assert(strcmp(caller, 'caller') || strcmp(caller, 'base'))
+  assert(strcmp(context, 'caller') || strcmp(context, 'base'))
 
   xstr = strtrim(disp(oldx));
 
-  S = evalin(caller, 'whos');
+  S = evalin(context, 'whos');
   for i = 1:numel(S)
-      S(i).name
       if strcmp(S(i).class, 'sym') || strcmp(S(i).class, 'symfun')
-        % idea: get the variable from the caller, check if
+        % idea: get the variable from the caller's context, check if
         % contains any symbols with the same string as x.
-        v = evalin(caller, S(i).name)
+        v = evalin(context, [S(i).name ';']);
         t = findsymbols(v);
         dosub = false;
         for c = 1:length(t)
@@ -70,7 +69,7 @@ function varargout = symreplace(oldx, newx, caller)
         % If so, subs in the new x and replace that variable.
         if (dosub)
           newv = subs(v,t{c},newx);
-          assignin(caller, S(i).name, newv);
+          assignin(context, S(i).name, newv);
         end
       end
       if strcmp(S(i).class, 'symfun')
