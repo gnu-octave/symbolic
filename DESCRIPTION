@@ -1,6 +1,6 @@
 Name: octsympy
-Version: 0.0.3
-Date: 2014-04-29
+Version: 0.0.4
+Date: 2014-05-26
 Author: Colin B. Macdonald <cbm@m.fsf.org>
 Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
 Title: Octave Symbolic Package using SymPy
