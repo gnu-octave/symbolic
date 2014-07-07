@@ -25,10 +25,13 @@
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, [@var{a}, @var{b}])
 %% Symbolic integration.
 %%
-%% The definite integral: to integrate an expression @var{f} with
-%% respect to variable @var{x} from @var{x}=0 to @var{x}=2 is:
+%% Definite integral:
 %% @example
 %% F = int(f, x, 0, 2)
+%% @end example
+%% or alternatively
+%% @example
+%% F = int(f, x, [0 2])
 %% @end example
 %%
 %% Indefinite integral:
@@ -45,24 +48,11 @@
 
 function F = int(f, x, a, b)
 
-  if (nargin == 1)
-    % int(f)
-
-    % minor issue here when f is a constant: if x had
-    % assumptions then here we've ignored them.
-    %cmd = [ '(f,) = _ins\n' ...
-    %        'if f.is_constant():\n' ...
-    %        '    return (sp.S(''x'')*f,)\n' ...
-    %        'F = sp.integrate(f)\n'  ...
-    %        'return (F,)' ];
-    %F = python_cmd (cmd, sym(f));
-    %return
-
-    definite = false;
-    x = symvar(f,1);
-    if isempty(x)
-      x = sym('x');
-    end
+  if (nargin == 4)
+    % int(f, x, a, b)
+    assert(numel(a)==1)
+    assert(numel(b)==1)
+    definite = true;
 
 
   elseif (nargin == 2) && (numel(x) == 1)
@@ -70,10 +60,20 @@ function F = int(f, x, a, b)
     definite = false;
 
 
+  elseif (nargin == 1)
+    % int(f)
+    definite = false;
+    x = symvar(f,1);
+    if isempty(x)
+      x = sym('x');
+    end
+
+
   elseif (nargin == 2) && (numel(x) == 2)
     % int(f, [a b])
     idx.type = '()';
     idx.subs = {2};
+    definite = true;
     b = subsref(x, idx);
     idx.subs = {1};
     a = subsref(x, idx);
@@ -82,35 +82,27 @@ function F = int(f, x, a, b)
     if isempty(x)
       x = sym('x');
     end
-    definite = true;
 
 
   elseif (nargin == 3) && (numel(a) == 2)
     % int(f, x, [a b])
+    definite = true;
     idx.type = '()';
     idx.subs = {2};
     b = subsref(a, idx);
     idx.subs = {1};
     a = subsref(a, idx);
-    definite = true;
 
 
   elseif (nargin == 3) && (numel(a) == 1)
     % int(f, a, b)
+    definite = true;
     b = a;
     a = x;
     x = symvar(f,1);
     if isempty(x)
       x = sym('x');
     end
-    definite = true;
-
-
-  elseif (nargin == 4)
-    % int(f, x, a, b)
-    assert(numel(a)==1)
-    assert(numel(b)==1)
-    definite = true;
 
 
   else
