@@ -58,17 +58,14 @@ function vars = symvar(F, Nout)
     end
 
   else
-    if (Nout == 0)
-      error('number of requested symbols should be positive')
-    end
-
+    assert(Nout >= 0, 'number of requested symbols should be positive')
 
     if (Nlist < Nout)
-      if (Nout == 1)
-        warning('Asked for one variable, but none found.');
-      else
-        warning('Asked for %d variables, but only %d found.',Nout,Nlist);
-      end
+      %if (Nout == 1)
+      %  warning('Asked for one variable, but none found.');
+      %else
+      %  warning('Asked for %d variables, but only %d found.',Nout,Nlist);
+      %end
       Nout = Nlist;
     end
 
@@ -111,20 +108,12 @@ function vars = symvar(F, Nout)
 end
 
 
-%! %% some corner cases
-%!assert (isempty (symvar (sym(1))));
 %!test
-%! disp('*** One warning expected')
+%! %% some empty cases
+%! assert (isempty (symvar (sym(1))));
 %! assert (isempty (symvar (sym(1),1)));
-%!test
-%! % should fail on symbols
-%! try
-%!   symvar (sym (1), 0);
-%!   waserr = false;
-%! catch
-%!   waserr = true;
-%! end
-%! assert (waserr)
+%! assert (isempty (symvar (sym(1),0)));
+%! assert (isempty (symvar (sym('x'),0)));
 
 %!shared x,y,f
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;
