@@ -53,8 +53,9 @@ function [flag, newobj] = fix_assumptions(obj, newx, xstr)
       warning('FIXME: need to do anything special for symfun vars?')
     end
 
+
   elseif iscell(obj)
-    fprintf('Replacing inside cell array of numel=%d\n', numel(obj))
+    %fprintf('Recursing into a cell array of numel=%d\n', numel(obj))
     newobj = obj;
     flag = false;
     for i=1:numel(obj)
@@ -65,8 +66,9 @@ function [flag, newobj] = fix_assumptions(obj, newx, xstr)
       end
     end
 
+
   elseif isstruct(obj)
-    fprintf('Replacing inside a struct array of numel=%d\n', numel(obj))
+    %fprintf('Recursing into a struct array of numel=%d\n', numel(obj))
     newobj = obj;
     fields = fieldnames(obj);
     for i=1:numel(obj)
@@ -83,6 +85,7 @@ function [flag, newobj] = fix_assumptions(obj, newx, xstr)
       end
     end
   end
+
 
   if ~(flag)
     newobj = [];

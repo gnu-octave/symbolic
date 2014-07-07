@@ -198,9 +198,22 @@ function s = sym(x, varargin)
         s = python_cmd (cmd, asm);
         return
       elseif strcmp(asm, 'clear')
-        % implement in its own m file
-        % FIXME does SMT allow this in sym or only syms
-        error('clear is not implemented, Issue #37');
+        %% 'clear' is a special case
+        newx = sym(x);
+        % --------------------------
+        % Muck around in the caller's namespace
+        xstr = strtrim(disp(newx));
+        S = evalin('caller', 'whos');
+        evalin('caller', '[];');  % clear 'ans'
+        for i = 1:numel(S)
+          obj = evalin('caller', S(i).name);
+          [flag, newobj] = fix_assumptions(obj, newx, xstr);
+          if flag, assignin('caller', S(i).name, newobj); end
+        end
+        % --------------------------
+        s = newx;
+        return
+
       elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
               strcmp(asm, 'integer') || strcmp(asm, 'even') || ...
               strcmp(asm, 'odd') || strcmp(asm, 'rational'))
@@ -224,4 +237,23 @@ end
 
 %!test
 %! assert (isa (sym (pi), 'sym'))
-%!assert (isa (sym ('beta'), 'sym'))
+%! assert (isa (sym ('beta'), 'sym'))
+
+%!test
+%! %% assumptions and clearing them
+%! x = sym('x', 'real');
+%! f = {x {2*x}};
+%! A = assumptions();
+%! assert ( ~isempty(A))
+%! x = sym('x', 'clear');
+%! A = assumptions();
+%! assert ( isempty(A))
+
+%!test
+%! %% matlab compat, syms x clear should add x to workspace
+%! x = sym('x', 'real');
+%! f = 2*x;
+%! clear x
+%! assert (~exist('x', 'var'))
+%! x = sym('x', 'clear');
+%! assert (exist('x', 'var'))

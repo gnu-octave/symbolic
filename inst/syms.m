@@ -102,6 +102,22 @@ function syms(varargin)
       assert(isvarname(expr)); % help prevent malicious strings
       if isempty(asm)
         assignin('caller', expr, sym(expr))
+      elseif strcmp(asm, 'clear')
+        % We do this here instead of calling sym() because sym()
+        % would modify this workspace instead of the caller's.
+        newx = sym(expr);
+        assignin('caller', expr, newx);
+        % --------------------------
+        % Muck around in the caller's namespace
+        xstr = strtrim(disp(newx));
+        S = evalin('caller', 'whos');
+        evalin('caller', '[];');  % clear 'ans'
+        for i = 1:numel(S)
+          obj = evalin('caller', S(i).name);
+          [flag, newobj] = fix_assumptions(obj, newx, xstr);
+          if flag, assignin('caller', S(i).name, newobj); end
+        end
+        % --------------------------
       else
         assignin('caller', expr, sym(expr, asm))
       end
@@ -133,3 +149,30 @@ function syms(varargin)
 
   end
 
+end
+
+
+%!test
+%! %% assumptions
+%! syms x real
+%! x2 = sym('x', 'real');
+%! assert (isequal (x, x2))
+
+%!test
+%! %% assumptions and clearing them
+%! syms x real
+%! f = {x {2*x}};
+%! A = assumptions();
+%! assert ( ~isempty(A))
+%! syms x clear
+%! A = assumptions();
+%! assert ( isempty(A))
+
+%!test
+%! %% matlab compat, syms x clear should add x to workspace
+%! syms x real
+%! f = 2*x;
+%! clear x
+%! assert (~exist('x', 'var'))
+%! syms x clear
+%! assert (exist('x', 'var'))
