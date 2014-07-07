@@ -31,15 +31,18 @@ function A = python_ipc_popen2(what, cmd, varargin)
     disp('##  We have popen2(): opening a new pipe for two-way IPC with SymPy...')
     disp('##');
 
-    [fin, fout, pid] = popen2 ('/bin/python','-i');
-    %[fin, fout, pid] = popen2 ('/home/cbm/mydebugpython.sh');
-    %[fin, fout, pid] = popen2 ('/bin/python','-i -c "x=1; print x"');
+    [fin, fout, pid] = popen2 ('python','-i');
 
     fprintf('##  Technical info: fin = %d, fout = %d, pid = %d\n', fin, fout, pid)
     disp('##');
     disp('##  Python should be starting, you may see a few lines of output')
     disp('##  from it which can probably be ignored until your prompt returns.')
     disp('##')
+    fflush (stdout);
+
+    if (pid < 0)
+      error('popen2() failed');
+    end
 
     headers = python_header();
     fputs (fin, headers);

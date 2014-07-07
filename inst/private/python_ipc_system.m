@@ -62,7 +62,7 @@ function A = python_ipc_system(what, cmd, varargin)
   if status ~= 0
     status
     out
-    error('failed');
+    error('system() call failed!');
   end
   A = extractblock(out, tag.item, tag.enditem);
   % cut the "import variables success message"
