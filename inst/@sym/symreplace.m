@@ -49,47 +49,32 @@ function varargout = symreplace(oldx, newx, context)
 
   assert(strcmp(context, 'caller') || strcmp(context, 'base'))
 
-  xstr = strtrim(disp(oldx));
-
-  S = evalin(context, 'whos');
-  for i = 1:numel(S)
-      if strcmp(S(i).class, 'sym') || strcmp(S(i).class, 'symfun')
-        % idea: get the variable from the caller's context, check if
-        % contains any symbols with the same string as x.
-        v = evalin(context, [S(i).name ';']);
-        t = findsymbols(v);
-        dosub = false;
-        for c = 1:length(t)
-          ystr = strtrim(disp(t{c}));
-          if strcmp(xstr, ystr)
-            dosub = true;
-            break
-          end
-        end
-        % If so, subs in the new x and replace that variable.
-        if (dosub)
-          newv = subs(v,t{c},newx);
-          assignin(context, S(i).name, newv);
-        end
-      end
-      if strcmp(S(i).class, 'symfun')
-        warning('FIXME: need to do anything special for symfun vars?')
-      end
-  end
+  assignin(context, 'hack__newx__', newx);
+  assignin(context, 'hack__xstr__', strtrim(disp(oldx)));
+  evalin(context, 'fix_assumptions_script');
 
 end
 
 
 %!test
-%! %% start with assumptions on x then remove them
+%! % start with assumptions on x then remove them
 %! syms x positive
 %! f = x*10;
 %! symreplace(x, sym('x'))
 %! assert(isempty(assumptions(x)))
 
-
 %!test
+%! % replace x with y
 %! syms x
 %! f = x*10;
 %! symreplace(x, sym('y'))
 %! assert( isequal (f, 10*sym('y')))
+
+%!test
+%! % gets inside structs
+%! syms x
+%! f = {x 1 2 {3 4*x}};
+%! symreplace(x, sym('y'))
+%! syms y
+%! assert( isequal (f{1}, y))
+%! assert( isequal (f{4}{2}, 4*y))

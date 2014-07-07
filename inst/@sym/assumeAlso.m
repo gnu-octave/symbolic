@@ -52,42 +52,9 @@ function varargout = assumeAlso(x, cond, varargin)
   xstr = strtrim(disp(x));
   newx = sym(xstr, ca);
 
-
-  %% tricky part
-  % find other instances of x and replace them
-  % with newx.
-  % FIXME: may want a way to disable this, its essentially for
-  % Matlab SMT compatibility.
-
-  
-  % FIXME: how to split this out to helper fcn? 'caller' would bee wrong?
-  if (1==1)
-    S = evalin('caller', 'whos');
-    for i = 1:numel(S)
-      if strcmp(S(i).class, 'sym') || strcmp(S(i).class, 'symfun')
-        % idea: get the variable from the caller, check if
-        % contains any symbols with the same string as x.
-        v = evalin('caller', S(i).name);
-        t = findsymbols(v);
-        dosub = false;
-        for c = 1:length(t)
-          ystr = strtrim(disp(t{c}));
-          if strcmp(xstr,ystr)
-            dosub = true;
-            break
-          end
-        end
-        % If so, subs in the new x and replace that variable.
-        if (dosub)
-          newv = subs(v,t{c},newx);
-          assignin('caller', S(i).name, newv);
-        end
-      end
-      if strcmp(S(i).class, 'symfun')
-        warning('FIXME: need to do anything special for symfun vars?')
-      end
-    end
-  end
+  % hack: traverse caller's workspace and replace x with newx
+  assignin('caller', 'hack__newx__', newx);
+  evalin('caller', 'fix_assumptions_script');
 
   if (nargout > 0)
     varargout{1} = newx;
