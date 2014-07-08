@@ -44,6 +44,6 @@ end
 
 %!test
 %! syms x
-%! y = sin(x)
+%! y = sin(x);
 %! assert ( strcmp( latex(y), '\sin{\left (x \right )}'))
 %! assert ( strcmp( latex(exp(x)), 'e^{x}'))

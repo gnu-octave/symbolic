@@ -44,30 +44,17 @@ function [A,B] = assumptions(F, outp)
   if (nargin <= 1)
     outp = 'no';
   end
-  if ((nargin >= 1) && ~isempty(F))
-    assert(isa(F, 'sym'))
-  end
-
 
   if (find_all_free_symbols)
     %% no input arguments
     % find all syms, check each for free symbols
-    alls = {}; c = 0;
+    workspace = {};
     S = evalin('caller', 'whos');
+    evalin('caller', '[];');  % clear 'ans'
     for i = 1:numel(S)
-      if strcmp(S(i).class, 'sym')
-        v=evalin('caller', S(i).name);
-        t = findsymbols(v);
-        alls(end+1:end+length(t)) = t(:);
-      elseif strcmp(S(i).class, 'symfun')
-        warning('FIXME: need to do anything special for symfun vars?')
-        v=evalin('caller', S(i).name);
-        t = findsymbols(v);
-        alls(end+1:end+length(t)) = t(:);
-      end
+      workspace{i} = evalin('caller', S(i).name);
     end
-    F = [alls{:}];
-    % F probably has dups but that doesn't matter for next step
+    F = findsymbols(workspace);
   end
 
 
@@ -170,6 +157,8 @@ end
 %! assert(isempty(assumptions(x)))
 
 %!test
+%! syms x positive
+%! assert(~isempty(assumptions()))
 %! clear
 %! assert(isempty(assumptions()))
 
@@ -190,3 +179,20 @@ end
 %! assert(length(a) == 2)
 %! assert(~isempty(strfind(a{1}, 'positive')))
 %! assert(~isempty(strfind(a{2}, 'real')))
+
+%!test
+%! %% assumptions on just the vars in an expression
+%! syms x y positive
+%! f = 2*x;
+%! assert(length(assumptions(f))==1)
+%! assert(length(assumptions())==2)
+
+%!test
+%! %% assumptions in cell/struct
+%! syms x y z w positive
+%! f = {2*x [1 2 y] {1, {z}}};
+%! assert(length(assumptions())==4)
+%! assert(length(assumptions(f))==3)
+%! clear x y z w
+%! assert(length(assumptions())==3)
+%! assert(length(assumptions(f))==3)

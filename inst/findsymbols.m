@@ -18,16 +18,13 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
-%% Return a list (cell array) of the symbols in a symbolic expression.
+%% Return a list (cell array) of the symbols in an expression.
 %%
 %% The list is sorted alphabetically.
 %%
+%% @var{x} could be a sym, sym array. cell ray or struct.
+%%
 %% Note E, I, pi, etc are not counted as symbols.
-%%
-%% Similar behaviour to the built-in @code{all} with regard to
-%% matrices and the second argument.
-%%
-%% Throws an error if any entries are non-numeric.
 %%
 %% @seealso{symvar, findsym}
 %% @end deftypefn
@@ -35,8 +32,13 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function L = findsymbols(x)
+function L = findsymbols(obj, dosort)
 
+  if nargin == 1
+    dosort = true;
+  end
+
+  if isa(obj, 'sym')
   cmd = [ 'x = _ins[0]\n'                       ...
           'if not x.is_Matrix:\n'               ...
           '    s = x.free_symbols\n'            ...
@@ -47,9 +49,51 @@ function L = findsymbols(x)
           'l = list(s)\n'                       ...
           'l = sorted(l, key=str)\n'            ...
           'return (l,)' ];
+    L = python_cmd (cmd, obj);
+    %L = findsymbols(obj);
+    if isa(obj, 'symfun')
+      warning('FIXME: need to do anything special for symfun vars?')
+    end
 
-  L = python_cmd (cmd, x);
 
+  elseif iscell(obj)
+    %fprintf('Recursing into a cell array of numel=%d\n', numel(obj))
+    L = {};
+    for i=1:numel(obj)
+      temp = findsymbols(obj{i}, false);
+      if ~isempty(temp)
+        L = {L{:} temp{:}};
+      end
+    end
+
+
+  elseif isstruct(obj)
+    %fprintf('Recursing into a struct array of numel=%d\n', numel(obj))
+    L = {};
+    fields = fieldnames(obj);
+    for i=1:numel(obj)
+      for j=1:length(fields)
+        thisobj = getfield(obj, {i}, fields{j});
+        temp = findsymbols(thisobj, false);
+        if ~isempty(temp)
+          L = {L{:} temp{:}};
+        end
+      end
+    end
+
+  else
+    L = {};
+  end
+
+
+  if dosort
+    Ls = {};
+    for i=1:length(L)
+      Ls{i} = strtrim(disp(L{i}));
+    end
+    [tilde, I] = unique(Ls);
+    L = L(I);
+  end
 end
 
 
