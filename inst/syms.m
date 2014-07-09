@@ -107,9 +107,10 @@ function syms(varargin)
         % would modify this workspace instead of the caller's.
         newx = sym(expr);
         assignin('caller', expr, newx);
-        % --------------------------
-        % Muck around in the caller's namespace
         xstr = strtrim(disp(newx));
+        % --------------------------
+        % Muck around in the caller's namespace, replacing syms
+        % thst match 'xstr' (a string) with the 'newx' sym.
         S = evalin('caller', 'whos');
         evalin('caller', '[];');  % clear 'ans'
         for i = 1:numel(S)

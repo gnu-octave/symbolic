@@ -38,7 +38,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = symreplace(oldx, newx, context)
+function symreplace(oldx, newx, context)
 
   if (nargin < 3)
     context = 'caller';
@@ -49,10 +49,27 @@ function varargout = symreplace(oldx, newx, context)
 
   assert(strcmp(context, 'caller') || strcmp(context, 'base'))
 
-  assignin(context, 'hack__newx__', newx);
-  assignin(context, 'hack__xstr__', strtrim(disp(oldx)));
-  evalin(context, 'fix_assumptions_script');
+  xstr = strtrim(disp(oldx));
 
+  % ---------------------------------------------
+  % Muck around in the caller's namespace, replacing syms
+  % that match 'xstr' (a string) with the 'newx' sym.
+  %newx =
+  %xstr =
+  %contect='caller';
+  % alt implementation w/ script
+  % ---------------------------------------------
+  %assignin(context, 'hack__newx__', newx);
+  %assignin(context, 'hack__xstr__', xstr);
+  %evalin(context, 'fix_assumptions_script');
+  S = evalin(context, 'whos');
+  evalin(context, '[];');  % clear 'ans'
+  for i = 1:numel(S)
+    obj = evalin(context, S(i).name);
+    [flag, newobj] = fix_assumptions(obj, newx, xstr);
+    if flag, assignin(context, S(i).name, newobj); end
+  end
+  % ---------------------------------------------
 end
 
 
