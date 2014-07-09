@@ -20,9 +20,11 @@
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.
+%% The list is sorted alphabetically.  Note the order is not the
+%% same as @code{symvar} and @code{symvar}: use one of those if
+%% Matlab Symbolic Math Toolbox compatibility is important.
 %%
-%% @var{x} could be a sym, sym array. cell ray or struct.
+%% @var{x} could be a sym, sym array, cell array, or struct.
 %%
 %% Note E, I, pi, etc are not counted as symbols.
 %%

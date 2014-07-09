@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{z} =} norm (@var{x})
-%% @deftypefn  {Function File} {@var{z} =} norm (@var{x}, @var{ord})
+%% @deftypefnx {Function File} {@var{z} =} norm (@var{x}, @var{ord})
 %% Symbolic vector/matrix norm.
 %%
 %% @end deftypefn
