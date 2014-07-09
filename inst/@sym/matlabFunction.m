@@ -139,12 +139,13 @@ function f = matlabFunction(varargin)
   %fprintf('debug: %d inputs, %d outputs\n', Nin, Nout);
 
 
-  %% outputs
+  %% Outputs
   exprstrs = {};
   for i=1:Nout
     expr = varargin{i};
+    % FIXME: more work here for Abs, etc, need proper sympy codegen
     exprstr{i} = strtrim(disp(expr));
-    %% FIXME: ** to ^, vectorize?
+    % FIXME: ** to ^, vectorize?
     exprstr{i} = vectorize(exprstr{i});
   end
 
@@ -157,6 +158,8 @@ function f = matlabFunction(varargin)
     f = eval(str);
   end
 
+  % Note: this fails in Matlab SMT too, so no need to live about @sym
+  %h = matlabFunction({x,y,z},'vars',{x y z})
 end
 
 
