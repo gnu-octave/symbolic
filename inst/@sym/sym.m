@@ -123,6 +123,32 @@ function s = sym(x, varargin)
     end
     return
 
+  elseif (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
+    % special case for 'clear', because of side-effects
+    x = strtrim(disp(x));  % we just want the string
+    s = sym(x);
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    xstr = x;
+    newx = s;
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
+    return
+
+  elseif (isa (x, 'sym')  &&  nargin==2)
+    % support sym(x, assumption) for existing sym x
+    s = sym(strtrim(disp(x)), varargin{1});
+    return
+
 
   elseif (isa (x, 'char'))
     useSymbolNotS = false;
@@ -197,23 +223,6 @@ function s = sym(x, varargin)
         cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
         s = python_cmd (cmd, asm);
         return
-      elseif strcmp(asm, 'clear')
-        %% 'clear' is a special case
-        newx = sym(x);
-        xstr = strtrim(disp(newx));
-        % --------------------------
-        % Muck around in the caller's namespace, replacing syms
-        % thst match 'xstr' (a string) with the 'newx' sym.
-        S = evalin('caller', 'whos');
-        evalin('caller', '[];');  % clear 'ans'
-        for i = 1:numel(S)
-          obj = evalin('caller', S(i).name);
-          [newobj, flag] = symreplace(obj, xstr, newx);
-          if flag, assignin('caller', S(i).name, newobj); end
-        end
-        % --------------------------
-        s = newx;
-        return
 
       elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
               strcmp(asm, 'integer') || strcmp(asm, 'even') || ...
@@ -258,3 +267,17 @@ end
 %! assert (~exist('x', 'var'))
 %! x = sym('x', 'clear');
 %! assert (exist('x', 'var'))
+
+%!test
+%! %% assumptions should work if x is already a sym
+%! x = sym('x');
+%! x = sym(x, 'real');
+%! assert (~isempty(assumptions(x)))
+
+%!test
+%! %% likewise for clear
+%! x = sym('x', 'real');
+%! f = 2*x;
+%! x = sym(x, 'clear');
+%! assert (isempty(assumptions(x)))
+%! assert (isempty(assumptions(f)))
