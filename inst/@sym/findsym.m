@@ -38,8 +38,9 @@ function s = findsym(varargin)
 
   A = symvar(varargin{:});
 
-  n = length(A);
+  % FIXME: once Octave 3.6 is ancient history, can use strjoin(cell, ',')
 
+  n = length(A);
 
   if n == 0
     s = '';
@@ -57,11 +58,12 @@ end
 
 
 %!assert (strcmp (findsym (sym(2)), ''));
+
 %!shared x,y,f
 %! x=sym('x'); y=sym('y'); f=x^2+3*x*y-y^2;
 %!assert (strcmp (findsym (f), 'x,y'));
 %!assert (strcmp (findsym (f,1), 'x'));
-%!
+
 %!test
 %! % test order of returned vars
 %! syms x y a b c xx

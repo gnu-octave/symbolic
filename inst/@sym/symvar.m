@@ -29,8 +29,8 @@
 %% @example
 %% syms x,y
 %% f     = x^2+3*x*y-y^2;
-%% vars  = findsym (f);
-%% vars2 = findsym (f,1);
+%% vars  = symvar (f);
+%% vars2 = symvar (f,1);
 %% @end example
 %%
 %% Compatibility with other implementations: the output should
