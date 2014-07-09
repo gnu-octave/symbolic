@@ -49,10 +49,11 @@ function [A,B] = assumptions(F, outp)
     %% no input arguments
     % find all syms, check each for free symbols
     workspace = {};
-    S = evalin('caller', 'whos');
-    evalin('caller', '[];');  % clear 'ans'
+    context = 'caller';
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
     for i = 1:numel(S)
-      workspace{i} = evalin('caller', S(i).name);
+      workspace{i} = evalin(context, S(i).name);
     end
     F = findsymbols(workspace);
   end

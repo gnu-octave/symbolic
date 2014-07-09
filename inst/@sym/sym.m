@@ -208,7 +208,7 @@ function s = sym(x, varargin)
         evalin('caller', '[];');  % clear 'ans'
         for i = 1:numel(S)
           obj = evalin('caller', S(i).name);
-          [flag, newobj] = fix_assumptions(obj, newx, xstr);
+          [newobj, flag] = symreplace(obj, xstr, newx);
           if flag, assignin('caller', S(i).name, newobj); end
         end
         % --------------------------

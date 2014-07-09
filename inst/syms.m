@@ -108,17 +108,21 @@ function syms(varargin)
         newx = sym(expr);
         assignin('caller', expr, newx);
         xstr = strtrim(disp(newx));
-        % --------------------------
+        % ---------------------------------------------
         % Muck around in the caller's namespace, replacing syms
-        % thst match 'xstr' (a string) with the 'newx' sym.
-        S = evalin('caller', 'whos');
-        evalin('caller', '[];');  % clear 'ans'
+        % that match 'xstr' (a string) with the 'newx' sym.
+        %xstr = x;
+        %newx = s;
+        context = 'caller';
+        % ---------------------------------------------
+        S = evalin(context, 'whos');
+        evalin(context, '[];');  % clear 'ans'
         for i = 1:numel(S)
-          obj = evalin('caller', S(i).name);
-          [flag, newobj] = fix_assumptions(obj, newx, xstr);
-          if flag, assignin('caller', S(i).name, newobj); end
+          obj = evalin(context, S(i).name);
+          [newobj, flag] = symreplace(obj, xstr, newx);
+          if flag, assignin(context, S(i).name, newobj); end
         end
-        % --------------------------
+        % ---------------------------------------------
       else
         assignin('caller', expr, sym(expr, asm))
       end

@@ -41,22 +41,21 @@ function varargout = assume(x, cond, varargin)
   xstr = strtrim(disp(x));
   newx = sym(xstr, ca);
 
-  % hack: traverse caller's workspace and replace x with newx
-  %assignin('caller', 'hack__newx__', newx);
-  %evalin('caller', 'fix_assumptions_script');
-
-  % alt implementation w/o script avoids octave bug w/ tests
-  % --------------------------
+  % ---------------------------------------------
   % Muck around in the caller's namespace, replacing syms
-  % thst match 'xstr' (a string) with the 'newx' sym.
-  S = evalin('caller', 'whos');
-  evalin('caller', '[];');  % clear 'ans'
+  % that match 'xstr' (a string) with the 'newx' sym.
+  %xstr =
+  %newx =
+  context = 'caller';
+  % ---------------------------------------------
+  S = evalin(context, 'whos');
+  evalin(context, '[];');  % clear 'ans'
   for i = 1:numel(S)
-    obj = evalin('caller', S(i).name);
-    [flag, newobj] = fix_assumptions(obj, newx, xstr);
-    if flag, assignin('caller', S(i).name, newobj); end
+    obj = evalin(context, S(i).name);
+    [newobj, flag] = symreplace(obj, xstr, newx);
+    if flag, assignin(context, S(i).name, newobj); end
   end
-  % --------------------------
+  % ---------------------------------------------
 
   if (nargout > 0)
     varargout{1} = newx;

@@ -36,6 +36,8 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
+warning('Deprecated (FIXME: remove later)');
+
 if ~(exist ('hack__newx__', 'var'))
   error('you must define "hack__newx__" first, see help')
 end
@@ -48,8 +50,8 @@ hack__S__ = whos();
 for hack__i__ = 1:numel(hack__S__)
   if isempty(regexp(hack__S__(hack__i__).name, '^hack__.*__'))
     hack__obj__ = eval(hack__S__(hack__i__).name);
-    [hack__flag__, hack__newobj__] = ...
-        fix_assumptions(hack__obj__, hack__newx__, hack__xstr__);
+    [hack__newobj__, hack__flag__] = ...
+        symreplace(hack__obj__, hack__xstr__, hack__newx__);
     if (hack__flag__)
       eval([hack__S__(hack__i__).name '= hack__newobj__;']);
     end
