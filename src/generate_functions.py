@@ -43,6 +43,7 @@ erfi||0,0|
 heaviside|Heaviside|1,1
 dirac|DiracDelta|1,0
 nextprime||123,127
+conj|conjugate
 """
 # todo:
 #psi(x)|polygamma(0,x)
