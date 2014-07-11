@@ -118,8 +118,8 @@ def octcmd(x):
     elif isinstance(x, int):
         s = str(x)
     elif isinstance(x, float):
-        # FIXME: see Bug #11
-        s = "%.20g" % x
+        # We pass IEEE doubles using the exact hex representation
+        s = "hex2num('%s')" % d2hex(x)
     elif isinstance(x, str):
         s = "sprintf('" + x.encode("string_escape").replace("'", "''") + "')"
     elif isinstance(x, unicode):

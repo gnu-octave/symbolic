@@ -70,8 +70,8 @@ function z = mat_rclist_asgn(A, r, c, B)
           '    AA[r[i],c[i]] = BT[i]\n'  ...
           'return (AA,)' ];
 
-  rr = num2cell(r-1);
-  cc = num2cell(c-1);
+  rr = num2cell(int32(r-1));
+  cc = num2cell(int32(c-1));
   z = python_cmd (cmd, A, rr, cc, B);
 
 

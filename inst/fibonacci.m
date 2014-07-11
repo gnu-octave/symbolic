@@ -31,9 +31,9 @@
 function r = fibonacci(n, x)
 
   if (nargin == 1)
-    r = python_cmd ('return sp.fibonacci(*_ins),', n);
+    r = python_cmd ('return sp.fibonacci(*_ins),', sym(n));
   else
-    r = python_cmd ('return sp.fibonacci(*_ins),', n, sym(x));
+    r = python_cmd ('return sp.fibonacci(*_ins),', sym(n), sym(x));
   end
 
 end

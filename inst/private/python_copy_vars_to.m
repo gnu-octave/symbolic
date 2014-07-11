@@ -59,11 +59,21 @@ function s = do_list(s, indent, in, L)
       else
         s = sprintf('%s%s%s.append(False)\n', s, sp, in);
       end
-    elseif (isnumeric(x) && isscalar(x))
-      % TODO: should pass the actual double, see comments elsewhere
-      % for this same problem in other direction
+    elseif (isinteger(x) && isscalar(x))
+      s = sprintf('%s%s# Load %d: int type\n', s, sp, i);
+      s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
+    elseif (isfloat(x) && isscalar(x))
+      % Floating point input.  By default, all Octave numbers are
+      % IEEE double: we pass these using the exact hex
+      % representation.  We could detect and treat
+      % (double-precision) integers specially (which might
+      % help with indexing in some places) but I think it might be
+      % too magical.  For now, all doubles become floats in Python.
+      %if (mod(x,1) == 0)  % pass integers
+      %  s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
       s = sprintf('%s%s# Load %d: double\n', s, sp, i);
-      s = sprintf('%s%s%s.append(%.24g)\n', s, sp, in, x);
+      s = sprintf('%s%s%s.append(hex2d("%s"))\n', s, sp, in, num2hex(x));
+      % FIXME: handle single precision % issue #50.
     elseif (iscell(x))
       s = sprintf('%s%s# Load %d: a cell array to list\n', s, sp, i);
       inn = [in 'n'];

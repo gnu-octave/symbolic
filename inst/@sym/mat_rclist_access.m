@@ -42,8 +42,8 @@ function z = mat_rclist_access(A, r, c)
           '    M[i,0] = A[rr[i],cc[i]]\n'  ...
           'return (M,)' ];
 
-  rr = num2cell(r-1);
-  cc = num2cell(c-1);
+  rr = num2cell(int32(r-1));
+  cc = num2cell(int32(c-1));
   z = python_cmd(cmd, A, rr, cc);
 end
 

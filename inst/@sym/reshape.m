@@ -53,7 +53,7 @@ function z = reshape(a, n, m)
           'else:\n' ...
           '    return ( A ,)' ];
 
-  z = python_cmd(cmd, sym(a), n, m);
+  z = python_cmd(cmd, sym(a), int32(n), int32(m));
 
 end
 

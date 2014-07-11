@@ -74,8 +74,8 @@ function z = mat_rccross_access(A, r, c)
           '        M[i,j] = A[rr[i],cc[j]]\n'  ...
           'return (M,)' ];
 
-  rr = num2cell(r-1);
-  cc = num2cell(c-1);
+  rr = num2cell(int32(r-1));
+  cc = num2cell(int32(c-1));
   z = python_cmd(cmd, A, rr, cc);
 
   % FIXME: here's some code could be used for slices
