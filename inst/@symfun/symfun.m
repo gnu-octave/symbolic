@@ -233,13 +233,12 @@ end
 %! assert(isa(f, 'symfun'))
 %! assert(isa(x, 'sym'))
 
-%%!test
-%%! % FIXME: Bug #40: ops on symfuns return pure syms
-%%! syms x y
-%%! f(x) = x^2;
-%%! g(x,y) = sym('g(x,y)')
-%%! f2 = 2*f;
-%%! assert( isequal (f2(4), 32))
-%%! assert( isa(f2, 'symfun'))
-%%! assert( isa(2*g, 'symfun'))
-%%! assert( isa(0*g, 'symfun'))  % in SMT, this is the zero symfun
+%!test
+%! syms x y
+%! f(x) = x^2;
+%! g(x,y) = sym('g(x,y)');
+%! f2 = 2*f;
+%! assert( isequal (f2(4), 32))
+%! assert( isa(f2, 'symfun'))
+%! assert( isa(2*g, 'symfun'))
+%! assert( isa(0*g, 'symfun'))  % in SMT, this is the zero symfun
