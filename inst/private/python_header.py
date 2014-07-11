@@ -6,12 +6,21 @@ import sympy as sp
 # FIXME: how to reactivate from srepr w/o this?
 from sympy import *
 #import dill as pickle
-import copy
+from copy import copy as copy_copy
+from binascii import hexlify as binascii_hexlify
+from struct import pack as struct_pack, unpack as struct_unpack
 
 
 def dbout(l):
     sys.stderr.write("pydebug: " + str(l) + "\n")
 
+# used to pass doubles back-and-forth
+def d2hex(x):
+    return binascii_hexlify(struct_pack(">d", x))
+
+def hex2d(s):
+    bins = ''.join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+    return struct_unpack('>d', bins)[0]
 
 # Used by evalpy()
 def dictdiff(a, b):

@@ -27,6 +27,13 @@
 %% double (x)
 %% @end example
 %%
+%% Despite the name, this is how you get convert a complex sym to
+%% floating point too:
+%% @example
+%% z = sym(4i) + 3;
+%% double (z)
+%% @end example
+%%
 %% If conversion fails, you get an error:
 %% @example
 %% syms x
@@ -60,7 +67,7 @@ function y = double(x, failerr)
     % sympy N() works fine on matrices but it gives objects like "Matrix([[1.0,2.0]])"
     y = zeros(size(x));
     for j = 1:numel(x)
-      % Bug #17
+      % temp = x(j)  (Issue #17)
       idx.type = '()';
       idx.subs = {j};
       temp = double(subsref(x,idx), failerr);
@@ -73,52 +80,60 @@ function y = double(x, failerr)
     return
   end
 
-  % FIXME: maybe its better to do the special casing, etc on the
-  % python end?  Revisit this when fixing proper movement of
-  % doubles (Bug #11).
+  cmd = [ '(x,) = _ins\n' ...
+          '# special case for zoo, FIXME: good idea?\n' ...
+          'if x == zoo:\n' ...
+          '    return (1,d2hex(float(sp.oo)),"none",)\n' ...
+          'try:\n' ...
+          '    z = float(x)\n'  ...
+          'except TypeError:\n' ...
+          '    flag = 0\n' ...
+          'else:\n' ...
+          '    flag = 1;\n' ...
+          '    return (flag,d2hex(z),"none",)\n' ...
+          'if (flag == 0):\n' ...
+          '    try:\n' ...
+          '        z = complex(x)\n'  ...
+          '    except TypeError:\n' ...
+          '        flag = 0\n' ...
+          '    else:\n' ...
+          '        flag = 2;\n' ...
+          '        return (flag,d2hex(z.real),d2hex(z.imag),)\n' ...
+          'return (0,"none","none")' ];
 
-  cmd = [ '(x,) = _ins\n'  ...
-          'y = sp.N(x,20)\n'  ...
-          'y = str(y)\n'  ...
-          'return (y,)' ];
+  [flag, A, B] = python_cmd (cmd, x);
 
-  A = python_cmd (cmd, x);
+  assert(isnumeric(flag))
   assert(ischar(A))
+  assert(ischar(B))
 
-  % workaround for Octave 3.6.4 where str2double borks on "inf"
-  % instead of "Inf".
-  % http://hg.savannah.gnu.org/hgweb/octave/rev/a08f6e17336e
-  %if (is_octave())
-  if exist('octave_config_info', 'builtin');
-    if (compare_versions (OCTAVE_VERSION (), '3.8.0', '<'))
-      A = strrep(A, 'inf', 'Inf');
-    end
-  end
-
-  % special case for nan so we can later detect if str2double finds a double
-  if (strcmp(A, 'nan'))
-    y = NaN;
-    return
-  end
-
-  % special case for zoo, at least in sympy 0.7.4, 0.7.5
-  if (strcmp(A, 'zoo'))
-    y = Inf;
-    return
-  end
-
-  y = str2double (A);
-  if (isnan (y))
-    y = [];
+  if (flag==0)
     if (failerr)
-      error('Failed to convert %s ''%s'' to double', class(x), x.text);
+      error('cannot convert to double');
+    else
+      y = [];
     end
+  elseif (flag==1)
+    y = hex2num(A);
+  elseif (flag==2)
+    y = hex2num(A) + 1i*hex2num(B);
+  else
+    error('whut?');
   end
+
 end
 
 
 %!assert (double (sym(10)) == 10)
 %!assert (isequal (double (sym([10 12])), [10 12]))
+
 %!test
 %! assert (isempty (double (sym('x'), false)))
 %! assert (isempty (double (sym([10 12 sym('x')]), false)))
+
+%!test
+%! %% complex
+%! a = 3 + 4i;
+%! b = sym(a);
+%! assert (isequal (double (b), a))
+%! assert (isequal (double (b/pi), a/pi))  % really?
