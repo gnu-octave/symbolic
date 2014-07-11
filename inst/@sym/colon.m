@@ -32,24 +32,21 @@ function y = colon(a,step,b)
 
   if (nargin == 2)
     b = step;
-    step = 1;
+    step = sym(1);
   end
+  a = sym(a);
+  b = sym(b);
+  step = sym(step);
 
-  % make sure inputs convert without error
-  tilde = double(a);
-  tilde = double(b);
-  tilde = double(step);
+  B = (b-a)/step;
+  y = (0:double(B))*sym(step) + a;
 
-  % A slower approach (more ipc)
-  %y = sym( double(a):double(step):double(b) );
-
-  cmd = ['(a,b,step) = _ins\n'...
-         'y = range(a,b+sign(step)*1,step)\n'...
-         'return y,'];
-  y = python_cmd(cmd, a, b, step);
-  % FIXME: if we had arrays, could drop this...
-  y = cell2mat(y);
-
+  % this approach fails to  make 0:sym(pi):10
+  %cmd = ['(a,b,step) = _ins\n'...
+  %       'y = range(a,b+sign(step)*1,step)\n'...
+  %       'return y,'];
+  %y = python_cmd(cmd, a, b, step)
+  %y = cell2mat(y);
 end
 
 
@@ -70,6 +67,22 @@ end
 %! a = sym(10):-2:-4;
 %! b = sym(10:-2:-4);
 %! assert(isequal(a,b));
+
+%!test
+%! % symbolic intervals
+%! p = sym(pi);
+%! L = 0:p/4:p;
+%! assert(isa(L,'sym'));
+%! assert(isequal(L, [0 p/4 p/2 3*p/4 p]));
+
+%!test
+%! % mixed symbolic and double intervals
+%! p = sym(pi);
+%! disp('*** 2 warnings expected: ***');
+%! L = 0.1:(sym(pi)/3):2.3;
+%! assert(isa(L,'sym'));
+%! t = sym(1)/10;
+%! assert(isequal(L, [t p/3+t 2*p/3+t]));
 
 %!test
 %! % should be an error if it doesn't convert to double
