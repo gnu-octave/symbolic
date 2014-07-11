@@ -166,7 +166,10 @@ end
 function A = cell2symarray(C)
   A = sym([]);
   for i=1:length(C)
-    A(i) = C{i};
+    %A(i) = C{i};  % Issue #17
+    idx.type = '()';
+    idx.subs = {i};
+    A = subsasgn(A, idx, C{i});
   end
 end
 
@@ -176,7 +179,11 @@ function C = syms2charcells(S)
     if iscell(S)
       C{i} = strtrim(disp(S{i}));
     else
-      C{i} = strtrim(disp(S(i)));
+      % MoFo Issue #17
+      %C{i} = strtrim(disp(S(i)))
+      idx.type = '()';
+      idx.subs = {i};
+      C{i} = strtrim(disp(subsref(S,idx)));
     end
   end
 end
@@ -186,13 +193,18 @@ end
 %! syms x y z
 
 %!test
+%! % basic test
 %! h = matlabFunction(2*x);
 %! assert(h(3)==6)
+
+%!test
+%! % autodetect inputs
 %! h = matlabFunction(2*x*y, x+y);
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
+%! % specified inputs
 %! h = matlabFunction(2*x*y, 'vars', [x y]);
 %! assert(h(3,5)==30)
 %! h = matlabFunction(2*x*y, x+y, 'vars', [x y]);
@@ -200,7 +212,7 @@ end
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
-%! %% cell arrays for vars list
+%! % cell arrays for vars list
 %! h = matlabFunction(2*x*y, x+y, 'vars', {x y});
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
@@ -209,7 +221,7 @@ end
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
-%! %% cell arrays specfies order, overriding symvar order
+%! % cell arrays specfies order, overriding symvar order
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
@@ -218,7 +230,7 @@ end
 %! assert(t1 == 18 && t2 == 4)
 
 %!test
-%! %% cell arrays specfies order, overriding symvar order
+%! % cell arrays specfies order, overriding symvar order
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
@@ -227,13 +239,13 @@ end
 %! assert(t1 == 18 && t2 == 4)
 
 %%!xtest
-%%! %% FIXME: functions with different names in Sympy (disabled for now)
+%%! % FIXME: functions with different names in Sympy (disabled for now)
 %%! f = abs(x);  % becomes Abs(x)
 %%! h = matlabFunction(f);
 %%! assert(h(-10) == 10)
 
 %%!xtest
-%%! %% FIXME: non-scalar outputs (disabled for now)
+%%! % FIXME: non-scalar outputs (disabled for now)
 %%! H = [x y z];
 %%! M = [x y; z 16];
 %%! V = [x;y;z];
