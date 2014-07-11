@@ -109,7 +109,7 @@ end
 %! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
 %! rhs = 2*b(I);
 %! rhs2 = reshape(rhs, 2, 3);
-%! disp('*** One warning expected: ***');
+%! fprintf('\n*** One warning expected: ***\n');
 %! A = mat_mask_asgn(a,I, rhs2);
 %! B = b;  B(I) = rhs;
 %! assert(isequal( A, B ))

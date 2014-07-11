@@ -42,6 +42,11 @@ end
 
 
 %!test
+%! fprintf('\n');
 %! syms x
 %! r = octsympy_reset();
+%! pause(1);
+%! syms x
+%! pause(2);
+%! fprintf('\n');
 %! assert(r)

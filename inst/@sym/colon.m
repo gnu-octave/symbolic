@@ -78,7 +78,7 @@ end
 %!test
 %! % mixed symbolic and double intervals
 %! p = sym(pi);
-%! disp('*** 2 warnings expected: ***');
+%! fprintf('\n*** 2 warnings expected: ***\n');
 %! L = 0.1:(sym(pi)/3):2.3;
 %! assert(isa(L,'sym'));
 %! t = sym(1)/10;

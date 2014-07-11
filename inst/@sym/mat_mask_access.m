@@ -96,7 +96,7 @@ end
 %! a = sym(b);
 %! I = rand(size(b)) > 0.5;
 %!assert(isequal( mat_mask_access(a,I), b(I) ))
-%! disp('*** 2 warnings expected: ***');
+%! fprintf('\n*** 2 warnings expected: ***\n');
 %! I = I(:);
 %!assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = I';
