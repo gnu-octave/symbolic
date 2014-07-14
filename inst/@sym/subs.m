@@ -95,3 +95,64 @@ function g = subs(f, in, out)
           'return (g,)' ];
 
   g = python_cmd (cmd, sym(f), sublist);
+
+end
+
+
+%!shared x,y,t,f
+%! syms x y t
+%! f = x*y;
+
+%!test
+%! assert( isequal(  subs(f, x, y),  y^2  ))
+%! assert( isequal(  subs(f, y, sin(x)),  x*sin(x)  ))
+%! assert( isequal(  subs(f, x, 16),  16*y  ))
+
+%!test
+%! % multiple subs w/ cells
+%! assert( isequal(  subs(f, {x}, {t}),  y*t  ))
+%! assert( isequal(  subs(f, {x y}, {t t}),  t*t  ))
+%! assert( isequal(  subs(f, {x y}, {t 16}),  16*t  ))
+%! assert( isequal(  subs(f, {x y}, {16 t}),  16*t  ))
+%! assert( isequal(  subs(f, {x y}, {2 16}),  32  ))
+
+%!test
+%! % multiple subs w/ vectors
+%! assert( isequal( subs(f, [x y], [t t]),  t*t  ))
+%! assert( isequal( subs(f, [x y], [t 16]),  16*t  ))
+%! assert( isequal( subs(f, [x y], [2 16]),  32  ))
+
+%!test
+%! % anything you can think of
+%! assert( isequal( subs(f, [x y], {t t}),  t*t  ))
+%! assert( isequal( subs(f, {x y}, [t t]),  t*t  ))
+%! assert( isequal( subs(f, {x; y}, [t; t]),  t*t  ))
+
+%!test
+%! % sub in doubles gives sym (matches SMT 2013b)
+%! % FIXME: but see
+%! % http://www.mathworks.co.uk/help/symbolic/gradient.html
+%! assert( isequal( subs(f, {x y}, {2 pi}), 2*sym(pi) ))
+%! assert( ~isa(subs(f, {x y}, {2 pi}), 'double'))
+%! assert( isa(subs(f, {x y}, {2 pi}), 'sym'))
+%! assert( isa(subs(f, {x y}, {2 sym(pi)}), 'sym'))
+%! assert( isa(subs(f, {x y}, {sym(2) sym(pi)}), 'sym'))
+
+
+%!shared x,y,t,f,F
+%! syms x y t
+%! f = sin(x)*y;
+%! F = [f; 2*f];
+
+%!test
+%! % need the simultaneous=True flag in SymPy (matches SMT 2013b)
+%! assert( isequal( subs(f, [x t], [t 6]), y*sin(t) ))
+%! assert( isequal( subs(F, [x t], [t 6]), [y*sin(t); 2*y*sin(t)] ))
+
+%!test
+%! % swap x and y (also needs simultaneous=True
+%! assert( isequal( subs(f, [x y], [y x]), x*sin(y) ))
+
+%!test
+%! % but of course both x and y to t still works
+%! assert( isequal( subs(f, [x y], [t t]), t*sin(t) ))
