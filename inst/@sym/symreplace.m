@@ -32,7 +32,7 @@
 %% One mode of operation is similar to @code{subs()}:
 %% @example
 %% syms x y
-%% f = {x; x^2; sin(x)};
+%% f = @{x; x^2; sin(x)@};
 %% f = symreplace(f, x, y)
 %% f = symreplace(f, 'x', y)   % alt.
 %% @end example
@@ -80,10 +80,10 @@
 %% the base context instead.
 %%
 %% Note for developers: if you want to call this from your function
-%% but have it work on the 'caller' context @strong{of your
-%% function}, that unfortunately does not seem to be possible.
-%% Copy-paste the highlighted bits of this code into your function
-%% instead (see @code{assume()} for example.
+%% but have it work on the 'caller' context
+%% @strong{of your function}, that unfortunately does not seem to
+%% be possible.  Copy-paste the highlighted bits of this code into
+%% your function instead (see @code{assume} for example).
 %%
 %% @seealso{assume, assumeAlso, assumptions, sym, syms}
 %% @end deftypefn
