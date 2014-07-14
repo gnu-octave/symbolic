@@ -18,12 +18,12 @@ codegen_clean:
 
 ml_tidyup: ml_copy ml_convert ml_extract_tests
 	rm -f ../matlab/extract_tests_for_matlab.m
-	rm -f ../matlab/run_octave_tests.m
+	rm -f ../matlab/octsympy_tests.m
 
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
 	cp -ra extract_tests_for_matlab.m ../matlab/
-	cp -ra run_tests_matlab.m ../matlab/
+	cp -ra octsympy_tests_matlab.m ../matlab/
 	cd ../matlab/; octave -q --eval "extract_tests_for_matlab"
 
 ml_copy: ml_convert
