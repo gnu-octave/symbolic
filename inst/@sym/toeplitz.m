@@ -101,7 +101,7 @@ end
 %!test
 %! % mismatch
 %! syms x y
-%! fprintf('\n*** Two warning expected ***\n')
+%! fprintf('\n*** Two warnings expected ***\n')
 %! A = toeplitz([10 2], [1 3 5]);
 %! B = toeplitz([10 x], [1 3 y]);
 %! assert (isequal (A, subs(B,[x,y],[2 5])))

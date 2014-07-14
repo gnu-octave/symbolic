@@ -38,7 +38,7 @@ end
 %! assert( isa(f - x, 'symfun'))
 
 %!xtest
-%! Octave bug: https://savannah.gnu.org/bugs/?42735
+%! % Octave bug: https://savannah.gnu.org/bugs/?42735
 %! syms x
 %! f(x) = x^2;
 %! assert( isa(x - f, 'symfun'))
