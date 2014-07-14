@@ -123,17 +123,78 @@ function y = double(x, failerr)
 
 end
 
-
-%!assert (double (sym(10)) == 10)
-%!assert (isequal (double (sym([10 12])), [10 12]))
+%!test
+%! % numeric scalar
+%! a = double(sym(10));
+%! assert (a == 10)
+%! assert (isa (a, 'double'))
 
 %!test
+%! % numeric vectors
+%! a = double(sym([10 12]));
+%! assert (isequal (a, [10 12]))
+%! assert (isa (a, 'double'))
+
+%!test
+%! % optional second argument to return empty on failure
 %! assert (isempty (double (sym('x'), false)))
 %! assert (isempty (double (sym([10 12 sym('x')]), false)))
 
 %!test
-%! %% complex
+%! % complex
 %! a = 3 + 4i;
 %! b = sym(a);
 %! assert (isequal (double (b), a))
-%! assert (isequal (double (b/pi), a/pi))  % really?
+
+%!xtest
+%! % unexpected, precisely same floating point
+%! a = 3 + 4i;
+%! b = sym(a);
+%! assert (isequal (double (b/pi), a/pi))
+
+%!test
+%! % floating point
+%! x = sqrt(sym(2));
+%! assert( abs(double(x) - sqrt(2)) < 2*eps)
+%! x = sym(pi);
+%! assert( abs(double(x) - pi) < 2*eps)
+
+%!test
+%! % various infinities
+%! oo = sym(inf);
+%! zoo = sym('zoo');
+%! assert( double(oo) == inf )
+%! assert( double(-oo) == -inf )
+%! assert( double(zoo) == inf )
+%! assert( double(-zoo) == inf )
+%! assert( isnan(double(0*oo)) )
+%! assert( isnan(double(0*zoo)) )
+
+%!test
+%! % nan
+%! snan = sym(nan);
+%! assert( isnan(double(snan)))
+
+%!test
+%! % arrays
+%! a = [1 2; 3 4];
+%! assert( isequal(  double(sym(a)), a  ))
+%! assert( isequal(  double(sym(a)), a  ))
+
+%!test
+%! % should fail with error for non-double
+%! x = sym('x');
+%! try
+%!   double(x);
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert (failed)
+%! try
+%!   double([1 2 x]);
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert (failed)
