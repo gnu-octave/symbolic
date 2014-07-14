@@ -244,10 +244,99 @@ function s = sym(x, varargin)
 
 end
 
+%!test
+%! % integers
+%! x = sym('2');
+%! y = sym(2);
+%! assert (isa(x, 'sym'))
+%! assert (isa(y, 'sym'))
+%! assert (isequal(x, y))
+
+%!test
+%! % infinity
+%! for x = {'inf', '-inf', inf, -inf, 'Inf'}
+%!   y = sym(x{1});
+%!   assert (isa(y, 'sym'))
+%!   assert (isinf(double(y)))
+%!   assert (isinf(y))
+%! end
+
+%!test
+%! % pi
+%! x = sym('pi');
+%! assert (isa(x, 'sym'))
+%! assert (sin(x) == sym(0))
+%! assert ( abs(double(x) - pi) < 2*eps )
+%! x = sym(pi);
+%! assert (isa(x, 'sym'))
+%! assert (sin(x) == sym(0))
+%! assert ( abs(double(x) - pi) < 2*eps )
+
+%!test
+%! % rationals
+%! x = sym(1) / 3;
+%! assert (isa(x, 'sym'))
+%! assert (3*x - 1 == 0)
+%! x = 1 / sym(3);
+%! assert (isa(x, 'sym'))
+%! assert (3*x - 1 == 0)
+%! x = sym('1/3');
+%! assert (isa(x, 'sym'))
+%! assert (3*x - 1 == 0)
+
+%!test
+%! % passing small rationals
+%! x = sym('1/2');
+%! assert( double(x) == 1/2 )
+%! assert( isequal( 2*x, sym(1)))
+
+%!test
+%! % passing small rationals w/o quotes
+%! fprintf('\n*** One warning expected ***\n')
+%! x = sym(1/2);
+%! assert( double(x) == 1/2 )
+%! assert( isequal( 2*x, sym(1)))
 
 %!test
 %! assert (isa (sym (pi), 'sym'))
 %! assert (isa (sym ('beta'), 'sym'))
+
+
+%!test
+%! % Cell array lists to syms
+%! % (these tests are pretty weak, doens't recursively compare two
+%! % cells, but just running this is a good test.
+%! x = sym('x');
+%!
+%! a = {1 2};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%!
+%! a = {1 2 {3 4}};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%!
+%! a = {1 2; 3 4};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%!
+%! a = {1 2; 3 {4}};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%!
+%! a = {1 [1 2] x [sym(pi) x]};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%! assert (isequal( size(a{2}), size(s{2}) ))
+%! assert (isequal( size(a{4}), size(s{4}) ))
+%!
+%! a = {{{[1 2; 3 4]}}};
+%! s = sym(a);
+%! assert (isequal( size(a), size(s) ))
+%! assert (isequal( size(a{1}), size(s{1}) ))
+%! assert (isequal( size(a{1}{1}), size(s{1}{1}) ))
+%! assert (isequal( size(a{1}{1}{1}), size(s{1}{1}{1}) ))
+
 
 %!test
 %! %% assumptions and clearing them
