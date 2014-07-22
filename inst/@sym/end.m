@@ -32,9 +32,7 @@ function r = end (obj, index_pos, num_indices)
   end
 
   if (num_indices == 1)
-    % todo enable after numel change
-    %r = numel(obj)
-    r = prod(size(obj));
+    r = numel(obj);
   elseif (num_indices == 2)
     d = size(obj);
     r = d(index_pos);
@@ -44,3 +42,33 @@ function r = end (obj, index_pos, num_indices)
     num_indices
     error('now whut?');
   end
+
+end
+
+
+%!test
+%! % scalar
+%! syms x
+%! y = x(1:end);
+%! assert (isequal (x, y))
+
+%!test
+%! % vector
+%! syms x
+%! A = [1 2 x 4];
+%! y = A(end-1:end);
+%! assert (isequal (y, [x 4]))
+
+%!test
+%! % subset of matrix
+%! syms x
+%! A = [1 2 x; x 3 9; 4 x*x 6];
+%! y = A(end,1:end-1);
+%! assert (isequal (y, [4 x*x]))
+
+%!test
+%! % linear index of matrix
+%! syms x
+%! A = [1 2 x; x 3 9];
+%! y = A(end);
+%! assert (isequal (y, sym(9)))

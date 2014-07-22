@@ -40,3 +40,64 @@ function h = vertcat(varargin)
   varargin = sym(varargin);
   h = python_cmd (cmd, varargin{:});
 
+end
+
+
+
+%!shared x
+%! syms x
+
+%!test
+%! % basic
+%! A = [x; x];
+%! B = vertcat(x, x);
+%! C = vertcat(x, x, x);
+%! assert (isa (A, 'sym'))
+%! assert (isa (B, 'sym'))
+%! assert (isa (C, 'sym'))
+%! assert (isequal (size(A), [2 1]))
+%! assert (isequal (size(B), [2 1]))
+%! assert (isequal (size(C), [3 1]))
+
+%!test
+%! % basic, part 2
+%! A = [x; 1];
+%! B = [1; x];
+%! C = [1; 2; x];
+%! assert (isa (A, 'sym'))
+%! assert (isa (B, 'sym'))
+%! assert (isa (C, 'sym'))
+%! assert (isequal (size(A), [2 1]))
+%! assert (isequal (size(B), [2 1]))
+%! assert (isequal (size(C), [3 1]))
+
+%!test
+%! % column vectors
+%! a = [sym(1); 2];
+%! b = [sym(3); 4];
+%! assert (isequal ( [a;b] , [1; 2; 3; 4]  ))
+%! assert (isequal ( [a;b;a] , [1; 2; 3; 4; 1; 2]  ))
+
+%!test
+%! % row vectors
+%! a = [sym(1) 2];
+%! b = [sym(3) 4];
+%! assert (isequal ( [a;b] , [1 2; 3 4]  ))
+%! assert (isequal ( [a;b;a] , [1 2; 3 4; 1 2]  ))
+
+%!test
+%! % row vector, other row
+%! a = [sym(1) 2];
+%! assert (isequal ( [a; [sym(3) 4]] , [1 2; 3 4]  ))
+
+
+%!test
+%! % Octave 3.6 bug: should pass on 3.8.1 and matlab
+%! a = [sym(1) 2];
+%! assert (isequal ( [a; [3 4]] , [1 2; 3 4]  ))
+%! assert (isequal ( [a; sym(3) 4] , [1 2; 3 4]  ))
+%! % more examples
+%! [x [x x]; x x x];
+%! [[x x] x; x x x];
+%! [[x x] x; [x x] x];
+%! [x x x; [x x] x];

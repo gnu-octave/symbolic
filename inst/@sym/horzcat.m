@@ -40,3 +40,51 @@ function h = horzcat(varargin)
   varargin = sym(varargin);
   h = python_cmd (cmd, varargin{:});
 
+end
+
+
+%!shared x
+%! syms x
+
+%!test
+%! % basic
+%! A = [x x];
+%! B = horzcat(x, x);
+%! C = horzcat(x, x, x);
+%! assert (isa (A, 'sym'))
+%! assert (isa (B, 'sym'))
+%! assert (isa (C, 'sym'))
+%! assert (isequal (size(A), [1 2]))
+%! assert (isequal (size(B), [1 2]))
+%! assert (isequal (size(C), [1 3]))
+
+%!test
+%! % basic, part 2
+%! A = [x 1];
+%! B = [1 x];
+%! C = [1 2 x];
+%! assert (isa (A, 'sym'))
+%! assert (isa (B, 'sym'))
+%! assert (isa (C, 'sym'))
+%! assert (isequal (size(A), [1 2]))
+%! assert (isequal (size(B), [1 2]))
+%! assert (isequal (size(C), [1 3]))
+
+%!test
+%! % row vectors
+%! a = [sym(1) 2];
+%! b = [sym(3) 4];
+%! assert (isequal ( [a b] , [1 2 3 4]  ))
+%! assert (isequal ( [a 3 4] , [1 2 3 4]  ))
+%! assert (isequal ( [3 4 a] , [3 4 1 2]  ))
+%! assert (isequal ( [a [3 4]] , [1 2 3 4]  ))
+%! assert (isequal ( [a sym(3) 4] , [1 2 3 4]  ))
+%! assert (isequal ( [a [sym(3) 4]] , [1 2 3 4]  ))
+
+%!test
+%! % col vectors
+%! a = [sym(1); 2];
+%! b = [sym(3); 4];
+%! assert (isequal ( [a b] , [1 3; 2 4]  ))
+%! assert (isequal ( [a b a] , [1 3 1; 2 4 2]  ))
+

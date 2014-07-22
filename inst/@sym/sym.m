@@ -310,6 +310,14 @@ end
 %! assert (isequal ( sym(D) , A ))
 
 %!test
+%! % more sym from array
+%! syms x
+%! A = [x x];
+%! assert (isequal ( sym(A), A ))
+%! A = [1 x];
+%! assert (isequal ( sym(A), A ))
+
+%!test
 %! % Cell array lists to syms
 %! % (these tests are pretty weak, doens't recursively compare two
 %! % cells, but just running this is a good test.
