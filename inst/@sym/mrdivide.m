@@ -40,3 +40,43 @@ function z = mrdivide(x,y)
     error('TODO: array/array not implemented yet');
   end
 
+end
+
+
+%!test
+%! % scalar
+%! syms x
+%! assert (isa( x/x, 'sym'))
+%! assert (isequal( x/x, sym(1)))
+%! assert (isa( 2/x, 'sym'))
+%! assert (isa( x/2, 'sym'))
+
+%!test
+%! % matrix / scalar
+%! D = 2*[0 1; 2 3];
+%! A = sym(D);
+%! assert (isequal ( A/2 , D/2  ))
+%! assert (isequal ( A/sym(2) , D/2  ))
+
+%!test
+%! % scalar / array not implemented
+%! A = [1 2; 3 4];
+%! try
+%!   B = sym(1) / A;
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert(failed)
+
+%!test
+%! % array / array not implemented
+%! A = [1 2; 3 4];
+%! B = sym(A);
+%! try
+%!   C = A / B;
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert(failed)

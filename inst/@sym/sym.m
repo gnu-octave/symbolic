@@ -301,6 +301,13 @@ end
 %! assert (isa (sym (pi), 'sym'))
 %! assert (isa (sym ('beta'), 'sym'))
 
+%!test
+%! % sym from array
+%! D = [0 1; 2 3];
+%! A = [sym(0) 1; sym(2) 3];
+%! assert (isa (sym(D), 'sym'))
+%! assert (isequal ( size(sym(D)) , size(D) ))
+%! assert (isequal ( sym(D) , A ))
 
 %!test
 %! % Cell array lists to syms

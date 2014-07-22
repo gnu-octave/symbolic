@@ -38,14 +38,72 @@ function z = mpower(x, y)
     error('scalar^array not implemented');
 
   elseif ~isscalar(x) && isscalar(y)
-    % fixme: sympy can do int and rat, then MatPow, check MST
+    % FIXME: sympy can do int and rat, then MatPow, check MST
     z = python_cmd (cmd, sym(x), sym(y));
 
   else  % two array's case
     error('array^array not implemented');
   end
 
+end
+
 
 %!test
 %! syms x
 %! assert(isequal(x^(sym(4)/5), x.^(sym(4)/5)))
+
+%!test
+%! % integer powers of scalars
+%! syms x
+%! assert (isequal (x^2, x*x))
+%! assert (isequal (x^sym(3), x*x*x))
+
+%!test
+%! % array ^ integer
+%! syms x y
+%! A = [x 2; y 4];
+%! assert (isequal (A^2, A*A))
+%! assert (isequal (simplify(A^3 - A*A*A), [0 0; 0 0]))
+
+%!test
+%! % array ^ rational
+%! Ad = [1 2; 0 3];
+%! A = sym(Ad);
+%! B = A^(sym(1)/3);
+%! Bd = Ad^(1/3);
+%! assert (max(max(abs(double(B) - Bd))) < 1e-14)
+
+%!test
+%! % array ^ irrational not implemented (in sympy 0.7.5)
+%! Ad = [1 2; 0 3];
+%! try
+%!   B = x^sym(pi);
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert(failed)
+
+%!xtest
+%! % scalar^array not implemented
+%! syms x
+%! A = [1 2; 3 4];
+%! try
+%!   B = x^A;
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert(failed)
+
+%!test
+%! % array^array not implemented
+%! A = [1 2; 3 4];
+%! B = sym(A);
+%! try
+%!   C = A^B;
+%!   failed = false;
+%! catch
+%!   failed = true;
+%! end
+%! assert(failed)

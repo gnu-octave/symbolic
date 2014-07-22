@@ -29,3 +29,23 @@ function z = minus(x, y)
 
   % -y + x
   z = axplusy(-1, y, x);
+
+end
+
+%!test
+%! % scalar
+%! syms x
+%! assert (isa (x-1, 'sym'))
+%! assert (isa (x-x, 'sym'))
+%! assert (isequal (x-x, sym(0)))
+
+%!test
+%! % matrices
+%! D = [0 1; 2 3];
+%! A = sym(D);
+%! DZ = D - D;
+%! assert (isequal ( A - D , DZ  ))
+%! assert (isequal ( A - A , DZ  ))
+%! assert (isequal ( D - A , DZ  ))
+%! assert (isequal ( A - 2 , D - 2  ))
+%! assert (isequal ( 4 - A , 4 - D  ))

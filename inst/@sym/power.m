@@ -41,3 +41,41 @@ function z = power(x, y)
           '    return ( x**y ,)' ];
 
   z = python_cmd(cmd, sym(x), sym(y));
+
+end
+
+
+%!test
+%! % scalar .^ scalar
+%! syms x
+%! assert (isa (x.^2, 'sym'))
+%! assert (isa (2.^x, 'sym'))
+%! assert (isa (x.^x, 'sym'))
+%! assert (isequal (x.^2, x^2))
+%! assert (isequal (2.^x, 2^x))
+%! assert (isequal (x.^x, x^x))
+
+%!test
+%! % scalar .^ matrix
+%! D = [0 1; 2 3];
+%! A = sym(D);
+%! assert (isequal ( sym(2).^D , 2.^D ))
+%! assert (isequal ( sym(2).^A , 2.^A ))
+%! assert (isequal ( 2.^D , 2.^A ))
+%! assert (isequal ( 2.^A , 2.^A ))
+
+%!test
+%! % matrix .^ matrix
+%! syms x
+%! A = [x 2*x; 3*x 4*x];
+%! D = [0 1; 2 3];
+%! B = sym(D);
+%! assert (isequal ( A.^D, [1 2*x; 9*x^2 64*x^3] ))
+%! assert (isequal ( A.^B, [1 2*x; 9*x^2 64*x^3] ))
+
+%!test
+%! % matrix .^ scalar
+%! syms x
+%! A = [x 2*x];
+%! assert (isequal ( A.^2,      [x^2 4*x^2] ))
+%! assert (isequal ( A.^sym(2), [x^2 4*x^2] ))

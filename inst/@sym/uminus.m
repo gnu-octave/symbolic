@@ -28,3 +28,18 @@
 function z = uminus(x)
 
   z = axplusy(-1, x, 0);
+
+end
+
+
+%!test
+%! % scalar
+%! syms x
+%! assert (isa (-x, 'sym'))
+%! assert (isequal (-(-x), x))
+
+%!test
+%! % matrix
+%! D = [0 1; 2 3];
+%! A = sym(D);
+%! assert( isequal( -A, -D  ))

@@ -32,3 +32,27 @@ function z = mtimes(x, y)
 
   z = python_cmd (cmd, sym(x), sym(y));
 
+end
+
+
+%!test
+%! % scalar
+%! syms x
+%! assert (isa (x*2, 'sym'))
+%! assert (isequal (2*sym(3), sym(6)))
+%! assert (isequal (sym(2)*3, sym(6)))
+
+%!test
+%! % matrix-scalar
+%! D = [0 1; 2 3];
+%! A = sym(D);
+%! assert (isa (2*A, 'sym'))
+%! assert (isequal ( 2*A , 2*D  ))
+%! assert (isequal ( A*2 , 2*D  ))
+
+%!test
+%! % matrix-matrix
+%! D = [0 1; 2 3];
+%! A = sym(D);
+%! assert (isa (A*A, 'sym'))
+%! assert (isequal ( A*A , D*D  ))

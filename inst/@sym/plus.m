@@ -28,3 +28,26 @@
 function z = plus(x, y)
 
   z = axplusy(1, x, y);
+
+end
+
+
+%!test
+%! % basic addition
+%! syms x
+%! assert (isa (x+5, 'sym'))
+%! assert (isa (5+x, 'sym'))
+%! assert (isa (5+sym(4), 'sym'))
+%! assert (5+sym(4) == sym(9))
+
+%!test
+%! % array addition
+%! syms x
+%! D = [0 1; 2 3];
+%! A = [sym(0) 1; sym(2) 3];
+%! DZ = D - D;
+%! assert( isequal ( A + D , 2*D ))
+%! assert( isequal ( D + A , 2*D ))
+%! assert( isequal ( A + A , 2*D ))
+%! assert( isequal ( A + 2 , D + 2 ))
+%! assert( isequal ( 4 + A , 4 + D ))
