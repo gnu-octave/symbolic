@@ -54,7 +54,7 @@
 %% x1 == x2   % false
 %% @end example
 %%
-%% @seealso{syms,assumption}
+%% @seealso{syms,assumptions,assume,assumeAlso}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
