@@ -63,80 +63,9 @@
 
 function f = matlabFunction(varargin)
 
-  user_provided_vars = false;
-  Nout = -42;
-
-  %% input processing
-  % loop over inputs to find: (f1,f2,...,f_{Nout}, param, value)
-  i = 0;
-  while (i < nargin)
-    i = i + 1;
-    if (ischar(varargin{i}))
-      if (Nout < 0)
-        Nout = i-1;
-      end
-
-      if strcmpi(varargin{i}, 'vars')
-        temp = varargin{i+1};
-        i = i + 1;
-        user_provided_vars = true;
-        if (isa(temp, 'sym'))
-          inputs = temp;
-        elseif (iscell(temp))
-          inputs = temp;
-          for j=1:length(inputs)
-            assert(isa(inputs{j},'sym') || ischar(inputs{j}), ...
-                   'only sym/char supported in vars list');
-          end
-        else
-          error('invalid "vars" param');
-        end
-
-      elseif strcmpi(varargin{i}, 'file')
-        error('fixme: export to .m file not implemented yet');
-
-      elseif strcmp(varargin{i}, 'outputs')
-        warning('fixme: named "outputs" to be implemented')
-        outs = varargin{i+1}
-        i = i + 1;
-
-      else
-        error('invalid option')
-      end
-    end
-  end
-  if (Nout < 0)
-    Nout = nargin;
-  end
-
-
-  for i=1:Nout
-    if ~(isa(varargin{i}, 'sym'))
-      warning('expected output expressions to be syms');
-    end
-    if (isa(varargin{i}, 'symfun'))
-      warning('FIXME: symfun! does that need special treatment?');
-    end
-  end
-
-
-  %% get input string
-  if (user_provided_vars)
-    Nin = length(inputs);
-    inputstr = strjoin(syms2charcells(inputs), ',');
-  else
-    %inputstr = findsym(varargin{1});
-    % findsymbols works on cell input but ordering might not be
-    % symvar ordering
-    inputs = findsymbols(varargin(1:Nout));
-    Nin = length(inputs);
-    inputs_array = cell2symarray(inputs);
-    % findsym gives us the symvar ordering
-    inputstr = findsym(inputs_array);
-  end
-
-
-  %fprintf('debug: %d inputs, %d outputs\n', Nin, Nout);
+  [flg, meh] = codegen(varargin{:}, 'lang', 'octave');
+  assert(flg == -1);
+  [Nin, inputstr, Nout, param] = deal(meh{:});
 
 
   %% Outputs
@@ -158,34 +87,8 @@ function f = matlabFunction(varargin)
     f = eval(str);
   end
 
-  % Note: this fails in Matlab SMT too, so no need to live about @sym
+  % Note: this fails in Matlab SMT too, so no need to live outside @sym
   %h = matlabFunction({x,y,z},'vars',{x y z})
-end
-
-
-function A = cell2symarray(C)
-  A = sym([]);
-  for i=1:length(C)
-    %A(i) = C{i};  % Issue #17
-    idx.type = '()';
-    idx.subs = {i};
-    A = subsasgn(A, idx, C{i});
-  end
-end
-
-function C = syms2charcells(S)
-  C = {};
-  for i=1:length(S)
-    if iscell(S)
-      C{i} = strtrim(disp(S{i}));
-    else
-      % MoFo Issue #17
-      %C{i} = strtrim(disp(S(i)))
-      idx.type = '()';
-      idx.subs = {i};
-      C{i} = strtrim(disp(subsref(S,idx)));
-    end
-  end
 end
 
 
