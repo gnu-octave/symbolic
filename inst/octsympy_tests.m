@@ -166,6 +166,7 @@ end
 
 %!xtest
 %! % ops with infinity don't collapse
+%! syms x oo zoo
 %! y = x+oo;
 %! assert(~isempty( strfind(lower(y.pickle), 'add') ))
 %! y = x-oo;
@@ -178,6 +179,7 @@ end
 %!xtest
 %! % KNOWN FAILURE, x + oo
 %! % isinf(x + oo)?  SMT 2014a says "true"
+%! syms x oo zoo
 %! y = x+oo;
 %! assert(isinf(y))
 %! y = x-zoo;
@@ -199,15 +201,15 @@ end
 %! % fails to match SMT (although true here is certainly reasonable)
 %! syms x
 %! e = x == x;
-%! assert (isa(e, 'sym');
-%! assert (~isa(e, 'logical');
+%! assert (isa(e, 'sym'))
+%! assert (~isa(e, 'logical'))
 
 %!xtest
 %! % this is more serious!
 %! syms x
 %! e = x - 5 == x - 3;
-%! assert (isa(e, 'sym');
-%! assert (~isa(e, 'logical');
+%! assert (isa(e, 'sym'))
+%! assert (~isa(e, 'logical'))
 
 %!test
 %! % using eq for == and "same obj" is strange, part 1
@@ -245,8 +247,8 @@ end
 %! % SMT behaviour for arrays: if any x's it should not be logical
 %! % output but instead syms for the equality objects
 %! syms x
-%! assert (~islogical( [x 1] == 1 );
-%! assert (~islogical( [x 1] == x );
-%! assert (~islogical( [x x] == x );  % not so clear
+%! assert (~islogical( [x 1] == 1 ))
+%! assert (~islogical( [x 1] == x ))
+%! assert (~islogical( [x x] == x ))  % not so clear
 %! assert (isequal( [x x] == sym([1 2]), [x==1 x==2] ))
 %! assert (isequal( [x x] == [1 2], [x==1 x==2] ))
