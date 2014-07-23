@@ -105,24 +105,3 @@ end
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
 %! oo = sym('INF');
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
-
-%!xtest
-%! % ops with infinity don't collapse
-%! y = x+oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
-%! y = x-oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
-%! y = x-zoo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
-%! y = x*oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'mul') ))
-
-%!xtest
-%! % KNOWN FAILURE, x + oo
-%! % isinf(x + oo)?  SMT 2014a says "true"
-%! y = x+oo;
-%! assert(isinf(y))
-%! y = x-zoo;
-%! assert(isinf(y))
-%! y = x*oo;
-%! assert(isinf(y))

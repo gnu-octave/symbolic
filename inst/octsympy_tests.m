@@ -153,3 +153,100 @@ end
 %! f = sin(y);
 %! g = subs(f, y, a);
 %! assert (isequal (g, sin(a)))
+
+
+%!xtest
+%! % known failure, issue #55; an upstream issue
+%! snan = sym(nan);
+%! assert(~(snan == snan))
+
+
+%% ops with inf
+% move to isinf once fixed?
+
+%!xtest
+%! % ops with infinity don't collapse
+%! y = x+oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x-oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x-zoo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x*oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'mul') ))
+
+%!xtest
+%! % KNOWN FAILURE, x + oo
+%! % isinf(x + oo)?  SMT 2014a says "true"
+%! y = x+oo;
+%! assert(isinf(y))
+%! y = x-zoo;
+%! assert(isinf(y))
+%! y = x*oo;
+%! assert(isinf(y))
+
+
+
+%% x == x tests
+% Probably should move to eq.m when fixed
+
+%!test
+%! % in SMT x == x is a sym (not "true") and isAlways returns true
+%! syms x
+%! assert (isAlways(  x == x  ))
+
+%!xtest
+%! % fails to match SMT (although true here is certainly reasonable)
+%! syms x
+%! e = x == x;
+%! assert (isa(e, 'sym');
+%! assert (~isa(e, 'logical');
+
+%!xtest
+%! % this is more serious!
+%! syms x
+%! e = x - 5 == x - 3;
+%! assert (isa(e, 'sym');
+%! assert (~isa(e, 'logical');
+
+%!test
+%! % using eq for == and "same obj" is strange, part 1
+%! % this case passes
+%! syms x
+%! e = (x == 4) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (e)
+
+%!xtest
+%! % using eq for == and "same obj" is strange, part 2
+%! % this fails, but should be false
+%! syms x
+%! e = (x-5 == x-3) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (~e)
+
+%!xtest
+%! % using eq for == and "same obj" is strange, part 3
+%! % this fails too, but should be true, although perhaps
+%! % only with a call to simplify (i.e., isAlways should
+%! % get it right).
+%! syms x
+%! e = (2*x-5 == x-1) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (e)
+
+%!xtest
+%! % SMT behaviour for arrays: if any x's it should not be logical
+%! % output but instead syms for the equality objects
+%! syms x
+%! assert (~islogical( [x 1] == 1 );
+%! assert (~islogical( [x 1] == x );
+%! assert (~islogical( [x x] == x );  % not so clear
+%! assert (isequal( [x x] == sym([1 2]), [x==1 x==2] ))
+%! assert (isequal( [x x] == [1 2], [x==1 x==2] ))
