@@ -61,3 +61,18 @@ function print_indented(s, n)
   s = [pad s];  % first line
   disp(s)
 end
+
+
+%!test
+%! % simple
+%! syms x
+%! s1 = pretty(sin(x));
+%! s2 = 'sin(x)';
+%! assert(strcmp(s1,s2))
+
+%!test
+%! % with unicode, probably fails on Matlab
+%! syms x
+%! s1 = pretty(sin(x/2));
+%! s2 = sprintf('   ⎛x⎞\nsin⎜─⎟\n   ⎝2⎠');
+%! assert(strcmp(s1,s2))

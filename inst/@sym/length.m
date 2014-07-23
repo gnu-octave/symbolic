@@ -32,3 +32,20 @@ function n = length(x)
 
   d = size(x);
   n = max(d);
+
+end
+
+
+%!test
+%! a = sym([1 2 3]);
+%! assert(length(a) == 3);
+
+%!test
+%! % 2D array
+%! a = sym([1 2 3; 4 5 6]);
+%! assert(length(a) == 3);
+
+%!test
+%! % empty
+%! a = sym([]);
+%! assert(length(a) == 0);

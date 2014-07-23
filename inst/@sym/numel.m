@@ -32,3 +32,19 @@ function n = numel(x)
   d = size(x);
   n = prod(d);
 
+end
+
+
+%!test
+%! a = sym([1 2 3]);
+%! assert(numel(a) == 3);
+
+%!test
+%! % 2D array
+%! a = sym([1 2 3; 4 5 6]);
+%! assert(numel(a) == 6);
+
+%!test
+%! % empty
+%! a = sym([]);
+%! assert(numel(a) == 0);

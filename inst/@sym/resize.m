@@ -31,3 +31,7 @@ function z = resize(a, n, m)
 
   error('resize: not implemented');
 
+end
+
+
+%!assert(true)   % so far, everything works :)

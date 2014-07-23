@@ -55,3 +55,14 @@ function s = make_indented(s, n)
   s = strrep (s, newl, [newl pad]);
   s = [pad s];  % first line
 end
+
+
+%!test
+%! syms x
+%! s = disp(sin(x));
+%! assert(strcmp(s, '   sin(x)'))
+
+%!test
+%! syms x
+%! s = disp(sin(x/2));
+%! assert(strcmp(s, '   sin(x/2)'))

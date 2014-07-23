@@ -32,3 +32,7 @@ function z = cat(varargin)
 
   error('cat: not implemented, unnecessary?');
 
+end
+
+
+%!assert(true)   % so far, everything works :)

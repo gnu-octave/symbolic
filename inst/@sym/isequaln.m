@@ -65,3 +65,30 @@ function t = isequaln(x,y,varargin)
   if (nargin >= 3)
     t = t & isequaln(x, varargin{:});
   end
+
+end
+
+
+%!test
+%! a = sym([1 2]);
+%! b = a;
+%! assert (isequaln (a, b))
+%! b(1) = 42;
+%! assert (~isequaln (a, b))
+
+%!test
+%! a = sym([1 2; 3 4]);
+%! b = a;
+%! assert (isequaln (a, b))
+%! b(1) = 42;
+%! assert (~isequaln (a, b))
+
+%!test
+%! a = sym([nan; 2]);
+%! b = a;
+%! assert (isequaln (a, b))
+
+%!test
+%! a = sym([nan 2; 3 4]);
+%! b = a;
+%! assert (isequaln (a, b))

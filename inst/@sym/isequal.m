@@ -32,10 +32,37 @@
 
 function t = isequal(x,y,varargin)
 
-  if (any(isnan(x)))
+  if (any(any(isnan(x))))
     % at least on sympy 0.7.4, 0.7.5, nan == nan is true so we
     % detect is ourselves
     t = false;
   else
     t = isequaln(x,y,varargin{:});
   end
+
+end
+
+
+%!test
+%! a = sym([1 2]);
+%! b = a;
+%! assert (isequal (a, b))
+%! b(1) = 42;
+%! assert (~isequal (a, b))
+
+%!test
+%! a = sym([1 2; 3 4]);
+%! b = a;
+%! assert (isequal (a, b))
+%! b(1) = 42;
+%! assert (~isequal (a, b))
+
+%!test
+%! a = sym([nan; 2]);
+%! b = a;
+%! assert (~isequal (a, b))
+
+%!test
+%! a = sym([nan 2; 3 4]);
+%! b = a;
+%! assert (~isequal (a, b))
