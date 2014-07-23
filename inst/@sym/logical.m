@@ -60,3 +60,15 @@ function r = logical(p)
     keyboard
     error('unexpected return value')
   end
+
+end
+
+
+%!test
+%! % basics, many others in isAlways.m
+%! syms x
+%! assert (logical(true))
+%! assert (~(logical(false)))
+%! assert (logical(x==x))
+%! assert (~logical(x==1))
+%! assert (~logical(x^2==x))

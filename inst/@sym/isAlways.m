@@ -55,3 +55,77 @@ function r = isAlways(p)
   if (~ islogical(r))
     error('nonboolean return from python');
   end
+
+end
+
+
+%!test
+%! % basics
+%! assert(isAlways(true))
+%! assert(isAlways(1==1))
+%! assert(isAlways(sym(1)==sym(1)))
+%! assert(isAlways(sym(1)==1))
+
+
+%!shared x
+%! syms x
+
+%!test
+%! % in this case it is boolean
+%! expr = x - x == 0;
+%! assert (logical(expr))
+%! assert (isAlways(expr))
+%! assert (islogical(expr))
+
+%!test
+%! % structurally same and mathematically true
+%! % (here expr should be sym, non-boolean)
+%! expr = x == x;
+%! assert (logical(expr))
+%! assert (isAlways(expr))
+%! %assert (~islogical(expr))   % FIXME: Issue #56
+%! %assert (isa(expr, 'sym))
+
+%!test
+%! % structurally same and mathematically true
+%! % (here expr should be sym, non-boolean)
+%! expr = 1 + x == x + 1;
+%! assert (logical(expr))
+%! assert (isAlways(expr))
+%! %assert (~islogical(expr))   % FIXME: Issue #56
+%! %assert (isa(expr, 'sym))
+
+%!shared x,y
+%! syms x y
+
+%!test
+%! % structurally same and mathematically true
+%! % (here expr should be sym, non-boolean)
+%! expr = x*(1+y) == x*(y+1);
+%! assert (logical(expr))
+%! assert (isAlways(expr))
+
+% FIXME: should we support implicit == 0 like sympy?  what does SMT do?
+%expr = x - x;
+%c=c+1; r(c) = logical(expr);
+%c=c+1; r(c) = isAlways(expr);
+
+%!test
+%! % Now for some differences
+%! % simplest example from SymPy FAQ
+%! expr = x*(1+y) == x+x*y;
+%! assert (~logical(expr))
+%! assert (isAlways(expr))
+
+%!test
+%! % more differences
+%! % FIXME: logical() from SMT gives error on next two?
+%! expr = (x+1)*(x+1)  ==  ( x*x + 2*x + 1 );
+%! assert (~logical(expr))
+%! assert (isAlways(expr))
+
+%!test
+%! % more differences
+%! expr = sin(2*x)  ==  2*sin(x)*cos(x);
+%! assert (~logical(expr))
+%! assert (isAlways(expr))
