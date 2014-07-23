@@ -20,6 +20,9 @@
 %% @deftypefn {Function File}  {@var{r} =} isinf (@var{x})
 %% Return true if a symbolic expression is infinite.
 %%
+%% FIXME: Sympy returns "none" for isinf(x + oo), perhaps we should
+%% say "I don't know" in some cases too.  SMT seems to always decide...
+%%
 %% @seealso{isnan, double}
 %% @end deftypefn
 
@@ -31,6 +34,9 @@ function r = isinf(x)
 
   if isscalar(x)
 
+    % FIXME: why not is_unbounded?
+    % FIXME: investigate using tristate for don't know (sympy
+    % returns none
     cmd = [ 'd = _ins[0].is_finite\n'  ...
             'if (d==True):\n'                ...
             '    return (False,)\n'           ...
@@ -54,3 +60,69 @@ function r = isinf(x)
       r(j) = isinf(subsref(x, idx));
     end
   end
+
+end
+
+
+%!shared x,zoo,oo,snan
+%! oo = sym(inf);
+%! zoo = sym('zoo');
+%! x = sym('x');
+%! snan = sym(nan);
+
+%!test
+%! % various ops that give inf
+%! assert (isinf(oo))
+%! assert (isinf(zoo))
+%! assert (isinf(oo+oo))
+%! assert (~isinf(oo+zoo))
+%! assert (~isinf(0*oo))
+%! assert (~isinf(0*zoo))
+%! assert (~isinf(snan))
+%! assert (~isinf(oo-oo))
+%! assert (~isinf(oo-zoo))
+
+%!test
+%! % arrays
+%! assert (isequal(  isinf([oo zoo]), [1 1]  ))
+%! assert (isequal(  isinf([oo 1]),   [1 0]  ))
+%! assert (isequal(  isinf([10 zoo]), [0 1]  ))
+%! assert (isequal(  isinf([x oo x]), [0 1 0]  ))
+
+%!test
+%! % Must not contain string 'symbol'; these all should make an
+%! % actual infinity.  Actually a ctor test, not isinf.
+%! % IIRC, SMT in Matlab 2013b fails.
+%! oo = sym(inf);
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! oo = sym(-inf);
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! oo = sym('inf');
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! oo = sym('-inf');
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! oo = sym('Inf');
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! oo = sym('INF');
+%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+
+%!xtest
+%! % ops with infinity don't collapse
+%! y = x+oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x-oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x-zoo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x*oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'mul') ))
+
+%!xtest
+%! % KNOWN FAILURE, x + oo
+%! % isinf(x + oo)?  SMT 2014a says "true"
+%! y = x+oo;
+%! assert(isinf(y))
+%! y = x-zoo;
+%! assert(isinf(y))
+%! y = x*oo;
+%! assert(isinf(y))

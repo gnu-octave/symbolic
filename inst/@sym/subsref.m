@@ -121,3 +121,59 @@ end
 %! assert(isequal( x(1), x ))
 %! assert(isequal( x(true), x ))
 
+
+%!test
+%! % older access tests
+%! syms x
+%! f = [x 2; 3 4*x];
+%! % element access
+%! assert (logical(  f(1,1) == x  ))
+%! assert (logical(  f(1,2) == 2  ))
+%! % linear access of 2d array
+%! assert (logical(  f(1) == x  ))
+%! assert (logical(  f(2) == 3  ))  % column based
+%! assert (logical(  f(3) == 2  ))
+
+%!shared a,b
+%! % effectively a random matrix
+%! a = reshape( round(50*(sin(1:20)+1)),  5,4);
+%! b = sym(a);
+
+%!test
+%! % older array refs test
+%! assert (logical(b(1,1) == a(1,1)))
+%! assert (logical(b(3,1) == a(3,1)))
+%! assert (logical(b(1,3) == a(1,3)))
+%! assert (logical(b(4,4) == a(4,4)))
+
+%!test
+%! % older array refs test: linear indices
+%! assert (logical(b(1) == a(1)))
+%! assert (logical(b(3) == a(3)))
+%! assert (logical(b(13) == a(13)))
+
+%!test
+%! % older array refs test: end
+%! assert (all(all(logical(  b(end,1) == a(end,1)  ))))
+%! assert (all(all(logical(  b(2,end) == a(2,end)  ))))
+%! assert (all(all(logical(  b(end,end) == a(end,end)  ))))
+%! assert (all(all(logical(  b(end-1,1) == a(end-1,1)  ))))
+%! assert (all(all(logical(  b(2,end-1) == a(2,end-1)  ))))
+%! assert (all(all(logical(  b(end-1,end-1) == a(end-1,end-1)  ))))
+
+%!test
+%! % older slicing tests
+%! syms x
+%! a = [1 2 3 4 5 6]; a = [a; 3*a; 5*a; 2*a; 4*a];
+%! b = sym(a);
+%! assert (isequal(  b(:,1), a(:,1)  ))
+%! assert (isequal(  b(:,2), a(:,2)  ))
+%! assert (isequal(  b(1,:), a(1,:)  ))
+%! assert (isequal(  b(2,:), a(2,:)  ))
+%! assert (isequal(  b(:,:), a(:,:)  ))
+%! assert (isequal(  b(1:3,2), a(1:3,2)  ))
+%! assert (isequal(  b(1:4,:), a(1:4,:)  ))
+%! assert (isequal(  b(1:2:5,:), a(1:2:5,:)  ))
+%! assert (isequal(  b(1:2:4,:), a(1:2:4,:)  ))
+%! assert (isequal(  b(2:2:4,3), a(2:2:4,3)  ))
+%! assert (isequal(  b(2:2:4,3), a(2:2:4,3)  ))

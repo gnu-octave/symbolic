@@ -208,3 +208,38 @@ end
 %! g(x) = x;
 %! g(x) = x*x;
 %! assert(isa(g,'symfun'))
+
+
+%!test
+%! % older expansion tests
+%! syms x
+%! f = [2*x 3*x];
+%! f(2) = 4*x;
+%! assert (isequal (f, [2*x 4*x]))
+%! f(2) = 2;
+%! assert (isequal(f, [2*x 2]))
+%! g = f;
+%! g(1,3) = x*x;
+%! assert (isequal(g, [2*x 2 x^2]))
+%! g = f;
+%! g(3) = x*x;
+%! assert (isequal(g, [2*x 2 x^2]))
+%! g = f;
+%! g(3) = 4;
+%! assert (isequal(g, [2*x 2 4]))
+
+
+%!test
+%! % older slicing tests
+%! syms x
+%! f = [1 x^2 x^4];
+%! f(1:2) = [x x];
+%! assert (isequal(  f, [x x x^4]  ))
+%! f(1:2) = [1 2];
+%! assert (isequal(  f, [1 2 x^4]  ))
+%! f(end-1:end) = [3 4];
+%! assert (isequal(  f, [1 3 4]  ))
+%! f(3:4) = [10 11];
+%! assert (isequal(  f, [1 3 10 11]  ))
+%! f(end:end+1) = [12 14];
+%! assert (isequal(  f, [1 3 10 12 14]  ))

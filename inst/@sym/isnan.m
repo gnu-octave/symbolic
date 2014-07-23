@@ -51,3 +51,60 @@ function r = isnan(x)
       r(j) = isnan(subsref(x, idx));
     end
   end
+
+end
+
+
+%!shared x,zoo,oo,snan
+%! oo = sym(inf);
+%! zoo = sym('zoo');
+%! x = sym('x');
+%! snan = sym(nan);
+
+%!test
+%! % various ops that give nan
+%! assert (isnan(0*oo))
+%! assert (isnan(0*zoo))
+%! assert (isnan(snan))
+%! assert (isnan(snan-snan))
+%! assert (isnan(oo+snan))
+%! assert (isnan(oo-oo))
+%! assert (isnan(oo-zoo))
+%! assert (isnan(oo+zoo))
+%! assert (~isnan(oo))
+%! assert (~isnan(zoo))
+%! assert (~isnan(oo+oo))
+
+%!test
+%! % more ops give nan
+%! assert(isnan(x+snan))
+%! assert(isnan(x*snan))
+%! assert(isnan(0*snan))
+%! assert(isnan(x+nan))
+%! assert(isnan(x*nan))
+%! assert(isnan(sym(0)*nan))
+
+%!test
+%! % array
+%! assert (isequal(  isnan([oo zoo]),    [0 0]  ))
+%! assert (isequal(  isnan([10 snan]),   [0 1]  ))
+%! assert (isequal(  isnan([snan snan]), [1 1]  ))
+%! assert (isequal(  isnan([snan x]),    [1 0]  ))
+
+%!test
+%! % sub in to algebraic expression gives nan
+%! y = x - oo;
+%! y = subs(y, x, oo);
+%! assert(isnan(y))
+
+%!test
+%! % Must not contain string 'symbol'; these all should make an
+%! % actual infinity.  Actually a ctor test, not isnan.
+%! y = sym(nan);
+%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! y = sym('nan');
+%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! y = sym('NaN');
+%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! y = sym('NAN');
+%! assert (isempty( strfind(y.pickle, 'Symbol') ))
