@@ -119,3 +119,10 @@ function t = eq(x,y)
       end
     end
 
+end
+
+
+%!xtest
+%! % known failure, issue #55; an upstream issue
+%! snan = sym(nan);
+%! assert(~(snan == snan))
