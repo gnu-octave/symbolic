@@ -122,6 +122,118 @@ function t = eq(x,y)
 end
 
 
+%!test
+%! % simple tests with scalar numbers
+%! assert (islogical( sym(1) == sym(1) ))
+%! assert (islogical( sym(1) == 1 ))
+%! assert (islogical( sym(1) == 0 ))
+%! assert ( sym(1) == sym(1) )
+%! assert ( sym(1) == 1 )
+%! assert ( ~ (sym(1) == 0 ))
+
+%!test
+%! % anything involving a variable is not a bool (SMT behaviour)
+%! % (FIXME: currently have lots of failures of this, see below).
+%! syms x
+%! assert (~islogical( x == 0 ))
+
+%!test
+%! % ... except via cancelation
+%! syms x
+%! assert (x - x == 0)
+%! assert (isa(x - x == 0, 'logical'))
+%! assert (islogical(x - x == 0))
+
+%!test
+%! % array == array
+%! a = sym([1 2; 3 4]);
+%! y = a == a;
+%! assert (islogical( y ))
+%! assert (isequal( size(y), [2 2]))
+%! assert (all(all(y)))
+%! y = a == 1;
+%! assert (islogical( y ))
+%! assert (isequal( size(y), [2 2]))
+%! assert (isequal( y, [1 0; 0 0]))
+%! y = a == 42;
+%! assert (islogical( y ))
+%! assert (isequal( size(y), [2 2]))
+%! assert (isequal( y, [0 0; 0 0]))
+
+%!test
+%! % more array == array
+%! D = [0 1; 2 3];
+%! A = [sym(0) 1; sym(2) 3];
+%! DZ = D - D;
+%! assert (isa(A == A, 'logical'))
+%! assert (isa(A == D, 'logical'))
+%! assert (isa(A - D == DZ, 'logical'))
+%! assert (all(all(  A == A  )))
+%! assert (all(all(  A == D  )))
+%! assert (all(all(  A - D == DZ  )))
+
+
+%!test
+%! % in SMT x == x is a sym (not "true") and isAlways returns true
+%! syms x
+%! assert (isAlways(  x == x  ))
+
+%!xtest
+%! % fails to match SMT (although true here is certainly reasonable)
+%! syms x
+%! e = x == x;
+%! assert (isa(e, 'sym');
+%! assert (~isa(e, 'logical');
+
+%!xtest
+%! % this is more serious!
+%! syms x
+%! e = x - 5 == x - 3;
+%! assert (isa(e, 'sym');
+%! assert (~isa(e, 'logical');
+
+%!test
+%! % using eq for == and "same obj" is strange, part 1
+%! % this case passes
+%! syms x
+%! e = (x == 4) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (e)
+
+%!xtest
+%! % using eq for == and "same obj" is strange, part 2
+%! % this fails, but should be false
+%! syms x
+%! e = (x-5 == x-3) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (~e)
+
+%!xtest
+%! % using eq for == and "same obj" is strange, part 3
+%! % this fails too, but should be true, although perhaps
+%! % only with a call to simplify (i.e., isAlways should
+%! % get it right).
+%! syms x
+%! e = (2*x-5 == x-1) == (x == 4);
+%! assert (isAlways( e ))
+%! assert (islogical( e ))
+%! assert (isa(e, 'logical'))
+%! assert (e)
+
+%!xtest
+%! % SMT behaviour for arrays: if any x's it should not be logical
+%! % output but instead syms for the equality objects
+%! syms x
+%! assert (~islogical( [x 1] == 1 );
+%! assert (~islogical( [x 1] == x );
+%! assert (~islogical( [x x] == x );  % not so clear
+%! assert (isequal( [x x] == sym([1 2]), [x==1 x==2] ))
+%! assert (isequal( [x x] == [1 2], [x==1 x==2] ))
+
 %!xtest
 %! % known failure, issue #55; an upstream issue
 %! snan = sym(nan);
