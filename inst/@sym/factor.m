@@ -29,6 +29,8 @@
 
 function [p,m] = factor(f)
 
+  % FIXME: doc: SMT does not expose vector output?  Strange, given Matlab's
+  % factor(double) command!
 
   if (isempty (findsymbols (f)))
     %% No syms, integer factorization
@@ -37,8 +39,8 @@ function [p,m] = factor(f)
         error('FIXME: check SMT, allows array input here?')
       end
       % FIXME: this is fragile, even pretty(y) causes it to expand
-      % SMT is less fragile.   but how do they expose vector output?
-      % They don't, how strange, given Matlab's factor(double) command!
+      % SMT is less fragile.  Can we do something to force
+      % evaluate=False to persist here?
       p = python_cmd ('return factorint(_ins[0], visual=True),', f);
     else
       if (~isscalar(f))
