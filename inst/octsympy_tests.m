@@ -146,16 +146,6 @@ end
 
 
 %!xtest
-%! % Issue #10, subbing matrices in for scalars
-%! % TODO: also test with double [1 2 3]: works but noisy
-%! syms y
-%! a = sym([1 2; 3 4])
-%! f = sin(y);
-%! g = subs(f, y, a);
-%! assert (isequal (g, sin(a)))
-
-
-%!xtest
 %! % known failure, issue #55; an upstream issue
 %! snan = sym(nan);
 %! assert(~(snan == snan))

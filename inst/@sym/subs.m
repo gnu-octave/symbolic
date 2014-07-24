@@ -37,6 +37,18 @@
 %% subs(F, [x y], @{2 sym(pi)@})
 %% @end example
 %%
+%% Note: There are many possibilities that we don't support (FIXME)
+%% if you start mixing scalars and matrices.  We support one simple
+%% case of subbing a matrix in for a scalar in a scalar expression:
+%% @example
+%% syms x
+%% f = sin(x)
+%% g = subs(f, x, [1 2; 3 4])
+%% @end example
+%% If you want to extend support to more cases, a good place to
+%% start, as of July 2014, is the Sympy Issue #2962
+%% [https://github.com/sympy/sympy/issues/2962].
+%%
 %% @seealso{symfun}
 %% @end deftypefn
 
@@ -45,6 +57,24 @@
 
 
 function g = subs(f, in, out)
+
+  %% special case: scalar f, scalar in, vector out
+  % A workaround for Issue #10, also upstream Sympy Issue @2962
+  % (github.com/sympy/sympy/issues/2962).  There are more complicated
+  % cases that will also fail but this one must be pretty common.
+  if (isscalar(f) && ~iscell(in) && ~iscell(out) && isscalar(in) && ~isscalar(out))
+    g = sym(out);  % a symarray of same size-shape as out, whether
+                   % out is sym or double
+    for i = 1:numel(out)
+      % f$#k Issue #17
+      %g(i) = subs(f, in, sym(out(i)))
+      idx.type = '()'; idx.subs = {i};
+      temp = subsref(out, idx);
+      temp2 = subs(f, in, temp);
+      g = subsasgn(g, idx, temp2);
+    end
+    return
+  end
 
   %% Simple code for scalar x
   % The more general code would work fine, but maybe this makes some
@@ -156,3 +186,21 @@ end
 %!test
 %! % but of course both x and y to t still works
 %! assert( isequal( subs(f, [x y], [t t]), t*sin(t) ))
+
+
+%!test
+%! % Issue #10, subbing matrices in for scalars
+%! syms y
+%! a = sym([1 2; 3 4]);
+%! f = sin(y);
+%! g = subs(f, y, a);
+%! assert (isequal (g, sin(a)))
+
+%!test
+%! % Issue #10, subbing matrices in for scalars
+%! syms y
+%! a = [10 20 30];
+%! f = 2*y;
+%! g = subs(f, y, a);
+%! assert (isequal (g, 2*a))
+%! assert (isa (g, 'sym'))
