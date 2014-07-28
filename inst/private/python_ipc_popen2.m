@@ -3,7 +3,9 @@ function A = python_ipc_popen2(what, cmd, varargin)
   persistent fin fout pid
 
   if (strcmp(what, 'reset'))
-    disp('Closing the Python pipe...');
+    if (~isempty(pid))
+      disp('Closing the Python pipe...');
+    end
     pid = [];
     if (~isempty(fin))
       t = fclose(fin); fin = [];
