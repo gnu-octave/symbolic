@@ -74,6 +74,13 @@ end
 %! assert (isequal (divergence(f,{x,y,z}), 0))
 
 %!test
+%! % double const
+%! f = [1 2];
+%! g = sym(0);
+%! assert (isequal (divergence(f, [x y]), g))
+%! % should fail, calls @double: divergence(f, {x y}), g))
+
+%!test
 %! % 1D fcn in 2d/3d
 %! f = [x y z];
 %! assert (isequal (divergence(f), 3))

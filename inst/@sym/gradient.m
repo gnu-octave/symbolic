@@ -53,7 +53,7 @@ function g = gradient(f,x)
           'G = f.jacobian(x).T\n' ...
           'return ( G ,)' ];
 
-  g = python_cmd (cmd, f, x);
+  g = python_cmd (cmd, sym(f), x);
 
 end
 
@@ -74,6 +74,12 @@ end
 %! f = sym(1);
 %! g = sym(0);
 %! assert (isequal (gradient(f), g))
+%! assert (isequal (gradient(f,x), g))
+
+%!test
+%! % double const
+%! f = 1;
+%! g = sym(0);
 %! assert (isequal (gradient(f,x), g))
 
 %!test

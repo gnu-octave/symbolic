@@ -54,13 +54,20 @@ function g = curl(v,x)
           '      d(v[1],x[0]) - d(v[0],x[1])  ])\n'...
           'return ( g ,)' ];
 
-  g = python_cmd (cmd, v, x);
+  g = python_cmd (cmd, sym(v), x);
 
 end
 
 
 %!shared x,y,z
 %! syms x y z
+
+%!test
+%! % double const
+%! f = [1 2 3];
+%! g = [sym(0); 0; 0];
+%! assert (isequal (curl(f, [x y z]), g))
+%! % should fail, calls @double: curl(f, {x y z}), g))
 
 %!test
 %! % div curl always 0

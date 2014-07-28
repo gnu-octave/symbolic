@@ -53,7 +53,7 @@ function g = laplacian(f,x)
           '    g = g + f.diff(y,2)\n' ...
           'return ( g ,)' ];
 
-  g = python_cmd (cmd, f, x);
+  g = python_cmd (cmd, sym(f), x);
 
 end
 
@@ -77,6 +77,12 @@ end
 %! assert (isequal (laplacian(f), g))
 %! assert (isequal (laplacian(f,x), g))
 %! f = sym('c');
+%! assert (isequal (laplacian(f,x), g))
+
+%!test
+%! % double const
+%! f = 1;
+%! g = sym(0);
 %! assert (isequal (laplacian(f,x), g))
 
 %!test
