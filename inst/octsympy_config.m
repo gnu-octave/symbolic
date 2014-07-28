@@ -20,8 +20,6 @@
 %% @deftypefn {Function File} {@var{r} =} octsympy_config ()
 %% Configure the octsympy system.
 %%
-%% FIXME: this should control unicode too.
-%%
 %% Communication mechanism:
 %% @example
 %% octsympy_config ipc default   % default, autodetected
@@ -34,6 +32,11 @@
 %% few characters of the SymPy string representation.
 %% @example
 %% octsympy_config snippet 1|0   % or true/false
+%% @end example
+%%
+%% FIXME: Unicode support: use unicode for displaying syms.
+%% @example
+%% octsympy_config unicode 1|0   % or true/false
 %% @end example
 %%
 %% @seealso{sym, syms, octsympy_reset}
@@ -58,15 +61,21 @@ function varargout = octsympy_config(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
+      settings.unicode = true;
       settings.snippet = true;
+
+    case 'unicode'
+      if (nargin == 1)
+        varargout{1} = settings.unicode;
+      else
+        settings.unicode = tf_from_input(arg);
+      end
 
     case 'snippet'
       if (nargin == 1)
         varargout{1} = settings.snippet;
-      elseif ischar(arg)
-        settings.snippet = strcmp(arg, 'true');
       else
-        settings.snippet = logical(arg);
+        settings.snippet = tf_from_input(arg);
       end
 
     case 'ipc'
@@ -89,6 +98,24 @@ function varargout = octsympy_config(cmd, arg)
 
     otherwise
       error ('invalid input')
+  end
+end
+
+
+function r = tf_from_input(s)
+
+  if (~ischar(s))
+    r = logical(s);
+  elseif (strcmpi(s, 'true'))
+    r = true;
+  elseif (strcmpi(s, 'false'))
+    r = false;
+  elseif (strcmpi(s, '[]'))
+    r = false;
+  else
+    r = str2double(s);
+    assert(~isnan(r), 'invalid expression to convert to bool')
+    r = logical(r);
   end
 end
 

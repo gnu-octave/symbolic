@@ -30,14 +30,14 @@ function display(obj)
   % Note: if you edit this, make sure you edit disp.m as well
 
   %% Settings
-  unicode_decorations = true;
+  unicode_decorations = octsympy_config('unicode');
   display_snippet = octsympy_config('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
   if (unicode_decorations)
     timesstr = '×';
   else
-    timesstr = '×';
+    timesstr = 'x';
   end
 
   d = size (obj);
@@ -112,7 +112,7 @@ function snippet_of_sympy(obj, unicode_decorations)
     lquot = '“'; rquot = '”';
   else
     ell = '...';
-    lquot = '"'; rquot = lq;
+    lquot = '"'; rquot = lquot;
   end
   % trim newlines (if there are any)
   %s = regexprep (obj.pickle, '\n', '\\n');

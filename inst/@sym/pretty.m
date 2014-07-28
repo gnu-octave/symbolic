@@ -24,8 +24,9 @@
 %% Note: pretty(x) works like disp(x) (makes output even if has a
 %% semicolon)
 %%
-%% FIXME: use_unicode as a global var?, use_unicode=False)
+%% FIXME: octsympy_config...
 %% FIXME: wrapping column?
+%% FIXME: store this in the sym?  pretty_by_default?  flat versus not?
 %%
 %% @seealso{disp,latex}
 %% @end deftypefn
