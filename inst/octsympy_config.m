@@ -28,6 +28,16 @@
 %% w = octsympy_config('ipc')    % query the ipc mechanism
 %% @end example
 %%
+%% Python executable path/command:
+%% @example
+%% octsympy_config python '/usr/bin/python'
+%% octsympy_config python 'C:\Python\python.exe'
+%% octsympy_config python 'N:\myprogs\py.exe'
+%% @end example
+%% Default is an empty string; in which case octsympy just runs
+%% @code{python} and assumes the path is set appropriately.
+%% FIXME: need to make sure default works on Windows too.
+%%
 %% Snippets: when displaying a sym object, we show the first
 %% few characters of the SymPy string representation.
 %% @example
@@ -63,6 +73,7 @@ function varargout = octsympy_config(cmd, arg)
       settings.ipc = 'default';
       settings.unicode = true;
       settings.snippet = true;
+      settings.whichpython = '';
 
     case 'unicode'
       if (nargin == 1)
@@ -76,6 +87,17 @@ function varargout = octsympy_config(cmd, arg)
         varargout{1} = settings.snippet;
       else
         settings.snippet = tf_from_input(arg);
+      end
+
+    case 'python'
+      if (nargin == 1)
+        varargout{1} = settings.whichpython;
+      elseif (isempty(arg) || strcmp(arg,'[]'))
+        settings.whichpython = '';
+        octsympy_reset()
+      else
+        settings.whichpython = arg;
+        octsympy_reset()
       end
 
     case 'ipc'

@@ -33,7 +33,12 @@ function A = python_ipc_popen2(what, cmd, varargin)
     disp('##  We have popen2(): opening a new pipe for two-way IPC with SymPy...')
     disp('##');
 
-    [fin, fout, pid] = popen2 ('python','-i');
+
+    pyexec = octsympy_config('python');
+    if (isempty(pyexec))
+      pyexec = 'python';
+    end
+    [fin, fout, pid] = popen2 (pyexec, '-i');
 
     fprintf('##  Technical info: fin = %d, fout = %d, pid = %d\n', fin, fout, pid)
     disp('##');

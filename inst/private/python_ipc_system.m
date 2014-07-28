@@ -38,6 +38,11 @@ function A = python_ipc_system(what, cmd, varargin)
   %% output
   s3 = python_copy_vars_from('_outs');
 
+  pyexec = octsympy_config('python');
+  if (isempty(pyexec))
+    pyexec = 'python';
+  end
+
   %% FIXME: Debug mode
   % it would be helpful to provide an option to output the
   % generated py file for examing.
@@ -45,7 +50,7 @@ function A = python_ipc_system(what, cmd, varargin)
     nl = sprintf('\n');
     bigs = [headers nl s1 nl s2 nl s3 nl];
     bigs = strrep(bigs, '"', '\"');
-    [status,out] = system(['python -c "' bigs '"']);
+    [status,out] = system([pyexec ' -c "' bigs '"']);
   else
     %% use a temp file
     fname = 'temp_sym_python_cmd.py';
@@ -56,7 +61,7 @@ function A = python_ipc_system(what, cmd, varargin)
     fprintf(fd, '%s\n', s2);
     fprintf(fd, '%s\n', s3);
     fclose(fd);
-    [status,out] = system(['python ' fname]);
+    [status,out] = system([pyexec ' ' fname]);
   end
 
   if status ~= 0
