@@ -53,7 +53,7 @@ function A = python_ipc_popen2(what, cmd, varargin)
 
     headers = python_header();
     fputs (fin, headers);
-    fprintf (fin, 'print "hello"\n');
+    fprintf (fin, '\n\n');
     fflush(fin);
     % todo print a block and read it to make sure we're live
   end
