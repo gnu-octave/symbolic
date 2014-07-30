@@ -142,9 +142,13 @@ def octcmd(x):
 
 
 def octoutput_drv(x):
-    import xml.dom.minidom as minidom
     xroot = ET.Element('output_block')
     octoutput(x, xroot)
+    # simple, but no newlines and escapes unicode
+    #print ET.tostring(xroot)
+    #print "\n"
+    # Clashes with some expat lib in Matlab, Issue #63
+    import xml.dom.minidom as minidom
     DOM = minidom.parseString(ET.tostring(xroot))
     print DOM.toprettyxml(indent="", newl="\n", encoding="utf-8")
 

@@ -44,6 +44,14 @@ function [A,out] = python_ipc_system(what, cmd, varargin)
     pyexec = 'python';
   end
 
+  %% FIXME: Issue #63: with new regexp code on Matlab
+  % workaround:
+  % octsympy_config python 'LD_LIBRARY_PATH="" python'
+  % to prevent a conflict with the expat shipped with Matlab 2014a
+  % See here with oracle
+  % https://bugzilla.redhat.com/show_bug.cgi?id=821337
+  % FIXME: make this the default on Matlab install?
+
   %% FIXME: Debug mode
   % it would be helpful to provide an option to output the
   % generated py file for examing.
