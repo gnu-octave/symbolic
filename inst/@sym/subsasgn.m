@@ -56,6 +56,13 @@ function out = subsasgn (val, idx, rhs)
         out = mat_replace(val, idx.subs, sym(rhs));
       end
 
+    case '.'
+      assert( isa(rhs, 'sym'))
+      assert( ~isa(idx.subs, 'sym'))
+      assert( ~isa(val, 'sym'))
+      val.(idx.subs) = rhs;
+      out = val;
+
     otherwise
       disp('FIXME: do we need to support any other forms of subscripted assignment?')
       idx
@@ -243,3 +250,22 @@ end
 %! assert (isequal(  f, [1 3 10 11]  ))
 %! f(end:end+1) = [12 14];
 %! assert (isequal(  f, [1 3 10 12 14]  ))
+
+%!test
+%! % struct.str = sym, sometimes calls subsasgn
+%! d = struct();
+%! syms x
+%! d.a = x;
+%! assert (isa (d, 'struct'))
+%! assert (isequal (d.a, x))
+%! d.('a') = x;
+%! assert (isa (d, 'struct'))
+%! assert (isequal (d.a, x))
+%! d = setfield(d, 'a', x);
+%! assert (isa (d, 'struct'))
+%! assert (isequal (d.a, x))
+%! % at least on Oct 3.8, this calls sym's subsasgn
+%! d = struct();
+%! d = setfield(d, 'a', x);
+%! assert (isa (d, 'struct'))
+%! assert (isequal (d.a, x))
