@@ -69,13 +69,33 @@ function f = matlabFunction(varargin)
 
 
   %% Outputs
+  if (param.codegen)
+    error('matlabFunction: dot m file code gen not implemented yet');
+  end
   exprstrs = {};
   for i=1:Nout
     expr = varargin{i};
-    % FIXME: more work here for Abs, etc, need proper sympy codegen
-    exprstr{i} = strtrim(disp(expr));
-    % FIXME: ** to ^, vectorize?
-    exprstr{i} = vectorize(exprstr{i});
+    cmd = [ '(f,) = _ins\n' ...
+            'try:\n' ...
+            '    s = octave_code(f)\n' ...
+            'except NameError, e:\n' ...
+            '    return (False, e)\n' ...
+            'return (True, s)\n'];
+    [worked, codestr] = python_cmd (cmd, expr);
+    %worked = false;
+    if (worked)
+      codestr = vectorize(codestr);
+    else
+      warning('Somewhat expected: SymPy has no octave codegen, working around');
+      %% As of Aug 2014, origin/master SymPy has no octave_code()
+      % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
+      codestr = strtrim(disp(expr));
+      % Matlab: ** to ^ substition.  On Octave, vectorize does this
+      % automatically
+      codestr = strrep(codestr, '**', '^');
+      codestr = vectorize(codestr);
+    end
+    exprstr{i} = codestr;
   end
 
   if (Nout == 1)
@@ -141,11 +161,15 @@ end
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 
-%%!xtest
-%%! % FIXME: functions with different names in Sympy (disabled for now)
-%%! f = abs(x);  % becomes Abs(x)
-%%! h = matlabFunction(f);
-%%! assert(h(-10) == 10)
+%!xtest
+%! % functions with different names in Sympy (will fail unless
+%! % Sympy has Octave codegen).
+%! f = abs(x);  % becomes Abs(x)
+%! h = matlabFunction(f);
+%! assert(h(-10) == 10)
+%! f = ceil(x);
+%! h = matlabFunction(f);
+%! assert(h(10.1) == 11)
 
 %%!xtest
 %%! % FIXME: non-scalar outputs (disabled for now)
