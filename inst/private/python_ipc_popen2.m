@@ -1,4 +1,5 @@
-function A = python_ipc_popen2(what, cmd, varargin)
+function [A,out] = python_ipc_popen2(what, cmd, varargin)
+% "out" provided for debugging
 
   persistent fin fout pid
 
@@ -17,14 +18,13 @@ function A = python_ipc_popen2(what, cmd, varargin)
       t = fclose(fout); fout = [];
       A = A && (t == 0);
     end
+    out = [];
     return
   end
 
   if ~(strcmp(what, 'run'))
     error('unsupported command')
   end
-
-  tag = ipc_misc_params();
 
   if isempty(pid)
     disp('##')
@@ -72,10 +72,9 @@ function A = python_ipc_popen2(what, cmd, varargin)
 
   fputs (fin, s);
   fflush(fin);
-  %disp('paused before read'); pause
-  out = readblock(fout, tag.block, tag.endblock);
-  A = extractblock(out, tag.item, tag.enditem);
-  if (isempty(strfind(A{1}, 'successful')))
+  out = readblock(fout, '<output_block>', '</output_block>');
+  % could extractblock here, but just search for keyword instead
+  if (isempty(strfind(out, 'successful')))
     error('failed to import variables to python?')
   end
 
@@ -90,6 +89,5 @@ function A = python_ipc_popen2(what, cmd, varargin)
 
   fputs (fin, s);
   fflush(fin);
-  %disp('paused before read'); pause
-  out = readblock(fout, tag.block, tag.endblock);
-  A = extractblock(out, tag.item, tag.enditem);
+  out = readblock(fout, '<output_block>', '</output_block>');
+  A = extractblock(out);

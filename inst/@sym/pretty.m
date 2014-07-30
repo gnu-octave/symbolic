@@ -34,12 +34,20 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = pretty(x)
+function varargout = pretty(x, opt)
 
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
 
-  cmd = [ 'd = sp.pretty(*_ins, use_unicode=True)\n'  ...
-          'return (d,)' ];
+  if nargin == 1
+    opt = 0;
+  end
+  if opt
+    cmd = [ 'd = sp.pretty(*_ins, use_unicode=False)\n'  ...
+            'return (d,)' ];
+  else
+    cmd = [ 'd = sp.pretty(*_ins, use_unicode=True)\n'  ...
+            'return (d,)' ];
+  end
 
   s = python_cmd (cmd, x);
 

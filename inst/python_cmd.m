@@ -116,18 +116,15 @@ function varargout = python_cmd(cmd, varargin)
   %disp(cmd)
   %fprintf('\n*** </CODE> ***\n\n')
 
-  A = python_sympy_cmd_raw('run', cmd, varargin{:});
+  [A,db] = python_sympy_cmd_raw('run', cmd, varargin{:});
+  % FIXME: filter this earlier?
+  A = A{1};
+  %db
 
-  % FIXME: for legacy reasons, there were two strings per output,
-  % clean this up sometime.
-  M = length(A)/2;
-  assert(rem(M,1) == 0)
+  M = length(A);
   varargout = cell(1,M);
   for i=1:M
-    dontcare = A{2*i-1};
-    estr = A{2*i};
-    eval(estr)   % creates a variable called tmp, see *ipc* fcns
-    varargout{i} = tmp;
+    varargout{i} = A{i};
   end
 
   if nargout ~= M
@@ -163,12 +160,88 @@ end
 %! y = python_cmd (cmd, x);
 %! assert (strcmp(y, 'Octave'))
 
-%% unicode
 %!test
+%! % string with newlines
+%! x = 'a string\nbroke off\nmy guitar\n';
+%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x2))
+
+%%!test
+%%! % FIXME: newlines: should be escaped for import?
+%%! %y2 = python_cmd ('return _ins', x);
+%%! %assert (strcmp(y, x))
+
+
+%!test
+%! % string with XML escapes
+%! x = '<> >< <<>>';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+%! x = '&';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+
+%!test
+%! % strings with double quotes
+%! % FIXME: sensible to escape double-quotes to send to python?
+%! x = 'a\"b\"c';
+%! expy = 'a"b"c';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, expy))
+%! x = '\"';
+%! expy = '"';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, expy))
+
+%!test
+%! % strings with quotes
+%! x = 'a''b';  # this is a single quote
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+
+%!test
+%! % strings with quotes
+%! x = '\"a''b\"c''\"d';
+%! y1 = '"a''b"c''"d';
+%! cmd = 's = _ins[0]; return s,';
+%! y2 = python_cmd (cmd, x);
+%! assert (strcmp(y1, y2))
+
+%%!test
+%%! % FIXME: strings with printf escapes
+%%! x = '% %% %%% %%%%'
+%%! y = python_cmd ('return _ins', x)
+%%! assert (strcmp(y, x))
+
+%%!test
+%%! % FIXME: slashes
+%%! x = '/\ // \\ \\\ \/ \/\/\'
+%%! y = python_cmd ('return _ins', x)
+%%! assert (strcmp(y, x))
+
+%!test
+%! % strings with special chars
+%! x = '!@#$^&* you!';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+%! x = '`~-_=+[{]}|;:,.?';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+
+%!test
+%! % unicode
 %! s1 = '我爱你';
 %! cmd = 'return u"\u6211\u7231\u4f60",';
 %! s2 = python_cmd (cmd);
 %! assert (strcmp (s1,s2))
+
+%%!test
+%%! % unicode w/ slashes, escapes, etc  FIXME
+%%! s1 = '我爱你<>\\&//\\#%% %\\我';
+%%! cmd = 'return u"\u6211\u7231\u4f60",';
+%%! s2 = python_cmd (cmd);
+%%! assert (strcmp (s1,s2))
 
 %% list, tuple
 %!assert (isequal (python_cmd ('return [1,2,3],'), {1, 2, 3}))

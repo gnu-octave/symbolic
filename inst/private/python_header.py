@@ -9,7 +9,7 @@ from sympy import *
 from copy import copy as copy_copy
 from binascii import hexlify as binascii_hexlify
 from struct import pack as struct_pack, unpack as struct_unpack
-
+import xml.etree.ElementTree as ET
 
 def dbout(l):
     sys.stderr.write("pydebug: " + str(l) + "\n")
@@ -139,3 +139,101 @@ def octcmd(x):
         s = "error('python does not know how to export type " + str(type(x)).replace("'", "''") + "')"
     return s
 
+
+
+def octoutput_drv(x):
+    import xml.dom.minidom as minidom
+    xroot = ET.Element('output_block')
+    octoutput(x, xroot)
+    DOM = minidom.parseString(ET.tostring(xroot))
+    print DOM.toprettyxml(indent="", newl="\n", encoding="utf-8")
+
+
+# Please no extra blank lines within functions (breaks interpret from stdin)
+# FIXME: unicode probably do not have enough escaping, but cannot string_escape
+def octoutput(x, et):
+    OCTCODE_INT = 1001
+    OCTCODE_DOUBLE = 1002
+    OCTCODE_STR = 1003
+    OCTCODE_USTR = 1004
+    OCTCODE_BOOL = 1005
+    OCTCODE_DICT = 1010
+    OCTCODE_SYM = 1020
+    x = objectfilter(x)
+    if isinstance(x, (sp.Basic,sp.Matrix)):
+        if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
+            if isinstance(x, sp.ImmutableMatrix):
+                dbout("Warning: ImmutableMatrix")
+            _d = x.shape
+        else:
+            if not isinstance(x, sp.Expr):
+                dbout("Treating unknown sympy as scalar: " + str(type(x)))
+            _d = (1,1)
+        pretty_ascii = sp.pretty(x,use_unicode=False)
+        # FIXME: in future, let's just pass both back
+        pretty_unicode = sp.pretty(x,use_unicode=True)
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_SYM)
+        f = ET.SubElement(a, 'f')
+        f.text = my_srepr(x)
+        f = ET.SubElement(a, 'f')
+        f.text = str(_d[0])
+        f = ET.SubElement(a, 'f')
+        f.text = str(_d[1])
+        f = ET.SubElement(a, 'f')
+        f.text = str(x)
+        f = ET.SubElement(a, 'f')
+        f.text = pretty_ascii
+    elif isinstance(x, bool):
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_BOOL)
+        f = ET.SubElement(a, 'f')
+        f.text = str(x)
+    elif isinstance(x, (list,tuple)):
+        c = ET.SubElement(et, 'list')
+        for y in x:
+            octoutput(y, c)
+    elif isinstance(x, int):
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_INT)
+        f = ET.SubElement(a, 'f')
+        f.text = str(x)
+    elif isinstance(x, float):
+        # We pass IEEE doubles using the exact hex representation
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_DOUBLE)
+        f = ET.SubElement(a, 'f')
+        f.text = d2hex(x)
+    elif isinstance(x, str):
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_STR)
+        f = ET.SubElement(a, 'f')
+        f.text = x
+    elif isinstance(x, unicode):
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_USTR)
+        f = ET.SubElement(a, 'f')
+        # newlines are ok with new regexp parser
+        #f.text = x.replace("\n","\\n")
+        f.text = x
+    elif isinstance(x, dict):
+        # Note: the dict cannot be too complex, keys must convert to
+        # strings for example.  Values can be dicts, lists.
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_DICT)
+        # Convert keys to strings
+        keystr = [str(y) for y in x.keys()]
+        c = ET.SubElement(a, 'list')
+        octoutput(keystr, c)
+        c = ET.SubElement(a, 'list')
+        octoutput(x.values(), c)
+    else:
+        dbout("error exporting variable")
+        octoutput("python does not know how to export type " + str(type(x)), et)

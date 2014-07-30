@@ -6,28 +6,12 @@ function s = python_copy_vars_to(in, varargin)
   s = sprintf('%s%s = []\n\n', s, in);
   s = do_list(s, 0, in, varargin);
   else
-  tag = ipc_misc_params();
-
-  s = sprintf('%stry:\n', s);
-  s = sprintf('%s    %s = []\n', s, in);
-  s = do_list(s, 4, in, varargin);
-  s = sprintf('%s    print "%s"\n', s, tag.block);
-  s = sprintf('%s    print "%s\\n%s"\n', s, tag.item, tag.enditem);
-  s = sprintf('%s    print "%s"\n', s, tag.item);
-  s = sprintf('%s    print "PYTHON: successful variable import"\n', s);
-  s = sprintf('%s    print "%s"\n', s, tag.enditem);
-  s = sprintf('%s    print "%s"\n', s, tag.endblock);
-
-  s = sprintf('%sexcept:\n', s);
-  s = sprintf('%s    print\n', s);
-  s = sprintf('%s    print "%s"\n', s, tag.block);
-  s = sprintf('%s    print "%s\\n%s"\n', s, tag.item, tag.enditem);
-  s = sprintf('%s    print "%s"\n', s, tag.item);
-  s = sprintf('%s    print "PYTHON: Error in variable import"\n', s);
-  s = sprintf('%s    print "%s"\n', s, tag.enditem);
-  s = sprintf('%s    print "%s"\n', s, tag.endblock);
-  s = sprintf('%s\n\n', s);
-  %s = sprintf('%s    rethrow\n\n', s, tag.endblock);
+    s = sprintf('%stry:\n', s);
+    s = sprintf('%s    %s = []\n', s, in);
+    s = do_list(s, 4, in, varargin);
+    s = sprintf('%s    octoutput_drv("PYTHON: successful variable import")\n', s);
+    s = sprintf('%sexcept:\n', s);
+    s = sprintf('%s    octoutput_drv("PYTHON: Error in variable import")\n\n\n', s);
   end
 end
 

@@ -1,10 +1,12 @@
-function A = python_ipc_system(what, cmd, varargin)
+function [A,out] = python_ipc_system(what, cmd, varargin)
+% "out" is provided for debugging
 
   persistent show_msg
 
   if (strcmp(what, 'reset'))
     show_msg = [];
     A = true;
+    out = [];
     return
   end
 
@@ -23,17 +25,16 @@ function A = python_ipc_system(what, cmd, varargin)
     show_msg = true;
   end
 
-  tag = ipc_misc_params();
-
   headers = python_header();
 
+  newl = sprintf('\n');
 
   %% load all the inputs into python as pickles
   s1 = python_copy_vars_to('_ins', varargin{:});
 
   %% the actual command
   % this will do something with _ins and produce _outs
-  s2 = sprintf('%s\n\n', cmd);
+  s2 = [cmd newl newl];
 
   %% output
   s3 = python_copy_vars_from('_outs');
@@ -47,8 +48,7 @@ function A = python_ipc_system(what, cmd, varargin)
   % it would be helpful to provide an option to output the
   % generated py file for examing.
   if (1==1)
-    nl = sprintf('\n');
-    bigs = [headers nl s1 nl s2 nl s3 nl];
+    bigs = [headers newl s1 newl s2 newl s3 newl];
     bigs = strrep(bigs, '"', '\"');
     [status,out] = system([pyexec ' -c "' bigs '"']);
   else
@@ -69,6 +69,13 @@ function A = python_ipc_system(what, cmd, varargin)
     out
     error('system() call failed!');
   end
-  A = extractblock(out, tag.item, tag.enditem);
-  % cut the "import variables success message"
-  A = A(3:end);
+
+  % there should be two blocks
+  ind = strfind(out, '<output_block>');
+  assert(length(ind) == 2)
+  out1 = out(ind(1):(ind(2)-1));
+  % could extractblock here, but just search for keyword instead
+  if (isempty(strfind(out1, 'successful')))
+    error('failed to import variables to python?')
+  end
+  A = extractblock(out(ind(2):end));
