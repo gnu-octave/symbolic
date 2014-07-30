@@ -97,9 +97,9 @@
 function varargout = python_cmd(cmd, varargin)
 
 
-  %% a big of preprocessing
-  % the user might or might not have escaped newlines.  We want to
-  % reliably indent this code to put it inside a Python function.
+  %% A bit of preprocessing
+  % The user might or might not have escaped newlines in the command.
+  % We want to reliably indent this code to put it in a Python function.
   newl = sprintf('\n');
   cmd = strrep(cmd, '\n', newl);
   cmd = strtrim(cmd);  % I think this is not important
@@ -133,28 +133,28 @@ function varargout = python_cmd(cmd, varargin)
 end
 
 
-%% general test
 %!test
+%! % general test
 %! x = 10; y = 6;
 %! cmd = '(x,y) = _ins; return (x+y,x-y)';
 %! [a,b] = python_cmd (cmd, x, y);
 %! assert (a == x + y && b == x - y)
 
-%% bool
 %!test
+%! % bool
 %! assert (python_cmd ('return True,'))
 %! assert (~python_cmd ('return False,'))
 
-%% float
 %!test
+%! % float
 %! assert (abs(python_cmd ('return 1.0/3,') - 1/3) < 1e-15)
 
-%% int
 %!test
+%! % int
 %! assert (python_cmd ('return 123456,') == 123456)
 
-%% string
 %!test
+%! % string
 %! x = 'octave';
 %! cmd = 's = _ins[0]; return s.capitalize(),';
 %! y = python_cmd (cmd, x);
@@ -169,9 +169,10 @@ end
 
 %%!test
 %%! % FIXME: newlines: should be escaped for import?
-%%! %y2 = python_cmd ('return _ins', x);
-%%! %assert (strcmp(y, x))
-
+%%! x = 'a string\nbroke off\nmy guitar\n';
+%%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%%! y = python_cmd ('return _ins', x2);
+%%! assert (strcmp(y, x2))
 
 %!test
 %! % string with XML escapes
@@ -184,7 +185,8 @@ end
 
 %!test
 %! % strings with double quotes
-%! % FIXME: sensible to escape double-quotes to send to python?
+%! % maybe its sensible to need to escape double-quotes to send to python?
+%! % FIXME: or we could escape ", \, \n automatically?
 %! x = 'a\"b\"c';
 %! expy = 'a"b"c';
 %! y = python_cmd ('return _ins', x);
@@ -208,17 +210,18 @@ end
 %! y2 = python_cmd (cmd, x);
 %! assert (strcmp(y1, y2))
 
-%%!test
-%%! % FIXME: strings with printf escapes
-%%! x = '% %% %%% %%%%'
-%%! y = python_cmd ('return _ins', x)
-%%! assert (strcmp(y, x))
+%!test
+%! % strings with printf escapes
+%! x = '% %% %%% %%%% %s %g %%s';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
 
-%%!test
-%%! % FIXME: slashes
-%%! x = '/\ // \\ \\\ \/ \/\/\'
-%%! y = python_cmd ('return _ins', x)
-%%! assert (strcmp(y, x))
+%!test
+%! % slashes: FIXME: escape backslashes
+%! x = '/\\ // \\\\ \\/\\/\\';
+%! z = '/\ // \\ \/\/\';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, z))
 
 %!test
 %! % strings with special chars
@@ -237,20 +240,29 @@ end
 %! assert (strcmp (s1,s2))
 
 %%!test
-%%! % unicode w/ slashes, escapes, etc  FIXME
-%%! s1 = '我爱你<>\\&//\\#%% %\\我';
-%%! cmd = 'return u"\u6211\u7231\u4f60",';
-%%! s2 = python_cmd (cmd);
+%%! % unicode passthru: FIXME: how to get unicode back to Python?
+%%! s1 = '我爱你'
+%%! cmd = 'return (_ins[0],)';
+%%! s2 = python_cmd (cmd, s1)
 %%! assert (strcmp (s1,s2))
 
-%% list, tuple
-%!assert (isequal (python_cmd ('return [1,2,3],'), {1, 2, 3}))
-%!assert (isequal (python_cmd ('return (4,5),'), {4, 5}))
-%!assert (isequal (python_cmd ('return (6,),'), {6,}))
-%!assert (isequal (python_cmd ('return [],'), {}))
+%%!test
+%%! % unicode w/ slashes, escapes, etc  FIXME
+%%! s1 = '我爱你<>\\&//\\#%% %\\我'
+%%! s3 = '我爱你<>\&//\#%% %\我'
+%%! cmd = 'return u"\u6211\u7231\u4f60",';
+%%! s2 = python_cmd (cmd)
+%%! assert (strcmp (s2,s3))
 
-%% dict
 %!test
+%! % list, tuple
+%! assert (isequal (python_cmd ('return [1,2,3],'), {1, 2, 3}))
+%! assert (isequal (python_cmd ('return (4,5),'), {4, 5}))
+%! assert (isequal (python_cmd ('return (6,),'), {6,}))
+%! assert (isequal (python_cmd ('return [],'), {}))
+
+%!test
+%! % dict
 %! cmd = 'd = dict(); d["a"] = 6; d["b"] = 10; return d,';
 %! d = python_cmd (cmd);
 %! assert (d.a == 6 && d.b == 10)
