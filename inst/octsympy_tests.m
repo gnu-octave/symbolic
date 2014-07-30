@@ -1,6 +1,9 @@
 % count = 1
 dirs = {'.' '@symfun' '@logical' '@sym'};
 
+totaltime = clock();
+totalcputime = cputime();
+
 if ~exist('count') || count == 0
 
   for j = 1:length(dirs)
@@ -8,14 +11,15 @@ if ~exist('count') || count == 0
     fprintf('%s\n\n', char('_'*ones(1,80)));
   end
 
+  totaltime = etime(clock(), totaltime);
+  totalcputime = cputime() - totalcputime;
+  fprintf('***** Ran all tests, %g seconds (%gs CPU) *****\n', ...
+          totaltime, totalcputime);
 else
 
   %% Old version
   % keeping this code around b/c it can count the number of tests
   % passed for me...
-
-  totaltime = clock();
-  totalcputime = cputime();
 
   num_tests = 0;
   num_passed = 0;
