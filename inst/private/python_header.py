@@ -239,5 +239,7 @@ def octoutput(x, et):
         c = ET.SubElement(a, 'list')
         octoutput(x.values(), c)
     else:
-        dbout("error exporting variable")
+        dbout("error exporting variable:")
+        dbout("x: " + str(x))
+        dbout("type: " + str(type(x)))
         octoutput("python does not know how to export type " + str(type(x)), et)

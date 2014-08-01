@@ -199,7 +199,8 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
   %% get input string
   if (param.user_provided_vars)
     Nin = length(inputs);
-    inputstr = strjoin(syms2charcells(inputs), ',');
+    % FIXME: once Octave 3.6 is ancient history, use strjoin
+    inputstr = mystrjoin(syms2charcells(inputs), ',');
   else
     %inputstr = findsym(varargin{1});
     % findsymbols works on cell input but ordering might not be
@@ -216,6 +217,23 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
 
 end
 
+
+function s = mystrjoin(A, sepchar)
+% replacement for strjoin until Octave 3.6 is old
+  n = numel(A);
+
+  if n == 0
+    s = '';
+  else
+    s = A{1};
+  end
+
+  for i = 2:n
+    s = [s sepchar A{i}];
+  end
+end
+
+
 function A = cell2symarray(C)
   A = sym([]);
   for i=1:length(C)
@@ -225,6 +243,7 @@ function A = cell2symarray(C)
     A = subsasgn(A, idx, C{i});
   end
 end
+
 
 function C = syms2charcells(S)
   C = {};

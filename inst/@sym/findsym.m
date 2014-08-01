@@ -38,22 +38,41 @@ function s = findsym(varargin)
 
   A = symvar(varargin{:});
 
-  % FIXME: once Octave 3.6 is ancient history, can use strjoin(cell, ',')
+  % FIXME: once Octave 3.6 is ancient history, use strjoin
+  s = mystrjoin(syms2charcells(A), ',');
 
-  n = length(A);
+end
+
+
+function C = syms2charcells(S)
+  C = {};
+  for i=1:length(S)
+    if iscell(S)
+      C{i} = strtrim(disp(S{i}));
+    else
+      % MoFo Issue #17
+      %C{i} = strtrim(disp(S(i)))
+      idx.type = '()';
+      idx.subs = {i};
+      C{i} = strtrim(disp(subsref(S,idx)));
+    end
+  end
+end
+
+
+function s = mystrjoin(A, sepchar)
+% replacement for strjoin until Octave 3.6 is old
+  n = numel(A);
 
   if n == 0
     s = '';
   else
-    t = subsref(A, substruct('()', {1}));
-    s = strtrim(disp(t));
+    s = A{1};
   end
 
-  for i=2:n
-    t = subsref(A, substruct('()', {i}));
-    s = [s ',' strtrim(disp(t))];
+  for i = 2:n
+    s = [s sepchar A{i}];
   end
-
 end
 
 

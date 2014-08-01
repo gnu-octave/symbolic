@@ -118,7 +118,7 @@ function f = matlabFunction(varargin)
               'try:\n' ...
               '    s = octave_code(f)\n' ...
               'except NameError, e:\n' ...
-              '    return (False, e)\n' ...
+              '    return (False, str(e))\n' ...
               'return (True, s)\n'];
       [worked, codestr] = python_cmd (cmd, expr);
       %worked = false;
@@ -126,6 +126,7 @@ function f = matlabFunction(varargin)
         codestr = vectorize(codestr);
       else
         warning('Somewhat expected: SymPy has no octave codegen, working around');
+        disp(codestr)
         %% As of Aug 2014, origin/master SymPy has no octave_code()
         % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
         codestr = strtrim(disp(expr));
