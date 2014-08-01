@@ -37,7 +37,7 @@ function [outflag,output] = codegen(varargin)
 
   if (strcmpi(param.lang, 'Octave'))
     outflag = -1;
-    output = {Nin, inputstr, Nout, param};
+    output = {Nin, inputs, inputstr, Nout, param};
     return
   end
 
