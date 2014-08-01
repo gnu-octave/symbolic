@@ -55,6 +55,7 @@ function z = diff(f, varargin)
   % simpler version, but gives error on differentiating a constant
   %cmd = 'return sp.diff(*_ins),';
 
+  % FIXME: with a sympy symvar we could move most/all of this to python?
 
   if ~(isscalar(f))
     z = f;
@@ -67,6 +68,22 @@ function z = diff(f, varargin)
     end
     return
   end
+
+  % two special cases for SMT compat.
+  if (nargin >=2)
+    q = varargin{1};
+    isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
+    if ((nargin == 2) && isnum2)
+      x = symvar(f,1);
+      z = diff(f, x, varargin{1});
+      return
+    end
+    if ((nargin == 3) && isnum2)
+      z = diff(f, varargin{2}, varargin{1});
+      return
+    end
+  end
+
 
   cmd = [ '# special case for one-arg constant\n'             ...
           'if (len(_ins)==1 and _ins[0].is_constant()):\n'    ...
@@ -99,6 +116,19 @@ end
 %! % octave's vector difference still works
 %!assert(isempty(diff(1)))
 %!assert((diff([2 6]) == 4))
+
+%!test
+%! % other forms
+%! f = sin(x);
+%! g = diff(f,x,2);
+%! assert (isequal (diff(f,2), g))
+%! assert (isequal (diff(f,2,x), g))
+%! assert (isequal (diff(f,sym(2)), g))
+%! assert (isequal (diff(f,sym(2),x), g))
+%! g = diff(f,x);
+%! assert (isequal (diff(f), g))
+%! assert (isequal (diff(f,1), g))
+%! assert (isequal (diff(f,1,x), g))
 
 %!test
 %! % matrix
