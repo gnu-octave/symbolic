@@ -42,26 +42,26 @@
 
 function s = taylor(f,varargin)
 
-  %varargin
-  %nargin
-
-  if nargin == 1
+  if (nargin == 1)  % taylor(f)
     x = symvar(f,1);
     a = sym(0);
     i = 1;
-  elseif nargin == 2
+  elseif (nargin == 2)  % taylor(f,x)
     x = varargin{1};
     a = sym(0);
     i = 2;
   elseif (~ischar(varargin{1}) && ~ischar(varargin{2}))
+    % taylor(f,x,a,...)
     x = varargin{1};
     a = varargin{2};
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
+    % taylor(f,x,'param')
     x = varargin{1};
     a = sym(0);
     i = 2;
-  else
+  else  % taylor(f,'param')
+    assert (ischar(varargin{1}))
     x = symvar(f,1);
     a = sym(0);
     i = 1;
@@ -84,6 +84,10 @@ function s = taylor(f,varargin)
   
   if (isfloat(n))
     n = int32(n);
+  end
+
+  if (numel(x) >= 1)
+    warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
   end
 
   cmd = [ '(f,x,a,n) = _ins\n'  ...
