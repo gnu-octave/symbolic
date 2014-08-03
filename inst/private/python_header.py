@@ -164,7 +164,13 @@ def octoutput(x, et):
     OCTCODE_DICT = 1010
     OCTCODE_SYM = 1020
     x = objectfilter(x)
-    if isinstance(x, (sp.Basic,sp.Matrix)):
+    if isinstance(x, bool) or (x in (S.true, S.false)):
+        a = ET.SubElement(et, 'item')
+        f = ET.SubElement(a, 'f')
+        f.text = str(OCTCODE_BOOL)
+        f = ET.SubElement(a, 'f')
+        f.text = str(x)
+    elif isinstance(x, (sp.Basic,sp.Matrix)):
         if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
             if isinstance(x, sp.ImmutableMatrix):
                 dbout("Warning: ImmutableMatrix")
@@ -189,12 +195,6 @@ def octoutput(x, et):
         f.text = str(x)
         f = ET.SubElement(a, 'f')
         f.text = pretty_ascii
-    elif isinstance(x, bool):
-        a = ET.SubElement(et, 'item')
-        f = ET.SubElement(a, 'f')
-        f.text = str(OCTCODE_BOOL)
-        f = ET.SubElement(a, 'f')
-        f.text = str(x)
     elif isinstance(x, (list,tuple)):
         c = ET.SubElement(et, 'list')
         for y in x:
