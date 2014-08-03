@@ -42,6 +42,11 @@ Differences
   prime factors and their multiplicities.  Pure Matlab 'factor' has
   this but strangely SMT 'factor' does not.
 
+* Assumptions are quite different, although we fake quite a bit for
+  compatibility, see section below.
+
+* SMT has isinf(x + oo) and isinf(x*oo) true.  SymPy says false.
+
 
 Differences in assumptions
 --------------------------

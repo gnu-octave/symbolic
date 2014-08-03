@@ -105,3 +105,25 @@ end
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
 %! oo = sym('INF');
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+
+%!test
+%! % ops with infinity shouldn't collapse
+%! syms x oo zoo
+%! y = x + oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x - oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x - zoo;
+%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! y = x*oo;
+%! assert(~isempty( strfind(lower(y.pickle), 'mul') ))
+
+%!test
+%! % ops with infinity are not necessarily infinite
+%! syms x oo zoo
+%! y = x + oo;
+%! assert(~isinf(y))  %  SMT 2014a says "true", I disagree
+%! y = x - zoo;
+%! assert(~isinf(y))
+%! y = x*oo;
+%! assert(~isinf(y))
