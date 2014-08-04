@@ -269,3 +269,28 @@ end
 %! d = setfield(d, 'a', x);
 %! assert (isa (d, 'struct'))
 %! assert (isequal (d.a, x))
+
+%!test
+%! % bool scalar assignments of true/false into sym
+%! a = sym([1 2 x 3]);
+%! b = [1 2 10 4];
+%! e = a == b;
+%! assert (logical (e(2)))
+%! e(2) = false;
+%! assert (~logical (e(2)))
+
+%!test
+%! % bool vector assignments of true/false into sym
+%! a = sym([1 2 x 3]);
+%! b = [1 2 10 4];
+%! e = a == b;
+%! e(1:2) = [true true];
+%! assert (isequal (e, [sym(1)==1  sym(2)==2  x==10  sym(3)==4]))
+
+%!test
+%! % bool scalar promoted to vector assignments into sym
+%! a = sym([1 2 x 3]);
+%! b = [1 2 10 4];
+%! e = a == b;
+%! e(1:2) = true;
+%! assert (isequal (e, [sym(1)==1  sym(2)==2  x==10  sym(3)==4]))
