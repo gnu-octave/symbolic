@@ -39,7 +39,7 @@ function s = do_list(s, indent, in, L)
       s = sprintf('%s%s# Load %d: string\n', s, sp, i);
       s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);
 
-    elseif (islogical(x))
+    elseif (islogical(x) && isscalar(x))
       s = sprintf('%s%s# Load %d: bool\n', s, sp, i);
       if (x)
         s = sprintf('%s%s%s.append(True)\n', s, sp, in);
