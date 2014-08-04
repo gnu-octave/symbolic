@@ -142,23 +142,24 @@ end
 %! assert (isequal (w, [true true false; true false true]))
 
 %!xtest
-%! % if-else-end blocks automatically use logical
-%! % FIXME: bug in Octave?
+%! % FIXME: bug in Octave: "if" should automatically use logical
 %! e = sym(true);
 %! if (e)   % want same as "if (logical(e))"
 %!   assert(true);
 %! else
 %!   assert(false);
 %! end
-%! e2 = sym(1) == sym(1);
-%! if (e2)
-%!   assert(true);
-%! else
-%!   assert(false);
-%! end
-%! e3 = sym([1 2]) == sym([1 1]);
-%! if (e3(1))
-%!   assert(true);
-%! else
-%!   assert(false);
-%! end
+
+% more above, one it passes
+% e2 = sym(1) == sym(1);
+% if (e2)
+%   assert(true);
+% else
+%   assert(false);
+% end
+% e3 = sym([1 2]) == sym([1 1]);
+% if (e3(1))
+%   assert(true);
+% else
+%   assert(false);
+% end

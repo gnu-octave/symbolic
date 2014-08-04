@@ -57,13 +57,17 @@ end
 %! oo = sym(inf);
 %! zoo = sym('zoo');
 
-%!assert(symprod(n, n, 1, 10) - factorial(sym(10)) == 0)
-%!assert(symprod(n, n, sym(1), sym(10)) - factorial(10) == 0)
-%!assert(symprod(a, n, 1, oo) - a^oo == 0)
-%!assert(symprod(a, n, 1, inf) - a^oo == 0)
+%!test
+%! % simple
+%! assert (isequal (symprod(n, n, 1, 10), factorial(sym(10))))
+%! assert (isequal (symprod(n, n, sym(1), sym(10)), factorial(10)))
+
+%!test
+%! % infinite product
+%! assert (isequal (symprod(a, n, 1, oo), a^oo))
+%! assert (isequal (symprod(a, n, 1, inf), a^oo))
 %! % not with oo, but true with zoo, see below
-%!assert(symprod(1, n, 1, zoo) == 1)
-%!assert(symprod(1, n, 1, 'zoo') == 1)
+%! assert (isequal (symprod(1, n, 1, zoo), sym(1)))
 
 %!test
 %! %% a^oo, when a == 1
@@ -78,5 +82,4 @@ end
 %!test
 %! %% a^zoo, when a == 1
 %! % on both sympy 0.7.4 and 0.7.5 this is 1
-%! assert(islogical(1^zoo == 1))
-%! assert(1^zoo == 1)
+%! assert (isequal (1^zoo, sym(1)))

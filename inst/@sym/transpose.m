@@ -41,12 +41,13 @@ end
 
 %!test
 %! x = sym(1);
-%! assert(x.' == x)
-%!assert(isempty(sym([]).'))
+%! assert (isequal (x.', x))
+
+%!assert (isempty (sym([]).'))
 
 %!test
 %! syms x;
-%! assert(x.' == x)
+%! assert (isequal (x.', x))
 
 %!test
 %! A = [1 2; 3 4];

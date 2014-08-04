@@ -66,7 +66,7 @@ function z = mod(x, n)
 end
 
 
-%!assert (mod (sym(5),4) == 1)
+%!assert (isequal (mod (sym(5),4), sym(1)))
 %!assert (isequal (mod ([sym(5) 8],4), [1 0] ))
 %!test
 %! syms x

@@ -39,11 +39,11 @@ end
 %!test
 %! % simple
 %! x = sym(1); y = sym(1); e = x ~= y;
-%! assert (islogical (e))
-%! assert (~e)
+%! % assert (islogical (e))
+%! assert (~logical(e))
 %! x = sym(1); y = sym(2); e = x ~= y;
-%! assert (islogical (e))
-%! assert (e)
+%! %assert (islogical (e))
+%! assert (logical(e))
 
 %!test
 %! % array -- array

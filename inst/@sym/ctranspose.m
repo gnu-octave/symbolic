@@ -41,22 +41,26 @@ end
 
 %!test
 %! x = sym(1);
-%! assert(x' == x)
-%!assert(isempty(sym([])'))
+%! assert (isequal (x', x))
+
+%!assert (isempty (sym([])'))
 
 %!test
-%! syms x real;
-%! assert(x' == x)
+%! % conjugate does nothing to real x
+%! syms x real
+%! assert (isequal (x', x))
 
-%% FIXME: Bug #19
-%%!test
-%%! syms x;
-%%! assert(x' == conj(x))
-%%!test
-%%! syms x;
-%%! A = [x 2*x];
-%%! B = [conj(x); 2*conj(x)];
-%%! assert(isequal(A', B))
+%!test
+%! % complex
+%! syms x
+%! assert (isequal (x', conj(x)))
+
+%!test
+%! % complex array
+%! syms x
+%! A = [x 2*x];
+%! B = [conj(x); 2*conj(x)];
+%! assert(isequal(A', B))
 
 %!test
 %! A = [1 2; 3 4];

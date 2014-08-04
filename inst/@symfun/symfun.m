@@ -161,11 +161,11 @@ end
 %! assert(isa(f, 'symfun'))
 
 %!test
-%! %% rhs is not sym
+%! % rhs is not sym
 %! syms x
 %! f = symfun(8, x);
-%! assert(isa(f,'symfun'))
-%! assert(f(10) == sym(8))
+%! assert (isa (f,'symfun'))
+%! assert (isequal (f(10), sym(8)))
 
 %!test
 %! % vector symfun

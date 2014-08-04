@@ -80,21 +80,27 @@ end
 %!shared x, oo
 %! syms x
 %! oo = sym(inf);
-%!assert(isa(limit(x,x,pi), 'sym'))
-%!assert(isequal(limit(x,x,pi), sym(pi)))
 
-%!assert(limit(sin(x)/x, x, 0) == 1);
-%!assert(limit(1/x, x, 0, 'right') == oo);
-%!assert(limit(1/x, x, 0) == oo);
-%!assert(limit(1/x, x, 0, 'left') == -oo);
-%!assert(limit(1/x, x, oo) == 0);
-%!assert(limit(sign(x), x, 0, 'left') == -1);
-%!assert(limit(sign(x), x, 0, 'right') == 1);
-%!assert(limit(sign(x), x, 0, '-') == -1);
-%!assert(limit(sign(x), x, 0, '+') == 1);
+%!assert (isa (limit(x, x, pi), 'sym'))
+
+%!assert (isequal (limit(x, x, pi), sym(pi)))
+
+%!assert (isequal (limit(sin(x)/x, x, 0), 1))
+
+%!test
+%! % left/right-hand limit
+%! assert (isequal (limit(1/x, x, 0, 'right'), oo))
+%! assert (isequal (limit(1/x, x, 0), oo))
+%! assert (isequal (limit(1/x, x, 0, 'left'), -oo))
+%! assert (isequal (limit(1/x, x, oo), 0))
+%! assert (isequal (limit(sign(x), x, 0, 'left'), -1))
+%! assert (isequal (limit(sign(x), x, 0, 'right'), 1))
+%! assert (isequal (limit(sign(x), x, 0, '-'), -1))
+%! assert (isequal (limit(sign(x), x, 0, '+'), 1))
 
 %!test
 %! % matrix
 %! syms y
 %! A = [x 1/x x*y];
-%! assert(isequal(limit(A,x,3),sym([3 sym(1)/3 3*y])))
+%! B = sym([3 sym(1)/3 3*y]);
+%! assert (isequal (limit(A, x, 3), B))

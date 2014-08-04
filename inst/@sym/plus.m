@@ -38,7 +38,7 @@ end
 %! assert (isa (x+5, 'sym'))
 %! assert (isa (5+x, 'sym'))
 %! assert (isa (5+sym(4), 'sym'))
-%! assert (5+sym(4) == sym(9))
+%! assert (isequal (5+sym(4), sym(9)))
 
 %!test
 %! % array addition

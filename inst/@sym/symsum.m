@@ -49,17 +49,20 @@ end
 
 %!test
 %! % finite sums
-%! assert(symsum(n,n,1,10) == 55)
+%! assert (isequal (symsum(n,n,1,10), 55))
 %! assert(isa(symsum(n,n,1,10), 'sym'))
-%! assert(symsum(n,n,sym(1),sym(10)) == 55)
-%! assert(symsum(n,n,sym(1),sym(10)) == 55)
-%! assert(symsum(1/n,n,1,10) == sym(7381)/2520)
-
-%!test
-%! % FIXME: zoo/oo seems to depend on sympy version?
-%! assert(symsum(1/n,n,1,oo) == sym('zoo'))
+%! assert (isequal (symsum(n,n,sym(1),sym(10)), 55))
+%! assert (isequal (symsum(n,n,sym(1),sym(10)), 55))
+%! assert (isequal (symsum(1/n,n,1,10), sym(7381)/2520))
 
 %!test
 %! % ok to use double's for arguments in infinite series
 %! assert(isequal(symsum(1/n^2,n,1,oo), sym(pi)^2/6))
 %! assert(isequal(symsum(1/n^2,n,1,inf), sym(pi)^2/6))
+
+%!test
+%! % should be oo because 1 is real but seems to be
+%! % zoo/oo depending on sympy version
+%! zoo = sym('zoo');
+%! assert (isequal (symsum(1/n,n,1,oo), oo) || ...
+%!         isequal (symsum(1/n,n,1,oo), zoo))
