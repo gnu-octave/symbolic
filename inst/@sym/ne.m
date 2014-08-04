@@ -31,7 +31,7 @@ function t = ne(x,y)
 
   % nanspecial is (python) 'True' here b/c nan is not equal
   % to everything, even itself.
-  t = ineq_helper('[donotuse]', 'Ne', x, y, 'True');
+  t = ineq_helper('[donotuse]', 'Ne', x, y, 'S.true');
 
 end
 
@@ -39,23 +39,21 @@ end
 %!test
 %! % simple
 %! x = sym(1); y = sym(1); e = x ~= y;
-%! % assert (islogical (e))
-%! assert (~logical(e))
+%! assert (~logical (e))
 %! x = sym(1); y = sym(2); e = x ~= y;
-%! %assert (islogical (e))
 %! assert (logical(e))
 
-%!test
+%!xtest
 %! % array -- array
 %! syms x
 %! a = sym([1 3 3 2*x]);
 %! b = sym([2 x 3 10]);
 %! e = a ~= b;
 %! assert (isa (e, 'sym'))
-%! assert (e(1))
+%! assert (logical (e(1)))
 %! assert (isa (e(2), 'sym'))
 %! assert (isequal (e(2), 3 ~= x))
-%! assert (~e(3))
+%! assert (~logical (e(3)))
 %! assert (isa (e(4), 'sym'))
 %! assert (isequal (e(4), 2*x ~= 10))
 
@@ -70,10 +68,8 @@ end
 %! % nan
 %! syms oo x
 %! snan = sym(nan);
-%! e = snan ~= 0;
-%! assert (islogical (e))
-%! assert (e)
+%! e = snan ~= sym(0);
+%! assert (logical (e))
 %! e = snan ~= snan;
-%! assert (islogical (e))
-%! assert (e)
+%! assert (logical (e))
 

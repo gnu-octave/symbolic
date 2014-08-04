@@ -27,7 +27,7 @@
 %% Keywords: symbolic
 
 
-function t = ge(x,y)
+function t = ge(x, y)
 
   t = ineq_helper('>=', 'Ge', x, y);
 
@@ -37,11 +37,9 @@ end
 %!test
 %! % simple
 %! x = sym(1); y = sym(1); e = x >= y;
-%! assert (islogical (e))
-%! assert (e)
+%! assert (logical (e))
 %! x = sym(1); y = sym(2); e = x >= y;
-%! assert (islogical (e))
-%! assert (~e)
+%! assert (~logical(e))
 
 %!test
 %! % array -- array
@@ -50,17 +48,9 @@ end
 %! b = sym([2 x 3 10]);
 %! e = a >= b;
 %! assert (isa (e, 'sym'))
-%! assert (~e(1))
+%! assert (~logical (e(1)))
 %! assert (isa (e(2), 'sym'))
 %! assert (isequal (e(2), 3 >= x))
-%! assert (e(3))
+%! assert (logical (e(3)))
 %! assert (isa (e(4), 'sym'))
 %! assert (isequal (e(4), 2*x >= 10))
-
-%!test
-%! % oo
-%! syms oo x
-%! e = oo >= x;
-%! assert (isa (e, 'sym'))
-%! assert (strcmp (strtrim (disp (e)), 'oo >= x'))
-

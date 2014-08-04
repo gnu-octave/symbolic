@@ -22,7 +22,7 @@
 function t = ineq_helper(op, fop, lhs, rhs, nanspecial)
 
   if (nargin == 4)
-    nanspecial = 'False';
+    nanspecial = 'S.false';
   end
 
   cmd = [ '(lhs, rhs) = _ins\n' ...
