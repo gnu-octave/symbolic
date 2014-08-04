@@ -83,9 +83,14 @@ function s = sym(x, varargin)
   %% User interface for defining sym
   % sym(1), sym('x'), etc.
 
-  % not a subclass, exactly a sym, not symfun
-  %if (strcmp (class (x), 'sym'))
+  %if (strcmp (class (x), 'symfun')  &&  nargin==1)
+  %  % FIXME: pass a symfun to sym() ctor; convert to pure sym
+  %  % (SMT does not do this in 2014a).  bad idea?
+  %  s = x.sym;
+  %  return
+
   if (isa (x, 'sym')  &&  nargin==1)
+    % matches sym and subclasses
     s = x;
     return
 
