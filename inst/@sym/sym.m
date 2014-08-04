@@ -102,6 +102,10 @@ function s = sym(x, varargin)
     s = double_array_to_sym (x);
     return
 
+  elseif (islogical (x)  &&  ~isscalar (x)  &&  nargin==1)
+    s = double_array_to_sym (x);
+    return
+
   elseif (isa (x, 'double')  &&  ~isreal (x)  &&  nargin==1)
     s = sym(real(x)) + sym('I')*sym(imag(x));
     return
@@ -127,6 +131,13 @@ function s = sym(x, varargin)
       s = sym(rats(x));
     end
     return
+
+  elseif (islogical (x)  &&  isscalar(x)  &&  nargin==1)
+    if (x)
+      cmd = 'z = sp.S.true';
+    else
+      cmd = 'z = sp.S.false';
+    end
 
   elseif (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
     % special case for 'clear', because of side-effects
@@ -269,25 +280,25 @@ end
 %!test
 %! % pi
 %! x = sym('pi');
-%! assert (isa(x, 'sym'))
-%! assert (sin(x) == sym(0))
-%! assert ( abs(double(x) - pi) < 2*eps )
+%! assert (isa (x, 'sym'))
+%! assert (isequal (sin(x), sym(0)))
+%! assert (abs(double(x) - pi) < 2*eps )
 %! x = sym(pi);
-%! assert (isa(x, 'sym'))
-%! assert (sin(x) == sym(0))
+%! assert ( isa (x, 'sym'))
+%! assert ( isequal (sin(x), sym(0)))
 %! assert ( abs(double(x) - pi) < 2*eps )
 
 %!test
 %! % rationals
 %! x = sym(1) / 3;
-%! assert (isa(x, 'sym'))
-%! assert (3*x - 1 == 0)
+%! assert (isa (x, 'sym'))
+%! assert (isequal (3*x - 1, sym(0)))
 %! x = 1 / sym(3);
-%! assert (isa(x, 'sym'))
-%! assert (3*x - 1 == 0)
+%! assert (isa (x, 'sym'))
+%! assert (isequal (3*x - 1, sym(0)))
 %! x = sym('1/3');
-%! assert (isa(x, 'sym'))
-%! assert (3*x - 1 == 0)
+%! assert (isa (x, 'sym'))
+%! assert (isequal (3*x - 1, sym(0)))
 
 %!test
 %! % passing small rationals
@@ -390,3 +401,17 @@ end
 %! x = sym(x, 'clear');
 %! assert (isempty(assumptions(x)))
 %! assert (isempty(assumptions(f)))
+
+%!test
+%! % bool
+%! t = sym(false);
+%! t = sym(true);
+%! assert (logical (t))
+
+%!test
+%! % bool vec/mat
+%! a = sym(1);
+%! t = sym([true false]);
+%! assert (isequal (t, [a==1  a==0]))
+%! t = sym([true false; false true]);
+%! assert (isequal (t, [a==1  a==0;  a==0  a==1]))

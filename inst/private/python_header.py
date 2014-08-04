@@ -164,7 +164,7 @@ def octoutput(x, et):
     OCTCODE_DICT = 1010
     OCTCODE_SYM = 1020
     x = objectfilter(x)
-    if isinstance(x, bool) or (x in (S.true, S.false)):
+    if isinstance(x, bool):
         a = ET.SubElement(et, 'item')
         f = ET.SubElement(a, 'f')
         f.text = str(OCTCODE_BOOL)
@@ -175,9 +175,12 @@ def octoutput(x, et):
             if isinstance(x, sp.ImmutableMatrix):
                 dbout("Warning: ImmutableMatrix")
             _d = x.shape
+        elif isinstance(x, sp.Expr):
+            _d = (1,1)
+        elif x in (S.true, S.false):
+            _d = (1,1)
         else:
-            if not isinstance(x, sp.Expr):
-                dbout("Treating unknown sympy as scalar: " + str(type(x)))
+            dbout("Treating unknown sympy as scalar: " + str(type(x)))
             _d = (1,1)
         pretty_ascii = sp.pretty(x,use_unicode=False)
         # FIXME: in future, let's just pass both back
