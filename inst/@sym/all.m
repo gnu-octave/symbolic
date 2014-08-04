@@ -34,12 +34,14 @@
 
 function z = all(x, varargin)
 
-  z = double (x, false);
-  if (isempty (z))
-    error ('indeterminable')
-  else
-    z = all (z, varargin{:});
-  end
+  z = all (logical (x), varargin{:});
+
+  %z = double (x, false);
+  %if (isempty (z))
+  %  error ('indeterminable')
+  %else
+  %  z = all (z, varargin{:});
+  %end
 
 end
 

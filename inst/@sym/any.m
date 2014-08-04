@@ -34,12 +34,14 @@
 
 function z = any(x, varargin)
 
-  z = double (x, false);
-  if (isempty (z))
-    error('indeterminable')
-  else
-    z = any (z, varargin{:});
-  end
+  z = any (logical (x), varargin{:});
+
+  %  z = double (x, false);
+  %if (isempty (z))
+  %  error('indeterminable')
+  %else
+  %  z = any (z, varargin{:});
+  %end
 
 end
 
