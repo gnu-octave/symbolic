@@ -45,30 +45,120 @@
 
 function r = logical(p)
 
-  if ~(isscalar(p))
-    warning('logical not implemented for arrays (?) todo?');
-  end
+  cmd = [ '(p,) = _ins\n' ...
+          'def scalar_case(p,):\n' ...
+          '    if p in (S.true, S.false):\n' ...
+          '        return bool(p)\n' ...
+          '    if isinstance(p, sp.relational.Relational):\n' ...
+          '        return bool(p._eval_relation(p.lhs, p.rhs))\n' ...
+          '    if p.is_number:\n' ...
+          '        return bool(p)\n' ...
+          '    # FIXME: better list cases that are ok...\n' ...
+          '    #return bool(p)\n' ...
+          '    return False\n' ...
+          'if p.is_Matrix:\n' ...
+          '    # we want a pure python list .applyfunc gives Matrix back\n' ...
+          '    r = [scalar_case(a) for a in p.T]\n' ...
+          'else:\n' ...
+          '    r = [scalar_case(p)]\n' ...
+          'return (True, r, )' ];
 
-  cmd = [ '(e,) = _ins\n'  ...
-          'r = bool(e.lhs == e.rhs)\n'  ...
-          'return (r,)' ];
-  r = python_cmd (cmd, p);
-
-  if ~islogical(r)
-    disp('logical: cannot happen?  wrong pickle?  Bug?')
-    r
-    keyboard
-    error('unexpected return value')
-  end
+  [flag, r] = python_cmd (cmd, p);
+  assert(flag, 'FIXME: use this to support things we want to error out instead of T/F');
+  r = cell2mat(r);
+  r = reshape(r, size(p));
 
 end
 
 
 %!test
 %! % basics, many others in isAlways.m
-%! syms x
 %! assert (logical(true))
 %! assert (~(logical(false)))
-%! assert (logical(x==x))
-%! assert (~logical(x==1))
-%! assert (~logical(x^2==x))
+%! assert (logical(sym(1)))
+%! assert (logical(sym(-1)))
+%! assert (~logical(sym(0)))
+
+%!xtest
+%! % logical(symbol): we adopt the conventiion these are true if nonzero
+%! % SMT has error for these: FIXME: do we want this instead?
+%! syms x oo
+%! y1 = logical(x);
+%! assert (islogical (y1))
+%! assert (~y1)
+%! y2 = logical(oo);
+%! assert (islogical (y2))
+%! assert (y2)
+
+%!test
+%! % eqns, "structurally equivalent"
+%! syms x
+%! e = logical(x == x);
+%! assert ( islogical (e))
+%! assert (e)
+%! e = logical(x == 1);
+%! assert ( islogical (e))
+%! assert (~e)
+
+%!test
+%! % eqn could have solutions but are false in general
+%! syms x
+%! e = logical(x^2 == x);
+%! assert ( islogical (e))
+%! assert (~e)
+%! e = logical(2*x == x);
+%! assert ( islogical (e))
+%! assert (~e)
+
+%!test
+%! % FIXME: (not sure yet)  T/F matrices should stay sym until logical()
+%! a = sym(1);
+%! e = a == a;
+%! assert (isa (e, 'sym'))
+%! assert (islogical (logical (e)))
+%! e = [a == a  a == 0  a == a];
+%! assert (isa (e, 'sym'))
+%! assert (islogical (logical (e)))
+
+%!test
+%! % sym vectors of T/F to logical
+%! a = sym(1);
+%! e = [a == a  a == 0  a == a];
+%! w = logical(e);
+%! assert (islogical (w))
+%! assert (isequal (w, [true false true]))
+%! e = e.';   # FIXME: e' gave error
+%! w = logical(e);
+%! assert (islogical (w))
+%! assert (isequal (w, [true; false; true]))
+
+%!test
+%! % sym matrix of T/F to logical
+%! a = sym([1 2 3; 4 5 6]);
+%! b = sym([1 2 0; 4 0 6]);
+%! e = a == b;
+%! w = logical(e);
+%! assert (islogical (w))
+%! assert (isequal (w, [true true false; true false true]))
+
+%!xtest
+%! % if-else-end blocks automatically use logical
+%! % FIXME: bug in Octave?
+%! e = sym(true);
+%! if (e)   % want same as "if (logical(e))"
+%!   assert(true);
+%! else
+%!   assert(false);
+%! end
+%! e2 = sym(1) == sym(1);
+%! if (e2)
+%!   assert(true);
+%! else
+%!   assert(false);
+%! end
+%! e3 = sym([1 2]) == sym([1 1]);
+%! if (e3(1))
+%!   assert(true);
+%! else
+%!   assert(false);
+%! end
