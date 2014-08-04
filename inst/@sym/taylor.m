@@ -81,12 +81,11 @@ function s = taylor(f,varargin)
     end
   end
 
-  
   if (isfloat(n))
     n = int32(n);
   end
 
-  if (numel(x) >= 1)
+  if (numel(x) > 1)
     warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
   end
 
@@ -140,4 +139,3 @@ end
 %! assert (isequal (g, 4*x+(x-2)^2-4))
 %! g = taylor(f,x,a);
 %! assert (isequal (simplify(g), f))
-
