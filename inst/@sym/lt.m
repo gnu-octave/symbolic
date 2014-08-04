@@ -119,9 +119,8 @@ end
 %! assert (~(e))
 %! b = [sym(0) x];
 %! e = b < snan;
-%! assert (isa (e, 'sym'))
-%! assert (~(e(1)))
-%! assert (~(e(2)))
+%! assert (islogical (e))
+%! assert (isequal (e, [false false]))
 
 %!test
 %! % oo
@@ -138,7 +137,7 @@ end
 %! assert (islogical (e))
 %! assert (e(1))
 
-%!xtest
+%!test
 %! % sympy true matrix: FIXME
 %! a = sym([1 3 3]);
 %! b = sym([2 4 1]);
@@ -148,14 +147,14 @@ end
 %! assert (isequal (e, [true true false]))
 
 %!xtest
-%! % assumptions
+%! % assumptions, broken in SymPy somewhere?
 %! syms z positive
 %! e = -1 < z;
 %! assert (islogical (e))
 %! assert (e(1))
 
 %!xtest
-%! % oo, assumptions 2
+%! % oo, assumptions 2, broken in SymPy somewhere?
 %! syms oo
 %! syms z negative
 %! e = z < oo;
