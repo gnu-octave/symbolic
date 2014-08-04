@@ -47,8 +47,13 @@
 
 function r = isAlways(p)
 
+  assert(isscalar(p), 'isAlways: untested/unimplemented for matrix')
+
   cmd = [ '(p,) = _ins\n'  ...
-          'r = sp.simplify(p.lhs-p.rhs) == 0\n'  ...
+          'if p in (S.true, S.false):\n' ...
+          '    r = bool(p)\n' ...
+          'else:\n' ...
+          '    r = sp.simplify(p.lhs-p.rhs) == 0\n' ...
           'return (r,)' ];
   r = python_cmd (cmd, p);
 
@@ -75,7 +80,6 @@ end
 %! expr = x - x == 0;
 %! assert (logical(expr))
 %! assert (isAlways(expr))
-%! assert (islogical(expr))
 
 %!test
 %! % structurally same and mathematically true
