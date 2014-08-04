@@ -137,6 +137,9 @@ end
 %! y = snan == 1;
 %! assert (islogical(y))
 %! assert (~isa(y, 'sym'))
+%! assert (~y)
+
+
 %!test
 %! % Issue #9, for arrays, passes currently, probably for wrong reason
 %! snan = sym(nan);
@@ -145,11 +148,12 @@ end
 %! assert (isequal (A, [false false true]))
 %!test
 %! % these seem to work
-%! assert (islogical(sym(inf) == 1))
-%! assert ((sym(inf) == 1) == false)
+%! e = sym(inf) == 1;
+%! assert (islogical(e))
+%! assert (~e)
 
 
-%!xtest
+%!test
 %! % known failure, issue #55; an upstream issue
 %! snan = sym(nan);
 %! assert(~(snan == snan))
