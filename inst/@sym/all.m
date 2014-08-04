@@ -44,26 +44,26 @@ function z = all(x, varargin)
 end
 
 
-%% Tests
-%!shared a, s
+%!test
+%! % matrix
 %! a = [0 3; 1 2];
 %! s = sym (a);
-%!assert (isequal (all (s), all (a)))
-%!assert (isequal (all (s,1), all (a,1)))
-%!assert (isequal (all (s,2), all (a,2)))
-%
-%!shared a, s
+%! assert (isequal (all (s), all (a)))
+%! assert (isequal (all (s,1), all (a,1)))
+%! assert (isequal (all (s,2), all (a,2)))
+
+%!test
+%! % vector
 %! a = [1 2 3];
 %! s = sym (a);
-%!assert (isequal (all (s), all (a)))
-%!assert (isequal (all (s,1), all (a,1)))
-%!assert (isequal (all (s,2), all (a,2)))
-%
-%!shared s, x
-%! syms x
-%! s = sym ([1 2 x]);
+%! assert (isequal (all (s), all (a)))
+%! assert (isequal (all (s,1), all (a,1)))
+%! assert (isequal (all (s,2), all (a,2)))
+
 %!test
 %! % should fail on symbols
+%! syms x
+%! s = [1 2 x];
 %! try
 %!   all (s)
 %!   waserr = false;

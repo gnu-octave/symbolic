@@ -44,26 +44,26 @@ function z = any(x, varargin)
 end
 
 
-%% Tests
-%!shared a,s
-%! a=[0 0; 1 0];
-%! s=sym(a);
-%!assert (isequal (any (s), any (a)))
-%!assert (isequal (any (s,1), any (a,1)))
-%!assert (isequal (any (s,2), any (a,2)))
-%
-%!shared a,s
-%! a=[0 1 0];
-%! s=sym(a);
-%!assert (isequal (any (s), any (a)))
-%!assert (isequal (any (s,1), any (a,1)))
-%!assert (isequal (any (s,2), any (a,2)))
-%
-%!shared a,s,x
-%! syms x
-%! s=sym([0 1 x]);
+%!test
+%! % matrix
+%! a = [0 0; 1 0];
+%! s = sym(a);
+%! assert (isequal (any (s), any (a)))
+%! assert (isequal (any (s,1), any (a,1)))
+%! assert (isequal (any (s,2), any (a,2)))
+
+%!test
+%! % vector
+%! a = [0 1 0];
+%! s = sym(a);
+%! assert (isequal (any (s), any (a)))
+%! assert (isequal (any (s,1), any (a,1)))
+%! assert (isequal (any (s,2), any (a,2)))
+
 %!test
 %! % should fail on symbols
+%! syms x
+%! s = [0 1 x];
 %! try
 %!   any (s)
 %!   waserr = false;
