@@ -103,6 +103,11 @@ end
 %% Bugs still active
 % Change these from xtest to test and move them up as fixed.
 
+%%!test
+%%! % FIXME: in SMT, x - true goes to x - 1
+%%! syms x
+%%! y = x - (1==1)
+%%! assert( isequal (y, x - 1))
 
 %!xtest
 %! % Issue #8: array construction when row is only doubles
@@ -118,45 +123,36 @@ end
 %! assert (isequal(A, [1 2; 3 4]))
 
 
-
-%!xtest
+%!test
 %! % boolean not converted to sym (part of Issue #58)
 %! y = sym(1==1);
 %! assert( isa (y, 'sym'))
 %! y = sym(1==0);
 %! assert( isa (y, 'sym'))
-%! % what should this mean?
-%! %syms x
-%! %y = x - (1==1)
-%! %assert( isa (y, 'sym'))
 
 
-%!xtest
+%!test
 %! % Issue #9, nan == 1 should be bool false not "nan == 1" sym
 %! snan = sym(0)/0;
 %! y = snan == 1;
-%! assert (islogical(y))
-%! assert (~isa(y, 'sym'))
-%! assert (~y)
-
+%! assert (~logical(y))
 
 %!test
 %! % Issue #9, for arrays, passes currently, probably for wrong reason
 %! snan = sym(nan);
 %! A = [snan snan 1] == [10 12 1];
-%! assert (islogical (A))
-%! assert (isequal (A, [false false true]))
+%! assert (isequal (A, sym([false false true])))
+
 %!test
 %! % these seem to work
 %! e = sym(inf) == 1;
-%! assert (islogical(e))
-%! assert (~e)
+%! assert (~logical(e))
 
 
 %!test
 %! % known failure, issue #55; an upstream issue
 %! snan = sym(nan);
-%! assert(~(snan == snan))
+%! assert (~logical(snan == snan))
 
 
 
@@ -173,54 +169,50 @@ end
 %! % fails to match SMT (although true here is certainly reasonable)
 %! syms x
 %! e = x == x;
-%! assert (isa(e, 'sym'))
-%! assert (~isa(e, 'logical'))
+%! assert (strcmp (strtrim(disp(e)), 'x == x'))
 
-%!xtest
-%! % this is more serious!
-%! syms x
-%! e = x - 5 == x - 3;
-%! assert (isa(e, 'sym'))
-%! assert (~isa(e, 'logical'))
+%%!xtest
+%%! % this is more serious!
+%%! % FIXME: is it? currently goes to false which is reasonable
+%%! syms x
+%%! e = x - 5 == x - 3;
+%%! assert (isa(e, 'sym'))
+%%! assert (~isa(e, 'logical'))
 
-%!test
-%! % using eq for == and "same obj" is strange, part 1
-%! % this case passes
-%! syms x
-%! e = (x == 4) == (x == 4);
-%! assert (isAlways( e ))
-%! assert (islogical( e ))
-%! assert (isa(e, 'logical'))
-%! assert (e)
+%%!test
+%%! % using eq for == and "same obj" is strange, part 1
+%%! % this case passes
+%%! syms x
+%%! e = (x == 4) == (x == 4);
+%%! assert (isAlways( e ))
+%%! assert (logical( e ))
 
-%!xtest
-%! % using eq for == and "same obj" is strange, part 2
-%! % this fails, but should be false
-%! syms x
-%! e = (x-5 == x-3) == (x == 4);
-%! assert (isAlways( e ))
-%! assert (islogical( e ))
-%! assert (isa(e, 'logical'))
-%! assert (~e)
+%%!test
+%%! % using eq for == and "same obj" is strange, part 2
+%%! syms x
+%%! e = (x-5 == x-3) == (x == 4);
+%%! assert (~logical( e ))
+%%! % assert (~isAlways( e ))
 
-%!xtest
-%! % using eq for == and "same obj" is strange, part 3
-%! % this fails too, but should be true, although perhaps
-%! % only with a call to simplify (i.e., isAlways should
-%! % get it right).
-%! syms x
-%! e = (2*x-5 == x-1) == (x == 4);
-%! assert (isAlways( e ))
-%! assert (islogical( e ))
-%! assert (isa(e, 'logical'))
-%! assert (e)
+%%!xtest
+%%! % using eq for == and "same obj" is strange, part 3
+%%! % this fails too, but should be true, although perhaps
+%%! % only with a call to simplify (i.e., isAlways should
+%%! % get it right).
+%%! syms x
+%%! e = (2*x-5 == x-1) == (x == 4);
+%%! assert (isAlways( e ))
+%%! assert (islogical( e ))
+%%! assert (isa(e, 'logical'))
+%%! assert (e)
 
 %!xtest
 %! % SMT behaviour for arrays: if any x's it should not be logical
 %! % output but instead syms for the equality objects
 %! syms x
-%! assert (~islogical( [x 1] == 1 ))
-%! assert (~islogical( [x 1] == x ))
-%! assert (~islogical( [x x] == x ))  % not so clear
-%! assert (isequal( [x x] == sym([1 2]), [x==1 x==2] ))
-%! assert (isequal( [x x] == [1 2], [x==1 x==2] ))
+%! assert (isequal ( [x x] == sym([1 2]), [x==1 x==2] ))
+%! assert (isequal ( [x x] == [1 2], [x==1 x==2] ))
+%! % FIXME: new bool means these don't test the right thing
+%! %assert (~islogical( [x 1] == 1 ))
+%! %assert (~islogical( [x 1] == x ))
+%! %assert (~islogical( [x x] == x ))  % not so clear
