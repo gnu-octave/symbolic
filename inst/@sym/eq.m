@@ -57,12 +57,19 @@ end
 
 %!test
 %! % simple tests with scalar numbers
-%! assert (islogical( sym(1) == sym(1) ))
-%! assert (islogical( sym(1) == 1 ))
-%! assert (islogical( sym(1) == 0 ))
-%! assert ( sym(1) == sym(1) )
-%! assert ( sym(1) == 1 )
-%! assert ( ~ (sym(1) == 0 ))
+%! assert (logical (sym(1) == sym(1)))
+%! assert (logical (sym(1) == 1))
+%! assert (~logical (sym(1) == 0))
+%! assert (isequal (sym(1) == sym(1), sym(true)))
+%! assert (isequal (sym(1) == 1, sym(true)))
+%! assert (isequal (sym(1) == 0, sym(false)))
+
+%!test
+%! % Type of the output is sym or logical?
+%! % FIXME: in current version, they are sym
+%! e = sym(1) == sym(1);
+%! %assert (islogical (e))
+%! assert (isa (e, 'sym'))
 
 %!test
 %! % things involving a variable are usually not bool but sym.
@@ -76,55 +83,49 @@ end
 %! % ... except of course via cancelation
 %! syms x
 %! e = x - x == 0;
-%! assert (islogical (e))
-%! assert (e)
+%! assert (logical (e))
+%! assert (isequal (e, sym(true)))
 
 %!test
 %! % array == array
 %! a = sym([1 2; 3 4]);
 %! y = a == a;
-%! assert (islogical( y ))
 %! assert (isequal( size(y), [2 2]))
+%! assert (isequal (y, sym([true true; true true])))
 %! assert (all(all(y)))
 %! y = a == 1;
-%! assert (islogical( y ))
 %! assert (isequal( size(y), [2 2]))
-%! assert (isequal( y, [1 0; 0 0]))
+%! assert (isequal (y, sym([true false; false false])))
+%! assert (any(any(y)))
 %! y = a == 42;
-%! assert (islogical( y ))
 %! assert (isequal( size(y), [2 2]))
-%! assert (isequal( y, [0 0; 0 0]))
+%! assert (isequal (y, sym([false false; false false])))
 
 %!test
 %! % more array == array
 %! D = [0 1; 2 3];
 %! A = [sym(0) 1; sym(2) 3];
 %! DZ = D - D;
-%! assert (islogical(A == A))
-%! assert (islogical(A == D))
-%! assert (islogical(A - D == DZ))
-%! assert (all(all(  A == A  )))
-%! assert (all(all(  A == D  )))
-%! assert (all(all(  A - D == DZ  )))
+%! assert (isequal (logical(A == A), [true true; true true]))
+%! assert (isequal (logical(A == D), [true true; true true]))
+%! assert (isequal (logical(A - D == DZ), [true true; true true]))
+%! assert (all (all (  A == A  )))
+%! assert (all (all (  A == D  )))
+%! assert (all (all (  A - D == DZ  )))
 
 %!test
 %! % logical output, right shape, etc
+%! t = true; f = false;
 %! a = sym([0 1 2; 3 4 5]);
 %! b = sym([0 1 1; 3 5 5]);
 %! e = a == b;
-%! eexp = [1 1 0; 1 0 1];
-%! assert (~isa (e, 'sym'))
-%! assert (islogical (e))
+%! eexp = sym(logical([1 1 0; 1 0 1]));
 %! assert (isequal (e, eexp))
 %! a = sym([0 1 2]);
 %! b = sym([0 1 1]);
 %! e = a == b;
-%! eexp = [1 1 0];
-%! assert (~isa (e, 'sym'))
-%! assert (islogical (e))
+%! eexp = sym(logical([1 1 0]));
 %! assert (isequal (e, eexp))
 %! e = a' == b';
-%! eexp = eexp';
-%! assert (~isa (e, 'sym'))
-%! assert (islogical (e))
+%! eexp = eexp.';  % is/was bug here with '
 %! assert (isequal (e, eexp))
