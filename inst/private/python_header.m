@@ -1,7 +1,7 @@
 function s = python_header()
 %private
 
-  if (1 == 1)
+  if (1 == 0)
     %s = sprintf('import sympy as sp\nimport pickle\n\n');
     s = python_header_embed();
     return

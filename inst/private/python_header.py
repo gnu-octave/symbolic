@@ -1,15 +1,36 @@
+#from __future__ import print_function
+
 import sys
 sys.ps1 = ""; sys.ps2 = ""
-import sympy
-#import sympy.abc
-import sympy as sp
-# FIXME: how to reactivate from srepr w/o this?
-from sympy import *
-#import dill as pickle
-from copy import copy as copy_copy
-from binascii import hexlify as binascii_hexlify
-from struct import pack as struct_pack, unpack as struct_unpack
-import xml.etree.ElementTree as ET
+
+def myerr(e):
+    # hardcoded in case no xml
+    print("<output_block>")
+    print("<item>\n<f>1003</f>\n<f>")
+    print(str(e[0]).replace("&", "&amp;").replace("<","&lt;").replace(">","&rt;"))
+    print("</f>\n</item>\n<item>\n<f>1003</f>\n<f>")
+    print(str(e[1]).replace("&", "&amp;").replace("<","&lt;").replace(">","&rt;"))
+    #print("</f></item>\n<item><f>1003</f><f>")
+    #print(str(e[2]))
+    print("</f>\n</item>")
+    print("</output_block>\n")
+
+try:
+    import sympy
+    #import sympy.abc
+    import sympy as sp
+    # FIXME: how to reactivate from srepr w/o this?
+    from sympy import *
+    #import dill as pickle
+    from copy import copy as copy_copy
+    from binascii import hexlify as binascii_hexlify
+    from struct import pack as struct_pack, unpack as struct_unpack
+    import xml.etree.ElementTree as ET
+    import sympY22
+except:
+    myerr(sys.exc_info())
+    raise
+
 
 def dbout(l):
     sys.stderr.write("pydebug: " + str(l) + "\n")
@@ -73,72 +94,6 @@ def objectfilter(x):
     else:
         y = x
     return y
-
-
-# Single quotes must be replaced with two copies, escape not enough
-# Please no extra blank lines within functions (breaks interpret from stdin)
-# FIXME: unicode probably do not have enough escaping, but cannot string_escape
-def octcmd(x):
-    x = objectfilter(x)
-    if isinstance(x, (sp.Basic,sp.Matrix)):
-        # could escape, but does single quotes too
-        #_srepr = sp.srepr(x).encode("string_escape").replace("'", "''")
-        _srepr = my_srepr(x).replace("'", "''")
-        _str = str(x).encode("string_escape").replace("'", "''")
-        _pretty_ascii = \
-        sp.pretty(x,use_unicode=False).encode("string_escape").replace("'", "''")
-        _pretty_unicode = \
-        sp.pretty(x,use_unicode=True).encode("utf-8").replace("\n","\\n").replace("'", "''")
-        if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
-            if isinstance(x, sp.ImmutableMatrix):
-                dbout("Warning: ImmutableMatrix")
-            _d = x.shape
-            s = "sym('" +  _srepr  + "'" + \
-                ", [" +  str(_d[0]) + ' ' + str(_d[1])  + ']' + \
-                ", '" +  _str  + "'" + \
-                ", sprintf('" +  _pretty_ascii  + "')" + \
-                ")"
-        else:
-            if not isinstance(x, sp.Expr):
-                dbout("Treating unknown sympy as scalar: " + str(type(x)))
-            s = "sym('" +  _srepr  + "'" + \
-                ", [1 1]" + \
-                ", '" +  _str  + "'" + \
-                ", sprintf('" +  _pretty_ascii  + "')" + \
-                ")"
-    elif isinstance(x, bool) and x:
-        s = "true"
-    elif isinstance(x, bool) and not x:
-        s = "false"
-    elif isinstance(x, (list,tuple)):
-        s = "{"
-        for y in x:
-            s = s + octcmd(y) + ",  "
-        s = s + "}"
-    elif isinstance(x, int):
-        s = str(x)
-    elif isinstance(x, float):
-        # We pass IEEE doubles using the exact hex representation
-        s = "hex2num('%s')" % d2hex(x)
-    elif isinstance(x, str):
-        s = "sprintf('" + x.encode("string_escape").replace("'", "''") + "')"
-    elif isinstance(x, unicode):
-        # not .encode("string_escape")
-        s = "sprintf('" + \
-          x.encode("utf-8").replace("\n","\\n").replace("'", "''") + "')"
-    elif isinstance(x, dict):
-        # Note: the dict cannot be too complex: the keys need to be convertable
-        # to strings with str().
-        s = "struct("
-        for key,val in x.iteritems():
-            s = s + "'" + str(key) + "', " + octcmd(val) + ", "
-        if len(x) >= 1:
-            s = s[:-2]
-        s = s + ")"
-    else:
-        s = "error('python does not know how to export type " + str(type(x)).replace("'", "''") + "')"
-    return s
-
 
 
 def octoutput_drv(x):

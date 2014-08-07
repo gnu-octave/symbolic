@@ -52,6 +52,8 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     end
 
     headers = python_header();
+
+    fprintf (fin, '\n\n');
     fputs (fin, headers);
     fprintf (fin, '\n\n');
     fflush(fin);

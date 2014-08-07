@@ -5,6 +5,9 @@ function A = readblock(fout, tagblock, tagendblock)
   wait_disp_thres = 0.05;
 
   EAGAIN = errno ('EAGAIN');
+  % Windows emits this when pipe is waiting (see
+  % octave/libinterp/corefcn/syscalls.cc test code)
+  EINVAL = errno ('EINVAL');
   done = false;
   started = false;
   nwaits = 0;
@@ -13,6 +16,9 @@ function A = readblock(fout, tagblock, tagendblock)
   fclear (fout);  % otherwise, fails on next call
 
   do
+    if (ispc () && ! isunix ())
+      errno (0);  % win32, see syscalls.cc test code
+    end
     s = fgets (fout);
     if (ischar (s))
       %fputs (stdout, s);
@@ -29,7 +35,7 @@ function A = readblock(fout, tagblock, tagendblock)
         done = true;
       end
 
-    elseif (errno () == EAGAIN)
+    elseif (errno() == EAGAIN || errno() == EINVAL)
       wait = exp(nwaits/10)/1e4;
       if wait <= wait_disp_thres
         %fprintf(stdout, 'W'); % debugging, in general do nothing
