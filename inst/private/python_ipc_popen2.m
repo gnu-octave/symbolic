@@ -53,10 +53,15 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
 
     headers = python_header();
 
-    fprintf (fin, '\n\n');
+    % repeated from python_header.py: kill prompt ASAP
+    fprintf (fin, 'import sys\nsys.ps1 = ""; sys.ps2 = ""\n\n')
+    fflush(fin);
+    sleep(0.01); disp('')
+
     fputs (fin, headers);
     fprintf (fin, '\n\n');
     fflush(fin);
+    sleep(0.01); disp('');
     % todo print a block and read it to make sure we're live
   end
 
