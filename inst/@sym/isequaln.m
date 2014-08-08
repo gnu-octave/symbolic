@@ -17,11 +17,12 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{r} =} isequaln (@var{f}, @var{g})
-%% Test if two symbolic arrays are same.
+%% @deftypefn  {Function File} {@var{r} =} isequaln (@var{f}, @var{g})
+%% @deftypefnx {Function File} {@var{r} =} isequaln (@var{f}, @var{g}, ...)
+%% Test if contents of arrays are equal, even with nan.
 %%
-%% Here @code{nan == nan} is true, see also @code{isequal} where
-%% @code{nan ~= nan}.
+%% Here @code{nan == nan} is considered true, see also
+%% @code{isequal} where as usual @code{nan ~= nan}.
 %%
 %% @seealso{logical, isAlways, eq (==), isequal}
 %% @end deftypefn
@@ -29,20 +30,23 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function t = isequaln(x,y,varargin)
+function t = isequaln(x, y, varargin)
 
+  % isequal does not care about type, but if you wanted it to...
+  %if ( ~ ( isa (x, 'sym') && isa (y, 'sym')))
+  %  t = false;
+  %  return
+  %end
 
   %% some special cases
-  if ~(is_same_shape(x,y))
+  if ~(is_same_shape(x, y))
     t = false;
     return
   end
 
-  % at least on sympy 0.7.4, 0.7.5, nan == nan is true so we
-  % don't need to detect it ourselves (todo: this seems a bit
-  % fragile to rely on!)
-
-  % sympy's == is not componentwise so no special case for arrays
+  % In symy, nan == nan is true by structural (not mathematical)
+  % equivalence, so we don't need to detect it ourselves.
+  % Sympy's == returns a scalar for arrays, no special case.
 
   cmd = 'return (_ins[0] == _ins[1],)';
 
@@ -52,18 +56,8 @@ function t = isequaln(x,y,varargin)
     error('nonboolean return from python');
   end
 
-  %else  % both are arrays
-  %  t = logical(zeros(size(x)));
-  %  for j = 1:numel(x)
-  %    % Bug #17
-  %    idx.type = '()';
-  %    idx.subs = {j};
-  %    t(j) = isequaln(subsref(x,idx),subsref(y,idx));
-  %  end
-  %end
-
   if (nargin >= 3)
-    t = t & isequaln(x, varargin{:});
+    t = t && isequaln(x, varargin{:});
   end
 
 end
@@ -92,3 +86,12 @@ end
 %! a = sym([nan 2; 3 4]);
 %! b = a;
 %! assert (isequaln (a, b))
+
+%!test
+%! % more than two arrays
+%! a = sym([nan 2 3]);
+%! b = a;
+%! c = a;
+%! assert (isequaln (a, b, c))
+%! c(1) = 42;
+%! assert (~isequaln (a, b, c))
