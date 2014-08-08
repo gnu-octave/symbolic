@@ -14,14 +14,13 @@ function [A,out] = python_ipc_system(what, cmd, varargin)
     error('unsupported command')
   end
 
+  vstr = '0.0.4';  % FIXME
+
   if (isempty(show_msg))
-    disp('##')
-    disp('##  Initializing SymPy communication...')
-    disp('##')
-    disp('##  You are using the system() IPC mechanism to communicate with SymPy.')
-    disp('##  This will be slow.  Every round-trip involves executing a new Python')
-    disp('##  process.  Many operations involve several round-trips.')
-    disp('##')
+    disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
+    disp('You are using the slower system() communications with SymPy.')
+    disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
+    disp('new python process and many operations involve several round-trips.')
     show_msg = true;
   end
 
@@ -54,7 +53,7 @@ function [A,out] = python_ipc_system(what, cmd, varargin)
 
   %% FIXME: Debug mode
   % it would be helpful to provide an option to output the
-  % generated py file for examing.
+  % generated .py file for examining.
   if (1==1)
     bigs = [headers newl s1 newl s2 newl s3 newl];
     bigs = strrep(bigs, '"', '\"');

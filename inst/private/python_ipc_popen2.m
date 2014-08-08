@@ -26,13 +26,10 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     error('unsupported command')
   end
 
+  vstr = '0.0.4';  % FIXME
   if isempty(pid)
-    disp('##')
-    disp('##  OctSymPy: Initializing SymPy communication...')
-    disp('##');
-    disp('##  We have popen2(): opening a new pipe for two-way IPC with SymPy...')
-    disp('##');
-
+    disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
+    disp('Initializing communication with SymPy using a popen2() pipe.')
 
     pyexec = octsympy_config('python');
     if (isempty(pyexec))
@@ -40,41 +37,46 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     end
     [fin, fout, pid] = popen2 (pyexec, '-i');
 
-    fprintf('##  Technical info: fin = %d, fout = %d, pid = %d\n', fin, fout, pid)
-    disp('##');
-    disp('##  Python should be starting, you may see a few lines of output')
-    disp('##  from it which can probably be ignored until your prompt returns.')
-    disp('##')
+    disp('Python started: some output may appear before your prompt returns.')
+    fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n\n', fin, fout, pid)
     fflush (stdout);
 
     if (pid < 0)
       error('popen2() failed');
     end
 
-    headers = python_header();
-
     % repeated from python_header.py: kill prompt ASAP
     fprintf (fin, 'import sys\nsys.ps1 = ""; sys.ps2 = ""\n\n')
     fflush(fin);
-    sleep(0.01); disp('')
+    %sleep(0.05); %disp('')
 
+    headers = python_header();
     fputs (fin, headers);
     fprintf (fin, '\n\n');
+    %fflush(fin);
+    %sleep(0.05); disp('');
+
+    % print a block then read it to make sure we're live
+    fprintf (fin, 'octoutput_drv("SymPy communication channel established")\n\n');
     fflush(fin);
-    sleep(0.01); disp('');
-    % todo print a block and read it to make sure we're live
+    % if any exceptions in start-up, we probably get those instead
+    out = readblock(fout, '<output_block>', '</output_block>');
+    A = extractblock(out);
+    if (isempty(strfind(A, 'established')))
+      A
+      out
+      error('ipc_popen2: something has gone wrong in starting python')
+    else
+      disp(['ipc_popen2: ' A{1}])
+    end
   end
 
 
   newl = sprintf('\n');
 
-  % wrap loading of vars in a big try catch block
-  % todo: s = appendline(s, indent, str, varargin)
-  % append one newline by default
-  % todo this is not just fprintf b/c of the no-open case?
-
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
+  % there is a try-except block here, sends a block if sucessful
   s = python_copy_vars_to('_ins', varargin{:});
 
   fputs (fin, s);
@@ -82,7 +84,9 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
   out = readblock(fout, '<output_block>', '</output_block>');
   % could extractblock here, but just search for keyword instead
   if (isempty(strfind(out, 'successful')))
-    error('failed to import variables to python?')
+    out
+    A = extractblock(out)
+    error('ipc_popen2: failed to send variables to python?')
   end
 
   %% the actual command

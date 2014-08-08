@@ -1,6 +1,8 @@
 function A = readblock(fout, tagblock, tagendblock)
 %private function
 
+  % FIXME: needs timeout feature
+
   % how long to wait before displaying "Waiting..."
   wait_disp_thres = 0.05;
 

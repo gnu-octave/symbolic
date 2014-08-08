@@ -11,12 +11,10 @@ sys.ps1 = ""; sys.ps2 = ""
 def myerr(e):
     # hardcoded in case no xml
     print("<output_block>")
-    print("<item>\n<f>1003</f>\n<f>")
-    print(str(e[0]).replace("&", "&amp;").replace("<","&lt;").replace(">","&rt;"))
-    print("</f>\n</item>\n<item>\n<f>1003</f>\n<f>")
-    print(str(e[1]).replace("&", "&amp;").replace("<","&lt;").replace(">","&rt;"))
-    #print("</f></item>\n<item><f>1003</f><f>")
-    #print(str(e[2]))
+    print("<item>\n<f>9999</f>\n<f>")
+    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&rt;"))
+    print("</f><f>")
+    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&rt;"))
     print("</f>\n</item>")
     print("</output_block>\n")
 
@@ -25,7 +23,7 @@ try:
     import sympy
     #import sympy.abc
     import sympy as sp
-    # FIXME: how to reactivate from srepr w/o this?
+    # FIXME: possible to reactivate from srepr w/o this?
     from sympy import *
     import sympy.printing
     #import dill as pickle
@@ -127,7 +125,7 @@ try:
     def octoutput(x, et):
         OCTCODE_INT = 1001
         OCTCODE_DOUBLE = 1002
-        OCTCODE_STR = 1003  # this one hardcoded above too
+        OCTCODE_STR = 1003
         OCTCODE_USTR = 1004
         OCTCODE_BOOL = 1005
         OCTCODE_DICT = 1010

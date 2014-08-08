@@ -3,8 +3,8 @@ function s = python_copy_vars_to(in, varargin)
   s = '';
 
   if 1==0
-  s = sprintf('%s%s = []\n\n', s, in);
-  s = do_list(s, 0, in, varargin);
+    s = sprintf('%s%s = []\n\n', s, in);
+    s = do_list(s, 0, in, varargin);
   else
     s = sprintf('%stry:\n', s);
     s = sprintf('%s    %s = []\n', s, in);

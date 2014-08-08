@@ -90,6 +90,7 @@ function r = process_item(item)
 % process each item and return octave objects
 
   % this table must match the python code!
+  OCTCODE_ERROR = 9999;
   OCTCODE_INT = 1001;
   OCTCODE_DOUBLE = 1002;
   OCTCODE_STR = 1003;
@@ -152,8 +153,18 @@ function r = process_item(item)
       for i=1:length(keys)
         r = setfield (r, keys{i}, vals{i});
       end
+    case OCTCODE_ERROR
+      assert(M == 2)
+      str1 = str_post_xml_filter(C{2});
+      str2 = str_post_xml_filter(C{3});
+      warning('extractblock: read an error back from python')
+      str1
+      str2
+      disp('Continuing, but unsure if its safe to do so!')
+      r = 'there was a python error';
     otherwise
-      error('not implemented');
+      C
+      error('extractblock: not implemented or something wrong');
   end
 end
 
