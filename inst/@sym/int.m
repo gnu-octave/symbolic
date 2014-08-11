@@ -160,3 +160,8 @@ end
 %! assert( isequal (int(sym(2)), 2*x))
 %! assert( isequal (int(sym(2),[0 a]), 2*a))
 %! assert( isequal (int(sym(2),0,a), 2*a))
+
+%!test
+%! % componentwise int of array
+%! A = [x x*x];
+%! assert (isequal (int(A, x), [x^2/2 x^3/3]))

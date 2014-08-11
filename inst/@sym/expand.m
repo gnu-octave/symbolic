@@ -33,5 +33,12 @@ function y = expand(x)
 end
 
 
-%!test syms x
-%! assert( logical (x^2 + 6*x + 5 == expand ((x+5)*(x+1))))
+%!test
+%! syms x
+%! assert (logical (x^2 + 6*x + 5 == expand ((x+5)*(x+1))))
+%! assert (isequal (x^2 + 6*x + 5, expand ((x+5)*(x+1))))
+
+%!test
+%! % array
+%! syms x
+%! assert (isequal (expand ([x (x+1)*x]), [x x^2+x]))
