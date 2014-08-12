@@ -83,12 +83,13 @@ function f = matlabFunction(varargin)
   if (param.codegen) && (~isempty(param.fname))
     cmd = [ '(expr,fcnname,filename,showhdr,in_vars) = _ins\n' ...
             'from sympy.utilities.codegen import codegen\n' ...
-            'out = codegen((fcnname,expr), "' ...
-            param.lang ...
+            'try:\n' ...
+            '    out = codegen((fcnname,expr), "' param.lang ...
             '", filename, header=showhdr' ...
-            ', argument_sequence=in_vars' ...
-            ')\n' ...
-            'return (out ,)\n'];
+            ', argument_sequence=in_vars)\n' ...
+            'except ValueError, e:\n' ...
+            '    return (False, str(e))\n' ...
+            'return (True, out)\n'];
 
     % if filename ends with .m, do not add another
     if strcmpi(param.fname(end-1:end), '.m')
@@ -98,7 +99,16 @@ function f = matlabFunction(varargin)
     fname2 = param.fname; fcnname = param.fname;
     % FIXME: careful, inputs is from findsymbols not symvar, wrong
     % order?
-    out = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
+    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
+
+    if (~worked)
+      if (strcmp(out, 'Language ''octave'' is not supported.'))
+	error('matlabFunction: your SymPy has no octave codegen, cannot workaround');
+      else
+	ou
+	error('matlabFunction: Some other error from SymPy code gen?  file a bug!');
+      end
+    end
     M.name = out{1}{1};
     M.code = out{1}{2};
 
@@ -125,8 +135,9 @@ function f = matlabFunction(varargin)
       if (worked)
         codestr = vectorize(codestr);
       else
-        warning('Somewhat expected: SymPy has no octave codegen, working around');
-        disp(codestr)
+        assert(codestr, 'global name ''octave_code'' is not defined')
+        warning('matlabFunction: your SymPy has no octave codegen: partial workaround');
+
         %% As of Aug 2014, origin/master SymPy has no octave_code()
         % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
         codestr = strtrim(disp(expr));
