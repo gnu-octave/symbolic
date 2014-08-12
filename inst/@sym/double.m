@@ -63,6 +63,8 @@ function y = double(x, failerr)
     failerr = true;
   end
 
+  % FIXME: port to uniop?
+
   if ~(isscalar(x))
     % sympy N() works fine on matrices but it gives objects like "Matrix([[1.0,2.0]])"
     y = zeros(size(x));
