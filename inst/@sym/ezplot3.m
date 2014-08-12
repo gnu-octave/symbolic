@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{h} =} ezplot3 (@var{f1}, @var{f2},@var{f3})
-%% @deftypefnx {Function File} {@var{h} =} ezplot (...)
+%% @deftypefnx {Function File} {@var{h} =} ezplot3 (...)
 %% Simple 3D parametric plotting of symbolic expressions.
 %%
 %% See help for the (non-symbolic) @code{ezplot3}, which this
