@@ -55,41 +55,37 @@ function z = diff(f, varargin)
   % simpler version, but gives error on differentiating a constant
   %cmd = 'return sp.diff(*_ins),';
 
-  % FIXME: with a sympy symvar we could move most/all of this to python?
-
-  if ~(isscalar(f))
-    z = f;
-    for j = 1:numel(f)
-      idx.type = '()';
-      idx.subs = {j};
-      % z(j) = diff(f(j), varargin{:});
-      temp = diff(subsref(f, idx), varargin{:});
-      z = subsasgn(z, idx, temp);
+  %% some special cases for SMT compat.
+  % FIXME: with a sympy symvar, could move this to python?
+  if (nargin == 1)  % diff(f) -> symvar
+    x = symvar(f, 1);
+    if (isempty(x))
+      x = sym('x');  % e.g., diff(sym(6))
     end
+    z = diff(f, x);
     return
-  end
-
-  % two special cases for SMT compat.
-  if (nargin >=2)
+  elseif (nargin >= 2)
     q = varargin{1};
+    % Note: pickle: to avoid double() overhead for common diff(f,x)
     isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
-    if ((nargin == 2) && isnum2)
-      x = symvar(f,1);
+    if ((nargin == 2) && isnum2)  % diff(f,2) -> symvar
+      x = symvar(f, 1);
+      if (isempty(x))
+        x = sym('x');   % e.g., diff(sym(6), 2)
+      end
       z = diff(f, x, varargin{1});
       return
     end
-    if ((nargin == 3) && isnum2)
+    if ((nargin == 3) && isnum2)  % diff(f,2,x) -> diff(f,x,2)
       z = diff(f, varargin{2}, varargin{1});
       return
     end
   end
 
 
-  cmd = [ '# special case for one-arg constant\n'             ...
-          'if (len(_ins)==1 and _ins[0].is_constant()):\n'    ...
-          '    return (sp.numbers.Zero(),)\n'                 ...
-          'd = sp.diff(*_ins)\n'                              ...
-          'return (d,)' ];
+  cmd = [ 'f = _ins[0]\n' ...
+          'args = _ins[1:]\n' ...
+          'return (f.diff(*args), )' ];
 
   varargin = sym(varargin);
   z = python_cmd (cmd, sym(f), varargin{:});
@@ -100,22 +96,32 @@ end
 %!shared x,y,z
 %! syms x y z
 
-%!assert(logical( diff(sin(x)) - cos(x) == 0 ))
-%!assert(logical( diff(sin(x),x) - cos(x) == 0 ))
-%!assert(logical( diff(sin(x),x,x) + sin(x) == 0 ))
+%!test
+%! % basic
+%! assert(logical( diff(sin(x)) - cos(x) == 0 ))
+%! assert(logical( diff(sin(x),x) - cos(x) == 0 ))
+%! assert(logical( diff(sin(x),x,x) + sin(x) == 0 ))
 
+%!test
 %! % these fail when doubles are not converted to sym
-%!assert(logical( diff(sin(x),x,2) + sin(x) == 0 ))
-%!assert(logical( diff(sym(1),x) == 0 ))
-%!assert(logical( diff(1,x) == 0 ))
-%!assert(logical( diff(pi,x) == 0 ))
+%! assert(logical( diff(sin(x),x,2) + sin(x) == 0 ))
+%! assert(logical( diff(sym(1),x) == 0 ))
+%! assert(logical( diff(1,x) == 0 ))
+%! assert(logical( diff(pi,x) == 0 ))
 
+%!test
 %! % symbolic diff of const (w/o variable) fails in sympy, but we work around
-%!assert(logical( diff(sym(1)) == 0 ))
+%! assert (isequal (diff(sym(1)), sym(0)))
 
+%!test
+%! % nth symbolic diff of const
+%! assert (isequal (diff(sym(1), 2), sym(0)))
+%! assert (isequal (diff(sym(1), sym(1)), sym(0)))
+
+%!test
 %! % octave's vector difference still works
-%!assert(isempty(diff(1)))
-%!assert((diff([2 6]) == 4))
+%! assert(isempty(diff(1)))
+%! assert((diff([2 6]) == 4))
 
 %!test
 %! % other forms
@@ -135,3 +141,19 @@ end
 %! A = [x sin(x); x*y 10];
 %! B = [1 cos(x); y 0];
 %! assert(isequal(diff(A,x),B))
+
+%!test
+%! % bug: use symvar
+%! a = x*y;
+%! b = diff(a);
+%! assert (isequal (b, y))
+
+%!test
+%! % bug: symvar should be used on the matrix, not comp-by-comp
+%! a = [x y x*x];
+%! b = diff(a);
+%! assert (~isequal (b(2), 1))
+%! assert (isequal (b, [1 0 2*x]))
+%! b = diff(a,1);
+%! assert (~isequal (b(2), 1))
+%! assert (isequal (b, [1 0 2*x]))
