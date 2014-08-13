@@ -32,6 +32,8 @@
 
 function r = isinf(x)
 
+  % FIXME: port to uniop_helper, how to return bools then?
+
   if isscalar(x)
 
     % FIXME: why not is_unbounded?
@@ -71,7 +73,7 @@ end
 %! snan = sym(nan);
 
 %!test
-%! % various ops that give inf
+%! % various ops that give inf and nan
 %! assert (isinf(oo))
 %! assert (isinf(zoo))
 %! assert (isinf(oo+oo))

@@ -45,4 +45,3 @@ inst/@sym/erfi.m
 inst/@sym/heaviside.m
 inst/@sym/dirac.m
 inst/@sym/nextprime.m
-inst/@sym/conj.m
