@@ -132,6 +132,10 @@ function r = tf_from_input(s)
     r = true;
   elseif (strcmpi(s, 'false'))
     r = false;
+  elseif (strcmpi(s, 'on'))
+    r = true;
+  elseif (strcmpi(s, 'off'))
+    r = false;
   elseif (strcmpi(s, '[]'))
     r = false;
   else
