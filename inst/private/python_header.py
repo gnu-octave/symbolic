@@ -97,7 +97,6 @@ except:
 try:
     def objectfilter(x):
         """Perform final fixes before passing objects back to Octave"""
-        #FIXME: replace immutable matrices here?
         if isinstance(x, sp.Matrix) and x.shape == (1,1):
             #dbout("Note: replaced 1x1 mat with scalar")
             y = x[0,0]
@@ -139,8 +138,6 @@ try:
             f.text = str(x)
         elif isinstance(x, (sp.Basic,sp.Matrix)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
-                if isinstance(x, sp.ImmutableMatrix):
-                    dbout("Warning: ImmutableMatrix")
                 _d = x.shape
             elif isinstance(x, sp.Expr):
                 _d = (1,1)
