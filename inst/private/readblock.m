@@ -1,7 +1,10 @@
-function A = readblock(fout, tagblock, tagendblock)
+function A = readblock(fout, tagblock, tagendblock, timeout)
 %private function
 
   % FIXME: needs timeout feature
+  if (nargin < 4)
+    timeout = inf;
+  end
 
   % how long to wait before displaying "Waiting..."
   wait_disp_thres = 0.05;
