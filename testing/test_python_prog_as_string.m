@@ -20,3 +20,18 @@ bigs3 = 'import sys\nprint(42);'
 [st2,out2] = system(['python -c "' bigs2 '"'])
 
 [st3,out3] = system(['python -c "' bigs3 '"'])
+
+%% idea: use exec()
+
+# triple slash quote
+s4 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"p\\\")\")'
+
+# with single quote: escaped just for entry into octave
+s5 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"p\\\")\np(''jk'')\")'
+
+
+[st4,out4] = system(['python -c "' s4 '"'])
+
+[st5,out5] = system(['python -c "' s5 '"'])
+
+
