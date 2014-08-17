@@ -34,10 +34,9 @@ function [Q, R] = qr(A, ord)
   end
 
   cmd = [ '(A,) = _ins\n'  ...
-          'if A.is_Matrix:\n' ...
-          '    Q, R = A.QRdecomposition()\n' ...
-          'else:\n' ...
-          '    Q, R = S(1), A\n' ...
+          'if not A.is_Matrix:\n' ...
+          '    A = sp.Matrix([A])\n' ...
+          '(Q, R) = A.QRdecomposition()\n' ...
           'return (Q, R)' ];
 
   [Q, R] = python_cmd (cmd, sym(A));
@@ -52,8 +51,10 @@ end
 %! assert (isequal (r, sym(6)))
 %! syms x
 %! [q, r] = qr(x);
-%! assert (isequal (q, sym(1)))
-%! assert (isequal (r, x))
+%! assert (isequal (q*r, x))
+%! % could hardcode this if desired
+%! %assert (isequal (q, sym(1)))
+%! %assert (isequal (r, x))
 
 %!test
 %! A = [1 2; 3 4];

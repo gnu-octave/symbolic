@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{S} =} svd (@var{A})
-%% @deftypefn  {Function File} {@var{U}, @var{S}, @var{V} =} svd (@var{A})
+%% @deftypefnx {Function File} {@var{U}, @var{S}, @var{V} =} svd (@var{A})
 %% Symbolic singular value decomposition.
 %%
 %% The SVD: 
