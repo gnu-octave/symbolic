@@ -73,37 +73,27 @@ end
 %! Bd = Ad^(1/3);
 %! assert (max(max(abs(double(B) - Bd))) < 1e-14)
 
-%!test
+%!xtest
 %! % array ^ irrational not implemented (in sympy 0.7.5)
-%! Ad = [1 2; 0 3];
+%! % FIXME: this should raise an error, but instead can fail
+%! % quietly and return A.  Issue #78.
+%! % FIXME: when fixing this, use a proper error test like below.
+%! A = sym([1 2; 0 3]);
 %! try
-%!   B = x^sym(pi);
+%!   B = A^sym(pi);
 %!   failed = false;
 %! catch
 %!   failed = true;
 %! end
 %! assert(failed)
 
-%!xtest
+%!error <not implemented>
 %! % scalar^array not implemented
 %! syms x
 %! A = [1 2; 3 4];
-%! try
-%!   B = x^A;
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed)
+%! B = x^A;
 
-%!test
+%!error <not implemented>
 %! % array^array not implemented
-%! A = [1 2; 3 4];
-%! B = sym(A);
-%! try
-%!   C = A^B;
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed)
+%! A = sym([1 2; 3 4]);
+%! B = A^A;
