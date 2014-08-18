@@ -7,7 +7,7 @@ function A = readblock(fout, tagblock, tagendblock, timeout)
   end
 
   % how long to wait before displaying "Waiting..."
-  wait_disp_thres = 0.05;
+  wait_disp_thres = 2.0;
 
   EAGAIN = errno ('EAGAIN');
   % Windows emits this when pipe is waiting (see
@@ -17,6 +17,7 @@ function A = readblock(fout, tagblock, tagendblock, timeout)
   started = false;
   nwaits = 0;
   dispw = false;
+  waited = 0;
 
   fclear (fout);  % otherwise, fails on next call
 
@@ -41,8 +42,9 @@ function A = readblock(fout, tagblock, tagendblock, timeout)
       end
 
     elseif (errno() == EAGAIN || errno() == EINVAL)
-      wait = exp(nwaits/10)/1e4;
-      if wait <= wait_disp_thres
+      waitdelta = exp(nwaits/10)/1e4;
+      waited = waited + waitdelta;
+      if waited <= wait_disp_thres
         %fprintf(stdout, 'W'); % debugging, in general do nothing
       elseif (~dispw)
         fprintf(stdout, 'Waiting...')
@@ -50,14 +52,28 @@ function A = readblock(fout, tagblock, tagendblock, timeout)
       else
         fprintf(stdout, '.')
       end
-      sleep (wait);
       fclear (fout);
+      %if (ispc () && ! isunix ())
+      %errno (0);   % maybe can do this on win32?
+      %end
+      sleep (waitdelta);
       nwaits = nwaits + 1;
     else
+      % FIXME: win32 can get here with errno 0, still need to wait?
+      % FIXME: need to separate the treatment from other unexpected errno?
       errno ()
-      error ('Failed to read python output, perhaps an error in the command?')
+      s
+      warning ('OctSymPy:readblock:invaliderrno', 'Failed to read python output, perhaps an error in the command?')
     end
     %disp('paused'); pause
+
+    if (waited > timeout)
+      warning('OctSymPy:readblock:timeout', ...
+        sprintf('readblock: timeout of %g exceeded, breaking out', timeout));
+      % FIXME: need a success/fail flag?  what to return here?
+      A = [A '\nFAILED TIMEOUT\n'];
+      break
+    end
   until (done)
 
   if (dispw)
