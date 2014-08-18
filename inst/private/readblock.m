@@ -1,13 +1,12 @@
-function A = readblock(fout, tagblock, tagendblock, timeout)
-%private function
-
-  % FIXME: needs timeout feature
-  if (nargin < 4)
-    timeout = inf;
-  end
+function [A, err] = readblock(fout, timeout)
+%private function: read one block
 
   % how long to wait before displaying "Waiting..."
   wait_disp_thres = 2.0;
+
+  tagblock = '<output_block>';
+  tagendblock = '</output_block>';
+  err = false;
 
   EAGAIN = errno ('EAGAIN');
   % Windows emits this when pipe is waiting (see
@@ -64,14 +63,17 @@ function A = readblock(fout, tagblock, tagendblock, timeout)
       errno ()
       s
       warning ('OctSymPy:readblock:invaliderrno', 'Failed to read python output, perhaps an error in the command?')
+      sleep(0.1)  % FIXME; replace with waitdelta etc
     end
     %disp('paused'); pause
 
     if (waited > timeout)
       warning('OctSymPy:readblock:timeout', ...
         sprintf('readblock: timeout of %g exceeded, breaking out', timeout));
-      % FIXME: need a success/fail flag?  what to return here?
+      disp('output so far:')
+      A
       A = [A '\nFAILED TIMEOUT\n'];
+      err = true;
       break
     end
   until (done)

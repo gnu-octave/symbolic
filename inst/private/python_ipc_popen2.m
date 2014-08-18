@@ -3,6 +3,8 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
 
   persistent fin fout pid
 
+  py_startup_timeout = 30;  % seconds
+
   if (strcmp(what, 'reset'))
     if (~isempty(pid))
       disp('Closing the Python pipe...');
@@ -60,7 +62,11 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     fprintf (fin, 'octoutput_drv("SymPy communication channel established")\n\n');
     fflush(fin);
     % if any exceptions in start-up, we probably get those instead
-    out = readblock(fout, '<output_block>', '</output_block>');
+    [out, err] = readblock(fout, py_startup_timeout);
+    if (err)
+      error('OctSymPy:python_ipc_popen2:timeout', ...
+        'ipc_popen2: something wrong? timed out starting python')
+    end
     A = extractblock(out);
     if (isempty(strfind(A, 'established')))
       A
@@ -81,7 +87,12 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
 
   fputs (fin, s);
   fflush(fin);
-  out = readblock(fout, '<output_block>', '</output_block>');
+  [out, err] = readblock(fout, inf);
+  if (err)
+    error('OctSymPy:python_ipc_popen2:xfer', ...
+      'ipc_popen2: xfer vars: something wrong? timed out?')
+  end
+
   % could extractblock here, but just search for keyword instead
   if (isempty(strfind(out, 'successful')))
     out
@@ -100,5 +111,9 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
 
   fputs (fin, s);
   fflush(fin);
-  out = readblock(fout, '<output_block>', '</output_block>');
+  [out, err] = readblock(fout, inf);
+  if (err)
+    error('OctSymPy:python_ipc_popen2:cmderr', ...
+      'ipc_popen2: cmd error? read block returned error');
+  end
   A = extractblock(out);
