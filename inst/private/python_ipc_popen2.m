@@ -9,9 +9,10 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     if (~isempty(pid))
       disp('Closing the Python pipe...');
     end
-    pid = [];
     if (~isempty(fin))
       t = fclose(fin); fin = [];
+      waitpid(pid);
+      pid = [];
       A = (t == 0);
     else
       A = true;
