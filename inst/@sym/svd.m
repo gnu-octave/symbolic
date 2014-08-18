@@ -21,7 +21,7 @@
 %% @deftypefnx {Function File} {@var{U}, @var{S}, @var{V} =} svd (@var{A})
 %% Symbolic singular value decomposition.
 %%
-%% The SVD: 
+%% The SVD:
 %% U*S*V' = A
 %%
 %% FIXME: currently only singular values, not singular vectors.
@@ -74,11 +74,11 @@ end
 %!test
 %! % matrix with symbols
 %! syms x positive
-%! A = [x+1 0; sym(0) 2*x+1]
-%! s = svd(A)
-%! s2 = subs(s, x, 2)
+%! A = [x+1 0; sym(0) 2*x+1];
+%! s = svd(A);
+%! s2 = subs(s, x, 2);
 %! assert (isequal (s2, [sym(5); 3]))
-%! s = simplify(factor(s))
+%! s = simplify(factor(s));
 %! assert (isequal (s, [2*x+1; x+1]))
 
 %%!test
