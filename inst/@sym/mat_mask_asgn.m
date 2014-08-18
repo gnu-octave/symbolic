@@ -59,11 +59,16 @@ function z = mat_mask_asgn(A, I, B)
   end
 
   if (~(is_same_shape(A,I)))
-    warning('A and I in A(I) not same shape: did you intend this?')
+    % this is not an error, but quite likely reflects a user error
+    warning('OctSymPy:subsagn:index-matrix-not-same-shape', ...
+            'A and I in A(I) not same shape: no problem, but did you intend this?')
   end
   if (~isvector(B))
-    % apparently this is ok
-    warning('B not vector in A(I)=B: this is unusual, did you intend this?')
+    % Here B is a matrix.  B scalar is dealt with earlier.  This is a bit
+    % odd (although ok in octave) so probably a user error.
+    assert (~isscalar(B))
+    warning('OctSymPy:subsagn:rhs-shape', ...
+            'B neither vector nor scalar in indexed A(I)=B: unusual, did you intend this?')
   end
 
   % I think .T makes a copy, but be careful: in general may need a
@@ -105,11 +110,21 @@ end
 %! B = b;  B(I) = 17;
 %! assert(isequal( A, B ))
 
-%!test  % non-vector RHS ("rhs2")
+%!warning <unusual>
+%! % strange non-vector (matrix) RHS ("rhs2"), should be warning
+%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
+%! rhs2 = reshape(2*b(I), 2, 3);  % strange bit
+%! A = a;
+%! A(I) = rhs2;
+
+%!test
+%! % nonetheless, above strange case should give right answer
 %! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
 %! rhs = 2*b(I);
 %! rhs2 = reshape(rhs, 2, 3);
-%! fprintf('\n*** One warning expected: ***\n');
-%! A = mat_mask_asgn(a,I, rhs2);
-%! B = b;  B(I) = rhs;
-%! assert(isequal( A, B ))
+%! warning ('off', 'OctSymPy:subsagn:rhs-shape', 'local')
+%! A0 = a; A1 = a;
+%! A0(I) = rhs;
+%! A1(I) = rhs2;
+%! A2 = mat_mask_asgn(a, I, rhs2);
+%! assert(isequal( A0, A1, A2 ))

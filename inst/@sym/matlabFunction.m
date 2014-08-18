@@ -136,7 +136,8 @@ function f = matlabFunction(varargin)
         codestr = vectorize(codestr);
       else
         assert(codestr, 'global name ''octave_code'' is not defined')
-        warning('matlabFunction: your SymPy has no octave codegen: partial workaround');
+        warning('OctSymPy:matlabFunction:nocodegen', ...
+                'matlabFunction: your SymPy has no octave codegen: partial workaround');
 
         %% As of Aug 2014, origin/master SymPy has no octave_code()
         % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
@@ -169,18 +170,21 @@ end
 
 %!test
 %! % basic test
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(2*x);
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3)==6)
 
 %!test
 %! % autodetect inputs
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(2*x*y, x+y);
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % specified inputs
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(2*x*y, 'vars', [x y]);
 %! assert(h(3,5)==30)
 %! h = matlabFunction(2*x*y, x+y, 'vars', [x y]);
@@ -189,6 +193,7 @@ end
 
 %!test
 %! % cell arrays for vars list
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(2*x*y, x+y, 'vars', {x y});
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
@@ -198,6 +203,7 @@ end
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
@@ -207,6 +213,7 @@ end
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
@@ -226,6 +233,7 @@ end
 
 %!test
 %! % 'file' with empty filename returns handle
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! h = matlabFunction(2*x*y, 'file', '');
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3,5)==30)

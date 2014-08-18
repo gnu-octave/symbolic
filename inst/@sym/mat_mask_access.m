@@ -42,7 +42,9 @@ function Z = mat_mask_access(A, I)
     error('size A not compatible w/ size I in A(I)')
   end
   if (~(is_same_shape(A,I)))
-    warning('A and I in A(I) not same shape: did you intend this?')
+    % this is not an error, but quite likely reflects a user error
+    warning('OctSymPy:subsref:index-matrix-not-same-shape', ...
+            'A and I in A(I) not same shape: no problem, but did you intend this?')
   end
 
   % issue #18 fix a(t/f)=6
@@ -90,30 +92,44 @@ function Z = mat_mask_access(A, I)
 end
 
 
-%% 2D arrays
-%!shared a,b,I
+
+%!test
+%! % 2D arrays
 %! b = [1:4]; b = [b; 3*b; 5*b];
 %! a = sym(b);
 %! I = rand(size(b)) > 0.5;
-%!assert(isequal( mat_mask_access(a,I), b(I) ))
-%! fprintf('\n*** 2 warnings expected: ***\n');
+%! assert(isequal( mat_mask_access(a,I), b(I) ))
+%! warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape', 'local')
 %! I = I(:);
-%!assert(isequal( mat_mask_access(a,I), b(I) ))
+%! assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = I';
-%!assert(isequal( mat_mask_access(a,I), b(I) ))
+%! assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = logical(zeros(size(b)));
-%!assert(isequal( mat_mask_access(a,I), b(I) ))
+%! assert(isequal( mat_mask_access(a,I), b(I) ))
 
-%% 1D arrays
-%!shared r,c,ar,ac,Ir,Ic
+%!warning <not same shape>
+%! % some warnings when I is wrong shape
 %! r = [1:6];
 %! ar = sym(r);
 %! c = r';
 %! ac = sym(c);
 %! Ir = rand(size(r)) > 0.5;
 %! Ic = rand(size(c)) > 0.5;
-%!assert(isequal( mat_mask_access(ar,Ir), r(Ir) ))
-%!assert(isequal( mat_mask_access(ac,Ic), c(Ic) ))
-%! disp('*** 2 warnings expected: ***');
-%!assert(isequal( mat_mask_access(ar,Ic), r(Ic) ))
-%!assert(isequal( mat_mask_access(ac,Ir), c(Ir) ))
+%! temp = mat_mask_access(ar, Ic);
+%! temp = mat_mask_access(ac, Ir);
+%! temp = ar(Ic);
+%! temp = ac(Ir);
+
+%!test
+%! % 1D arrays
+%! r = [1:6];
+%! ar = sym(r);
+%! c = r';
+%! ac = sym(c);
+%! Ir = rand(size(r)) > 0.5;
+%! Ic = rand(size(c)) > 0.5;
+%! assert(isequal( mat_mask_access(ar,Ir), r(Ir) ))
+%! assert(isequal( mat_mask_access(ac,Ic), c(Ic) ))
+%! warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape', 'local')
+%! assert(isequal( mat_mask_access(ar,Ic), r(Ic) ))
+%! assert(isequal( mat_mask_access(ac,Ir), c(Ir) ))
