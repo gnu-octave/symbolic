@@ -46,7 +46,8 @@ function A = toeplitz(C,R)
   % Diagonal conflict
   idx.type = '()';  idx.subs = {1};
   if (nargin == 2) && ~(isequal(subsref(R,idx), subsref(C,idx)));
-    warning('toeplitz: column wins diagonal conflict')
+    warning('OctSymPy:toeplitz:diagconflict', ...
+            'toeplitz: column wins diagonal conflict')
     R = subsasgn(R, idx, subsref(C, idx));
   end
   % (if just one input (R) then we want it to get the diag)
@@ -98,10 +99,16 @@ end
 %! B = toeplitz([a,b,c]);
 %! assert (isequal( A, B))
 
+%!warning <diagonal conflict>
+%! % mismatch
+%! syms x
+%! B = toeplitz([10 x], [1 3 x]);
+
 %!test
 %! % mismatch
 %! syms x y
-%! fprintf('\n*** Two warnings expected ***\n')
+%! fprintf('\n*** One warning expected ***\n')  % how to quiet this one?
 %! A = toeplitz([10 2], [1 3 5]);
+%! warning ('off', 'OctSymPy:toeplitz:diagconflict', 'local')
 %! B = toeplitz([10 x], [1 3 y]);
-%! assert (isequal (A, subs(B,[x,y],[2 5])))
+%! assert (isequal (A, subs(B, [x,y], [2 5])))

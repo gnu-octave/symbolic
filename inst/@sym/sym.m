@@ -127,7 +127,8 @@ function s = sym(x, varargin)
       % it to at least warn so I can catch bugs.
       % Matlab SMT also does this (w/o warning).
       % I don't trust this behaviour much.
-      warning('Using rats() for rational approx, did you really mean to pass a noninteger?');
+      warning('OctSymPy:sym:rationalapprox', ...
+              'Using rats() for rational approx, did you really mean to pass a noninteger?');
       s = sym(rats(x));
     end
     return
@@ -306,9 +307,12 @@ end
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))
 
+%!warning <rational approx> x = sym(1/2);
+
 %!test
-%! % passing small rationals w/o quotes
-%! fprintf('\n*** One warning expected ***\n')
+%! % passing small rationals w/o quotes: despite the warning,
+%! % it should work
+%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
 %! x = sym(1/2);
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))

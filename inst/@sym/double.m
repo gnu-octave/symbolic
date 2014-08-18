@@ -111,7 +111,7 @@ function y = double(x, failerr)
 
   if (flag==0)
     if (failerr)
-      error('cannot convert to double');
+      error('OctSymPy:double:conversion', 'cannot convert to double');
     else
       y = [];
     end
@@ -183,20 +183,6 @@ end
 %! assert( isequal(  double(sym(a)), a  ))
 %! assert( isequal(  double(sym(a)), a  ))
 
-%!test
 %! % should fail with error for non-double
-%! x = sym('x');
-%! try
-%!   double(x);
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert (failed)
-%! try
-%!   double([1 2 x]);
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert (failed)
+%!error <cannot convert> syms x; double(x)
+%!error <cannot convert> syms x; double([1 2 x])

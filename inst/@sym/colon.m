@@ -78,19 +78,11 @@ end
 %!test
 %! % mixed symbolic and double intervals
 %! p = sym(pi);
-%! fprintf('\n*** 2 warnings expected: ***\n');
+%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
 %! L = 0.1:(sym(pi)/3):2.3;
 %! assert(isa(L,'sym'));
 %! t = sym(1)/10;
 %! assert(isequal(L, [t p/3+t 2*p/3+t]));
 
-%!test
 %! % should be an error if it doesn't convert to double
-%! syms x
-%! try
-%!   a = 1:x;
-%!   waserr = false;
-%! catch
-%!   waserr = true;
-%! end
-%! assert(waserr)
+%!error <cannot convert> syms x; a = 1:x;
