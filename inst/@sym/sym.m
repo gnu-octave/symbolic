@@ -73,8 +73,9 @@ function s = sym(x, varargin)
   if (nargin > 2)
     s.pickle = x;
     s.size = varargin{1};
-    s.flattext = varargin{2};
-    s.text = varargin{3};
+    s.flat = varargin{2};
+    s.ascii = varargin{3};
+    s.unicode = varargin{4};
     s.extra = [];
     s = class(s, 'sym');
     return

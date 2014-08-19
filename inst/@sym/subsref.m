@@ -43,10 +43,12 @@ function out = subsref (f, idx)
       fld = idx.subs;
       if (strcmp (fld, 'pickle'))
         out = f.pickle;
-      elseif (strcmp (fld, 'text'))
-        out = f.text;
-      elseif (strcmp (fld, 'flattext'))
-        out = f.flattext;
+      elseif (strcmp (fld, 'flat'))
+        out = f.flat;
+      elseif (strcmp (fld, 'ascii'))
+        out = f.ascii;
+      elseif (strcmp (fld, 'unicode'))
+        out = f.unicode;
       elseif (strcmp (fld, 'extra'))
         out = f.extra;
       % not part of the interface
