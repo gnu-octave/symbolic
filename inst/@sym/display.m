@@ -68,16 +68,16 @@ function display(x)
 
 
   elseif (isempty (x))
-    formatstr = [ '%s = (%s) %s (empty %d' timesstr '%d matrix)' ];
-    n = fprintf (formatstr, inputname (1), class (x), strtrim(disp(x)), d(1), d(2))
+    formatstr = [  ];
+    n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', inputname (1), ...
+                 class (x), strtrim(disp(x)), d(1), timesstr, d(2))
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
 
   elseif (length (d) == 2)
     %% 2D Array
-    formatstr = [ '%s = (%s %d' timesstr '%d matrix)' ];
-    n = fprintf (formatstr, inputname (1), class (x), d(1), d(2));
-
+    n = fprintf ('%s = (%s %d%s%d matrix)', inputname (1), class (x), ...
+                 d(1), timesstr, d(2));
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
     if (loose), fprintf ('\n'); end
