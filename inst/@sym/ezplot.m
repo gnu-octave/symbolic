@@ -80,6 +80,7 @@ end
 
 %!test
 %! % simple
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms x
 %! f = cos(x);
 %! h = ezplot(f);
@@ -88,6 +89,7 @@ end
 
 %!test
 %! % parametric
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms t
 %! x = cos(t);
 %! y = sin(t);
@@ -97,6 +99,7 @@ end
 
 %!test
 %! % contour
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms x y
 %! f = sqrt(x*x + y*y) - 1;
 %! h = ezplot(f);
@@ -105,6 +108,7 @@ end
 
 %!test
 %! % bounds etc as syms
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms x
 %! f = cos(x);
 %! h = ezplot(f, [0 2*sym(pi)], sym(42));

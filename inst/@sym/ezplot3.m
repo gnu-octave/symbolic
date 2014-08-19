@@ -65,6 +65,7 @@ end
 
 %!test
 %! % parametric
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms t
 %! f1 = cos(t);
 %! f2 = sin(t);
@@ -75,6 +76,7 @@ end
 
 %!test
 %! % bounds etc as syms
+%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
 %! syms t
 %! f1 = cos(t);
 %! f2 = sin(t);
