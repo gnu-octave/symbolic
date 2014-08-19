@@ -123,7 +123,7 @@ function [A,B] = assumptions(F, outp)
         astr = python_cmd(cmd, x, false);
       end
       if ~isempty(astr)
-        str = strtrim([disp(x) ': ' astr]);
+        str = [x.flat ': ' astr];
         c = c + 1;
         if strcmp(outp, 'dict')
           A{c} = s;

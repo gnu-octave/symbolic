@@ -65,5 +65,5 @@ end
 %! syms x
 %! f(x) = x^2;
 %! y = x^2;    % not a symfun
-%! assert(strcmp(f.flattext, y.flattext))
+%! assert(strcmp(f.flat, y.flat))
 

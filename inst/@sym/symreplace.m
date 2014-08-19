@@ -102,11 +102,11 @@ function varargout = symreplace(varargin)
   %% otherwise, no output: this is the scary one
   if (nargin == 1)
     newx = varargin{1};
-    xstr = strtrim(disp(newx));
+    xstr = newx.flat;
   end
   if (nargin == 2)
     % this works if x is string or sym
-    xstr = strtrim(disp(varargin{1}));
+    xstr = varargin{1}.flat;
     newx = varargin{2};
   end
   if (nargin < 3)
@@ -154,7 +154,7 @@ function [newobj, flag] = symreplace_helper(obj, xstr, newx)
     % check if contains any symbols with the same string as x.
     symlist = findsymbols(obj);
     for c = 1:length(symlist)
-      if strcmp(xstr, strtrim(disp(symlist{c})))
+      if strcmp(xstr, symlist{c}.flat)
         flag = true;
         break
       end
