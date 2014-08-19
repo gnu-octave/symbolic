@@ -27,10 +27,13 @@
 
 function display(x)
 
-  % todo: octsympy_cpmfig display flat/pretty/unicode
-
   %% Settings
-  unicode_dec = octsympy_config('unicode');
+  wh = octsympy_config('display');
+  if (strcmp(wh, 'unicode'))
+    unicode_dec = true;
+  else
+    unicode_dec = false;
+  end
   display_snippet = octsympy_config('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
   % FIXME
@@ -39,7 +42,7 @@ function display(x)
   %terminal_size: octave, above just gives [0 0]
 
 
-  if (unicode_decorations)
+  if (unicode_dec)
     timesstr = '×';
   else
     timesstr = 'x';

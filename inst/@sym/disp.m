@@ -31,17 +31,8 @@ function varargout = disp(x, wh)
 
 
   if (nargin == 1)
-    % fixme read from conf
-
-  % todo: octsympy_cpmfig display flat/pretty/unicode
-
-  %% Settings
-  fixme = octsympy_config('unicode');
-    if fixme
-      wh = 'unicode';
-    else
-      wh = 'ascii';
-    end
+    %% read config to see how to display x
+    wh = octsympy_config('display');
   end
 
   switch lower(wh)
@@ -82,7 +73,7 @@ end
 
 %!test
 %! syms x
-%! s = disp(sin(x/2));
+%! s = disp(sin(x/2), 'flat');
 %! assert(strcmp(s, '   sin(x/2)'))
 
 %!test
