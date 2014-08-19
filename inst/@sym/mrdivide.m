@@ -31,13 +31,13 @@ function z = mrdivide(x,y)
     z = rdivide(x, y);
 
   elseif isscalar(x) && ~isscalar(y)
-    error('TODO: scalar/array not implemented yet');
+    error('FIXME: scalar/array not implemented yet');
 
   elseif ~isscalar(x) && isscalar(y)
     z = rdivide(x, y);
 
   else  % two array's case
-    error('TODO: array/array not implemented yet');
+    error('FIXME: array/array not implemented yet');
   end
 
 end
@@ -58,25 +58,11 @@ end
 %! assert (isequal ( A/2 , D/2  ))
 %! assert (isequal ( A/sym(2) , D/2  ))
 
-%!test
-%! % scalar / array not implemented
+%!error <scalar/array not implemented>
 %! A = [1 2; 3 4];
-%! try
-%!   B = sym(1) / A;
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed)
+%! B = sym(1) / A;
 
-%!test
-%! % array / array not implemented
+%!error <array/array not implemented>
 %! A = [1 2; 3 4];
 %! B = sym(A);
-%! try
-%!   C = A / B;
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed)
+%! C = A / B;

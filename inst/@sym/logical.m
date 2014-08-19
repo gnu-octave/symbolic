@@ -142,26 +142,12 @@ end
 %! assert (islogical (w))
 %! assert (isequal (w, [true true false; true false true]))
 
-%!test
-%! % FIXME: symbols not convertable to logical
+%!error <cannot .* convert sym .* bool>
 %! syms x oo
-%! try
-%!   logical(x)
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed);
+%! logical(x);
 
-%!test
-%! % nan not convertable to logical
-%! try
-%!   logical(sym(nan))
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed);
+%!error <cannot .* convert sym .* bool>
+%! logical(sym(nan))
 
 %!test
 %! % but oo and zoo are non-zero so we call those true
