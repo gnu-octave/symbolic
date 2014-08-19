@@ -27,15 +27,14 @@
 
 function display(x)
 
-  % todo: handle snippets here then call disp
   % todo: octsympy_cpmfig display flat/pretty/unicode
 
-
   %% Settings
-  unicode_decorations = octsympy_config('unicode');
+  unicode_dec = octsympy_config('unicode');
   display_snippet = octsympy_config('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
-  term_width = 69;  % hardcoded for tablet
+  % FIXME
+  term_width = 69;  % hardcoded for my tablet
   %get(0,'CommandWindowSize'): works in matlab gui & term
   %terminal_size: octave, above just gives [0 0]
 
@@ -56,9 +55,9 @@ function display(x)
     if (~toobig)
       fprintf(' %s', s)
       n = n + 1 + length(s);
-      snippet_of_sympy (x, 7, term_width - n, unicode_decorations)
+      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
     else
-      snippet_of_sympy (x, 7, term_width - n, unicode_decorations)
+      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
       if (loose), fprintf ('\n'); end
       disp(x)
       if (loose), fprintf ('\n'); end
@@ -68,7 +67,7 @@ function display(x)
   elseif (isempty (x))
     formatstr = [ '%s = (%s) %s (empty %d' timesstr '%d matrix)' ];
     n = fprintf (formatstr, inputname (1), class (x), strtrim(disp(x)), d(1), d(2))
-    snippet_of_sympy (x, 7, term_width - n, unicode_decorations)
+    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
 
   elseif (length (d) == 2)
@@ -76,7 +75,7 @@ function display(x)
     formatstr = [ '%s = (%s %d' timesstr '%d matrix)' ];
     n = fprintf (formatstr, inputname (1), class (x), d(1), d(2));
 
-    snippet_of_sympy (x, 7, term_width - n, unicode_decorations)
+    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
     if (loose), fprintf ('\n'); end
     disp(x)
@@ -88,23 +87,12 @@ function display(x)
     % (not possible with sympy matrix)
     fprintf ('%s = (%s nD array)', inputname (1), class (x))
 
-    snippet_of_sympy (x, 7, term_width - n, unicode_decorations)
+    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
     if (loose), fprintf ('\n'); end
     disp(x)
     if (loose), fprintf ('\n'); end
   end
-end
-
-function print_indented(s, n)
-  if (nargin == 1)
-    n = 3;
-  end
-  pad = char (double (' ')*ones (1,n));
-  newl = sprintf('\n');
-  s = strrep (s, newl, [newl pad]);
-  s = [pad s];  % first line
-  disp(s)
 end
 
 

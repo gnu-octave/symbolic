@@ -29,9 +29,19 @@
 
 function varargout = disp(x, wh)
 
+
   if (nargin == 1)
     % fixme read from conf
-    wh = 'flat';
+
+  % todo: octsympy_cpmfig display flat/pretty/unicode
+
+  %% Settings
+  fixme = octsympy_config('unicode');
+    if fixme
+      wh = 'unicode';
+    else
+      wh = 'ascii';
+    end
   end
 
   switch lower(wh)
