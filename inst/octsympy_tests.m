@@ -169,7 +169,7 @@ end
 %! % fails to match SMT (although true here is certainly reasonable)
 %! syms x
 %! e = x == x;
-%! assert (strcmp (strtrim(disp(e)), 'x == x'))
+%! assert (strcmp (strtrim(disp(e, 'flat')), 'x == x'))
 
 %%!xtest
 %%! % this is more serious!

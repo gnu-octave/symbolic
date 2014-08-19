@@ -62,7 +62,7 @@ end
 %! syms oo x
 %! e = oo ~= x;
 %! assert (isa (e, 'sym'))
-%! assert (strcmp (strtrim (disp (e)), 'oo != x'))
+%! assert (strcmp (strtrim (disp (e, 'flat')), 'oo != x'))
 
 %!test
 %! % nan

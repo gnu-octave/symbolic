@@ -249,7 +249,11 @@ function C = syms2charcells(S)
   C = {};
   for i=1:length(S)
     if iscell(S)
-      C{i} = S{i}.flat;
+      if isa(S{i}, 'sym')
+        C{i} = S{i}.flat;
+      else
+        C{i} = S{i};
+      end
     else
       % MoFo Issue #17
       %C{i} = S(i).flat
