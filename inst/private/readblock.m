@@ -57,12 +57,27 @@ function [A, err] = readblock(fout, timeout)
       %end
       sleep (waitdelta);
       nwaits = nwaits + 1;
+    elseif (errno() == 0)
+      waitdelta = exp(nwaits/10)/1e4;
+      waited = waited + waitdelta;
+      if waited <= wait_disp_thres
+        %fprintf(stdout, 'W'); % debugging, in general do nothing
+      elseif (~dispw)
+        fprintf(stdout, 'Waiting***')
+        dispw = true;
+      else
+        fprintf(stdout, '*')
+      end
+      fclear (fout);
+      %if (ispc () && ! isunix ())
+      %errno (0);   % maybe can do this on win32?
+      %end
+      sleep (waitdelta);
+      nwaits = nwaits + 1;
     else
-      % FIXME: win32 can get here with errno 0, still need to wait?
       % FIXME: need to separate the treatment from other unexpected errno?
-      errno ()
-      s
-      warning ('OctSymPy:readblock:invaliderrno', 'Failed to read python output, perhaps an error in the command?')
+      warning ('OctSymPy:readblock:invaliderrno', ...
+        sprintf('readblock: s=%d, errno=%d, perhaps error in the command?', s, errno()))
       sleep(0.1)  % FIXME; replace with waitdelta etc
     end
     %disp('paused'); pause
@@ -70,8 +85,13 @@ function [A, err] = readblock(fout, timeout)
     if (waited > timeout)
       warning('OctSymPy:readblock:timeout', ...
         sprintf('readblock: timeout of %g exceeded, breaking out', timeout));
-      disp('output so far:')
-      A
+      if (started)
+        disp('output so far:')
+        A
+      else
+        disp('no output so far')
+        A = '';
+      end
       A = [A '\nFAILED TIMEOUT\n'];
       err = true;
       break
