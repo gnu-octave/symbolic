@@ -38,6 +38,8 @@ function [A,out] = python_ipc_popen2(what, cmd, varargin)
     if (isempty(pyexec))
       pyexec = 'python';
     end
+    % FIXME: the '-i' is not always wanted, e.g., with mydbpy.bat on windows
+    %[fin, fout, pid] = popen2 (pyexec);
     [fin, fout, pid] = popen2 (pyexec, '-i');
 
     disp('Python started: some output may appear before your prompt returns.')
