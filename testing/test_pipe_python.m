@@ -8,9 +8,38 @@ EINVAL = errno ('EINVAL')
 
 disp('** calling popen2')
 
-[in, out, pid] = popen2 ('python', '-i')
-%[in, out, pid] = popen2 ('n:\win32\py.exe')
+%[in, out, pid] = popen2 ('python', '-i')
+%[in, out, pid] = popen2 ('n:\win32\py.exe', '-i')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\mydbpy.bat')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe', 'cat')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-i -c "a=42;print(a);print(a,a)"')
+
+% works on win32:
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe', 'cat')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe', {'cat'})
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe')
+% (but needs to fclose first!)
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-V')
+
+% does not work:
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe cat')  
+
+% should work but does not:
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-i')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-c print(42)')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-c print(42)')
+
+% testing
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-i')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-c print(42)')
+%args = {'-c' 'print(42)'};
+Targs = {'-c' '"print(66);a=66;print((a,a,a,a))"'};
+%args = {'-i' '-u' '--help'};
+args = {'-u'};
+[in, out, pid] = popen2 ('py.exe', args)
 assert(pid > 0)
+
+close_first = true
 
 sleep(0.1)
 fprintf('\n')
@@ -18,7 +47,9 @@ fprintf('\n')
 % this will make the correct newline on win and unix
 newl = sprintf('\n');
 
-r = fputs (in, ['a = 42; print((a,a,a))' newl newl]);
+newl2 = "\r\n";
+
+r = fputs (in, ['a = 42; print((a,a,a))' newl2 newl2]);
 assert(r == 0)
 
 %% test loading modules
@@ -26,9 +57,6 @@ assert(r == 0)
 %assert(r == 0)
 
 r = fputs (in, ['a = "test"; print(a)' newl newl]);
-assert(r == 0)
-
-r = fputs (in, ['a = 43; print((a,a,a))' newl newl]);
 assert(r == 0)
 
 %% other things that work
@@ -44,45 +72,52 @@ r = fputs (in, [newl newl]);
 %% Flush input
 % necessary (tested on GNU/Linux) if last input is fprintf, rather
 % than fputs.
+sleep (0.1);
+r = fflush(in);  assert(r == 0)
+sleep (0.1);
 r = fflush(in);  assert(r == 0)
 
 %% Issue whether we close before reading from the pipe
 % need to close it later for proper interactivity.
-%r = fclose (in);  assert(r == 0)
+if (close_first)
+  disp('closing "in" before reading back')
+  r = fclose (in);  assert(r == 0);
+end
 
-sleep (0.1);
 
 fprintf('\n**** Starting to read from pipe ****\n')
 done = false;
 
 num_again = 0;
+errno(0);
+fclear(out);
 while(1)
   if (ispc() && ~isunix())
     %% reset errno before the syscall, harmful on Linux?
     % what about Mac OS X?
-    errno(0)   % see octave syscall.cc test on windows
+    %errno(0);   % see octave syscall.cc test on windows
   end
   s = fgets (out);
   if (ischar (s))
+    disp('<out>')
     fputs (stdout, s);
+    disp('</out>')
   elseif (errno() == EINVAL)
     fclear (out);
     errno(0);   % reset errno, is this sufficient for win32?
-    sleep (0.1);
+    sleep (0.15);
     disp('waiting (on win32)')
     num_again++;
     assert (ispc() && ~isunix())
   elseif (errno() == EAGAIN)
     fclear(out);
     errno(0);   % not required on posix but harmless?
-    sleep(0.1);
+    sleep(0.15);
     disp('waiting (on posix)')
     num_again++;
     %assert (~ispc() && isunix())
   else
-    warning('fgets returned non-string but unexpected errno...')
-    s
-    errno
+    warning(sprintf('fgets returned non-string, unexpected errno: s=%d, errno=%d', s, errno()))
     sleep(0.1);
     num_again++;
   end
@@ -92,6 +127,8 @@ while(1)
   end
 end
 
-r = fclose (in);  assert(r == 0)
+if (~close_first)
+  r = fclose (in);  assert(r == 0)
+end
 r = fclose (out);  assert(r == 0)
-waitpid (pid);
+[pid,st,msg] = waitpid (pid)
