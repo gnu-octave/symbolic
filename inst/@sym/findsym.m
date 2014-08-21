@@ -48,13 +48,14 @@ function C = syms2charcells(S)
   C = {};
   for i=1:length(S)
     if iscell(S)
-      C{i} = strtrim(disp(S{i}));
+      C{i} = S{i}.flat;
     else
       % MoFo Issue #17
-      %C{i} = strtrim(disp(S(i)))
+      %C{i} = S(i).flat
       idx.type = '()';
       idx.subs = {i};
-      C{i} = strtrim(disp(subsref(S,idx)));
+      temp = subsref(S, idx);
+      C{i} = temp.flat;
     end
   end
 end

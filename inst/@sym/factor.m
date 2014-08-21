@@ -96,5 +96,5 @@ end
 %!test
 %! % "fragile form" works
 %! A = factor(sym(124));
-%! B = strtrim(disp(A));
+%! B = strtrim(disp(A, 'flat'));
 %! assert (strcmp (B, '2**2*31**1'))

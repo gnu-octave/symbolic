@@ -49,7 +49,7 @@ function varargout = assumeAlso(x, cond, varargin)
 
   ca.(cond) = true;
 
-  xstr = strtrim(disp(x));
+  xstr = x.flat;
   newx = sym(xstr, ca);
 
   % ---------------------------------------------

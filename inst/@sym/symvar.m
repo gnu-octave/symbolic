@@ -76,7 +76,7 @@ function vars = symvar(F, Nout)
 
     symstrings = {};
     for i=1:Nlist
-      symstrings{i} = strtrim(disp(symlist{i}));
+      symstrings{i} = symlist{i}.flat;
     end
 
     %% define a map for resorting

@@ -73,8 +73,9 @@ function s = sym(x, varargin)
   if (nargin > 2)
     s.pickle = x;
     s.size = varargin{1};
-    s.flattext = varargin{2};
-    s.text = varargin{3};
+    s.flat = varargin{2};
+    s.ascii = varargin{3};
+    s.unicode = varargin{4};
     s.extra = [];
     s = class(s, 'sym');
     return
@@ -142,7 +143,9 @@ function s = sym(x, varargin)
 
   elseif (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
     % special case for 'clear', because of side-effects
-    x = strtrim(disp(x));  % we just want the string
+    if (isa(x, 'sym'))
+      x = x.flat;    % we just want the string
+    end
     s = sym(x);
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -163,7 +166,7 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'sym')  &&  nargin==2)
     % support sym(x, assumption) for existing sym x
-    s = sym(strtrim(disp(x)), varargin{1});
+    s = sym(x.flat, varargin{1});
     return
 
 

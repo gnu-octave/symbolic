@@ -107,7 +107,7 @@ function syms(varargin)
         % would modify this workspace instead of the caller's.
         newx = sym(expr);
         assignin('caller', expr, newx);
-        xstr = strtrim(disp(newx));
+        xstr = newx.flat;
         % ---------------------------------------------
         % Muck around in the caller's namespace, replacing syms
         % that match 'xstr' (a string) with the 'newx' sym.

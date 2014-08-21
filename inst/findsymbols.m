@@ -91,7 +91,7 @@ function L = findsymbols(obj, dosort)
   if dosort
     Ls = {};
     for i=1:length(L)
-      Ls{i} = strtrim(disp(L{i}));
+      Ls{i} = L{i}.flat;
     end
     [tilde, I] = unique(Ls);
     L = L(I);

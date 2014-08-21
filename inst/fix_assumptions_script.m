@@ -42,7 +42,7 @@ if ~(exist ('hack__newx__', 'var'))
   error('you must define "hack__newx__" first, see help')
 end
 if ~(exist ('hack__xstr__', 'var'))
-  hack__xstr__ = strtrim(disp(hack__newx__));
+  hack__xstr__ = hack__newx__.flat;
 end
 
 hack__S__ = whos();

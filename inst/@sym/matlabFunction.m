@@ -141,7 +141,7 @@ function f = matlabFunction(varargin)
 
         %% As of Aug 2014, origin/master SymPy has no octave_code()
         % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
-        codestr = strtrim(disp(expr));
+        codestr = expr.flat;
         % Matlab: ** to ^ substition.  On Octave, vectorize does this
         % automatically
         codestr = strrep(codestr, '**', '^');

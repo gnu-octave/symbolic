@@ -38,15 +38,20 @@
 %% @code{python} and assumes the path is set appropriately.
 %% FIXME: need to make sure default works on Windows too.
 %%
-%% Snippets: when displaying a sym object, we show the first
-%% few characters of the SymPy string representation.
+%% Display of syms:
 %% @example
-%% octsympy_config snippet 1|0   % or true/false
+%% octsympy_config display flat
+%% octsympy_config display ascii
+%% octsympy_config display unicode
 %% @end example
+%% By default OctSymPy uses a unicode pretty printer to display
+%% symbolic expressions.  If that doesn't work (e.g., if you
+%% see @code{?} characters) then try the @code{ascii} option.
 %%
-%% FIXME: Unicode support: use unicode for displaying syms.
+%% Snippets: when displaying a sym object, we show the first
+%% few characters of the SymPy representation.
 %% @example
-%% octsympy_config unicode 1|0   % or true/false
+%% octsympy_config snippet 1|0   % or true/false, on/off
 %% @end example
 %%
 %% @seealso{sym, syms, octsympy_reset}
@@ -71,15 +76,18 @@ function varargout = octsympy_config(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.unicode = true;
+      settings.display = 'unicode';
       settings.snippet = true;
       settings.whichpython = '';
 
-    case 'unicode'
+    case 'display'
       if (nargin == 1)
-        varargout{1} = settings.unicode;
+        varargout{1} = settings.display;
       else
-        settings.unicode = tf_from_input(arg);
+        arg = lower(arg);
+        assert(strcmp(arg, 'flat') || strcmp(arg, 'ascii') || ...
+               strcmp(arg, 'unicode'))
+        settings.display = arg;
       end
 
     case 'snippet'

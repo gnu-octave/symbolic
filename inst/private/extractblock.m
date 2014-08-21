@@ -131,7 +131,7 @@ function r = process_item(item)
       assert(M == 1)
       r = strcmpi(C{2}, 'true');
     case OCTCODE_SYM
-      assert(M == 5)
+      assert(M == 6)
       %warning('FIXME: wip?  more error checking')
       sz1 = str2double(C{3});
       sz2 = str2double(C{4});
@@ -140,8 +140,9 @@ function r = process_item(item)
       % fixme: should we use <item>'s for these not raw <f>?
       str = str_post_xml_filter(C{2});
       flat = str_post_xml_filter(C{5});
-      prettytext = str_post_xml_filter(C{6});
-      r = sym(str, [sz1 sz2], flat, prettytext);
+      ascii = str_post_xml_filter(C{6});
+      unicode = str_post_xml_filter(C{7});
+      r = sym(str, [sz1 sz2], flat, ascii, unicode);
     case OCTCODE_DICT
       %warning('FIXME: wip');
       keys = C{2}{1};

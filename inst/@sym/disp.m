@@ -27,14 +27,23 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = disp(obj)
+function varargout = disp(x, wh)
 
-  %Note: if you edit this, make sure you edit display.m as well
 
-  if (isscalar (obj))
-    s = obj.flattext;
-  else
-    s = obj.text;
+  if (nargin == 1)
+    %% read config to see how to display x
+    wh = octsympy_config('display');
+  end
+
+  switch lower(wh)
+    case 'flat'
+      s = x.flat;
+    case 'ascii'
+      s = x.ascii;
+    case 'unicode'
+      s = x.unicode;
+    otherwise
+      error('invalid display type')
   end
   s = make_indented(s);
 
@@ -64,5 +73,17 @@ end
 
 %!test
 %! syms x
-%! s = disp(sin(x/2));
+%! s = disp(sin(x/2), 'flat');
 %! assert(strcmp(s, '   sin(x/2)'))
+
+%!test
+%! % Examples of 2x0 and 0x2 empty matrices:
+%! a = sym([1 2; 3 4]);
+%! b2x0 = a([true true], [false false]);
+%! b0x2 = a([false false], [true true]);
+%! assert (size (b2x0), [2 0])
+%! assert (size (b0x2), [0 2])
+%! s = disp(b2x0);
+%! assert(strcmp(s, '   []'))
+%! s = disp(b0x2);
+%! assert(strcmp(s, '   []'))
