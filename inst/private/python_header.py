@@ -12,9 +12,9 @@ def myerr(e):
     # hardcoded in case no xml
     print("<output_block>")
     print("<item>\n<f>9999</f>\n<f>")
-    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&rt;"))
+    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
     print("</f><f>")
-    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&rt;"))
+    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
     print("</f>\n</item>")
     print("</output_block>\n")
 
