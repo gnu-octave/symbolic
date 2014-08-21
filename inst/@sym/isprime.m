@@ -28,32 +28,53 @@
 
 function z = isprime(x)
 
-  cmd = [ '(x,) = _ins\n'   ...
-          'if x.is_Matrix:\n'   ...
-          '    z = x.applyfunc(lambda a: sp.isprime(a))\n'  ...
-          'else:\n'   ...
-          '    z = sp.isprime(x)\n'  ...
-          'return (z,)' ];
+  %sf = [ 'def sf(x):\n' ...
+  %       '    return x.is_prime' ];
 
-  z = python_cmd (cmd, x);
+  % could just call uniop_helper but this way we can catch the errors
 
-  %% postproccess to logical
-  % FIXME: Issue #27
-  % FIXME: but anyway, this is a bit horrid, not the recommended approach
-  if (numel(z) > 1)
-    tf = zeros(size(z), 'logical');
-    for i=1:numel(z)
-      %rhs = subsref(z, substruct('()', {i}))
-      rhs = python_cmd ('return _ins[0][_ins[1]] == True,', z, i-1);
-      tf(i) = rhs;
-    end
-    z = tf;
+  sf = [ 'def sf(x):\n' ...
+         '    if not x.is_nonnegative:\n' ...
+         '        raise NameError("isprime: input must be nonnegative")\n' ...
+         '    r = x.is_prime\n' ...
+         '    if r is None:\n' ...
+         '        raise NameError("isprime: cannot determine if input is prime")\n' ...
+         '    return r' ];
+
+  cmd = [ sf '\n' ...
+          '(x,) = _ins\n' ...
+          'try:\n' ...
+          '    if x.is_Matrix:\n' ...
+          '        return (True, x.applyfunc(lambda a: sf(a)))\n' ...
+          '    else:\n' ...
+          '        return (True, sf(x))\n' ...
+          'except NameError, e:\n' ...
+          '    return (False, str(e))' ...
+        ];
+
+  [r, z] = python_cmd(cmd, x);
+
+  if (~r)
+    error(z)
   end
+
+  z = logical(z);
+
 end
 
 
 %!assert (isprime (sym(5)))
 %!assert (~isprime (sym(4)))
+%!assert (~isprime (sym(0)))
+%!assert (~isprime (sym(1)))
+
 %!test
 %! a = [5 7 6; 1 2 337];
 %! assert (isequal (isprime (a), [true true false; false true true]))
+
+%!error <must be nonnegative> isprime(sym(-4))
+%!error <must be nonnegative> isprime(sym(4i))
+%!error <must be nonnegative> isprime(sym('x'))
+%!error <cannot determine>
+%! syms x positive
+%! isprime(x)
