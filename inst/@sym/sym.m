@@ -124,13 +124,12 @@ function s = sym(x, varargin)
       s = sym(sprintf('%d', x));
     else
       % Allow 1/3 and other "small" fractions.
-      % FIXME: good if this warning were configurable, personally I like
-      % it to at least warn so I can catch bugs.
-      % Matlab SMT also does this (w/o warning).
-      % I don't trust this behaviour much.
+      % Personally, I like a warning here so I can catch bugs.
+      % Matlab SMT does this (w/o warning).
+      % FIXME: alternatively, could have sympy do this?
       warning('OctSymPy:sym:rationalapprox', ...
               'Using rats() for rational approx, did you really mean to pass a noninteger?');
-      s = sym(rats(x));
+      s = sym(strtrim(rats(x)));
     end
     return
 
