@@ -122,7 +122,7 @@ function varargout = octsympy_config(cmd, arg)
           case 'popen2'
             disp('Forcing the popen2() octsympy communication mechanism')
           otherwise
-          warning(['Unknown IPC mechanism: hope you know what you''re doing'])
+          warning(['Unknown/unsupported IPC mechanism: hope you know what you''re doing'])
         end
       end
 

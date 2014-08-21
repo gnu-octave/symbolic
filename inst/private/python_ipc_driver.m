@@ -1,5 +1,5 @@
-function [A,db] = python_sympy_cmd_raw(what, cmd, varargin)
-%PYTHON_SYMPY_CMD_RAW  Run SymPy command and return strings
+function [A, db] = python_ipc_driver(what, cmd, varargin)
+%PYTHON_IPC_DRIVER  Run Python/SymPy command and return strings
 
   which_ipc = octsympy_config('ipc');
 
@@ -20,19 +20,23 @@ function [A,db] = python_sympy_cmd_raw(what, cmd, varargin)
   switch lower(which_ipc)
     case 'default'
       if (exist('popen2', 'builtin'))
-        [A,db] = python_ipc_popen2(what, cmd, varargin{:});
+        [A, db] = python_ipc_popen2(what, cmd, varargin{:});
       else
-        [A,db] = python_ipc_system(what, cmd, varargin{:});
+        [A, db] = python_ipc_system(what, cmd, false, varargin{:});
       end
 
     case 'system'
-      [A,db] = python_ipc_system(what, cmd, varargin{:});
+      [A, db] = python_ipc_system(what, cmd, false, varargin{:});
+
+    case 'systmpfile'
+      %% for debugging, not intended for long-term usage
+      [A, db] = python_ipc_system(what, cmd, true, varargin{:});
 
     case 'popen2'
       if (~exist('popen2', 'builtin'))
         warning('You forced popen2 ipc but you don''t have one, trouble ahead');
       end
-      [A,db] = python_ipc_popen2(what, cmd, varargin{:});
+      [A, db] = python_ipc_popen2(what, cmd, varargin{:});
 
     otherwise
       error('invalid ipc mechanism')

@@ -116,7 +116,7 @@ function varargout = python_cmd(cmd, varargin)
   %disp(cmd)
   %fprintf('\n*** </CODE> ***\n\n')
 
-  [A,db] = python_sympy_cmd_raw('run', cmd, varargin{:});
+  [A,db] = python_ipc_driver('run', cmd, varargin{:});
   % FIXME: filter this earlier?
   A = A{1};
   %db

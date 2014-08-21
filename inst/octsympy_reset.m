@@ -28,7 +28,7 @@
 function varargout = octsympy_reset()
 
   disp('Resetting the octsympy communication mechanism');
-  r = python_sympy_cmd_raw('reset', []);
+  r = python_ipc_driver('reset', []);
 
   if (nargout == 0)
     if (~r)

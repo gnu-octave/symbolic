@@ -1,4 +1,4 @@
-function [A,out] = python_ipc_popen2(what, cmd, varargin)
+function [A, out] = python_ipc_popen2(what, cmd, varargin)
 % "out" provided for debugging
 
   persistent fin fout pid
