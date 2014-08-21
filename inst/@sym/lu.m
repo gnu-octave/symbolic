@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{L}, @var{U} =} norm (@var{A})
-%% @deftypefnx {Function File} {@var{L}, @var{U}, @var{P} =} norm (@var{A})
-%% @deftypefnx {Function File} {... =} norm (@var{A}, 'vector')
+%% @deftypefn  {Function File} {@var{L}, @var{U} =} lu (@var{A})
+%% @deftypefnx {Function File} {@var{L}, @var{U}, @var{P} =} lu (@var{A})
+%% @deftypefnx {Function File} {... =} lu (@var{A}, 'vector')
 %% Symbolic LU factorization of a matrix.
 %%
 %% @end deftypefn
