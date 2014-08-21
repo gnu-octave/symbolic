@@ -1,17 +1,23 @@
-function s = python_copy_vars_to(in, varargin)
+function s = python_copy_vars_to(in, te, varargin)
+%private function
 
-  s = '';
-
-  if 1==0
-    s = sprintf('%s%s = []\n\n', s, in);
+  if (~te)
+    %% no error checking
+    s = sprintf('%s = []\n', in);
     s = do_list(s, 0, in, varargin);
   else
-    s = sprintf('%stry:\n', s);
-    s = sprintf('%s    %s = []\n', s, in);
+    %% put inside try-except
+    s = sprintf('try:\n    %s = []\n', in);
     s = do_list(s, 4, in, varargin);
-    s = sprintf('%s    octoutput_drv("PYTHON: successful variable import")\n', s);
-    s = sprintf('%sexcept:\n', s);
-    s = sprintf('%s    octoutput_drv("PYTHON: Error in variable import")\n\n\n', s);
+    s = [ ...
+      s ...
+      sprintf([ ...
+      '    octoutput_drv("PYTHON: successful variable import")\n' ...
+      'except:\n' ...
+      '    octoutput_drv("PYTHON: Error in variable import")\n' ...
+      '    myerr(sys.exc_info())\n' ...
+      '    raise\n' ...
+      '\n\n' ])];
   end
 end
 

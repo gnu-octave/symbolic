@@ -87,7 +87,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
   % there is a try-except block here, sends a block if sucessful
-  s = python_copy_vars_to('_ins', varargin{:});
+  s = python_copy_vars_to('_ins', true, varargin{:});
 
   fputs (fin, s);
   fflush(fin);
@@ -104,13 +104,15 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     error('ipc_popen2: failed to send variables to python?')
   end
 
-  %% the actual command
-  % this will do something with _ins and produce _outs
-  % FIXME: wrap this in try catch too
-  s = [cmd newl newl];
+  %% The actual command
+  % cmd will be a snippet of python code that does something
+  % with _ins and produce _outs.
+  s = python_ipc_format_cmd(cmd);
 
-  %% output
+
+  %% output, or perhaps a thrown error
   s2 = python_copy_vars_from('_outs');
+
   s = [s s2];
 
   fputs (fin, s);

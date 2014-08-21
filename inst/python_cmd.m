@@ -105,18 +105,18 @@ function varargout = python_cmd(cmd, varargin)
   cmd = strtrim(cmd);  % I think this is not important
   cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
 
+  %% IPC interface
+  % the ipc mechanism shall put the input variables in the tuple
+  % '_ins' and it will return to us whatever we put in the tuple
+  % '_outs'.  There is no particular reason this needs to define
+  % a function, I just thought it isolates local variables a bit.
   cmd = sprintf( [ 'def _fcn(_ins):\n' ...
                    '    _outs = []\n' ...
                    '    %s\n' ...
                    '    return _outs\n' ...
-                   '\n' ...
-                   '_outs = _fcn(_ins)\n\n' ], cmd);
+                   '_outs = _fcn(_ins)' ], cmd);
 
-  %fprintf('\n*** <CODE> ***\n')
-  %disp(cmd)
-  %fprintf('\n*** </CODE> ***\n\n')
-
-  [A,db] = python_ipc_driver('run', cmd, varargin{:});
+  [A, db] = python_ipc_driver('run', cmd, varargin{:});
   % FIXME: filter this earlier?
   A = A{1};
   %db

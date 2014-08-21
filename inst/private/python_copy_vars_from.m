@@ -1,4 +1,21 @@
-function s = python_copy_vars_from(out)
+function s = python_copy_vars_from(out, tryexcept)
 %private function
 
-  s = sprintf('octoutput_drv(%s)\n\n', out);
+  if (nargin == 1)
+    tryexcept = true;
+  end
+
+  if (~tryexcept)
+    %% no error checking
+    s = sprintf('octoutput_drv(%s)\n\n', out);
+  else
+    %% with try-except block
+    s = sprintf([ ...
+         'try:\n' ...
+         '    octoutput_drv(%s)\n' ...
+         'except:\n' ...
+         '    octoutput_drv("PYTHON: Error in var export")\n' ...
+         '    myerr(sys.exc_info())\n' ...
+         '    raise\n' ...
+         '\n\n' ], out);
+  end
