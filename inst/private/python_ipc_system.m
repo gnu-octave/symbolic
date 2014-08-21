@@ -14,7 +14,7 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
     error('unsupported command')
   end
 
-  vstr = '0.0.4';  % FIXME
+  vstr = octsympy_config('version');
 
   if (isempty(show_msg))
     disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])

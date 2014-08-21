@@ -54,6 +54,11 @@
 %% octsympy_config snippet 1|0   % or true/false, on/off
 %% @end example
 %%
+%% Report the version number:
+%% @example
+%% octsympy_config version
+%% @end example
+%%
 %% @seealso{sym, syms, octsympy_reset}
 %% @end deftypefn
 
@@ -79,6 +84,10 @@ function varargout = octsympy_config(cmd, arg)
       settings.display = 'unicode';
       settings.snippet = true;
       settings.whichpython = '';
+
+    case 'version'
+      assert (nargin == 1)
+      varargout{1} = '0.0.4-git';
 
     case 'display'
       if (nargin == 1)

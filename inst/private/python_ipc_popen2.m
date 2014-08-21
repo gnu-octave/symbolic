@@ -29,7 +29,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     error('unsupported command')
   end
 
-  vstr = '0.0.4';  % FIXME
+  vstr = octsympy_config('version');
+
   if isempty(pid)
     disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
     disp('Initializing communication with SymPy using a popen2() pipe.')

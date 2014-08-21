@@ -1,5 +1,5 @@
 Name: octsympy
-Version: 0.0.4
+Version: 0.0.4-git
 Date: 2014-05-26
 Author: Colin B. Macdonald <cbm@m.fsf.org>
 Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
@@ -13,6 +13,6 @@ Description: Adds symbolic calculation features to GNU Octave.
  packages.
 Categories: symbolic
 Url: http://github.com/cbm755/octsympy
-SystemRequirements: sympy (>= 0.7.3)
+SystemRequirements: sympy (>= 0.7.5)
 BuildRequires: python
 
