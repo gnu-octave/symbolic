@@ -19,56 +19,42 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File}  {} pretty (@var{x})
 %% @deftypefnx {Function File}  {@var{s} =} pretty (@var{x})
-%% Return/display ASCII-art representation of symbolic expression.
+%% Return/display ASCII-art/unicode representation of expression.
+%%
+%% This is usually the same as @code{disp(x)}, unless you have
+%% @code{octsympy_config display flat}, in which case
+%% @code{pretty(x)} displays ASCII-art.  You can force unicode
+%% with @code{pretty(x, 'unicode')}.
 %%
 %% Note: pretty(x) works like disp(x) (makes output even if has a
 %% semicolon)
 %%
-%% FIXME: octsympy_config...
-%% FIXME: wrapping column?
-%% FIXME: store this in the sym?  pretty_by_default?  flat versus not?
+%% @code{pretty} exists mainly for compatibility with the
+%% Symbolic Math Toolbox.
 %%
-%% @seealso{disp,latex}
+%% @seealso{disp, latex}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = pretty(x, opt)
+function varargout = pretty(x, wh)
 
-  loose = strcmp(get(0,'FormatSpacing'), 'loose');
-
-  if nargin == 1
-    opt = 0;
-  end
-  if opt
-    cmd = [ 'd = sp.pretty(*_ins, use_unicode=False)\n'  ...
-            'return (d,)' ];
-  else
-    cmd = [ 'd = sp.pretty(*_ins, use_unicode=True)\n'  ...
-            'return (d,)' ];
+  if (nargin == 1)
+    % read config to see how to display x
+    wh = octsympy_config('display');
   end
 
-  s = python_cmd (cmd, x);
+  % if config says flat, pretty does ascii
+  if (strcmp('flat', lower(wh)))
+    wh = 'ascii';
+  end
 
   if (nargout == 0)
-    if (loose), fprintf ('\n'); end
-    print_indented (s)
-    if (loose), fprintf ('\n'); end
+    disp(x, wh)
   else
-    varargout = {s};
+    varargout{1} = disp(x, wh);
   end
-end
-
-function print_indented(s, n)
-  if (nargin == 1)
-    n = 3;
-  end
-  pad = char (double (' ')*ones (1,n));
-  newl = sprintf('\n');
-  s = strrep (s, newl, [newl pad]);
-  s = [pad s];  % first line
-  disp(s)
 end
 
 
@@ -76,12 +62,19 @@ end
 %! % simple
 %! syms x
 %! s1 = pretty(sin(x));
-%! s2 = 'sin(x)';
+%! s2 = '   sin(x)';
+%! assert(strcmp(s1,s2))
+
+%!test
+%! % force ascii
+%! syms x
+%! s1 = pretty(sin(x/2), 'ascii');
+%! s2 = sprintf('      /x\\\n   sin|-|\n      \\2/');
 %! assert(strcmp(s1,s2))
 
 %!test
 %! % with unicode, probably fails on Matlab
 %! syms x
 %! s1 = pretty(sin(x/2));
-%! s2 = sprintf('   ⎛x⎞\nsin⎜─⎟\n   ⎝2⎠');
+%! s2 = sprintf('      ⎛x⎞\n   sin⎜─⎟\n      ⎝2⎠');
 %! assert(strcmp(s1,s2))
