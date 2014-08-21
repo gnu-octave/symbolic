@@ -2,7 +2,8 @@
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
 
-#from __future__ import print_function
+from __future__ import print_function
+from __future__ import division
 
 import sys
 sys.ps1 = ""; sys.ps2 = ""
@@ -21,15 +22,13 @@ def myerr(e):
 
 try:
     import sympy
-    #import sympy.abc
     import sympy as sp
-    # FIXME: possible to reactivate from srepr w/o this?
+    # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
-    #import dill as pickle
-    from copy import copy as copy_copy
-    from binascii import hexlify as binascii_hexlify
-    from struct import pack as struct_pack, unpack as struct_unpack
+    import copy
+    import binascii
+    import struct
     import xml.etree.ElementTree as ET
 except:
     myerr(sys.exc_info())
@@ -41,15 +40,14 @@ try:
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
         # used to pass doubles back-and-forth
-        return binascii_hexlify(struct_pack(">d", x))
+        return binascii.hexlify(struct.pack(">d", x))
     def hex2d(s):
         bins = ''.join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
-        return struct_unpack('>d', bins)[0]
+        return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
         n = dict()
         for k in a:
-            print(str(k))
             if not k in b:
                 n[k] = a[k]
         return n
@@ -80,8 +78,8 @@ try:
                 xtra = ", positive=True"
             else:
                 xtra = ""
-                for (key,val) in asm.iteritems():
-                    xtra = xtra + ", %s=%s" % (key,val)
+                for (key, val) in asm.iteritems():
+                    xtra = xtra + ", %s=%s" % (key, val)
             return "%s(%s%s)" % (expr.__class__.__name__,
                                  self._print(expr.name), xtra)
     #
@@ -105,15 +103,15 @@ try:
         return y
     #
     def octoutput_drv(x):
-        xroot = ET.Element('output_block')
+        xroot = ET.Element("output_block")
         octoutput(x, xroot)
         # simple, but no newlines and escapes unicode
-        #print ET.tostring(xroot)
-        #print "\n"
+        #print(ET.tostring(xroot))
+        #print("\n")
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
-        print DOM.toprettyxml(indent="", newl="\n", encoding="utf-8")
+        print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
     myerr(sys.exc_info())
     raise
@@ -136,7 +134,7 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, 'f')
             f.text = str(x)
-        elif isinstance(x, (sp.Basic,sp.Matrix)):
+        elif isinstance(x, (sp.Basic, sp.Matrix)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
             elif isinstance(x, sp.Expr):
@@ -146,8 +144,8 @@ try:
             else:
                 dbout("Treating unknown sympy as scalar: " + str(type(x)))
                 _d = (1,1)
-            pretty_ascii = sp.pretty(x,use_unicode=False)
-            pretty_unicode = sp.pretty(x,use_unicode=True)
+            pretty_ascii = sp.pretty(x, use_unicode=False)
+            pretty_unicode = sp.pretty(x, use_unicode=True)
             a = ET.SubElement(et, 'item')
             f = ET.SubElement(a, 'f')
             f.text = str(OCTCODE_SYM)
@@ -163,7 +161,7 @@ try:
             f.text = pretty_ascii
             f = ET.SubElement(a, 'f')
             f.text = pretty_unicode
-        elif isinstance(x, (list,tuple)):
+        elif isinstance(x, (list, tuple)):
             c = ET.SubElement(et, 'list')
             for y in x:
                 octoutput(y, c)
@@ -214,3 +212,6 @@ try:
 except:
     myerr(sys.exc_info())
     raise
+# end of python header, now couple blank lines
+
+
