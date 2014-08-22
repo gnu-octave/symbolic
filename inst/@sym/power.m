@@ -27,6 +27,15 @@
 
 function z = power(x, y)
 
+  % Dear hacker from the distant future... maybe you can delete this?
+  if (isa(x, 'symfun') || isa(y, 'symfun'))
+    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+            'worked around octave bug #42735')
+    z = power(x, y);
+    return
+  end
+
+
   cmd = [ '(x,y) = _ins\n'                                    ...
           'if x.is_Matrix and y.is_Matrix:\n'                 ...
           '    # FIXME need a copy?\n'                         ...

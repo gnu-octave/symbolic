@@ -29,6 +29,15 @@
 
 function z = mpower(x, y)
 
+  % Dear hacker from the distant future... maybe you can delete this?
+  if (isa(x, 'symfun') || isa(y, 'symfun'))
+    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+            'worked around octave bug #42735')
+    z = mpower(x, y);
+    return
+  end
+
+
   cmd = 'return _ins[0]**_ins[1],';
 
   if isscalar(x) && isscalar(y)

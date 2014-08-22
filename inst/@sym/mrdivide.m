@@ -25,7 +25,16 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = mrdivide(x,y)
+function z = mrdivide(x, y)
+
+  % Dear hacker from the distant future... maybe you can delete this?
+  if (isa(x, 'symfun') || isa(y, 'symfun'))
+    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+            'worked around octave bug #42735')
+    z = mrdivide(x, y);
+    return
+  end
+
 
   if isscalar(x) && isscalar(y)
     z = rdivide(x, y);

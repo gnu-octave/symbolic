@@ -37,11 +37,20 @@ end
 %! assert( isa(f - f, 'symfun'))
 %! assert( isa(f - x, 'symfun'))
 
-%!xtest
+%!test
 %! % Octave bug: https://savannah.gnu.org/bugs/?42735
 %! syms x
 %! f(x) = x^2;
-%! assert( isa(x - f, 'symfun'))
+%! g = x^2;
+%! warning('off', 'OctSymPy:sym:arithmetic:42735-workaround', 'local')
+%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
+%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
+%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))
+%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.sym, x / g))
+%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.sym, x ^ g))
+%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.sym, x .* g))
+%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.sym, x ./ g))
+%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.sym, x .^ g))
 
 %!test
 %! % different variables

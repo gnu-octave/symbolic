@@ -27,6 +27,15 @@
 
 function z = mtimes(x, y)
 
+  % Dear hacker from the distant future... maybe you can delete this?
+  if (isa(x, 'symfun') || isa(y, 'symfun'))
+    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+            'worked around octave bug #42735')
+    z = mtimes(x, y);
+    return
+  end
+
+
   cmd = [ '(x,y) = _ins\n'  ...
           'return ( x*y ,)' ];
 
