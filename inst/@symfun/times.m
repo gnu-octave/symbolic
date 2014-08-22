@@ -17,26 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} mpower (@var{f}, @var{g})
-%% Symbolic function exponentiation (^).
+%% @deftypefn  {Function File}  {@var{h} =} times (@var{f}, @var{g})
+%% Symbolic function componentwise multiplication (dot*).
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function h = mpower(f, g)
+function h = times(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
-  h = symfun(s1 ^ s2, vars);
+  h = symfun(s1 .* s2, vars);
 end
 
 
 %!test
 %! syms x
-%! f(x) = 2*x;
-%! h = f^f;
+%! f(x) = x^2;
+%! assert( isa(f .* f, 'symfun'))
+%! assert( isa(f .* x, 'symfun'))
+
+%!test
+%! syms x
+%! f(x) = [x 2*x];
+%! h = f.*[x 3];
 %! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, (2*x)^(2*x)))
-%! h = f^sym(2);
-%! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, 4*x^2))
+%! assert( isequal (h.sym, [x^2 6*x]))
+

@@ -17,26 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} mpower (@var{f}, @var{g})
-%% Symbolic function exponentiation (^).
+%% @deftypefn  {Function File}  {@var{h} =} rdivide (@var{f}, @var{g})
+%% Forward slash component division of symbolic functions (dot/).
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function h = mpower(f, g)
+function h = rdivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
-  h = symfun(s1 ^ s2, vars);
+  h = symfun(s1 ./ s2, vars);
 end
 
 
 %!test
 %! syms x
-%! f(x) = 2*x;
-%! h = f^f;
+%! f(x) = x^2;
+%! assert( isa(f./f, 'symfun'))
+%! assert( isa(f./[x x^2], 'symfun'))
+
+%!test
+%! syms x
+%! f(x) = [x 2*x];
+%! h = f./[x 2];
 %! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, (2*x)^(2*x)))
-%! h = f^sym(2);
-%! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, 4*x^2))
+%! assert( isequal (h.sym, [1 x]))
+
