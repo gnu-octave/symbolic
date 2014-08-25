@@ -3,59 +3,59 @@ function s = python_copy_vars_to(in, te, varargin)
 
   if (~te)
     %% no error checking
-    s = sprintf('%s = []\n', in);
-    s = do_list(s, 0, in, varargin);
+    s = [ sprintf('%s = []\n', in) ...
+          do_list(0, in, varargin) ];
   else
     %% put inside try-except
-    s = sprintf('try:\n    %s = []\n', in);
-    s = do_list(s, 4, in, varargin);
-    s = [ ...
-      s ...
-      sprintf([ ...
+    s1 = sprintf('try:\n    %s = []\n', in);
+    L = do_list(4, in, varargin);
+    newl = sprintf('\n');
+    %newl = '\n';
+    s2 = mystrjoin(L, newl);
+    s3 = sprintf([ ...
       '    octoutput_drv("PYTHON: successful variable import")\n' ...
       'except:\n' ...
       '    octoutput_drv("PYTHON: Error in variable import")\n' ...
       '    myerr(sys.exc_info())\n' ...
       '    raise\n' ...
-      '\n\n' ])];
+      '\n\n']);
+    s = [s1 s2 newl s3];
   end
 end
 
 
-function s = do_list(s, indent, in, L)
+function a = do_list(indent, in, varlist)
 
-  sp = char(' ' * ones(indent, 1));
-  for i=1:numel(L)
-    x = L{i};
+  sp = repmat(' ', 1, indent);
+  a = {}; c = 0;
+  for i = 1:numel(varlist)
+    x = varlist{i};
 
-    if (isa(x,'sym')) %&& isscalar(x))   % wrong for mat sympys
-      s = sprintf('%s%s# Load %d: pickle\n', s, sp, i);
+    if (isa(x,'sym'))
+      c=c+1; a{c} = [sp '# sympy expression'];
       % need to be careful here: pickle might have escape codes
-      %s = sprintf('%s%s%s.append(pickle.loads("""%s"""))\n', s, sp, in, x.pickle);
-      % subsref is a workaround: otherwise this calls size/numel,
-      % starts a recursion if size not cached in the sym.
-      idx.type = '.';
-      idx.subs = 'pickle';
-      %s = sprintf('%s%s%s.append(%s)\n', s, sp, in, x.pickle);
-      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, sprintf(subsref(x, idx)));
+      % .append(pickle.loads("""%s"""))', x.pickle)
       % The extra printf around the pickle helps if it still has
       % escape codes (and seems harmless if it does not)
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(x.pickle));
 
     elseif (ischar(x))
-      s = sprintf('%s%s# Load %d: string\n', s, sp, i);
-      s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);
+      c=c+1; a{c} = [sp '# string'];
+      c=c+1; a{c} = [sp in '.append("' x '")'];
+      % or do we want a printf() around the string?
+      %c=c+1; a{c} = sprintf('%s%s.append("%s")', sp, in, x);
 
     elseif (islogical(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: bool\n', s, sp, i);
+      c=c+1; a{c} = [sp '# bool'];
       if (x)
-        s = sprintf('%s%s%s.append(True)\n', s, sp, in);
+        c=c+1; a{c} = [sp in '.append(True)'];
       else
-        s = sprintf('%s%s%s.append(False)\n', s, sp, in);
+        c=c+1; a{c} = [sp in '.append(True)'];
       end
 
     elseif (isinteger(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: int type\n', s, sp, i);
-      s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
+      c=c+1; a{c} = [sp '# int type'];
+      c=c+1; a{c} = sprintf('%s%s.append(%d)', sp, in, x);
 
     elseif (isfloat(x) && isscalar(x))
       % Floating point input.  By default, all Octave numbers are
@@ -71,31 +71,62 @@ function s = do_list(s, indent, in, L)
       if (isa(x,'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end
-      s = sprintf('%s%s# Load %d: double\n', s, sp, i);
-      s = sprintf('%s%s%s.append(hex2d("%s"))\n', s, sp, in, num2hex(x));
+      c=c+1; a{c} = [sp '# double'];
+      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))', sp, in, num2hex(x));
 
     elseif (iscell(x))
-      s = sprintf('%s%s# Load %d: a cell array to list\n', s, sp, i);
+      c=c+1; a{c} = [sp '# cell array to list'];
       inn = [in 'n'];
-      s = sprintf('%s%s%s = []\n', s, sp, inn);
-      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, inn);
-      s = do_list(s, indent, inn, x);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, inn);
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, inn);
+      b = do_list(indent, inn, x);
+      a = {a{:} b{:}};
+      c = length(a);
 
     elseif (isstruct(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: struct to dict\n', s, sp, i);
+      c=c+1; a{c} = [sp '# struct to dict'];
       inkeys = [in 'k'];
       invalues = [in 'v'];
-      s = sprintf('%s%s%s = []\n', s, sp, inkeys);
-      s = do_list(s, indent, inkeys, fieldnames(x));
-      s = sprintf('%s%s%s = []\n', s, sp, invalues);
-      s = do_list(s, indent, invalues, struct2cell(x));
-      s = sprintf('%s%s%s.append(dict(zip(%s,%s)))\n', s, sp, in, inkeys, invalues);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, inkeys);
+      b = do_list(indent, inkeys, fieldnames(x));
+      a = {a{:} b{:}};
+      c = length(a);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, invalues);
+      b = do_list(indent, indent, invalues, struct2cell(x));
+      a = {a{:} b{:}};
+      c = length(a);
+      c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
 
     else
       i, x
       error('don''t know how to move that variable to python');
     end
   end
-  s = sprintf('%s%s# end of a list\n', s, sp);
+  c=c+1; a(c) = [sp '# end of a list'];
 end
+
+
+
+function s = mystrjoin(A, sepchar)
+% replacement for strjoin until Octave 3.6 is old
+
+  % if we have it, use it
+  if exist('strjoin', 'builtin');  % or file FIXME: check 3.8
+    s = strjoin(A, sepchar);
+    return
+  end
+
+  n = numel(A);
+
+  if n == 0
+    s = '';
+  else
+    s = A{1};
+  end
+
+  for i = 2:n
+    s = [s sepchar A{i}];
+  end
+end
+
 
