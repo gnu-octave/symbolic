@@ -147,6 +147,11 @@ function varargout = octsympy_config(cmd, arg)
             disp('Forcing the system() octsympy communication mechanism')
           case 'popen2'
             disp('Forcing the popen2() octsympy communication mechanism')
+          case 'systmpfile'
+            disp('Forcing systmpfile ipc: warning: this is for debugging')
+          case 'sysoneline'
+            disp('Forcing systmpfile ipc: warning: this is for debugging')
+            warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
           warning(['Unknown/unsupported IPC mechanism: hope you know what you''re doing'])
         end
