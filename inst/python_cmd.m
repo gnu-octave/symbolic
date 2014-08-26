@@ -237,7 +237,13 @@ end
 %! x = '!@#$^&* you!';
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x))
-%! x = '`~-_=+[{]}|;:,.?';
+%! x = '~-_=+[{]}|;:,.?';
+%! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+
+%!xtest
+%! % string with backtick trouble for system -c (sysoneline)
+%! x = '`';
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x))
 
