@@ -36,7 +36,7 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
   %% The actual command
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
-  s2 = python_ipc_format_cmd(cmd);
+  s2 = python_format_cmd(cmd);
 
 
   %% output, or perhaps a thrown error

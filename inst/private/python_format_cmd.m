@@ -1,4 +1,4 @@
-function s = python_ipc_format_cmd(cmd, tryexcept)
+function s = python_format_cmd(cmd, tryexcept)
 %private function
 
   % cmd will be a snippet of python code that does something

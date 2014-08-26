@@ -113,7 +113,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% The actual command
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
-  s = python_ipc_format_cmd(cmd);
+  s = python_format_cmd(cmd);
 
 
   %% output, or perhaps a thrown error
