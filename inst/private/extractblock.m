@@ -158,11 +158,12 @@ function r = process_item(item)
       assert(M == 2)
       str1 = str_post_xml_filter(C{2});
       str2 = str_post_xml_filter(C{3});
-      warning('extractblock: read an error back from python')
+      disp('extractblock: read an error back from python')
       str1
       str2
-      disp('Continuing, but unsure if its safe to do so!')
+      %disp('Continuing, but unsure if its safe to do so!')
       r = 'there was a python error';
+      error('error reading back from python')
     otherwise
       C
       error('extractblock: not implemented or something wrong');

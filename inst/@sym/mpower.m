@@ -38,17 +38,29 @@ function z = mpower(x, y)
   end
 
 
-  cmd = 'return _ins[0]**_ins[1],';
-
   if isscalar(x) && isscalar(y)
+    cmd = 'return _ins[0]**_ins[1],';
     z = python_cmd (cmd, sym(x), sym(y));
 
   elseif isscalar(x) && ~isscalar(y)
     error('scalar^array not implemented');
 
   elseif ~isscalar(x) && isscalar(y)
-    % FIXME: sympy can do int and rat, then MatPow, check MST
-    z = python_cmd (cmd, sym(x), sym(y));
+    % FIXME: sympy can do int and rat, could use MatPow otherwise,
+    % rather than error.  SMT just leaves them unevaluted.
+    cmd = [ 'x, y = _ins\n' ...
+            'try:\n' ...
+            '    z = x**y\n' ...
+            '    r = True\n' ...
+            'except NotImplementedError as e:\n' ...
+            '    z = str(e)\n' ...
+            '    r = False\n' ...
+            'return (r, z)' ];
+
+    [r, z] = python_cmd (cmd, sym(x), sym(y));
+    if ~r
+      error('mpower: not implemented; sympy says: %s', z)
+    end
 
   else  % two array's case
     error('array^array not implemented');
@@ -82,19 +94,14 @@ end
 %! Bd = Ad^(1/3);
 %! assert (max(max(abs(double(B) - Bd))) < 1e-14)
 
-%!xtest
-%! % array ^ irrational not implemented (in sympy 0.7.5)
-%! % FIXME: this should raise an error, but instead can fail
-%! % quietly and return A.  Issue #78.
-%! % FIXME: when fixing this, use a proper error test like below.
+%!error <not implemented.*Only integer and rational values are supported>
 %! A = sym([1 2; 0 3]);
-%! try
-%!   B = A^sym(pi);
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert(failed)
+%! B = A^sym(pi);
+
+%!error <not implemented.*Only integer and rational values are supported>
+%! A = sym([1 2; 0 3]);
+%! syms x;
+%! B = A^x;
 
 %!error <not implemented>
 %! % scalar^array not implemented
