@@ -37,7 +37,13 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
 
     pyexec = octsympy_config('python');
     if (isempty(pyexec))
-      pyexec = 'python';
+      if (ispc () && ! isunix ())
+        % Octave popen2 on Windows can't tolerate stderr output
+        % https://savannah.gnu.org/bugs/?43036
+        pyexec = 'mydbpy.bat';
+      else
+        pyexec = 'python';
+      end
     end
     % FIXME: the '-i' is not always wanted, e.g., with mydbpy.bat on windows
     %[fin, fout, pid] = popen2 (pyexec);
