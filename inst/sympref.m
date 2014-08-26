@@ -65,6 +65,13 @@
 %% @item sysoneline, put the python commands all on one line and pass to "python -c" using a call to @code{system()}.  [for debugging, may not be supported long-term].
 %% @end itemize
 %%
+%% Reset: reset the SymPy communication mechanism.  This can be
+%% useful after an error occurs where the connection with Python
+%% becomes confused.
+%% @example
+%% sympref reset
+%% @end example
+%%
 %% Snippets: when displaying a sym object, we show the first
 %% few characters of the SymPy representation.
 %% @example
@@ -76,7 +83,7 @@
 %% sympref version
 %% @end example
 %%
-%% @seealso{sym, syms, octsympy_reset}
+%% @seealso{sym, syms}
 %% @end deftypefn
 
 function varargout = sympref(cmd, arg)
@@ -128,17 +135,17 @@ function varargout = sympref(cmd, arg)
         varargout{1} = settings.whichpython;
       elseif (isempty(arg) || strcmp(arg,'[]'))
         settings.whichpython = '';
-        octsympy_reset()
+        sympref('reset')
       else
         settings.whichpython = arg;
-        octsympy_reset()
+        sympref('reset')
       end
 
     case 'ipc'
       if (nargin == 1)
         varargout{1} = settings.ipc;
       else
-        octsympy_reset()
+        sympref('reset')
         settings.ipc = arg;
         switch arg
           case 'default'
@@ -155,6 +162,18 @@ function varargout = sympref(cmd, arg)
           otherwise
           warning(['Unknown/unsupported IPC mechanism: hope you know what you''re doing'])
         end
+      end
+
+    case 'reset'
+      disp('Resetting the octsympy communication mechanism');
+      r = python_ipc_driver('reset', []);
+
+      if (nargout == 0)
+        if (~r)
+          disp('Problem resetting');
+        end
+      else
+        varargout{1} = r;
       end
 
     otherwise
@@ -188,3 +207,13 @@ end
 %!test
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
+
+%!test
+%! fprintf('\n');
+%! syms x
+%! r = sympref('reset')
+%! pause(1);
+%! syms x
+%! pause(2);
+%! fprintf('\n');
+%! assert(r)
