@@ -1,7 +1,11 @@
 %% Test python -c with newlines in the command
 
-%pyexec = 'python'
-pyexec = 'n:\win32\octsympy.git\testing\py.exe'
+if (ispc () && ! isunix ())
+  pyexec = 'py.exe';
+  %pyexec = 'n:\win32\octsympy.git\testing\py.exe'
+else
+  pyexec = 'python';
+end
 
 %% Baseline
 % works on GNU/Linux and Windows
@@ -34,9 +38,11 @@ s4 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"p\\\")\")'
 # with single quote: escaped just for entry into octave
 s5 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"p\\\''qr\\\")\np(''jk'')\")'
 
-# with single quote: escaped just for entry into octave
-s6 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"h\\\nhelo\\\nbye\\\")\np(42)\")'
+# newlines inside inside string
+s6 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"hello\\\nbye\\\")\np(42)\")'
 
+# newlines, single quotes and double quotes inside string:
+s7 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"hello\\\n''nihao''\\\n\\\\\\\"bye\\\\\\\"\\\")\np(42)\")'
 
 [st4,out4] = system([pyexec ' -c "' s4 '"'])
 
@@ -44,8 +50,12 @@ s6 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"h\\\nhelo\\\nbye\\\")\np(42)\
 
 [st6,out6] = system([pyexec ' -c "' s6 '"'])
 
+[st7,out7] = system([pyexec ' -c "' s7 '"'])
 
-# single quote in -c
+disp('----------------------------------------')
+%% test, can we use single quotes instead to avoid so much escaping?
+
+# single quote in -c, fails on Windows
 sa1 = 'exec("def p(x):\n    print(x)\np(42)\np(\"a\\n\\\"b\\\"\\n\\\"c\")")'
 
 [sta1,outa1] = system([pyexec ' -c ''' sa1 ''''])
