@@ -1,7 +1,7 @@
 function [A, db] = python_ipc_driver(what, cmd, varargin)
 %PYTHON_IPC_DRIVER  Run Python/SymPy command and return strings
 
-  which_ipc = octsympy_config('ipc');
+  which_ipc = sympref('ipc');
 
   %% version check
   if exist('octave_config_info', 'builtin');

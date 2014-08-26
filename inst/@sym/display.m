@@ -28,13 +28,13 @@
 function display(x)
 
   %% Settings
-  wh = octsympy_config('display');
+  wh = sympref('display');
   if (strcmp(wh, 'unicode'))
     unicode_dec = true;
   else
     unicode_dec = false;
   end
-  display_snippet = octsympy_config('snippet');
+  display_snippet = sympref('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
   % FIXME
   term_width = 69;  % hardcoded for my tablet
@@ -102,7 +102,7 @@ end
 function snippet_of_sympy(x, padw, width, unicode)
 
   newl = sprintf('\n');
-  if ( ~ octsympy_config('snippet'))
+  if ( ~ sympref('snippet'))
     disp(newl)
     %fprintf('\n');
     return

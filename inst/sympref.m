@@ -17,14 +17,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{r} =} octsympy_config ()
+%% @deftypefn {Function File} {@var{r} =} sympref ()
 %% Configure the octsympy system.
 %%
 %% Python executable path/command:
 %% @example
-%% octsympy_config python '/usr/bin/python'
-%% octsympy_config python 'C:\Python\python.exe'
-%% octsympy_config python 'N:\myprogs\py.exe'
+%% sympref python '/usr/bin/python'
+%% sympref python 'C:\Python\python.exe'
+%% sympref python 'N:\myprogs\py.exe'
 %% @end example
 %% Default is an empty string; in which case octsympy just runs
 %% @code{python} and assumes the path is set appropriately.
@@ -32,9 +32,9 @@
 %%
 %% Display of syms:
 %% @example
-%% octsympy_config display flat
-%% octsympy_config display ascii
-%% octsympy_config display unicode
+%% sympref display flat
+%% sympref display ascii
+%% sympref display unicode
 %% @end example
 %% By default OctSymPy uses a unicode pretty printer to display
 %% symbolic expressions.  If that doesn't work (e.g., if you
@@ -42,11 +42,11 @@
 %%
 %% Communication mechanism:
 %% @example
-%% octsympy_config ipc default    % default, autodetected
-%% octsympy_config ipc system     % slower
-%% octsympy_config ipc systmpfile % debugging!
-%% octsympy_config ipc sysoneline % debugging!
-%% w = octsympy_config('ipc')     % query the ipc mechanism
+%% sympref ipc default    % default, autodetected
+%% sympref ipc system     % slower
+%% sympref ipc systmpfile % debugging!
+%% sympref ipc sysoneline % debugging!
+%% w = sympref('ipc')     % query the ipc mechanism
 %% @end example
 %% The default will typically be the @code{popen2} mechanism which
 %% uses a pipe to communicate with Python and should be fairly fast.
@@ -54,7 +54,7 @@
 %% @code{'system()'} command.  These are slower as a new Python
 %% process is started for each operation (and many commands use more
 %% than one operation).
-%% Other options for @code{octsympy_config ipc} include:
+%% Other options for @code{sympref ipc} include:
 %% @itemize
 %% @item popen2, force popen2 choice (e.g., on Matlab were it would
 %% not be the default).
@@ -68,24 +68,24 @@
 %% Snippets: when displaying a sym object, we show the first
 %% few characters of the SymPy representation.
 %% @example
-%% octsympy_config snippet 1|0   % or true/false, on/off
+%% sympref snippet 1|0   % or true/false, on/off
 %% @end example
 %%
 %% Report the version number:
 %% @example
-%% octsympy_config version
+%% sympref version
 %% @end example
 %%
 %% @seealso{sym, syms, octsympy_reset}
 %% @end deftypefn
 
-function varargout = octsympy_config(cmd, arg)
+function varargout = sympref(cmd, arg)
 
   persistent settings
 
   if (isempty(settings))
     settings = 42;
-    octsympy_config('defaults')
+    sympref('defaults')
   end
 
   if (nargin == 0)
@@ -186,5 +186,5 @@ end
 
 
 %!test
-%! octsympy_config('defaults')
-%! assert(strcmp(octsympy_config('ipc'), 'default'))
+%! sympref('defaults')
+%! assert(strcmp(sympref('ipc'), 'default'))

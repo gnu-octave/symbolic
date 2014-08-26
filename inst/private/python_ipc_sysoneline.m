@@ -14,7 +14,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     error('unsupported command')
   end
 
-  vstr = octsympy_config('version');
+  vstr = sympref('version');
 
   if (isempty(show_msg))
     disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
@@ -60,14 +60,14 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   s = strrep(s, newl, '\n');
   s3 = ['exec(\"' s '\");'];
 
-  pyexec = octsympy_config('python');
+  pyexec = sympref('python');
   if (isempty(pyexec))
     pyexec = 'python';
   end
 
   %% FIXME: Issue #63: with new regexp code on Matlab
   % workaround:
-  % octsympy_config python 'LD_LIBRARY_PATH="" python'
+  % sympref python 'LD_LIBRARY_PATH="" python'
   % to prevent a conflict with the expat shipped with Matlab 2014a
   % See here with oracle
   % https://bugzilla.redhat.com/show_bug.cgi?id=821337

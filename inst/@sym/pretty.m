@@ -22,7 +22,7 @@
 %% Return/display ASCII-art/unicode representation of expression.
 %%
 %% This is usually the same as @code{disp(x)}, unless you have
-%% @code{octsympy_config display flat}, in which case
+%% @code{sympref display flat}, in which case
 %% @code{pretty(x)} displays ASCII-art.  You can force unicode
 %% with @code{pretty(x, 'unicode')}.
 %%
@@ -42,7 +42,7 @@ function varargout = pretty(x, wh)
 
   if (nargin == 1)
     % read config to see how to display x
-    wh = octsympy_config('display');
+    wh = sympref('display');
   end
 
   % if config says flat, pretty does ascii

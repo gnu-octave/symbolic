@@ -29,13 +29,13 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     error('unsupported command')
   end
 
-  vstr = octsympy_config('version');
+  vstr = sympref('version');
 
   if isempty(pid)
     disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
     disp('Initializing communication with SymPy using a popen2() pipe.')
 
-    pyexec = octsympy_config('python');
+    pyexec = sympref('python');
     if (isempty(pyexec))
       if (ispc () && ! isunix ())
         % Octave popen2 on Windows can't tolerate stderr output

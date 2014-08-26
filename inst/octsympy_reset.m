@@ -22,7 +22,7 @@
 %%
 %% Returns true if called with an output and reset was successful.
 %%
-%% @seealso{syms, octsympy_config}
+%% @seealso{syms, sympref}
 %% @end deftypefn
 
 function varargout = octsympy_reset()

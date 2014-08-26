@@ -32,7 +32,7 @@ function varargout = disp(x, wh)
 
   if (nargin == 1)
     %% read config to see how to display x
-    wh = octsympy_config('display');
+    wh = sympref('display');
   end
 
   switch lower(wh)
