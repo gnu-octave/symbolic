@@ -40,13 +40,13 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       if (ispc () && ! isunix ())
         % Octave popen2 on Windows can't tolerate stderr output
         % https://savannah.gnu.org/bugs/?43036
+        disp(['Detected a Windows system: using "mydbpy.bat", workaround Octave bug'])
         pyexec = 'mydbpy.bat';
       else
         pyexec = 'python';
       end
     end
-    % FIXME: the '-i' is not always wanted, e.g., with mydbpy.bat on windows
-    %[fin, fout, pid] = popen2 (pyexec);
+    % perhaps the the '-i' is not always wanted?
     [fin, fout, pid] = popen2 (pyexec, '-i');
 
     disp('Python started: some output may appear before your prompt returns.')
