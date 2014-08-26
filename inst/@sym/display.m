@@ -36,11 +36,16 @@ function display(x)
   end
   display_snippet = sympref('snippet');
   loose = strcmp(get(0,'FormatSpacing'), 'loose');
-  % FIXME
-  term_width = 69;  % hardcoded for my tablet
-  %get(0,'CommandWindowSize'): works in matlab gui & term
-  %terminal_size: octave, above just gives [0 0]
 
+  %% Get terminal width, mainly for snippets
+  % works in matlab gui & -nodesktop but not the most up-to-date
+  % approach
+  [term_width] = get(0, 'CommandWindowSize');
+  if (isequal(term_width, [0 0]))
+    % octave gives [0 0], at least as of August
+    [term_width] = terminal_size();
+  end
+  term_width = term_width(2);
 
   if (unicode_dec)
     timesstr = '×';
