@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{r} =} sympref ()
-%% Configure the octsympy system.
+%% Preferences for the OctSymPy symbolic computing package.
 %%
 %% Python executable path/command:
 %% @example
@@ -26,9 +26,8 @@
 %% sympref python 'C:\Python\python.exe'
 %% sympref python 'N:\myprogs\py.exe'
 %% @end example
-%% Default is an empty string; in which case octsympy just runs
+%% Default is an empty string; in which case OctSymPy just runs
 %% @code{python} and assumes the path is set appropriately.
-%% FIXME: need to make sure default works on Windows too.
 %%
 %% Display of syms:
 %% @example
@@ -61,8 +60,12 @@
 %% @item system, construct a large multi-line string of the command
 %% and pass directly to the python interpreter with the
 %% @code{system()} command.  Warning: currently broken on Windows.
-%% @item systmpfile, output the python commands to a @code{temp_sym_python_cmd.py} file and then call that [for debugging, may not be supported long-term].
-%% @item sysoneline, put the python commands all on one line and pass to "python -c" using a call to @code{system()}.  [for debugging, may not be supported long-term].
+%% @item systmpfile, output the python commands to a
+%% @code{temp_sym_python_cmd.py} file and then call that [for
+%% debugging, may not be supported long-term].
+%% @item sysoneline, put the python commands all on one line and
+%% pass to "python -c" using a call to @code{system()}.  [for
+%% debugging, may not be supported long-term].
 %% @end itemize
 %%
 %% Reset: reset the SymPy communication mechanism.  This can be
