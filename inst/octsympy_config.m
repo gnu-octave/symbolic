@@ -20,14 +20,6 @@
 %% @deftypefn {Function File} {@var{r} =} octsympy_config ()
 %% Configure the octsympy system.
 %%
-%% Communication mechanism:
-%% @example
-%% octsympy_config ipc default   % default, autodetected
-%% octsympy_config ipc system    % slow, but maybe more robust?
-%% octsympy_config ipc popen2    % force the popen2() ipc
-%% w = octsympy_config('ipc')    % query the ipc mechanism
-%% @end example
-%%
 %% Python executable path/command:
 %% @example
 %% octsympy_config python '/usr/bin/python'
@@ -47,6 +39,31 @@
 %% By default OctSymPy uses a unicode pretty printer to display
 %% symbolic expressions.  If that doesn't work (e.g., if you
 %% see @code{?} characters) then try the @code{ascii} option.
+%%
+%% Communication mechanism:
+%% @example
+%% octsympy_config ipc default    % default, autodetected
+%% octsympy_config ipc system     % slower
+%% octsympy_config ipc systmpfile % debugging!
+%% octsympy_config ipc sysoneline % debugging!
+%% w = octsympy_config('ipc')     % query the ipc mechanism
+%% @end example
+%% The default will typically be the @code{popen2} mechanism which
+%% uses a pipe to communicate with Python and should be fairly fast.
+%% There are other options which are mostly based on calls using the
+%% @code{'system()'} command.  These are slower as a new Python
+%% process is started for each operation (and many commands use more
+%% than one operation).
+%% Other options for @code{octsympy_config ipc} include:
+%% @itemize
+%% @item popen2, force popen2 choice (e.g., on Matlab were it would
+%% not be the default).
+%% @item system, construct a large multi-line string of the command
+%% and pass directly to the python interpreter with the
+%% @code{system()} command.  Warning: currently broken on Windows.
+%% @item systmpfile, output the python commands to a @code{temp_sym_python_cmd.py} file and then call that [for debugging, may not be supported long-term].
+%% @item sysoneline, put the python commands all on one line and pass to "python -c" using a call to @code{system()}.  [for debugging, may not be supported long-term].
+%% @end itemize
 %%
 %% Snippets: when displaying a sym object, we show the first
 %% few characters of the SymPy representation.
