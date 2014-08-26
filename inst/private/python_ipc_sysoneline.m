@@ -27,8 +27,13 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   newl = sprintf('\n');
 
   %% Headers
-  s = python_header_embed2();
-  headers = ['exec(\"' s '\"); '];
+  % embedding the headers in the -c command is too long for
+  % Windows.  We have a 8000 char budget, and the header uses all
+  % of it.  This looks fragile w.r.t. pwd...  investigate.
+  headers = ['execfile(\"private/python_header.py\");'];
+  %s = python_header_embed2();
+  %headers = ['exec(\"' s '\"); '];
+
 
   %% load all the inputs into python as pickles
   s = python_copy_vars_to('_ins', true, varargin{:});
