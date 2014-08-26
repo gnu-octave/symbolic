@@ -96,13 +96,16 @@
 
 function varargout = python_cmd(cmd, varargin)
 
+  newl = sprintf('\n');
 
   %% A bit of preprocessing
   % The user might or might not have escaped newlines in the command.
   % We want to reliably indent this code to put it in a Python function.
-  newl = sprintf('\n');
+
+  % FIXME: trouble: this expands \n to newlines within string consts
+  % as well as the line endings.  Also, we add spaces: yuck!
   cmd = strrep(cmd, '\n', newl);
-  cmd = strtrim(cmd);  % I think this is not important
+  cmd = strtrim(cmd);  % don't want trailing newlines
   cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
 
   %% IPC interface
@@ -166,6 +169,12 @@ end
 %! x2 = sprintf('a string\nbroke off\nmy guitar\n');
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x2))
+
+%%!xtest
+%%! % bug: cmd string with newlines
+%%! y = python_cmd ('return "string\nbroke",')
+%%! y2 = 'string\nbroke'
+%%! assert (strcmp(y, y2))
 
 %%!test
 %%! % FIXME: newlines: should be escaped for import?
