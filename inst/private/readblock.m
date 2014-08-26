@@ -16,7 +16,7 @@ function [A, err] = readblock(fout, timeout)
   started = false;
   nwaits = 0;
   dispw = false;
-  waited = 0;
+  start = time();
 
   fclear (fout);  % otherwise, fails on next call
 
@@ -42,8 +42,7 @@ function [A, err] = readblock(fout, timeout)
 
     elseif (errno() == EAGAIN || errno() == EINVAL)
       waitdelta = exp(nwaits/10)/1e4;
-      waited = waited + waitdelta;
-      if waited <= wait_disp_thres
+      if (time() - start <= wait_disp_thres)
         %fprintf(stdout, 'W'); % debugging, in general do nothing
       elseif (~dispw)
         fprintf(stdout, 'Waiting...')
@@ -59,11 +58,10 @@ function [A, err] = readblock(fout, timeout)
       nwaits = nwaits + 1;
     elseif (errno() == 0)
       waitdelta = exp(nwaits/10)/1e4;
-      waited = waited + waitdelta;
-      if waited <= wait_disp_thres
+      if (time() - start <= wait_disp_thres)
         %fprintf(stdout, 'W'); % debugging, in general do nothing
       elseif (~dispw)
-        fprintf(stdout, 'Waiting***')
+        fprintf(stdout, '[usually something wrong if you see stars] Waiting***')
         dispw = true;
       else
         fprintf(stdout, '*')
@@ -75,14 +73,13 @@ function [A, err] = readblock(fout, timeout)
       sleep (waitdelta);
       nwaits = nwaits + 1;
     else
-      % FIXME: need to separate the treatment from other unexpected errno?
       warning ('OctSymPy:readblock:invaliderrno', ...
         sprintf('readblock: s=%d, errno=%d, perhaps error in the command?', s, errno()))
       sleep(0.1)  % FIXME; replace with waitdelta etc
     end
     %disp('paused'); pause
 
-    if (waited > timeout)
+    if (time() - start > timeout)
       warning('OctSymPy:readblock:timeout', ...
         sprintf('readblock: timeout of %g exceeded, breaking out', timeout));
       if (started)
