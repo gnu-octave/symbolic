@@ -32,6 +32,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       %% for debugging, not intended for long-term usage
       [A, db] = python_ipc_system(what, cmd, true, varargin{:});
 
+    case 'sysoneline'
+      %% for debugging, not intended for long-term usage
+      [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
+
     case 'popen2'
       if (~exist('popen2', 'builtin'))
         warning('You forced popen2 ipc but you don''t have one, trouble ahead');

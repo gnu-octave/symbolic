@@ -42,7 +42,7 @@ try:
         # used to pass doubles back-and-forth
         return binascii.hexlify(struct.pack(">d", x))
     def hex2d(s):
-        bins = ''.join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+        bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
         return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
@@ -63,13 +63,13 @@ try:
             # Not strictly necessary but here are some common cases so we
             # can abbreviate them.  Even better would be some
             # "minimal_assumptions" code, but I did not see such a thing.
-            asm_default = {'commutative':True}
-            asm_real = {'commutative':True, 'complex':True, 'hermitian':True,
-                        'imaginary':False, 'real':True}
-            asm_pos = {'commutative':True, 'complex':True, 'hermitian':True,
-                       'imaginary':False, 'negative':False, 'nonnegative':True,
-                       'nonpositive':False, 'nonzero':True, 'positive':True,
-                       'real':True, 'zero':False}
+            asm_default = {"commutative":True}
+            asm_real = {"commutative":True, "complex":True, "hermitian":True,
+                        "imaginary":False, "real":True}
+            asm_pos = {"commutative":True, "complex":True, "hermitian":True,
+                       "imaginary":False, "negative":False, "nonnegative":True,
+                       "nonpositive":False, "nonzero":True, "positive":True,
+                       "real":True, "zero":False}
             if asm == asm_default:
                 xtra = ""
             elif asm == asm_real:
@@ -129,10 +129,10 @@ try:
         OCTCODE_SYM = 1020
         x = objectfilter(x)
         if isinstance(x, bool):
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_BOOL)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = str(x)
         elif isinstance(x, (sp.Basic, sp.Matrix)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
@@ -146,63 +146,63 @@ try:
                 _d = (1,1)
             pretty_ascii = sp.pretty(x, use_unicode=False)
             pretty_unicode = sp.pretty(x, use_unicode=True)
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_SYM)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = my_srepr(x)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = str(_d[0])
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = str(_d[1])
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = str(x)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = pretty_ascii
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = pretty_unicode
         elif isinstance(x, (list, tuple)):
-            c = ET.SubElement(et, 'list')
+            c = ET.SubElement(et, "list")
             for y in x:
                 octoutput(y, c)
         elif isinstance(x, int):
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = str(x)
         elif isinstance(x, float):
             # We pass IEEE doubles using the exact hex representation
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_DOUBLE)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = d2hex(x)
         elif isinstance(x, str):
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             f.text = x
         elif isinstance(x, unicode):
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_USTR)
-            f = ET.SubElement(a, 'f')
+            f = ET.SubElement(a, "f")
             # newlines are ok with new regexp parser
             #f.text = x.replace("\n","\\n")
             f.text = x
         elif isinstance(x, dict):
             # Note: the dict cannot be too complex, keys must convert to
             # strings for example.  Values can be dicts, lists.
-            a = ET.SubElement(et, 'item')
-            f = ET.SubElement(a, 'f')
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_DICT)
             # Convert keys to strings
             keystr = [str(y) for y in x.keys()]
-            c = ET.SubElement(a, 'list')
+            c = ET.SubElement(a, "list")
             octoutput(keystr, c)
-            c = ET.SubElement(a, 'list')
+            c = ET.SubElement(a, "list")
             octoutput(x.values(), c)
         else:
             dbout("error exporting variable:")
