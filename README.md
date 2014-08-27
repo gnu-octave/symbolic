@@ -18,7 +18,7 @@ Feature parity with the other symbolic toolboxes.
 Status
 ------
 
-"Alpha" quality at best!  Contributions welcome.
+"Beta" quality at best!  Contributions welcome.
 
 
 
@@ -26,17 +26,34 @@ How to Install
 --------------
 
 1. The only dependencies are Python and SymPy.  Consult the SymPy
-website (e.g., "yum install sympy" on Fedora)
+   website (e.g., `yum install sympy` on Fedora).
 
-2. Download the latest release, e.g., octsympy-0.0.4.tar.gz
+2. Download the latest release, e.g., `octsympy-0.0.5.tar.gz`.
 
-3. Run Octave in the folder containing the octsympy-0.0.4.tar.gz file.
+3. Run Octave and change to the folder containing the downloaded file.
 
-4. At Octave prompt, type "pkg install octsympy-0.0.4.tar.gz".
+4. At Octave prompt, type `pkg install octsympy-0.0.5.tar.gz`.
 
-5. At Octave prompt, type "pkg load octsympy".
+5. At Octave prompt, type `pkg load octsympy`.
 
-6. At Octave prompt, type "syms x", then "f = (sin(x/2))^3", "diff(f,x)", etc.
+6. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
+   `diff(f,x)`, etc.
+
+
+
+How to Install on Windows
+-------------------------
+
+1.  Get [Octave](http://www.octave.org) for Windows.
+
+2.  Try the octsympy-windows-0.0.5.zip package.  Follow the last three
+    steps above using this file instead.
+
+The `octsympy-windows` package should have no dependencies other than
+Octave itself (it includes SymPy and a Python interpreter.)
+
+Alternatively, you can install Python and SymPy yourself and use the
+standard `octsympy-0.0.5.zip` package.
 
 
 
@@ -47,13 +64,12 @@ Although OctSymPy is designed for GNU Octave, it will work with
 Matlab.  Currently only the slower system()-based communication is
 available.
 
-1.  Download the latest release.
+1.  Download the latest release, e.g., `octsympy-matlab-0.0.5.tar.gz`.
 
 2.  Unzip is somewhere and add it to your Matlab Path.
 
 The .m files for Matlab have been reformatted for Matlab comment
 conventions, but are otherwise the same as the Octave source.
-
 
 
 How to Hack
@@ -62,8 +78,8 @@ How to Hack
 1.  Clone the repo.
 
 2.  Go to octsympy/src/ and type "make".  (You only need to do this
-again if you change the inst/private/python_header.py or various
-autogeneration scripts in src/.)
+    again if you change the inst/private/python_header.py or various
+    autogeneration scripts in src/.)
 
 3.  Run Octave or Matlab in octsympy/inst/.
 
@@ -73,10 +89,10 @@ Implementation
 --------------
 
 Generate Python code to do the actual work.  Sym objects keep a text
-field for display purposes and a string (currently an SymPy ``srepr'')
-of their python object.  The objects are communicated between Python
-and Octave by passing the srepr's back-and-forth.  Currently pure
-m-file (and Python) implementation, no code to be compiled.
+field for display purposes and a string (currently a customized SymPy
+`srepr`) of their python object.  The objects are communicated between
+Python and Octave by passing the srepr's back-and-forth.  Currently
+pure m-file (and Python) implementation, no code to be compiled.
 
 
 
