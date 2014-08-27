@@ -32,7 +32,7 @@ function a = do_list(indent, in, varlist)
     x = varlist{i};
 
     if (isa(x,'sym'))
-      c=c+1; a{c} = [sp '# sympy expression'];
+      c=c+1; a{c} = [sp '# sym'];
       % need to be careful here: pickle might have escape codes
       % .append(pickle.loads("""%s"""))', x.pickle)
       % The extra printf around the pickle helps if it still has
@@ -68,7 +68,7 @@ function a = do_list(indent, in, varlist)
       %if (mod(x,1) == 0)  % pass integers
       %  s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
 
-      if (isa(x,'single'))
+      if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end
       c=c+1; a{c} = [sp '# double'];

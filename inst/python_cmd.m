@@ -98,6 +98,11 @@ function varargout = python_cmd(cmd, varargin)
 
   newl = sprintf('\n');
 
+  if (iscell(cmd))
+    % this way, also could escape ", others?
+    % newlines and indented except first line
+    cmd = mystrjoin(cmd, [newl '    ']);
+  else
   %% A bit of preprocessing
   % The user might or might not have escaped newlines in the command.
   % We want to reliably indent this code to put it in a Python function.
@@ -107,6 +112,7 @@ function varargout = python_cmd(cmd, varargin)
   cmd = strrep(cmd, '\n', newl);
   cmd = strtrim(cmd);  % don't want trailing newlines
   cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
+  end
 
   %% IPC interface
   % the ipc mechanism shall put the input variables in the tuple
