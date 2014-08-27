@@ -46,10 +46,10 @@ How to Install on Windows
 
 1.  Get [Octave](http://www.octave.org) for Windows.
 
-2.  Try the octsympy-windows-0.0.5.zip package.  Follow the last three
+2.  Try the octsympy-win-0.0.5.zip package.  Follow the last three
     steps above using this file instead.
 
-The `octsympy-windows` package should have no dependencies other than
+The `octsympy-win` package should have no dependencies other than
 Octave itself (it includes SymPy and a Python interpreter.)
 
 Alternatively, you can install Python and SymPy yourself and use the
