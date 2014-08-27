@@ -1,0 +1,92 @@
+octsympy 0.0.5 (yyyy-mm-dd)
+===========================
+
+Major Changes
+-------------
+
+ *  `sympref` replaces `octsympy_config`.  You can change the Python
+    interpreter with `sympref python /path/to/python`.
+
+ *  Unicode pretty-printed output by default.
+
+     -  If you see `?` or other broken characters, try `sympref display
+        ascii`.  Then help me get this working on your system!
+
+     -  Or `sympref display flat` to disable pretty-printing.  (You can
+        still use the `pretty` command selectively).
+
+ *  Experimental Windows package with Python and SymPy included (look
+    Ma, no deps!)  Uses [David Manthey's single file py.exe Python] [1].
+
+   [1]: http://www.orbitals.com/programs/pyexe.html
+
+ *  Lots of new commands:
+
+          atan2           fliplr         isfinite          norm
+          ccode           flipud         isna              not
+          cond            fortran        jacobian          qr
+          conj            ge             laplacian         real
+          curl            gradient       le                repmat
+          det             gt             lt                svd
+          divergence      hessian        lu                toeplitz
+          ezplot3         imag           matlabFunction    tril
+          ezplot          inv            ne                triu
+
+ *  Preliminary code generation (`ccode`, `fortran` and
+    `matlabFunction` functions).  However, `matlabFunction` mostly
+    depends on patches not yet in upstream SymPy.
+
+ *  Inequality support.
+
+ *  Assumptions now behave more like the Matlab Symbolic Math Toolbox.
+
+
+Minor or internal changes
+-------------------------
+
+ *  Arithmetic operations on symfuns return symfuns instead of syms.
+
+ *  More robust XML-like IPC transport.
+
+ *  Move to proper Octave-style `%!` tests.
+
+ *  Debugging IPC modes: `systmpfile` (same as `system` but outputs a
+    temp file for inspection) and `sysoneline` (work-in-progress).
+
+
+
+octsympy 0.0.4 (2014-05-26)  Lovever Coffee
+===========================================
+
+ *  Basic assumptions support.
+
+ *  Matlab packages, only slow system() ipc for now.
+
+ *  Improvements on passing variables between Octave and Python.
+
+
+
+octsympy 0.0.3 (2014-04-29)  Wu Ke Song
+=======================================
+
+ *  Many new commands.
+
+ *  `system()` communication no longer makes temporary files.  To
+    change the communication mechanism, use "octsympy_config ipc
+    system". See also "help octsympy_config".
+
+ *  Added new tool "evalpy", this is fun and good for debugging...
+
+ *  Bugs fixed, docs updated
+
+ *  Start documenting differences with the Matlab Symbolic Math
+    Toolbox.
+
+
+
+octsympy 0.0.2 (2014-04-20)
+===========================
+
+ *  A preview release, test it out report issues.  Documentation is a
+    mess, various things are work-in-progress.  But it works and I
+    think has potential.
