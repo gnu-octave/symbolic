@@ -114,7 +114,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.0.4-git';
+      varargout{1} = '0.0.5';
 
     case 'display'
       if (nargin == 1)

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VER=0.0.3
+VER=0.0.5
 TAG=v${VER}
 PKG=octsympy-$VER
 DIR=$PKG
