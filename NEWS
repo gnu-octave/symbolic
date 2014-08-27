@@ -1,3 +1,14 @@
+octsympy 0.1.1 (yyyy-mm-dd)
+===========================
+
+ *  New commands:
+
+          isscalar
+
+ *  Bug fixes, #88, #90.
+
+
+
 octsympy 0.1.0 (2014-08-27)  Pacific Coffee
 ===========================================
 
