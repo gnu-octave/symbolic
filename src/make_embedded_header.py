@@ -12,7 +12,6 @@ if __name__ == "__main__":
 
     finname = '../inst/private/%s.py' % base
     foutname = '../inst/private/%s_embed.m' % base
-    foutname = '../inst/private/%s_embed2.m' % base
 
     fd = open(finname, "r")
     l = fd.readlines()
