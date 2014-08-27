@@ -8,14 +8,14 @@ PYEXEREADME=py278.readme.txt   # from the src package
 SYMPY=sympy-0.7.5
 
 # octsympy version
-VER=0.0.5
+VER=0.1.0
 
 ###################################
 TAG=v${VER}
 PKG=octsympy-$VER
 DIR=$PKG
 
-WINPKG=octsympy-win-$VER
+WINPKG=octsympy-windows-$VER
 WINDIR=$WINPKG
 WINDIRTMP=${WINDIR}-TMP
 
