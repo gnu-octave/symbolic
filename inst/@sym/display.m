@@ -59,7 +59,7 @@ function display(x)
     n = fprintf ('%s = (%s)', inputname (1), class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
-    toobig = hasnewlines || length(s) + n + 18 > term_width;
+    toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
     if (~toobig)
       fprintf(' %s', s)
       n = n + 1 + length(s);
