@@ -37,9 +37,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   %% load all the inputs into python as pickles
   s = python_copy_vars_to('_ins', true, varargin{:});
-  s = strrep(s, '"', '\\\"');
-  s = strrep(s, '\n', '\\\n');
-  s = strrep(s, newl, '\n');
+  s = myesc(s);
   s1 = ['exec(\"' s '\"); '];
 
 
@@ -47,17 +45,13 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
   s = python_format_cmd(cmd);
-  s = strrep(s, '"', '\\\"');
-  s = strrep(s, '\n', '\\\n');
-  s = strrep(s, newl, '\n');
+  s = myesc(s);
   s2 = ['exec(\"' s '\"); '];
 
 
   %% output, or perhaps a thrown error
   s = python_copy_vars_from('_outs');
-  s = strrep(s, '"', '\\\"');
-  s = strrep(s, '\n', '\\\n');
-  s = strrep(s, newl, '\n');
+  s = myesc(s);
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
@@ -109,3 +103,24 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     error('failed to import variables to python?')
   end
   A = extractblock(out(ind(2):end));
+end
+
+
+function s = myesc(s)
+  % order is important hete
+
+  newl = sprintf('\n');
+
+  % escape quotes twice
+  s = strrep(s, '\', '\\\\');
+
+  % dbl-quote is rather special here
+  % /" -> ///////" -> ///" -> /" -> "
+  s = strrep(s, '"', '\\\"');
+
+  %s = strrep(s, '\n', '\\\n');
+
+  % FIXME: test: undo_escape, not easy to dbl esc the strings...
+  % newl -> \n
+  s = strrep(s, newl, '\n');
+end
