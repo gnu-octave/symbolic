@@ -110,13 +110,11 @@ end
 
 function snippet_of_sympy(x, padw, width, unicode)
 
-  newl = sprintf('\n');
   if ( ~ sympref('snippet'))
-    disp(newl)
-    %fprintf('\n');
+    fprintf('\n');
     return
   end
-  
+
   if (unicode)
     ell = '…';
     lquot = '“'; rquot = '”';
