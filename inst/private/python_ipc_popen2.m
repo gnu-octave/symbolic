@@ -40,7 +40,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       if (ispc () && ! isunix ())
         % Octave popen2 on Windows can't tolerate stderr output
         % https://savannah.gnu.org/bugs/?43036
-        disp(['Detected a Windows system: using "mydbpy.bat", workaround Octave bug'])
+        disp(['Detected a Windows system: using "mydbpy.bat" to workaround Octave bug'])
         pyexec = 'mydbpy.bat';
       else
         pyexec = 'python';
