@@ -31,6 +31,7 @@ ml_copy: ml_convert
 	cp -ra ../inst/@sym/private ../matlab/@sym/
 	cp -ra ../inst/@symfun/private ../matlab/@symfun/
 	cp -af ../CONTRIBUTORS ../matlab/
+	cp -af ../NEWS ../matlab/
 	cp -af ../COPYING ../matlab/
 	cp -af ../matlab_smt_differences.md ../matlab/
 	cp -af ../README.md ../matlab/
