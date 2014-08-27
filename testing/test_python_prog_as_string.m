@@ -42,8 +42,23 @@ s5 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"p\\\''qr\\\")\np(''jk'')\")'
 s6 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"hello\\\nbye\\\")\np(42)\")'
 
 # newlines, single quotes and double quotes inside string:
-s7 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"hello\\\n''nihao''\\\n\\\\\\\"bye\\\\\\\"\\\")\np(42)\")'
+#s7 = 'exec(\"def p(x):\n    print(x)\np(42)\np(\\\"hello\\\n''nihao''\\\n\\\\\\\"bye\\\\\\\"\\\")\np(42)\")'
+s7 = ['exec(\"' ...
+'def p(x):\n    print(x)\n' ...
+'p(42)\np(\\\"hello\\\\n''ni\\\\\\\\\\\\\\\\tao''\\\n\\\\\\\"bye\\\\\\\"\\\")\n' ...
+'p(42)\np(''hello\\\\n\\\\''nihao\\\''\\\n\\\\\\\"bye\\\\\\\"'')\n' ...
+'p(42)\")']
+% a python str w/ newl, dblquote, tab, \. and \t
+%p("ab\nab\"ab\tab\\ab\\tab")
 
+%\n -> \\\\n [\\n \n newl]
+%\" -> \\\\\\\" 7 not 8  [\\\" \" "]
+%\" -> \\\\" then replace " with \\\"
+%\" -> \\\\\\\\"  [\\\\" \\" \"]
+%\t -> \\\\t [\\t \t tab]  good
+
+%\\ -> 8\
+%\\\\ -> 16\
 [st4,out4] = system([pyexec ' -c "' s4 '"'])
 
 [st5,out5] = system([pyexec ' -c "' s5 '"'])
