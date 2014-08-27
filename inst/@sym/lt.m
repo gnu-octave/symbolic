@@ -111,7 +111,7 @@ end
 %! assert (isequal (e(2), 1 < x))
 %! assert (~logical (e(3)))
 
-%!xtest
+%!test
 %! % ineq w/ nan
 %! syms x
 %! snan = sym(nan);
@@ -131,13 +131,6 @@ end
 %! assert (strcmp (strtrim (disp (e, 'flat')), 'oo < x'))
 
 %!test
-%! % oo, assumptions
-%! syms oo
-%! syms z positive
-%! e = -oo < z;
-%! assert (logical (e(1)))
-
-%!test
 %! % sympy true matrix
 %! a = sym([1 3 3]);
 %! b = sym([2 4 1]);
@@ -146,18 +139,23 @@ end
 %! %assert (islogical (e))
 %! assert (isequal (e, [true true false]))
 
+%!test
+%! % oo, assumptions
+%! syms oo
+%! syms z positive
+%! e = -oo < z;
+%! assert (logical (e))
+%! assert (isequal (e, sym(true)))
+
 %!xtest
 %! % Known failure, assumptions broken in SymPy somewhere?
 %! syms z positive
 %! e = -1 < z;
-%! assert (islogical (e))
-%! assert (e(1))
+%! assert (isequal (e, sym(true)))
 
 %!xtest
 %! % Known failure, assumptions broken in SymPy somewhere?
 %! syms oo
 %! syms z negative
 %! e = z < oo;
-%! assert (islogical (e))
-%! assert (e(1))
-
+%! assert (isequal (e, sym(true)))
