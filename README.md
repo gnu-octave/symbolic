@@ -11,7 +11,9 @@ Goals
 
 Feature parity with the other symbolic toolboxes.
 
-![ScreenShot](/screenshot.png)
+![Screenshot 1](/screenshot.png)
+
+![Screenshot 2](/screenshot-install.png)
 
 
 
