@@ -42,10 +42,14 @@ function display(x)
   % approach
   [term_width] = get(0, 'CommandWindowSize');
   if (isequal(term_width, [0 0]))
-    % octave gives [0 0], at least as of August
+    % octave gives [0 0], at least as of August 2014.
     [term_width] = terminal_size();
+    % octave has [height width]
+    term_width = term_width(2);
+  else
+    % matlab has [width height]
+    term_width = term_width(1);
   end
-  term_width = term_width(2);
 
   if (unicode_dec)
     timesstr = '×';
