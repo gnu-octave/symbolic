@@ -29,6 +29,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     error('unsupported command')
   end
 
+  newl = sprintf('\n');
+
   vstr = sympref('version');
 
   if isempty(pid)
@@ -37,7 +39,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
 
     pyexec = sympref('python');
     if (isempty(pyexec))
-      if (ispc () && ! isunix ())
+      if (ispc() && ~isunix())
         % Octave popen2 on Windows can't tolerate stderr output
         % https://savannah.gnu.org/bugs/?43036
         disp(['Detected a Windows system: using "mydbpy.bat" to workaround Octave bug'])
@@ -49,8 +51,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     % perhaps the the '-i' is not always wanted?
     [fin, fout, pid] = popen2 (pyexec, '-i');
 
-    disp('Python started: some output may appear before your prompt returns.')
-    fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n\n', fin, fout, pid)
+    fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)
+    %fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n', fin, fout, pid)
     fflush (stdout);
 
     if (pid < 0)
@@ -69,7 +71,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     %sleep(0.05); disp('');
 
     % print a block then read it to make sure we're live
-    fprintf (fin, 'octoutput_drv("SymPy communication channel established")\n\n');
+    fprintf (fin, 'octoutput_drv(("Communication establised.", sympy.__version__, sys.version))\n\n');
     fflush(fin);
     % if any exceptions in start-up, we probably get those instead
     [out, err] = readblock(fout, py_startup_timeout);
@@ -78,17 +80,21 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
         'ipc_popen2: something wrong? timed out starting python')
     end
     A = extractblock(out);
-    if (isempty(strfind(A, 'established')))
+    fprintf('\n')
+    if (isempty(strfind(A{1}, 'established')))
       A
       out
       error('ipc_popen2: something has gone wrong in starting python')
     else
-      disp(['ipc_popen2: ' A{1}])
+      disp(['OctSymPy: ' A{1}{1} '  SymPy v' A{1}{2} '.']);
+      % on unix we're seen this on stderr
+      if (ispc() && ~isunix())
+        disp(['Python ' strrep(A{1}{3}, newl, '')])
+      end
     end
   end
 
 
-  newl = sprintf('\n');
 
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
