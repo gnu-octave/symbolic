@@ -4,6 +4,7 @@ octsympy 0.1.1 (yyyy-mm-dd)
  *  New commands:
 
           isscalar
+          uplus
 
  *  Bug fixes, #88, #90.
 
