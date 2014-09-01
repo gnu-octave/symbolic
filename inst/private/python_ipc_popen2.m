@@ -93,9 +93,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
   % there is a try-except block here, sends a block if sucessful
-  s = python_copy_vars_to('_ins', true, varargin{:});
-
-  fputs (fin, s);
+  loc = python_copy_vars_to('_ins', true, varargin{:});
+  write_lines(fin, loc, true);
   fflush(fin);
   [out, err] = readblock(fout, inf);
   if (err)
@@ -119,9 +118,9 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% output, or perhaps a thrown error
   s2 = python_copy_vars_from('_outs');
 
-  s = [s s2];
+  write_lines(fin, s, true)
 
-  fputs (fin, s);
+  fputs (fin, s2);
   fflush(fin);
   [out, err] = readblock(fout, inf);
   if (err)
