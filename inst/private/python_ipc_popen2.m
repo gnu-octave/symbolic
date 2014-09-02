@@ -119,8 +119,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   s2 = python_copy_vars_from('_outs');
 
   write_lines(fin, s, true)
+  write_lines(fin, s2, true)
 
-  fputs (fin, s2);
   fflush(fin);
   [out, err] = readblock(fout, inf);
   if (err)
