@@ -60,7 +60,11 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
     %% paste all the commands into the system() command line
     % python -c
     bigs = [headers s];
+    % cmd or inputs might have \"
+    % " -> \"
+    % \" -> \\\"
     bigs = strrep(bigs, '"', '\"');
+    bigs = strrep(bigs, '\\"', '\\\"');
     [status,out] = system([pyexec ' -c "' bigs '"']);
   else
     %% Generate a temp .py file then execute it with system()
