@@ -175,21 +175,23 @@ end
 
 %!test
 %! % string with newlines
+%! % FIXME: escaped in input should still be escaped in output
 %! x = 'a string\nbroke off\nmy guitar\n';
-%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%! x2 = sprintf(x);
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x2))
 
-%%!xtest
-%%! % bug: cmd string with newlines
-%%! y = python_cmd ('return "string\nbroke",')
-%%! y2 = 'string\nbroke'
-%%! assert (strcmp(y, y2))
+%!test
+%! % bug: cmd string with newlines, works with cell
+%! % FIXME: no addition escaping for this one
+%! y = python_cmd ({'return "string\nbroke",'});
+%! y2 = sprintf('string\nbroke');
+%! assert (strcmp(y, y2))
 
 %%!test
 %%! % FIXME: newlines: should be escaped for import?
 %%! x = 'a string\nbroke off\nmy guitar\n';
-%%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%%! x2 = sprintf(x);
 %%! y = python_cmd ('return _ins', x2);
 %%! assert (strcmp(y, x2))
 
@@ -213,6 +215,13 @@ end
 %! x = '\"';
 %! expy = '"';
 %! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, expy))
+
+%!test
+%! % cmd has double quotes, these must be escaped by user
+%! % (of course, she is writing python code)
+%! expy = 'a"b"c';
+%! y = python_cmd ({'return "a\"b\"c",'});
 %! assert (strcmp(y, expy))
 
 %!test
@@ -262,14 +271,14 @@ end
 %! s1 = '我爱你';
 %! cmd = 'return u"\u6211\u7231\u4f60",';
 %! s2 = python_cmd (cmd);
-%! assert (strcmp (s1,s2))
+%! assert (strcmp (s1, s2))
 
 %%!test
 %%! % unicode passthru: FIXME: how to get unicode back to Python?
 %%! s1 = '我爱你'
 %%! cmd = 'return (_ins[0],)';
 %%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s1,s2))
+%%! assert (strcmp (s1, s2))
 
 %%!test
 %%! % unicode w/ slashes, escapes, etc  FIXME
@@ -277,7 +286,7 @@ end
 %%! s3 = '我爱你<>\&//\#%% %\我'
 %%! cmd = 'return u"\u6211\u7231\u4f60",';
 %%! s2 = python_cmd (cmd)
-%%! assert (strcmp (s2,s3))
+%%! assert (strcmp (s2, s3))
 
 %!test
 %! % list, tuple
