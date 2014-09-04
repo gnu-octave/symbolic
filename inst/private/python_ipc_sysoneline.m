@@ -37,7 +37,10 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   %% load all the inputs into python as pickles
   s = python_copy_vars_to('_ins', true, varargin{:});
+  % extra escaping
   s = myesc(s);
+  % join all the cell arrays with escaped newline
+  s = mystrjoin(s, '\n');
   s1 = ['exec(\"' s '\"); '];
 
 
@@ -46,12 +49,14 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % with _ins and produce _outs.
   s = python_format_cmd(cmd);
   s = myesc(s);
+  s = mystrjoin(s, '\n');
   s2 = ['exec(\"' s '\"); '];
 
 
   %% output, or perhaps a thrown error
   s = python_copy_vars_from('_outs');
   s = myesc(s);
+  s = mystrjoin(s, '\n');
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
@@ -107,20 +112,16 @@ end
 
 
 function s = myesc(s)
-  % order is important hete
 
-  newl = sprintf('\n');
+  for i = 1:length(s)
+    % order is important here
 
-  % escape quotes twice
-  s = strrep(s, '\', '\\\\');
+    % escape quotes twice
+    s{i} = strrep(s{i}, '\', '\\\\');
 
-  % dbl-quote is rather special here
-  % /" -> ///////" -> ///" -> /" -> "
-  s = strrep(s, '"', '\\\"');
+    % dbl-quote is rather special here
+    % /" -> ///////" -> ///" -> /" -> "
+    s{i} = strrep(s{i}, '"', '\\\"');
 
-  %s = strrep(s, '\n', '\\\n');
-
-  % FIXME: test: undo_escape, not easy to dbl esc the strings...
-  % newl -> \n
-  s = strrep(s, newl, '\n');
+  end
 end
