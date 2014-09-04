@@ -219,7 +219,7 @@ end
 
 %!test
 %! % cmd has double quotes, these must be escaped by user
-%! % (of course, she is writing python code)
+%! % (of course: she is writing python code)
 %! expy = 'a"b"c';
 %! y = python_cmd ({'return "a\"b\"c",'});
 %! assert (strcmp(y, expy))
@@ -245,7 +245,19 @@ end
 %! assert (strcmp(y, x))
 
 %!test
-%! % slashes: FIXME: escape backslashes
+%! % cmd with printf escapes
+%! x = '% %% %%% %%%% %s %g %%s';
+%! y = python_cmd ({['return "' x '",']});
+%! assert (strcmp(y, x))
+
+%!test
+%! % cmd w/ backslash and \n must be escaped by user
+%! expy = 'a\b\\c\nd\';
+%! y = python_cmd ({'return "a\\b\\\\c\\nd\\",'});
+%! assert (strcmp(y, expy))
+
+%!test
+%! % slashes: FIXME: auto escape backslashes
 %! x = '/\\ // \\\\ \\/\\/\\';
 %! z = '/\ // \\ \/\/\';
 %! y = python_cmd ('return _ins', x);
