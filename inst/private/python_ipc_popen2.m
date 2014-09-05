@@ -83,7 +83,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       out
       error('ipc_popen2: something has gone wrong in starting python')
     else
-      disp(['ipc_popen2: ' A{1}])
+      disp(['ipc_popen2: ' A])
     end
   end
 

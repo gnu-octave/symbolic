@@ -130,9 +130,11 @@ function varargout = python_cmd(cmd, varargin)
           '_outs = _fcn(_ins)' };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
-  % FIXME: filter this earlier?
-  A = A{1};
-  %db
+
+  if (~iscell(A))
+    A
+    error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
+  end
 
   M = length(A);
   varargout = cell(1,M);
