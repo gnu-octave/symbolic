@@ -218,22 +218,6 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
 end
 
 
-function s = mystrjoin(A, sepchar)
-% replacement for strjoin until Octave 3.6 is old
-  n = numel(A);
-
-  if n == 0
-    s = '';
-  else
-    s = A{1};
-  end
-
-  for i = 2:n
-    s = [s sepchar A{i}];
-  end
-end
-
-
 function A = cell2symarray(C)
   A = sym([]);
   for i=1:length(C)
