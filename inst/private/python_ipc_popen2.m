@@ -71,7 +71,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     %sleep(0.05); disp('');
 
     % print a block then read it to make sure we're live
-    fprintf (fin, 'octoutput_drv(("Communication establised.", sympy.__version__, sys.version))\n\n');
+    fprintf (fin, 'octoutput_drv(("Communication established.", sympy.__version__, sys.version))\n\n');
     fflush(fin);
     % if any exceptions in start-up, we probably get those instead
     [out, err] = readblock(fout, py_startup_timeout);
