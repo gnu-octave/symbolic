@@ -6,6 +6,10 @@ octsympy 0.1.1 (yyyy-mm-dd)
           isscalar
           uplus
 
+ *  IPC system() should work on windows (FIXME: test header load)
+
+ *  improvements to string handling/escaping.
+
  *  Bug fixes, #88, #90.
 
 
