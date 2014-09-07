@@ -154,12 +154,12 @@ def autogen_functions(L, where):
         fd.write('\n')
         if len(d['extra_code']) > 0:
                fd.write("  %s\n\n" % d['extra_code'])
-        fd.write("  cmd = [ '(x,) = _ins\\n' ...\n" )
-        fd.write("          'if x.is_Matrix:\\n' ...\n" )
-        fd.write("          '    z = x.applyfunc(lambda a: sp.%s(a))\\n' ...\n" % d['spname'])
-        fd.write("          'else:\\n' ...\n" )
-        fd.write("          '    z = sp.%s(x)\\n' ...\n" % d['spname'])
-        fd.write("          'return (z,)' ];\n")
+        fd.write("  cmd = { '(x,) = _ins' ...\n" )
+        fd.write("          'if x.is_Matrix:' ...\n" )
+        fd.write("          '    z = x.applyfunc(lambda a: sp.%s(a))' ...\n" % d['spname'])
+        fd.write("          'else:' ...\n" )
+        fd.write("          '    z = sp.%s(x)' ...\n" % d['spname'])
+        fd.write("          'return (z,)' };\n")
         fd.write("\n");
         fd.write("  z = python_cmd (cmd, x);\n\n")
         fd.write("end\n")

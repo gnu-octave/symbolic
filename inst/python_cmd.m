@@ -105,26 +105,9 @@
 
 function varargout = python_cmd(cmd, varargin)
 
-  newl = sprintf('\n');
-
-  if (iscell(cmd))
-    %% each cell is a line
-    % this way, also could escape ", others?
-
-    % newlines and indented except first line
-    %cmd = mystrjoin(cmd, [newl '    ']);
-  else
-    %% Legacy mode: one big string
-    % The user might or might not have escaped newlines in the command.
-    % We want to reliably indent this code to put it in a Python function.
-    % so we pass it through sprintf: trouble: this expands \n to newlines within string consts
-    % as well as the line endings.  Also, we add spaces: yuck!
-    cmd = strrep(cmd, '\n', newl);
-    cmd = strtrim(cmd);  % don't want trailing newlines
-    cmd = mystrsplit(cmd, {newl});
-    %cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
+  if (~iscell(cmd))
+    cmd = {cmd};
   end
-
 
   %% IPC interface
   % the ipc mechanism shall put the input variables in the tuple
@@ -195,7 +178,7 @@ end
 %!test
 %! % bug: cmd string with newlines, works with cell
 %! % FIXME: no addition escaping for this one
-%! y = python_cmd ({'return "string\nbroke",'});
+%! y = python_cmd ('return "string\nbroke",');
 %! y2 = sprintf('string\nbroke');
 %! assert (strcmp(y, y2))
 
@@ -232,7 +215,7 @@ end
 %! % cmd has double quotes, these must be escaped by user
 %! % (of course: she is writing python code)
 %! expy = 'a"b"c';
-%! y = python_cmd ({'return "a\"b\"c",'});
+%! y = python_cmd ('return "a\"b\"c",');
 %! assert (strcmp(y, expy))
 
 %!test
@@ -258,13 +241,13 @@ end
 %!test
 %! % cmd with printf escapes
 %! x = '% %% %%% %%%% %s %g %%s';
-%! y = python_cmd ({['return "' x '",']});
+%! y = python_cmd (['return "' x '",']);
 %! assert (strcmp(y, x))
 
 %!test
 %! % cmd w/ backslash and \n must be escaped by user
 %! expy = 'a\b\\c\nd\';
-%! y = python_cmd ({'return "a\\b\\\\c\\nd\\",'});
+%! y = python_cmd ('return "a\\b\\\\c\\nd\\",');
 %! assert (strcmp(y, expy))
 
 %!test
