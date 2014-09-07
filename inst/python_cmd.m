@@ -51,17 +51,26 @@
 %% a = python_cmd (cmd, x, y)
 %% @end example
 %%
-%% The string can have newlines for longer commands but be careful
+%% You can also pass a cell-array of lines of code.  But be careful
 %% with whitespace: its Python!
 %% @example
-%% cmd = [ '(x,) = _ins\n'  ...
-%%         'if x.is_Matrix:\n'  ...
-%%         '    return ( x.T ,)\n' ...
-%%         'else:\n' ...
-%%         '    return ( x ,)' ];
+%% cmd = { '(x,) = _ins' ...
+%%         'if x.is_Matrix:' ...
+%%         '    return (x.T,)' ...
+%%         'else:' ...
+%%         '    return (x,)' };
 %% @end example
-%% It might be a good idea to avoid blank lines (FIXME: this used to
-%% be a problem, can't reproduce).
+%% Each of these strings probably should not have any newlines
+%% (other than escaped ones e.g., inside strings).  An exception
+%% might be python """ multiline strings """.  FIXME: test this.
+%% It might be a good idea to avoid blank lines as they can cause
+%% problems with some of the ipc mechanisms.
+%%
+%% In older versions (OctSymPy v0.1.0 and older), you could use
+%% newlines and/or escaped newlines in the string to represent
+%% multiline input; this was fragile and made it hard to write
+%% python code with e.g., escaped chars in strings.  This form is
+%% deprecated but still available (for now) as python_cmd_string.
 %%
 %% Possible input types:
 %%    sym objects;
