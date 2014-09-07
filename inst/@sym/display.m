@@ -42,10 +42,14 @@ function display(x)
   % approach
   [term_width] = get(0, 'CommandWindowSize');
   if (isequal(term_width, [0 0]))
-    % octave gives [0 0], at least as of August
+    % octave gives [0 0], at least as of August 2014.
     [term_width] = terminal_size();
+    % octave has [height width]
+    term_width = term_width(2);
+  else
+    % matlab has [width height]
+    term_width = term_width(1);
   end
-  term_width = term_width(2);
 
   if (unicode_dec)
     timesstr = '×';
@@ -59,7 +63,7 @@ function display(x)
     n = fprintf ('%s = (%s)', inputname (1), class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
-    toobig = hasnewlines || length(s) + n + 18 > term_width;
+    toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
     if (~toobig)
       fprintf(' %s', s)
       n = n + 1 + length(s);
@@ -106,13 +110,11 @@ end
 
 function snippet_of_sympy(x, padw, width, unicode)
 
-  newl = sprintf('\n');
   if ( ~ sympref('snippet'))
-    disp(newl)
-    %fprintf('\n');
+    fprintf('\n');
     return
   end
-  
+
   if (unicode)
     ell = '…';
     lquot = '“'; rquot = '”';
