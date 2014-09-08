@@ -75,7 +75,7 @@ function c = sym2poly(p,x)
           'c = p.all_coeffs()\n' ...
           'return (c,)' ];
 
-  c2 = python_cmd (cmd, p, x);
+  c2 = python_cmd_string (cmd, p, x);
   if (isempty(c2))
     error('Empty python output, can this happen?  A bug.')
   end

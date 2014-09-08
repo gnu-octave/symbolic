@@ -44,7 +44,7 @@ function soln = dsolve(de, y, ic)
             'g = sp.dsolve(_de,_y)\n'  ...
             'return (g,)' ];
 
-    soln = python_cmd (cmd, de, y);
+    soln = python_cmd_string (cmd, de, y);
 
     if (nargin == 3)
       warning('todo: ICs not supported yet')

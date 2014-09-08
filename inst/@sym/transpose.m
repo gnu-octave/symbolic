@@ -34,7 +34,7 @@ function z = transpose(x)
           'else:\n' ...
           '    return (x,)' ];
 
-  z = python_cmd (cmd, x);
+  z = python_cmd_string (cmd, x);
 
 end
 

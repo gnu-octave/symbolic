@@ -84,7 +84,7 @@ function z = mat_rclist_asgn(A, r, c, B)
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd (cmd, A, rr, cc, B);
+  z = python_cmd_string (cmd, A, rr, cc, B);
 
 
   % a simpler earlier version, but only for scalar r,c

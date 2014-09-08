@@ -47,7 +47,7 @@ function S = symprod(f,n,a,b)
   cmd = [ '(f,n,a,b) = _ins\n'  ...
           'S = sp.product(f,(n,a,b))\n'  ...
           'return (S,)' ];
-  S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
+  S = python_cmd_string (cmd, sym(f), sym(n), sym(a), sym(b));
 
 end
 

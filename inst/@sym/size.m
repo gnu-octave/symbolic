@@ -51,7 +51,7 @@ function [n, m] = size(x, dim)
           'else:\n'  ...
           '    d = (1,1)\n'  ...
           'return (d[0],d[1],)' ];
-  [n,m] = python_cmd(cmd, x);
+  [n,m] = python_cmd_string(cmd, x);
   if (nargout <= 1)
     n = [n m];
   end

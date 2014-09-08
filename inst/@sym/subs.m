@@ -82,7 +82,7 @@ function g = subs(f, in, out)
   if (isscalar(in) && ~iscell(in) && ~iscell(out))
     cmd = [ '(f,x,y) = _ins\n'  ...
             'return (f.subs(x,y),)' ];
-    g = python_cmd (cmd, sym(f), sym(in), sym(out));
+    g = python_cmd_string (cmd, sym(f), sym(in), sym(out));
     return
   end
 
@@ -124,7 +124,7 @@ function g = subs(f, in, out)
           'g = f.subs(sublist, simultaneous=True)\n'  ...
           'return (g,)' ];
 
-  g = python_cmd (cmd, sym(f), sublist);
+  g = python_cmd_string (cmd, sym(f), sublist);
 
 end
 

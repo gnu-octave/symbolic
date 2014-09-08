@@ -25,5 +25,5 @@ function z = double_array_to_sym(A)
   cmd = [ 'L = _ins[0]\n'  ...
           'M = sp.Matrix(L)\n'  ...
           'return (M,)' ];
-  z = python_cmd (cmd, Ac);
+  z = python_cmd_string (cmd, Ac);
 

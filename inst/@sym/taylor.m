@@ -92,7 +92,7 @@ function s = taylor(f,varargin)
   cmd = [ '(f,x,a,n) = _ins\n'  ...
           's = f.series(x,a,n).removeO()\n'  ...
           'return (s,)' ];
-  s = python_cmd(cmd, sym(f), sym(x), sym(a), n);
+  s = python_cmd_string(cmd, sym(f), sym(x), sym(a), n);
 
 end
 

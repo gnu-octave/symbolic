@@ -118,9 +118,9 @@ function [A,B] = assumptions(F, outp)
   for i=1:length(s)
       x = s{i};
       if strcmp(outp, 'dict')
-        [astr, adict] = python_cmd(cmd, x, true);
+        [astr, adict] = python_cmd_string(cmd, x, true);
       else
-        astr = python_cmd(cmd, x, false);
+        astr = python_cmd_string(cmd, x, false);
       end
       if ~isempty(astr)
         str = [x.flat ': ' astr];

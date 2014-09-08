@@ -52,7 +52,7 @@ function H = hessian(f,x)
           'H = grad.jacobian(x)\n' ...
           'return ( H ,)' ];
 
-  H = python_cmd (cmd, sym(f), x);
+  H = python_cmd_string (cmd, sym(f), x);
 
 end
 

@@ -37,7 +37,7 @@ function B = fliplr(A)
           '    A.col_swap(j, n-j-1)\n' ...
           'return (A,)' ];
 
-  B = python_cmd(cmd, sym(A));
+  B = python_cmd_string(cmd, sym(A));
 
 end
 

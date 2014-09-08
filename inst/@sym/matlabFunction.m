@@ -130,7 +130,7 @@ function f = matlabFunction(varargin)
               'except NameError, e:\n' ...
               '    return (False, str(e))\n' ...
               'return (True, s)\n'];
-      [worked, codestr] = python_cmd (cmd, expr);
+      [worked, codestr] = python_cmd_string (cmd, expr);
       %worked = false;
       if (worked)
         codestr = vectorize(codestr);

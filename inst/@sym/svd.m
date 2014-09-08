@@ -48,7 +48,7 @@ function [S, varargout] = svd(A)
           'L = sp.Matrix(A.singular_values())\n' ...
           'return ( L ,)' ];
 
-  S = python_cmd (cmd, sym(A));
+  S = python_cmd_string (cmd, sym(A));
 
 end
 

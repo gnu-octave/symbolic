@@ -32,7 +32,7 @@ function z = det(x)
           '    A = sp.Matrix([A])\n' ...
           'return ( A.det() ,)\n' ];
 
-  z = python_cmd (cmd, x);
+  z = python_cmd_string (cmd, x);
 
 end
 

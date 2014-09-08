@@ -51,7 +51,7 @@ function g = jacobian(f,x)
           'G = f.jacobian(x)\n' ...
           'return ( G ,)' ];
 
-  g = python_cmd (cmd, sym(f), x);
+  g = python_cmd_string (cmd, sym(f), x);
 
 end
 

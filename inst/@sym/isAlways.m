@@ -55,7 +55,7 @@ function r = isAlways(p)
           'else:\n' ...
           '    r = sp.simplify(p.lhs-p.rhs) == 0\n' ...
           'return (r,)' ];
-  r = python_cmd (cmd, p);
+  r = python_cmd_string (cmd, p);
 
   if (~ islogical(r))
     error('nonboolean return from python');

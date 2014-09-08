@@ -38,7 +38,7 @@ function F = fourier(f,x,k)
   cmd = [ 'd = sp.fourier_transform(*_ins)\n' ...
           'return (d,)' ];
 
-  F = python_cmd (cmd, sym(f), sym(x), sym(k));
+  F = python_cmd_string (cmd, sym(f), sym(x), sym(k));
 
 end
 

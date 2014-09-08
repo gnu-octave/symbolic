@@ -44,7 +44,7 @@ function z = mat_rclist_access(A, r, c)
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd(cmd, A, rr, cc);
+  z = python_cmd_string (cmd, A, rr, cc);
 end
 
 

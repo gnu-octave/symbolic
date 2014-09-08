@@ -52,7 +52,7 @@ function [p,m] = factor(f)
               'p = sp.Matrix(1, num, sk)\n' ...
               'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])\n' ...
               'return (p,m)' ];
-      [p,m] = python_cmd (cmd, f);
+      [p,m] = python_cmd_string (cmd, f);
     end
 
 
@@ -63,7 +63,7 @@ function [p,m] = factor(f)
             '#if isinstance(p, sp.ImmutableMatrix):\n' ...
             '#    p = p.as_mutable()\n' ...
             'return (p,)' ];
-    p = python_cmd (cmd, f);
+    p = python_cmd_string (cmd, f);
   end
 end
 

@@ -38,7 +38,7 @@ function h = vertcat(varargin)
           'return (M,)' ];
 
   varargin = sym(varargin);
-  h = python_cmd (cmd, varargin{:});
+  h = python_cmd_string (cmd, varargin{:});
 
 end
 

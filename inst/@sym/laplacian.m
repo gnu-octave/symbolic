@@ -53,7 +53,7 @@ function g = laplacian(f,x)
           '    g = g + f.diff(y,2)\n' ...
           'return ( g ,)' ];
 
-  g = python_cmd (cmd, sym(f), x);
+  g = python_cmd_string (cmd, sym(f), x);
 
 end
 

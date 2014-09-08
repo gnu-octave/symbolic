@@ -44,7 +44,7 @@ function r = isinf(x)
             'else:\n'                        ...
             '    return (False,)' ];
 
-    r = python_cmd (cmd, x);
+    r = python_cmd_string (cmd, x);
 
     if (~ islogical(r))
       error('nonboolean return from python');

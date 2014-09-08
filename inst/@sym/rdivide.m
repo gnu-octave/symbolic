@@ -44,7 +44,7 @@ function z = rdivide(x, y)
           'else:\n' ...
           '    return ( x/y ,)' ];
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd_string (cmd, sym(x), sym(y));
 
 end
 

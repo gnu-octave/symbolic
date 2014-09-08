@@ -88,7 +88,7 @@ function Z = mat_mask_access(A, I)
     n = nnz(I);  m = 1;
   end
 
-  Z = python_cmd(cmd, sym(A), sym(I), n, m);
+  Z = python_cmd_string (cmd, sym(A), sym(I), n, m);
 end
 
 

@@ -89,7 +89,7 @@ function z = mat_mask_asgn(A, I, B)
   if islogical(I)
     I = double(I);
   end
-  z = python_cmd (cmd, sym(A), sym(I), sym(B));
+  z = python_cmd_string (cmd, sym(A), sym(I), sym(B));
 end
 
 

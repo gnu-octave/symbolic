@@ -52,7 +52,7 @@ function z = isprime(x)
           '    return (False, str(e))' ...
         ];
 
-  [r, z] = python_cmd(cmd, x);
+  [r, z] = python_cmd_string(cmd, x);
 
   if (~r)
     error(z)

@@ -103,7 +103,7 @@ function y = double(x, failerr)
           '        return (flag,z.real,z.imag)\n' ...
           'return (0,0.0,0.0)' ];
 
-  [flag, A, B] = python_cmd (cmd, x);
+  [flag, A, B] = python_cmd_string (cmd, x);
 
   assert(isnumeric(flag))
   assert(isnumeric(A))

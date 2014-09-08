@@ -49,7 +49,7 @@ function U = triu(A,k)
           'else:\n' ...
           '    return ( sp.S(0) ,)' ];
 
-  U = python_cmd (cmd, A, int32(double(k)));
+  U = python_cmd_string (cmd, A, int32(double(k)));
 
 end
 

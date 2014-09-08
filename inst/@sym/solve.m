@@ -72,7 +72,7 @@ function out = solve(varargin)
           'd = sp.solve(*_ins, dict=True)\n'  ...
           '#dbout(d)\n'  ...
           'return (d,)' ];
-  out = python_cmd (cmd, eqn, vars);
+  out = python_cmd_string (cmd, eqn, vars);
 end
 
 

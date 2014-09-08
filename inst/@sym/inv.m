@@ -38,7 +38,7 @@ function z = inv(x)
           'else:\n' ...
           '    return ( 1/x ,)' ];
 
-  z = python_cmd (cmd, x);
+  z = python_cmd_string (cmd, x);
 
 end
 

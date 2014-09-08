@@ -38,7 +38,7 @@ function B = repmat(A, n, m)
           'B = sp.Matrix.vstack(*L)\n' ...
           'return (B,)' ];
 
-  B = python_cmd(cmd, sym(A), int32(n), int32(m));
+  B = python_cmd_string(cmd, sym(A), int32(n), int32(m));
 
 end
 

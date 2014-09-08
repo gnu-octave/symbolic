@@ -37,7 +37,7 @@ function B = flipud(A)
           '    A.row_swap(i, m-i-1)\n' ...
           'return (A,)' ];
 
-  B = python_cmd(cmd, sym(A));
+  B = python_cmd_string(cmd, sym(A));
 
 end
 

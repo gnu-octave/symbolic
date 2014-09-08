@@ -48,7 +48,7 @@ function [L, U, P] = lu(A, opt)
           '    P.row_swap(*w)\n' ...
           'return (L, U, P)' ];
 
-  [L, U, P] = python_cmd (cmd, sym(A), opt);
+  [L, U, P] = python_cmd_string (cmd, sym(A), opt);
 
   if (nargout == 2)
     L = P.' * L;

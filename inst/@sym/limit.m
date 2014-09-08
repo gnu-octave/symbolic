@@ -72,7 +72,7 @@ function L = limit(f,x,a,dir)
           'else:\n' ...
           '    g = f.limit(x, a, dir=pdir)\n'  ...
           'return (g,)' ];
-  L = python_cmd (cmd, sym(f), sym(x), sym(a), pdir);
+  L = python_cmd_string (cmd, sym(f), sym(x), sym(a), pdir);
 
 end
 

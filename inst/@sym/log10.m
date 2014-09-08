@@ -32,7 +32,7 @@ function z = log10(x)
           'y = sp.log(x,10)\n' ...
           'return (y,)' ];
 
-  z = python_cmd (cmd, x);
+  z = python_cmd_string (cmd, x);
 
 end
 

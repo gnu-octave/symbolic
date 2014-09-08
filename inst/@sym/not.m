@@ -67,7 +67,7 @@ function r = not(x)
           '    flag = False\n' ...
           'return (flag, r)' ];
 
-  [flag, r] = python_cmd (cmd, x);
+  [flag, r] = python_cmd_string (cmd, x);
   if (~flag)
     assert (ischar (r), '<not>: programming error?')
     error(['<not>: ' r])

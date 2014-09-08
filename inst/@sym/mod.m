@@ -39,7 +39,7 @@ function z = mod(x, n)
             'def _op(a,b):\n' ...
             '    return a % b\n' ...
             'return _each_elem_binary(x,n,_op)' ];
-    z = python_cmd (cmd, sym(x), sym(n));
+    z = python_cmd_string (cmd, sym(x), sym(n));
 
     % or you can use a lambda:
     % return _each_elem_binary(x,n,lambda a,b: a % b)

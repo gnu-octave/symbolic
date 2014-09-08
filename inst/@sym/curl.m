@@ -54,7 +54,7 @@ function g = curl(v,x)
           '      d(v[1],x[0]) - d(v[0],x[1])  ])\n'...
           'return ( g ,)' ];
 
-  g = python_cmd (cmd, sym(v), x);
+  g = python_cmd_string (cmd, sym(v), x);
 
 end
 

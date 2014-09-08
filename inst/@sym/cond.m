@@ -32,7 +32,7 @@ function k = cond(A)
           '    A = sp.Matrix([A])\n' ...
           'return (A.condition_number(),)' ];
 
-  k = python_cmd (cmd, sym(A));
+  k = python_cmd_string (cmd, sym(A));
 
 end
 

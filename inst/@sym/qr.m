@@ -39,7 +39,7 @@ function [Q, R] = qr(A, ord)
           '(Q, R) = A.QRdecomposition()\n' ...
           'return (Q, R)' ];
 
-  [Q, R] = python_cmd (cmd, sym(A));
+  [Q, R] = python_cmd_string (cmd, sym(A));
 
 end
 

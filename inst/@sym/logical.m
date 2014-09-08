@@ -72,7 +72,7 @@ function r = logical(p)
           '    flag = False\n' ...
           'return (flag, r)' ];
 
-  [flag, r] = python_cmd (cmd, p);
+  [flag, r] = python_cmd_string (cmd, p);
   if (~flag)
     assert (ischar (r), 'logical: programming error?')
     error(['logical: ' r])

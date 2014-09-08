@@ -46,6 +46,6 @@ function z = binop_helper(x, y, scalar_fcn_str)
           '    return (y.applyfunc(lambda a: sf(x, a)), )\n' ...
           'return (sf(x, y), )' ];
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd_string (cmd, sym(x), sym(y));
 
 end

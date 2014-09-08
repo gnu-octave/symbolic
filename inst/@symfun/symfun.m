@@ -113,8 +113,8 @@ function f = symfun(expr, vars)
     fname = strtrim(tok{1});
     assert (isvarname (fname))
 
-    cmd = sprintf( ['_f = sp.Function("%s")(*_ins)\n' ...
-                    'return (_f,)' ], fname);
+    cmd = {['_f = sp.Function("' fname '")(*_ins)'] ...
+            'return (_f,)' };
 
     expr = python_cmd (cmd, vars{:});
   end

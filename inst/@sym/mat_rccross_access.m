@@ -85,7 +85,7 @@ function z = mat_rccross_access(A, r, c)
           'c = slice(_ins[3],_ins[4])\n'  ...
           'M = A[r,c]\n'  ...
           'return (M,)' ];
-  z = python_cmd(cmd, A, r1-1, r2, c1-1, c2);
+  z = python_cmd_string(cmd, A, r1-1, r2, c1-1, c2);
   end
 end
 

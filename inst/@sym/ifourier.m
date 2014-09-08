@@ -38,7 +38,7 @@ function f = ifourier(F,k,x)
   cmd = [ 'd = sp.inverse_fourier_transform(*_ins)\n' ...
           'return (d,)' ];
 
-  f = python_cmd (cmd, sym(F), sym(k), sym(x));
+  f = python_cmd_string (cmd, sym(F), sym(k), sym(x));
 
 end
 

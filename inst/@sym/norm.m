@@ -49,7 +49,7 @@ function z = norm(x, ord)
           'else:\n' ...
           '    return ( sqrt(x**2) ,)' ];
 
-  z = python_cmd (cmd, sym(x), ord);
+  z = python_cmd_string (cmd, sym(x), ord);
 
 end
 
