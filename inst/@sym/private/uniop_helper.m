@@ -19,22 +19,23 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = uniop_helper(x, scalar_fcn_str)
+function z = uniop_helper(x, scalar_fcn)
 
   % string can either be the name of a function or the definition
   % of a new function.
-  if (strncmp(scalar_fcn_str, 'def ', 4))
-    cmd = scalar_fcn_str;
+  if (iscell(scalar_fcn))
+    %assert strncmp(scalar_fcn_str, 'def ', 4)
+    cmd = scalar_fcn;
   else
-    cmd = ['sf = ' scalar_fcn_str];
+    cmd = {['sf = ' scalar_fcn]};
   end
 
-  cmd = [ cmd '\n' ...
-          '(x,) = _ins\n' ...
-          'if x.is_Matrix:\n' ...
-          '    return (x.applyfunc(lambda a: sf(a)), )\n' ...
-          'else:\n' ...
-          '    return (sf(x), )' ];
+  cmd = { cmd{:} ...
+          '(x,) = _ins' ...
+          'if x.is_Matrix:' ...
+          '    return x.applyfunc(lambda a: sf(a)),' ...
+          'else:' ...
+          '    return sf(x),' };
 
   z = python_cmd (cmd, sym(x));
 

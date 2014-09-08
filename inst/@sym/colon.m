@@ -42,10 +42,10 @@ function y = colon(a,step,b)
   y = (0:double(B))*sym(step) + a;
 
   % this approach fails to  make 0:sym(pi):10
-  %cmd = ['(a,b,step) = _ins\n'...
-  %       'y = range(a,b+sign(step)*1,step)\n'...
-  %       'return y,'];
-  %y = python_cmd(cmd, a, b, step)
+  %cmd = {'(a, b, step) = _ins'...
+  %       'y = range(a, b + sign(step)*1, step)'...
+  %       'return y,'};
+  %y = python_cmd_string(cmd, a, b, step)
   %y = cell2mat(y);
 end
 

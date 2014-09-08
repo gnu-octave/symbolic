@@ -239,7 +239,8 @@ function s = sym(x, varargin)
         cmd = sprintf('z = sympy.Symbol("%s")', x);
       elseif isstruct(asm) && isscalar(asm)
         % we have an assumptions dict
-        cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
+        cmd = { sprintf('s = sympy.Symbol("%s", **_ins[0])', x) ...
+                        'return s,' };
         s = python_cmd (cmd, asm);
         return
 
@@ -259,7 +260,7 @@ function s = sym(x, varargin)
     error('conversion to symbolic with those arguments not (yet) supported');
   end
 
-  s = python_cmd ([ cmd '\nreturn (z,)' ]);
+  s = python_cmd ({cmd 'return z,'});
 
 end
 
