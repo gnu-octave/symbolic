@@ -91,7 +91,7 @@ function a = do_list(indent, in, varlist)
       a = {a{:} b{:}};
       c = length(a);
       c=c+1; a{c} = sprintf('%s%s = []', sp, invalues);
-      b = do_list(indent, indent, invalues, struct2cell(x));
+      b = do_list(indent, invalues, struct2cell(x));
       a = {a{:} b{:}};
       c = length(a);
       c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
