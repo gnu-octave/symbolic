@@ -134,9 +134,10 @@ function varargout = python_cmd(cmd, varargin)
     varargout{i} = A{i};
   end
 
-  if nargout ~= M
-    warning('number of outputs don''t match, was this intentional?')
-  end
+  % re-enable after python_cmd_string is gone?
+  %if nargout ~= M
+  %  warning('number of outputs don''t match, was this intentional?')
+  %end
 end
 
 
