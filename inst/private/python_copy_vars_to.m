@@ -8,10 +8,7 @@ function L = python_copy_vars_to(in, te, varargin)
   else
     %% put inside try-except
     L = do_list(4, in, varargin);
-    %newl = sprintf('\n');
-    %newl = '\n';
-    %s2 = mystrjoin(L, newl);
-    L = {'try:' ...
+    L = { 'try:' ...
       sprintf('    %s = []', in) ...
       L{:} ...
       '    octoutput_drv("PYTHON: successful variable import")' ...
@@ -39,13 +36,11 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(x.pickle));
 
     elseif (ischar(x))
-      c=c+1; a{c} = [sp '# string'];
       c=c+1; a{c} = [sp in '.append("' x '")'];
       % or do we want a printf() around the string?
       %c=c+1; a{c} = sprintf('%s%s.append("%s")', sp, in, x);
 
     elseif (islogical(x) && isscalar(x))
-      c=c+1; a{c} = [sp '# bool'];
       if (x)
         c=c+1; a{c} = [sp in '.append(True)'];
       else
@@ -53,8 +48,7 @@ function a = do_list(indent, in, varlist)
       end
 
     elseif (isinteger(x) && isscalar(x))
-      c=c+1; a{c} = [sp '# int type'];
-      c=c+1; a{c} = sprintf('%s%s.append(%d)', sp, in, x);
+      c=c+1; a{c} = sprintf('%s%s.append(%d)  # int type', sp, in, x);
 
     elseif (isfloat(x) && isscalar(x))
       % Floating point input.  By default, all Octave numbers are
@@ -70,11 +64,11 @@ function a = do_list(indent, in, varlist)
       if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end
-      c=c+1; a{c} = [sp '# double'];
-      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))', sp, in, num2hex(x));
+      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
+                            sp, in, num2hex(x));
 
     elseif (iscell(x))
-      c=c+1; a{c} = [sp '# cell array to list'];
+      c=c+1; a{c} = [sp '# cell array: xfer to list'];
       inn = [in 'n'];
       c=c+1; a{c} = sprintf('%s%s = []', sp, inn);
       c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, inn);
@@ -83,7 +77,7 @@ function a = do_list(indent, in, varlist)
       c = length(a);
 
     elseif (isstruct(x) && isscalar(x))
-      c=c+1; a{c} = [sp '# struct to dict'];
+      c=c+1; a{c} = [sp '# struct: xfer to dict'];
       inkeys = [in 'k'];
       invalues = [in 'v'];
       c=c+1; a{c} = sprintf('%s%s = []', sp, inkeys);
