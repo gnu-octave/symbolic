@@ -49,7 +49,7 @@ function a = do_list(indent, in, varlist)
       if (x)
         c=c+1; a{c} = [sp in '.append(True)'];
       else
-        c=c+1; a{c} = [sp in '.append(True)'];
+        c=c+1; a{c} = [sp in '.append(False)'];
       end
 
     elseif (isinteger(x) && isscalar(x))
