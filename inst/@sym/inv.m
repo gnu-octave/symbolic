@@ -32,13 +32,13 @@ function z = inv(x)
     error('matrix is not square')
   end
 
-  cmd = [ '(x,) = _ins\n'  ...
-          'if x.is_Matrix:\n' ...
-          '    return ( x.inv() ,)\n' ...
-          'else:\n' ...
-          '    return ( 1/x ,)' ];
+  cmd = { 'x, = _ins'
+          'if x.is_Matrix:'
+          '    return x.inv(),'
+          'else:'
+          '    return S.One/x,' };
 
-  z = python_cmd_string (cmd, x);
+  z = python_cmd (cmd, x);
 
 end
 

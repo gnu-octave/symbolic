@@ -45,7 +45,7 @@ function y = colon(a,step,b)
   %cmd = {'(a, b, step) = _ins'...
   %       'y = range(a, b + sign(step)*1, step)'...
   %       'return y,'};
-  %y = python_cmd_string(cmd, a, b, step)
+  %y = python_cmd (cmd, a, b, step)
   %y = cell2mat(y);
 end
 

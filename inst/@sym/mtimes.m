@@ -36,10 +36,10 @@ function z = mtimes(x, y)
   end
 
 
-  cmd = [ '(x,y) = _ins\n'  ...
-          'return ( x*y ,)' ];
+  cmd = { '(x,y) = _ins'  ...
+          'return x*y,' };
 
-  z = python_cmd_string (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, sym(x), sym(y));
 
 end
 
