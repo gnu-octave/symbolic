@@ -27,7 +27,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function [p,m] = factor(f)
+function [p, m] = factor(f)
 
   % FIXME: doc: SMT does not expose vector output?  Strange, given Matlab's
   % factor(double) command!
@@ -50,9 +50,9 @@ function [p,m] = factor(f)
               'num = len(d.keys())' ...
               'sk = sorted(d.keys())' ...
               'p = sp.Matrix(1, num, sk)' ...
-              'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])\\' ...
-              'return (p,m)' };
-      [p,m] = python_cmd (cmd, f);
+              'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])' ...
+              'return (p, m)' };
+      [p, m] = python_cmd (cmd, f);
     end
 
 
@@ -60,9 +60,7 @@ function [p,m] = factor(f)
     %% symbols, polynomial factorization
     % FIXME; symvar? optional 2nd argument
     cmd = { 'p = factor(_ins[0])' ...
-            '#if isinstance(p, sp.ImmutableMatrix):' ...
-            '#    p = p.as_mutable()' ...
-            'return (p,)' };
+            'return p,' };
     p = python_cmd (cmd, f);
   end
 end
