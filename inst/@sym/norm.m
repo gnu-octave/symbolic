@@ -30,9 +30,9 @@ function z = norm(x, ord)
 
   if (nargin < 2)
     ord = 'meh';
-    line1 = 'x = _ins[0]\nord = None\n';
+    line1 = 'x = _ins[0]; ord = None';
   else
-    line1 = '(x,ord,) = _ins\n';
+    line1 = '(x,ord) = _ins';
   end
 
   if (ischar(ord))
@@ -43,13 +43,12 @@ function z = norm(x, ord)
     ord = sym(ord);
   end
 
-  cmd = [ line1 ...
-          'if x.is_Matrix:\n' ...
-          '    return ( x.norm(ord) ,)\n' ...
-          'else:\n' ...
-          '    return ( sqrt(x**2) ,)' ];
+  cmd = { line1 ...
+          'if not x.is_Matrix:' ...
+          '    x = sympy.Matrix([x])' ...
+          'return x.norm(ord),' };
 
-  z = python_cmd_string (cmd, sym(x), ord);
+  z = python_cmd (cmd, sym(x), ord);
 
 end
 
@@ -62,8 +61,8 @@ end
 %! assert (isequal (norm([x 1; 3 y], 'fro'), sqrt(x^2 + y^2 + 10)))
 %! assert (isequal (norm([x 1], 2), sqrt(x^2 + 1)))
 
-%! % test sym vs double ord
 %!test
+%! % test sym vs double ord
 %! syms x
 %! assert (isequal (norm([x 2 1], 1), abs(x) + 3))
 %! assert (isequal (norm([x 2 1], sym(1)), abs(x) + 3))
