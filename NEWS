@@ -8,7 +8,9 @@ octsympy 0.1.1 (yyyy-mm-dd)
 
  *  IPC system() should work on windows (FIXME: test header load)
 
- *  Improvements to string handling/escaping especially newlines.
+ *  Improvements to logical and isAlways commands.
+
+ *  Improvements to internel string handling/escaping especially newlines.
 
      -  Enter a multiline command using a cell array of lines e.g.,
         `python_cmd({'a = 10' 'return (a, 2*a)'})
