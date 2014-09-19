@@ -28,13 +28,13 @@
 
 function z = log10(x)
 
-  cmd = [ '(x,) = _ins\n' ...
-          'y = sp.log(x,10)\n' ...
-          'return (y,)' ];
+  sf = 'lambda x: sp.log(x, 10)';
 
-  z = python_cmd_string (cmd, x);
+  z = uniop_helper (x, sf);
 
 end
 
 
 %!assert (isequal (log10 (sym (1000)), sym (3)))
+
+%!assert (isequal (log10 (sym ([10 100])), sym ([1 2])))
