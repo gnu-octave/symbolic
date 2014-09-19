@@ -40,11 +40,11 @@ function soln = dsolve(de, y, ic)
   end
 
   if (isscalar(de))
-    cmd = [ '(_de,_y) = _ins\n'  ...
-            'g = sp.dsolve(_de,_y)\n'  ...
-            'return (g,)' ];
+    cmd = { '(de, y) = _ins'
+            'g = sp.dsolve(de, y)'
+            'return g,' };
 
-    soln = python_cmd_string (cmd, de, y);
+    soln = python_cmd (cmd, de, y);
 
     if (nargin == 3)
       warning('todo: ICs not supported yet')

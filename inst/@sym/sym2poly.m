@@ -69,13 +69,12 @@ function c = sym2poly(p,x)
     convert_to_double = false;
   end
 
-  cmd = [ 'f = _ins[0]\n' ...
-          'x = _ins[1]\n' ...
-          'p = Poly.from_expr(f,x)\n' ...
-          'c = p.all_coeffs()\n' ...
-          'return (c,)' ];
+  cmd = { 'f = _ins[0]'
+          'x = _ins[1]'
+          'p = Poly.from_expr(f,x)'
+          'return p.all_coeffs(),' };
 
-  c2 = python_cmd_string (cmd, p, x);
+  c2 = python_cmd (cmd, p, x);
   if (isempty(c2))
     error('Empty python output, can this happen?  A bug.')
   end

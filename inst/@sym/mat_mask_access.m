@@ -58,22 +58,17 @@ function Z = mat_mask_access(A, I)
   end
 
   % careful, if you have persistence/caching, do these need .copy?
-  cmd = [ '(A,mask,n,m) = _ins\n'  ...
-          '# transpose b/c SymPy is row-based\n' ...
-          'AT = A.T\n' ...
-          'maskT = mask.T\n' ...
-          'M = sp.Matrix.zeros(m, n)  # row-based\n'  ...
-          'j = 0\n' ...
-          'for i in range(0,len(A)):\n'  ...
-          '    if maskT[i] > 0:\n' ...
-          '        M[j] = AT[i]\n'  ...
-          '        j = j + 1\n' ...
-          'return (M.T,)' ];
-
-  % FIXME: not optimal, but we don't have bool -> sym yet
-  if (islogical(I))
-    I = double(I);
-  end
+  cmd = { '(A, mask, n, m) = _ins'
+          '# transpose b/c SymPy is row-based'
+          'AT = A.T'
+          'maskT = mask.T'
+          'M = sp.Matrix.zeros(m, n)  # row-based'
+          'j = 0'
+          'for i in range(0,len(A)):'
+          '    if maskT[i]:'
+          '        M[j] = AT[i]'
+          '        j = j + 1'
+          'return M.T,' };
 
   % output shape, see logic in comments above
   if (my_isrow(A))
@@ -88,7 +83,7 @@ function Z = mat_mask_access(A, I)
     n = nnz(I);  m = 1;
   end
 
-  Z = python_cmd_string (cmd, sym(A), sym(I), n, m);
+  Z = python_cmd (cmd, sym(A), sym(I), n, m);
 end
 
 

@@ -34,17 +34,17 @@ function z = mat_rclist_access(A, r, c)
     error('this routine is for a list of rows and cols');
   end
 
-  cmd = [ '(A,rr,cc) = _ins\n'  ...
-          '# 2D access so no transpose for sympy row-based\n' ...
-          'n = len(rr)\n' ...
-          'M = sp.Matrix.zeros(n, 1)\n'  ...
-          'for i in range(0,n):\n'  ...
-          '    M[i,0] = A[rr[i],cc[i]]\n'  ...
-          'return (M,)' ];
+  cmd = { '(A, rr, cc) = _ins'
+          '# 2D access so no transpose for sympy row-based'
+          'n = len(rr)'
+          'M = sp.Matrix.zeros(n, 1)'
+          'for i in range(0,n):'
+          '    M[i,0] = A[rr[i],cc[i]]'
+          'return M,' };
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd_string (cmd, A, rr, cc);
+  z = python_cmd (cmd, A, rr, cc);
 end
 
 

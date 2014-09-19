@@ -47,13 +47,13 @@ function g = laplacian(f,x)
     x = {x};
   end
 
-  cmd = [ '(f,x,) = _ins\n'  ...
-          'g = 0\n'...
-          'for y in x:\n' ...
-          '    g = g + f.diff(y,2)\n' ...
-          'return ( g ,)' ];
+  cmd = { '(f, x) = _ins'
+          'g = 0'
+          'for y in x:'
+          '    g = g + f.diff(y, 2)'
+          'return g,' };
 
-  g = python_cmd_string (cmd, sym(f), x);
+  g = python_cmd (cmd, sym(f), x);
 
 end
 

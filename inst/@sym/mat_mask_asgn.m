@@ -73,23 +73,19 @@ function z = mat_mask_asgn(A, I, B)
 
   % I think .T makes a copy, but be careful: in general may need a
   % .copy() here
-  cmd = [ '(A,mask,B) = _ins\n'  ...
-          '# transpose b/c SymPy is row-based\n' ...
-          'AT = A.T\n' ...
-          'maskT = mask.T\n' ...
-          'BT = B.T\n' ...
-          'j = 0\n' ...
-          'for i in range(0,len(A)):\n'  ...
-          '    if maskT[i] > 0:\n' ...
-          '        AT[i] = BT[j]\n'  ...
-          '        j = j + 1\n' ...
-          'return (AT.T,)' ];
+  cmd = { '(A, mask, B) = _ins'
+          '# transpose b/c SymPy is row-based'
+          'AT = A.T'
+          'maskT = mask.T'
+          'BT = B.T'
+          'j = 0'
+          'for i in range(0, len(A)):'
+          '    if maskT[i]:'
+          '        AT[i] = BT[j]'
+          '        j = j + 1'
+          'return AT.T,' };
 
-  % FIXME: not optimal, but we don't have bool -> sym yet
-  if islogical(I)
-    I = double(I);
-  end
-  z = python_cmd_string (cmd, sym(A), sym(I), sym(B));
+  z = python_cmd (cmd, sym(A), sym(I), sym(B));
 end
 
 

@@ -43,18 +43,18 @@ function g = curl(v,x)
 
   % ugh issue 17 so do in python to avoid
 
-  cmd = [ '(v,x,) = _ins\n'  ...
-          'def d(u,y):\n'             ...
-          '    if u.is_constant():\n'    ...
-          '        return sp.numbers.Zero()\n'...
-          '    return u.diff(y)\n'...
-          'g = Matrix([ \\n' ...
-          '      d(v[2],x[1]) - d(v[1],x[2]),  \\n'...
-          '      d(v[0],x[2]) - d(v[2],x[0]),  \\n'...
-          '      d(v[1],x[0]) - d(v[0],x[1])  ])\n'...
-          'return ( g ,)' ];
+  cmd = { '(v, x) = _ins'
+          'def d(u, y):'
+          '    if u.is_constant():'  % FIXME ?
+          '        return sp.numbers.Zero()'
+          '    return u.diff(y)'
+          'g = Matrix([ \'
+          '      d(v[2], x[1]) - d(v[1], x[2]),  \'
+          '      d(v[0], x[2]) - d(v[2], x[0]),  \'
+          '      d(v[1], x[0]) - d(v[0], x[1])  ])'
+          'return g,' };
 
-  g = python_cmd_string (cmd, sym(v), x);
+  g = python_cmd (cmd, sym(v), x);
 
 end
 

@@ -46,11 +46,11 @@ function [p, m] = factor(f)
       if (~isscalar(f))
         error('vector output factorization only for scalar integers')
       end
-      cmd = { 'd = factorint(_ins[0], visual=False)' ...
-              'num = len(d.keys())' ...
-              'sk = sorted(d.keys())' ...
-              'p = sp.Matrix(1, num, sk)' ...
-              'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])' ...
+      cmd = { 'd = factorint(_ins[0], visual=False)'
+              'num = len(d.keys())'
+              'sk = sorted(d.keys())'
+              'p = sp.Matrix(1, num, sk)'
+              'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])'
               'return (p, m)' };
       [p, m] = python_cmd (cmd, f);
     end
@@ -59,7 +59,7 @@ function [p, m] = factor(f)
   else
     %% symbols, polynomial factorization
     % FIXME; symvar? optional 2nd argument
-    cmd = { 'p = factor(_ins[0])' ...
+    cmd = { 'p = factor(_ins[0])'
             'return p,' };
     p = python_cmd (cmd, f);
   end

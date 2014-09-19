@@ -68,11 +68,11 @@ function out = solve(varargin)
   eqn = varargin(1:n/2);
   vars = varargin(n/2+1:n);
 
-  cmd = [ '#dbout(_ins)\n'  ...
-          'd = sp.solve(*_ins, dict=True)\n'  ...
-          '#dbout(d)\n'  ...
-          'return (d,)' ];
-  out = python_cmd_string (cmd, eqn, vars);
+  cmd = { '#dbout(_ins)'
+          'd = sp.solve(*_ins, dict=True)'
+          '#dbout(d)'
+          'return d,' };
+  out = python_cmd (cmd, eqn, vars);
 end
 
 

@@ -45,13 +45,13 @@ function g = jacobian(f,x)
     x = {x};
   end
 
-  cmd = [ '(f,x,) = _ins\n'  ...
-          'if not f.is_Matrix:\n' ...
-          '    f = Matrix([f])\n' ...
-          'G = f.jacobian(x)\n' ...
-          'return ( G ,)' ];
+  cmd = { '(f, x) = _ins'
+          'if not f.is_Matrix:'
+          '    f = Matrix([f])'
+          'G = f.jacobian(x)'
+          'return G,' };
 
-  g = python_cmd_string (cmd, sym(f), x);
+  g = python_cmd (cmd, sym(f), x);
 
 end
 
