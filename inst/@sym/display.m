@@ -79,7 +79,7 @@ function display(x)
   elseif (isempty (x))
     formatstr = [  ];
     n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', inputname (1), ...
-                 class (x), strtrim(disp(x)), d(1), timesstr, d(2))
+                 class (x), strtrim(disp(x)), d(1), timesstr, d(2));
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
 
