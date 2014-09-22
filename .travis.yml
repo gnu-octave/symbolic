@@ -10,14 +10,12 @@ install:
 # all commands here must have exit code 0 for the build to be called "passing"
 script:
   - octave --eval "a=42;disp(a);ver;pwd;exit(0)"
-  - r=$?; echo $r
-  - echo $r
   - pushd src; make; popd
   - pushd inst
   - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_test_suite(); exit(r)"
-  - popd
   - cat fntests.log
+  - popd
 
 #after_script:
 #  - echo ${TRAVIS_TEST_RESULT}
