@@ -54,12 +54,13 @@
 %% You can also pass a cell-array of lines of code.  But be careful
 %% with whitespace: its Python!
 %% @example
-%% cmd = { '(x,) = _ins' ...
-%%         'if x.is_Matrix:' ...
-%%         '    return (x.T,)' ...
-%%         'else:' ...
-%%         '    return (x,)' };
+%% cmd = @{ '(x,) = _ins'
+%%         'if x.is_Matrix:'
+%%         '    return (x.T,)'
+%%         'else:'
+%%         '    return (x,)' @};
 %% @end example
+%% The cell array can be either a row or a column vector.
 %% Each of these strings probably should not have any newlines
 %% (other than escaped ones e.g., inside strings).  An exception
 %% might be python """ multiline strings """.  FIXME: test this.
