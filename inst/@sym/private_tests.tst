@@ -16,32 +16,11 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{A} =} my_isrow (@var{x})
-%% Return true if input is a row vector.
-%%
-%% @seealso{my_iscolumn}
-%% @end deftypefn
 
-function retval = my_isrow(x)
+%% Tests for private/
+% Put tests here that would otherwise be in .m files in private/
+% https://savannah.gnu.org/bugs/?38776
 
-  t = exist('isrow');
+% FIXME: would be nice if this worked, to move the mat_* helpers
 
-  if ((t==2) || (t==5))
-    retval = isrow(x);
-  else
-    % from Rik Wehbring's Octave function:
-    sz = size (x);
-    retval = (ndims (x) == 2 && (sz(1) == 1));
-  end
-
-end
-
-
-% go give someone a hug instead; life's too short to worry about
-% private tests working in octave
-%%!assert(my_isrow([1]))
-%%!assert(my_isrow([1 2 3]))
-%%!assert(~my_isrow([]))
-%%!assert(~my_isrow([1 2 3]'))
-%%!assert(~my_isrow([1 2; 3 4]))
+%!assert(true)

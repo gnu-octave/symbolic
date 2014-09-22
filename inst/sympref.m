@@ -216,9 +216,8 @@ end
 %!test
 %! fprintf('\n');
 %! syms x
-%! r = sympref('reset')
+%! r = sympref('reset');
 %! pause(1);
 %! syms x
 %! pause(2);
-%! fprintf('\n');
 %! assert(r)

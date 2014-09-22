@@ -53,7 +53,7 @@
 %% @end example
 %%
 %% Abstract functions: you can use sym/syms:
-%% @example:
+%% @example
 %% syms f(x) g(x,y)
 %% @end example
 %%

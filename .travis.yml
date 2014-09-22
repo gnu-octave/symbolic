@@ -1,0 +1,21 @@
+language: python
+# well its really octave, but that is not supported
+
+install:
+  - sudo apt-add-repository --yes ppa:octave/stable
+  - sudo apt-get update
+  - sudo apt-get install octave
+  - "pip install sympy"
+
+# all commands here must have exit code 0 for the build to be called "passing"
+script:
+  - octave --eval "a=42;disp(a);ver;pwd;exit(0)"
+  - pushd src; make; popd
+  - pushd inst
+  - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
+  - octave --eval "r = octsympy_test_suite(); exit(r)"
+  - cat fntests.log
+  - popd
+
+#after_script:
+#  - echo ${TRAVIS_TEST_RESULT}
