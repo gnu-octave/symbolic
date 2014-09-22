@@ -1,7 +1,7 @@
 # the three main targets, all, matlab and clean
 
-OCTAVE="octave"
-PYTHON="python"
+OCTAVE=octave
+PYTHON=python
 
 all: codegen
 
