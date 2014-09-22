@@ -47,7 +47,9 @@ Differences
 
 * SMT has isinf(x + oo) and isinf(x*oo) true.  SymPy says false.
 
-* SMT logical(sym('x')), logical(sym(pi)) are errors.  OctSymPy has true (b/c nonzero).
+* SMT logical(sym('x')), logical(sym(pi)) are errors.  OctSymPy has true (b/c nonzero).  FIXME: double-check later
+
+* SMT char(expr) outputs MuPAD code string; OctSymPy outputs SymPy string.
 
 
 Differences in assumptions
