@@ -6,10 +6,7 @@ function anyfail = octsympy_test_suite ()
   fcndirs = { '.'
               '@logical'
               '@sym'
-              '@sym/private'
-              '@symfun'
-              '@symfun/private'
-              'private' };
+              '@symfun' };
   % I had trouble with global vars, so just return them
   files_with_no_tests = {};
   files_with_tests = {};

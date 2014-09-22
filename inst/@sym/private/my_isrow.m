@@ -38,8 +38,10 @@ function retval = my_isrow(x)
 end
 
 
-%!assert(my_isrow([1]))
-%!assert(my_isrow([1 2 3]))
-%!assert(~my_isrow([]))
-%!assert(~my_isrow([1 2 3]'))
-%!assert(~my_isrow([1 2; 3 4]))
+% go give someone a hug instead; life's too short to worry about
+% private tests working in octave
+%%!assert(my_isrow([1]))
+%%!assert(my_isrow([1 2 3]))
+%%!assert(~my_isrow([]))
+%%!assert(~my_isrow([1 2 3]'))
+%%!assert(~my_isrow([1 2; 3 4]))
