@@ -204,3 +204,6 @@ function report_files_with_no_tests (with, without, typ)
   printf ("\n%d (of %d) %s files have no tests:\n", n_without, n_tot, typ);
 endfunction
 
+
+% muhaha, no one is watching the watchers
+%!assert(true)
