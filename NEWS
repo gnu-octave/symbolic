@@ -3,10 +3,11 @@ octsympy 0.1.1 (yyyy-mm-dd)
 
  *  New commands:
 
+          char
           isscalar
           uplus
 
- *  Bug fixes, #88, #90.
+ *  Bug fixes, #88, #90, #91.
 
 
 
