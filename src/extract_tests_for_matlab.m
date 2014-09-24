@@ -47,12 +47,20 @@ function r = proc_file(base, basestr, nm, outdir)
   %__blockidx = __lineidx(find (! isspace (__body(__lineidx+1))))+1;
 
   nl = sprintf('\n');
+
+  % add an extra newline to ensure final line has one
+  body = [body nl];
+
   body = regexprep(body, '^test\n', ['%test' nl], 'lineanchors');
   body = regexprep(body, '^test ', ['%test' nl], 'lineanchors');
   body = regexprep(body, '^(shared .*)\n', ['%$1' nl], 'lineanchors', 'dotexceptnewline');
+  body = regexprep(body, '^xtest\n( [^\n]*\n)*', ['%xtest' ...
+                      ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
+  body = regexprep(body, '^error [^\n]+\n( [^\n]*\n)*', ['%error' ...
+                      ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
 
   % output it
-  out_name = ['tests_ml_' basestr '_' name_no_m];
+  out_name = ['tests_' basestr '_' name_no_m];
   full_out_name = [outdir '/' out_name '.m'];
   fid = fopen (full_out_name, 'w');
   fprintf(fid, 'function %s()\n', out_name);
