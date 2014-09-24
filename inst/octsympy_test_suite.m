@@ -1,6 +1,33 @@
-## Colin threw this together by modifying "__run_test_suite__.m",
-## which is Copyright (C) 2005-2013 David Bateman, part of Octave, GPL
-## v3 or later.
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{r} =} octsympy_test_suite ()
+%% Run the tests, log results, and return true if passing.
+%%
+%% I threw this together by modifying "__run_test_suite__.m" which
+%% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
+%% GPL v3.
+%%
+%% @end deftypefn
+
+%% Author: Colin B. Macdonald, David Bateman
+%% Keywords: tests
 
 function anyfail = octsympy_test_suite ()
   fcndirs = { '.'
@@ -85,10 +112,12 @@ function anyfail = octsympy_test_suite ()
   end_try_catch
 endfunction
 
+
 function print_test_file_name (nm)
   filler = repmat (".", 1, 50-length (nm));
   printf ("  %s %s", nm, filler);
 endfunction
+
 
 function print_pass_fail (p, n, xf, sk)
   if ((n + sk) > 0)
@@ -106,6 +135,7 @@ function print_pass_fail (p, n, xf, sk)
   endif
   puts ("\n");
 endfunction
+
 
 function retval = has_functions (f)
   n = length (f);
@@ -125,6 +155,7 @@ function retval = has_functions (f)
     retval = false;
   endif
 endfunction
+
 
 function retval = has_tests (f)
   fid = fopen (f);
@@ -192,9 +223,11 @@ function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
   #printf("%s%s -> passes %d of %d tests\n", ident, d, dp, dn);
 endfunction
 
+
 function n = num_elts_matching_pattern (lst, pat)
   n = sum (! cellfun ("isempty", regexp (lst, pat, 'once')));
 endfunction
+
 
 function report_files_with_no_tests (with, without, typ)
   pat = ['\' typ "$"];
