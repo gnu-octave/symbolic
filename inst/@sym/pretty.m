@@ -62,19 +62,19 @@ end
 %! % simple
 %! syms x
 %! s1 = pretty(sin(x));
-%! s2 = '   sin(x)';
+%! s2 = '  sin(x)';
 %! assert(strcmp(s1,s2))
 
 %!test
 %! % force ascii
 %! syms x
 %! s1 = pretty(sin(x/2), 'ascii');
-%! s2 = sprintf('      /x\\\n   sin|-|\n      \\2/');
+%! s2 = sprintf('     /x\\\n  sin|-|\n     \\2/');
 %! assert(strcmp(s1,s2))
 
 %!test
 %! % with unicode, probably fails on Matlab
 %! syms x
 %! s1 = pretty(sin(x/2));
-%! s2 = sprintf('      ⎛x⎞\n   sin⎜─⎟\n      ⎝2⎠');
+%! s2 = sprintf('     ⎛x⎞\n  sin⎜─⎟\n     ⎝2⎠');
 %! assert(strcmp(s1,s2))
