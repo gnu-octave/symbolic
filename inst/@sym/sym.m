@@ -180,10 +180,10 @@ function s = sym(x, varargin)
       useSymbolNotS = true;
     end
 
-    % check if we're making a symfun
-    if (~isempty (strfind (x, '(') ))
-      %% Start making an abstract symfun
-      % If we see parentheses, we assume user is making a symfun.  We
+    %% check if we're making a symfun
+    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)"
+    if (~isempty (regexp(x, '^\w+\(\w+(,\w+)*\)$')))
+      % Assume we are starting to make an abstract symfun.  We
       % don't do it directly here, but instead return a specially
       % tagged sym.  Essentially, the contents of this sym are
       % irrelevant except for the special contents of the "extra"
@@ -199,6 +199,8 @@ function s = sym(x, varargin)
       assert(isempty(asm))
       return
     end
+
+    doDecimalCheck = true;
 
     % various special cases for x
     if (strcmp(x, 'pi'))
@@ -222,13 +224,19 @@ function s = sym(x, varargin)
     elseif (strcmp(x, 'Lambda'))
       x = 'Lamda';
       useSymbolNotS = true;
+    elseif (~isempty (strfind (x, '(') ))
+      %disp('debug: has a "(", not a symfun, assuming srepr!')
+      useSymbolNotS = false;
+      doDecimalCheck = false;
+    else
+      %disp(['debug: just a regular symbol: ' x])
     end
 
     if (~useSymbolNotS)
       % if we're not forcing Symbol() then we use S(), unless
       % cmd already set.
       if (isempty(cmd))
-        if (~isempty(strfind(x, '.')))
+        if (doDecimalCheck && ~isempty(strfind(x, '.')))
           warning('possibly unintended decimal point in constructor string');
         end
         cmd = sprintf('z = sympy.S("%s")', x);

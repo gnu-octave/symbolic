@@ -4,6 +4,7 @@ octsympy 0.1.1 (yyyy-mm-dd)
  *  New commands:
 
           and
+          char
           isscalar
           or
           uplus
@@ -20,7 +21,7 @@ octsympy 0.1.1 (yyyy-mm-dd)
      -  The same applies to `evalpy`.  If you need the old deprecated
         behaviour, it is still available as `python_cmd_string`.
 
- *  Bug fixes, #88, #90.
+ *  Bug fixes, #88, #90, #91.
 
 
 
