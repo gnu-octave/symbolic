@@ -26,10 +26,10 @@ function t = ineq_helper(op, fop, lhs, rhs, nanspecial)
   end
 
   % FIXME: this will need to catch exceptions soon
-  op = { 'def _op(lhs, rhs):' ...
-         '    # workaround sympy nan behaviour, Issue #9' ...
-         '    if lhs is nan or rhs is nan:' ...
-        ['        return ' nanspecial] ...
+  op = { 'def _op(lhs, rhs):'
+         '    # workaround sympy nan behaviour, Issue #9'
+         '    if lhs is nan or rhs is nan:'
+        ['        return ' nanspecial]
         ['    return ' fop '(lhs, rhs)'] };
 
   t = binop_helper(lhs, rhs, op);

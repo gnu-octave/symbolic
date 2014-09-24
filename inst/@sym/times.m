@@ -36,10 +36,10 @@ function z = times(x, y)
   end
 
 
-  cmd = { '(x,y) = _ins' ...
-          'if x.is_Matrix and y.is_Matrix:' ...
-          '    return x.multiply_elementwise(y),' ...
-          'else:' ...
+  cmd = { '(x,y) = _ins'
+          'if x.is_Matrix and y.is_Matrix:'
+          '    return x.multiply_elementwise(y),'
+          'else:'
           '    return x*y,' };
 
   z = python_cmd (cmd, sym(x), sym(y));
