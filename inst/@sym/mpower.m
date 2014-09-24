@@ -51,7 +51,10 @@ function z = mpower(x, y)
 
     cmd = { 'x, y = _ins'
             'try:'
-            '    z = x**y'
+            '    if not y.is_number:'
+            '        z = sympy.MatPow(x, y)'
+            '    else:'
+            '        z = x**y'
             '    r = True'
             'except NotImplementedError as e:'
             '    z = str(e)'
