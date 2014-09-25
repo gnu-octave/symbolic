@@ -222,7 +222,7 @@ end
 
 %!test
 %! % strings with quotes
-%! x = 'a''b';  # this is a single quote
+%! x = 'a''b';  % this is a single quote
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x))
 
