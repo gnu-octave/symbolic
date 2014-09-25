@@ -58,4 +58,4 @@ end
 %!test
 %! % 2x2 inverse
 %! A = [1 2; 3 4];
-%! assert (double (inv (sym (A))), inv(A), 3*eps) 
+%! assert (max (max (abs (double (inv (sym (A))) - inv(A)))) <= 3*eps)

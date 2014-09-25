@@ -270,14 +270,14 @@ end
 %! c = isAlways(a, 'unknown', 'false');
 %! expect = [true false false true false];
 %! assert (islogical(b))
-%! assert (b, expect)
-%! assert (c, expect)
+%! assert (isequal (b, expect))
+%! assert (isequal (c, expect))
 %! b = isAlways(a, 'unknown', true);
 %! c = isAlways(a, 'unknown', 'true');
 %! expect = [true false true true false];
 %! assert (islogical(b))
-%! assert (b, expect)
-%! assert (c, expect)
+%! assert (isequal (b, expect))
+%! assert (isequal (c, expect))
 
 %!test
 %! % ineq
