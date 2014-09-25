@@ -66,13 +66,13 @@ function r = isAlways(p, varargin)
     assert(strcmpi(varargin{1}, 'unknown'))
     cant = varargin{2};
     if islogical(cant)
-      # SMT doesn't allow nonstring but it seems reasonable
+      % SMT doesn't allow nonstring but it seems reasonable
     elseif strcmpi(cant, 'true')
       cant = true;
     elseif strcmpi(cant, 'false')
       cant = false;
     elseif strcmpi(cant, 'error')
-      # no-op
+      % no-op
     else
       error('isAlways: invalid argument for "unknown" keyword')
     end

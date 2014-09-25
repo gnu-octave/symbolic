@@ -135,7 +135,7 @@ function f = matlabFunction(varargin)
       if (worked)
         codestr = vectorize(codestr);
       else
-        assert(codestr, 'global name ''octave_code'' is not defined')
+        assert(strcmp(codestr, 'global name ''octave_code'' is not defined'))
         warning('OctSymPy:matlabFunction:nocodegen', ...
                 'matlabFunction: your SymPy has no octave codegen: partial workaround');
 
