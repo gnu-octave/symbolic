@@ -102,10 +102,14 @@ end
 %! A = sym([1 2; 0 3]);
 %! B = A^sym(pi);
 
-%!error <not implemented.*Only integer and rational values are supported>
+%!xtest
 %! A = sym([1 2; 0 3]);
-%! syms x;
-%! B = A^x;
+%! syms n;
+%! B = A^n;
+%! C = subs(B, n, 1);
+%! assert (isequal (C, A))
+%! C = subs(B, n, 0);
+%! assert (isequal (C, sym(eye(2))))
 
 %!error <not implemented>
 %! % scalar^array not implemented
