@@ -34,7 +34,8 @@ function a = do_list(indent, in, varlist)
       % .append(pickle.loads("""%s"""))', x.pickle)
       % The extra printf around the pickle helps if it still has
       % escape codes (and seems harmless if it does not)
-      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(x.pickle));
+      % Issue #107: x.pickle fails for matrices, use char() as workaround
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
 
     elseif (ischar(x))
       c=c+1; a{c} = [sp in '.append("' x '")'];
