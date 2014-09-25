@@ -323,8 +323,9 @@ end
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
 %! % it should work
-%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
 %! x = sym(1/2);
+%! warning (s)
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))
 

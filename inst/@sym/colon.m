@@ -78,8 +78,9 @@ end
 %!test
 %! % mixed symbolic and double intervals
 %! p = sym(pi);
-%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
 %! L = 0.1:(sym(pi)/3):2.3;
+%! warning(s)
 %! assert(isa(L,'sym'));
 %! t = sym(1)/10;
 %! assert(isequal(L, [t p/3+t 2*p/3+t]));

@@ -94,11 +94,12 @@ end
 %! a = sym(b);
 %! I = rand(size(b)) > 0.5;
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
-%! warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape', 'local')
 %! I = I(:);
+%! s = warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape');
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = I';
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
+%! warning (s)
 %! I = logical(zeros(size(b)));
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
 
@@ -125,6 +126,7 @@ end
 %! Ic = rand(size(c)) > 0.5;
 %! assert(isequal( mat_mask_access(ar,Ir), r(Ir) ))
 %! assert(isequal( mat_mask_access(ac,Ic), c(Ic) ))
-%! warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape', 'local')
+%! s = warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape');
 %! assert(isequal( mat_mask_access(ar,Ic), r(Ic) ))
 %! assert(isequal( mat_mask_access(ac,Ir), c(Ir) ))
+%! warning (s)
