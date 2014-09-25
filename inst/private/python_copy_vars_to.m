@@ -3,8 +3,9 @@ function L = python_copy_vars_to(in, te, varargin)
 
   if (~te)
     %% no error checking
+    L = do_list(0, in, varargin);
     L = { sprintf('%s = []', in) ...
-          do_list(0, in, varargin){:} };
+          L{:} };
   else
     %% put inside try-except
     L = do_list(4, in, varargin);
