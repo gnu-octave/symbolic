@@ -128,7 +128,7 @@ end
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true false true]))
-%! e = e.';   # FIXME: e' gave error
+%! e = e.';   % FIXME: e' gave error
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true; false; true]))
