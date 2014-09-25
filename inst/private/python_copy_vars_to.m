@@ -96,7 +96,7 @@ function a = do_list(indent, in, varlist)
       error('don''t know how to move that variable to python');
     end
   end
-  c=c+1; a(c) = [sp '# end of a list'];
+  c=c+1; a{c} = [sp '# end of a list'];
 end
 
 

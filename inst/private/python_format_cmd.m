@@ -16,7 +16,8 @@ function s = python_format_cmd(cmd, tryexcept)
 
     % replace blank lines w/ empty comments
     I = cellfun(@isempty, cmd);
-    cmd(I) = '#';
+    % cmd(I) = '#';  % fails on matlab
+    cmd(I) = repmat({'#'}, 1, nnz(I));
 
     cmd = indent_lines(cmd, 4);
 

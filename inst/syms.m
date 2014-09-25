@@ -178,6 +178,6 @@ end
 %! syms x real
 %! f = 2*x;
 %! clear x
-%! assert (~exist('x', 'var'))
+%! assert (~logical(exist('x', 'var')))
 %! syms x clear
-%! assert (exist('x', 'var'))
+%! assert (logical(exist('x', 'var')))
