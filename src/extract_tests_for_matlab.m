@@ -54,10 +54,13 @@ function r = proc_file(base, basestr, nm, outdir)
   body = regexprep(body, '^test\n', ['%test' nl], 'lineanchors');
   body = regexprep(body, '^test ', ['%test' nl], 'lineanchors');
   body = regexprep(body, '^(shared .*)\n', ['%$1' nl], 'lineanchors', 'dotexceptnewline');
+  % FIXME: better to put these inside appropriate try catch end"
   body = regexprep(body, '^xtest\n( [^\n]*\n)*', ['%xtest' ...
                       ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
   body = regexprep(body, '^error [^\n]+\n( [^\n]*\n)*', ['%error' ...
                       ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
+  body = regexprep(body, '^warning [^\n]+\n( [^\n]*\n)*', ['%warning' ...
+                      ' (**WARNING TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
 
   % output it
   out_name = ['tests_' basestr '_' name_no_m];
