@@ -389,11 +389,11 @@ end
 %! %% assumptions and clearing them
 %! x = sym('x', 'real');
 %! f = {x {2*x}};
-%! A = assumptions();
-%! assert ( ~isempty(A))
+%! asm = assumptions();
+%! assert ( ~isempty(asm))
 %! x = sym('x', 'clear');
-%! A = assumptions();
-%! assert ( isempty(A))
+%! asm = assumptions();
+%! assert ( isempty(asm))
 
 %!test
 %! %% matlab compat, syms x clear should add x to workspace
