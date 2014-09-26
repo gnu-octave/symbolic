@@ -31,8 +31,8 @@
 function [n, m] = size(x, dim)
 
   n = x.size;
-  if (nargin >= 2) && (nargout >= 2)
-    error('invalid size call')
+  if (nargin == 2) && (nargout == 2)
+    error('size: invalid call')
   elseif (nargout == 2)
     m = n(2);
     n = n(1);
