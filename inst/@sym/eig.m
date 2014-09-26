@@ -18,8 +18,11 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{Lambda} =} eig (@var{A})
-%% @deftypefnx {Function File} {@var{V}, @var{Lambda}, @var{V} =} svd (@var{A})
+%% @deftypefnx {Function File} {@var{V}, @var{D} =} eig (@var{A})
 %% Symbolic eigenvales/eigenvectors of a matrix.
+%%
+%% FIXME; generalized eigrnvalue problem not supported, check
+%% SymPy.
 %%
 %% @seealso{svd}
 %% @end deftypefn
@@ -42,17 +45,30 @@ function [V, D] = eig(A, B)
             'for (e, m) in d.iteritems():'
             '    L.extend([e]*m)'
             'L = sympy.Matrix(L)'
-            %'L.simplify()'
             'return L,' };
 
     V = python_cmd (cmd, sym(A));
 
   else
-    error('FIXME')
-    % see A.eigenvects()
+    % careful, geometric vs algebraic mult, use m
+    cmd = { '(A,) = _ins'
+            'if not A.is_Matrix:'
+            '    A = sp.Matrix([A])'
+            'd = A.eigenvects()'
+            'V = sp.zeros(A.shape[0], 0)'  % empty
+            'L = []'
+            'for (e, m, bas) in d:'
+            '    L.extend([e]*m)'
+            '    if len(bas) < m:'
+            '        bas.extend([bas[0]]*(m-len(bas)))'
+            '    for v in bas:'
+            '        V = V.row_join(v)'
+            'D = diag(*L)'
+            'return V, D' };
+
+   [V, D] = python_cmd (cmd, sym(A));
+
   end
-
-
 end
 
 
@@ -89,3 +105,23 @@ end
 %! s = simplify(s);
 %! assert (isequal (s, [x+9; 6]) || isequal (s, [6; x+9]))
 
+
+%!test
+%! % eigenvects
+%! e = sym([5 5 5 6 7]);
+%! A = diag(e);
+%! [V, D] = eig(A);
+%! assert (isequal (diag(D), e.'))
+%! assert (isequal (V, diag(sym([1 1 1 1 1]))))
+
+%!test
+%! % alg/geom mult, eigenvects
+%! e = sym([5 5 5 6]);
+%! A = diag(e);
+%! A(1,2) = 1;
+%! [V, D] = eig(A);
+%! assert (isequal (diag(D), e.'))
+%! assert (sum(logical(V(1,:) ~= 0)) == 2)
+%! assert (sum(logical(V(2,:) ~= 0)) == 0)
+%! assert (sum(logical(V(3,:) ~= 0)) == 1)
+%! assert (sum(logical(V(4,:) ~= 0)) == 1)

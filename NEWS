@@ -6,6 +6,7 @@ octsympy 0.1.1 (yyyy-mm-dd)
           and
           char
           diag
+          eig
           isscalar
           or
           uplus
