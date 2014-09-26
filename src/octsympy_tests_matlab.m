@@ -8,7 +8,9 @@ cd(base);
 totaltime = clock();
 totalcputime = cputime();
 num_tests = 0;
-for i=1:length(files)
+rng('shuffle')
+%for i=1:length(files)
+for i=randperm(length(files))
   mfile = files(i).name;
   % detect tests b/c directory contains other stuff (e.g., surdirs and
   % helper files)
