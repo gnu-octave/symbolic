@@ -57,7 +57,7 @@ end
 
 function s = make_indented(s, n)
   if (nargin == 1)
-    n = 3;
+    n = 2;
   end
   pad = char (double (' ')*ones (1,n));
   newl = sprintf('\n');
@@ -69,21 +69,21 @@ end
 %!test
 %! syms x
 %! s = disp(sin(x));
-%! assert(strcmp(s, '   sin(x)'))
+%! assert(strcmp(s, '  sin(x)'))
 
 %!test
 %! syms x
 %! s = disp(sin(x/2), 'flat');
-%! assert(strcmp(s, '   sin(x/2)'))
+%! assert(strcmp(s, '  sin(x/2)'))
 
 %!test
 %! % Examples of 2x0 and 0x2 empty matrices:
 %! a = sym([1 2; 3 4]);
 %! b2x0 = a([true true], [false false]);
 %! b0x2 = a([false false], [true true]);
-%! assert (size (b2x0), [2 0])
-%! assert (size (b0x2), [0 2])
+%! assert (isequal (size (b2x0), [2 0]))
+%! assert (isequal (size (b0x2), [0 2]))
 %! s = disp(b2x0);
-%! assert(strcmp(s, '   []'))
+%! assert(strcmp(s, '  []'))
 %! s = disp(b0x2);
-%! assert(strcmp(s, '   []'))
+%! assert(strcmp(s, '  []'))

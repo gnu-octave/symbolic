@@ -17,22 +17,46 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} cat ()
-%% Overloaded cat for sym class, perhaps unnecessary.
+%% @deftypefn {Function File} {@var{z} =} or (@var{x}, @var{y})
+%% Logical or of symbolic arrays.
 %%
-%% FIXME: do we need this?
-%%
-%% @seealso{vertcat,horzcat}
+%% @seealso{and, not, xor, eq, ne, logical, isAlways, isequal}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function cat(varargin)
+function r = or(x, y)
 
-  error('cat: not implemented, unnecessary?');
+    r = binop_helper(x, y, 'lambda a,b: Or(a, b)');
 
 end
 
 
-%!assert(true)   % so far, everything works :)
+%!shared t, f
+%! t = sym(true);
+%! f = sym(false);
+
+%!test
+%! % simple
+%! assert (isequal (t | f, t))
+%! assert (isequal (t | t, t))
+%! assert (isequal (f | f, f))
+
+%!test
+%! % array
+%! w = [t t f f];
+%! z = [t f t f];
+%! assert (isequal (w | z, [t t t f]))
+
+%!xtest
+%! % output is sym even for scalar t/f
+%! % ₣IXME: should match other bool fcns
+%! assert (isa (t | f, 'sym'))
+
+%!test
+%! % eqns
+%! syms x
+%! e = or(x == 4, x == 5);
+%! assert (isequal (subs(e, x, [3 4 5 6]), [f t t f]))
+

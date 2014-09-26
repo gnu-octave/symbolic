@@ -40,22 +40,6 @@ function [n, m] = size(x, dim)
     n = n(dim);
   end
 
-  return
-
-
-  %% FIXME: the old implementation before sym objs cached size
-  cmd = [ 'x = _ins[0]\n'  ...
-          '#dbout("size of " + str(x))\n'  ...
-          'if x.is_Matrix:\n'  ...
-          '    d = x.shape\n'  ...
-          'else:\n'  ...
-          '    d = (1,1)\n'  ...
-          'return (d[0],d[1],)' ];
-  [n,m] = python_cmd(cmd, x);
-  if (nargout <= 1)
-    n = [n m];
-  end
-
 end
 
 

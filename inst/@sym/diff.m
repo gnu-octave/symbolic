@@ -83,9 +83,9 @@ function z = diff(f, varargin)
   end
 
 
-  cmd = [ 'f = _ins[0]\n' ...
-          'args = _ins[1:]\n' ...
-          'return (f.diff(*args), )' ];
+  cmd = { 'f = _ins[0]'
+          'args = _ins[1:]'
+          'return f.diff(*args),' };
 
   varargin = sym(varargin);
   z = python_cmd (cmd, sym(f), varargin{:});

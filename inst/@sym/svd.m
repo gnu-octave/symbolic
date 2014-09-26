@@ -42,11 +42,11 @@ function [S, varargout] = svd(A)
     error('svd: singular vectors not yet computed by sympy')
   end
 
-  cmd = [ '(A,) = _ins\n'  ...
-          'if not A.is_Matrix:\n' ...
-          '    A = sp.Matrix([A])\n' ...
-          'L = sp.Matrix(A.singular_values())\n' ...
-          'return ( L ,)' ];
+  cmd = { '(A,) = _ins'
+          'if not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'L = sp.Matrix(A.singular_values())'
+          'return L,' };
 
   S = python_cmd (cmd, sym(A));
 

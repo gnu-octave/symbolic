@@ -32,11 +32,11 @@ function z = inv(x)
     error('matrix is not square')
   end
 
-  cmd = [ '(x,) = _ins\n'  ...
-          'if x.is_Matrix:\n' ...
-          '    return ( x.inv() ,)\n' ...
-          'else:\n' ...
-          '    return ( 1/x ,)' ];
+  cmd = { 'x, = _ins'
+          'if x.is_Matrix:'
+          '    return x.inv(),'
+          'else:'
+          '    return S.One/x,' };
 
   z = python_cmd (cmd, x);
 
@@ -58,4 +58,4 @@ end
 %!test
 %! % 2x2 inverse
 %! A = [1 2; 3 4];
-%! assert (double (inv (sym (A))), inv(A), 3*eps) 
+%! assert (max (max (abs (double (inv (sym (A))) - inv(A)))) <= 3*eps)

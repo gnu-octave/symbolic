@@ -29,20 +29,20 @@ function z = rdivide(x, y)
 
   % Dear hacker from the distant future... maybe you can delete this?
   if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+    warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
     z = rdivide(x, y);
     return
   end
 
 
-  cmd = [ '(x,y) = _ins\n'  ...
-          'if x.is_Matrix and y.is_Matrix:\n'  ...
-          '    return ( x.multiply_elementwise(y.applyfunc(lambda a: 1/a)) ,)\n' ...
-          'if not x.is_Matrix and y.is_Matrix:\n'  ...
-          '    return ( y.applyfunc(lambda a: x/a) ,)\n' ...
-          'else:\n' ...
-          '    return ( x/y ,)' ];
+  cmd = { '(x,y) = _ins'
+          'if x.is_Matrix and y.is_Matrix:'
+          '    return x.multiply_elementwise(y.applyfunc(lambda a: 1/a)),'
+          'if not x.is_Matrix and y.is_Matrix:'
+          '    return y.applyfunc(lambda a: x/a),'
+          'else:'
+          '    return x/y,' };
 
   z = python_cmd (cmd, sym(x), sym(y));
 

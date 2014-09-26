@@ -81,15 +81,15 @@ function f = matlabFunction(varargin)
 
   %% Outputs
   if (param.codegen) && (~isempty(param.fname))
-    cmd = [ '(expr,fcnname,filename,showhdr,in_vars) = _ins\n' ...
-            'from sympy.utilities.codegen import codegen\n' ...
-            'try:\n' ...
-            '    out = codegen((fcnname,expr), "' param.lang ...
+    cmd = { '(expr,fcnname,filename,showhdr,in_vars) = _ins' ...
+            'from sympy.utilities.codegen import codegen' ...
+            'try:' ...
+           ['    out = codegen((fcnname,expr), "' param.lang ...
             '", filename, header=showhdr' ...
-            ', argument_sequence=in_vars)\n' ...
-            'except ValueError, e:\n' ...
-            '    return (False, str(e))\n' ...
-            'return (True, out)\n'];
+            ', argument_sequence=in_vars)'] ...
+            'except ValueError, e:' ...
+            '    return (False, str(e))' ...
+            'return (True, out)' };
 
     % if filename ends with .m, do not add another
     if strcmpi(param.fname(end-1:end), '.m')
@@ -124,18 +124,18 @@ function f = matlabFunction(varargin)
     exprstrs = {};
     for i=1:Nout
       expr = varargin{i};
-      cmd = [ '(f,) = _ins\n' ...
-              'try:\n' ...
-              '    s = octave_code(f)\n' ...
-              'except NameError, e:\n' ...
-              '    return (False, str(e))\n' ...
-              'return (True, s)\n'];
+      cmd = { '(f,) = _ins' ...
+              'try:' ...
+              '    s = octave_code(f)' ...
+              'except NameError, e:' ...
+              '    return (False, str(e))' ...
+              'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
       %worked = false;
       if (worked)
         codestr = vectorize(codestr);
       else
-        assert(codestr, 'global name ''octave_code'' is not defined')
+        assert(strcmp(codestr, 'global name ''octave_code'' is not defined'))
         warning('OctSymPy:matlabFunction:nocodegen', ...
                 'matlabFunction: your SymPy has no octave codegen: partial workaround');
 
@@ -170,54 +170,60 @@ end
 
 %!test
 %! % basic test
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(2*x);
+%! warning(s)
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3)==6)
 
 %!test
 %! % autodetect inputs
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(2*x*y, x+y);
+%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % specified inputs
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(2*x*y, 'vars', [x y]);
 %! assert(h(3,5)==30)
 %! h = matlabFunction(2*x*y, x+y, 'vars', [x y]);
+%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % cell arrays for vars list
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(2*x*y, x+y, 'vars', {x y});
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 %! h = matlabFunction(2*x*y, x+y, 'vars', {'x' 'y'});
+%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 %! h = matlabFunction(x*y, 12/y, 'vars', [y x]);
+%! warning(s)
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 %! h = matlabFunction(x*y, 12/y, 'vars', [y x]);
+%! warning(s)
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 
@@ -233,11 +239,12 @@ end
 
 %!test
 %! % 'file' with empty filename returns handle
-%! warning('off', 'OctSymPy:matlabFunction:nocodegen', 'local')
+%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
 %! h = matlabFunction(2*x*y, 'file', '');
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3,5)==30)
 %! h = matlabFunction(2*x*y, 'vars', {x y}, 'file', '');
+%! warning(s)
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3,5)==30)
 

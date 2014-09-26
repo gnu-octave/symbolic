@@ -62,6 +62,9 @@
 %% @item no semicolon, display each variable assigned.
 %% @end itemize
 %%
+%% Multiline code should be placed in a cell array, see the
+%% @code{python_cmd} documentation.
+%%
 %% Warning: evalpy is probably too smart for its own good.  It is
 %% intended for interactive use.  In your non-interactive code, you
 %% might want @code{python_cmd} instead.
@@ -73,7 +76,7 @@
 %%   Variables effected:" list.
 %% @item using print is probably a bad idea.  For now, use
 %%   @code{dbout(x)} to print @code{x} to stderr which should
-%%   appear in the terminal (FIXME).
+%%   appear in the terminal (FIXME: currently broken on windows).
 %% @item evalpy is a bit of a work-in-progress and subject to
 %%   change.  For example, with a proper IPC mechanism, you could
 %%   grab the values of @var{x} etc when needed and not need to
@@ -90,26 +93,25 @@ function evalpy(cmd, varargin)
 
   %% import variables
   % use name of input if it has one, also i0, i1, etc
-  s = '';
-  j = 0;
+  s = {};
   for i = 1:(nargin-1)
-    s = sprintf('%si%d = _ins[%d]\n', s, i-1, i-1);
+    s{end+1} = sprintf('i%d = _ins[%d]', i-1, i-1);
     name = inputname(i+1);
     if ~isempty(name)
-      s = sprintf('%s%s = _ins[%d]\n', s, name, i-1);
-      s = sprintf('%s_%s_orig = copy.copy(%s)\n', s, name, name);
+      s{end+1} = sprintf('%s = _ins[%d]', name, i-1);
+      s{end+1} = sprintf('_%s_orig = copy.copy(%s)', name, name);
     end
   end
   vars2py = s;
 
 
   %% generate code which checks if inputs have changed
-  s = '';
+  s = {};
   for i = 1:(nargin-1)
     name = inputname(i+1);
     if ~isempty(name)
-      s = sprintf('%sif not %s == _%s_orig:\n', s, name, name);
-      s = sprintf('%s    _newvars["%s"] = %s\n', s, name, name);
+      s{end+1} = sprintf('if not %s == _%s_orig:', name, name);
+      s{end+1} = sprintf('    _newvars["%s"] = %s', name, name);
     end
   end
   changed_vars_also_export = s;
@@ -122,41 +124,41 @@ function evalpy(cmd, varargin)
   %end
 
   %% Examine end of cmd
-  % The user might or might not have escaped newlines.
-  % Strip newline from end of cmd, and any leading/trailing
-  % whitespace.  Then we can count semicolons.
-  newl = sprintf('\n');
-  cmd = strrep(cmd, '\n', newl);
-  cmd = strtrim(cmd);
-  if strcmp(cmd(end-1:end),';;')
+  if ~iscell(cmd)
+    cmd = {cmd};
+  end
+  % count semicolons
+  s = cmd{end};
+  if strcmp(s(end-1:end),';;')
     verbosity = 0;
-    cmd = cmd(1:end-1);  % ;; is syntax error in python
-  elseif cmd(end) == ';'
+    cmd{end} = s(1:end-1);  % ;; is syntax error in python
+  elseif s(end) == ';'
     verbosity = 1;
   else
     verbosity = 2;
   end
 
-  fullcmd = [ ...
-      vars2py ...
-      '_vars1 = locals().copy()\n' ...
-      cmd  '\n' ...
-      '_vars2 = locals().copy()\n' ...
-      '_newvars = dictdiff(_vars2, _vars1)\n' ...
-      changed_vars_also_export ...
-      '_names = []\n' ...
-      'for key in _newvars:\n' ...
-      '    if not (key[0] == "_" or key[-1] == "_"):\n' ...
-      '        _outs.append(_vars2[key])\n' ...
-      '        _names.append(key)\n' ...
-      'return (_names,_outs,)' ];
+
+  fullcmd = { ...
+      vars2py{:} ...
+      '_vars1 = locals().copy()' ...
+      cmd{:} ...
+      '_vars2 = locals().copy()' ...
+      '_newvars = dictdiff(_vars2, _vars1)' ...
+      changed_vars_also_export{:} ...
+      '_names = []' ...
+      'for key in _newvars:' ...
+      '    if not (key[0] == "_" or key[-1] == "_"):' ...
+      '        _outs.append(_vars2[key])' ...
+      '        _names.append(key)' ...
+      'return (_names,_outs,)' };
 
   %% debugging
   %fprintf('\n*** <CODE> ***\n')
   %disp(fullcmd)
   %fprintf('\n*** </CODE> ***\n\n')
 
-  [names,values] = python_cmd (fullcmd, varargin{:});
+  [names, values] = python_cmd (fullcmd, varargin{:});
   assert (length(names) == length(values))
 
   %fprintf('assigning to %s...\n', names{i})

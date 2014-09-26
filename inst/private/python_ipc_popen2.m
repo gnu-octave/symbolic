@@ -71,7 +71,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     %sleep(0.05); disp('');
 
     % print a block then read it to make sure we're live
-    fprintf (fin, 'octoutput_drv(("Communication establised.", sympy.__version__, sys.version))\n\n');
+    fprintf (fin, 'octoutput_drv(("Communication established.", sympy.__version__, sys.version))\n\n');
     fflush(fin);
     % if any exceptions in start-up, we probably get those instead
     [out, err] = readblock(fout, py_startup_timeout);
@@ -86,10 +86,10 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       out
       error('ipc_popen2: something has gone wrong in starting python')
     else
-      disp(['OctSymPy: ' A{1}{1} '  SymPy v' A{1}{2} '.']);
+      disp(['OctSymPy: ' A{1} '  SymPy v' A{2} '.']);
       % on unix we're seen this on stderr
       if (ispc() && ~isunix())
-        disp(['Python ' strrep(A{1}{3}, newl, '')])
+        disp(['Python ' strrep(A{3}, newl, '')])
       end
     end
   end
@@ -99,9 +99,8 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
   % there is a try-except block here, sends a block if sucessful
-  s = python_copy_vars_to('_ins', true, varargin{:});
-
-  fputs (fin, s);
+  loc = python_copy_vars_to('_ins', true, varargin{:});
+  write_lines(fin, loc, true);
   fflush(fin);
   [out, err] = readblock(fout, inf);
   if (err)
@@ -125,9 +124,9 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
   %% output, or perhaps a thrown error
   s2 = python_copy_vars_from('_outs');
 
-  s = [s s2];
+  write_lines(fin, s, true)
+  write_lines(fin, s2, true)
 
-  fputs (fin, s);
   fflush(fin);
   [out, err] = readblock(fout, inf);
   if (err)

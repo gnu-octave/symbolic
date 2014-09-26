@@ -26,6 +26,8 @@ try:
     # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
+    from sympy.logic.boolalg import Boolean, BooleanFunction
+    from sympy.core.relational import Relational
     import copy
     import binascii
     import struct
@@ -137,9 +139,7 @@ try:
         elif isinstance(x, (sp.Basic, sp.Matrix)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
-            elif isinstance(x, sp.Expr):
-                _d = (1,1)
-            elif x in (S.true, S.false):
+            elif isinstance(x, (sp.Expr, Boolean)):
                 _d = (1,1)
             else:
                 dbout("Treating unknown sympy as scalar: " + str(type(x)))

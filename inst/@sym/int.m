@@ -111,15 +111,15 @@ function F = int(f, x, a, b)
 
 
   %% now do the definite or indefinite integral
-  if definite
-    cmd = [ '(f,x,a,b) = _ins\n'  ...
-            'F = sp.integrate(f, (x, a, b))\n'  ...
-            'return (F,)' ];
+  if (definite)
+    cmd = { '(f, x, a, b) = _ins'
+            'F = sp.integrate(f, (x, a, b))'
+            'return F,' };
     F = python_cmd (cmd, sym(f), sym(x), sym(a), sym(b));
   else
-    cmd = [ '(f,x) = _ins\n'  ...
-            'd = sp.integrate(f, x)\n'  ...
-            'return (d,)' ];
+    cmd = { '(f,x) = _ins'
+            'd = sp.integrate(f, x)'
+            'return d,' };
     F = python_cmd (cmd, sym(f), sym(x));
   end
 

@@ -11,7 +11,9 @@ function A = extractblock(out)
   % the octave objects.
   i = 1;
   [i, A] = helper(Z, i, false);
-  % assert (i == length(B)), no; might be other stuff or another block
+  % assert (i == length(Z)), no; might be other stuff or another block
+  assert(length(A) == 1)
+  A = A{1};
 end
 
 

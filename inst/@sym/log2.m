@@ -28,13 +28,13 @@
 
 function z = log2(x)
 
-  cmd = [ '(x,) = _ins\n' ...
-          'y = sp.log(x,2)\n' ...
-          'return (y,)' ];
+  sf = 'lambda x: sp.log(x, 2)';
 
-  z = python_cmd (cmd, x);
+  z = uniop_helper (x, sf);
 
 end
 
 
 %!assert (isequal (log2 (sym (1024)), sym (10)))
+
+%!assert (isequal (log2 (sym ([2 16; 32 1])), sym ([1 4; 5 0])))

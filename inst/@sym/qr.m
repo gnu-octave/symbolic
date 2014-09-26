@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{q}, @var{r} =} qr (@var{a})
 %% Symbolic QR factorization of a matrix.
 %%
-%% FIXME: The sympy QR routine could probably be improved. 
+%% FIXME: The sympy QR routine could probably be improved.
 %%
 %% @end deftypefn
 
@@ -30,14 +30,14 @@
 function [Q, R] = qr(A, ord)
 
   if (nargin == 2)
-    warning('economy-size not implemented')
+    warning('OctSymPy:NotImplemented', 'economy-size not implemented')
   end
 
-  cmd = [ '(A,) = _ins\n'  ...
-          'if not A.is_Matrix:\n' ...
-          '    A = sp.Matrix([A])\n' ...
-          '(Q, R) = A.QRdecomposition()\n' ...
-          'return (Q, R)' ];
+  cmd = { 'A = _ins[0]' ...
+          'if not A.is_Matrix:' ...
+          '    A = sp.Matrix([A])' ...
+          '(Q, R) = A.QRdecomposition()' ...
+          'return (Q, R)' };
 
   [Q, R] = python_cmd (cmd, sym(A));
 

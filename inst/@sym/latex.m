@@ -28,8 +28,7 @@
 
 function varargout = latex(x)
 
-  cmd = [ 'd = sp.latex(*_ins)\n'  ...
-          'return (d,)\n' ];
+  cmd = { 'return sp.latex(*_ins),' };
 
   s = python_cmd (cmd, x);
 

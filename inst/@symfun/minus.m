@@ -42,7 +42,7 @@ end
 %! syms x
 %! f(x) = x^2;
 %! g = x^2;
-%! warning('off', 'OctSymPy:sym:arithmetic:42735-workaround', 'local')
+%! s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
 %! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
 %! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
 %! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))
@@ -51,6 +51,7 @@ end
 %! h = x .* f; assert(isa(h, 'symfun') && isequal(h.sym, x .* g))
 %! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.sym, x ./ g))
 %! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.sym, x .^ g))
+%! warning(s);
 
 %!test
 %! % different variables

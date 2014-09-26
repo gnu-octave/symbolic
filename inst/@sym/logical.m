@@ -28,14 +28,23 @@
 %% logical(x == y)    % false
 %% @end example
 %%
-%% Note this is different from @code{isAlways}.
-%% FIXME: doc better.
-%%
-%% Example:
+%% Note this is different from @code{isAlways} which tries to
+%% determine mathematical truth:
 %% @example
 %% isAlways(x*(1+y) == x+x*y)    % true
 %% logical(x*(1+y) == x+x*y)   % false!
 %% @end example
+%%
+%% @code{logical} treats objects according to:
+%% @itemize
+%% @item true/false in various forms: as is.
+%% @item equalities (==), unequalities (~=): check for structural
+%% equivalence (whether lhs and rhs match without simplifying.)
+%% @item numbers: true if nonzero, false if zero.
+%% @item nan, oo, zoo: FIXME
+%% @item boolean expr: And, Or: FIXME
+%% @item other objects raise error.
+%% @end itemize
 %%
 %% @seealso{isAlways, isequal, eq (==)}
 %% @end deftypefn
@@ -45,38 +54,56 @@
 
 function r = logical(p)
 
-  cmd = [ '(p,) = _ins\n' ...
-          'def scalar_case(p,):\n' ...
-          '    TE = TypeError("cannot reliably convert sym \"%s\" to bool" % str(p))\n' ...
-          '    if p in (S.true, S.false):\n' ...
-          '        return bool(p)\n' ...
-          '    elif isinstance(p, sp.relational.Relational):\n' ...
-          '        return bool(p._eval_relation(p.lhs, p.rhs))\n' ...
-          '    elif p is nan:\n' ...
-          '        raise TE\n' ...
-          '    elif p.is_number:\n' ...
-          '        return bool(p)\n' ...
-          '    else:\n' ...
-          '        #return bool(p)\n' ...
-          '        #return False\n' ...
-          '        raise TE\n' ...
-          'try:\n' ...
-          '    if p.is_Matrix:\n' ...
-          '        # we want a pure python list .applyfunc gives Matrix back\n' ...
-          '        r = [scalar_case(a) for a in p.T]\n' ...
-          '    else:\n' ...
-          '        r = [scalar_case(p)]\n' ...
-          '    flag = True\n' ...
-          'except TypeError, e:\n' ...
-          '    r = str(e)\n' ...
-          '    flag = False\n' ...
-          'return (flag, r)' ];
+  % do not simplify here
 
-  [flag, r] = python_cmd (cmd, p);
+  cmd = {
+    'def scalar2tfn(p):'
+    '    if p in (S.true, S.false):'
+    '        return bool(p)'
+    '    # ineq nothing to do, but Eq, Ne check structural eq'
+    '    if isinstance(p, Eq):'
+    '        r = p.lhs == p.rhs'  % could not be true from Eq ctor
+    '        return bool(r)'  % none -> false
+    '    if isinstance(p, Ne):'
+    '        r = p.lhs != p.rhs'
+    '        return bool(r)'
+    '    if isinstance(p, (Lt, Gt, Le, Ge)):'
+    '        return False'  % didn't reduce in ctor, needs isAlways
+    '    # for SMT compat'
+    '    if p.is_number:'
+    '        r = p.is_zero'  % FIXME: return bool(r)?
+    '        if r in (S.true, S.false):'
+    '            return not bool(r)'
+    '    return None'
+    '    #return "cannot reliably convert sym \"%s\" to bool" % str(p))'
+  };
+
+  cmd = vertcat(cmd, {
+    '(x, unknown) = _ins'
+    'if x.is_Matrix:'
+    '    r = [a for a in x.T]'  % note transpose
+    'else:'
+    '    r = [x,]'
+    'r = [scalar2tfn(a) for a in r]'
+    'r = [unknown if a is None else a for a in r]'
+    'flag = True'
+    'if r.count("error") > 0:'
+    '    flag = False'
+    '    r = "cannot reliably convert sym to bool"'
+    'return (flag, r)' });
+
+  [flag, r] = python_cmd (cmd, p, 'error');
+
+  % FIXME: oo, zoo error too in SMT
+  %        '    elif p is nan:'
+  %        '        raise TE   # FIXME: check SMT'
+
+
   if (~flag)
     assert (ischar (r), 'logical: programming error?')
     error(['logical: ' r])
   end
+
   r = cell2mat(r);
   r = reshape(r, size(p));
 
@@ -87,6 +114,9 @@ end
 %! % basics, many others in isAlways.m
 %! assert (logical(true))
 %! assert (~(logical(false)))
+
+%!test
+%! % numbers to logic?
 %! assert (logical(sym(1)))
 %! assert (logical(sym(-1)))
 %! assert (~logical(sym(0)))
@@ -128,7 +158,7 @@ end
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true false true]))
-%! e = e.';   % FIXME: e' gave error
+%! e = e';
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true; false; true]))
@@ -143,7 +173,7 @@ end
 %! assert (isequal (w, [true true false; true false true]))
 
 %!error <cannot .* convert sym .* bool>
-%! syms x oo
+%! syms x
 %! logical(x);
 
 %!error <cannot .* convert sym .* bool>
@@ -151,10 +181,10 @@ end
 
 %!test
 %! % but oo and zoo are non-zero so we call those true
-%! % (SMT errors on these)
+%! % (SMT errors on these)  FIXME
 %! syms oo zoo
 %! assert (logical (oo))
-%! assert (logical (zoo))
+%! % assert (logical (zoo))
 
 %%!xtest
 %%! % FIXME: what about positive x?
@@ -172,7 +202,7 @@ end
 %!   assert(false);
 %! end
 
-% more above, one it passes
+% more above, once it passes
 % e2 = sym(1) == sym(1);
 % if (e2)
 %   assert(true);

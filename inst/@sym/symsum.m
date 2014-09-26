@@ -30,14 +30,15 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function S = symsum(f,n,a,b)
+function S = symsum(f, n, a, b)
 
   %if (nargin == 3)
   %  n = symvar
 
-  cmd = [ '(f,n,a,b) = _ins\n'  ...
-           'S = sp.summation(f,(n,a,b))\n'  ...
-           'return (S,)' ];
+  cmd = { '(f, n, a, b) = _ins'
+           'S = sp.summation(f, (n, a, b))'
+           'return S,' };
+
   S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
 
 end

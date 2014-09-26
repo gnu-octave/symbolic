@@ -38,15 +38,16 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function S = symprod(f,n,a,b)
+function S = symprod(f, n, a, b)
 
   % FIXME: symvar
   %if (nargin == 3)
   %  n = symvar
 
-  cmd = [ '(f,n,a,b) = _ins\n'  ...
-          'S = sp.product(f,(n,a,b))\n'  ...
-          'return (S,)' ];
+  cmd = { '(f, n, a, b) = _ins'
+          'S = sp.product(f, (n, a, b))'
+          'return S,' };
+
   S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
 
 end

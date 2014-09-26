@@ -27,10 +27,10 @@
 
 function z = det(x)
 
-  cmd = [ '(A,) = _ins\n'  ...
-          'if not A.is_Matrix:\n' ...
-          '    A = sp.Matrix([A])\n' ...
-          'return ( A.det() ,)\n' ];
+  cmd = { '(A,) = _ins'
+          'if not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'return A.det(),' };
 
   z = python_cmd (cmd, x);
 

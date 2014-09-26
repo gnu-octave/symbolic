@@ -28,15 +28,15 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function f = ifourier(F,k,x)
+function f = ifourier(F, k, x)
 
   if (nargin < 3)
     syms k
     warning('todo: check SMT for 2nd argument behavoir');
   end
 
-  cmd = [ 'd = sp.inverse_fourier_transform(*_ins)\n' ...
-          'return (d,)' ];
+  cmd = { 'd = sp.inverse_fourier_transform(*_ins)'
+          'return d,' };
 
   f = python_cmd (cmd, sym(F), sym(k), sym(x));
 

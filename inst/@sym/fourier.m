@@ -28,15 +28,15 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function F = fourier(f,x,k)
+function F = fourier(f, x, k)
 
   if (nargin < 3)
     syms k
     warning('todo: check SMT for 2nd argument behavoir');
   end
 
-  cmd = [ 'd = sp.fourier_transform(*_ins)\n' ...
-          'return (d,)' ];
+  cmd = { 'd = sp.fourier_transform(*_ins)'
+          'return d,' };
 
   F = python_cmd (cmd, sym(f), sym(x), sym(k));
 

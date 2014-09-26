@@ -51,17 +51,27 @@
 %% a = python_cmd (cmd, x, y)
 %% @end example
 %%
-%% The string can have newlines for longer commands but be careful
+%% You can also pass a cell-array of lines of code.  But be careful
 %% with whitespace: its Python!
 %% @example
-%% cmd = [ '(x,) = _ins\n'  ...
-%%         'if x.is_Matrix:\n'  ...
-%%         '    return ( x.T ,)\n' ...
-%%         'else:\n' ...
-%%         '    return ( x ,)' ];
+%% cmd = @{ '(x,) = _ins'
+%%         'if x.is_Matrix:'
+%%         '    return (x.T,)'
+%%         'else:'
+%%         '    return (x,)' @};
 %% @end example
-%% It might be a good idea to avoid blank lines (FIXME: this used to
-%% be a problem, can't reproduce).
+%% The cell array can be either a row or a column vector.
+%% Each of these strings probably should not have any newlines
+%% (other than escaped ones e.g., inside strings).  An exception
+%% might be python """ multiline strings """.  FIXME: test this.
+%% It might be a good idea to avoid blank lines as they can cause
+%% problems with some of the ipc mechanisms.
+%%
+%% In older versions (OctSymPy v0.1.0 and older), you could use
+%% newlines and/or escaped newlines in the string to represent
+%% multiline input; this was fragile and made it hard to write
+%% python code with e.g., escaped chars in strings.  This form is
+%% deprecated but still available (for now) as python_cmd_string.
 %%
 %% Possible input types:
 %%    sym objects;
@@ -96,33 +106,28 @@
 
 function varargout = python_cmd(cmd, varargin)
 
-  newl = sprintf('\n');
-
-  %% A bit of preprocessing
-  % The user might or might not have escaped newlines in the command.
-  % We want to reliably indent this code to put it in a Python function.
-
-  % FIXME: trouble: this expands \n to newlines within string consts
-  % as well as the line endings.  Also, we add spaces: yuck!
-  cmd = strrep(cmd, '\n', newl);
-  cmd = strtrim(cmd);  % don't want trailing newlines
-  cmd = strrep(cmd, newl, [newl '    ']);  % indent each line by 4
+  if (~iscell(cmd))
+    cmd = {cmd};
+  end
 
   %% IPC interface
   % the ipc mechanism shall put the input variables in the tuple
   % '_ins' and it will return to us whatever we put in the tuple
   % '_outs'.  There is no particular reason this needs to define
   % a function, I just thought it isolates local variables a bit.
-  cmd = sprintf( [ 'def _fcn(_ins):\n' ...
-                   '    _outs = []\n' ...
-                   '    %s\n' ...
-                   '    return _outs\n' ...
-                   '_outs = _fcn(_ins)' ], cmd);
+  cmd = indent_lines(cmd, 4);
+  cmd = { 'def _fcn(_ins):' ...
+          '    _outs = []' ...
+          cmd{:} ...
+          '    return _outs' ...
+          '_outs = _fcn(_ins)' };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
-  % FIXME: filter this earlier?
-  A = A{1};
-  %db
+
+  if (~iscell(A))
+    A
+    error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
+  end
 
   M = length(A);
   varargout = cell(1,M);
@@ -130,9 +135,10 @@ function varargout = python_cmd(cmd, varargin)
     varargout{i} = A{i};
   end
 
-  if nargout ~= M
-    warning('number of outputs don''t match, was this intentional?')
-  end
+  % re-enable after python_cmd_string is gone?
+  %if nargout ~= M
+  %  warning('number of outputs don''t match, was this intentional?')
+  %end
 end
 
 
@@ -165,21 +171,23 @@ end
 
 %!test
 %! % string with newlines
+%! % FIXME: escaped in input should still be escaped in output
 %! x = 'a string\nbroke off\nmy guitar\n';
-%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%! x2 = sprintf(x);
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x2))
 
-%%!xtest
-%%! % bug: cmd string with newlines
-%%! y = python_cmd ('return "string\nbroke",')
-%%! y2 = 'string\nbroke'
-%%! assert (strcmp(y, y2))
+%!test
+%! % bug: cmd string with newlines, works with cell
+%! % FIXME: no addition escaping for this one
+%! y = python_cmd ('return "string\nbroke",');
+%! y2 = sprintf('string\nbroke');
+%! assert (strcmp(y, y2))
 
 %%!test
 %%! % FIXME: newlines: should be escaped for import?
 %%! x = 'a string\nbroke off\nmy guitar\n';
-%%! x2 = sprintf('a string\nbroke off\nmy guitar\n');
+%%! x2 = sprintf(x);
 %%! y = python_cmd ('return _ins', x2);
 %%! assert (strcmp(y, x2))
 
@@ -206,6 +214,13 @@ end
 %! assert (strcmp(y, expy))
 
 %!test
+%! % cmd has double quotes, these must be escaped by user
+%! % (of course: she is writing python code)
+%! expy = 'a"b"c';
+%! y = python_cmd ('return "a\"b\"c",');
+%! assert (strcmp(y, expy))
+
+%!test
 %! % strings with quotes
 %! x = 'a''b';  % this is a single quote
 %! y = python_cmd ('return _ins', x);
@@ -226,7 +241,19 @@ end
 %! assert (strcmp(y, x))
 
 %!test
-%! % slashes: FIXME: escape backslashes
+%! % cmd with printf escapes
+%! x = '% %% %%% %%%% %s %g %%s';
+%! y = python_cmd (['return "' x '",']);
+%! assert (strcmp(y, x))
+
+%!test
+%! % cmd w/ backslash and \n must be escaped by user
+%! expy = 'a\b\\c\nd\';
+%! y = python_cmd ('return "a\\b\\\\c\\nd\\",');
+%! assert (strcmp(y, expy))
+
+%!test
+%! % slashes: FIXME: auto escape backslashes
 %! x = '/\\ // \\\\ \\/\\/\\';
 %! z = '/\ // \\ \/\/\';
 %! y = python_cmd ('return _ins', x);
@@ -252,14 +279,14 @@ end
 %! s1 = '我爱你';
 %! cmd = 'return u"\u6211\u7231\u4f60",';
 %! s2 = python_cmd (cmd);
-%! assert (strcmp (s1,s2))
+%! assert (strcmp (s1, s2))
 
 %%!test
 %%! % unicode passthru: FIXME: how to get unicode back to Python?
 %%! s1 = '我爱你'
 %%! cmd = 'return (_ins[0],)';
 %%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s1,s2))
+%%! assert (strcmp (s1, s2))
 
 %%!test
 %%! % unicode w/ slashes, escapes, etc  FIXME
@@ -267,7 +294,7 @@ end
 %%! s3 = '我爱你<>\&//\#%% %\我'
 %%! cmd = 'return u"\u6211\u7231\u4f60",';
 %%! s2 = python_cmd (cmd)
-%%! assert (strcmp (s2,s3))
+%%! assert (strcmp (s2, s3))
 
 %!test
 %! % list, tuple

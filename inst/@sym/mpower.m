@@ -31,7 +31,7 @@ function z = mpower(x, y)
 
   % Dear hacker from the distant future... maybe you can delete this?
   if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:42735-workaround', ...
+    warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
     z = mpower(x, y);
     return
@@ -48,14 +48,15 @@ function z = mpower(x, y)
   elseif ~isscalar(x) && isscalar(y)
     % FIXME: sympy can do int and rat, could use MatPow otherwise,
     % rather than error.  SMT just leaves them unevaluted.
-    cmd = [ 'x, y = _ins\n' ...
-            'try:\n' ...
-            '    z = x**y\n' ...
-            '    r = True\n' ...
-            'except NotImplementedError as e:\n' ...
-            '    z = str(e)\n' ...
-            '    r = False\n' ...
-            'return (r, z)' ];
+
+    cmd = { 'x, y = _ins'
+            'try:'
+            '    z = x**y'
+            '    r = True'
+            'except NotImplementedError as e:'
+            '    z = str(e)'
+            '    r = False'
+            'return (r, z)' };
 
     [r, z] = python_cmd (cmd, sym(x), sym(y));
     if ~r

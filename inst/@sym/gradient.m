@@ -47,11 +47,11 @@ function g = gradient(f,x)
     x = {x};
   end
 
-  cmd = [ '(f,x,) = _ins\n'  ...
-          'if not f.is_Matrix:\n' ...
-          '    f = Matrix([f])\n' ...
-          'G = f.jacobian(x).T\n' ...
-          'return ( G ,)' ];
+  cmd = { '(f, x) = _ins'
+          'if not f.is_Matrix:'
+          '    f = Matrix([f])'
+          'G = f.jacobian(x).T'
+          'return G,' };
 
   g = python_cmd (cmd, sym(f), x);
 

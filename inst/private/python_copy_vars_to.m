@@ -1,61 +1,56 @@
-function s = python_copy_vars_to(in, te, varargin)
+function L = python_copy_vars_to(in, te, varargin)
 %private function
 
   if (~te)
     %% no error checking
-    s = sprintf('%s = []\n', in);
-    s = do_list(s, 0, in, varargin);
+    L = do_list(0, in, varargin);
+    L = { sprintf('%s = []', in) ...
+          L{:} };
   else
     %% put inside try-except
-    s = sprintf('try:\n    %s = []\n', in);
-    s = do_list(s, 4, in, varargin);
-    s = [ ...
-      s ...
-      sprintf([ ...
-      '    octoutput_drv("PYTHON: successful variable import")\n' ...
-      'except:\n' ...
-      '    octoutput_drv("PYTHON: Error in variable import")\n' ...
-      '    myerr(sys.exc_info())\n' ...
-      '    raise\n' ...
-      '\n\n' ])];
+    L = do_list(4, in, varargin);
+    L = { 'try:' ...
+      sprintf('    %s = []', in) ...
+      L{:} ...
+      '    octoutput_drv("PYTHON: successful variable import")' ...
+      'except:' ...
+      '    octoutput_drv("PYTHON: Error in variable import")' ...
+      '    myerr(sys.exc_info())' ...
+      '    raise' };
   end
 end
 
 
-function s = do_list(s, indent, in, L)
+function a = do_list(indent, in, varlist)
 
-  sp = char(' ' * ones(indent, 1));
-  for i=1:numel(L)
-    x = L{i};
+  sp = repmat(' ', 1, indent);
+  a = {}; c = 0;
+  for i = 1:numel(varlist)
+    x = varlist{i};
 
-    if (isa(x,'sym')) %&& isscalar(x))   % wrong for mat sympys
-      s = sprintf('%s%s# Load %d: pickle\n', s, sp, i);
+    if (isa(x,'sym'))
+      c=c+1; a{c} = [sp '# sym'];
       % need to be careful here: pickle might have escape codes
-      %s = sprintf('%s%s%s.append(pickle.loads("""%s"""))\n', s, sp, in, x.pickle);
-      % subsref is a workaround: otherwise this calls size/numel,
-      % starts a recursion if size not cached in the sym.
-      idx.type = '.';
-      idx.subs = 'pickle';
-      %s = sprintf('%s%s%s.append(%s)\n', s, sp, in, x.pickle);
-      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, sprintf(subsref(x, idx)));
+      % .append(pickle.loads("""%s"""))', x.pickle)
       % The extra printf around the pickle helps if it still has
       % escape codes (and seems harmless if it does not)
+      % Issue #107: x.pickle fails for matrices, use char() as workaround
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
 
     elseif (ischar(x))
-      s = sprintf('%s%s# Load %d: string\n', s, sp, i);
-      s = sprintf('%s%s%s.append("%s")\n', s, sp, in, x);
+      c=c+1; a{c} = [sp in '.append("' x '")'];
+      % or do we want a printf() around the string?
+      %c=c+1; a{c} = sprintf('%s%s.append("%s")', sp, in, x);
 
     elseif (islogical(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: bool\n', s, sp, i);
       if (x)
-        s = sprintf('%s%s%s.append(True)\n', s, sp, in);
+        c=c+1; a{c} = [sp in '.append(True)'];
       else
-        s = sprintf('%s%s%s.append(False)\n', s, sp, in);
+        c=c+1; a{c} = [sp in '.append(False)'];
       end
 
     elseif (isinteger(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: int type\n', s, sp, i);
-      s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
+      c=c+1; a{c} = sprintf('%s%s.append(%d)  # int type', sp, in, x);
 
     elseif (isfloat(x) && isscalar(x))
       % Floating point input.  By default, all Octave numbers are
@@ -68,34 +63,41 @@ function s = do_list(s, indent, in, L)
       %if (mod(x,1) == 0)  % pass integers
       %  s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
 
-      if (isa(x,'single'))
+      if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end
-      s = sprintf('%s%s# Load %d: double\n', s, sp, i);
-      s = sprintf('%s%s%s.append(hex2d("%s"))\n', s, sp, in, num2hex(x));
+      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
+                            sp, in, num2hex(x));
 
     elseif (iscell(x))
-      s = sprintf('%s%s# Load %d: a cell array to list\n', s, sp, i);
+      c=c+1; a{c} = [sp '# cell array: xfer to list'];
       inn = [in 'n'];
-      s = sprintf('%s%s%s = []\n', s, sp, inn);
-      s = sprintf('%s%s%s.append(%s)\n', s, sp, in, inn);
-      s = do_list(s, indent, inn, x);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, inn);
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, inn);
+      b = do_list(indent, inn, x);
+      a = {a{:} b{:}};
+      c = length(a);
 
     elseif (isstruct(x) && isscalar(x))
-      s = sprintf('%s%s# Load %d: struct to dict\n', s, sp, i);
+      c=c+1; a{c} = [sp '# struct: xfer to dict'];
       inkeys = [in 'k'];
       invalues = [in 'v'];
-      s = sprintf('%s%s%s = []\n', s, sp, inkeys);
-      s = do_list(s, indent, inkeys, fieldnames(x));
-      s = sprintf('%s%s%s = []\n', s, sp, invalues);
-      s = do_list(s, indent, invalues, struct2cell(x));
-      s = sprintf('%s%s%s.append(dict(zip(%s,%s)))\n', s, sp, in, inkeys, invalues);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, inkeys);
+      b = do_list(indent, inkeys, fieldnames(x));
+      a = {a{:} b{:}};
+      c = length(a);
+      c=c+1; a{c} = sprintf('%s%s = []', sp, invalues);
+      b = do_list(indent, invalues, struct2cell(x));
+      a = {a{:} b{:}};
+      c = length(a);
+      c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
 
     else
       i, x
       error('don''t know how to move that variable to python');
     end
   end
-  s = sprintf('%s%s# end of a list\n', s, sp);
+  c=c+1; a{c} = [sp '# end of a list'];
 end
+
 

@@ -57,11 +57,13 @@
 %% @itemize
 %% @item popen2, force popen2 choice (e.g., on Matlab were it would
 %% not be the default).
-%% @item system, construct a large multi-line string of the command
+%% @item system, construct a large string of the command
 %% and pass directly to the python interpreter with the
-%% @code{system()} command.  Warning: currently broken on Windows.
+%% @code{system()} command.  This typically assembles a multiline
+%% string for the commands, except on Windows where a long one-line
+%% string is used.
 %% @item systmpfile, output the python commands to a
-%% @code{temp_sym_python_cmd.py} file and then call that [for
+%% @code{tmp_python_cmd.py} file and then call that [for
 %% debugging, may not be supported long-term].
 %% @item sysoneline, put the python commands all on one line and
 %% pass to "python -c" using a call to @code{system()}.  [for
@@ -114,7 +116,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.1.0';
+      varargout{1} = '0.1.0-git';
 
     case 'display'
       if (nargin == 1)
@@ -163,7 +165,7 @@ function varargout = sympref(cmd, arg)
             disp('Forcing systmpfile ipc: warning: this is for debugging')
             warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
-          warning(['Unknown/unsupported IPC mechanism: hope you know what you''re doing'])
+            warning('Unsupported IPC mechanism: hope you know what you''re doing')
         end
       end
 

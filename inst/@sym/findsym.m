@@ -61,22 +61,6 @@ function C = syms2charcells(S)
 end
 
 
-function s = mystrjoin(A, sepchar)
-% replacement for strjoin until Octave 3.6 is old
-  n = numel(A);
-
-  if n == 0
-    s = '';
-  else
-    s = A{1};
-  end
-
-  for i = 2:n
-    s = [s sepchar A{i}];
-  end
-end
-
-
 %!assert (strcmp (findsym (sym(2)), ''));
 
 %!shared x,y,f

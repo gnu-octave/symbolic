@@ -89,10 +89,10 @@ function s = taylor(f,varargin)
     warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
   end
 
-  cmd = [ '(f,x,a,n) = _ins\n'  ...
-          's = f.series(x,a,n).removeO()\n'  ...
-          'return (s,)' ];
-  s = python_cmd(cmd, sym(f), sym(x), sym(a), n);
+  cmd = { '(f, x, a, n) = _ins'
+          's = f.series(x, a, n).removeO()'
+          'return s,' };
+  s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
 
 end
 

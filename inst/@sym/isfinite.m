@@ -37,11 +37,10 @@ end
 
 
 %!test
-%! % no sym should be NA
 %! syms x oo
-%! assert (~isna(sym(1)))
-%! assert (~isna(x))
-%! assert (~isna(oo))
-%! assert (~isna(sym(nan)))
-%! assert (isna (sym ([1 nan])), [false false])
+%! assert (isfinite(x))   % FIXME: why?
+%! assert (isfinite(sym(1)))
+%! assert (~isfinite(oo))
+%! assert (~isfinite(sym(nan)))
+%! assert (isequal (isfinite (sym ([1 oo])), [true false]))
 

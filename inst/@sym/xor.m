@@ -17,22 +17,51 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} cat ()
-%% Overloaded cat for sym class, perhaps unnecessary.
+%% @deftypefn {Function File} {@var{z} =} xor (@var{x}, @var{y})
+%% Logical xor of symbolic arrays.
 %%
-%% FIXME: do we need this?
-%%
-%% @seealso{vertcat,horzcat}
+%% @seealso{and, or, not, eq, ne, logical, isAlways, isequal}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function cat(varargin)
+function r = xor(x, y)
 
-  error('cat: not implemented, unnecessary?');
+    r = binop_helper(x, y, 'lambda a,b: Xor(a, b)');
 
 end
 
 
-%!assert(true)   % so far, everything works :)
+%!shared t, f
+%! t = sym(true);
+%! f = sym(false);
+
+%!test
+%! % simple
+%! assert (isequal (xor(t, f), t))
+%! assert (isequal (xor(t, t), f))
+
+%!test
+%! % array
+%! w = [t t f f];
+%! z = [t f t f];
+%! assert (isequal (xor(w, z), [f t t f]))
+
+%!xtest
+%! % output is sym even for scalar t/f
+%! % ₣IXME: should match other bool fcns
+%! assert (isa (xor(t, f), 'sym'))
+
+%!test
+%! % eqns
+%! syms x
+%! e = xor(x == 4, x == 5);
+%! assert (isequal (subs(e, x, [3 4 5 6]), [f t t f]))
+
+%!test
+%! % eqns, exclusive
+%! syms x
+%! e = xor(x == 3, x^2 == 9);
+%! assert (isequal (subs(e, x, [-3 0 3]), [t f f]))
+

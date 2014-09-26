@@ -39,9 +39,10 @@
 
 function y = simplify(x)
 
-  cmd = [ 'y = sp.simplify(*_ins)\n'  ...
-          'return (y,)' ];
+  cmd = 'return sp.simplify(*_ins),';
+
   y = python_cmd (cmd, x);
+
 end
 
 

@@ -17,16 +17,24 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
     end
   end
 
+  if (strcmp(lower(which_ipc), 'default'))
+    if (exist('popen2') > 1)
+      which_ipc = 'popen2';
+    else
+      which_ipc = 'system';
+    end
+  end
+
   switch lower(which_ipc)
-    case 'default'
-      if (exist('popen2', 'builtin'))
-        [A, db] = python_ipc_popen2(what, cmd, varargin{:});
+    case 'popen2'
+      [A, db] = python_ipc_popen2(what, cmd, varargin{:});
+
+    case 'system'
+      if (ispc () && (~isunix ()))
+        [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
       else
         [A, db] = python_ipc_system(what, cmd, false, varargin{:});
       end
-
-    case 'system'
-      [A, db] = python_ipc_system(what, cmd, false, varargin{:});
 
     case 'systmpfile'
       %% for debugging, not intended for long-term usage
@@ -35,12 +43,6 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
     case 'sysoneline'
       %% for debugging, not intended for long-term usage
       [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
-
-    case 'popen2'
-      if (~exist('popen2', 'builtin'))
-        warning('You forced popen2 ipc but you don''t have one, trouble ahead');
-      end
-      [A, db] = python_ipc_popen2(what, cmd, varargin{:});
 
     otherwise
       error('invalid ipc mechanism')

@@ -66,12 +66,12 @@ function L = limit(f,x,a,dir)
       error('invalid')
   end
 
-  cmd = [ '(f, x, a, pdir) = _ins\n'  ...
-          'if f.is_Matrix:\n'   ...
-          '    g = f.applyfunc(lambda b: b.limit(x, a, dir=pdir))\n'...
-          'else:\n' ...
-          '    g = f.limit(x, a, dir=pdir)\n'  ...
-          'return (g,)' ];
+  cmd = { '(f, x, a, pdir) = _ins'
+          'if f.is_Matrix:'
+          '    g = f.applyfunc(lambda b: b.limit(x, a, dir=pdir))'
+          'else:'
+          '    g = f.limit(x, a, dir=pdir)'
+          'return g,' };
   L = python_cmd (cmd, sym(f), sym(x), sym(a), pdir);
 
 end

@@ -247,7 +247,8 @@ function s = sym(x, varargin)
         cmd = sprintf('z = sympy.Symbol("%s")', x);
       elseif isstruct(asm) && isscalar(asm)
         % we have an assumptions dict
-        cmd = sprintf('s = sympy.Symbol("%s", **_ins[0])\nreturn s,', x);
+        cmd = { sprintf('s = sympy.Symbol("%s", **_ins[0])', x) ...
+                        'return s,' };
         s = python_cmd (cmd, asm);
         return
 
@@ -267,7 +268,7 @@ function s = sym(x, varargin)
     error('conversion to symbolic with those arguments not (yet) supported');
   end
 
-  s = python_cmd ([ cmd '\nreturn (z,)' ]);
+  s = python_cmd ({cmd 'return z,'});
 
 end
 
@@ -322,8 +323,9 @@ end
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
 %! % it should work
-%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
 %! x = sym(1/2);
+%! warning (s)
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))
 
@@ -387,20 +389,20 @@ end
 %! %% assumptions and clearing them
 %! x = sym('x', 'real');
 %! f = {x {2*x}};
-%! A = assumptions();
-%! assert ( ~isempty(A))
+%! asm = assumptions();
+%! assert ( ~isempty(asm))
 %! x = sym('x', 'clear');
-%! A = assumptions();
-%! assert ( isempty(A))
+%! asm = assumptions();
+%! assert ( isempty(asm))
 
 %!test
 %! %% matlab compat, syms x clear should add x to workspace
 %! x = sym('x', 'real');
 %! f = 2*x;
 %! clear x
-%! assert (~exist('x', 'var'))
+%! assert (~logical(exist('x', 'var')))
 %! x = sym('x', 'clear');
-%! assert (exist('x', 'var'))
+%! assert (logical(exist('x', 'var')))
 
 %!test
 %! %% assumptions should work if x is already a sym

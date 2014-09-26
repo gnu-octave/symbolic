@@ -29,12 +29,12 @@
 function z = conj(x)
 
   % can just use .conjugate on matrix but avoids S.true err
-  sf = [ 'def sf(x):\n' ...
-         '    if x in (S.true, S.false):\n' ...
-         '        return x\n' ...
-         '    return x.conjugate()' ];
+  sf = { 'def sf(x):'
+         '    if x in (S.true, S.false):'
+         '        return x'
+         '    return x.conjugate()' };
 
-  z = uniop_helper(x, sf);
+  z = uniop_helper (x, sf);
 
 end
 

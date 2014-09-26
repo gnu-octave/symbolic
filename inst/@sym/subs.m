@@ -80,8 +80,8 @@ function g = subs(f, in, out)
   % The more general code would work fine, but maybe this makes some
   % debugging easier, e.g., without simultaneous mode?
   if (isscalar(in) && ~iscell(in) && ~iscell(out))
-    cmd = [ '(f,x,y) = _ins\n'  ...
-            'return (f.subs(x,y),)' ];
+    cmd = { '(f, x, y) = _ins'
+            'return f.subs(x, y),' };
     g = python_cmd (cmd, sym(f), sym(in), sym(out));
     return
   end
@@ -120,9 +120,9 @@ function g = subs(f, in, out)
 
   % simultaneous=True is important so we can do subs(f,[x y], [y x])
 
-  cmd = [ '(f,sublist) = _ins\n'  ...
-          'g = f.subs(sublist, simultaneous=True)\n'  ...
-          'return (g,)' ];
+  cmd = { '(f, sublist) = _ins'
+          'g = f.subs(sublist, simultaneous=True)'
+          'return g,' };
 
   g = python_cmd (cmd, sym(f), sublist);
 

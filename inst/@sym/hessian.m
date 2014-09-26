@@ -45,12 +45,12 @@ function H = hessian(f,x)
     x = {x};
   end
 
-  cmd = [ '(f,x,) = _ins\n'  ...
-          '#if not f.is_Matrix:\n' ...
-          'f = Matrix([f])\n' ...
-          'grad = f.jacobian(x).T\n' ...
-          'H = grad.jacobian(x)\n' ...
-          'return ( H ,)' ];
+  cmd = { '(f,x,) = _ins'
+          '#if not f.is_Matrix:'
+          'f = Matrix([f])'
+          'grad = f.jacobian(x).T'
+          'H = grad.jacobian(x)'
+          'return H,' };
 
   H = python_cmd (cmd, sym(f), x);
 

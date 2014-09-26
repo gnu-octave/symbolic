@@ -21,7 +21,7 @@ function [A, err] = readblock(fout, timeout)
   fclear (fout);  % otherwise, fails on next call
 
   do
-    if (ispc () && ! isunix ())
+    if (ispc () && (~isunix ()))
       errno (0);  % win32, see syscalls.cc test code
     end
     s = fgets (fout);
@@ -51,7 +51,7 @@ function [A, err] = readblock(fout, timeout)
         fprintf(stdout, '.')
       end
       fclear (fout);
-      %if (ispc () && ! isunix ())
+      %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
       sleep (waitdelta);
@@ -67,7 +67,7 @@ function [A, err] = readblock(fout, timeout)
         fprintf(stdout, '*')
       end
       fclear (fout);
-      %if (ispc () && ! isunix ())
+      %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
       sleep (waitdelta);

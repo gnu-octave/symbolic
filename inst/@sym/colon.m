@@ -42,10 +42,10 @@ function y = colon(a,step,b)
   y = (0:double(B))*sym(step) + a;
 
   % this approach fails to  make 0:sym(pi):10
-  %cmd = ['(a,b,step) = _ins\n'...
-  %       'y = range(a,b+sign(step)*1,step)\n'...
-  %       'return y,'];
-  %y = python_cmd(cmd, a, b, step)
+  %cmd = {'(a, b, step) = _ins'...
+  %       'y = range(a, b + sign(step)*1, step)'...
+  %       'return y,'};
+  %y = python_cmd (cmd, a, b, step)
   %y = cell2mat(y);
 end
 
@@ -78,8 +78,9 @@ end
 %!test
 %! % mixed symbolic and double intervals
 %! p = sym(pi);
-%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
 %! L = 0.1:(sym(pi)/3):2.3;
+%! warning(s)
 %! assert(isa(L,'sym'));
 %! t = sym(1)/10;
 %! assert(isequal(L, [t p/3+t 2*p/3+t]));
