@@ -165,7 +165,7 @@ function varargout = sympref(cmd, arg)
             disp('Forcing systmpfile ipc: warning: this is for debugging')
             warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
-          warning(['Unknown/unsupported IPC mechanism: hope you know what you''re doing'])
+            warning('Unsupported IPC mechanism: hope you know what you''re doing')
         end
       end
 

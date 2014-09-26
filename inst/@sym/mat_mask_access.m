@@ -43,7 +43,7 @@ function Z = mat_mask_access(A, I)
   end
   if (~(is_same_shape(A,I)))
     % this is not an error, but quite likely reflects a user error
-    warning('OctSymPy:subsref:index-matrix-not-same-shape', ...
+    warning('OctSymPy:subsref:index_matrix_not_same_shape', ...
             'A and I in A(I) not same shape: no problem, but did you intend this?')
   end
 
@@ -95,7 +95,7 @@ end
 %! I = rand(size(b)) > 0.5;
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = I(:);
-%! s = warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape');
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
 %! I = I';
 %! assert(isequal( mat_mask_access(a,I), b(I) ))
@@ -126,7 +126,7 @@ end
 %! Ic = rand(size(c)) > 0.5;
 %! assert(isequal( mat_mask_access(ar,Ir), r(Ir) ))
 %! assert(isequal( mat_mask_access(ac,Ic), c(Ic) ))
-%! s = warning ('off', 'OctSymPy:subsref:index-matrix-not-same-shape');
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! assert(isequal( mat_mask_access(ar,Ic), r(Ic) ))
 %! assert(isequal( mat_mask_access(ac,Ir), c(Ir) ))
 %! warning (s)

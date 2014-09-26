@@ -60,14 +60,14 @@ function z = mat_mask_asgn(A, I, B)
 
   if (~(is_same_shape(A,I)))
     % this is not an error, but quite likely reflects a user error
-    warning('OctSymPy:subsagn:index-matrix-not-same-shape', ...
+    warning('OctSymPy:subsagn:index_matrix_not_same_shape', ...
             'A and I in A(I) not same shape: no problem, but did you intend this?')
   end
   if (~isvector(B))
     % Here B is a matrix.  B scalar is dealt with earlier.  This is a bit
     % odd (although ok in octave) so probably a user error.
     assert (~isscalar(B))
-    warning('OctSymPy:subsagn:rhs-shape', ...
+    warning('OctSymPy:subsagn:rhs_shape', ...
             'B neither vector nor scalar in indexed A(I)=B: unusual, did you intend this?')
   end
 
@@ -118,7 +118,7 @@ end
 %! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
 %! rhs = 2*b(I);
 %! rhs2 = reshape(rhs, 2, 3);
-%! s = warning ('off', 'OctSymPy:subsagn:rhs-shape');
+%! s = warning ('off', 'OctSymPy:subsagn:rhs_shape');
 %! A0 = a; A1 = a;
 %! A0(I) = rhs;
 %! A1(I) = rhs2;
