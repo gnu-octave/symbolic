@@ -22,7 +22,7 @@
 %% @deftypefnx {Function File} {@var{M} =} diag (@var{v}, @var{n}, @var{m})
 %% @deftypefnx {Function File} {@var{v} =} diag (@var{A})
 %% @deftypefnx {Function File} {@var{v} =} diag (@var{A}, @var{k})
-%% Make symbolic diagonal matrix or extract diagonal of symbolic matrix.
+%% Make diagonal matrix or extract diagonal of symbolic matrix.
 %%
 %% @seealso{repmat}
 %% @end deftypefn
