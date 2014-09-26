@@ -27,6 +27,7 @@
 %% FIXME: currently only singular values, not singular vectors.
 %% Should add full SVD to sympy.
 %%
+%% @seealso{eig}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
