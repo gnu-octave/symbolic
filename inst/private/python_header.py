@@ -97,12 +97,17 @@ except:
 try:
     def objectfilter(x):
         """Perform final fixes before passing objects back to Octave"""
-        if isinstance(x, sp.Matrix) and x.shape == (1,1):
-            #dbout("Note: replaced 1x1 mat with scalar")
-            y = x[0,0]
-        else:
-            y = x
-        return y
+        if isinstance(x, sp.Matrix) and x.shape == (1, 1):
+            return x[0, 0]
+        elif isinstance(x, sp.MatrixExpr):
+            try:
+                y = x.as_explicit()
+                L = [p is None for p in y]
+                if not any(L):  # aint got None
+                    return y
+            except:
+                return x
+        return x
     #
     def octoutput_drv(x):
         xroot = ET.Element("output_block")
@@ -136,13 +141,16 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif isinstance(x, (sp.Basic, sp.Matrix)):
+        elif isinstance(x, (sp.Basic, sp.Matrix, sp.MatrixExpr)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
             elif isinstance(x, (sp.Expr, Boolean)):
-                _d = (1,1)
+                _d = (1, 1)
+            elif isinstance(x, sp.MatrixExpr):
+                # FIXME: play with x.shape instead
+                _d = (1, 1)
             else:
-                dbout("Treating unknown sympy as scalar: " + str(type(x)))
+                dbout("Treating unexpected SymPy obj as scalar: " + str(type(x)))
                 _d = (1,1)
             pretty_ascii = sp.pretty(x, use_unicode=False)
             pretty_unicode = sp.pretty(x, use_unicode=True)

@@ -102,7 +102,20 @@ end
 %! A = sym([1 2; 0 3]);
 %! B = A^sym(pi);
 
+%!test
+%! % matpow
+%! syms n
+%! A = sym([1 2; 3 4]);
+%! B = A^n;
+%! C = 10 + B + B^2;
+%! D = subs(C, n, 1);
+%! E = 10 + A + A^2;
+%! assert (isequal (D, E))
+
+% FIXME: sin(B) also fails, our fault?
+
 %!xtest
+%! % matpow, FIXME: sympy bug?
 %! A = sym([1 2; 0 3]);
 %! syms n;
 %! B = A^n;
