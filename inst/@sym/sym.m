@@ -400,9 +400,9 @@ end
 %! x = sym('x', 'real');
 %! f = 2*x;
 %! clear x
-%! assert (~exist('x', 'var'))
+%! assert (~logical(exist('x', 'var')))
 %! x = sym('x', 'clear');
-%! assert (exist('x', 'var'))
+%! assert (logical(exist('x', 'var')))
 
 %!test
 %! %% assumptions should work if x is already a sym
