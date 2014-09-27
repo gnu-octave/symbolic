@@ -76,11 +76,11 @@ end
 
 %!test
 %! syms x
-%! a = 2*(x+1)*(x-2); b = x+1;
-%! [q, r] = quorem(a, b)
-%! assert (isequal (a, q*b + r))
-%! assert (isequal (q, 2))
-%! assert (isequal (r, x-2))
+%! a = 2*(x+1)*(x-2) + 3; b = x+1;
+%! [q, r] = quorem(a, b);
+%! assert (isAlways (a == q*b + r))
+%! assert (isequal (r, 3))
+%! assert (isequal (q, 2*(x-2)))
 
 
 %%test
