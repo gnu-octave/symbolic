@@ -46,28 +46,32 @@ function z = mat_access(A, subs)
       z = sym([]);
       return
     end
-    if (~isvector(i) || ischar(i))
-      size(i), i
-      error('what?');
+    if (ischar(i))
+      error(['invalid indexing, i="' i '"'])
+    end
+    if (~isvector(i))
+      warning('FIXME: Not Implemented: Matrix index into matrix');
     end
     [r, c] = ind2sub (size(A), i);
     z = mat_rclist_access(A, r, c);
     return
 
   elseif ((length(subs) == 1) && (isvector(A)))
-    %% linear index into a vector A
+    %% linear index into a vector/scalar A
     i = subs{1};
     if (isempty(i))
       z = sym([]);
       return
     end
+    if (ischar(i))
+      error(['invalid indexing, i="' i '"'])
+    end
     if (isscalar(A) && (i == 1))
       z = A;
       return
     end
-    if (~isvector(i) || ischar(i))
-      size(i), i
-      error('what?');
+    if (~isvector(i))
+      warning('FIXME: Not Implemented: Matrix index into vector/scalar');
     end
     [r, c] = ind2sub (size(A), i);
     z = mat_rclist_access(A, r, c);
