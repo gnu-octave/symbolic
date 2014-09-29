@@ -98,7 +98,7 @@ end
 %!shared e
 %! e = sym([1 3 5; 2 4 6]);
 %!assert(isequal( e(:), sym((1:6)') ))
-%!assert(isequal( e([1 2 3]), sym([1; 2; 3]) ))
+%!assert(isequal( e([1 2 3]), sym([1 2 3]) ))
 %!assert(isequal( e([1; 3; 4]), sym([1; 3; 4]) ))
 %!assert(isempty( e([]) ))
 %!assert(isequal( e([]), sym([]) ))
