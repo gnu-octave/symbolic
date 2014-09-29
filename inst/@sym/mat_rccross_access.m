@@ -45,7 +45,9 @@ function z = mat_rccross_access(A, r, c)
 
   [n, m] = size(A);
 
-  if (isnumeric(r) && ((isvector(r) || isempty(r))))
+  if (isnumeric(r) && isempty(r))
+    % no-op
+  elseif (isnumeric(r) && isvector(r))
     assert(r >= 1 && r <= n, 'index out of range')
   elseif (strcmp(r, ':'))
     r = 1:n;
@@ -56,7 +58,9 @@ function z = mat_rccross_access(A, r, c)
     error('unknown 2d-indexing in rows')
   end
 
-  if (isnumeric(c) && ((isvector(c) || isempty(c))))
+  if (isnumeric(c) && isempty(c))
+    % no-op
+  elseif (isnumeric(c) && isvector(c))
     assert(c >= 1 && c <= m, 'index out of range')
   elseif (strcmp(c,':'))
     c = 1:m;
