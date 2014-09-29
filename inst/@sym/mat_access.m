@@ -42,9 +42,8 @@ function z = mat_access(A, subs)
   elseif (length(subs) == 1)
     %% linear index into a matrix/vector/scalar A
     i = subs{1};
-    if (isempty(i))
-      z = sym([]);
-      return
+    if strcmp(i, '')
+      i = [];  % yes empty str ok here
     end
     if (ischar(i))
       error(['invalid indexing, i="' i '"'])
@@ -67,6 +66,8 @@ function z = mat_access(A, subs)
     c = subs{2};
     assert( isvector(r) || isempty(r) || strcmp(r, ':') )
     assert( isvector(c) || isempty(c) || strcmp(c, ':') )
+    if strcmp(r, ''), r = []; end
+    if strcmp(c, ''), c = []; end
     z = mat_rccross_access(A, r, c);
     return
 

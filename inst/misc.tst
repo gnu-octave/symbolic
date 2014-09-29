@@ -67,3 +67,13 @@
 %! % matrix index into vector
 %! a = [10 20 x];
 %! assert (isequal (a([3 1; 3 2]), [x 10; x 20]))
+
+%!test
+%! % empty indexing
+%! assert (isempty (x([])))
+%! assert (isequal (size(x([])), [0 0]))
+%! m = [0 x 1; 2*x 3 0];
+%! assert (isequal (size(m([])), [0 0]))
+%! assert (isequal (size(m([],[])), [0 0]))
+%! assert (isequal (size(m(:,[])), [2 0]))
+%! assert (isequal (size(m([],:)), [0 3]))
