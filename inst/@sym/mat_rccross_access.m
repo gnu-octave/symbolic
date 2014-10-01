@@ -48,7 +48,7 @@ function z = mat_rccross_access(A, r, c)
   if (isnumeric(r) && isempty(r))
     % no-op
   elseif (isnumeric(r) && isvector(r))
-    assert(r >= 1 && r <= n, 'index out of range')
+    assert(all(r >= 1) && all(r <= n), 'index out of range')
   elseif (strcmp(r, ':'))
     r = 1:n;
   elseif (islogical(r) && isvector(r) && (length(r) == n))
@@ -61,7 +61,7 @@ function z = mat_rccross_access(A, r, c)
   if (isnumeric(c) && isempty(c))
     % no-op
   elseif (isnumeric(c) && isvector(c))
-    assert(c >= 1 && c <= m, 'index out of range')
+    assert(all(c >= 1) && all(c <= m), 'index out of range')
   elseif (strcmp(c,':'))
     c = 1:m;
   elseif (islogical(c) && isvector(c) && (length(c) == m))
