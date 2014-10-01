@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} octsympy_test_suite ()
+%% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
 %% Run the tests, log results, and return true if passing.
 %%
 %% I threw this together by modifying "__run_test_suite__.m" which
@@ -29,7 +29,7 @@
 %% Author: Colin B. Macdonald, David Bateman
 %% Keywords: tests
 
-function anyfail = octsympy_test_suite ()
+function anyfail = octsympy_tests ()
   fcndirs = { '.'
               '@logical'
               '@sym'
