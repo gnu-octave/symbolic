@@ -23,7 +23,14 @@ octsympy 0.1.1 (yyyy-mm-dd)
      -  The same applies to `evalpy`.  If you need the old deprecated
         behaviour, it is still available as `python_cmd_string`.
 
- *  Bug fixes, #88, #90, #91.
+ *  Improvements to sym() command: you can now pass the underlying "srepr"
+    SymPy presentation to create an object.
+
+ *  Better test system, easier to see "real" failures rather than expected
+    (known) failures.
+
+ *  Bug fixes: improvements to indexing, findsymbols and assumptions,
+    isscalar failures on recent Octave, output formatting fixes.
 
 
 
