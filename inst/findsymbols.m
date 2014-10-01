@@ -41,18 +41,18 @@ function L = findsymbols(obj, dosort)
   end
 
   if isa(obj, 'sym')
-  cmd = { 'x = _ins[0]' ...
-          'if not x.is_Matrix:' ...
-          '    s = x.free_symbols' ...
-          'else:' ...
-          '    s = set()' ...
-          '    for i in x.values():' ...
-          '        s = s.union(i.free_symbols)' ...
-          'l = list(s)' ...
-          'l = sorted(l, key=str)' ...
-          'return (l,)' };
+    cmd = { 'x = _ins[0]'
+            '#s = x.free_symbols'   % in 0.7.5-git
+            'if not x.is_Matrix:'
+            '    s = x.free_symbols'
+            'else:'
+            '    s = set()'
+            '    for i in x.values():'
+            '        s = s.union(i.free_symbols)'
+            'l = list(s)'
+            'l = sorted(l, key=str)'
+            'return l,' };
     L = python_cmd (cmd, obj);
-    %L = findsymbols(obj);
     if isa(obj, 'symfun')
       warning('FIXME: need to do anything special for symfun vars?')
     end
@@ -118,10 +118,10 @@ end
 %!assert (isempty (findsymbols (sym (nan))))
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
+
 %!test
-%! % diff asm make diff symboks
+%! % diff asm make diff symbols
 %! x1 = sym('x');
 %! x2 = sym('x', 'positive');
 %! f = x1*x2;
 %! assert (length (findsymbols (f)) == 2)
-
