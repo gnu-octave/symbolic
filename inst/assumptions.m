@@ -158,6 +158,7 @@ end
 %! assert(isempty(assumptions(x)))
 
 %!test
+%! clear  % for matlab test script
 %! syms x positive
 %! assert(~isempty(assumptions()))
 %! clear
@@ -183,6 +184,7 @@ end
 
 %!test
 %! %% assumptions on just the vars in an expression
+%! clear  % for matlab test script
 %! syms x y positive
 %! f = 2*x;
 %! assert(length(assumptions(f))==1)
@@ -190,6 +192,7 @@ end
 
 %!test
 %! %% assumptions in cell/struct
+%! clear  % for matlab test script
 %! syms x y z w positive
 %! f = {2*x [1 2 y] {1, {z}}};
 %! assert(length(assumptions())==4)

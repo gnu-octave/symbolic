@@ -88,10 +88,11 @@ function L = findsymbols(obj, dosort)
   end
 
 
+  % sort and make unique using internal representation
   if dosort
     Ls = {};
     for i=1:length(L)
-      Ls{i} = L{i}.flat;
+      Ls{i} = char(L{i});
     end
     [tilde, I] = unique(Ls);
     L = L(I);
@@ -117,4 +118,10 @@ end
 %!assert (isempty (findsymbols (sym (nan))))
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
+%!test
+%! % diff asm make diff symboks
+%! x1 = sym('x');
+%! x2 = sym('x', 'positive');
+%! f = x1*x2;
+%! assert (length (findsymbols (f)) == 2)
 
