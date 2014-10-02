@@ -19,7 +19,7 @@ for i=1:length(files)
     testtime = clock();
     str = mfile(1:end-2);
     num_tests = num_tests + 1;
-    disp(['>>> Running test(s) in: ' mfile ]);
+    fprintf(['>>> Running test(s) in: ' mfile '  ']);  % no newline
     eval(str)
     testtime = etime(clock(), testtime);
   end
