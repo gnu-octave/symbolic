@@ -1,7 +1,12 @@
 #!/bin/sh
 
-VER=0.1.0
-TAG=v${VER}
+# for day-to-day testing
+VER=0.1.0-git
+# for release
+#VER=0.1.0
+#TAG=v${VER}
+
+#----------------------------------------------------------------
 PKG=octsympy-$VER
 DIR=$PKG
 
@@ -17,9 +22,11 @@ read -p "Press [Enter] to git clone and make packages..."
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 pushd octsympy
-# for testing before tagging
-#git checkout master
-git checkout tags/${TAG}
+if [ -z $TAG]; then
+  git checkout master
+else
+  git checkout tags/${TAG}
+fi
 popd
 
 
