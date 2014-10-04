@@ -44,9 +44,9 @@ function anyfail = octsympy_tests ()
   try
     page_screen_output (false);
     warning ("off", "Octave:deprecated-function");
-    fid = fopen ("fntests.log", "wt");
+    fid = fopen ("octsympy_tests.log", "wt");
     if (fid < 0)
-      error ("could not open fntests.log for writing");
+      error ("could not open octsympy_tests.log for writing");
     endif
     test ("", "explain", fid);
     dp = dn = dxf = dsk = 0;
@@ -74,19 +74,16 @@ function anyfail = octsympy_tests ()
       printf ("  SKIPPED %6d\n", dsk);
     endif
     puts ("\n");
-    puts ("See the file test/fntests.log for additional details.\n");
+    puts ("See the file octsympy_tests.log for additional details.\n");
     if (dxf > 0)
       puts ("\n");
-      puts ("Expected failures (listed as XFAIL above) are known bugs.\n");
-      puts ("Please help improve OctSymPy (or upstream Octave/SymPy as appropriate).\n");
+      puts ("Expected failures (listed as XFAIL above) are usually known bugs.\n");
+      puts ("Help is always appreciated.\n");
     endif
     if (dsk > 0)
       puts ("\n");
       puts ("Tests are most often skipped because the features they require\n");
-      puts ("have been disabled.  Features are most often disabled because\n");
-      puts ("they require dependencies that were not present when Octave\n");
-      puts ("was built.  The configure script should have printed a summary\n");
-      puts ("at the end of its run indicating which dependencies were not found.\n");
+      puts ("have been disabled.\n");
     endif
 
     ## Weed out deprecated and private functions
@@ -98,8 +95,6 @@ function anyfail = octsympy_tests ()
     report_files_with_no_tests (files_with_tests, files_with_no_tests, ".m");
     printf("\n");
     printf (list_in_columns (files_with_no_tests, 80));
-    %puts ("\nPlease help improve Octave by contributing tests for\n");
-    %puts ("these files (see the list in the file fntests.log).\n\n");
 
     anyfail = nfail > 0;
 
