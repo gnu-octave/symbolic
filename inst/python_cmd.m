@@ -125,7 +125,9 @@ function varargout = python_cmd(cmd, varargin)
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
   if (~iscell(A))
-    A
+    disp(A)
+    % Python state undefined, so reset it (overkill for nostateful ipc)
+    sympref reset
     error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
   end
 
