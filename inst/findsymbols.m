@@ -129,3 +129,18 @@ end
 %! x2 = sym('x', 'positive');
 %! f = x1*x2;
 %! assert (length (findsymbols (f)) == 2)
+
+%!test
+%! % symfun or sym
+%! syms x f(y)
+%! a = f*x;
+%! b = f(y)*x;
+%! c(y) = x;
+%! assert (isequal (findsymbols(a), {x y}))
+%! assert (isequal (findsymbols(b), {x y}))
+
+%!xtest
+%! % FIXME: symfun, yes need to do sth special or doc, see smt in symvar
+%! syms a x y
+%! f(x, y) = a;  % const symfun
+%! assert (isequal (findsymbols(f), {a x y}))
