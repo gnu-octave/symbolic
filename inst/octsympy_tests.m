@@ -40,6 +40,10 @@ function anyfail = octsympy_tests ()
   pso = page_screen_output ();
   warn_state = warning ("query", "quiet");
   warning ("on", "quiet");
+  % time it all
+  totaltime = clock();
+  totalcputime = cputime();
+  % get the octsympy startup text out of way before we start
   syms x
   try
     page_screen_output (false);
@@ -73,7 +77,11 @@ function anyfail = octsympy_tests ()
     if (dsk > 0)
       printf ("  SKIPPED %6d\n", dsk);
     endif
+    totaltime = etime(clock(), totaltime);
+    totalcputime = cputime() - totalcputime;
+    fprintf ('  TIME %8.0fs (%.0fs CPU)\n', totaltime, totalcputime);
     puts ("\n");
+
     puts ("See the file octsympy_tests.log for additional details.\n");
     if (dxf > 0)
       puts ("\n");
@@ -109,7 +117,7 @@ endfunction
 
 
 function print_test_file_name (nm)
-  filler = repmat (".", 1, 50-length (nm));
+  filler = repmat (".", 1, 48-length (nm));
   printf ("  %s %s", nm, filler);
 endfunction
 
