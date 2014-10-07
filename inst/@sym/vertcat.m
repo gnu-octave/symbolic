@@ -28,13 +28,18 @@
 
 function h = vertcat(varargin)
 
-  cmd = { '_proc = []'  ...
-          'for i in _ins:'  ...
-          '    if i.is_Matrix:'  ...
-          '        _proc.append(i)'  ...
-          '    else:'  ...
-          '        _proc.append(sp.Matrix([[i]]))'  ...
-          'M = sp.Matrix.vstack(*_proc)'  ...
+  % special case for 0x0 but other empties should be checked for
+  % compatibilty
+  cmd = { '_proc = []'
+          'for i in _ins:'
+          '    if i.is_Matrix:'
+          '        if i.shape == (0, 0):'
+          '            pass'
+          '        else:'
+          '            _proc.append(i)'
+          '    else:'
+          '        _proc.append(sp.Matrix([[i]]))'
+          'M = sp.Matrix.vstack(*_proc)'
           'return M,' };
 
   varargin = sym(varargin);
@@ -90,6 +95,27 @@ end
 %! a = [sym(1) 2];
 %! assert (isequal ( [a; [sym(3) 4]] , [1 2; 3 4]  ))
 
+%!test
+%! % empty vectors
+%! v = [sym(1) sym(2)];
+%! a = [v; []];
+%! assert (isequal (a, v))
+%! a = [[]; v; []];
+%! assert (isequal (a, v))
+%! a = [v; []; [] []];
+%! assert (isequal (a, v))
+
+%!test
+%! % more empty vectors
+%! v = [sym(1) sym(2)];
+%! q = sym(ones(0, 2));
+%! assert (isequal ([v; q], v))
+
+%!xtest
+%! % FIXME should be error
+%! v = [sym(1) sym(2)];
+%! q = sym(ones(0, 3));
+%! assert (~isequal ([v; q], v))
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
