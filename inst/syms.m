@@ -129,6 +129,8 @@ function syms(varargin)
 
     else  % yes, this is a symfun
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
+      assert(~isempty(regexp(varargin{i}, '^\w+\([A-z]\w*(,[A-z]\w*)*\)$')), ...
+             'invalid symfun expression')
       tok = mystrsplit(varargin{i}, {'(', ')', ','});
       name = strtrim(tok{1});
       vars = {};  varnames = {};  c = 0;

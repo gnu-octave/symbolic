@@ -181,8 +181,9 @@ function s = sym(x, varargin)
     end
 
     %% check if we're making a symfun
-    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)"
-    if (~isempty (regexp(x, '^\w+\(\w+(,\w+)*\)$')))
+    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)", "f(x6b2)"
+    % but should not match "Rational(2, 3)", "f(2br02b)"
+    if (~isempty (regexp(x, '^\w+\([A-z]\w*(,[A-z]\w*)*\)$')))
       % Assume we are starting to make an abstract symfun.  We
       % don't do it directly here, but instead return a specially
       % tagged sym.  Essentially, the contents of this sym are
