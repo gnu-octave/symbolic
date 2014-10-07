@@ -48,12 +48,9 @@ function h = vertcat(varargin)
 end
 
 
-
-%!shared x
-%! syms x
-
 %!test
 %! % basic
+%! syms x
 %! A = [x; x];
 %! B = vertcat(x, x);
 %! C = vertcat(x, x, x);
@@ -66,6 +63,7 @@ end
 
 %!test
 %! % basic, part 2
+%! syms x
 %! A = [x; 1];
 %! B = [1; x];
 %! C = [1; 2; x];
@@ -123,6 +121,7 @@ end
 %! assert (isequal ( [a; [3 4]] , [1 2; 3 4]  ))
 %! assert (isequal ( [a; sym(3) 4] , [1 2; 3 4]  ))
 %! % more examples
+%! syms x
 %! [x [x x]; x x x];
 %! [[x x] x; x x x];
 %! [[x x] x; [x x] x];

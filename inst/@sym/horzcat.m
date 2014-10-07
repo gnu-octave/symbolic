@@ -48,11 +48,9 @@ function h = horzcat(varargin)
 end
 
 
-%!shared x
-%! syms x
-
 %!test
 %! % basic
+%! syms x
 %! A = [x x];
 %! B = horzcat(x, x);
 %! C = horzcat(x, x, x);
@@ -65,6 +63,7 @@ end
 
 %!test
 %! % basic, part 2
+%! syms x
 %! A = [x 1];
 %! B = [1 x];
 %! C = [1 2 x];
