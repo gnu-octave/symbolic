@@ -100,8 +100,14 @@ end
 %! assert (isequal (a, v))
 %! a = [[]; v; []];
 %! assert (isequal (a, v))
-%! a = [v; []; [] []];
+%! a = [v; []; []];
 %! assert (isequal (a, v))
+
+%!xtest
+%! % FIXME: is this Octave bug? worth worrying about
+%! syms x
+%! a = [x; [] []];
+%! assert (isequal (a, x))
 
 %!test
 %! % more empty vectors
