@@ -16,6 +16,8 @@ octsympy 0.1.1 (yyyy-mm-dd)
 
  *  Improvements to logical and isAlways commands.
 
+ *  Fix sym(double) approx by rationals (issue #121, thanks HuiZhong LU).
+
  *  Improvements to internel string handling/escaping especially newlines.
 
      -  Enter a multiline command using a cell array of lines e.g.,
