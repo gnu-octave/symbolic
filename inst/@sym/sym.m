@@ -180,27 +180,6 @@ function s = sym(x, varargin)
       useSymbolNotS = true;
     end
 
-    %% check if we're making a symfun
-    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)", "f(x6b2)"
-    % but should not match "Rational(2, 3)", "f(2br02b)"
-    if (~isempty (regexp(x, '^\w+\([A-z]\w*(,[A-z]\w*)*\)$')))
-      % Assume we are starting to make an abstract symfun.  We
-      % don't do it directly here, but instead return a specially
-      % tagged sym.  Essentially, the contents of this sym are
-      % irrelevant except for the special contents of the "extra"
-      % field.  subasgn can then note this and actually build the
-      % symfun: it will know the arguments from the LHS of "g(x) =
-      % sym('g(x)')".  Rather, if the user calls "g = sym('g(x)')",
-      % I see no easy way to throw an error, so we just make the
-      % symbol itself a plea to read the docs ;-)
-      %disp('DEBUG: I hope you are using this sym for the rhs of a symfun...');
-      s = sym('pleaseReadHelpSymFun');
-      s.extra = {'MAKING SYMFUN HACK', x};
-      %s = x;  % this would be nicer, but it fails to call subsasgn
-      assert(isempty(asm))
-      return
-    end
-
     doDecimalCheck = true;
 
     % various special cases for x

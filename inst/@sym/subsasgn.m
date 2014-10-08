@@ -36,17 +36,7 @@ function out = subsasgn (val, idx, rhs)
       % This also gets called for "syms f(x)"
 
       if (isa(idx.subs{1}, 'sym'))  % f(sym) = ..., define symfun
-        if (isa(rhs, 'sym'))
-          myidx.type = '.'; myidx.subs = {'extra'};
-          A = subsref(rhs, myidx);
-          % here's the hack for nonspecific functions.  If rhs is
-          % just a standard sym, we don't have to do this.
-          if (iscell(A) && strcmp(A{1}, 'MAKING SYMFUN HACK'))
-            %disp('DEBUG: oh good, you are!')
-            out = symfun(A{2}, idx.subs);
-            return
-          end
-        else
+        if (~isa(rhs, 'sym'))
           % rhs is, e.g., a double, then we call the constructor
           rhs = sym(rhs);
         end
