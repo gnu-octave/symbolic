@@ -40,13 +40,17 @@ function anyfail = octsympy_tests ()
   pso = page_screen_output ();
   warn_state = warning ("query", "quiet");
   warning ("on", "quiet");
+  % time it all
+  totaltime = clock();
+  totalcputime = cputime();
+  % get the octsympy startup text out of way before we start
   syms x
   try
     page_screen_output (false);
     warning ("off", "Octave:deprecated-function");
-    fid = fopen ("fntests.log", "wt");
+    fid = fopen ("octsympy_tests.log", "wt");
     if (fid < 0)
-      error ("could not open fntests.log for writing");
+      error ("could not open octsympy_tests.log for writing");
     endif
     test ("", "explain", fid);
     dp = dn = dxf = dsk = 0;
@@ -73,20 +77,21 @@ function anyfail = octsympy_tests ()
     if (dsk > 0)
       printf ("  SKIPPED %6d\n", dsk);
     endif
+    totaltime = etime(clock(), totaltime);
+    totalcputime = cputime() - totalcputime;
+    fprintf ('  TIME %8.0fs (%.0fs CPU)\n', totaltime, totalcputime);
     puts ("\n");
-    puts ("See the file test/fntests.log for additional details.\n");
+
+    puts ("See the file octsympy_tests.log for additional details.\n");
     if (dxf > 0)
       puts ("\n");
-      puts ("Expected failures (listed as XFAIL above) are known bugs.\n");
-      puts ("Please help improve OctSymPy (or upstream Octave/SymPy as appropriate).\n");
+      puts ("Expected failures (listed as XFAIL above) are usually known bugs.\n");
+      puts ("Help is always appreciated.\n");
     endif
     if (dsk > 0)
       puts ("\n");
       puts ("Tests are most often skipped because the features they require\n");
-      puts ("have been disabled.  Features are most often disabled because\n");
-      puts ("they require dependencies that were not present when Octave\n");
-      puts ("was built.  The configure script should have printed a summary\n");
-      puts ("at the end of its run indicating which dependencies were not found.\n");
+      puts ("have been disabled.\n");
     endif
 
     ## Weed out deprecated and private functions
@@ -98,8 +103,6 @@ function anyfail = octsympy_tests ()
     report_files_with_no_tests (files_with_tests, files_with_no_tests, ".m");
     printf("\n");
     printf (list_in_columns (files_with_no_tests, 80));
-    %puts ("\nPlease help improve Octave by contributing tests for\n");
-    %puts ("these files (see the list in the file fntests.log).\n\n");
 
     anyfail = nfail > 0;
 
@@ -114,7 +117,7 @@ endfunction
 
 
 function print_test_file_name (nm)
-  filler = repmat (".", 1, 50-length (nm));
+  filler = repmat (".", 1, 48-length (nm));
   printf ("  %s %s", nm, filler);
 endfunction
 
@@ -122,7 +125,7 @@ endfunction
 function print_pass_fail (p, n, xf, sk)
   if ((n + sk) > 0)
     printf (" PASS %3d/%-3d", p, n);
-    nfail = n - p - xf;
+    nfail = n - p;
     if (nfail > 0)
       printf (" \033[1;40;31m%s %d\033[m", "FAIL", nfail);
     endif

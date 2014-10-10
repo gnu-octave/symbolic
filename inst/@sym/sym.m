@@ -414,3 +414,13 @@ end
 %! assert (isequal (t, [a==1  a==0]))
 %! t = sym([true false; false true]);
 %! assert (isequal (t, [a==1  a==0;  a==0  a==1]))
+
+%!test
+%! % 50 shapes of empty
+%! a = sym(ones(0, 3));
+%! assert (isa (a, 'sym'))
+%! assert (isequal (size (a), [0 3]))
+%! a = sym(ones(2, 0));
+%! assert (isequal (size (a), [2 0]))
+%! a = sym([]);
+%! assert (isequal (size (a), [0 0]))

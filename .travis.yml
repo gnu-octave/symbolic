@@ -14,7 +14,7 @@ script:
   - pushd inst
   - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_tests; exit(r)"
-  - cat fntests.log
+  - cat octsympy_tests.log
   - popd
 
 #after_script:

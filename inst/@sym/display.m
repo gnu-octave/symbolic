@@ -139,3 +139,6 @@ function snippet_of_sympy(x, padw, width, unicode)
   end
   fprintf([pad lquot '%s' rquot '\n'], s)
 end
+
+
+% FIXME: tricky to test without spamming stdout
