@@ -126,10 +126,12 @@ function s = sym(x, varargin)
       % Allow 1/3 and other "small" fractions.
       % Personally, I like a warning here so I can catch bugs.
       % Matlab SMT does this (w/o warning).
-      % FIXME: alternatively, could have sympy do this?
+      % FIXME: could have sympy do this?  Or just make symbolic floats?
       warning('OctSymPy:sym:rationalapprox', ...
-              'Using rats() for rational approx, did you really mean to pass a noninteger?');
-      s = sym(strtrim(rats(x)));
+              'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
+      [N, D] = rat(x, 1e-15);
+      %s = sym(N) / sym(D);   % three round trips
+      s = sym(sprintf('Rational(%d, %d)', N, D));
     end
     return
 
@@ -181,8 +183,9 @@ function s = sym(x, varargin)
     end
 
     %% check if we're making a symfun
-    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)"
-    if (~isempty (regexp(x, '^\w+\(\w+(,\w+)*\)$')))
+    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)", "f(x6b2)"
+    % but should not match "Rational(2, 3)", "f(2br02b)"
+    if (~isempty (regexp(x, '^\w+\([A-z]\w*(,[A-z]\w*)*\)$')))
       % Assume we are starting to make an abstract symfun.  We
       % don't do it directly here, but instead return a specially
       % tagged sym.  Essentially, the contents of this sym are
