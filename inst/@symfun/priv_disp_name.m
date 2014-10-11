@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{f})
-%% A string appropriate for representing the name of this symfun
+%% A string appropriate for representing the name of this symfun.
 %%
 %% Private method: this is not the method you are looking for.
 %%

@@ -94,7 +94,8 @@ end
 
 function a = remove_dupes(symvars, vars)
   M = length(vars);
-  keep = ones(1, length(symvars), 'logical');
+  % ones(1, 3, 'logical') doesn't work in Matlab
+  keep = logical(ones(1, length(symvars)));
   for j = 1:length(symvars)
     for i = 1:M
       if (strcmp(char(symvars(j)), char(vars(i))))
@@ -109,7 +110,7 @@ end
 
 %!test
 %! % basic, quotes are oct 3.6 workaround
-%! syms a x "f(t, s)"
+%! syms 'f(t, s)'
 %! assert (isequal (symvar (f, 0), sym([])))
 %! assert (isequal (symvar (f, 1), t))
 %! assert (isequal (symvar (f, 2), [t s]))
@@ -131,7 +132,7 @@ end
 
 %!test
 %! % preference for the explicit variables
-%! syms a x "f(t, s)"
+%! syms a x 'f(t, s)'
 %! h = f*a + x;
 %! assert (isequal (symvar (h, 1), t))
 %! assert (isequal (symvar (h, 2), [t s]))
