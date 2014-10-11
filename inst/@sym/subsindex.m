@@ -20,6 +20,8 @@
 %% @deftypefn  {Function File} {@var{i} =} subsindex (@var{x})
 %% Used to implement indexing by sym.
 %%
+%% Note returns zero-based index.
+%%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -27,8 +29,33 @@
 
 function b = subsindex(x)
 
-  % zero-based indexing
-  b = double(x) - 1;
+  % check if all bool or all integer
+  cmd = {
+      '(A,) = _ins'
+      'if not A.is_Matrix:'
+      '    A = sp.Matrix([A])'
+      'if all([x.is_Integer for x in A]):'
+      '    return 1,'
+      'elif all([x in (S.true, S.false) for x in A]):'
+      '    return 2,'
+      'else:'
+      '    return 0,' };
+
+  flag = python_cmd (cmd, x);
+
+  assert(isnumeric(flag))
+
+  if (flag == 0)
+    error('OctSymPy:subsindex:values', 'subscript indices must be integers or boolean');
+  elseif (flag == 1)
+    % integer
+    b = double(x) - 1;  % zero-based
+  elseif (flag == 2)
+    % boolean
+    b = find(logical(x)) - 1;  % zero-based
+  else
+    error('subsindex: programming error');
+  end
 
 end
 
@@ -62,3 +89,30 @@ end
 %!   waserr = true;
 %! end
 %! assert(waserr)
+
+%!test
+%! syms x
+%! assert (isequal (x(sym (true)), x))
+%! assert (isequal (x(sym (false)), sym ([])))
+
+%!test
+%! x = 6;
+%! assert (isequal (x(sym (true)), 6))
+%! assert (isequal (x(sym (false)), []))
+
+%!test
+%! a = sym([10 12 14]);
+%! assert (isequal (a(sym ([true false true])), a([1 3])))
+%! assert (isequal (a(sym ([false false false])), sym (ones(1,0))))
+
+%!test
+%! a = [10 11; 12 13];
+%! p = [true false; true true];
+%! assert (isequal (a(sym (p)), a(p)))
+%! p = [false false false];
+%! assert (isequal (a(sym (p)), a(p)))
+
+%!error <indices must be integers or boolean>
+%! a = [10 12];
+%! I = [sym(true) 2];
+%! b = a(I);
