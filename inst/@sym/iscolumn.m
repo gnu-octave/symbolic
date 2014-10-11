@@ -17,31 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{A} =} my_iscolumn (@var{x})
-%% Return true if input is a column vector.
+%% @deftypefn  {Function File} {@var{r} =} iscolumn (@var{x})
+%% Return true if symbolic expression is a column vector.
 %%
-%% @seealso{my_isrow}
+%% @seealso{isrow, isvector, isscalar}
 %% @end deftypefn
 
-function retval = my_iscolumn(x)
+function r = iscolumn(x)
 
-  t = exist('iscolumn');
-
-  if ((t==2) || (t==5))
-    retval = iscolumn(x);
-  else
-    % from Rik Wehbring's Octave function:
-    sz = size (x);
-    retval = (ndims (x) == 2 && (sz(2) == 1));
-  end
+  % from Rik Wehbring's Octave function:
+  sz = size (x);
+  r = (ndims (x) == 2 && (sz(2) == 1));
 
 end
 
 
-% go give someone a hug instead; life's too short to worry about
-% private tests working in octave
-%%!assert(my_iscolumn([1]))
-%%!assert(my_iscolumn([1 2 3]'))
-%%!assert(~my_iscolumn([]))
-%%!assert(~my_iscolumn([1 2 3]))
-%%!assert(~my_iscolumn([1 2; 3 4]))
+%!assert (iscolumn (sym ([1])))
+%!assert (iscolumn (sym ([1 2 3]')))
+%!assert (~iscolumn (sym ([])))
+%!assert (~iscolumn (sym ([1 2 3])))
+%!assert (~iscolumn (sym ([1 2; 3 4])))
