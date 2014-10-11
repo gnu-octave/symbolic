@@ -11,6 +11,7 @@ octsympy 0.1.1 (yyyy-mm-dd)
           isrow
           isscalar
           isvector
+          nnz
           or
           uplus
           xor
