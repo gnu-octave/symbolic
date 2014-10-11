@@ -51,10 +51,10 @@ function z = mat_access(A, subs)
     [r, c] = ind2sub (size(A), i);
     z = mat_rclist_access(A, r(:), c(:));
     % output shape, see also logic in comments in mat_mask_access.m
-    if (~isscalar(A) && my_isrow(A) && isvector(i))
+    if (~isscalar(A) && isrow(A) && isvector(i))
       z = reshape(z, 1, length(i));  % i might be row or col
-    elseif (~isscalar(A) && my_iscolumn(A) && isvector(i))
-      assert(my_iscolumn(z))
+    elseif (~isscalar(A) && iscolumn(A) && isvector(i))
+      assert(iscolumn(z))
     else
       % all other cases we take shape of i
       z = reshape(z, size(i));

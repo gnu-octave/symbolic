@@ -17,31 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{A} =} my_isrow (@var{x})
-%% Return true if input is a row vector.
+%% @deftypefn  {Function File} {@var{r} =} isrow (@var{x})
+%% Return true if symbolic expression is a row vector.
 %%
-%% @seealso{my_iscolumn}
+%% @seealso{iscolumn, isvector, isscalar}
 %% @end deftypefn
 
-function retval = my_isrow(x)
+function r = isrow(x)
 
-  t = exist('isrow');
-
-  if ((t==2) || (t==5))
-    retval = isrow(x);
-  else
-    % from Rik Wehbring's Octave function:
-    sz = size (x);
-    retval = (ndims (x) == 2 && (sz(1) == 1));
-  end
+  % from Rik Wehbring's Octave function
+  sz = size (x);
+  r = (ndims (x) == 2 && (sz(1) == 1));
 
 end
 
 
-% go give someone a hug instead; life's too short to worry about
-% private tests working in octave
-%%!assert(my_isrow([1]))
-%%!assert(my_isrow([1 2 3]))
-%%!assert(~my_isrow([]))
-%%!assert(~my_isrow([1 2 3]'))
-%%!assert(~my_isrow([1 2; 3 4]))
+%!assert (isrow (sym ([1])))
+%!assert (isrow (sym ([1 2 3])))
+%!assert (~isrow (sym ([])))
+%!assert (~isrow (sym ([1 2 3]')))
+%!assert (~isrow (sym ([1 2; 3 4])))

@@ -70,20 +70,26 @@ function Z = mat_mask_access(A, I)
           '        j = j + 1'
           'return M.T,' };
 
+  % old Matlab (e.g., 2008) has no isrow/iscolumn, but we want A
+  % and I to be sym eventually, so just do it here first.  But in
+  % (common) case where I is nonsym (logical), its faster to call
+  % nnz on the nonsym I.
+  A = sym(A);
+  Is = sym(I);
   % output shape, see logic in comments above
-  if (my_isrow(A))
+  if (isrow(A))
     n = 1;  m = nnz(I);
-  elseif (my_iscolumn(A))
+  elseif (iscolumn(A))
     n = nnz(I);  m = 1;
-  elseif (my_isrow(I))
+  elseif (isrow(Is))
     n = 1;  m = nnz(I);
-  elseif (my_iscolumn(I))
+  elseif (iscolumn(Is))
     n = nnz(I);  m = 1;
   else
     n = nnz(I);  m = 1;
   end
 
-  Z = python_cmd (cmd, sym(A), sym(I), n, m);
+  Z = python_cmd (cmd, A, Is, n, m);
 end
 
 

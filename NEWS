@@ -7,6 +7,8 @@ octsympy 0.1.1 (yyyy-mm-dd)
           char
           diag
           eig
+          iscolumn
+          isrow
           isscalar
           isvector
           or
