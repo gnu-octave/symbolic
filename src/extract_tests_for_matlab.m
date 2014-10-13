@@ -47,12 +47,25 @@ function r = proc_file(base, basestr, nm, outdir)
   %__blockidx = __lineidx(find (! isspace (__body(__lineidx+1))))+1;
 
   nl = sprintf('\n');
-  body = regexprep(body, '^test\n', ['%test' nl], 'lineanchors');
-  body = regexprep(body, '^test ', ['%test' nl], 'lineanchors');
+
+  % add an extra newline to ensure final line has one
+  body = [body nl];
+
+  ddot = 'fprintf(''.'')';
+  dskip = 'fprintf(''s'')';
+  body = regexprep(body, '^test\n', [nl ddot nl '%test' nl], 'lineanchors');
+  body = regexprep(body, '^test ', [nl ddot nl '%test' nl], 'lineanchors');
   body = regexprep(body, '^(shared .*)\n', ['%$1' nl], 'lineanchors', 'dotexceptnewline');
+  % FIXME: better to put these inside appropriate try catch end"
+  body = regexprep(body, '^xtest\n( [^\n]*\n)*', [nl dskip nl '%xtest' ...
+                      ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
+  body = regexprep(body, '^error [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%error' ...
+                      ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
+  body = regexprep(body, '^warning [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%warning' ...
+                      ' (**WARNING TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
 
   % output it
-  out_name = ['tests_ml_' basestr '_' name_no_m];
+  out_name = ['tests_' basestr '_' name_no_m];
   full_out_name = [outdir '/' out_name '.m'];
   fid = fopen (full_out_name, 'w');
   fprintf(fid, 'function %s()\n', out_name);
@@ -62,7 +75,7 @@ function r = proc_file(base, basestr, nm, outdir)
   % FIXME: fprintf better than this schar thing?  its for utf8
   fwrite(fid, body, "schar");
   fprintf(fid, '\n\n\n%%%% End of tests\n');
-  fprintf(fid, 'disp(''    Passed tests for %s'')\n', in_name);
+  fprintf(fid, 'disp(''  Passed'')\n');
   fclose(fid);
 endfunction
 

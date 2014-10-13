@@ -1,218 +1,245 @@
-% count = 1
-dirs = {'.' '@symfun' '@logical' '@sym'};
+%% Copyright (C) 2014 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
 
-totaltime = clock();
-totalcputime = cputime();
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
+%% Run the tests, log results, and return true if passing.
+%%
+%% I threw this together by modifying "__run_test_suite__.m" which
+%% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
+%% GPL v3.
+%%
+%% @end deftypefn
 
-if ~exist('count') || count == 0
+%% Author: Colin B. Macdonald, David Bateman
+%% Keywords: tests
 
-  for j = 1:length(dirs)
-    runtests(fullfile(pwd, dirs{j}))
-    fprintf('%s\n\n', char('_'*ones(1,80)));
-  end
+function anyfail = octsympy_tests ()
+  fcndirs = { '.'
+              '@logical'
+              '@sym'
+              '@symfun' };
+  % I had trouble with global vars, so just return them
+  files_with_no_tests = {};
+  files_with_tests = {};
+  pso = page_screen_output ();
+  warn_state = warning ("query", "quiet");
+  warning ("on", "quiet");
+  % time it all
+  totaltime = clock();
+  totalcputime = cputime();
+  % get the octsympy startup text out of way before we start
+  syms x
+  try
+    page_screen_output (false);
+    warning ("off", "Octave:deprecated-function");
+    fid = fopen ("octsympy_tests.log", "wt");
+    if (fid < 0)
+      error ("could not open octsympy_tests.log for writing");
+    endif
+    test ("", "explain", fid);
+    dp = dn = dxf = dsk = 0;
+    puts ("\nIntegrated test scripts:\n\n");
+    for i = 1:length (fcndirs)
+      [p, n, xf, sk, FWT, FWNT] = run_test_script (fid, fcndirs{i});
+      dp += p;
+      dn += n;
+      dxf += xf;
+      dsk += sk;
+      files_with_tests = {files_with_tests{:} FWT{:}};
+      files_with_no_tests = {files_with_no_tests{:} FWNT{:}};
+    endfor
+    fclose (fid);
 
-  totaltime = etime(clock(), totaltime);
-  totalcputime = cputime() - totalcputime;
-  fprintf('***** Ran all tests, %g seconds (%gs CPU) *****\n', ...
-          totaltime, totalcputime);
-else
+    puts ("\nSummary:\n\n");
 
-  %% Old version
-  % keeping this code around b/c it can count the number of tests
-  % passed for me...
+    nfail = dn - dp;
+    printf ("  PASS    %6d\n", dp);
+    printf ("  FAIL    %6d\n", nfail);
+    if (dxf > 0)
+      printf ("  XFAIL   %6d\n", dxf);
+    endif
+    if (dsk > 0)
+      printf ("  SKIPPED %6d\n", dsk);
+    endif
+    totaltime = etime(clock(), totaltime);
+    totalcputime = cputime() - totalcputime;
+    fprintf ('  TIME %8.0fs (%.0fs CPU)\n', totaltime, totalcputime);
+    puts ("\n");
 
-  num_tests = 0;
-  num_passed = 0;
+    puts ("See the file octsympy_tests.log for additional details.\n");
+    if (dxf > 0)
+      puts ("\n");
+      puts ("Expected failures (listed as XFAIL above) are usually known bugs.\n");
+      puts ("Help is always appreciated.\n");
+    endif
+    if (dsk > 0)
+      puts ("\n");
+      puts ("Tests are most often skipped because the features they require\n");
+      puts ("have been disabled.\n");
+    endif
 
-  for j = 1:length(dirs)
-    %methods_list = methods(classes{j});
-    %base = ['@' classes{j}];
-    thisdir = fullfile(pwd, dirs{j});
-    files = dir(thisdir);
+    ## Weed out deprecated and private functions
+    #weed_idx = cellfun (@isempty, regexp (files_with_tests, '\<deprecated\>|\<private\>', 'once'));
+    #files_with_tests = files_with_tests(weed_idx);
+    #weed_idx = cellfun (@isempty, regexp (files_with_no_tests, '\<deprecated\>|\<private\>', 'once'));
+    #files_with_no_tests = files_with_no_tests(weed_idx);
 
-    %for i=1:length(methods_list)
-    %m = methods_list{i};
-    for i=1:length(files)
-      m = files(i).name;
-      if ( (~files(i).isdir) && strcmp(m(end-1:end), '.m') )
-        [N,MAX] = test([dirs{j} '/' m], [], stdout);
-        num_tests = num_tests + MAX;
-        num_passed = num_passed + N;
-        if (MAX > 0)
-          fprintf('        Passed %d of %d\n', N, MAX);
-          %fprintf('%s\n\n', char('_'*ones(1,80)));
-          %fprintf('  (paused)\n'); pause
-        end
-      end
-    end
-  end
-  totaltime = etime(clock(), totaltime);
-  totalcputime = cputime() - totalcputime;
-  fprintf('\n***** Passed %d/%d tests passed, %g seconds (%gs CPU) *****\n', ...
-          num_passed, num_tests, totaltime, totalcputime);
-  if (num_tests - num_passed > 0)
-    disp('***** WARNING: some tests failed *****');
-  end
-end
+    report_files_with_no_tests (files_with_tests, files_with_no_tests, ".m");
+    printf("\n");
+    printf (list_in_columns (files_with_no_tests, 80));
 
+    anyfail = nfail > 0;
 
-%% Tests
-% tests listed here are for current or fixed bugs.  Could move
-% these to appropriate functions later if desired.
-
-%!test
-%! % Issue #5, scalar expansion
-%! a = sym(1);
-%! a(2) = 2;
-%! assert (isequal(a, [1 2]))
-%! a = sym([]);
-%! a([1 2]) = [1 2];
-%! assert (isa(a, 'sym'))
-%! assert (isequal(a, [1 2]))
-%! a = sym([]);
-%! a([1 2]) = sym([1 2]);
-%! assert (isa(a, 'sym'))
-%! assert (isequal(a, [1 2]))
-
-
-%!test
-%! % "any, all" not implemented
-%! D = [0 1; 2 3];
-%! A = sym(D);
-%! assert (isequal( size(any(A-D)), [1 2] ))
-%! assert (isequal( size(all(A-D,2)), [2 1] ))
-
-
-%!test
-%! % double wasn't implemented correctly for arrays
-%! D = [0 1; 2 3];
-%! A = sym(D);
-%! assert (isequal( size(double(A)), size(A) ))
-%! assert (isequal( double(A), D ))
-
-
-%!test
-%! % in the past, inf/nan in array ctor made wrong matrix
-%! a = sym([nan 1 2]);
-%! assert (isequaln (a, [nan 1 2]))
-%! a = sym([1 inf]);
-%! assert( isequaln (a, [1 inf]))
-
-
-
-%% Bugs still active
-% Change these from xtest to test and move them up as fixed.
-
-%%!test
-%%! % FIXME: in SMT, x - true goes to x - 1
-%%! syms x
-%%! y = x - (1==1)
-%%! assert( isequal (y, x - 1))
-
-%!xtest
-%! % Issue #8: array construction when row is only doubles
-%! % fails on: Octave 3.6.4, 3.8.1, hg tip July 2014.
-%! % works on: Matlab
-%! try
-%!   A = [sym(0) 1; 2 3];
-%!   failed = false;
-%! catch
-%!   failed = true;
-%! end
-%! assert (~failed)
-%! assert (isequal(A, [1 2; 3 4]))
+    page_screen_output (pso);
+    warning (warn_state.state, "quiet");
+  catch
+    page_screen_output (pso);
+    warning (warn_state.state, "quiet");
+    disp (lasterr ());
+  end_try_catch
+endfunction
 
 
-%!test
-%! % boolean not converted to sym (part of Issue #58)
-%! y = sym(1==1);
-%! assert( isa (y, 'sym'))
-%! y = sym(1==0);
-%! assert( isa (y, 'sym'))
+function print_test_file_name (nm)
+  filler = repmat (".", 1, 48-length (nm));
+  printf ("  %s %s", nm, filler);
+endfunction
 
 
-%!test
-%! % Issue #9, nan == 1 should be bool false not "nan == 1" sym
-%! snan = sym(0)/0;
-%! y = snan == 1;
-%! assert (~logical(y))
-
-%!test
-%! % Issue #9, for arrays, passes currently, probably for wrong reason
-%! snan = sym(nan);
-%! A = [snan snan 1] == [10 12 1];
-%! assert (isequal (A, sym([false false true])))
-
-%!test
-%! % these seem to work
-%! e = sym(inf) == 1;
-%! assert (~logical(e))
-
-
-%!test
-%! % known failure, issue #55; an upstream issue
-%! snan = sym(nan);
-%! assert (~logical(snan == snan))
+function print_pass_fail (p, n, xf, sk)
+  if ((n + sk) > 0)
+    printf (" PASS %3d/%-3d", p, n);
+    nfail = n - p;
+    if (nfail > 0)
+      printf (" \033[1;40;31m%s %d\033[m", "FAIL", nfail);
+    endif
+    if (sk > 0)
+      printf (" \033[1;40;33m%s %d", "SKIP", sk);
+    endif
+    if (xf > 0)
+      printf (" \033[1;40;33m%s %d\033[m", "XFAIL", xf);
+    endif
+  endif
+  puts ("\n");
+endfunction
 
 
+function retval = has_functions (f)
+  n = length (f);
+  if (n > 3 && strcmpi (f((end-2):end), ".cc"))
+    fid = fopen (f);
+    if (fid >= 0)
+      str = fread (fid, "*char")';
+      fclose (fid);
+      retval = ! isempty (regexp (str,'^(DEFUN|DEFUN_DLD)\>',
+                                      'lineanchors', 'once'));
+    else
+      error ("fopen failed: %s", f);
+    endif
+  elseif (n > 2 && strcmpi (f((end-1):end), ".m"))
+    retval = true;
+  else
+    retval = false;
+  endif
+endfunction
 
 
-%% x == x tests
-% Probably should move to eq.m when fixed
+function retval = has_tests (f)
+  fid = fopen (f);
+  if (fid >= 0)
+    str = fread (fid, "*char")';
+    fclose (fid);
+    retval = ! isempty (regexp (str,
+                                '^%!(assert|error|fail|test|xtest|warning)',
+                                'lineanchors', 'once'));
+  else
+    error ("fopen failed: %s", f);
+  endif
+endfunction
 
-%!test
-%! % in SMT x == x is a sym (not "true") and isAlways returns true
-%! syms x
-%! assert (isAlways(  x == x  ))
 
-%!xtest
-%! % fails to match SMT (although true here is certainly reasonable)
-%! syms x
-%! e = x == x;
-%! assert (strcmp (strtrim(disp(e, 'flat')), 'x == x'))
+function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
+  FWT = {};
+  FWNT = {};
 
-%%!xtest
-%%! % this is more serious!
-%%! % FIXME: is it? currently goes to false which is reasonable
-%%! syms x
-%%! e = x - 5 == x - 3;
-%%! assert (isa(e, 'sym'))
-%%! assert (~isa(e, 'logical'))
+  lst = dir (d);
+  dp = dn = dxf = dsk = 0;
+  for i = 1:length (lst)
+    nm = lst(i).name;
+    ## # recurve into subdirs
+    ## if (lst(i).isdir && nm(1) != ".")
+    ##   [p, n, xf, sk, myFWT, myFWNT] = run_test_script (fid, [d, filesep, nm]);
+    ##   dp += p;
+    ##   dn += n;
+    ##   dxf += xf;
+    ##   dsk += sk;
+    ##   FWT = {FWT{:} myFWT{:}};
+    ##   FWNT = {FWNT{:} myFWNT{:}};
+    ## endif
+  endfor
+  for i = 1:length (lst)
+    nm = lst(i).name;
+    ## Ignore hidden files
+    if (nm(1) == '.')
+      continue
+    endif
+    f = fullfile (d, nm);
+    if ((length (nm) > 2 && strcmpi (nm((end-1):end), ".m"))
+        || (length (nm) > 4
+            && (   strcmpi (nm((end-3):end), "-tst")
+                || strcmpi (nm((end-3):end), ".tst"))))
+      p = n = xf = 0;
+      ## Only run if it contains %!test, %!assert, %!error, %!fail, or %!warning
+      if (has_tests (f))
+	tmp = f;
+        print_test_file_name (tmp);
+        [p, n, xf, sk] = test (f, "quiet", fid);
+        print_pass_fail (p, n, xf, sk);
+        dp += p;
+        dn += n;
+        dxf += xf;
+        dsk += sk;
+	FWT{end+1} = f;
+      else
+        ## To reduce the list length, only mark .cc files that contain
+        ## DEFUN definitions.
+        FWNT{end+1} = f;
+      endif
+    endif
+  endfor
+  #printf("%s%s -> passes %d of %d tests\n", ident, d, dp, dn);
+endfunction
 
-%%!test
-%%! % using eq for == and "same obj" is strange, part 1
-%%! % this case passes
-%%! syms x
-%%! e = (x == 4) == (x == 4);
-%%! assert (isAlways( e ))
-%%! assert (logical( e ))
 
-%%!test
-%%! % using eq for == and "same obj" is strange, part 2
-%%! syms x
-%%! e = (x-5 == x-3) == (x == 4);
-%%! assert (~logical( e ))
-%%! % assert (~isAlways( e ))
+function n = num_elts_matching_pattern (lst, pat)
+  n = sum (! cellfun ("isempty", regexp (lst, pat, 'once')));
+endfunction
 
-%%!xtest
-%%! % using eq for == and "same obj" is strange, part 3
-%%! % this fails too, but should be true, although perhaps
-%%! % only with a call to simplify (i.e., isAlways should
-%%! % get it right).
-%%! syms x
-%%! e = (2*x-5 == x-1) == (x == 4);
-%%! assert (isAlways( e ))
-%%! assert (islogical( e ))
-%%! assert (isa(e, 'logical'))
-%%! assert (e)
 
-%!xtest
-%! % SMT behaviour for arrays: if any x's it should not be logical
-%! % output but instead syms for the equality objects
-%! syms x
-%! assert (isequal ( [x x] == sym([1 2]), [x==1 x==2] ))
-%! assert (isequal ( [x x] == [1 2], [x==1 x==2] ))
-%! % FIXME: new bool means these don't test the right thing
-%! %assert (~islogical( [x 1] == 1 ))
-%! %assert (~islogical( [x 1] == x ))
-%! %assert (~islogical( [x x] == x ))  % not so clear
+function report_files_with_no_tests (with, without, typ)
+  pat = ['\' typ "$"];
+  n_with = num_elts_matching_pattern (with, pat);
+  n_without = num_elts_matching_pattern (without, pat);
+  n_tot = n_with + n_without;
+  printf ("\n%d (of %d) %s files have no tests:\n", n_without, n_tot, typ);
+endfunction
+
+
+% muhaha, no one is watching the watchers
+%!assert(true)

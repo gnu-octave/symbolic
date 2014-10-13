@@ -30,7 +30,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       [A, db] = python_ipc_popen2(what, cmd, varargin{:});
 
     case 'system'
-      if (ispc () && ! isunix ())
+      if (ispc () && (~isunix ()))
         [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
       else
         [A, db] = python_ipc_system(what, cmd, false, varargin{:});

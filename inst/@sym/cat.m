@@ -28,7 +28,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = cat(varargin)
+function cat(varargin)
 
   error('cat: not implemented, unnecessary?');
 

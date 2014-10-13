@@ -21,8 +21,12 @@
 %% Return a list (cell array) of the symbols in an expression.
 %%
 %% The list is sorted alphabetically.  Note the order is not the
-%% same as @code{symvar} and @code{symvar}: use one of those if
+%% same as @code{symvar} and @code{findsym}: use one of those if
 %% Matlab Symbolic Math Toolbox compatibility is important.
+%%
+%% If two variables have the same symbol but different assumptions,
+%% they will both appear in the output.  It is not well-defined
+%% in what order they appear.
 %%
 %% @var{x} could be a sym, sym array, cell array, or struct.
 %%
@@ -41,18 +45,18 @@ function L = findsymbols(obj, dosort)
   end
 
   if isa(obj, 'sym')
-  cmd = { 'x = _ins[0]' ...
-          'if not x.is_Matrix:' ...
-          '    s = x.free_symbols' ...
-          'else:' ...
-          '    s = set()' ...
-          '    for i in x.values():' ...
-          '        s = s.union(i.free_symbols)' ...
-          'l = list(s)' ...
-          'l = sorted(l, key=str)' ...
-          'return (l,)' };
+    cmd = { 'x = _ins[0]'
+            '#s = x.free_symbols'   % in 0.7.5-git
+            'if not x.is_Matrix:'
+            '    s = x.free_symbols'
+            'else:'
+            '    s = set()'
+            '    for i in x.values():'
+            '        s = s.union(i.free_symbols)'
+            'l = list(s)'
+            'l = sorted(l, key=str)'
+            'return l,' };
     L = python_cmd (cmd, obj);
-    %L = findsymbols(obj);
     if isa(obj, 'symfun')
       warning('FIXME: need to do anything special for symfun vars?')
     end
@@ -88,10 +92,11 @@ function L = findsymbols(obj, dosort)
   end
 
 
+  % sort and make unique using internal representation
   if dosort
     Ls = {};
     for i=1:length(L)
-      Ls{i} = L{i}.flat;
+      Ls{i} = char(L{i});
     end
     [tilde, I] = unique(Ls);
     L = L(I);
@@ -118,3 +123,24 @@ end
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
 
+%!test
+%! % diff. assumptions make diff. symbols
+%! x1 = sym('x');
+%! x2 = sym('x', 'positive');
+%! f = x1*x2;
+%! assert (length (findsymbols (f)) == 2)
+
+%!test
+%! % symfun or sym
+%! syms x f(y)
+%! a = f*x;
+%! b = f(y)*x;
+%! c(y) = x;
+%! assert (isequal (findsymbols(a), {x y}))
+%! assert (isequal (findsymbols(b), {x y}))
+
+%!xtest
+%! % FIXME: symfun, yes need to do sth special or doc, see smt in symvar
+%! syms a x y
+%! f(x, y) = a;  % const symfun
+%! assert (isequal (findsymbols(f), {a x y}))

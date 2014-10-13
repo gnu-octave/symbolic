@@ -35,7 +35,7 @@
 
 function z = mat_rccross_access(A, r, c)
 
-  if (ischar(r) && ischar(c) && (r == ':') && (c == ':'))
+  if (ischar(r) && ischar(c) && strcmp(r, ':') && strcmp(c, ':'))
     z = A;
     return
   end
@@ -43,11 +43,13 @@ function z = mat_rccross_access(A, r, c)
   %if both expressible as py slices...
   % FIXME: Could optimize these cases
 
-  [n,m] = size(A);
+  [n, m] = size(A);
 
-  if (isnumeric(r) && ((isvector(r) || isempty(r))))
+  if (isnumeric(r) && isempty(r))
     % no-op
-  elseif (strcmp(r,':'))
+  elseif (isnumeric(r) && isvector(r))
+    assert(all(r >= 1) && all(r <= n), 'index out of range')
+  elseif (strcmp(r, ':'))
     r = 1:n;
   elseif (islogical(r) && isvector(r) && (length(r) == n))
     I = r;
@@ -56,8 +58,10 @@ function z = mat_rccross_access(A, r, c)
     error('unknown 2d-indexing in rows')
   end
 
-  if (isnumeric(c) && ((isvector(c) || isempty(c))))
+  if (isnumeric(c) && isempty(c))
     % no-op
+  elseif (isnumeric(c) && isvector(c))
+    assert(all(c >= 1) && all(c <= m), 'index out of range')
   elseif (strcmp(c,':'))
     c = 1:m;
   elseif (islogical(c) && isvector(c) && (length(c) == m))
@@ -67,11 +71,13 @@ function z = mat_rccross_access(A, r, c)
     error('unknown 2d-indexing in columns')
   end
 
-  cmd = { '(A, rr, cc) = _ins'  ...
-          'M = sp.Matrix.zeros(len(rr), len(cc))'  ...
-          'for i in range(0, len(rr)):'  ...
-          '    for j in range(0, len(cc)):'  ...
-          '        M[i,j] = A[rr[i], cc[j]]'  ...
+  cmd = { '(A, rr, cc) = _ins'
+          'if not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'M = sp.Matrix.zeros(len(rr), len(cc))'
+          'for i in range(0, len(rr)):'
+          '    for j in range(0, len(cc)):'
+          '        M[i,j] = A[rr[i], cc[j]]'
           'return M,' };
 
   rr = num2cell(int32(r-1));

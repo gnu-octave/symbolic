@@ -35,7 +35,8 @@ function z = mat_rclist_access(A, r, c)
   end
 
   cmd = { '(A, rr, cc) = _ins'
-          '# 2D access so no transpose for sympy row-based'
+          'if not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
           'n = len(rr)'
           'M = sp.Matrix.zeros(n, 1)'
           'for i in range(0,n):'
@@ -51,4 +52,5 @@ end
 %!shared A,B
 %! B = [1 2 3; 5 6 7];
 %! A = sym(B);
-%!assert(isequal(  mat_rclist_access(A,[1 2],[2 3]), [B(1,2); B(2,3)]  ))
+
+%!assert (isequal (mat_rclist_access(A,[1 2],[2 3]), [B(1,2); B(2,3)]))

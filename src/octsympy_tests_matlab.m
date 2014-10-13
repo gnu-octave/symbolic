@@ -8,6 +8,9 @@ cd(base);
 totaltime = clock();
 totalcputime = cputime();
 num_tests = 0;
+% do tests in random order:
+%rng('shuffle')
+%for i=randperm(length(files))
 for i=1:length(files)
   mfile = files(i).name;
   % detect tests b/c directory contains other stuff (e.g., surdirs and
@@ -16,7 +19,7 @@ for i=1:length(files)
     testtime = clock();
     str = mfile(1:end-2);
     num_tests = num_tests + 1;
-    disp(['>>> Running test(s) in: ' mfile ]);
+    fprintf(['>>> Running test(s) in: ' mfile '  ']);  % no newline
     eval(str)
     testtime = etime(clock(), testtime);
   end

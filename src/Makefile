@@ -22,6 +22,7 @@ codegen_clean:
 ml_tidyup: ml_copy ml_convert ml_extract_tests
 	rm -f ../matlab/extract_tests_for_matlab.m
 	rm -f ../matlab/octsympy_tests.m
+	rm -f ../matlab/octsympy_test_suite.m
 
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
@@ -53,6 +54,7 @@ matlab_clean:
 	rm -f ../matlab/*.m
 	rm -f ../matlab/CONTRIBUTORS
 	rm -f ../matlab/COPYING
+	rm -f ../matlab/NEWS
 	rm -f ../matlab/*.md
 	rm -rf ../matlab/@sym
 	rm -rf ../matlab/@symfun

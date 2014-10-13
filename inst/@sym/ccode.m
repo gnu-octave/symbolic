@@ -88,6 +88,7 @@ end
 %! assert(strcmp(C.name, 'file.c'))
 %! assert(strcmp(H.name, 'file.h'))
 %! %disp(expected_c_code); disp(C.code)
-%! assert(strcmp(C.code, expected_c_code))
-%! assert(strcmp(H.code, expected_h_code))
-
+%! s1 = strrep(expected_c_code, sprintf('\n'), sprintf('\r\n'));
+%! s2 = strrep(expected_h_code, sprintf('\n'), sprintf('\r\n'));
+%! assert (strcmp (C.code, expected_c_code) || strcmp (C.code, s1))
+%! assert (strcmp (H.code, expected_h_code) || strcmp (H.code, s2))

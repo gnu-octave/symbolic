@@ -17,30 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{n} =} numel (@var{f})
-%% Number of elements in symbolic array of symfuns.
+%% @deftypefn  {Function File} {@var{b} =} isvector (@var{x})
+%% Return true if this symbolic expression is a vector.
 %%
-%% FIXME: Why do I need this in the subclass symfun?  why is it called so much?
-%%
+%% @seealso{size, numel, isscalar}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function n = numel(f)
+function b = isvector(x)
 
-  % see issue #107, #109
-  n = 1;
+  d = size(x);
+  b = any(d == 1);
 
 end
 
 
-%!test
-%! syms x
-%! f(x) = x^2;
-%! assert(numel(f)==1)
-
-%!test
-%! syms x
-%! f(x) = [1 x];
-%! assert(numel(f)==1)
+%!assert(isvector(sym('x')))
+%!assert(isvector(sym([1 2 3])))
+%!assert(isvector(sym([1; 2])))
+%!assert(isvector(sym([1; 2])))
+%!assert(~isvector(sym([1 2; 3 4])))
+%!assert(~isvector(sym([])))

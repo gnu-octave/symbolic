@@ -43,4 +43,3 @@ end
 %! h = f.*[x 3];
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (h.sym, [x^2 6*x]))
-

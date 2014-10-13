@@ -17,30 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{n} =} numel (@var{f})
-%% Number of elements in symbolic array of symfuns.
+%% @deftypefn  {Function File} {@var{r} =} iscolumn (@var{x})
+%% Return true if symbolic expression is a column vector.
 %%
-%% FIXME: Why do I need this in the subclass symfun?  why is it called so much?
-%%
+%% @seealso{isrow, isvector, isscalar}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function r = iscolumn(x)
 
-function n = numel(f)
-
-  % see issue #107, #109
-  n = 1;
+  % from Rik Wehbring's Octave function:
+  sz = size (x);
+  r = (ndims (x) == 2 && (sz(2) == 1));
 
 end
 
 
-%!test
-%! syms x
-%! f(x) = x^2;
-%! assert(numel(f)==1)
-
-%!test
-%! syms x
-%! f(x) = [1 x];
-%! assert(numel(f)==1)
+%!assert (iscolumn (sym ([1])))
+%!assert (iscolumn (sym ([1 2 3]')))
+%!assert (~iscolumn (sym ([])))
+%!assert (~iscolumn (sym ([1 2 3])))
+%!assert (~iscolumn (sym ([1 2; 3 4])))

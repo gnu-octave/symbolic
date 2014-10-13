@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{b} =} isscalar (@var{x})
 %% Return true if this symbolic expression is a scalar.
 %%
-%% @seealso{size, numel}
+%% @seealso{size, numel, isvector}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

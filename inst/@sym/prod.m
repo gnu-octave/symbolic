@@ -40,31 +40,32 @@ function y = prod(x, n)
 
   if (isscalar(x))
     y = x;
-  else
-    if (nargin == 1)
-      if (my_isrow(x))
-        n = 2;
-      elseif (my_iscolumn(x))
-        n = 1;
-      else
-        n = 1;
-      end
-    end
+    return
+  end
 
-    %y = python_cmd ('return (sp.prod(_ins[0]),)', x);
-    cmd = { 'A = _ins[0]' ...
-            'B = sp.Matrix.zeros(A.rows, 1)' ...
-            'for i in range(0, A.rows):' ...
-            '   B[i] = prod(A.row(i))' ...
-            'return B,' };
-    if (n == 1)
-      y = python_cmd (cmd, transpose(x));
-      y = transpose(y);
-    elseif (n == 2)
-      y = python_cmd (cmd, x);
+  if (nargin == 1)
+    if (isrow(x))
+      n = 2;
+    elseif (iscolumn(x))
+      n = 1;
     else
-      error('unsupported');
+      n = 1;
     end
+  end
+
+  %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
+  cmd = { 'A = _ins[0]'
+          'B = sp.Matrix.zeros(A.rows, 1)'
+          'for i in range(0, A.rows):'
+          '   B[i] = prod(A.row(i))'
+          'return B,' };
+  if (n == 1)
+    y = python_cmd (cmd, transpose(x));
+    y = transpose(y);
+  elseif (n == 2)
+    y = python_cmd (cmd, x);
+  else
+    error('unsupported');
   end
 end
 
@@ -82,4 +83,3 @@ end
 %!assert (isequal (prod(a), prod(b)))
 %!assert (isequal (prod(a,1), prod(b,1)))
 %!assert (isequal (prod(a,2), prod(b,2)))
-
