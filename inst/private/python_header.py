@@ -102,8 +102,8 @@ try:
         elif isinstance(x, sp.MatrixExpr):
             try:
                 y = x.as_explicit()
-                L = [p is None for p in y]
-                if not any(L):  # aint got None
+                if not any([p is None for p in y]): # y aint got None
+                    # fixed after 0.7.5, remove later
                     return y
             except:
                 return x

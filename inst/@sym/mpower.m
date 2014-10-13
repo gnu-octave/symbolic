@@ -115,7 +115,7 @@ end
 % FIXME: sin(B) also fails, our fault?
 
 %!xtest
-%! % matpow, FIXME: sympy bug?
+%! % matpow, fails in sympy-0.7.5, fixed by https://github.com/sympy/sympy/pull/8137
 %! A = sym([1 2; 0 3]);
 %! syms n;
 %! B = A^n;
