@@ -162,7 +162,7 @@ function varargout = sympref(cmd, arg)
           case 'systmpfile'
             disp('Forcing systmpfile ipc: warning: this is for debugging')
           case 'sysoneline'
-            disp('Forcing systmpfile ipc: warning: this is for debugging')
+            disp('Forcing sysoneline ipc: warning: this is for debugging')
             warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
             warning('Unsupported IPC mechanism: hope you know what you''re doing')
@@ -212,6 +212,22 @@ end
 %!test
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
+
+%!test
+%! % system should work on all system, but just runs sysoneline on windows
+%! fprintf('Running some tests that reset the IPC and produce output\n');
+%! sympref('ipc', 'system');
+%! pause(1);
+%! syms x
+%! pause(2);
+
+%!test
+%! % sysoneline should work on all systems
+%! fprintf('\n');
+%! sympref('ipc', 'sysoneline');
+%! pause(1);
+%! syms x
+%! pause(2);
 
 %!test
 %! fprintf('\n');
