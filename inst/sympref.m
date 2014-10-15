@@ -210,10 +210,6 @@ end
 
 
 %!test
-%! sympref('defaults')
-%! assert(strcmp(sympref('ipc'), 'default'))
-
-%!test
 %! % system should work on all system, but just runs sysoneline on windows
 %! fprintf('Running some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
@@ -228,6 +224,10 @@ end
 %! pause(1);
 %! syms x
 %! pause(2);
+
+%!test
+%! sympref('defaults')
+%! assert(strcmp(sympref('ipc'), 'default'))
 
 %!test
 %! fprintf('\n');
