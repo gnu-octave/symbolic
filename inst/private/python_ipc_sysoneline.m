@@ -29,8 +29,9 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   %% Headers
   % embedding the headers in the -c command is too long for
   % Windows.  We have a 8000 char budget, and the header uses all
-  % of it.  This looks fragile w.r.t. pwd...  investigate.
-  headers = ['execfile(\"private/python_header.py\"); '];
+  % of it.
+  mydir = fileparts (mfilename ('fullpath'));
+  headers = ['execfile(\"' mydir filesep() 'python_header.py\"); '];
   %s = python_header_embed2();
   %headers = ['exec(\"' s '\"); '];
 
