@@ -181,6 +181,16 @@ function varargout = sympref(cmd, arg)
         varargout{1} = r;
       end
 
+    %case 'path'
+      %pkg_path = fileparts (mfilename ('fullpath'));
+      % or
+      %pkg_l = pkg ('list');
+      %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, "UniformOutput", false));
+      %if (~ any (idx))
+      %  error ('the package %s is not installed', your_pkg);
+      %end
+      %pkg_path = pkg_l{idx}.dir
+
     otherwise
       error ('invalid input')
   end
