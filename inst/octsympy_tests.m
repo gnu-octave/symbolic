@@ -34,7 +34,7 @@ function anyfail = octsympy_tests ()
               '@logical'
               '@sym'
               '@symfun' };
-  mypwd = pwd ();
+  mycwd = pwd ();
   mydir = fileparts (mfilename ('fullpath'));
   chdir (mydir);
   % I had trouble with global vars, so just return them
