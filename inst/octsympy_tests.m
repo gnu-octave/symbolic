@@ -34,6 +34,9 @@ function anyfail = octsympy_tests ()
               '@logical'
               '@sym'
               '@symfun' };
+  mypwd = pwd ();
+  mydir = fileparts (mfilename ('fullpath'));
+  chdir (mydir);
   % I had trouble with global vars, so just return them
   files_with_no_tests = {};
   files_with_tests = {};
@@ -113,6 +116,7 @@ function anyfail = octsympy_tests ()
     warning (warn_state.state, "quiet");
     disp (lasterr ());
   end_try_catch
+  chdir (mycwd);
 endfunction
 
 
