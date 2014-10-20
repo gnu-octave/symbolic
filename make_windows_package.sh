@@ -8,7 +8,7 @@ PYEXEREADME=py278.readme.txt   # from the src package
 SYMPY=sympy-0.7.5
 
 # octsympy version
-VER=0.1.0
+VER=0.1.1
 
 ###################################
 TAG=v${VER}
