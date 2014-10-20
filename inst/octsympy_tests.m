@@ -24,6 +24,10 @@
 %% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
 %% GPL v3.
 %%
+%% FIXME: once we no longer try to support Octave 3.6, drop most of
+%% this and call "__run_test_suite({'@sym', '@symfun'}, {})"
+%% instead.  See https://savannah.gnu.org/bugs/?41215
+%%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald, David Bateman
