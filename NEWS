@@ -1,6 +1,12 @@
 octsympy 0.x.y (yyyy-mm-dd)
 ===========================
 
+ *  New commands:
+
+          expm
+          trace
+          pinv
+
 
 
 octsympy 0.1.1 (2014-10-20)  Rose Garden
