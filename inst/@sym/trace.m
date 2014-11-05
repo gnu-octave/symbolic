@@ -17,26 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{B} =} inv (@var{A})
-%% Symbolic inverse of a matrix.
+%% @deftypefn  {Function File} {@var{B} =} trace (@var{A})
+%% Trace of symbolic matrix.
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = inv(x)
-
-  [n,m] = size(x);
-  if n ~= m
-    error('matrix is not square')
-  end
+function z = trace(x)
 
   cmd = { 'x, = _ins'
-          'if x.is_Matrix:'
-          '    return x.inv(),'
-          'else:'
-          '    return S.One/x,' };
+          'if not x.is_Matrix:'
+          '    x = sp.Matrix([[x]])'
+          'return x.trace(),' };
 
   z = python_cmd (cmd, x);
 
@@ -46,16 +40,9 @@ end
 %!test
 %! % scalar
 %! syms x
-%! assert (isequal (inv(x), 1/x))
+%! assert (isequal (trace(x), x))
 
 %!test
-%! % diagonal
 %! syms x
-%! A = [sym(1) 0; 0 x];
-%! B = [sym(1) 0; 0 1/x];
-%! assert (isequal (inv(A), B))
-
-%!test
-%! % 2x2 inverse
-%! A = [1 2; 3 4];
-%! assert (max (max (abs (double (inv (sym (A))) - inv(A)))) <= 3*eps)
+%! A = [x 3; 2*x 5];
+%! assert (isequal (trace(A), x + 5))
