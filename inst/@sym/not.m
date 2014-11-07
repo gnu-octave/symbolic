@@ -102,7 +102,9 @@ end
 %!test
 %! % output is sym
 %! syms x
-%! assert (isa (~(x == 4), 'sym'))
+%! e = ~(x == 4);
+%! assert (isa (e, 'sym'))
+%! assert (strncmp(char(e), 'Unequality', 10))
 
 %!xtest
 %! % output is sym even for scalar t/f
