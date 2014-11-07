@@ -62,4 +62,4 @@ end
 %! B = expm(A);
 %! C = double(subs(B, x, 4));
 %! D = expm(double(subs(A, x, 4)));
-%! assert (max (max (abs (C - D))) <= 1000*eps)
+%! assert (max (max (abs (C - D))) <= 1e-11)

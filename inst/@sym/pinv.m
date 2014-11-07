@@ -45,4 +45,4 @@ end
 %!test
 %! % 2x3
 %! A = [1 2 3; 4 5 6];
-%! assert (max (max (abs (double (pinv (sym (A))) - pinv(A)))) <= 3*eps)
+%! assert (max (max (abs (double (pinv (sym (A))) - pinv(A)))) <= 10*eps)
