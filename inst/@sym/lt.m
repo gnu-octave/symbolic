@@ -140,7 +140,17 @@ end
 %! assert (isequal (e, [true true false]))
 
 %!test
-%! % oo, assumptions
+%! % oo, finite real variables
+%! syms oo
+%! syms z real
+%! assumeAlso(z, 'finite')
+%! e = -oo < z;
+%! assert (isequal (e, sym(true)))
+%! e = z < oo;
+%! assert (isequal (e, sym(true)))
+
+%!test
+%! % -oo, positive var
 %! syms oo
 %! syms z positive
 %! e = -oo < z;

@@ -43,7 +43,8 @@
 %% x = sym ('x', 'positive')
 %% @end example
 %% The following options are supported:
-%% 'real', 'positive', 'negative', 'integer', 'even', 'odd', 'rational'.
+%% 'real', 'positive', 'negative', 'integer', 'even', 'odd',
+%% 'rational', 'finite'.
 %% Others are supported in SymPy but not exposed directly here.
 %%
 %% Caution: it is possible to create multiple variants of the
@@ -237,7 +238,7 @@ function s = sym(x, varargin)
       elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
               strcmp(asm, 'negative') || strcmp(asm, 'integer') || ...
               strcmp(asm, 'even') || strcmp(asm, 'odd') || ...
-              strcmp(asm, 'rational'))
+              strcmp(asm, 'rational') || strcmp(asm, 'finite'))
         cmd = sprintf('z = sympy.Symbol("%s", %s=True)', x, asm);
       else
         error('that assumption not supported')
