@@ -148,14 +148,13 @@ end
 %! assert (isequal (e, sym(true)))
 
 %!xtest
-%! % Known failure, assumptions broken in SymPy somewhere?
+%! % positive (known failure w/ sympy 0.7.5)
 %! syms z positive
 %! e = -1 < z;
 %! assert (isequal (e, sym(true)))
 
-%!xtest
-%! % Known failure, assumptions broken in SymPy somewhere?
+%!test
 %! syms oo
-%! syms z negative
+%! z = sym('z', 'negative')
 %! e = z < oo;
 %! assert (isequal (e, sym(true)))
