@@ -78,6 +78,12 @@ function [A,B] = assumptions(F, outp)
     'adict_even_076 = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}'
     'adict_integer = {"real":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "irrational":False}'
     'adict_rational = {"real":True, "commutative":True, "hermitian":True, "complex":True, "rational":True, "imaginary":False, "irrational":False}'
+    'if sympy.__version__.startswith("0.7.6"):'  % FIXME: clean up this
+    '    new076 = {"algebraic":True,  "transcendental":False}'
+    '    adict_integer.update(new076)'
+    '    adict_even.update(new076)'
+    '    adict_odd.update(new076)'
+    '    adict_rational.update(new076)'
     'adict = x.assumptions0'
     'if adict == adict_default:'
     '    astr = ""'
