@@ -7,6 +7,8 @@ octsympy 0.x.y (yyyy-mm-dd)
           trace
           pinv
 
+ *  Support new SymPy 0.7.6.
+
 
 
 octsympy 0.1.1 (2014-10-20)  Rose Garden
