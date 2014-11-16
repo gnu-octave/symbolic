@@ -25,6 +25,8 @@
 %% For a matrix/vector, return a cell array where each entry is
 %% a row vector.
 %%
+%% A symbol/number has itself as children.
+%%
 %% @seealso{lhs, rhs}
 %% @end deftypefn
 
@@ -36,10 +38,14 @@ function r = children(f)
   cmd = {
     'f, = _ins'
     'f = sympify(f)'  % mutable -> immutable
+    'def scalarfcn(a):'
+    '    if len(a.args) == 0:'
+    '        return sympy.Matrix([a])'  % children(x) is [x]
+    '    return sympy.Matrix([a.args])'
     'if f.is_Matrix:'
-    '    r = [sympy.Matrix([a.args]) for a in f.T]'  % note transpose
+    '    r = [scalarfcn(a) for a in f.T]'  % note transpose
     'else:'
-    '    r = sympy.Matrix([f.args])'
+    '    r = scalarfcn(f)'
     'return r,' };
 
   r = python_cmd (cmd, f);
@@ -85,19 +91,21 @@ end
 %! ec = {[2*x y^2], [1 x]; [2 x], [3 x]};
 %! assert (isequal (c, ec))
 
-%!xtest
+%!test
 %! % matrix, sum/prod
 %! syms x y
-%! disp('what do we want here?')
-%! f = [2*x+y; x*sin(y)]
-%! c = children(f)
-%! assert(false)
+%! f = [2*x + y; x*sin(y); sin(x)];
+%! ec = {[2*x y]; [x sin(y)]; [x]};
+%! c = children(f);
+%! assert (isequal (c, ec))
 
-%!xtest
-%! % scalar, no expr
+%!test
+%! % scalar symbol
 %! syms x
-%! disp('what do we want here?')
-%! c = children(x)
-%! c = children(sym(1))
-%! assert(false)
+%! assert (isequal (children(x), x))
+
+%!test
+%! % scalar number
+%! x = sym(6);
+%! assert (isequal (children(x), x))
 
