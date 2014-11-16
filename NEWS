@@ -5,8 +5,10 @@ octsympy 0.x.y (yyyy-mm-dd)
 
           children
           expm
-          trace
+          lhs
           pinv
+          rhs
+          trace
 
 
 
