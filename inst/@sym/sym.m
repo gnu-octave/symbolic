@@ -222,7 +222,8 @@ function s = sym(x, varargin)
         if (doDecimalCheck && ~isempty(strfind(x, '.')))
           warning('possibly unintended decimal point in constructor string');
         end
-        cmd = sprintf('z = sympy.S("%s")', x);
+        % x is raw sympy, could have various quotes in it
+        cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
       end
     else % useSymbolNotS
       assert(isempty(cmd), 'inconsistent input')
@@ -426,3 +427,18 @@ end
 %! assert (isequal (size (a), [2 0]))
 %! a = sym([]);
 %! assert (isequal (size (a), [0 0]))
+
+%!test
+%! % embedded sympy commands, various quotes, issue #143
+%! a = sym('a');
+%! a1 = sym('Symbol("a")');
+%! a2 = sym('Symbol(''a'')');
+%! assert (isequal (a, a1))
+%! assert (isequal (a, a2))
+%! % Octave only, and eval to hide from Matlab parser
+%! if exist('octave_config_info', 'builtin')
+%!   eval( 'a3 = sym("Symbol(''a'')");' );
+%!   eval( 'a4 = sym("Symbol(\"a\")");' );
+%!   assert (isequal (a, a3))
+%!   assert (isequal (a, a4))
+%! end
