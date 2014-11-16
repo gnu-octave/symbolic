@@ -28,6 +28,8 @@ try:
     import sympy.printing
     from sympy.logic.boolalg import Boolean, BooleanFunction
     from sympy.core.relational import Relational
+    # temporary? for piecewise support
+    from sympy.functions.elementary.piecewise import ExprCondPair
     import copy
     import binascii
     import struct
