@@ -5,6 +5,7 @@ octsympy 0.x.y (yyyy-mm-dd)
 
           expm
           trace
+          potential
           pinv
 
 
