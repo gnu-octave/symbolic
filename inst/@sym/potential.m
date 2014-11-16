@@ -37,15 +37,16 @@ function p = potential(v, x, y)
   if (nargin == 1)
     x = symvar(v);
   end
+
+  % orient same as vec field
+  x = reshape(x, size(v));
+
   if (nargin < 3)
     y = 0*x;
   end
 
   assert ((length(v) == length(x)) && (length(x) == length(y)), ...
           'potential: num vars must match vec length')
-
-  % orient same as vec field
-  x = reshape(x, size(v));
 
   % FIXME: check jacobian is symmetric?
 
@@ -81,6 +82,12 @@ end
 %! F = x*exp(y) + (z-1)^2;
 %! f = gradient(F);
 %! G = potential(f, [x;y;z], [0;1;1]);
+%! assert (isAlways (G == F))
+
+%!test
+%! F = x*exp(y);
+%! f = gradient(F);
+%! G = potential(f);
 %! assert (isAlways (G == F))
 
 %!xtest
