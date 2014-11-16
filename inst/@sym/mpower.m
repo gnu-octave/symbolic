@@ -49,6 +49,9 @@ function z = mpower(x, y)
     % FIXME: sympy can do int and rat, could use MatPow otherwise,
     % rather than error.  SMT just leaves them unevaluted.
 
+    % FIXME: sin(MatrixExpr) also fails, any easy way in SymPy to express
+    % component-wise operations on a MatrixExpr?
+
     cmd = { 'x, y = _ins'
             'try:'
             '    if not y.is_number:'
@@ -111,8 +114,6 @@ end
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
 %! assert (isequal (D, E))
-
-% FIXME: sin(B) also fails, our fault?
 
 %!xtest
 %! % matpow, fails in sympy-0.7.5, fixed by https://github.com/sympy/sympy/pull/8137
