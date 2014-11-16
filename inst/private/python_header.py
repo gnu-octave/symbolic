@@ -102,9 +102,9 @@ try:
         elif isinstance(x, sp.MatrixExpr):
             try:
                 y = x.as_explicit()
-                if not any([p is None for p in y]): # y aint got None
-                    # fixed after 0.7.5, remove later
-                    return y
+                if sympy.__version__ == "0.7.5" and any([p is None for p in y]):
+                    raise NotImplementedError("broken in 0.7.5")
+                return y
             except:
                 return x
         return x
