@@ -61,7 +61,8 @@ end
 %! % basics, sum
 %! syms x y
 %! f = 2*x + x*x + sin(y);
-%! assert (isequal (children(f), [2*x x*x sin(y)]))
+%! assert (isequal (children(f), [2*x x*x sin(y)]) || ...
+%!         isequal (children(f), [x*x 2*x sin(y)]))
 
 %!test
 %! % basics, product
@@ -86,16 +87,16 @@ end
 %!test
 %! % matrix
 %! syms x y
-%! f = [2*x + y^2  1 + x; 2 + x  3 + x];
+%! f = [4 + y  1 + x;  2 + x  3 + x];
 %! c = children(f);
-%! ec = {[2*x y^2], [1 x]; [2 x], [3 x]};
+%! ec = {[4 y], [1 x]; [2 x], [3 x]};
 %! assert (isequal (c, ec))
 
 %!test
 %! % matrix, sum/prod
 %! syms x y
-%! f = [2*x + y; x*sin(y); sin(x)];
-%! ec = {[2*x y]; [x sin(y)]; [x]};
+%! f = [x + y; x*sin(y); sin(x)];
+%! ec = {[x y]; [x sin(y)]; [x]};
 %! c = children(f);
 %! assert (isequal (c, ec))
 
