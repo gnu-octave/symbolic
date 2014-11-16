@@ -9,6 +9,9 @@ octsympy 0.x.y (yyyy-mm-dd)
 
  *  Support new SymPy 0.7.6.
 
+ *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
+    power.
+
 
 
 octsympy 0.1.1 (2014-10-20)  Rose Garden

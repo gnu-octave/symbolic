@@ -108,9 +108,10 @@ try:
             return x[0, 0]
         elif isinstance(x, sp.MatrixExpr):
             try:
+                # expands MatPow(A, 2) and known-size MatrixSymbols
                 y = x.as_explicit()
                 if sympy.__version__ == "0.7.5" and any([p is None for p in y]):
-                    raise NotImplementedError("broken in 0.7.5")
+                    raise NotImplementedError()
                 return y
             except:
                 return x
