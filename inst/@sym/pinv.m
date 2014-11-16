@@ -17,26 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{B} =} inv (@var{A})
-%% Symbolic inverse of a matrix.
+%% @deftypefn  {Function File} {@var{B} =} pinv (@var{A})
+%% Symbolic Moore-Penrose pseudoinverse of a matrix.
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = inv(x)
-
-  [n,m] = size(x);
-  if n ~= m
-    error('matrix is not square')
-  end
+function z = pinv(x)
 
   cmd = { 'x, = _ins'
-          'if x.is_Matrix:'
-          '    return x.inv(),'
-          'else:'
-          '    return S.One/x,' };
+          'if not x.is_Matrix:'
+          '    x = sp.Matrix([[x]])'
+          'return x.pinv(),' };
 
   z = python_cmd (cmd, x);
 
@@ -46,16 +40,9 @@ end
 %!test
 %! % scalar
 %! syms x
-%! assert (isequal (inv(x), 1/x))
+%! assert (isequal (pinv(x), 1/x))
 
 %!test
-%! % diagonal
-%! syms x
-%! A = [sym(1) 0; 0 x];
-%! B = [sym(1) 0; 0 1/x];
-%! assert (isequal (inv(A), B))
-
-%!test
-%! % 2x2 inverse
-%! A = [1 2; 3 4];
-%! assert (max (max (abs (double (inv (sym (A))) - inv(A)))) <= 3*eps)
+%! % 2x3
+%! A = [1 2 3; 4 5 6];
+%! assert (max (max (abs (double (pinv (sym (A))) - pinv(A)))) <= 10*eps)

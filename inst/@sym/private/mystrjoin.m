@@ -20,6 +20,9 @@ function s = mystrjoin(A, sepchar)
 
   %% we have no strjoin, do our own
   n = numel(A);
+  % The builtin strjoin in Octave and Matlab do this too (that is, need
+  % to call with '\\n' to join with '\n'.
+  sepchar = sprintf(sepchar);
 
   if (n == 0)
     s = '';

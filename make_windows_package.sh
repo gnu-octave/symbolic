@@ -8,7 +8,7 @@ PYEXEREADME=py278.readme.txt   # from the src package
 SYMPY=sympy-0.7.5
 
 # octsympy version
-VER=0.1.0
+VER=0.1.1
 
 ###################################
 TAG=v${VER}
@@ -62,6 +62,12 @@ mv ${WINDIR}/inst/mydbpy.bat ${WINDIR}/bin/
 # py.exe
 cp ${PYEXE} ${WINDIR}/bin/py.exe
 cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
+
+# change default python to py.exe
+echo "making default python py.exe"
+sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_sysoneline.m
+sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
+
 # sympy
 cp -ra sympy-0.7.5/sympy ${WINDIR}/bin/
 cp -ra sympy-0.7.5/README.rst ${WINDIR}/README.sympy.rst

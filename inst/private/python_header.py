@@ -72,12 +72,19 @@ try:
                        "imaginary":False, "negative":False, "nonnegative":True,
                        "nonpositive":False, "nonzero":True, "positive":True,
                        "real":True, "zero":False}
+            asm_neg = {"commutative":True, "complex":True, "hermitian":True,
+                       "imaginary":False, "negative":True, "nonnegative":False,
+                       "nonpositive":True, "nonzero":True, "positive":False,
+                       "prime":False, "composite":False, "real":True,
+                       "zero":False}
             if asm == asm_default:
                 xtra = ""
             elif asm == asm_real:
                 xtra = ", real=True"
             elif asm == asm_pos:
                 xtra = ", positive=True"
+            elif asm == asm_neg:
+                xtra = ", negative=True"
             else:
                 xtra = ""
                 for (key, val) in asm.iteritems():

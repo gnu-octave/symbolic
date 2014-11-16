@@ -29,8 +29,9 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   %% Headers
   % embedding the headers in the -c command is too long for
   % Windows.  We have a 8000 char budget, and the header uses all
-  % of it.  This looks fragile w.r.t. pwd...  investigate.
-  headers = ['execfile(\"private/python_header.py\"); '];
+  % of it.
+  mydir = fileparts (mfilename ('fullpath'));
+  headers = ['execfile(\"' mydir filesep() 'python_header.py\"); '];
   %s = python_header_embed2();
   %headers = ['exec(\"' s '\"); '];
 
@@ -40,7 +41,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % extra escaping
   s = myesc(s);
   % join all the cell arrays with escaped newline
-  s = mystrjoin(s, '\n');
+  s = mystrjoin(s, '\\n');
   s1 = ['exec(\"' s '\"); '];
 
 
@@ -49,14 +50,14 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % with _ins and produce _outs.
   s = python_format_cmd(cmd);
   s = myesc(s);
-  s = mystrjoin(s, '\n');
+  s = mystrjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];
 
 
   %% output, or perhaps a thrown error
   s = python_copy_vars_from('_outs');
   s = myesc(s);
-  s = mystrjoin(s, '\n');
+  s = mystrjoin(s, '\\n');
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
