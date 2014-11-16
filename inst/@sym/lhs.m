@@ -45,3 +45,14 @@ end
 %! assert (isequal (lhs(f), x + 1))
 %! assert (isequal (rhs(f), 2*y))
 
+%!test
+%! syms x y
+%! f = x + 1 < 2*y;
+%! assert (isequal (lhs(f), x + 1))
+%! assert (isequal (rhs(f), 2*y))
+
+%!test
+%! syms x y
+%! f = x + 1 >= 2*y;
+%! assert (isequal (lhs(f), x + 1))
+%! assert (isequal (rhs(f), 2*y))
