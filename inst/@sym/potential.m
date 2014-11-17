@@ -22,7 +22,8 @@
 %% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x}, @var{y})
 %% Symbolic potential of a vector field.
 %%
-%% FIXME; DOC
+%% Return symbolic nan if the field has no potential (based on
+%% checking if the Jacobian matrix of the field is nonsymmetric).
 %%
 %% @seealso{gradient}
 %% @end deftypefn
@@ -48,13 +49,14 @@ function p = potential(v, x, y)
   assert ((length(v) == length(x)) && (length(x) == length(y)), ...
           'potential: num vars must match vec length')
 
-  % FIXME: check jacobian is symmetric?
-
   cmd = { '(v, x, y) = _ins'
           'if not v.is_Matrix:'
           '    v = Matrix([v])'
           '    x = Matrix([x])'
           '    y = Matrix([y])'
+          'G = v.jacobian(x)'
+          'if not G.is_symmetric():'
+          '    return S.NaN,'
           '_lambda = sympy.Dummy(real=True)'
           'q = y + _lambda*(x - y)'
           'vlx = v.subs(zip(list(x), list(q)))'
@@ -89,6 +91,12 @@ end
 %! f = gradient(F);
 %! G = potential(f);
 %! assert (isAlways (G == F))
+
+%!test
+%! % no potential exists
+%! syms x y;
+%! a = [x; x*y**2];
+%! assert (isnan (potential (a)))
 
 %!xtest
 %! % fails b/c of sympy #8458 (piecewise expr that should simplify)
