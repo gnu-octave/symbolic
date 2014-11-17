@@ -61,20 +61,19 @@ end
 %! % basics, sum
 %! syms x y
 %! f = 2*x + x*x + sin(y);
-%! assert (isequal (children(f), [2*x x*x sin(y)]) || ...
-%!         isequal (children(f), [x*x 2*x sin(y)]))
+%! assert (isempty (setxor (children(f), [2*x x*x sin(y)])))
 
 %!test
 %! % basics, product
 %! syms x y
 %! f = 2*x*sin(y);
-%! assert (isequal (children(f), [2 x sin(y)]))
+%! assert (isempty (setxor (children(f), [2 x sin(y)])))
 
 %!test
 %! % basics, product and powers
 %! syms x y
 %! f = 2*x^2*y^3;
-%! assert (isequal (children(f), [2 x^2 y^3]))
+%! assert (isempty (setxor (children(f), [2 x^2 y^3])))
 
 %!test
 %! % eqn, ineq
@@ -90,7 +89,10 @@ end
 %! f = [4 + y  1 + x;  2 + x  3 + x];
 %! c = children(f);
 %! ec = {[4 y], [1 x]; [2 x], [3 x]};
-%! assert (isequal (c, ec))
+%! assert (isequal (size(c), size(ec)))
+%! for i=1:length(c)
+%!   assert (isempty (setxor (c{i}, ec{i})))
+%! end
 
 %!test
 %! % matrix, sum/prod
@@ -98,7 +100,10 @@ end
 %! f = [x + y; x*sin(y); sin(x)];
 %! ec = {[x y]; [x sin(y)]; [x]};
 %! c = children(f);
-%! assert (isequal (c, ec))
+%! assert (isequal (size(c), size(ec)))
+%! for i=1:length(c)
+%!   assert (isempty (setxor (c{i}, ec{i})))
+%! end
 
 %!test
 %! % scalar symbol
