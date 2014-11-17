@@ -74,16 +74,24 @@ The .m files for Matlab have been reformatted for Matlab comment
 conventions, but are otherwise the same as the Octave source.
 
 
-How to Hack
+How to Help
 -----------
 
-1.  Clone the repo.
+We have a list of things to work on tagged [help
+wanted](https://github.com/cbm755/octsympy/issues?q=is:open+is:issue+label:"help+wanted").
+Some of these should be quite easy to fix and would be a great way to
+get involved.  Come join us!
+
+How to hack on the code:
+
+1.  Clone the repo with git (preferred, but you can use the "Download
+    ZIP" instead of you want).
 
 2.  Go to octsympy/src/ and type "make".  (You only need to do this
     again if you change the inst/private/python_header.py or various
     autogeneration scripts in src/.)
 
-3.  Run Octave or Matlab in octsympy/inst/.
+3.  Run Octave (or Matlab) in octsympy/inst/.
 
 
 
