@@ -82,7 +82,7 @@ end
 
 %!test
 %! % empty input
-%! A = sym([1 2 3]);
+%! A = sym([1]);
 %! C = setdiff(A, []);
 %! assert (isequal (C, A))
 

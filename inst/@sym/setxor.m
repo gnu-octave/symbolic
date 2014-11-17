@@ -63,16 +63,18 @@ end
 %! A = sym([1 2 3]);
 %! B = sym([1 2 4]);
 %! C = setxor(A, B);
-%! D = sym([3 4]);
-%! assert (isequal (C, D))
+%! D1 = sym([3 4]);
+%! D2 = sym([4 3]);
+%! assert (isequal (C, D1) || isequal (C, D2))
 
 %!test
 %! % one nonsym
 %! A = sym([1 2 3]);
 %! B = [1 2 4];
 %! C = setxor(A, B);
-%! D = sym([3 4]);
-%! assert (isequal (C, D))
+%! D1 = sym([3 4]);
+%! D2 = sym([4 3]);
+%! assert (isequal (C, D1) || isequal (C, D2))
 
 %!test
 %! % empty
@@ -82,9 +84,10 @@ end
 
 %!test
 %! % empty input
-%! A = sym([1 2 3]);
+%! A = sym([1 2]);
 %! C = setxor(A, []);
-%! assert (isequal (C, A))
+%! assert (isequal (C, A) || isequal (C, sym([2 1])))
+
 
 %!test
 %! % scalar
