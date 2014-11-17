@@ -8,6 +8,8 @@ octsympy 0.x.y (yyyy-mm-dd)
           lhs
           pinv
           rhs
+          setdiff
+          setxor
           trace
 
 
