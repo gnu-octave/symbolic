@@ -95,7 +95,7 @@ end
 %!test
 %! % no potential exists
 %! syms x y;
-%! a = [x; x*y**2];
+%! a = [x; x*y^2];
 %! assert (isnan (potential (a)))
 
 %!xtest
