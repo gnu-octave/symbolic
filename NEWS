@@ -3,10 +3,15 @@ octsympy 0.x.y (yyyy-mm-dd)
 
  *  New commands:
 
+          children
           expm
-          trace
-          potential
+          lhs
           pinv
+          potential
+          rhs
+          setdiff
+          setxor
+          trace
 
  *  Support new SymPy 0.7.6.
 
