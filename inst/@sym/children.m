@@ -20,12 +20,20 @@
 %% @deftypefn {Function File} {@var{r} =} children (@var{f})
 %% Return "children" (terms, lhs/rhs, etc) of symbolic expression.
 %%
-%% For a scalar expression, return a row vector of sym expressions.
+%% For a scalar expression, return a row vector of sym expressions:
+%% @example
+%% syms x y
+%% f = 2*x*y + sin(x)
+%% C = children(f)    % gives [2*x*y  sin(x)]
+%% children(C(1))     % gives [2 x y]
+%% children(C(2))     % gives x
+%% @end example
 %%
-%% For a matrix/vector, return a cell array where each entry is
-%% a row vector.
 %%
-%% A symbol/number has itself as children.
+%% For matrices/vectors, return a cell array where each entry is
+%% a row vector.  The cell array is the same shape as the input.
+%%
+%% A symbol/number/boolean has itself as children.
 %%
 %% @seealso{lhs, rhs}
 %% @end deftypefn
@@ -114,4 +122,3 @@ end
 %! % scalar number
 %! x = sym(6);
 %! assert (isequal (children(x), x))
-
