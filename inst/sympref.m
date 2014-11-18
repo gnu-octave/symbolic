@@ -163,7 +163,6 @@ function varargout = sympref(cmd, arg)
             disp('Forcing systmpfile ipc: warning: this is for debugging')
           case 'sysoneline'
             disp('Forcing sysoneline ipc: warning: this is for debugging')
-            warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
             warning('Unsupported IPC mechanism: hope you know what you''re doing')
         end

@@ -165,6 +165,6 @@ end
 
 %!test
 %! syms oo
-%! z = sym('z', 'negative')
+%! z = sym('z', 'negative');
 %! e = z < oo;
 %! assert (isequal (e, sym(true)))
