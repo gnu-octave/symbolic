@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{L} =} lhs (@var{f})
 %% Left-hand side of symbolic expression.
 %%
-%% FIXME: could be much smarter: e.g., error if not eq, ineq.
+%% Gives an error if any of the symbolic objects have no left-hand side.
 %%
 %% @seealso{rhs, children}
 %% @end deftypefn
@@ -30,11 +30,27 @@
 
 function L = lhs(f)
 
-  c = children(f);
-  %L = c(1)  % f$@k issue #17
-  idx.type = '()';
-  idx.subs = {1};
-  L = subsref(c, idx);
+  cmd = {
+    'f, = _ins'
+    'flag = 0'
+    'r = 0'
+    'if f.is_Matrix:'
+    '    try:'
+    '        r = f.applyfunc(lambda a: a.lhs)'
+    '    except:'
+    '        flag = 1'
+    'else:'
+    '    try:'
+    '        r = f.lhs'
+    '    except:'
+    '        flag = 1'
+    'return (flag, r)' };
+
+  [flag, L] = python_cmd (cmd, f);
+
+  if (flag)
+    error('lhs: one or more entries have no ''lhs'' attribute')
+  end
 
 end
 
@@ -56,3 +72,27 @@ end
 %! f = x + 1 >= 2*y;
 %! assert (isequal (lhs(f), x + 1))
 %! assert (isequal (rhs(f), 2*y))
+
+%!test
+%! syms x y
+%! A = [x == y  2*x < 2*y;  3*x > 3*y  4*x <= 4*y;  5*x >= 5*y  x < 0];
+%! L = [x 2*x; 3*x 4*x; 5*x x];
+%! R = [y 2*y; 3*y 4*y; 5*y 0];
+%! assert (isequal( lhs(A), L))
+%! assert (isequal( rhs(A), R))
+
+%!error <lhs:.* entries have no>
+%! syms x
+%! lhs(x)
+
+%!error <rhs:.* entries have no>
+%! syms x
+%! rhs(x)
+
+%!error <lhs:.* entries have no>
+%! lhs(sym(true))
+
+%!error <lhs:.* entries have no>
+%! syms x
+%! A = [1 + x == 2*x  sym(6)];
+%! lhs(A)

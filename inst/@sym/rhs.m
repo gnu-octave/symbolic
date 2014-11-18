@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{L} =} rhs (@var{f})
 %% Right-hand side of symbolic expression.
 %%
-%% FIXME: could be much smarter: e.g., error if not eq, ineq.
+%% Gives an error if any of the symbolic objects have no right-hand side.
 %%
 %% @seealso{lhs, children}
 %% @end deftypefn
@@ -30,18 +30,34 @@
 
 function R = rhs(f)
 
-  c = children(f);
-  %R = c(2)  % f$@k issue #17
-  idx.type = '()';
-  idx.subs = {2};
-  R = subsref(c, idx);
+  cmd = {
+    'f, = _ins'
+    'flag = 0'
+    'r = 0'
+    'if f.is_Matrix:'
+    '    try:'
+    '        r = f.applyfunc(lambda a: a.rhs)'
+    '    except:'
+    '        flag = 1'
+    'else:'
+    '    try:'
+    '        r = f.rhs'
+    '    except:'
+    '        flag = 1'
+    'return (flag, r)' };
+
+  [flag, R] = python_cmd (cmd, f);
+
+  if (flag)
+    error('rhs: one or more entries have no ''rhs'' attribute')
+  end
 
 end
 
 
+%% most tests are in lhs
 %!test
-%! syms x y
-%! f = x + 1 == 2*y;
-%! assert (isequal (lhs(f), x + 1))
-%! assert (isequal (rhs(f), 2*y))
+%! syms x
+%! f = x + 1 == 2*x;
+%! assert (isequal (rhs(f), 2*x))
 
