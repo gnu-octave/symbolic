@@ -140,7 +140,17 @@ end
 %! assert (isequal (e, [true true false]))
 
 %!test
-%! % oo, assumptions
+%! % oo, finite real variables
+%! syms oo
+%! syms z real
+%! assumeAlso(z, 'finite')
+%! e = -oo < z;
+%! assert (isequal (e, sym(true)))
+%! e = z < oo;
+%! assert (isequal (e, sym(true)))
+
+%!xtest
+%! % -oo, positive var (known failure w/ sympy 0.7.6)
 %! syms oo
 %! syms z positive
 %! e = -oo < z;
@@ -148,14 +158,13 @@ end
 %! assert (isequal (e, sym(true)))
 
 %!xtest
-%! % Known failure, assumptions broken in SymPy somewhere?
+%! % positive (known failure w/ sympy 0.7.5)
 %! syms z positive
 %! e = -1 < z;
 %! assert (isequal (e, sym(true)))
 
-%!xtest
-%! % Known failure, assumptions broken in SymPy somewhere?
+%!test
 %! syms oo
-%! syms z negative
+%! z = sym('z', 'negative');
 %! e = z < oo;
 %! assert (isequal (e, sym(true)))
