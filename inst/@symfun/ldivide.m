@@ -17,22 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} mrdivide (@var{f}, @var{g})
-%% Forward slash division of symbolic functions (/).
+%% @deftypefn  {Function File}  {@var{h} =} ldivide (@var{f}, @var{g})
+%% Component-wise backslash division of symbolic functions.
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function h = mrdivide(f, g)
+function h = ldivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
-  h = symfun(s1 / s2, vars);
+  h = symfun(s1 .\ s2, vars);
 end
 
 
 %!test
 %! syms x
 %! f(x) = x^2;
-%! assert( isa(f/f, 'symfun'))
-%! assert( isa(f/x, 'symfun'))
+%! assert( isa(f .\ f, 'symfun'))
+%! assert( isa(f .\ x, 'symfun'))

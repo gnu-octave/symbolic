@@ -5,13 +5,17 @@ octsympy 0.x.y (yyyy-mm-dd)
 
           children
           expm
+          ldivide
           lhs
+          mldivide
           pinv
           potential
           rhs
           setdiff
           setxor
           trace
+
+ *  Symbolic backslash support.
 
  *  Support new SymPy 0.7.6.
 
