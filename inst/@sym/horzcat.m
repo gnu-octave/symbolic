@@ -109,7 +109,7 @@ end
 %! assert (isequal ([v q], v))
 
 %!xtest
-%! % FIXME: should be error
+%! % on 0.7.5, this doesn't give an error (so xtest for now)
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(3, 0));
-%! assert (~isequal ([v q], v))
+%! error <unexpected return> w = [v q];
