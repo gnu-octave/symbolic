@@ -5,7 +5,7 @@ install:
   - sudo apt-add-repository --yes ppa:octave/stable
   - sudo apt-get update
   - sudo apt-get install octave
-  - "pip install sympy"
+  - "pip install sympy-0.7.5"
 
 # all commands here must have exit code 0 for the build to be called "passing"
 script:
