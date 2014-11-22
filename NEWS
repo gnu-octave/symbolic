@@ -1,19 +1,15 @@
-octsympy 0.x.y (yyyy-mm-dd)
+octsympy 0.1.2 (yyyy-mm-dd)
 ===========================
 
  *  New commands:
 
-          children
-          expm
-          lhs
-          pinv
+          children           rhs
+          expm	             setdiff
+          lhs	             setxor
+          pinv	             trace
           potential
-          rhs
-          setdiff
-          setxor
-          trace
 
- *  Support new SymPy 0.7.6.
+ *  Support new SymPy 0.7.6.  0.7.5 should still work for now.
 
 
 
