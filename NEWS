@@ -1,3 +1,15 @@
+octsympy x.y.z (yyyy-mm-dd)
+===========================
+
+ *  New commands:
+
+          ldivide
+          mldivide
+
+ *  Symbolic backslash support.
+
+
+
 octsympy 0.1.2 (yyyy-mm-dd)
 ===========================
 
@@ -10,8 +22,6 @@ octsympy 0.1.2 (yyyy-mm-dd)
           potential
 
  *  Support new SymPy 0.7.6.  0.7.5 should still work for now.
-
- *  Symbolic backslash support.
 
 
 
