@@ -1,11 +1,11 @@
 #!/bin/sh
 
 # download py.exe from http://www.orbitals.com/programs/pyexe.html
-PYEXE=py278.exe
-PYEXEREADME=py278.readme.txt   # from the src package
+PYEXE=py2789.exe
+PYEXEREADME=py2789.readme.txt   # from the src package
 
 # download sympy release, unpack in the directory with this script
-SYMPY=sympy-0.7.5
+SYMPY=sympy-0.7.6
 
 # octsympy version
 VER=0.1.2
@@ -69,8 +69,8 @@ sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ip
 sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
 
 # sympy
-cp -ra sympy-0.7.5/sympy ${WINDIR}/bin/
-cp -ra sympy-0.7.5/README.rst ${WINDIR}/README.sympy.rst
+cp -ra ${SYMPY}/sympy ${WINDIR}/bin/ || exit -6
+cp -ra ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit -6
 
 zip -r ${WINPKG}.zip ${WINDIR}
 
