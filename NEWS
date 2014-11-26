@@ -5,8 +5,11 @@ octsympy x.y.z (yyyy-mm-dd)
 
           ldivide
           mldivide
+          vpa
 
  *  Symbolic backslash support.
+
+ *  variable-precision arithematic support.
 
 
 
