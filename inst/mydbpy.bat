@@ -7,7 +7,7 @@ REM You'll need to edit this script if your python is called something else.
 
 REM This batch file uses the "where" command, which is present only for
 REM Windows Server 2003 and later versions. So, for older windows systems (such
-REM as Windows XP) only lines 16 or 19 should be kept in the next code block.
+REM as Windows XP) only lines 15 or 18 should be kept in the next code block.
 
 REM returns 0 if python.exe is found
 where /Q python.exe
