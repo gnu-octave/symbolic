@@ -5,6 +5,11 @@ REM This bat file discards stderr from py.exe
 REM We look for python.exe and use that if found.  Otherwise we try py.exe.
 REM You'll need to edit this script if your python is called something else.
 
+REM This batch file uses the "where" command, which is present only for
+REM Windows Server 2003 and later versions. So, for older windows systems (such
+REM as Windows XP) only lines 13 or 18 should be kept in the next code block,
+REM depending on a python installation is present on your system.
+
 REM returns 0 if python.exe is found
 where /Q python.exe
 IF ERRORLEVEL 1 GOTO else
@@ -13,6 +18,11 @@ goto endif
 :else
 py.exe -i 2> NUL
 :endif
+
+REM If python is not installed in your system, "py.exe" will be used.
+REM Please, include its folder (for instance: 
+REM    C:\Octave\Octave-3.8.2\\share\octave\package\octosympy-0.0.1\bin     )
+REM in the windows environment variable %PATH 
 
 REM Other options for the stderr:
 
