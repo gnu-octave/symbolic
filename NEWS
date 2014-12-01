@@ -1,3 +1,15 @@
+octsympy x.y.z (yyyy-mm-dd)
+===========================
+
+ *  New commands:
+
+          ldivide
+          mldivide
+
+ *  Symbolic backslash support.
+
+
+
 octsympy 0.1.2 (2014-12-01)
 ===========================
 
