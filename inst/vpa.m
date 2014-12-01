@@ -37,24 +37,18 @@
 
 function r = vpa(x, n)
 
-  % FIXME, no unicode on 2.7 b/c just str. do we need it?
-
   if (numel(x) ~= 1 && ~ischar(x) && ~isa(x, 'sym'))
     x = mat2list(x);
     cmd = {
       'L = _ins[0]'
       'o = _ins[1:]'
-      'L = [[Float(b, *o) for b in a] for a in L]'
+      'L = [[sympy.N(b, *o) for b in a] for a in L]'
       'return sympy.Matrix(L),' };
   else
     cmd = {
       'x = _ins[0]'
       'o = _ins[1:]'
-      'if type(x) in (str, float):'
-      '    r = Float(x, *o)'  % fixme: pi fails
-      'else:'
-      '    r = x.evalf(*o)'
-      'return r,' };
+      'return sympy.N(x, *o),' };
   end
 
   if (nargin == 1)
@@ -137,3 +131,8 @@ end
 %! c = vpa(b, 6);
 %! assert (isequal (double(c), [3 0; 6 1]))
 
+%!test
+%! % pi str
+%! a = vpa('pi', 32)
+%! b = vpa(sym('pi'), 32)
+%! assert (double (a - b) == 0)
