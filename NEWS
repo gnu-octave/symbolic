@@ -1,4 +1,4 @@
-octsympy 0.1.2 (yyyy-mm-dd)
+octsympy 0.1.2 (2014-11-23)
 ===========================
 
  *  New commands:
@@ -9,7 +9,11 @@ octsympy 0.1.2 (yyyy-mm-dd)
           pinv	             trace
           potential
 
- *  Support new SymPy 0.7.6.  0.7.5 should still work for now.
+ *  Support new SymPy 0.7.6.  This adds Octave code generation which means
+    that OctSymPy's `matlabFunction` is supported.
+
+ *  For now, SymPy 0.7.5 should still work, but upgrading to SymPy 0.7.6 is
+    recommended.
 
 
 
