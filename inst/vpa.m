@@ -29,7 +29,7 @@
 %% x = vpa(1/3, 32)     # no!  first makes double 1/3 (15 digits)
 %% @end example
 %%
-%% @seealso{sym}
+%% @seealso{sym, vpasolve}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
