@@ -207,7 +207,7 @@ end
 %!test
 %! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
 %! % (put inside eval to hide from 3.6 parser)
-%! if exist('octave_config_info', 'builtin');
+%! if exist('octave_config_info', 'builtin')
 %!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
 %!     syms x y
 %!     eval('syms g(x,y)')

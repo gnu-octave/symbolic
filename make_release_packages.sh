@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=0.1.1-git
+VER=0.1.2-git
 # for release
-#VER=0.1.1
+#VER=0.1.2
 #TAG=v${VER}
 
 #----------------------------------------------------------------

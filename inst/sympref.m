@@ -116,7 +116,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.1.1-git';
+      varargout{1} = '0.1.2-git';
 
     case 'display'
       if (nargin == 1)
@@ -163,7 +163,6 @@ function varargout = sympref(cmd, arg)
             disp('Forcing systmpfile ipc: warning: this is for debugging')
           case 'sysoneline'
             disp('Forcing sysoneline ipc: warning: this is for debugging')
-            warning('the systmpfile ipc mechanism is under developement, many tests fail');
           otherwise
             warning('Unsupported IPC mechanism: hope you know what you''re doing')
         end

@@ -1,13 +1,19 @@
-octsympy 0.x.y (yyyy-mm-dd)
+octsympy 0.1.2 (2014-12-01)
 ===========================
 
  *  New commands:
 
-          expm
-          trace
-          pinv
+          children           rhs
+          expm	             setdiff
+          lhs	             setxor
+          pinv	             trace
+          potential
 
- *  Support new SymPy 0.7.6.
+ *  Support new SymPy 0.7.6.  This adds Octave code generation which means
+    that OctSymPy's `matlabFunction` is supported.
+
+ *  For now, SymPy 0.7.5 should still work, but upgrading to SymPy 0.7.6 is
+    recommended.
 
  *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
     power.
