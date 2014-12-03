@@ -75,7 +75,8 @@ function varargout = ezplot(varargin)
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
-          varargin{i} = @(t) 0*t + double(varargin{i});
+          varargin{i} = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
+          %varargin{i} = @(t) 0*t + double(varargin{i});  % no
         else
           % check variables match (sanity check)
           if (isempty(firstsym))
@@ -131,7 +132,7 @@ end
 %! syms x t
 %! ezplot(t, x)
 
-%!error <each function should have exactly one input>
+%!error <functions should have at most one input>
 %! syms x t
 %! ezplot(t, t*x)
 
