@@ -160,13 +160,13 @@
 %! %assert (~islogical( [x x] == x ))  % not so clear
 
 %!xtest
-%! % FIXME: symbolic matrix size
+%! % FIXME: symbolic matrix size, Issue #159
 %! syms n m integer
 %! A = sym('A', [n m])
 %! assert (isequal (size (A), [n m]))
 
 %!xtest
-%! % symbolic matrix, subs in for size
+%! % symbolic matrix, subs in for size, Issue #160
 %! syms n m integer
 %! A = sym('A', [n m]);
 %! B = subs(A, [n m], [5 6]);
