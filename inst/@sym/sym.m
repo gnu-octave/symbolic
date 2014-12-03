@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
-%% @deftypefnx {Function File} {@var{x} =} sym (...)
+%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr})
+%% @deftypefnx {Function File} {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -37,7 +38,7 @@
 %% y = sym (sym (pi))   % idempotent
 %% @end example
 %%
-%% A second argument provides an assumption @xref{assumptions},
+%% A second argument can provide an assumption @xref{assumptions},
 %% or restriction on the type of the symbol.
 %% @example
 %% x = sym ('x', 'positive')
@@ -55,7 +56,17 @@
 %% x1 == x2   % false
 %% @end example
 %%
-%% @seealso{syms,assumptions,assume,assumeAlso}
+%% The second argument can also specify the size of a matrix
+%% @example
+%% A = sym('A', [2, 3])
+%% @end example
+%% or even with symbolic size
+%% @example
+%% syms n positive
+%% A = sym('A', [n, n])
+%% @end example
+%%
+%% @seealso{syms, assumptions, assume, assumeAlso}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -176,9 +187,12 @@ function s = sym(x, varargin)
     useSymbolNotS = false;
     cmd = [];
 
-    % first check if we have assumptions
     asm = [];
-    if (nargin == 2)
+    if (nargin == 2 && isequal(size(varargin{1}), [1 2]))
+      s = make_sym_matrix(x, varargin{1});
+      return
+    elseif (nargin == 2)
+      % we have assumptions
       asm = varargin{1};
       useSymbolNotS = true;
     end
@@ -242,7 +256,7 @@ function s = sym(x, varargin)
               strcmp(asm, 'rational') || strcmp(asm, 'finite'))
         cmd = sprintf('z = sympy.Symbol("%s", %s=True)', x, asm);
       else
-        error('that assumption not supported')
+        error('sym: that assumption not supported')
       end
     end % useSymbolNotS
 
@@ -417,6 +431,24 @@ end
 %! assert (isequal (t, [a==1  a==0]))
 %! t = sym([true false; false true]);
 %! assert (isequal (t, [a==1  a==0;  a==0  a==1]))
+
+%!test
+%! % symbolic matrix
+%! A = sym('A', [2 3]);
+%! assert (isa (A, 'sym'))
+%! assert (isequal (size (A), [2 3]))
+%! A(1, 1) = 7;
+%! assert (isa (A, 'sym'))
+%! A = A + 1;
+%! assert (isa (A, 'sym'))
+
+%!test
+%! % symbolic matrix, subs in for size
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! B = subs(A, [n m], [5 6]);
+%! assert (isa (B, 'sym'))
+%! assert (isequal (size (B), [5 6]))
 
 %!test
 %! % 50 shapes of empty

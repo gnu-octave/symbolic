@@ -8,6 +8,9 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  Symbolic backslash support.
 
+ *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
+    power.
+
 
 
 octsympy 0.1.2 (2014-12-01)
