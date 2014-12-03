@@ -100,11 +100,17 @@ end
 %! b = sin(a);
 %! assert(abs(double(b) < 1e-256))
 
-%%!xtest
-%%! % bug? cannot pass str that user might expect
-%%! a = vpa('pi', 32);
-%%! b = sin(a);
-%%! assert(abs(double(b) < 1e-32))
+%!test
+%! % pi str
+%! a = vpa('pi', 32);
+%! b = sin(a);
+%! assert(abs(double(b) < 1e-32))
+
+%!test
+%! % pi str
+%! a = vpa('pi', 32);
+%! b = vpa(sym('pi'), 32);
+%! assert (double (a - b) == 0)
 
 %!test
 %! spi = sym(pi);
@@ -130,9 +136,3 @@ end
 %! b = int32([pi 0; 6.25 1]);
 %! c = vpa(b, 6);
 %! assert (isequal (double(c), [3 0; 6 1]))
-
-%!test
-%! % pi str
-%! a = vpa('pi', 32)
-%! b = vpa(sym('pi'), 32)
-%! assert (double (a - b) == 0)
