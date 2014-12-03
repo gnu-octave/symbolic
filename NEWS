@@ -1,5 +1,12 @@
-octsympy 0.1.3 (yyyy-mm-dd)
+octsympy x.y.z (yyyy-mm-dd)
 ===========================
+
+ *  New commands:
+
+          ldivide
+          mldivide
+
+ *  Symbolic backslash support.
 
  *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
     power.
