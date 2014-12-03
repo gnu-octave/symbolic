@@ -58,14 +58,34 @@ function varargout = ezplot(varargin)
     fshift = 0;
   end
 
+  firstsym = [];
+
   for i = (1+fshift):nargin
     if (isa(varargin{i}, 'sym'))
       if ( (i == 1 + fshift) || ...
            (i == 2 + fshift && isscalar(varargin{i})) ...
          )
-        % one of the fcns to plot, convert to handle fcn
-        % i == 2 extra cond.: ezplot(f, sym([0 1]))
-        varargin{i} = matlabFunction(varargin{i});
+        % This is one of the fcns to plot, so convert to handle fcn
+        % The "i == 2" issscalar cond is to supports ezplot(f, sym([0 1]))
+
+        % Each is function of one var, and its the same var for all
+        thissym = symvar(varargin{i});
+        assert(length(thissym) <= 1, ...
+          'ezplot: plotting curves: functions should have at most one input');
+        if (isempty(thissym))
+          % a number, create a constant function in a dummy variable
+          % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
+          varargin{i} = @(t) 0*t + double(varargin{i});
+        else
+          % check variables match (sanity check)
+          if (isempty(firstsym))
+            firstsym = thissym;
+          else
+            assert(logical(thissym == firstsym), ...
+              'ezplot: all functions must be in terms of the same variables');
+          end
+          varargin{i} = matlabFunction(varargin{i});
+        end
       else
         % plot ranges, etc, convert syms to doubles
         varargin{i} = double(varargin{i});
@@ -106,6 +126,14 @@ end
 %! warning(s)
 %! xx = get(h, 'xdata');
 %! assert (abs(xx(end) - cos(2*pi)) <= 4*eps)
+
+%!error <all functions must be in terms of the same variables>
+%! syms x t
+%! ezplot(t, x)
+
+%!error <each function should have exactly one input>
+%! syms x t
+%! ezplot(t, t*x)
 
 %%!test
 %%! % contour, FIXME: broken on Matlab?  Issue #108
