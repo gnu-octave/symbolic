@@ -93,7 +93,7 @@ end
 %! A = diag([6 6 7]);
 %! B = sym(A);
 %! e = eig(B);
-%! assert (size(e), [3 1])
+%! assert (isequal (size (e), [3 1]))
 %! assert (sum(logical(e == 6)) == 2)
 %! assert (sum(logical(e == 7)) == 1)
 

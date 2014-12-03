@@ -25,7 +25,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function h = mrdivide(f,g)
+function h = mrdivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
   h = symfun(s1 / s2, vars);
 end

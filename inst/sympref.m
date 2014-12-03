@@ -116,7 +116,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.1.0-git';
+      varargout{1} = '0.1.2-git';
 
     case 'display'
       if (nargin == 1)
@@ -162,8 +162,7 @@ function varargout = sympref(cmd, arg)
           case 'systmpfile'
             disp('Forcing systmpfile ipc: warning: this is for debugging')
           case 'sysoneline'
-            disp('Forcing systmpfile ipc: warning: this is for debugging')
-            warning('the systmpfile ipc mechanism is under developement, many tests fail');
+            disp('Forcing sysoneline ipc: warning: this is for debugging')
           otherwise
             warning('Unsupported IPC mechanism: hope you know what you''re doing')
         end
@@ -180,6 +179,16 @@ function varargout = sympref(cmd, arg)
       else
         varargout{1} = r;
       end
+
+    %case 'path'
+      %pkg_path = fileparts (mfilename ('fullpath'));
+      % or
+      %pkg_l = pkg ('list');
+      %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, "UniformOutput", false));
+      %if (~ any (idx))
+      %  error ('the package %s is not installed', your_pkg);
+      %end
+      %pkg_path = pkg_l{idx}.dir
 
     otherwise
       error ('invalid input')
@@ -208,6 +217,22 @@ function r = tf_from_input(s)
   end
 end
 
+
+%!test
+%! % system should work on all system, but just runs sysoneline on windows
+%! fprintf('\nRunning some tests that reset the IPC and produce output\n');
+%! sympref('ipc', 'system');
+%! pause(1);
+%! syms x
+%! pause(2);
+
+%!test
+%! % sysoneline should work on all systems
+%! fprintf('\n');
+%! sympref('ipc', 'sysoneline');
+%! pause(1);
+%! syms x
+%! pause(2);
 
 %!test
 %! sympref('defaults')

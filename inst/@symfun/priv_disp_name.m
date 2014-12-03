@@ -17,31 +17,41 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{A} =} my_isrow (@var{x})
-%% Return true if input is a row vector.
+%% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{f})
+%% A string appropriate for representing the name of this symfun.
 %%
-%% @seealso{my_iscolumn}
+%% Private method: this is not the method you are looking for.
+%%
 %% @end deftypefn
 
-function retval = my_isrow(x)
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
 
-  t = exist('isrow');
+function s = priv_disp_name(f, input_name)
 
-  if ((t==2) || (t==5))
-    retval = isrow(x);
+  vars = f.vars;
+  if length(vars) == 0
+    varstr = '';
   else
-    % from Rik Wehbring's Octave function:
-    sz = size (x);
-    retval = (ndims (x) == 2 && (sz(1) == 1));
+    v = vars{1};
+    varstr = v.flat;
   end
+  for i = 2:length(vars);
+    v = vars{i};
+    varstr = [varstr ', ' v.flat];
+  end
+  s = [input_name, '(', varstr, ')'];
 
 end
 
 
-% go give someone a hug instead; life's too short to worry about
-% private tests working in octave
-%%!assert(my_isrow([1]))
-%%!assert(my_isrow([1 2 3]))
-%%!assert(~my_isrow([]))
-%%!assert(~my_isrow([1 2 3]'))
-%%!assert(~my_isrow([1 2; 3 4]))
+%!test
+%! syms f(x)
+%! s = priv_disp_name(f, 'f');
+%! assert (strcmp (s, 'f(x)'))
+
+%!test
+%! syms x y
+%! g(y, x) = x + y;
+%! s = priv_disp_name(g, 'g');
+%! assert (strcmp (s, 'g(y, x)'))

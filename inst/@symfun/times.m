@@ -42,8 +42,4 @@ end
 %! f(x) = [x 2*x];
 %! h = f.*[x 3];
 %! assert( isa(h, 'symfun'))
-%! % FIXME: matlab error issue #107
-%! %assert( isequal (h.sym, [x^2 6*x]))
-%! hsym = h(x);
-%! assert( isequal (hsym, [x^2 6*x]))
-
+%! assert( isequal (h.sym, [x^2 6*x]))

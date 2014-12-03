@@ -49,7 +49,7 @@ end
 %! assert (isequal (inv(x), 1/x))
 
 %!test
-%! % scalar
+%! % diagonal
 %! syms x
 %! A = [sym(1) 0; 0 x];
 %! B = [sym(1) 0; 0 1/x];

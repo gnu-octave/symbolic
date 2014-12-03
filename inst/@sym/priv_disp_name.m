@@ -17,31 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{A} =} my_iscolumn (@var{x})
-%% Return true if input is a column vector.
+%% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{x})
+%% A string appropriate for representing the name of this sym.
 %%
-%% @seealso{my_isrow}
+%% Private method: this is not the method you are looking for.
+%%
 %% @end deftypefn
 
-function retval = my_iscolumn(x)
+%% Author: Colin B. Macdonald
+%% Keywords: symbolic
 
-  t = exist('iscolumn');
+function s = priv_disp_name(x, input_name)
 
-  if ((t==2) || (t==5))
-    retval = iscolumn(x);
-  else
-    % from Rik Wehbring's Octave function:
-    sz = size (x);
-    retval = (ndims (x) == 2 && (sz(2) == 1));
-  end
+  s = input_name;
+  % (subclasses might do something more interesting)
 
 end
 
 
-% go give someone a hug instead; life's too short to worry about
-% private tests working in octave
-%%!assert(my_iscolumn([1]))
-%%!assert(my_iscolumn([1 2 3]'))
-%%!assert(~my_iscolumn([]))
-%%!assert(~my_iscolumn([1 2 3]))
-%%!assert(~my_iscolumn([1 2; 3 4]))
+%!test
+%! syms x
+%! s = priv_disp_name(x, 'x');
+%! assert (strcmp (s, 'x'))

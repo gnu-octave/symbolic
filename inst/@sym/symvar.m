@@ -38,6 +38,10 @@
 %% Toolbox version 2014a, as documented here:
 %% http://www.mathworks.co.uk/help/symbolic/symvar.html
 %%
+%% If two variables have the same symbol but different assumptions,
+%% they will both appear in the output.  It is not well-defined
+%% in what order they appear.
+%%
 %% @seealso{findsym, findsymbols}
 %% @end deftypefn
 
@@ -152,3 +156,12 @@ end
 %! %% upper case letters in correct order
 %! s = X*Y*Z;
 %! assert (isequal( symvar (s,3), [X Y Z] ))
+
+%!test
+%! % diff. assumptions make diff. symbols
+%! x1 = sym('x');
+%! x2 = sym('x', 'positive');
+%! f = x1*x2;
+%! assert (length (symvar (f)) == 2)
+%! z = symvar (f, 1);
+%! assert (xor (isequal (z, x1), isequal (z, x2)))

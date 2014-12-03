@@ -24,6 +24,9 @@
 %% FIXME: not sure sympy is really so strict, currently in sym.
 %% FIXME: deal with ICs?
 %%
+%% FIXME: SMT supports strings like 'Dy + y = 0': we are unlikely
+%% to support this.
+%%
 %% @seealso{int}
 %% @end deftypefn
 
@@ -31,28 +34,56 @@
 %% Keywords: symbolic
 
 
-function soln = dsolve(de, y, ic)
+function soln = dsolve(de, ic, varargin)
+
+  if (nargin >= 2)
+    error('FIXME: ICs not supported yet, issue #120')
+  end
 
   % Usually we cast to sym in the _cmd call, but want to be
   % careful here b/c of symfuns
-  if ~ (isa(de, 'sym') && isa(y, 'sym'))
+  %if ~ (isa(de, 'sym') && isa(ic, 'sym'))
+  if (~isa(de, 'sym'))
     error('inputs must be sym or symfun')
   end
 
+  % FIXME: might be nice to expose SymPy's "classify_ode"
+
+  % FIXME: double-check its y(x) = soln...
   if (isscalar(de))
-    cmd = { '(de, y) = _ins'
-            'g = sp.dsolve(de, y)'
-            'return g,' };
+    cmd = { '(de,) = _ins'
+            'g = sp.dsolve(de)'
+            '#if isinstance(g, Equality):'
+            '#    l = g.lhs'
+            '#    r = g.rhs'
+            'return g.rhs,' };
 
-    soln = python_cmd (cmd, de, y);
-
-    if (nargin == 3)
-      warning('todo: ICs not supported yet')
-      stop
-    end
-
+    soln = python_cmd (cmd, de);
 
   else
     error('TODO system case')
   end
+end
 
+
+%!test
+%! syms y(x)
+%! de = diff(y, 2) - 4*y == 0;
+%! f = dsolve(de);
+%! syms C1 C2
+%! g1 = C1*exp(-2*x) + C2*exp(2*x);
+%! g2 = C2*exp(-2*x) + C1*exp(2*x);
+%! assert (isequal (f, g1) || isequal (f, g2))
+
+%!xtest
+%! % initial conditions
+%! syms y(x)
+%! de = diff(y, 2) + 4*y == 0;
+%! f = dsolve(de, y(0) == 3)
+%! g = 3*cos(2*x) + C1*sin(2*x);
+%! assert (isequal (f, g))
+%! f = dsolve(de, y(0) == 3, y(2*pi/4) == 0);
+%! g = 3*cos(2*x);
+%! assert (isequal (f, g))
+
+% FIXME: also test something with IC on diff(y)

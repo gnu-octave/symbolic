@@ -2,8 +2,15 @@ function z = double_array_to_sym(A)
 %private helper for sym ctor
 %   convert an array to syms, currently on 1D, 2D.
 
-  % todo: split to fcn mat2list()
-  [n,m] = size(A);
+  [n, m] = size(A);
+
+  if (n == 0 || m == 0)
+    cmd = { sprintf('return sp.Matrix(%d, %d, []),', n, m) };
+    z = python_cmd (cmd);
+    return
+  end
+
+  % todo: could split to fcn mat2list()?
   Ac = cell(n,1);
   for i=1:n
     % todo: this is fast and works great for ints but in general we
@@ -22,8 +29,8 @@ function z = double_array_to_sym(A)
     error('conversion not supported for arrays of dim > 2');
   end
 
-  cmd = { 'L = _ins[0]' ...
-          'M = sp.Matrix(L)' ...
+  cmd = { 'L = _ins[0]'
+          'M = sp.Matrix(L)'
           'return M,' };
   z = python_cmd (cmd, Ac);
 

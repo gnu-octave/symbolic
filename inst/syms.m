@@ -39,12 +39,12 @@
 %% syms x y z positive
 %% @end example
 %%
-%% Symfun's represent abstract or concrete functions.  Abstract
-%% symfun's can be created with @code{syms}:
+%% Symfuns represent abstract or concrete functions.  Abstract
+%% symfuns can be created with @code{syms}:
 %% @example
 %% syms f(x)
 %% @end example
-%% If @code{x} does not exost in the callers workspace, it
+%% If @code{x} does not exist in the callers workspace, it
 %% is created as a @strong{side effect} in that workspace.
 %%
 %% Called without arguments, @code{syms} displays a list of
@@ -84,10 +84,11 @@ function syms(varargin)
 
   % Check if final input is assumption
   asm = varargin{end};
-  if ( strcmp(asm, 'real') || strcmp(asm, 'positive') || strcmp(asm, 'integer') || ...
-       strcmp(asm, 'even') || strcmp(asm, 'odd') || strcmp(asm, 'rational') || ...
-       strcmp(asm, 'clear') )
-    last = nargin-1;
+  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
+      strcmp(asm, 'negative') || strcmp(asm, 'integer') || ...
+      strcmp(asm, 'even') || strcmp(asm, 'odd') || ...
+      strcmp(asm, 'rational') || strcmp(asm, 'finite') || strcmp(asm, 'clear'))
+    last = nargin - 1;
   else
     asm = '';
     last = nargin;
@@ -129,31 +130,23 @@ function syms(varargin)
 
     else  % yes, this is a symfun
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
-      tok = mystrsplit(varargin{i}, {'(', ')', ','});
-      name = strtrim(tok{1});
-      vars = {};  varnames = {};  c = 0;
-      for i = 2:length(tok)
-        vs = strtrim(tok{i});
-        if ~isempty(vs)
-          assert(isvarname(vs)); % help prevent malicious strings
-          exists = evalin('caller',['exist(''' vs ''', ''var'')']);
-          if (exists)
-            vs_sym = evalin('caller', vs);
-          else
-            vs_sym = sym(vs);
-            assignin('caller', vs, vs_sym);
-          end
-          c = c + 1;
-          vars{c} = vs_sym;;
-          varnames{c} = vs;
-        end
-      end
-      sf = symfun(name, vars);
+      % regex matches: abc(x,y), f(var), f(x, y, z), f(r2d2), f( x, y )
+      % should not match: Rational(2, 3), f(2br02b)
+      assert(~isempty(regexp(varargin{i}, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
+             'invalid symfun expression')
+      s = sym(varargin{i});
+      %vars = symvar(s)  % might re-order the inputs, instead:
+      cmd = { 'f = _ins[0]'
+              'return (f.func.__name__, f.args)' };
+      [name, vars] = python_cmd (cmd, s);
+      sf = symfun(s, vars);
       assignin('caller', name, sf);
+      for i = 1:length(vars)
+        v = vars{i};
+        assignin('caller', v.flat, v);
+      end
     end
-
   end
-
 end
 
 

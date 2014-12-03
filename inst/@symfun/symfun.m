@@ -25,59 +25,56 @@
 %% equation).  A concrete symfun represents a known function such
 %% as f(x) = sin(x).
 %%
-%% @strong{IMPORTANT}: are you getting sym's with names like
-%% @code{pleaseReadHelpSymFun}?  This probably happens because the
-%% following is @strong{not} the way to create an abstract symfun:
+%% A concrete symfun:
 %% @example
-%% f = sym('f(x)')
-%% @end example
-%% Instead, use @code{f(x)} on the left-hand side:
-%% @example
-%% f(x) = sym('f(x)')
+%% syms x
+%% f(x) = sin(x)
 %% @end example
 %%
+%% An abstract symfun:
+%% @example
+%% syms g(x)
+%% @end example
+%% and note this creates the sym @code{x} automatically.
 %%
-%% Note that it is not usually necessary to call symfun directly,
-%% you can use sym and syms.  Examples:
+%% Alternatively:
 %% @example
 %% x = sym('x')
+%% g(x) = sym('g(x)')
+%% @end example
+%% Note the following is @strong{not} the way to create an abstract
+%% symfun:
+%% @example
+%% g = sym('g(x)')
+%% @end example
+%% Instead, use @code{g(x)} on the left-hand side as above.
+%%
+%% You can make multidimensional concrete or abstract symfuns:
+%% @example
+%% syms g(x, y)
+%% @end example
+%% However, a bug in the Octave parser in versions before 4.0 means
+%% the 2D example will give a parse error.  A workaround:
+%% @example
+%% syms 'g(x, y)'
+%% @end example
+%%
+%% As the above examples demonstrate, it is usually not necessary to
+%% call symfun directly.  However, it can be done:
+%% @example
+%% syms x y
 %% f = symfun(sin(x), x)
-%% f(x) = sin(x)  % same thing
+%% F = symfun(x*y, [x y])
+%% g = symfun(sym('g(x)'), x)
+%% G = symfun(sym('G(x, y)'), [x y])
 %% @end example
 %%
+%% This allows, for example, creating an abstract function formally
+%% of x, y but depending only on x:
 %% @example
-%% x = sym('x')
-%% y = sym('y')
-%% f = symfun(x*y, [x y])
-%% f(x,y) = x*y  % same thing
+%% syms x y
+%% h = symfun(sym('h(x)'), [x y])
 %% @end example
-%%
-%% Abstract functions: you can use sym/syms:
-%% @example
-%% syms f(x) g(x,y)
-%% @end example
-%%
-%% or
-%% @example
-%% x = sym('x')
-%% y = sym('y')
-%% f(x) = sym('f(x)')
-%% g(x,y) = sym('g(x,y)')
-%% @end example
-%%
-%%
-%% To build abstract functions with symfun directly, the call to
-%% symfun needs a string for @var{expr}.  It should be just the
-%% function name (without the @code{(x,y)}).
-%% @example
-%% x = sym('x')
-%% y = sym('y')
-%% f = symfun('f', x)
-%% g = symfun('g', [x y])
-%% @end example
-%% However, for interaction with @code{sym()}, it currently can
-%% include the @code{(x,y)}.
-%%
 %%
 %% @seealso{sym, syms}
 %% @end deftypefn
@@ -98,24 +95,20 @@ function f = symfun(expr, vars)
   % if the vars are in a sym array, put them in a cell array
   if (isa( vars, 'sym'))
     varsarray = vars;
-    vars = cell(1,numel(varsarray));
-    for i=1:numel(varsarray)
-      idx.type = '()';  idx.subs = {i};
-      vars{i} = subsref(varsarray, idx);
+    vars = cell(1, numel(varsarray));
+    for i = 1:numel(varsarray)
+      vars{i} = varsarray(i);
     end
   end
 
-  %% abstract function
-  % (If we have a concrete function, it will be passed in to expr,
-  % here we just deal with the abstract function case.)
   if (ischar (expr))
+    % FIXME: drop this later
+    warning('symfun: deprecated: symfun(''f'', x) format not supported')
     tok = mystrsplit(expr, {'(', ')', ','});
     fname = strtrim(tok{1});
     assert (isvarname (fname))
-
     cmd = {['_f = sp.Function("' fname '")(*_ins)'] ...
             'return (_f,)' };
-
     expr = python_cmd (cmd, vars{:});
   end
 
@@ -153,11 +146,11 @@ end
 
 %!test
 %! syms x y
-%! f = symfun('f', {x});
+%! f = symfun(sym('f(x)'), {x});
 %! assert(isa(f, 'symfun'))
-%! f = symfun('f', [x y]);
+%! f = symfun(sym('f(x,y)'), [x y]);
 %! assert(isa(f, 'symfun'))
-%! f = symfun('f', {x y});
+%! f = symfun(sym('f(x,y)'), {x y});
 %! assert(isa(f, 'symfun'))
 
 %!test
@@ -214,7 +207,7 @@ end
 %!test
 %! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
 %! % (put inside eval to hide from 3.6 parser)
-%! if exist('octave_config_info', 'builtin');
+%! if exist('octave_config_info', 'builtin')
 %!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
 %!     syms x y
 %!     eval('syms g(x,y)')
@@ -242,3 +235,18 @@ end
 %! assert( isa(f2, 'symfun'))
 %! assert( isa(2*g, 'symfun'))
 %! assert( isa(0*g, 'symfun'))  % in SMT, this is the zero symfun
+
+%!test
+%! % syms has its own parsing code, check it works
+%! syms 'f(x,y)'
+%! g = f;
+%! syms 'f(x, y)'
+%! assert (isequal (f, g))
+%! syms 'f( x,  y  )'
+%! assert (isequal (f, g))
+
+%!test
+%! % syms own parsing code should not reorder the vars
+%! syms 'f(y, x)'
+%! v = f.vars;
+%! assert (isequal (v{1}, y) && isequal (v{2}, x))
