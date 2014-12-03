@@ -88,7 +88,7 @@ end
 
 %!test
 %! % solve for 2*x (won't work on Matlab/Octave 3.6)
-%! if exist('octave_config_info', 'builtin');
+%! if exist('octave_config_info', 'builtin')
 %!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
 %!     d = solve(e, 2*x);
 %!     s = d{1}.('2*x');

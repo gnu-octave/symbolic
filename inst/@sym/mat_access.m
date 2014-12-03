@@ -39,45 +39,25 @@ function z = mat_access(A, subs)
     z = reshape(A, numel(A), 1);
     return
 
-  elseif ((length(subs) == 1) && (~isvector(A)))
-    %% linear index into a matrix A
+  elseif (length(subs) == 1)
+    %% linear index into a matrix/vector/scalar A
     i = subs{1};
-    if (isempty(i))
-      z = sym([]);
-      return
+    if strcmp(i, '')
+      i = [];  % yes empty str ok here
     end
-    if (~isvector(i) || ischar(i))
-      size(i), i
-      error('what?');
+    if (ischar(i))
+      error(['invalid indexing, i="' i '"'])
     end
     [r, c] = ind2sub (size(A), i);
-    z = mat_rclist_access(A, r, c);
-    return
-
-  elseif ((length(subs) == 1) && (isvector(A)))
-    %% linear index into a vector A
-    i = subs{1};
-    if (isempty(i))
-      z = sym([]);
-      return
-    end
-    if (isscalar(A) && (i == 1))
-      z = A;
-      return
-    end
-    if (~isvector(i) || ischar(i))
-      size(i), i
-      error('what?');
-    end
-    [r, c] = ind2sub (size(A), i);
-    z = mat_rclist_access(A, r, c);
-    % output shape, see logic in comments in mat_mask_access.m
-    if (my_isrow(A))
-      z = reshape(z, 1, length(c));
-    elseif (my_iscolumn(A))
-      assert(my_iscolumn(z))
+    z = mat_rclist_access(A, r(:), c(:));
+    % output shape, see also logic in comments in mat_mask_access.m
+    if (~isscalar(A) && isrow(A) && isvector(i))
+      z = reshape(z, 1, length(i));  % i might be row or col
+    elseif (~isscalar(A) && iscolumn(A) && isvector(i))
+      assert(iscolumn(z))
     else
-      error('Tertium Non Datur')
+      % all other cases we take shape of i
+      z = reshape(z, size(i));
     end
     return
 
@@ -86,6 +66,8 @@ function z = mat_access(A, subs)
     c = subs{2};
     assert( isvector(r) || isempty(r) || strcmp(r, ':') )
     assert( isvector(c) || isempty(c) || strcmp(c, ':') )
+    if strcmp(r, ''), r = []; end
+    if strcmp(c, ''), c = []; end
     z = mat_rccross_access(A, r, c);
     return
 

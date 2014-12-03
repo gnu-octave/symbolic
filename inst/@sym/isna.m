@@ -43,5 +43,4 @@ end
 %! assert (~isna(x))
 %! assert (~isna(oo))
 %! assert (~isna(sym(nan)))
-%! assert (isna (sym ([1 nan])), [false false])
-
+%! assert (isequal (isna (sym ([1 nan])), [false false]))

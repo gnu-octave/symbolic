@@ -125,7 +125,9 @@ function varargout = python_cmd(cmd, varargin)
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
   if (~iscell(A))
-    A
+    disp(A)
+    % Python state undefined, so reset it (overkill for nostateful ipc)
+    sympref reset
     error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
   end
 
@@ -175,14 +177,16 @@ end
 %! x = 'a string\nbroke off\nmy guitar\n';
 %! x2 = sprintf(x);
 %! y = python_cmd ('return _ins', x);
-%! assert (strcmp(y, x2))
+%! x3 = strrep(x2, sprintf('\n'), sprintf('\r\n'));  % windows
+%! assert (strcmp(y, x2) || strcmp(y, x3))
 
 %!test
 %! % bug: cmd string with newlines, works with cell
 %! % FIXME: no addition escaping for this one
 %! y = python_cmd ('return "string\nbroke",');
 %! y2 = sprintf('string\nbroke');
-%! assert (strcmp(y, y2))
+%! y3 = strrep(y2, sprintf('\n'), sprintf('\r\n'));  % windows
+%! assert (strcmp(y, y2) || strcmp(y, y3))
 
 %%!test
 %%! % FIXME: newlines: should be escaped for import?
@@ -222,7 +226,7 @@ end
 
 %!test
 %! % strings with quotes
-%! x = 'a''b';  # this is a single quote
+%! x = 'a''b';  % this is a single quote
 %! y = python_cmd ('return _ins', x);
 %! assert (strcmp(y, x))
 

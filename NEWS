@@ -1,27 +1,78 @@
-octsympy 0.1.1 (yyyy-mm-dd)
+octsympy x.y.z (yyyy-mm-dd)
 ===========================
 
  *  New commands:
 
-          and
-          char
-          isscalar
-          or
-          uplus
-          xor
+          ldivide
+          mldivide
 
- *  IPC system() should work on windows (FIXME: test header load)
+ *  Symbolic backslash support.
+
+
+
+octsympy 0.1.2 (2014-12-01)
+===========================
+
+ *  New commands:
+
+          children           rhs
+          expm	             setdiff
+          lhs	             setxor
+          pinv	             trace
+          potential
+
+ *  Support new SymPy 0.7.6.  This adds Octave code generation which means
+    that OctSymPy's `matlabFunction` is supported.
+
+ *  For now, SymPy 0.7.5 should still work, but upgrading to SymPy 0.7.6 is
+    recommended.
+
+
+
+octsympy 0.1.1 (2014-10-20)  Rose Garden
+========================================
+
+Major Changes
+-------------
+
+ *  Fix sym(double) approx by rationals (issue #121, thanks HuiZhong LU).
+
+ *  Improvements to sym() command: you can now pass the underlying "srepr"
+    SymPy presentation to create an object.
+
+ *  Bug fixes: improvements to indexing, findsymbols and assumptions,
+    isscalar/isvector failures on recent Octave, output formatting fixes,
+
+ *  New commands:
+
+          and             isscalar
+          char            isvector
+          diag            nnz
+          eig             or
+          iscolumn        uplus
+          isrow           xor
+
+
+Minor Changes
+-------------
 
  *  Improvements to logical and isAlways commands.
+
+ *  IPC system() should work on windows.
+
+ *  Better test system, easier to see "real" failures rather than expected
+    (known) failures.
+
+ *  Improved handling of symfuns.
 
  *  Improvements to internel string handling/escaping especially newlines.
 
      -  Enter a multiline command using a cell array of lines e.g.,
         `python_cmd({'a = 10' 'return (a, 2*a)'})
+	or
+        `python_cmd({'a = 10'; 'return (a, 2*a)'})
      -  The same applies to `evalpy`.  If you need the old deprecated
         behaviour, it is still available as `python_cmd_string`.
-
- *  Bug fixes, #88, #90, #91.
 
 
 
@@ -45,7 +96,7 @@ Major Changes
  *  Experimental Windows package with Python and SymPy included (look
     Ma, no deps!)  Uses [David Manthey's single file py.exe Python] [1].
 
-   [1]: http://www.orbitals.com/programs/pyexe.html
+    [1]: http://www.orbitals.com/programs/pyexe.html
 
  *  Lots of new commands:
 

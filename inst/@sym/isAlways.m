@@ -66,13 +66,13 @@ function r = isAlways(p, varargin)
     assert(strcmpi(varargin{1}, 'unknown'))
     cant = varargin{2};
     if islogical(cant)
-      # SMT doesn't allow nonstring but it seems reasonable
+      % SMT doesn't allow nonstring but it seems reasonable
     elseif strcmpi(cant, 'true')
       cant = true;
     elseif strcmpi(cant, 'false')
       cant = false;
     elseif strcmpi(cant, 'error')
-      # no-op
+      % no-op
     else
       error('isAlways: invalid argument for "unknown" keyword')
     end
@@ -88,8 +88,8 @@ function r = isAlways(p, varargin)
     '    #FIXME; Boolean, simplify more than once?'
     '    if r in (S.true, S.false):'
     '        return bool(r)'
-    '    # hopefully we get sympy 0.7.6 patched'
-    '    if sympy.__version__ == "0.7.5":'
+    '    # hopefully we get sympy patched for some of this'
+    '    if sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6"):'
     '        if isinstance(p, Equality):'
     '            r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
     '            r = simplify(r)'
@@ -270,14 +270,14 @@ end
 %! c = isAlways(a, 'unknown', 'false');
 %! expect = [true false false true false];
 %! assert (islogical(b))
-%! assert (b, expect)
-%! assert (c, expect)
+%! assert (isequal (b, expect))
+%! assert (isequal (c, expect))
 %! b = isAlways(a, 'unknown', true);
 %! c = isAlways(a, 'unknown', 'true');
 %! expect = [true false true true false];
 %! assert (islogical(b))
-%! assert (b, expect)
-%! assert (c, expect)
+%! assert (isequal (b, expect))
+%! assert (isequal (c, expect))
 
 %!test
 %! % ineq

@@ -3,8 +3,9 @@ function L = python_copy_vars_to(in, te, varargin)
 
   if (~te)
     %% no error checking
+    L = do_list(0, in, varargin);
     L = { sprintf('%s = []', in) ...
-          do_list(0, in, varargin){:} };
+          L{:} };
   else
     %% put inside try-except
     L = do_list(4, in, varargin);
@@ -33,7 +34,8 @@ function a = do_list(indent, in, varlist)
       % .append(pickle.loads("""%s"""))', x.pickle)
       % The extra printf around the pickle helps if it still has
       % escape codes (and seems harmless if it does not)
-      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(x.pickle));
+      % Issue #107: x.pickle fails for matrices, use char() as workaround
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
 
     elseif (ischar(x))
       c=c+1; a{c} = [sp in '.append("' x '")'];
@@ -95,7 +97,7 @@ function a = do_list(indent, in, varlist)
       error('don''t know how to move that variable to python');
     end
   end
-  c=c+1; a(c) = [sp '# end of a list'];
+  c=c+1; a{c} = [sp '# end of a list'];
 end
 
 

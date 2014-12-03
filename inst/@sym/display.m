@@ -58,9 +58,12 @@ function display(x)
   end
   newl = sprintf('\n');
 
+  % an appropriate label for this variable, likely just inputname itself
+  name = priv_disp_name(x, inputname (1));
   d = size (x);
+
   if (isscalar (x))
-    n = fprintf ('%s = (%s)', inputname (1), class (x));
+    n = fprintf ('%s = (%s)', name, class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
     toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
@@ -78,14 +81,14 @@ function display(x)
 
   elseif (isempty (x))
     formatstr = [  ];
-    n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', inputname (1), ...
+    n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', name, ...
                  class (x), strtrim(disp(x)), d(1), timesstr, d(2));
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
 
   elseif (length (d) == 2)
     %% 2D Array
-    n = fprintf ('%s = (%s %d%s%d matrix)', inputname (1), class (x), ...
+    n = fprintf ('%s = (%s %d%s%d matrix)', name, class (x), ...
                  d(1), timesstr, d(2));
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
@@ -97,7 +100,7 @@ function display(x)
   else
     %% nD Array
     % (not possible with sympy matrix)
-    fprintf ('%s = (%s nD array)', inputname (1), class (x))
+    fprintf ('%s = (%s nD array)', name, class (x))
 
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
@@ -136,3 +139,6 @@ function snippet_of_sympy(x, padw, width, unicode)
   end
   fprintf([pad lquot '%s' rquot '\n'], s)
 end
+
+
+% FIXME: tricky to test without spamming stdout

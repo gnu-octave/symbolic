@@ -7,8 +7,8 @@ the differences.
 
 
 
-Functions only SMT has
-----------------------
+Functions SMT has that OctSymPy does not have
+---------------------------------------------
 
 > "Uh, all of them, I think."
 >     --John Conner, 1995
@@ -17,14 +17,15 @@ That is, your help is needed here.
 
 
 
-Functions only OctSymPY has
----------------------------
+Functions that OctSymPY has which SMT does not have
+---------------------------------------------------
 
 These should be updated to match SMT if/when they are added.
 
 * fibonacci
 * isprime
 * nextprime
+* lhs/rhs
 
 
 

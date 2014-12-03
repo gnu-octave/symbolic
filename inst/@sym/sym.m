@@ -43,7 +43,8 @@
 %% x = sym ('x', 'positive')
 %% @end example
 %% The following options are supported:
-%% 'real', 'positive', 'integer', 'even', 'odd', 'rational'.
+%% 'real', 'positive', 'negative', 'integer', 'even', 'odd',
+%% 'rational', 'finite'.
 %% Others are supported in SymPy but not exposed directly here.
 %%
 %% Caution: it is possible to create multiple variants of the
@@ -126,10 +127,12 @@ function s = sym(x, varargin)
       % Allow 1/3 and other "small" fractions.
       % Personally, I like a warning here so I can catch bugs.
       % Matlab SMT does this (w/o warning).
-      % FIXME: alternatively, could have sympy do this?
+      % FIXME: could have sympy do this?  Or just make symbolic floats?
       warning('OctSymPy:sym:rationalapprox', ...
-              'Using rats() for rational approx, did you really mean to pass a noninteger?');
-      s = sym(strtrim(rats(x)));
+              'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
+      [N, D] = rat(x, 1e-15);
+      %s = sym(N) / sym(D);   % three round trips
+      s = sym(sprintf('Rational(%d, %d)', N, D));
     end
     return
 
@@ -180,26 +183,6 @@ function s = sym(x, varargin)
       useSymbolNotS = true;
     end
 
-    %% check if we're making a symfun
-    % regex matches "abc(x,y)", "f(var)", "f(x, y, z)"
-    if (~isempty (regexp(x, '^\w+\(\w+(,\w+)*\)$')))
-      % Assume we are starting to make an abstract symfun.  We
-      % don't do it directly here, but instead return a specially
-      % tagged sym.  Essentially, the contents of this sym are
-      % irrelevant except for the special contents of the "extra"
-      % field.  subasgn can then note this and actually build the
-      % symfun: it will know the arguments from the LHS of "g(x) =
-      % sym('g(x)')".  Rather, if the user calls "g = sym('g(x)')",
-      % I see no easy way to throw an error, so we just make the
-      % symbol itself a plea to read the docs ;-)
-      %disp('DEBUG: I hope you are using this sym for the rhs of a symfun...');
-      s = sym('pleaseReadHelpSymFun');
-      s.extra = {'MAKING SYMFUN HACK', x};
-      %s = x;  % this would be nicer, but it fails to call subsasgn
-      assert(isempty(asm))
-      return
-    end
-
     doDecimalCheck = true;
 
     % various special cases for x
@@ -239,7 +222,8 @@ function s = sym(x, varargin)
         if (doDecimalCheck && ~isempty(strfind(x, '.')))
           warning('possibly unintended decimal point in constructor string');
         end
-        cmd = sprintf('z = sympy.S("%s")', x);
+        % x is raw sympy, could have various quotes in it
+        cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
       end
     else % useSymbolNotS
       assert(isempty(cmd), 'inconsistent input')
@@ -253,8 +237,9 @@ function s = sym(x, varargin)
         return
 
       elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
-              strcmp(asm, 'integer') || strcmp(asm, 'even') || ...
-              strcmp(asm, 'odd') || strcmp(asm, 'rational'))
+              strcmp(asm, 'negative') || strcmp(asm, 'integer') || ...
+              strcmp(asm, 'even') || strcmp(asm, 'odd') || ...
+              strcmp(asm, 'rational') || strcmp(asm, 'finite'))
         cmd = sprintf('z = sympy.Symbol("%s", %s=True)', x, asm);
       else
         error('that assumption not supported')
@@ -323,8 +308,9 @@ end
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
 %! % it should work
-%! warning ('off', 'OctSymPy:sym:rationalapprox', 'local')
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
 %! x = sym(1/2);
+%! warning (s)
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))
 
@@ -386,22 +372,23 @@ end
 
 %!test
 %! %% assumptions and clearing them
+%! clear  % for matlab test script
 %! x = sym('x', 'real');
 %! f = {x {2*x}};
-%! A = assumptions();
-%! assert ( ~isempty(A))
+%! asm = assumptions();
+%! assert ( ~isempty(asm))
 %! x = sym('x', 'clear');
-%! A = assumptions();
-%! assert ( isempty(A))
+%! asm = assumptions();
+%! assert ( isempty(asm))
 
 %!test
 %! %% matlab compat, syms x clear should add x to workspace
 %! x = sym('x', 'real');
 %! f = 2*x;
 %! clear x
-%! assert (~exist('x', 'var'))
+%! assert (~logical(exist('x', 'var')))
 %! x = sym('x', 'clear');
-%! assert (exist('x', 'var'))
+%! assert (logical(exist('x', 'var')))
 
 %!test
 %! %% assumptions should work if x is already a sym
@@ -430,3 +417,28 @@ end
 %! assert (isequal (t, [a==1  a==0]))
 %! t = sym([true false; false true]);
 %! assert (isequal (t, [a==1  a==0;  a==0  a==1]))
+
+%!test
+%! % 50 shapes of empty
+%! a = sym(ones(0, 3));
+%! assert (isa (a, 'sym'))
+%! assert (isequal (size (a), [0 3]))
+%! a = sym(ones(2, 0));
+%! assert (isequal (size (a), [2 0]))
+%! a = sym([]);
+%! assert (isequal (size (a), [0 0]))
+
+%!test
+%! % embedded sympy commands, various quotes, issue #143
+%! a = sym('a');
+%! a1 = sym('Symbol("a")');
+%! a2 = sym('Symbol(''a'')');
+%! assert (isequal (a, a1))
+%! assert (isequal (a, a2))
+%! % Octave only, and eval to hide from Matlab parser
+%! if exist('octave_config_info', 'builtin')
+%!   eval( 'a3 = sym("Symbol(''a'')");' );
+%!   eval( 'a4 = sym("Symbol(\"a\")");' );
+%!   assert (isequal (a, a3))
+%!   assert (isequal (a, a4))
+%! end

@@ -43,7 +43,7 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
   % join all the cell arrays with newlined
   s = mystrjoin([s1 s2 s3], newl);
 
-  pyexec =sympref('python');
+  pyexec = sympref('python');
   if (isempty(pyexec))
     pyexec = 'python';
   end

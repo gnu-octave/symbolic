@@ -29,8 +29,8 @@
 
 function n = numel(f)
 
-  %disp('symfun numel call')
-  n = numel(f.sym);
+  % see issue #107, #109
+  n = 1;
 
 end
 
@@ -38,4 +38,9 @@ end
 %!test
 %! syms x
 %! f(x) = x^2;
+%! assert(numel(f)==1)
+
+%!test
+%! syms x
+%! f(x) = [1 x];
 %! assert(numel(f)==1)

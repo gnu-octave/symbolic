@@ -5,7 +5,7 @@ PYTHON=python
 
 all: codegen
 
-matlab: all ml_copy ml_convert ml_extract_tests ml_tidyup
+matlab: all ml_copy ml_convert ml_extract_tests
 
 clean: codegen_clean matlab_clean
 
@@ -19,16 +19,12 @@ codegen_clean:
 	${PYTHON} generate_functions.py clean
 	rm -f ../inst/private/python_header_embed.m
 
-ml_tidyup: ml_copy ml_convert ml_extract_tests
-	rm -f ../matlab/extract_tests_for_matlab.m
-	rm -f ../matlab/octsympy_tests.m
-	rm -f ../matlab/octsympy_test_suite.m
-
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
-	cp -ra extract_tests_for_matlab.m ../matlab/
-	cp -ra octsympy_tests_matlab.m ../matlab/
+	cp -ra ../extract_tests_for_matlab.m ../matlab/
+	cp -ra ../octsympy_tests_matlab.m ../matlab/
 	cd ../matlab/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
+	rm -f ../matlab/extract_tests_for_matlab.m
 
 ml_copy: ml_convert
 	cp -ra ../inst/private ../matlab/
@@ -40,15 +36,18 @@ ml_copy: ml_convert
 	cp -af ../matlab_smt_differences.md ../matlab/
 	cp -af ../README.md ../matlab/
 	cp -af ../README.matlab.md ../matlab/
+	rm -f ../matlab/octsympy_tests.m
 
 ml_convert:
 	mkdir -p ../matlab/@sym/
 	mkdir -p ../matlab/@symfun/
 	mkdir -p ../matlab/@logical/
-	${OCTAVE} -q --eval "convert_comments('../inst/', '',         '../matlab/')"
-	${OCTAVE} -q --eval "convert_comments('../inst/', '@symfun',  '../matlab/')"
-	${OCTAVE} -q --eval "convert_comments('../inst/', '@sym',     '../matlab/')"
-	${OCTAVE} -q --eval "convert_comments('../inst/', '@logical', '../matlab/')"
+	cp -ra ../convert_comments.m ../matlab/
+	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '',         '../matlab/')"
+	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '@symfun',  '../matlab/')"
+	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '@sym',     '../matlab/')"
+	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '@logical', '../matlab/')"
+	rm -f ../matlab/convert_comments.m
 
 matlab_clean:
 	rm -f ../matlab/*.m

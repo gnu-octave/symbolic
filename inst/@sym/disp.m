@@ -81,8 +81,8 @@ end
 %! a = sym([1 2; 3 4]);
 %! b2x0 = a([true true], [false false]);
 %! b0x2 = a([false false], [true true]);
-%! assert (size (b2x0), [2 0])
-%! assert (size (b0x2), [0 2])
+%! assert (isequal (size (b2x0), [2 0]))
+%! assert (isequal (size (b0x2), [0 2]))
 %! s = disp(b2x0);
 %! assert(strcmp(s, '  []'))
 %! s = disp(b0x2);

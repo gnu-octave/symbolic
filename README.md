@@ -30,11 +30,11 @@ How to Install
 1. The only dependencies are Python and SymPy.  Consult the SymPy
    website (e.g., `yum install sympy` on Fedora).
 
-2. Download the latest release, e.g., `octsympy-0.1.0.tar.gz`.
+2. Download the latest release, e.g., `octsympy-0.1.2.tar.gz`.
 
 3. Run Octave and change to the folder containing the downloaded file.
 
-4. At Octave prompt, type `pkg install octsympy-0.1.0.tar.gz`.
+4. At Octave prompt, type `pkg install octsympy-0.1.2.tar.gz`.
 
 5. At Octave prompt, type `pkg load octsympy`.
 
@@ -48,14 +48,14 @@ How to Install on Windows
 
 1.  Get [Octave](http://www.octave.org) for Windows.
 
-2.  Try the octsympy-windows-0.1.0.zip package.  Follow the last three
+2.  Try the octsympy-windows-0.1.2.zip package.  Follow the last three
     steps above using this file instead.
 
 The `octsympy-windows` package should have no dependencies other than
 Octave itself (it includes SymPy and a Python interpreter.)
 
 Alternatively, you can install Python and SymPy yourself and use the
-standard `octsympy-0.1.0.zip` package.
+standard `octsympy-0.1.2.zip` package.
 
 
 
@@ -66,7 +66,7 @@ Although OctSymPy is designed for GNU Octave, it will work with
 Matlab.  Currently only the slower system()-based communication is
 available.
 
-1.  Download the latest release, e.g., `octsympy-matlab-0.1.0.tar.gz`.
+1.  Download the latest release, e.g., `octsympy-matlab-0.1.2.tar.gz`.
 
 2.  Unzip is somewhere and add it to your Matlab Path.
 
@@ -74,16 +74,24 @@ The .m files for Matlab have been reformatted for Matlab comment
 conventions, but are otherwise the same as the Octave source.
 
 
-How to Hack
+How to Help
 -----------
 
-1.  Clone the repo.
+We have a list of things to work on tagged [help
+wanted](https://github.com/cbm755/octsympy/issues?q=is:open+is:issue+label:"help+wanted").
+Some of these should be quite easy to fix and would be a great way to
+get involved.  Come join us!
+
+How to hack on the code:
+
+1.  Clone the repo with git (preferred, but you can use the "Download
+    ZIP" instead of you want).
 
 2.  Go to octsympy/src/ and type "make".  (You only need to do this
     again if you change the inst/private/python_header.py or various
     autogeneration scripts in src/.)
 
-3.  Run Octave or Matlab in octsympy/inst/.
+3.  Run Octave (or Matlab) in octsympy/inst/.
 
 
 
