@@ -6,10 +6,14 @@ octsympy x.y.z (yyyy-mm-dd)
           ldivide
           mldivide
           vpa
+          vpasolve
 
  *  Symbolic backslash support.
 
  *  variable-precision arithmetic support.
+
+ *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
+    power.
 
 
 
