@@ -3,6 +3,9 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  New commands:
 
+          coeffs
+          isallconstant
+          isconstant
           ldivide
           mldivide
 
