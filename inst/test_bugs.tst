@@ -178,3 +178,13 @@
 %! % FIXME: e.g., cannot add to it
 %! B = B + 1
 %! assert (isa (B, 'sym'))
+
+%!xtest
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x
+%!xtest
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x
+%!test
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x
