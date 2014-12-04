@@ -55,8 +55,8 @@ function varargout = ezplot3(varargin)
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
-          varargin{i} = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
-          % varargin{i} = @(t) 0*t + double(varargin{i});  % no
+          thisf = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
+          %thisf = @(t) 0*t + double(varargin{i});  % no
         else
           % check variables match (sanity check)
           if (isempty(firstsym))
@@ -65,8 +65,10 @@ function varargout = ezplot3(varargin)
             assert(logical(thissym == firstsym), ...
               'ezplot3: all functions must be in terms of the same variables');
           end
-          varargin{i} = matlabFunction(varargin{i});
+          thisf = matlabFunction(varargin{i});
         end
+
+        varargin{i} = thisf;
 
       else
         % plot ranges, etc, convert syms to doubles
