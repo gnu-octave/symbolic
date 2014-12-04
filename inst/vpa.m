@@ -51,11 +51,16 @@ function r = vpa(x, n)
       'return sympy.N(x, *o),' };
   end
 
+  %if (nargin == 1)
+  %  r = python_cmd (cmd, x);
+  %else
+  %  r = python_cmd (cmd, x, n);
+  %end
+
   if (nargin == 1)
-    r = python_cmd (cmd, x);
-  else
-    r = python_cmd (cmd, x, n);
+    n = digits();
   end
+  r = python_cmd (cmd, x, n);
 
 end
 
