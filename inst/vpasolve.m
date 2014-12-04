@@ -29,7 +29,7 @@
 %% vpa_solve(e, x, 0.1)
 %% @end example
 %%
-%% @seealso{sym, vpa}
+%% @seealso{vpa}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -44,7 +44,7 @@ function r = vpasolve(e, x, x0)
     x = symvar(e, 1);
   end
 
-  n = 32;  % default digits, FIXME.
+  n = digits();
 
   cmd = {
     '(e, x, x0, n) = _ins'

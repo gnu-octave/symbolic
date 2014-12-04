@@ -3,6 +3,7 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  New commands:
 
+          digits
           ldivide
           mldivide
           vpa
@@ -10,7 +11,7 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  Symbolic backslash support.
 
- *  variable-precision arithmetic support.
+ *  variable-precision arithmetic support: see vpa, digits, vpasolve.
 
  *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
     power.
