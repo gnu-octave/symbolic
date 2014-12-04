@@ -22,7 +22,6 @@
 %% @deftypefnx {Function File} {@var{y} =} vpasolve (@var{e}, @var{x}, @var{x0})
 %% Numerical solution of a symbolic equation.
 %%
-%% 
 %% @example
 %% syms x
 %% e = exp(x) == x + 2
@@ -46,11 +45,12 @@ function r = vpasolve(e, x, x0)
 
   n = digits();
 
+  % nsolve gives back mpf object: https://github.com/sympy/sympy/issues/6092
   cmd = {
     '(e, x, x0, n) = _ins'
     'sympy.mpmath.mp.dps = n'
     'r = nsolve(e, x, x0)'
-    'r = sympy.N(r, n)'  % gives mpf object
+    'r = sympy.N(r, n)'
     'return r,' };
 
   r = python_cmd (cmd, sym(e), x, x0, n);
@@ -77,3 +77,32 @@ end
 %! w = q - vpi;
 %! assert (double(w) < 1e-30)
 
+%!test
+%! % very accurate pi
+%! syms x
+%! e = tan(x/4) == 1;
+%! m = digits(256);
+%! q = vpasolve(e, x, 3);
+%! assert (double(abs(sin(q))) < 1e-256)
+%! digits(m);
+
+%!test
+%! % very accurate sqrt 2
+%! syms x
+%! e = x*x == 2;
+%! m = digits(256);
+%! q = vpasolve(e, x, 1.5);
+%! assert (double(abs(q*q - 2)) < 1e-256)
+%! digits(m);
+
+%!xtest
+%! % very accurate sqrt pi
+%! % fails: https://github.com/sympy/sympy/issues/8564
+%! syms x
+%! e = x*x == sym(pi);
+%! m = digits(256);
+%! q = vpasolve(e, x, 3);
+%! q*q - vpa(pi)
+%! sin(q*q)
+%! assert (double(abs(sin(q))) < 1e-256)
+%! digits(m);
