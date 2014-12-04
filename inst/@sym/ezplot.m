@@ -41,8 +41,6 @@
 %% and Octave's ezplot and Matlab 2014a does not support N as
 %% number of points.  Disabled some tests.
 %%
-%% FIXME: should call symvar on all of them at once?
-%%
 %% @seealso{ezplot3, ezsurf, ezmesh, matlabFunction}
 %% @end deftypefn
 
