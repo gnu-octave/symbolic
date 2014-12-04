@@ -18,14 +18,10 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} matlabFunction (@var{f1}, ..., @var{fn})
-%% @deftypefnx {Function File} {@var{g} =} matlabFunction (..., @var{param}, @var{value})
-%% @deftypefnx {Function File} {@var{g} =} matlabFunction (..., 'vars', [@var{x} ... @var{z}])
-%% @deftypefnx {Function File} {...} matlabFunction (..., 'file', @var{name})
-%% @deftypefnx {Function File} {...} matlabFunction (..., 'outputs', [@var{o1} ... @var{on}])
 %% Convert symbolic expression into a standard function.
 %%
-%% This is a synonym of: @xref{function_handle}
+%% This is a synonym of @code{function_handle}.  See further
+%% documentation: @xref{function_handle}
 %%
 %% @seealso{ccode, fortran, latex, function_handle}
 %%
