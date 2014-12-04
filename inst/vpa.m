@@ -86,30 +86,30 @@ end
 %!test
 %! a = vpa(pi, 4);
 %! b = sin(a);
-%! assert(abs(double(b) < 1e-4))
+%! assert(abs(double(b)) < 1e-4)
 
 %!test
 %! % vpa from double not more than 16 digits
 %! a = vpa(pi, 32);
 %! b = sin(a);
-%! assert(abs(double(b) > 1e-20))
-%! assert(abs(double(b) < 1e-15))
+%! assert(abs(double(b)) > 1e-20)
+%! assert(abs(double(b)) < 1e-15)
 
 %!test
 %! a = vpa(sym(pi), 32);
 %! b = sin(a);
-%! assert(abs(double(b) < 1e-30))
+%! assert(abs(double(b)) < 1e-30)
 
 %!test
 %! a = vpa(sym(pi), 256);
 %! b = sin(a);
-%! assert(abs(double(b) < 1e-256))
+%! assert(abs(double(b)) < 1e-256)
 
 %!test
 %! % pi str
 %! a = vpa('pi', 32);
 %! b = sin(a);
-%! assert(abs(double(b) < 1e-32))
+%! assert(abs(double(b)) < 1e-32)
 
 %!test
 %! % pi str
