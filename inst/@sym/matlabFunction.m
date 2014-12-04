@@ -97,8 +97,7 @@ function f = matlabFunction(varargin)
     end
 
     fname2 = param.fname; fcnname = param.fname;
-    % FIXME: careful, inputs is from findsymbols not symvar, wrong
-    % order?
+    % was old note about findsymbols vs symvar: not relevant
     [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
 
     if (~worked)
@@ -295,3 +294,10 @@ end
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
 %! delete('temp_test_output3.m')
+
+%!test
+%! % order of outputs is lexiographic
+%! syms a A x y
+%! f = y + 10*a + 100*x + 1000*A;
+%! h = matlabFunction(f);
+%! assert (h(1, 2, 3, 4) == 1000 + 20 + 300 + 4)

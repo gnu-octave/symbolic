@@ -144,3 +144,11 @@ end
 %! syms a x y
 %! f(x, y) = a;  % const symfun
 %! assert (isequal (findsymbols(f), {a x y}))
+
+%!test
+%! % sorts lexigraphically, same as symvar *with single input*
+%! % (note symvar does something different with 2 inputs).
+%! syms A B a b x y X Y
+%! f = A*a*B*b*y*X*Y*x;
+%! assert (isequal (findsymbols(f), {A B X Y a b x y}))
+%! assert (isequal (symvar(f), [A B X Y a b x y]))
