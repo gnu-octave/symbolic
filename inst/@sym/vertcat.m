@@ -39,11 +39,20 @@ function h = vertcat(varargin)
           '            _proc.append(i)'
           '    else:'
           '        _proc.append(sp.Matrix([[i]]))'
-          'M = sp.Matrix.vstack(*_proc)'
-          'return M,' };
+          'failed = False'
+          'M = "whatev"'
+          'try:'
+          '    M = sp.Matrix.vstack(*_proc)'
+          'except ShapeError:'
+          '    failed = True'
+          'return (failed, M)' };
 
   varargin = sym(varargin);
-  h = python_cmd (cmd, varargin{:});
+  [flag, h] = python_cmd (cmd, varargin{:});
+
+  if (flag)
+    error('vertcat: ShapeError: incompatible sizes concatenated')
+  end
 
 end
 
@@ -115,11 +124,12 @@ end
 %! q = sym(ones(0, 2));
 %! assert (isequal ([v; q], v))
 
-%!xtest
-%! % on 0.7.5, this doesn't give an error (so xtest for now)
+%!#error <ShapeError>
+%! % FIXME: re-introduce when we drop 0.7.5 support (Issue #164)
+%! % (or if Octave gains an "xerror" test)
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(0, 3));
-%! error <unexpected return> w = [v; q];
+%! w = [v; q];
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
