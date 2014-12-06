@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014 Colin B. Macdonald, Andrés Prieto
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,7 +24,7 @@
 %% @example
 %% solve(x==2*x+6, x)
 %% solve(eq1, eq2, var1, var2)
-%% solve(eq1,...,eqn, var1,...,varm)   % FIXME for now need m==n
+%% solve(eq1,...,eqn, var1,...,varm)
 %% @end example
 %%
 %% Output will be a cell array.  Each entry of the cell array is a
@@ -45,10 +45,6 @@
 %% d@{1@}.('2*x')   % gives 4*y (and won't work on Matlab)
 %% @end example
 %%
-%% FIXME: make it work if omitting the vars
-%% @example
-%% solve(eq1,...,eqm)
-%% @end example
 %%
 %% FIXME: when there is just one variable to be solved for, the
 %% output doesn't match Matlab SMT (should not be inside a cell
@@ -57,22 +53,26 @@
 %% @seealso{dsolve}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
+%% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic
 
 function out = solve(varargin)
 
-  n = nargin;
   varargin = sym(varargin);
-  % FIXME: this is not right in all cases!
-  eqn = varargin(1:n/2);
-  vars = varargin(n/2+1:n);
 
-  cmd = { '#dbout(_ins)'
-          'd = sp.solve(*_ins, dict=True)'
-          '#dbout(d)'
-          'return d,' };
-  out = python_cmd (cmd, eqn, vars);
+  cmd = { 'input=_ins[:]'
+          'eqs=list();symbols=list()'
+          'for arg in input:'
+          '    if arg.is_Relational:'
+          '        eqs.append(arg)'
+          '    else:'
+          '        symbols.append(arg)'
+          'if len(symbols)==0:'
+          '    symbols=list(reduce(set.union, [fi.free_symbols for fi in eqs], set()))'
+          'return sp.solve(eqs,symbols),'};
+
+  out = python_cmd (cmd, varargin{:});
+
 end
 
 
@@ -81,17 +81,30 @@ end
 %! e = 10*x == 20*y;
 %!test
 %! d = solve(e, x);
-%! assert (isequal (d{1}.x, 2*y))
+%! assert (isequal (d.x, 2*y))
 %!test
 %! d = solve(e, y);
-%! assert (isequal (d{1}.y, x/2))
+%! assert (isequal (d.y, x/2))
+%!test
+%! d = solve(e);
+%! assert (isequal (d.x, 2*y))
 
 %!test
 %! % solve for 2*x (won't work on Matlab/Octave 3.6)
 %! if exist('octave_config_info', 'builtin')
 %!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
 %!     d = solve(e, 2*x);
-%!     s = d{1}.('2*x');
+%!     s = d.('2*x');
 %!     assert (isequal (s, 4*y))
 %!   end
 %! end
+
+%!test
+%! d = solve(2*x-3*y==0,x+y==0);
+%! assert (isequal (d.x, 3/5) && isequal(d.y, 2/5))
+%!test
+%! d = solve(2*x-3*y==0,x+y==0,x,y);
+%! assert (isequal (d.x, 3/5) && isequal(d.y, 2/5))
+
+
+
