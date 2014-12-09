@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
+%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
+%% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
 %% Laplace transform.
 %%
 %% Examples:
@@ -27,8 +27,8 @@
 %% syms t s
 %% f = t^2
 %% laplace(f)
-%% laplace(f,t)
-%% laplace(f,t,s)
+%% laplace(f, t)
+%% laplace(f, t, s)
 %% @end example
 %%
 %% @seealso{ilaplace}
@@ -42,20 +42,25 @@ function F = laplace(varargin)
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
-  if(nargin==1)
+  % If the physical variable of f is equal to "s",
+  % "t" is the frequency domain variable (analogously to SMT)
+  if (nargin == 1)
     f=varargin{1};
+    t=symvar(f,1);
     cmd = { 'f=_ins[0]'
+            't=_ins[1]'
             's=sp.Symbol("s")'
-            't=list(f.free_symbols)[0]'
+            'if t==s:'
+            '    s=sp.Symbol("t")'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd,f);
+    F = python_cmd(cmd,f,t);
 
-  elseif(nargin==2)
+  elseif (nargin == 2)
     f=varargin{1};
     t=varargin{2}; 
     cmd = { 'f=_ins[0]'
@@ -69,7 +74,7 @@ function F = laplace(varargin)
 
     F = python_cmd(cmd,f,t);
 
-  elseif(nargin==3)
+  elseif (nargin == 3)
     f=varargin{1};
     t=varargin{2}; 
     s=varargin{3};
@@ -92,11 +97,14 @@ function F = laplace(varargin)
 end
 
 %!shared t,s
-%! syms t s
+%! syms t s u w
 
 %!test
 %! % basic
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
+%! assert(logical( laplace(exp(2*u),u) == 1/(s-2) ))
+%! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
+%! assert(logical( laplace(exp(2*s)) == 1/(t-2) ))
 %! assert(logical( laplace(cos(3*t)) == s/(s^2+9) ))
 %! assert(logical( laplace(t^3) == 6/s^4 ))
 

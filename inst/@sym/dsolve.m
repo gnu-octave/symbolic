@@ -19,10 +19,12 @@
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{sol} =} dsolve (@var{ode}, @var{ics})
 %% Solve ODEs symbolically.
+%%
 %% Solve initial-value / boundary-value differential problems symbolically.
 %% Solve initial-value problems symbolically involving linear systems 
-%%  of first order ODEs with constant coefficients
+%% of first order ODEs with constant coefficients
 %%
+%% FIXME: Other types of ODE systems may be partially supported
 %% FIXME: SMT supports strings like 'Dy + y = 0': we are unlikely
 %% to support this.
 %%
@@ -41,7 +43,8 @@ function [soln,classify] = dsolve(ode,varargin)
     error('Inputs must be sym or symfun')
   end
 
-  % FIXME: might be nice to expose SymPy's "sp.ode.classify_sysode"
+  % FIXME: might be nice to expose SymPy's "sp.ode.classify_sysode" and
+  %        "sp.ode.classify_ode" with their own commands
   if (isscalar(ode) && nargout==2)
     classify = python_cmd ('return sp.ode.classify_ode(_ins[0])[0],', ode);
   elseif(~isscalar(ode) && nargout==2)
@@ -52,6 +55,7 @@ function [soln,classify] = dsolve(ode,varargin)
   % FIXME: the initial/boundary conditions admit parameters
   %        but only on their values (not at the evaluation point) 
 
+  % FIXME: it is not currently supported a list of boundary/initial conditions
   if (isscalar(ode) && nargin>=2)
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           'sol=sp.dsolve(ode)'
@@ -118,65 +122,76 @@ end
 %! syms C1 C2
 %! g1 = C1*exp(-2*x) + C2*exp(2*x);
 %! g2 = C2*exp(-2*x) + C1*exp(2*x);
-%! assert (isequal (rhs(f), rhs(g1)) || isequal (rhs(f), rhs(g2)))
+%! assert (isequal (rhs(f), g1) || isequal (rhs(f), g2))
  
 %!test
 %! % Solution in implicit form
-%! syms x y(x)
+%! syms x y(x) C1
 %! sol=dsolve((2*x*y(x)-exp(-2*y(x)))*diff(y(x),x)+y(x)==0)
 %! eq=x*exp(2*y(x))-log(y(x))==C1
-%! assert (isequal (sol, eq))
+%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)) )
+
+%!test
+%! % Compute solution and classification
+%! syms x y(x) C1
+%! [sol,classy]=dsolve((2*x*y(x)-exp(-2*y(x)))*diff(y(x),x)+y(x)==0)
+%! eq=x*exp(2*y(x))-log(y(x))==C1
+%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)) && classy=="1st_exact")
 
 %!test
 %! % initial conditions (first order ode)
 %! syms x y(x)
-%! de = diff(y, x, 1) + 4*y == 0;
+%! de = diff(y, x) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3)
 %! g = 3*exp(-4*x);
-%! assert (isequal (rhs(f), rhs(g)))
+%! assert (isequal (rhs(f), g))
 
 %!test
 %! % initial conditions (second order ode)
 %! syms x y(x)
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3, subs(diff(y,x,1),x,0)==0)
+%! f = dsolve(de, y(0) == 3, subs(diff(y,x),x,0)==0)
 %! g = 3*cos(2*x);
-%! assert (isequal (rhs(f), rhs(g)))
+%! assert (isequal (rhs(f), g))
 
 %!test
 %! % Dirichlet boundary conditions (second order ode)
 %! syms x y(x)
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3, y(1) == 0)
-%! g = -3*sin(2*x)/tan(2)+3*cos(2*x);
-%! assert (isequal (rhs(f), rhs(g)))
+%! f = dsolve(de, y(0) == 2, y(1) == 0)
+%! g = -2*sin(2*x)/tan(sym('2'))+2*cos(2*x);
+%! assert (isequal (rhs(f), g))
 
 %!test
 %! % Neumann boundary conditions (second order ode)
 %! syms x y(x)
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, subs(diff(y,x,1),x,0)==1, subs(diff(y,x,1),x,1)==0)
-%! g = sin(2*x)/2+cos(2*x)/(2*tan(2));
-%! assert (isequal (rhs(f), rhs(g)))
+%! f = dsolve(de, subs(diff(y,x),x,0)==1, subs(diff(y,x),x,1)==0)
+%! g = sin(2*x)/2+cos(2*x)/(2*tan(sym('2')));
+%! assert (isequal (rhs(f), g))
 
 %!test
 %! % Dirichlet-Neumann boundary conditions (second order ode)
 %! syms y(x)
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3, subs(diff(y,x,1),x,1)==0)
-%! g = 3*sin(2*x)*tan(2)+3*cos(2*x);
-%! assert (isequal (rhs(f), rhs(g)))
+%! f = dsolve(de, y(0) == 3, subs(diff(y,x),x,1)==0)
+%! g = 3*sin(2*x)*tan(sym('2'))+3*cos(2*x);
+%! assert (isequal (rhs(f), g))
 
 %!test
-%! % System of ODEs (initial-value problem)
+%! % System of ODEs
 %! syms t x(t) y(t) C1 C2
 %! ode_1=diff(x(t),t) == 2*y(t);
 %! ode_2=diff(y(t),t) == 2*x(t)-3*t;
 %! sol_sodes=dsolve([ode_1,ode_2])
 %! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)]
+%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
+
+%!test
+%! % System of ODEs (initial-value problem)
+%! syms t x(t) y(t)
 %! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0)
 %! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2]
-%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
 %! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
 
 %!xtest
@@ -185,5 +200,3 @@ end
 %! f = dsolve(de, y(0) == 3, y(2*pi/4) == 0);
 %! g = 3*cos(2*x);
 %! assert (isequal (f, g))
-
-

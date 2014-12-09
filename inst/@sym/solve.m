@@ -100,11 +100,8 @@ end
 %! end
 
 %!test
-%! d = solve(2*x-3*y==0,x+y==0);
+%! d = solve(2*x-3*y==0,x+y==1);
 %! assert (isequal (d.x, 3/5) && isequal(d.y, 2/5))
 %!test
-%! d = solve(2*x-3*y==0,x+y==0,x,y);
+%! d = solve(2*x-3*y==0,x+y==1,x,y);
 %! assert (isequal (d.x, 3/5) && isequal(d.y, 2/5))
-
-
-

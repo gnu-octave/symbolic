@@ -26,7 +26,7 @@
 %% syms x
 %% f = 2/(x + 4)/(x + 1)
 %% partfrac(f)
-%% partfrac(f,x)
+%% partfrac(f, x)
 %% @end example
 %%
 %% Other examples:
@@ -55,8 +55,8 @@ function z = partfrac(f, varargin)
 
   cmd = 'return sp.polys.partfrac.apart(_ins[0],_ins[1]),';
 
-  varargin = sym(varargin);
-  z = python_cmd (cmd, sym(f), varargin{:});
+  x = sym(varargin);
+  z = python_cmd (cmd, sym(f), x);
 
 end
 
@@ -66,8 +66,6 @@ end
 
 %!test
 %! % basic
-%! assert(logical( partfrac(y/(x + 2)/(x + 1), x) == -y/(x + 2) + y/(x + 1) ))
-%! assert(logical( factor(partfrac(x^2/(x^2 - y^2), y)) == factor(x/(2*(x + y)) + x/(2*(x - y)) )))
-%! assert(logical( factor(partfrac(x^2/(x^2 - y^2), x)) == factor(-y/(2*(x + y)) + y/(2*(x - y)) + 1 )))
-
-
+%! assert(logical( partfrac(y/(x + 2)/(x + 1),x) == -y/(x + 2) + y/(x + 1) ))
+%! assert(logical( factor(partfrac(x^2/(x^2 - y^2),y)) == factor(x/(2*(x + y)) + x/(2*(x - y)) )))
+%! assert(logical( factor(partfrac(x^2/(x^2 - y^2),x)) == factor(-y/(2*(x + y)) + y/(2*(x - y)) + 1 )))

@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
+%% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% Inverse Laplace transform.
 %%
 %% Examples:
@@ -27,11 +27,11 @@
 %% syms t s
 %% F = 1/s^2
 %% ilaplace(F)
-%% ilaplace(F,s)
-%% ilaplace(F,s,t)
+%% ilaplace(F, s)
+%% ilaplace(F, s, t)
 %% @end example
 %%
-%% @seealso{ilaplace}
+%% @seealso{laplace}
 %% @end deftypefn
 
 %% Author: Andrés Prieto
@@ -42,33 +42,38 @@ function f = ilaplace(varargin)
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
-  if(nargin==1)
+  % If the Laplace variable in the frequency domain is equal to "t",
+  % "x" will be the physical variable (analogously to SMT)
+  if (nargin == 1)
     F=varargin{1};
+    s=symvar(F,1);
     cmd = { 'F=_ins[0]'
-            't=sp.Symbol("t")'
-            's=list(F.free_symbols)[0]'
-            'return sp.inverse_laplace_transform(F, s, t),'};
-
-    f = python_cmd(cmd,F);
-
-  elseif(nargin==2)
-    F=varargin{1};
-    s=varargin{2}; 
-    cmd = { 'F=_ins[0]'
-            't=sp.Symbol("t")'
             's=_ins[1]'
-            'return sp.inverse_laplace_transform(F, s, t),'};
+            't=sp.Symbol("t")'
+            'if t==s:'
+            '    t=sp.Symbol("x")'
+            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s);
 
-  elseif(nargin==3)
+  elseif (nargin == 2)
+    F=varargin{1};
+    s=varargin{2}; 
+    cmd = { 'F=_ins[0]'
+            's=_ins[1]'
+            't=sp.Symbol("t")'
+            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
+
+    f = python_cmd(cmd,F,s);
+
+  elseif (nargin == 3)
     F=varargin{1};
     s=varargin{2};
     t=varargin{3};
     cmd = { 'F=_ins[0]'
             't=_ins[2]'
             's=_ins[1]'
-            'return sp.inverse_laplace_transform(F, s, t),'};
+            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s,t);
 
@@ -80,16 +85,17 @@ function f = ilaplace(varargin)
 end
 
 %!shared t,s
-%! syms t s
+%! syms t s r u x
 
 %!test
 %! % basic
-%! assert(logical( ilaplace(1/s^2) == t*heaviside(t) ))
-%! assert(logical( ilaplace(cos(3*t)) == s/(s^2+9) ))
-%! assert(logical( ilaplace(t^3) == 6/s^4 ))
+%! assert(logical( ilaplace(1/s^2) == t ))
+%! assert(logical( ilaplace(1/r^2,r) == t ))
+%! assert(logical( ilaplace(1/s^2,s,u) == u ))
+%! assert(logical( ilaplace(1/t^2) == x ))
+%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
+%! assert(logical( ilaplace(6/s^4) == t^3 ))
 
 %!xtest
 %! syms t s f(t)
 %! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
-
-
