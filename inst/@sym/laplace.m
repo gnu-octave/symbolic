@@ -47,9 +47,7 @@ function F = laplace(varargin)
   if (nargin == 1)
     f=varargin{1};
     t=symvar(f,1);
-    cmd = { 'f=_ins[0]'
-            't=_ins[1]'
-            's=sp.Symbol("s")'
+    cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
             '    s=sp.Symbol("t")'
             'F=sp.laplace_transform(f, t, s)'
@@ -63,9 +61,7 @@ function F = laplace(varargin)
   elseif (nargin == 2)
     f=varargin{1};
     t=varargin{2}; 
-    cmd = { 'f=_ins[0]'
-            's=sp.Symbol("s")'
-            't=_ins[1]'
+    cmd = { 'f=_ins[0]; s=sp.Symbol("s"); t=_ins[1]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
@@ -78,9 +74,7 @@ function F = laplace(varargin)
     f=varargin{1};
     t=varargin{2}; 
     s=varargin{3};
-    cmd = { 'f=_ins[0]'
-            's=_ins[2]'
-            't=_ins[1]'
+    cmd = { 'f=_ins[0]; s=_ins[2]; t=_ins[1]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
