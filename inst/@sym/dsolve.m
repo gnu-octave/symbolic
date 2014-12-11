@@ -131,7 +131,7 @@ end
 %! f = dsolve(de, y(0) == 3);
 %! g = 3*cos(2*x) + C1*sin(2*x);
 %! assert (isequal (rhs(f), g))
- 
+
 %!test
 %! % Solution in implicit form
 %! syms y(x) C1
@@ -204,10 +204,9 @@ end
 %! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
 %! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
 
-%!xtest
-%! % initial conditions: it fails since 2*pi/4 are replaced by a rational number
+%!test
 %! syms y(x)
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 0, y(pi/4) == 1);
+%! f = dsolve(de, y(0) == 0, y(sym(pi)/4) == 1);
 %! g = sin(2*x);
 %! assert (isequal (rhs(f), g))
