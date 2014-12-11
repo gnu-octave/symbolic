@@ -186,8 +186,9 @@ end
 %! g = 3*sin(2*x)*tan(sym('2'))+3*cos(2*x);
 %! assert (isequal (rhs(f), g))
 
-%!test
+%!xtest
 %! % System of ODEs
+%! % FIXME: marked xtest because failing on 0.7.5
 %! syms x(t) y(t) C1 C2
 %! ode_1=diff(x(t),t) == 2*y(t);
 %! ode_2=diff(y(t),t) == 2*x(t)-3*t;
@@ -195,8 +196,9 @@ end
 %! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
 %! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
 
-%!test
+%!xtest
 %! % System of ODEs (initial-value problem)
+%! % FIXME: marked xtest because failing on 0.7.5
 %! syms x(t) y(t)
 %! ode_1=diff(x(t),t) == 2*y(t);
 %! ode_2=diff(y(t),t) == 2*x(t)-3*t;
