@@ -36,12 +36,9 @@ How to Install
 
 4. At Octave prompt, type `pkg install octsympy-0.1.2.tar.gz`.
 
-5. Be sure that the Octave package `octave-symbolic` is not installed.
-   Otherwise, it should be uninstalled to avoid compatibility issues.
+5. At Octave prompt, type `pkg load octsympy`.
 
-6. At Octave prompt, type `pkg load octsympy`.
-
-7. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
+6. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
    `diff(f,x)`, etc.
 
 
