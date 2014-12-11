@@ -189,7 +189,7 @@ end
 
 %!test
 %! % System of ODEs
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>76)
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>75)
 %!   syms x(t) y(t) C1 C2
 %!   ode_1=diff(x(t),t) == 2*y(t);
 %!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
@@ -202,7 +202,7 @@ end
 
 %!test
 %! % System of ODEs (initial-value problem)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>76)
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>75)
 %!   syms x(t) y(t)
 %!   ode_1=diff(x(t),t) == 2*y(t);
 %!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
