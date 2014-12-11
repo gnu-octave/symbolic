@@ -102,5 +102,7 @@ end
 %! assert(logical( laplace(t^3) == 6/s^4 ))
 
 %!xtest
+%! % Differential operator to algebraic
+%! % SymPy cannot evaluate? (Issue #170)
 %! syms s f(t)
 %! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
