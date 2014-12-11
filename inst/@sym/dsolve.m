@@ -126,7 +126,7 @@ end
 
 %!test
 %! % Not enough initial conditions
-%! syms y(x)
+%! syms y(x) C1
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3);
 %! g = 3*cos(2*x) + C1*sin(2*x);
@@ -198,6 +198,8 @@ end
 %!test
 %! % System of ODEs (initial-value problem)
 %! syms x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
 %! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
 %! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
 %! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
@@ -205,6 +207,7 @@ end
 %!xtest
 %! % initial conditions: it fails since 2*pi/4 are replaced by a rational number
 %! syms y(x)
-%! f = dsolve(de, y(0) == 3, y(2*pi/4) == 0);
-%! g = 3*cos(2*x);
-%! assert (isequal (f, g))
+%! de = diff(y, 2) + 4*y == 0;
+%! f = dsolve(de, y(0) == 0, y(pi/4) == 1);
+%! g = sin(2*x);
+%! assert (isequal (rhs(f), g))
