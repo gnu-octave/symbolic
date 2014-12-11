@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
-%% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
 %% Laplace transform.
 %%
 %% Examples:
@@ -96,11 +96,10 @@ function F = laplace(varargin)
 
 end
 
-%!shared t,s
-%! syms t s u w
 
 %!test
 %! % basic
+%! syms t s u w
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
 %! assert(logical( laplace(exp(2*u),u) == 1/(s-2) ))
 %! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
@@ -109,7 +108,5 @@ end
 %! assert(logical( laplace(t^3) == 6/s^4 ))
 
 %!xtest
-%! syms t s f(t)
+%! syms s f(t)
 %! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
-
-

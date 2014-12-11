@@ -61,11 +61,9 @@ function z = partfrac(f, varargin)
 end
 
 
-%!shared x,y,z
-%! syms x y z
-
 %!test
 %! % basic
+%! syms x y z
 %! assert(logical( partfrac(y/(x + 2)/(x + 1),x) == -y/(x + 2) + y/(x + 1) ))
 %! assert(logical( factor(partfrac(x^2/(x^2 - y^2),y)) == factor(x/(2*(x + y)) + x/(2*(x - y)) )))
 %! assert(logical( factor(partfrac(x^2/(x^2 - y^2),x)) == factor(-y/(2*(x + y)) + y/(2*(x - y)) + 1 )))

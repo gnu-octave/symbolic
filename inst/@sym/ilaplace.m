@@ -17,9 +17,9 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
-%% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% Inverse Laplace transform.
 %%
 %% Examples:
@@ -84,11 +84,10 @@ function f = ilaplace(varargin)
 
 end
 
-%!shared t,s
-%! syms t s r u x
 
 %!test
 %! % basic
+%! syms t s r u x
 %! assert(logical( ilaplace(1/s^2) == t ))
 %! assert(logical( ilaplace(1/r^2,r) == t ))
 %! assert(logical( ilaplace(1/s^2,s,u) == u ))
@@ -97,5 +96,5 @@ end
 %! assert(logical( ilaplace(6/s^4) == t^3 ))
 
 %!xtest
-%! syms t s f(t)
+%! syms s f(t)
 %! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
