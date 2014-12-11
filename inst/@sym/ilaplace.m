@@ -47,9 +47,7 @@ function f = ilaplace(varargin)
   if (nargin == 1)
     F=varargin{1};
     s=symvar(F,1);
-    cmd = { 'F=_ins[0]'
-            's=_ins[1]'
-            't=sp.Symbol("t")'
+    cmd = { 'F=_ins[0];s=_ins[1];t=sp.Symbol("t")'
             'if t==s:'
             '    t=sp.Symbol("x")'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
@@ -59,9 +57,7 @@ function f = ilaplace(varargin)
   elseif (nargin == 2)
     F=varargin{1};
     s=varargin{2}; 
-    cmd = { 'F=_ins[0]'
-            's=_ins[1]'
-            't=sp.Symbol("t")'
+    cmd = { 'F=_ins[0];s=_ins[1];t=sp.Symbol("t")'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s);
@@ -70,9 +66,7 @@ function f = ilaplace(varargin)
     F=varargin{1};
     s=varargin{2};
     t=varargin{3};
-    cmd = { 'F=_ins[0]'
-            't=_ins[2]'
-            's=_ins[1]'
+    cmd = { 'F=_ins[0];t=_ins[2];s=_ins[1]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s,t);
