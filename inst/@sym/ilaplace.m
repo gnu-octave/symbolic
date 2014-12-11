@@ -88,7 +88,3 @@ end
 %! assert(logical( ilaplace(1/t^2) == x ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
 %! assert(logical( ilaplace(6/s^4) == t^3 ))
-
-%!xtest
-%! syms s f(t)
-%! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
