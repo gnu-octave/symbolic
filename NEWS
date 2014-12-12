@@ -4,8 +4,11 @@ octsympy x.y.z (yyyy-mm-dd)
  *  New commands:
 
           digits
+          ilaplace
+          laplace
           ldivide
           mldivide
+          partfrac
           vpa
           vpasolve
 
@@ -13,9 +16,16 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  variable-precision arithmetic support: see vpa, digits, vpasolve.
 
+ *  Much-improved dsolve thanks to Andrés Prieto.
+
+ *  Laplace and inverse Laplace transforms (Andrés Prieto).
+
+ *  Partial fractions (Andrés Prieto).
+
+ *  Improvments to solve.
+
  *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
     power.
-
 
 
 octsympy 0.1.2 (2014-12-01)
