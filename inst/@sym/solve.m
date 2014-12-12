@@ -102,6 +102,26 @@ end
 %!test
 %! d = solve(2*x-3*y==0,x+y==1);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
+
 %!test
 %! d = solve(2*x-3*y==0,x+y==1,x,y);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
+
+%!test
+%! % Multiple solutions, single variable
+%! d = solve(x^2 == 4);
+%! assert (length(d) == 2);
+%! % FIXME: think about what form output should take here.
+%! assert (isequal (d{1}.x, 2) || isequal(d{1}.x, -2))
+%! assert (isequal (d{2}.x, 2) || isequal(d{2}.x, -2))
+
+%!test
+%! % Multiple solutions, multiple variables
+%! d = solve(x^2 == 4, x + y == 1);
+%! assert (length(d) == 2);
+%! % FIXME: SMT has d.x gives vector and d.y giving vector, what is
+%! % more intuitive?
+%! for i = 1:2
+%!   assert (isequal (d{i}.x + d{i}.y, 1))
+%!   assert (isequal ((d{i}.x)^2, 4))
+%! end
