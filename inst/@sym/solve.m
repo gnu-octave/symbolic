@@ -60,38 +60,64 @@ function out = solve(varargin)
 
   varargin = sym(varargin);
 
-  cmd = { 'input=_ins[:]'
-          'eqs=list();symbols=list()'
-          'for arg in input:'
+  % These are various special cases for the output, single versus multiple
+  cmd = { 'eqs = list(); symbols = list()'
+          'for arg in _ins:'
           '    if arg.is_Relational:'
           '        eqs.append(arg)'
           '    else:'
           '        symbols.append(arg)'
+          '#'
           'if len(symbols) > 0:'
-          '    return sp.solve(eqs, symbols),'
-          'return sp.solve(eqs),'};
+          '    d = sp.solve(eqs, symbols, dict=True)'
+          'else:'
+          '    d = sp.solve(eqs, dict=True)'
+          '#'
+          'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
+          '    if len(d) == 1:'  % one variable, single solution
+          '        return d[0].popitem()[1],'
+          '    else:'  % one variable, multiple solutions
+          '        return sp.Matrix([r.popitem()[1] for r in d]),'
+          '#'
+          'if len(d) == 1:'
+          '    d = d[0]'
+          'return d,' };
 
   out = python_cmd (cmd, varargin{:});
 
 end
 
 
+
+%!test
+%! % Simple, single variable, single solution
+%! syms x
+%! d = solve(10*x == 50);
+%! assert (isequal (d, 5))
+
+%!test
+%! % Single variable, multiple solutions
+%! syms x
+%! d = solve(x^2 == 4);
+%! assert (length(d) == 2);
+%! assert (isequal (d, [2; -2]) || isequal (d, [-2; 2]))
+
 %!shared x,y,e
 %! syms x y
 %! e = 10*x == 20*y;
 %!test
 %! d = solve(e, x);
-%! assert (isequal (d.x, 2*y))
+%! assert (isequal (d, 2*y))
 %!test
 %! d = solve(e, y);
-%! assert (isequal (d.y, x/2))
+%! assert (isequal (d, x/2))
 %!test
 %! d = solve(e);
-%! assert (isequal (d.x, 2*y))
+%! assert (isequal (d, 2*y))
 
 %!test
 %! % solve for 2*x (won't work on Matlab/Octave 3.6)
-%! if exist('octave_config_info', 'builtin')
+%! if 1==0 && exist('octave_config_info', 'builtin')
 %!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
 %!     d = solve(e, 2*x);
 %!     s = d.('2*x');
@@ -100,20 +126,12 @@ end
 %! end
 
 %!test
-%! d = solve(2*x-3*y==0,x+y==1);
+%! d = solve(2*x - 3*y == 0, x + y == 1);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
 
 %!test
 %! d = solve(2*x-3*y==0,x+y==1,x,y);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
-
-%!test
-%! % Multiple solutions, single variable
-%! d = solve(x^2 == 4);
-%! assert (length(d) == 2);
-%! % FIXME: think about what form output should take here.
-%! assert (isequal (d{1}.x, 2) || isequal(d{1}.x, -2))
-%! assert (isequal (d{2}.x, 2) || isequal(d{2}.x, -2))
 
 %!test
 %! % Multiple solutions, multiple variables
@@ -125,3 +143,9 @@ end
 %!   assert (isequal (d{i}.x + d{i}.y, 1))
 %!   assert (isequal ((d{i}.x)^2, 4))
 %! end
+
+%!test
+%! % No solutions
+%! syms x y z
+%! d = solve(x == y, z);
+%! assert (isempty (d));
