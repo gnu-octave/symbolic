@@ -67,9 +67,9 @@ function out = solve(varargin)
           '        eqs.append(arg)'
           '    else:'
           '        symbols.append(arg)'
-          'if len(symbols)==0:'
-          '    symbols=list(reduce(set.union, [fi.free_symbols for fi in eqs], set()))'
-          'return sp.solve(eqs,symbols),'};
+          'if len(symbols) > 0:'
+          '    return sp.solve(eqs, symbols),'
+          'return sp.solve(eqs),'};
 
   out = python_cmd (cmd, varargin{:});
 
