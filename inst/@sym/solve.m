@@ -61,6 +61,7 @@
 %% @example
 %% [X, Y, Z] = solve(eq1, eq2, x, y, z)
 %% @end example
+%% FIXME: Issue #172.
 %%
 %% @seealso{dsolve}
 %% @end deftypefn
