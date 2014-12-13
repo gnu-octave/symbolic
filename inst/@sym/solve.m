@@ -17,38 +17,50 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{sol} =} solve (@var{eqn, var})
+%% @deftypefn  {Function File} {@var{sol} =} solve (@var{eq, var})
+%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, eq2})
+%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, ..., eqn, v1, ..., vm})
+%% @deftypefnx {Function File} {[@var{s1, ..., sn}] =} solve (@var{eq1, ..., eqm, v1, ..., vn})
 %% Symbolic solutions of equations and systems.
 %%
 %% Examples
 %% @example
-%% solve(x==2*x+6, x)
-%% solve(eq1, eq2, var1, var2)
-%% solve(eq1,...,eqn, var1,...,varm)
+%% solve(x == 2*x + 6, x)    % -6
+%% solve(x^2 + 6 == 5*x, x)  % [2; 3]
 %% @end example
 %%
-%% Output will be a cell array.  Each entry of the cell array is a
-%% dictionary (well, a struct).  String representation of the things
-%% you wanted to solve for (typically variables) are the keys of the
-%% dict.
-%%
-%% Examples
+%% You can specify a variable or even an expression to solve for:
 %% @example
 %% syms x y
 %% e = 10*x == 20*y
-%% d = solve(e, x)
-%% d@{1@}.x          % gives 2*y
-%% d = solve(e, y)
-%% d@{1@}.y          % gives x/2
-%%
-%% d = solve(e, 2*x)
-%% d@{1@}.('2*x')   % gives 4*y (and won't work on Matlab)
+%% d = solve(e, x)    % gives 2*y
+%% d = solve(e, y)    % gives x/2
+%% d = solve(e, 2*x)  % gives 4*y
 %% @end example
 %%
+%% In general, the output will be a list of dictionaries.  Each
+%% entry of the list is one a solution, and the variables that make
+%% up that solutions are keys of the dictionary (fieldnames of the
+%% struct).
+%% @example
+%% syms x y
+%% d = solve(x^2 == 4, x + y == 1)
+%% d{1}.x   % the first solution
+%% d{1}.y
+%% d{2}.x   % the second solution
+%% d{2}.y
+%% @end example
 %%
-%% FIXME: when there is just one variable to be solved for, the
-%% output doesn't match Matlab SMT (should not be inside a cell
-%% array).  Many other forms of output to consider.
+%% But there are various special cases for the output (single
+%% versus multiple variables, single versus multiple solutions,
+%% etc).
+%% FIXME: provide a 'raw_output' argument or something to
+%% always give the general output.
+%%
+%% Alternatively, but FIXME: not yet supported:
+%% @example
+%% [X, Y, Z] = solve(eq1, eq2, x, y, z)
+%% @end example
 %%
 %% @seealso{dsolve}
 %% @end deftypefn
@@ -60,7 +72,6 @@ function out = solve(varargin)
 
   varargin = sym(varargin);
 
-  % These are various special cases for the output, single versus multiple
   cmd = { 'eqs = list(); symbols = list()'
           'for arg in _ins:'
           '    if arg.is_Relational:'
