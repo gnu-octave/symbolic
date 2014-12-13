@@ -189,28 +189,28 @@ end
 
 %!test
 %! % System of ODEs
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>75)
+%! if (strcmp (python_cmd ('return sp.__version__,'), '0.7.5'))
+%!   disp('skipping: Solution of ODE systems is only supported using sympy 0.7.6 or later')
+%! else
 %!   syms x(t) y(t) C1 C2
 %!   ode_1=diff(x(t),t) == 2*y(t);
 %!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
 %!   sol_sodes=dsolve([ode_1,ode_2]);
 %!   g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
 %!   assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
-%! else
-%!   disp('Solution of ODE systems is only supported in sympy 0.7.6 or later')
 %! end
 
 %!test
 %! % System of ODEs (initial-value problem)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))>75)
+%! if (strcmp (python_cmd ('return sp.__version__,'), '0.7.5'))
+%!   disp('skipping: Solution of ODE systems is only supported using sympy 0.7.6 or later')
+%! else
 %!   syms x(t) y(t)
 %!   ode_1=diff(x(t),t) == 2*y(t);
 %!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
 %!   sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
 %!   g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
 %!   assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
-%! else
-%!   disp('Solution of ODE systems is only supported in sympy 0.7.6 or later')
 %! end
 
 %!test
