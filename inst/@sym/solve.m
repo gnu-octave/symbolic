@@ -127,14 +127,20 @@ end
 %! assert (isequal (d, 2*y))
 
 %!test
-%! % solve for 2*x (won't work on Matlab/Octave 3.6)
-%! if 1==0 && exist('octave_config_info', 'builtin')
-%!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
-%!     d = solve(e, 2*x);
-%!     s = d.('2*x');
-%!     assert (isequal (s, 4*y))
-%!   end
-%! end
+%! % now this works because we don't return a dict, see next comments
+%! d = solve(e, 2*x);
+%! assert (isequal (d, 4*y))
+
+%%!test
+%%! % solve for 2*x (won't work on Matlab/Octave 3.6)
+%%! % FIXME: design a test with both x and y?  Should we support this?
+%%! if exist('octave_config_info', 'builtin')
+%%!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
+%%!     d = solve(e, 2*x);
+%%!     s = d.('2*x');
+%%!     assert (isequal (s, 4*y))
+%%!   end
+%%! end
 
 %!test
 %! d = solve(2*x - 3*y == 0, x + y == 1);
