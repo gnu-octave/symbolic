@@ -48,7 +48,11 @@ function r = vpasolve(e, x, x0)
   % nsolve gives back mpf object: https://github.com/sympy/sympy/issues/6092
   cmd = {
     '(e, x, x0, n) = _ins'
-    'sympy.mpmath.mp.dps = n'
+    'if sympy.__version__ == "0.7.5":'
+    '    import mpmath'
+    '    mpmath.mp.dps = n'
+    'else:'
+    '    sympy.mpmath.mp.dps = n'
     'r = nsolve(e, x, x0)'
     'r = sympy.N(r, n)'
     'return r,' };
