@@ -17,13 +17,13 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} diff (@var{f})
+%% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, ...)
 %% Symbolic differentiation of symbolic functions.
 %%
 %% Mostly the same as @code{diff} for class @code{sym} (indeed it
-%% calls that code)but returns a @code{symfun}.
+%% calls that code) but returns a @code{symfun}.
 %%
 %% The derivative is itself a symfun so you can evaluate at a point like:
 %% @example
@@ -41,6 +41,7 @@
 %% @end example
 %%
 %% @seealso{int}
+%% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, differentiation
