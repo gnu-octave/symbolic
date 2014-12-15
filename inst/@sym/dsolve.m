@@ -189,7 +189,7 @@ end
 
 %!test
 %! % System of ODEs
-%! if (strcmp (python_cmd ('return sp.__version__,'), '0.7.5'))
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
 %!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
 %! else
 %!   syms x(t) y(t) C1 C2
@@ -202,7 +202,7 @@ end
 
 %!test
 %! % System of ODEs (initial-value problem)
-%! if (strcmp (python_cmd ('return sp.__version__,'), '0.7.5'))
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
 %!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
 %! else
 %!   syms x(t) y(t)
