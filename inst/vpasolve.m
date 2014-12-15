@@ -46,11 +46,17 @@ function r = vpasolve(e, x, x0)
   n = digits();
 
   % nsolve gives back mpf object: https://github.com/sympy/sympy/issues/6092
+
+  % FIXME: 0.7.5 nonsense here?  On fedora, uses system mpmath?
+  % Ubuntu needs sympy.mpmath etc
   cmd = {
     '(e, x, x0, n) = _ins'
     'if sympy.__version__ == "0.7.5":'
-    '    import mpmath'
-    '    mpmath.mp.dps = n'
+    '    try:'
+    '        sympy.mpmath.mp.dps = n'
+    '    except AttributeError:'
+    '        import mpmath'
+    '        mpmath.mp.dps = n'
     'else:'
     '    sympy.mpmath.mp.dps = n'
     'r = nsolve(e, x, x0)'
