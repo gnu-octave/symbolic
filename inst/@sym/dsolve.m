@@ -145,7 +145,8 @@ end
 %! syms y(x) C1
 %! [sol,classy]=dsolve((2*x*y(x)-exp(-2*y(x)))*diff(y(x),x)+y(x)==0);
 %! eq=x*exp(2*y(x))-log(y(x))==C1;
-%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)) && classy=="1st_exact")
+%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)))
+%! assert (strcmp (classy, '1st_exact'))
 
 %!test
 %! % initial conditions (first order ode)
