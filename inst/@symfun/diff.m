@@ -50,6 +50,7 @@ function z = diff(f, varargin)
 
   z = diff(f.sym, varargin{:});
   z = symfun(z, f.vars);
+
 end
 
 
