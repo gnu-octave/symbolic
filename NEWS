@@ -3,6 +3,7 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  New commands:
 
+          argnames
           digits
           ilaplace
           laplace

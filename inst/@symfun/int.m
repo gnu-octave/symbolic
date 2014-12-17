@@ -101,8 +101,7 @@ end
 %! syms f(x) y
 %! g = int(f, y);
 %! assert (isa (g, 'symfun'))
-%! v = g.vars; v = v{1};  % FIXME: Issue #175
-%! assert (isequal (v, x))
+%! assert (isequal (argnames (g), x))
 
 %!test
 %! % same as above, but concrete symfun
@@ -110,6 +109,5 @@ end
 %! f(x) = x^2;
 %! g = int(f, y);
 %! assert (isa (g, 'symfun'))
-%! v = g.vars; v = v{1};  % FIXME: Issue #175
-%! assert (isequal (v, x))
+%! assert (isequal (argnames (g), x))
 %! assert (isequal (g, x^2*y))
