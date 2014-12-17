@@ -124,12 +124,16 @@ end
 %! q = sym(ones(0, 2));
 %! assert (isequal ([v; q], v))
 
-%!#error <ShapeError>
-%! % FIXME: re-introduce when we drop 0.7.5 support (Issue #164)
-%! % (or if Octave gains an "xerror" test)
-%! v = [sym(1) sym(2)];
-%! q = sym(ones(0, 3));
-%! w = [v; q];
+%!error <ShapeError>
+%! % FIXME: clean-up when we drop 0.7.5 support (Issue #164)
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: test passes on sympy > 0.7.6')
+%!   error('ShapeError')   % pass the test with correct error
+%! else
+%!   v = [sym(1) sym(2)];
+%!   q = sym(ones(0, 3));
+%!   w = [v; q];
+%! end
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
