@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} int (@var{f})
+%% @deftypefn  {Function File} {@var{g} =} int (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, @var{a}, @var{b})
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, [@var{a}, @var{b}])

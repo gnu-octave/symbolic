@@ -68,7 +68,7 @@
 function vars = symvar(F, Nout)
 
   if (nargin == 1)
-    warning('FIXME: symvar(symfun) differs from SMT... OK?')
+    % Note: symvar(symfun) differs from SMT, see test below
     vars = symvar([F.vars{:} F.sym(:)]);
 
   else
@@ -152,11 +152,13 @@ end
 %! assert (isequal (symvar(g, 2), [s t]))
 %! assert (isequal (symvar(g, 3), [s t x]))
 
-%!xtest
-%! % symfun dep on some vars only, differs from smt w/o n
-%! % FIXME: decide if we want this...
+%!test
+%! % A documented difference from SMT on symvar(symfun) w/o n
 %! syms x s t
 %! f(s) = x;
 %! g(s, t) = x*s;
-%! assert (isequal (symvar(f), x))  % no s
-%! assert (isequal (symvar(g), [s x]))  % no t
+%! % SMT would have
+%! %assert (isequal (symvar(f), x))  % no s
+%! %assert (isequal (symvar(g), [s x]))  % no t
+%! assert (isequal (symvar(f), [s x]))
+%! assert (isequal (symvar(g), [s t x]))
