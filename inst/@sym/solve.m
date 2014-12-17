@@ -57,11 +57,10 @@
 %% FIXME: provide a 'raw_output' argument or something to
 %% always give the general output.
 %%
-%% Alternatively, but FIXME: not yet supported:
+%% Alternatively
 %% @example
 %% [X, Y, Z] = solve(eq1, eq2, x, y, z)
 %% @end example
-%% FIXME: Issue #172.
 %%
 %% @seealso{dsolve}
 %% @end deftypefn
@@ -69,36 +68,62 @@
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic
 
-function out = solve(varargin)
+function varargout = solve(varargin)
 
   varargin = sym(varargin);
 
-  cmd = { 'eqs = list(); symbols = list()'
-          'for arg in _ins:'
-          '    if arg.is_Relational:'
-          '        eqs.append(arg)'
-          '    else:'
-          '        symbols.append(arg)'
-          '#'
-          'if len(symbols) > 0:'
-          '    d = sp.solve(eqs, symbols, dict=True)'
-          'else:'
-          '    d = sp.solve(eqs, dict=True)'
-          '#'
-          'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
-          '    if len(d) == 1:'  % one variable, single solution
-          '        return d[0].popitem()[1],'
-          '    else:'  % one variable, multiple solutions
-          '        return sp.Matrix([r.popitem()[1] for r in d]),'
-          '#'
-          'if len(d) == 1:'
-          '    d = d[0]'
-          'return d,' };
+  if (nargout == 0 || nargout == 1)
+    cmd = { 'eqs = list(); symbols = list()'
+            'for arg in _ins:'
+            '    if arg.is_Relational:'
+            '        eqs.append(arg)'
+            '    else:'
+            '        symbols.append(arg)'
+            '#'
+            'if len(symbols) > 0:'
+            '    d = sp.solve(eqs, symbols, dict=True)'
+            'else:'
+            '    d = sp.solve(eqs, dict=True)'
+            '#'
+            'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
+            '    if len(d) == 1:'  % one variable, single solution
+            '        return d[0].popitem()[1],'
+            '    else:'  % one variable, multiple solutions
+            '        return sp.Matrix([r.popitem()[1] for r in d]),'
+            '#'
+            'if len(d) == 1:'
+            '    d = d[0]'
+            'return d,' };
 
-  out = python_cmd (cmd, varargin{:});
+    out = python_cmd (cmd, varargin{:});
+    varargout = {out};
+
+  else  % multiple outputs
+    cmd = { 'eqs = list(); symbols = list()'
+            'for arg in _ins:'
+            '    if arg.is_Relational:'
+            '        eqs.append(arg)'
+            '    else:'
+            '        symbols.append(arg)'
+            '#'
+            'if len(symbols) > 0:'
+            '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
+            'else:'
+            '    (vars, solns) = sp.solve(eqs, set=True)'
+            '#'
+            'd = []'
+            'for (i, var) in enumerate(vars):'
+            '    d.append(sp.Matrix([t[i] for t in solns]))'
+            'return d,' };
+
+    out = python_cmd (cmd, varargin{:});
+    varargout = out;
+    if (length(out) ~= nargout)
+      warning('solve: number of outputs did not match solution vars');
+    end
+  end
 
 end
-
 
 
 %!test
@@ -167,3 +192,24 @@ end
 %! syms x y z
 %! d = solve(x == y, z);
 %! assert (isempty (d));
+
+%!test
+%! % Multiple outputs with single solution
+%! syms x y
+%! [X, Y] = solve(2*x + y == 5, x + y == 3);
+%! assert (isequal (X, 2))
+%! assert (isequal (Y, 1))
+
+%!test
+%! % Multiple outputs with multiple solns
+%! syms x y
+%! [X, Y] = solve(x*x == 4, x == 2*y);
+%! assert (isequal (X, [2; -2]))
+%! assert (isequal (Y, [1; -1]))
+
+%!test
+%! % Multiple outputs with multiple solns, specify vars
+%! syms x y
+%! [X, Y] = solve(x*x == 4, x == 2*y, x, y);
+%! assert (isequal (X, [2; -2]))
+%! assert (isequal (Y, [1; -1]))
