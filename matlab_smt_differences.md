@@ -52,6 +52,11 @@ Differences
 
 * SMT char(expr) outputs MuPAD code string; OctSymPy outputs SymPy string.
 
+* Suppose we have a symfun `g(s,t) = x`.  Both SMT and OctSymPy agree
+  that `symvar(g, 1)` is `s` (i.e., preference for the independent
+  variables).  However, `symvar(g)` gives `[s t x]` in OctSymPy and
+  `x] in SMT.  I suspect this is an SMT bug.
+
 
 Differences in assumptions
 --------------------------
