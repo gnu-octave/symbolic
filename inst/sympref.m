@@ -119,9 +119,9 @@ function varargout = sympref(cmd, arg)
       settings = [];
       settings.ipc = 'default';
       settings.display = 'unicode';
-      settings.snippet = true;
       settings.whichpython = '';
       settings.digits = 32;
+      settings.snippet = true;  % Should be false for a release
 
     case 'version'
       assert (nargin == 1)
