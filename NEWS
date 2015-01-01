@@ -9,7 +9,11 @@ octsympy x.y.z (yyyy-mm-dd)
           laplace
           ldivide
           mldivide
+          null
           partfrac
+          rank
+          rref
+          sum
           vpa
           vpasolve
 
