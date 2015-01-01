@@ -12,6 +12,7 @@ octsympy x.y.z (yyyy-mm-dd)
           null
           partfrac
           rank
+          rref
           sum
           vpa
           vpasolve
