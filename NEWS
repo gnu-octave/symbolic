@@ -11,6 +11,7 @@ octsympy x.y.z (yyyy-mm-dd)
           mldivide
           null
           partfrac
+          orth
           rank
           rref
           sum

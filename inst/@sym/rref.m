@@ -23,7 +23,7 @@
 %%
 %% Optional second output gives the indices of pivots.
 %%
-%% @seealso{rank, null}
+%% @seealso{rank, null, orth}
 %% @end deftypefn
 
 function [r, k] = rref(A)

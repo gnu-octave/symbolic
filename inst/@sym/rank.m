@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{r} =} rank (@var{A})
 %% Rank of a symbolic matrix.
 %%
-%% @seealso{cond, null}
+%% @seealso{cond, null, orth}
 %% @end deftypefn
 
 function r = rank(A)

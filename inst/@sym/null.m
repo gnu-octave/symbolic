@@ -23,7 +23,7 @@
 %% Return a matrix whose columns are a basis for the nullspace of
 %% the matrix.
 %%
-%% @seealso{rank}
+%% @seealso{rank, orth}
 %% @end deftypefn
 
 function r = null(A)
