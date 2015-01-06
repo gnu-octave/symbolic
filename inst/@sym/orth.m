@@ -48,14 +48,18 @@ end
 %! K = orth(A);
 %! L = orth(sym(A));
 %! assert (isequal (size(L), [2 1]))
-%! assert (all (abs (double(L) - K) < 1e-16))
+%! dif1 = abs (double(L) - K);
+%! dif2 = abs (double(L) + K);
+%! assert (all (dif1 < 1e-16) || all (dif2 < 1e-16))
 
 %!test
 %! A = [1; 3];
 %! K = orth(A);
 %! L = orth(sym(A));
 %! assert (isequal (size(L), [2 1]))
-%! assert (all (abs (double(L) - K) < 1e-16))
+%! dif1 = abs (double(L) - K);
+%! dif2 = abs (double(L) + K);
+%! assert (all (dif1 < 1e-16) || all (dif2 < 1e-16))
 
 %!test
 %! A = sym([1 2; 3 4]);
