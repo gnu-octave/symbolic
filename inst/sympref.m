@@ -121,11 +121,11 @@ function varargout = sympref(cmd, arg)
       settings.display = 'unicode';
       settings.whichpython = '';
       settings.digits = 32;
-      settings.snippet = true;  % Should be false for a release
+      settings.snippet = false;  % Should be false for a release
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.1.2-git';
+      varargout{1} = '0.1.3';
 
     case 'display'
       if (nargin == 1)
