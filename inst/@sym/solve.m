@@ -45,10 +45,10 @@
 %% @example
 %% syms x y
 %% d = solve(x^2 == 4, x + y == 1)
-%% d{1}.x   % the first solution
-%% d{1}.y
-%% d{2}.x   % the second solution
-%% d{2}.y
+%% d@{1@}.x   % the first solution
+%% d@{1@}.y
+%% d@{2@}.x   % the second solution
+%% d@{2@}.y
 %% @end example
 %%
 %% But there are various special cases for the output (single
