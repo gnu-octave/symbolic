@@ -49,9 +49,12 @@ function r = vpasolve(e, x, x0)
 
   % FIXME: 0.7.5 nonsense here?  On fedora, uses system mpmath?
   % Ubuntu needs sympy.mpmath etc
+  % Update: 0.7.6 needs this too, at least on Fedora 21.  Later
+  % sympy will not have bundled mpmath and hopefully this can all
+  % go away.
   cmd = {
     '(e, x, x0, n) = _ins'
-    'if sympy.__version__ == "0.7.5":'
+    'if sympy.__version__ in ("0.7.5", "0.7.6"):'
     '    try:'
     '        sympy.mpmath.mp.dps = n'
     '    except AttributeError:'
