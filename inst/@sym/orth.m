@@ -28,13 +28,12 @@
 
 function B = orth(A)
 
-  % orthog=True means orthonormal, should fix or at least document upstream
   cmd = { 'A = _ins[0]'
           'if not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'L = A.rref()'
           'B = [A[:, i] for i in L[1]]' % get pivot columns in original
-          'B = sp.GramSchmidt(B, orthog=True)'
+          'B = sp.GramSchmidt(B, True)'
           'B = sp.Matrix.hstack(*B)'
           'return B,'
         };
