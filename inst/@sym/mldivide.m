@@ -48,16 +48,18 @@ function x = mldivide(A, b)
 
   cmd = {
     '(A, B) = _ins'
+    'flag = 0'
     'if not A.is_Matrix:'
     '    A = sympy.Matrix([A])'
     'if not B.is_Matrix:'
     '    B = sympy.Matrix([B])'
+    'if any([y.is_Float for y in A]) or any([y.is_Float for y in B]):'
+    '    flag = 1'
     'M = A.cols'
     'Z = sympy.zeros(M, B.cols)'
     'for k in range(0, B.cols):'
     '    b = B.col(k)'
     '    x = [Symbol("c%d" % (j + k*M)) for j in range(0, M)]'
-    '    #dbout(x)'
     '    AA = A.hstack(A, b)'
     '    d = solve_linear_system(AA, *x)'
     '    if d is None:'
@@ -65,12 +67,14 @@ function x = mldivide(A, b)
     '    else:'
     '        # apply dict'
     '        Z[:, k] = sympy.Matrix([d.get(c, c) for c in x])'
-    '    #dbout(Z)'
-    'return Z,'
+    'return (flag, Z)'
   };
 
-  x = python_cmd (cmd, sym(A), sym(b));
-
+  [flag, x] = python_cmd (cmd, sym(A), sym(b));
+  if (flag ~= 0)
+    warning('octsympy:backslash:vpa', ...
+            'vpa backslash may not match double backslash')
+  end
 end
 
 % [5 2] \ 10
@@ -108,3 +112,18 @@ end
 %! y = [-2*c1 + 5 nan -2*c5; c1 nan c5];
 %! assert (isequaln (x, y))
 
+%!warning <vpa backslash>
+%! % vpa, nearly singular matrix
+%! A = sym([1 2; 2 4]);
+%! A(1,1) = vpa('1.001');
+%! b = sym([1; 2]);
+%! x = A \ b;
+%! y = [sym(0); vpa('0.5')];
+%! assert (isequal (x, y))
+
+%!warning <vpa backslash>
+%! % vpa, singular rhs
+%! A = sym([1 2; 2 4]);
+%! b = [vpa('1.01'); vpa('2')];
+%! x = A \ b;
+%! assert (all(isnan(x)))

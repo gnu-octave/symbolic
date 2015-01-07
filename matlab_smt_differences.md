@@ -52,6 +52,22 @@ Differences
 
 * SMT char(expr) outputs MuPAD code string; OctSymPy outputs SymPy string.
 
+* Suppose we have a symfun `g(s,t) = x`.  Both SMT and OctSymPy agree
+  that `symvar(g, 1)` is `s` (i.e., preference for the independent
+  variables).  However, `symvar(g)` gives `[s t x]` in OctSymPy and
+  `x] in SMT.  I suspect this is an SMT bug.
+
+* SMT and OctSymPy differ in how the return solutions to systems of
+  equation has multiple solutions.  For example:
+  `d = solve(x*x == 4, x == 2*y)`
+  In OctSymPy, the two solutions are `d{1}` and `d{2}`.  Components are
+  accessed as `d{1}.x` (the x component of the first solution).  In SMT, its
+  the opposite: `d.x` gives the x component of both solutions as a column vector.
+  I prefer our way (but this could be changed fairly easily.)
+
+  `[X, Y] = solve(x*x == 4, x == 2*y)` does the same on both, returning
+  column vectors for X and Y.
+
 
 Differences in assumptions
 --------------------------

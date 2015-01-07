@@ -17,31 +17,40 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn  {Function File} {@var{r} =} rank (@var{A})
+%% Rank of a symbolic matrix.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
-%%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{cond, null, orth}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function r = rank(A)
 
-function f = matlabFunction(varargin)
+  cmd = { 'A = _ins[0]'
+          'if not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'return A.rank(),' };
 
-  f = function_handle(varargin{:});
+  r = python_cmd (cmd, A);
 
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! A = sym([1 2; 3 4]);
+%! assert (rank(A) == 2);
+
+%!test
+%! A = sym([1 2 3; 3 4 5]);
+%! assert (rank(A) == 2);
+
+%!test
+%! A = sym([1 2; 1 2]);
+%! assert (rank(A) == 1);
+
+%!test
+%! A = sym([1 2; 3 4]);
+%! assert (rank(A) == 2);
+
+%!assert (rank(sym(1)) == 1);
+%!assert (rank(sym(0)) == 0);
+%!assert (rank(sym('x', 'positive')) == 1);

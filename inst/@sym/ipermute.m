@@ -17,31 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn {Function File} {@var{A} =} ipermute (@var{B}, @var{iperm})
+%% Permute the indices of a symbolic array.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
-%%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{permute}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function A = ipermute(B, iperm)
 
-function f = matlabFunction(varargin)
-
-  f = function_handle(varargin{:});
+  A = permute(B, iperm);
 
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! syms x
+%! A = [1 x];
+%! perm = [2 1];
+%! B = permute(A, perm);
+%! C = ipermute(B, perm);
+%! assert (isequal(C, A))

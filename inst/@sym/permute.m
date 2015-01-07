@@ -17,31 +17,38 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn {Function File} {@var{B} =} permute (@var{A}, @var{perm})
+%% Permute the indices of a symbolic array.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
+%% Generalizes transpose, but currently doesn't do much as we only
+%% support 2D symbolic arrays.
 %%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{ipermute}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function B = permute(A, perm)
 
-function f = matlabFunction(varargin)
-
-  f = function_handle(varargin{:});
+  if (isequal(perm, [1 2]))
+    B = A;
+  elseif  (isequal(perm, [2 1]))
+    B = A.';
+  else
+    error('permute: invalid input');
+  end
 
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! D = round(10*rand(5,3));
+%! A = sym(D);
+%! B = permute(A, [1 2]);
+%! assert (isequal(B, A))
+%! B = permute(A, [2 1]);
+%! assert (isequal(B, A.'))
+
+%!test
+%! syms x
+%! A = [1 x];
+%! B = permute(A, [2 1]);
+%! assert (isequal(B, [1; x]))

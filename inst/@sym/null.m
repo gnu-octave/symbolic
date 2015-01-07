@@ -17,31 +17,36 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn  {Function File} {@var{r} =} null (@var{A})
+%% Basis for the nullspace of a symbolic matrix.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
+%% Return a matrix whose columns are a basis for the nullspace of
+%% the matrix.
 %%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{rank, orth}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function r = null(A)
 
-function f = matlabFunction(varargin)
+  cmd = { 'A = _ins[0]'
+          'if not A.is_Matrix:'
+          '    A = sympy.Matrix([A])'
+          'ns = A.nullspace()'
+          'if len(ns) == 0:'
+          '    return sympy.zeros(A.cols, 0),'
+          'return sympy.Matrix.hstack(*ns),' };
 
-  f = function_handle(varargin{:});
+  r = python_cmd (cmd, A);
 
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! A = sym([1 2; 3 4]);
+%! assert (isempty (null (A)))
+
+%!assert (isempty (null (sym(4))))
+
+%!test
+%! A = sym([1 2 3; 3 4 5]);
+%! assert (isequal (null(A), sym([1;-2;1])))

@@ -39,11 +39,20 @@ function h = horzcat(varargin)
           '            _proc.append(i)'
           '    else:'
           '        _proc.append(sp.Matrix([[i]]))'
-          'M = sp.Matrix.hstack(*_proc)'
-          'return M,' };
+          'failed = False'
+          'M = "whatev"'
+          'try:'
+          '    M = sp.Matrix.hstack(*_proc)'
+          'except ShapeError:'
+          '    failed = True'
+          'return (failed, M)' };
 
   varargin = sym(varargin);
-  h = python_cmd (cmd, varargin{:});
+  [flag, h] = python_cmd (cmd, varargin{:});
+
+  if (flag)
+    error('horzcat: ShapeError: incompatible sizes concatenated')
+  end
 
 end
 
@@ -108,8 +117,13 @@ end
 %! q = sym(ones(1, 0));
 %! assert (isequal ([v q], v))
 
-%!xtest
-%! % on 0.7.5, this doesn't give an error (so xtest for now)
-%! v = [sym(1) sym(2)];
-%! q = sym(ones(3, 0));
-%! error <unexpected return> w = [v q];
+%!error <ShapeError>
+%! % FIXME: clean-up when we drop 0.7.5 support (Issue #164)
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: test passes on sympy > 0.7.6')
+%!   error('ShapeError')   % pass the test with correct error
+%! else
+%!   v = [sym(1) sym(2)];
+%!   q = sym(ones(3, 0));
+%!   w = [v q];
+%! end

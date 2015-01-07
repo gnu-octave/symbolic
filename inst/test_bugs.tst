@@ -158,3 +158,33 @@
 %! %assert (~islogical( [x 1] == 1 ))
 %! %assert (~islogical( [x 1] == x ))
 %! %assert (~islogical( [x x] == x ))  % not so clear
+
+%!xtest
+%! % FIXME: symbolic matrix size, Issue #159
+%! syms n m integer
+%! A = sym('A', [n m])
+%! assert (isequal (size (A), [n m]))
+
+%!xtest
+%! % symbolic matrix, subs in for size, Issue #160
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! B = subs(A, [n m], [5 6]);
+%! assert (isa (B, 'sym'))
+%! assert (isequal (size (B), [5 6]))
+%! % FIXME: not same as an freshly created 5 x 6.
+%! C = sym('B', [5 6]);
+%! assert (isequal(B, C))
+%! % FIXME: e.g., cannot add to it
+%! B = B + 1
+%! assert (isa (B, 'sym'))
+
+%!xtest
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x
+%!xtest
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x
+%!test
+%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
+%! syms x

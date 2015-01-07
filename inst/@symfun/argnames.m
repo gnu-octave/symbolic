@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014 Colin B. Macdonald and others
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,31 +17,34 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
+%% Return the independent variables in a symfun.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
-%%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{symvar, findsym, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function f = matlabFunction(varargin)
+function vars = argnames(F)
 
-  f = function_handle(varargin{:});
+  vars = [F.vars{:}];
 
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! % basic test
+%! syms f(x)
+%! assert (isequal (argnames (f), x))
+
+%!test
+%! % Multiple variables, abstract symfun (quotes are oct 3.6 workaround)
+%! syms 'f(t, x, y)'
+%! assert (isequal (argnames (f), [t x y]))
+
+%!test
+%! % Concrete symfun
+%! syms x y z t
+%! f(t, x, y) = x + y + z;
+%! assert (isequal (argnames (f), [t x y]))

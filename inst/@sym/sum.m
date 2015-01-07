@@ -17,26 +17,28 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y} =} prod (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} prod (@var{x}, @var{n})
-%% Product of symbolic expressions.
+%% @deftypefn  {Function File} {@var{y} =} sum (@var{x})
+%% @deftypefnx {Function File} {@var{y} =} sum (@var{x}, @var{n})
+%% Sum of symbolic expressions.
 %%
-%% Can specify row or column sums using @var{n}.
+%% Sum over the rows or columns of an expression.  By default, sum
+%% over the rows.  Can specify row or column sums using @var{n}.
+%% To perform symbolic summations, see @xref{symsum}.
 %%
 %% Example:
 %% @example
 %% syms x y z
-%% f = prod([x y z])
+%% f = sum([x y z])
 %% @end example
 %% @example
-%% f = prod([x y; x z], 1)
-%% f = prod([x y; x z], 2)
+%% f = sum([x y; x z], 1)
+%% f = sum([x y; x z], 2)
 %% @end example
 %%
-%% @seealso{sum, symprod}
+%% @seealso{prod, symsum}
 %% @end deftypefn
 
-function y = prod(x, n)
+function y = sum(x, n)
 
   if (isscalar(x))
     y = x;
@@ -57,7 +59,7 @@ function y = prod(x, n)
   cmd = { 'A = _ins[0]'
           'B = sp.Matrix.zeros(A.rows, 1)'
           'for i in range(0, A.rows):'
-          '   B[i] = prod(A.row(i))'
+          '   B[i] = sum(A.row(i))'
           'return B,' };
   if (n == 1)
     y = python_cmd (cmd, transpose(x));
@@ -72,14 +74,14 @@ end
 
 %!shared x,y,z
 %! syms x y z
-%!assert (isequal (prod (x), x))
-%!assert (isequal (prod ([x y z]), x*y*z))
-%!assert (isequal (prod ([x; y; z]), x*y*z))
-%!assert (isequal (prod ([x y z], 1), [x y z]))
-%!assert (isequal (prod ([x y z], 2), x*y*z))
+%!assert (isequal (sum (x), x))
+%!assert (isequal (sum ([x y z]), x+y+z))
+%!assert (isequal (sum ([x; y; z]), x+y+z))
+%!assert (isequal (sum ([x y z], 1), [x y z]))
+%!assert (isequal (sum ([x y z], 2), x+y+z))
 
 %!shared a,b
 %! b = [1 2; 3 4]; a = sym(b);
-%!assert (isequal (prod(a), prod(b)))
-%!assert (isequal (prod(a,1), prod(b,1)))
-%!assert (isequal (prod(a,2), prod(b,2)))
+%!assert (isequal (sum(a), sum(b)))
+%!assert (isequal (sum(a,1), sum(b,1)))
+%!assert (isequal (sum(a,2), sum(b,2)))

@@ -65,8 +65,7 @@ function [outflag,output] = codegen(varargin)
     else
       fname2 = param.fname; fcnname = param.fname;
     end
-    % FIXME: careful, inputs is from findsymbols not symvar, wrong order?
-    %inputs
+    % was note here about findsymbols vs symvar ordering: not relevant
     out = python_cmd (cmd, varargin{1}, fcnname, fname2, param.show_header, inputs);
     C.name = out{1}{1};
     C.code = out{1}{2};
@@ -199,13 +198,12 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
     % FIXME: once Octave 3.6 is ancient history, use strjoin
     inputstr = mystrjoin(syms2charcells(inputs), ',');
   else
-    %inputstr = findsym(varargin{1});
-    % findsymbols works on cell input but ordering might not be
-    % symvar ordering
+    % findsymbols works on cell input, previous comment worried
+    % about differences with symvar, but don't think there are any
+    % here: only for two inputs like symvar(f, 2).
     inputs = findsymbols(varargin(1:Nout));
     Nin = length(inputs);
     inputs_array = cell2symarray(inputs);
-    % findsym gives us the symvar ordering
     inputstr = findsym(inputs_array);
   end
 

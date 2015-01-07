@@ -17,31 +17,37 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
-%% Convert symbolic expression into a standard function.
+%% @deftypefn  {Function File} {@var{n} =} digits ()
+%% @deftypefnx {Function File} {} digits (@var{n})
+%% @deftypefnx {Function File} {@var{oldn} =} digits (@var{n})
+%% Get/set number of digits used in variable precision arith.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
-%%
-%% @seealso{ccode, fortran, latex, function_handle}
-%%
+%% @seealso{sym, vpa, vpasolve}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function f = matlabFunction(varargin)
+function m = digits(n)
 
-  f = function_handle(varargin{:});
-
+  if (nargin == 0) || (nargout == 1)
+    m = sympref('digits');
+  end
+  if (nargin == 1)
+    sympref('digits', n);
+  end
 end
 
 
 %!test
-%! % autodetect inputs
-%! syms x y
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = matlabFunction(2*x*y, x+y);
-%! warning(s)
-%! [t1, t2] = h(3,5);
-%! assert(t1 == 30 && t2 == 8)
+%! orig = digits(32);  % to reset later
+%! m = digits(64);
+%! p = vpa(sym(pi));
+%! assert (abs (double (sin(p))) < 1e-64)
+%! n = digits(m);
+%! assert (n == 64)
+%! p = vpa(sym(pi));
+%! assert (abs (double (sin(p))) < 1e-32)
+%! assert (abs (double (sin(p))) > 1e-40)
+%! digits(orig)
+
