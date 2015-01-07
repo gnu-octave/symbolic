@@ -4,6 +4,7 @@ octsympy x.y.z (yyyy-mm-dd)
  *  New commands:
 
           ipermute
+          nchoosek
           permute
 
  *  Fixes for developement version of SymPy.
