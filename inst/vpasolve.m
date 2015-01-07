@@ -63,7 +63,7 @@ function r = vpasolve(e, x, x0)
     'else:'
     '    sympy.mpmath.mp.dps = n'
     'r = nsolve(e, x, x0)'
-    'r = sympy.N(r, n)'
+    'r = sympy.N(r, n)'  % deal with mpf
     'return r,' };
 
   r = python_cmd (cmd, sym(e), x, x0, n);
