@@ -4,8 +4,10 @@ function s = python_header()
   persistent PyStrCache
 
   if (isempty(PyStrCache))
-    s = fileread('private/python_header.py');
-    PyStrCache = s;
+    % FIXME: does Octave 3.6 have fileread?
+    PyStrCache = fileread('private/python_header.py');
   end
+
   s = PyStrCache;
+
 end
