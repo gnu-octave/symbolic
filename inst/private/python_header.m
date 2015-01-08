@@ -1,30 +1,11 @@
 function s = python_header()
 %private
 
-  if (1 == 1)
-    %s = sprintf('import sympy as sp\nimport pickle\n\n');
-    s = python_header_embed();
-    return
+  persistent PyStrCache
 
-
-  else
-    % for debugging/development
-    %s = fileread('python_header.py');
-    [f,msg] = fopen('private/python_header.py');
-    if (f == -1)
-      error(['Error reading python header: ' msg])
-    end
-    A = '';
-    while(1)
-      s = fgets (f);
-      if (ischar (s))
-        A = [A s];
-      else
-        break
-      end
-    end
-    fclose(f);
-    s = A;
-    return
+  if (isempty(PyStrCache))
+    s = fileread('private/python_header.py');
+    PyStrCache = s;
   end
+  s = PyStrCache;
 end
