@@ -54,7 +54,7 @@ nextprime||123,127
 
 
 copyright_block = \
-"""%% Copyright (C) 2014 Colin B. Macdonald
+"""%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -132,7 +132,7 @@ def autogen_functions(L, where):
         fd.write(copyright_block)
 
         fd.write('\n%% -*- texinfo -*-\n')
-        fd.write("%%%% @deftypefn  {Function File} {@var{z} =} %s (@var{x})\n" % f)
+        fd.write("%%%% @deftypefn  {Function File} {@var{y} =} %s (@var{x})\n" % f)
         fd.write("%%%% Symbolic %s function.\n" % f)
 
         fd.write( \
@@ -147,11 +147,11 @@ def autogen_functions(L, where):
 
 """)
 
-        fd.write("function z = %s(x)\n" % f)
+        fd.write("function y = %s(x)\n" % f)
         #fd.write('\n')
         if len(d['extra_code']) > 0:
                fd.write("\n  %s\n\n" % d['extra_code'])
-        fd.write("  z = uniop_helper (x, '%s');\n" % d['spname'])
+        fd.write("  y = uniop_helper (x, '%s');\n" % d['spname'])
         fd.write("end\n")
 
         # tests
@@ -180,21 +180,11 @@ def autogen_functions(L, where):
         fd.close()
 
 
-def output_for_gitignore(L):
-    """Output list for .gitignore file"""
-    print "**** Optional: copy/paste to update this list in .gitignore ****"
-
-    for d in L:
-        f = d['name']
-        print "inst/@sym/%s.m" % f
-
-
 def print_usage():
     print """
   Run this script with one argument:
     python generate_functions install:  make m files in ../inst/@sym
     python generate_functions clean:  remove them from above
-    python generate_functions gitignore:  generate lines for gitignore (for devs)
 """
 
 if __name__ == "__main__":
@@ -209,8 +199,6 @@ if __name__ == "__main__":
     elif sys.argv[1] == 'clean':
         print "cleaning up"
         remove_all(L)
-    elif sys.argv[1] == 'gitignore':
-        output_for_gitignore(L)
     else:
         print_usage()
 

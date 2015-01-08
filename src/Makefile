@@ -3,21 +3,22 @@
 OCTAVE=octave
 PYTHON=python
 
-all: codegen
+default:
+	${PYTHON} make_embedded_header.py
+	echo "no install needed"
 
-matlab: all ml_copy ml_convert ml_extract_tests
+matlab: default ml_copy ml_convert ml_extract_tests
 
-clean: codegen_clean matlab_clean
+clean: matlab_clean
+	rm -f ../inst/private/python_header_embed.m
 
 #######################################################
 
 codegen:
 	${PYTHON} generate_functions.py install
-	${PYTHON} make_embedded_header.py
 
 codegen_clean:
 	${PYTHON} generate_functions.py clean
-	rm -f ../inst/private/python_header_embed.m
 
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
