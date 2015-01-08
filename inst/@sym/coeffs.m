@@ -19,74 +19,153 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{c} =} coeffs (@var{p}, @var{x})
-%% Return coefficients of symbolic polynomial @var{p}
+%% @deftypefnx {Function File} {@var{c} =} coeffs (@var{p})
+%% @deftypefnx {Function File} {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
+%% @deftypefnx {Function File} {[@var{c}, @var{t}] =} coeffs (@var{p})
+%% Return non-zero coefficients of symbolic polynomial.
 %%
-%% FIXME; DOC this is just sym2poly copied.
-%%
-%% If there is only one free variable in @var{p} the
-%% coefficient vector @var{c} is a plain numeric vector (double).  If there is more
-%% than one free variable in @var{p}, a second argument @var{x} specifies the
-%% free variable and the function returns a row vector of symbolic expressions.
-%% The coefficients correspond to decreasing exponent of the free variable.
+%% @var{c} contains the coefficients and @var{t} the corresponding
+%% terms.
 %%
 %% Example:
 %% @example
-%% x = sym ('x');
-%% y = sym ('y');
-%% c = sym2poly (x^2 + 3*x - 4);    % c = [1 3 -4]
-%% c = sym2poly (x^2 + y*x, x);     % c = [sym(1) y sym(0)]
+%% syms x
+%% [c, t] = coeffs (x^6 + 3*x - 4);
+%% % gives c = [1 3 -4]
+%% %   and t = [x^6 x 1]
 %% @end example
 %%
-%% If @var{p} is not a polynomial the result has no warranty.  SymPy can
-%% certainly deal with more general concepts of polynomial but we do not
-%% yet expose all of that here.
+%% The polynomial can be multivariate:
+%% @example
+%% syms x y
+%% [c, t] = coeffs (x^2 + y*x);  % c = [1 1], t = [x^2 x*y]
+%% [c, t] = coeffs (x^2 + y*x, [x y]);  % same
+%% [c, t] = coeffs (x^2 + y*x, @{x y@});  % same
+%% @end example
 %%
-%% @seealso{poly2sym,polyval,roots}
+%% You can use the second argument to specify a vector or list of
+%% variables:
+%% @example
+%% [c, t] = coeffs (x^2 + y*x, x);
+%% % c = [1 y] and t = [x^2 x]
+%% @end example
+%%
+%% Omitting the second output gives only the coefficients:
+%% @example
+%% c = coeffs (x^6 + 3*x - 4);   % c = [1 3 -4]
+%% @end example
+%% WARNING: Matlab's Symbolic Math Toolbox returns c = [-4 3 1]
+%% here (as of version 2014a).  I suspect they have a bug as its
+%% inconsistent with the rest of Matlab's polynomial routines.  We
+%% do not copy this bug.
+%%
+%% @seealso{sym2poly}
 %% @end deftypefn
 
-function c = coeffs(p,x)
-
-  warning('FIXME')
+function [c, t] = coeffs(p, x)
 
   if ~(isscalar(p))
-    error('works for scalar input only');
-  end
-
-  if (nargin == 1)
-    ss = findsymbols(p);
-    if (length(ss) > 2)
-      error('Input has more than one symbol: not clear what you want me to do')
-    end
-    x = ss{1};
-    convert_to_double = true;
-  else
-    convert_to_double = false;
+    error('coeffs: works for scalar input only');
   end
 
   cmd = { 'f = _ins[0]'
-          'x = _ins[1]'
-          'p = Poly.from_expr(f, x)'
-          'c = p.all_coeffs()'
-          'return c,' };
+          'xx = _ins[1]'
+          'try:'
+          '    xx = list(xx)'
+          'except TypeError:'
+          '    xx = [xx]'
+          'p = Poly.from_expr(f, *xx)'
+          'terms = p.terms()'
+          'cc = [q[1] for q in terms]'
+          'tt = [1]*len(terms)'
+          'for i, x in enumerate(p.gens):'
+          '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
+          'return (Matrix([cc]), Matrix([tt]))' };
 
-  c2 = python_cmd (cmd, p, x);
-  if (isempty(c2))
-    error('Empty python output, can this happen?  A bug.')
+  if (nargin == 1)
+    [c, t] = python_cmd (cmd, p, {});
+  else
+    [c, t] = python_cmd (cmd, p, x);
   end
 
-  % FIXME: should be able to convert c2 to array faster than array
-  % expansion!  Particularly in the case where we just convert to
-  % double anyway!
-  c = sym([]);
-  for j = 1:numel(c2)
-    % Bug #17
-    %c(j) = c2{j};
-    idx.type = '()'; idx.subs = {j};
-    c = subsasgn(c, idx, c2{j});
-  end
+  %% matlab SMT bug?
+  % they seem to reverse the order if t is not output.
+  %if (nargout == 1)
+  %  c = fliplr(c);
+  %end
 
-  if (convert_to_double)
-    c = double(c);
-  end
+  % if nargout == 1, here is a simplier implementation:
+  %cmd = { 'f = _ins[0]'
+  %        'xx = _ins[1]'
+  %        'try:'
+  %        '    xx = list(xx)'
+  %        'except TypeError:'
+  %        '    xx = [xx]'
+  %        'p = Poly.from_expr(f, *xx)'
+  %        'c = p.coeffs()'
+  %        'return Matrix([c]),' };
 
 end
+
+
+%!test
+%! % simple
+%! syms x
+%! [c, t] = coeffs(6*x*x + 27);
+%! assert (isequal (c, [6 27]))
+%! assert (isequal (t, [x*x 1]))
+
+%!test
+%! % specify a variable
+%! syms x
+%! [c, t] = coeffs(6*x*x + 27, x);
+%! assert (isequal (c, [6 27]))
+%! assert (isequal (t, [x*x 1]))
+
+%!test
+%! % specify another variable
+%! syms x y
+%! [c, t] = coeffs(6*x + 27, y);
+%! assert (isequal (c, 6*x + 27))
+%! assert (isequal (t, 1))
+
+%%!test
+%%! % weird SMT order
+%%! syms x
+%%! a1 = [27 6];
+%%! a2 = [6 27];
+%%! c = coeffs(6*x*x + 27);
+%%! assert (isequal (c, a1))
+%%! [c, t] = coeffs(6*x*x + 27);
+%%! assert (isequal (c, a2))
+
+%!test
+%! % multivariable array
+%! syms x y
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36, [x y]);
+%! a = [6  27  36];
+%! s = [x^2  x*y  1];
+%! assert (isequal (c, a))
+%! assert (isequal (t, s))
+%! % with list
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {x y});
+%! assert (isequal (c, a))
+%! assert (isequal (t, s))
+
+%!test
+%! % other symbols treated as part of coeffs
+%! syms x y
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36, x);
+%! a = [6  27*y  36];
+%! s = [x^2  x  1];
+%! assert (isequal (c, a))
+%! assert (isequal (t, s))
+
+%!test
+%! % empty same as no specifying
+%! syms x y
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {});
+%! a = [6  27  36];
+%! assert (isequal (c, a))
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36);
+%! assert (isequal (c, a))
