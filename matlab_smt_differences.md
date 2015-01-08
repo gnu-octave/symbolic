@@ -17,7 +17,7 @@ That is, your help is needed here.
 
 
 
-Functions that OctSymPY has which SMT does not have
+Functions that OctSymPy has which SMT does not have
 ---------------------------------------------------
 
 These should be updated to match SMT if/when they are added.
@@ -39,6 +39,8 @@ Differences
 * SMT's sym() constructor allows big string expressions: we don't
   really support that (and its not the way modern SMT is used either).
   Build your expressions like sym('x')/2 rather than sym('x/2').
+  (If you do want to pass long strings, they should be valid Python
+  SymPy `srepr` syntax---i.e., you probably don't want to do this!)
 
 * OctSymPy has [p,m] = factor(a) which returns an array of the
   prime factors and their multiplicities.  Pure Matlab 'factor' has
