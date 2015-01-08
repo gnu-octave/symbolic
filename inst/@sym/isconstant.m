@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{y} =} isconstant (@var{x})
-%% Indicate which elements of symbolic array are constant
+%% Indicate which elements of symbolic array are constant.
 %%
-%% @seealso{symvar, findsymbols}
+%% @seealso{isallconstant, symvar, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -28,32 +28,26 @@
 
 function z = isconstant(x)
 
-  % non-elem-wise:
-  %z = isempty (findsymbols (x));
-
-  if (isscalar(x))
-    z = python_cmd ('return _ins[0].is_constant(),', x);
-  else
-    z = zeros (size (x), 'logical');
-    for i = 1:numel(x)
-      % f'ing bug #17, gets me everytime
-      %z(i) = isconstant (x(i));
-      idx.type = '()'; idx.subs = {i};
-      z(i) = isconstant (subsref (x, idx));
-    end
-  end
-  return
-
-  % FIXME this looks useful, but Issue #27: Matrix of bools not converted to logical
   cmd = { '(x,) = _ins'
           'if x.is_Matrix:'
           '    return x.applyfunc(lambda a: a.is_constant()),'
           'else:'
           '    return x.is_constant(),' };
   z = python_cmd (cmd, sym(x));
+  % Issue #27: Matrix of bools not converted to logical
+  z = logical(z);
+
 end
 
 
+%!test
+%! syms x
+%! A = [x 2 3];
+%! B = [false true true];
+%! assert (isequal (isconstant(A), B))
 
-
-
+%!test
+%! syms x
+%! A = [x 2; 3 x];
+%! B = [false true; true false];
+%! assert (isequal (isconstant(A), B))

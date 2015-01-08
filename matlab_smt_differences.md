@@ -26,6 +26,7 @@ These should be updated to match SMT if/when they are added.
 * isprime
 * nextprime
 * lhs/rhs
+* isconstant/isallconstant
 
 
 

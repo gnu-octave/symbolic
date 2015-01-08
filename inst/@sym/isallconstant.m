@@ -17,10 +17,10 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{y} =} isconstant (@var{x})
-%% Indicate which elements of symbolic array are constant
+%% @deftypefn {Function File}  {@var{y} =} isallconstant (@var{x})
+%% Whether all elements of a symbolic array are constant.
 %%
-%% @seealso{symvar, findsymbols}
+%% @seealso{isconstant, symvar, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -28,7 +28,17 @@
 
 function z = isallconstant(x)
 
-  % non-elem-wise:
   z = isempty (findsymbols (x));
 
 end
+
+
+%!assert (isallconstant([sym(1) 2 3]))
+
+%!test
+%! syms x
+%! assert (~isallconstant([sym(1) x 3]))
+
+%!test
+%! syms x
+%! assert (~isallconstant([sym(1) x; sym(2) 3]))
