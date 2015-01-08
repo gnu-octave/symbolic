@@ -6,3 +6,6 @@
 temp_sym_python_cmd.py
 inlog.txt
 outlog.txt
+
+# matlab package subdir
+matlab/
