@@ -12,6 +12,9 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  Fixes for developement version of SymPy.
 
+ *  On Windows, default to ascii rendering for now (until unicode
+    is fixed in Octave on that platform).
+
  *  No longer needs to autogenerate a bunch of functions at install
     time: hopefully making it easier than ever to get involved!
 
