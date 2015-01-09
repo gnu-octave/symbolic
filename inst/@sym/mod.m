@@ -17,23 +17,48 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{y} =} mod (@var{x}, @var{n})
+%% @deftypefn  {Function File}  {@var{y} =} mod (@var{x}, @var{n})
+%% @deftypefnx {Function File}  {@var{y} =} mod (@var{x}, @var{n}, false)
 %% Element-wise modular arithmetic on symbolic arrays and polynomials.
 %%
-%% If any of the entries contain variables, we assume they are
-%% polynomials and convert their coefficients to mod @var{n}.
+%% Example:
+%% @example
+%% mod([10 3 1], sym(3))   % [1 0 1]
+%% @end example
 %%
-%% @seealso{FIXME}
+%% If any of the entries contain variables, we assume they are
+%% univariate polynomials and convert their coefficients to mod
+%% @var{n}:
+%% @example
+%% syms x
+%% mod(5*x + 7, 3)   % '2*x + 1'
+%% mod(x, 3)         % 'x' (coefficient is 1 mod 3)
+%% @end example
+%% You can disable this behaviour by passing @code{false} as the
+%% third argument:
+%% @example
+%% syms x
+%% q = mod(x, 3, false)  % 'Mod(x, 3)'
+%% subs(q, x, 10)        % '1'
+%% syms n integer
+%% mod(3*n+2, 3, false)  % '2'
+%% @end example
+%%
+%% @seealso{coeffs}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = mod(x, n)
+function z = mod(x, n, canpoly)
+
+  if (nargin < 3)
+     canpoly = true;
+  end
 
   isconst = isempty (findsymbols (x));
 
-  if (isconst)
+  if (~canpoly || isconst)
     z = binop_helper(x, n, 'lambda a,b: a % b');
 
     %z = binop_helper(x, n, {'def _op(a, b):' ...
@@ -49,24 +74,62 @@ function z = mod(x, n)
       if (isscalar(n))
         m = n;
       else
-        m = subsref (n, idx);
+        m = subsref (n, idx); % m = n(i)
       end
       sv = symvar(t, 1);
-      rhs = poly2sym (mod (sym2poly (t,sv), m), sv);
-      %z(i) = rhs;
-      z = subsasgn(z, idx, rhs);
+      % Note: sympy Polys have a .termwise: would that be easier?
+      [c, t] = coeffs(t, sv);
+      c = mod(c, m, false);  % force no poly here
+      rhs = t * c.';  % recombine the new poly
+      z = subsasgn(z, idx, rhs);  %z(i) = rhs;
     end
   end
 
 end
 
 
-%!assert (isequal (mod (sym(5),4), sym(1)))
-%!assert (isequal (mod ([sym(5) 8],4), [1 0] ))
+%!assert (isequal (mod (sym(5), 4), sym(1)))
+%!assert (isequal (mod ([sym(5) 8], 4), [1 0] ))
+%!assert (isequal (mod (sym(5), [2 3]), [1 2] ))
+%!assert (isequal (mod ([sym(5) sym(6)], [2 3]), [1 0] ))
+
 %!test
 %! syms x
-%! assert (isequal ( mod (5*x,3), 2*x ))
+%! assert (isequal ( mod (5*x, 3), 2*x ))
+
 %!test
 %! syms x
 %! a = [7*x^2 + 3*x + 3  3*x; 13*x^4  6*x];
 %! assert (isequal ( mod (a,3), [x^2 0; x^4 0] ))
+
+%!test
+%! % vector of polys with mix of vars: symvar on each
+%! syms x y
+%! a = [6*x  7*y];
+%! b = mod(a, 4);
+%! c = [2*x  3*y];
+%! assert (isequal (b, c))
+
+%!xtest
+%! % coeff has variable (fails on 0.7.5)
+%! syms x
+%! n = sym('n', 'integer');
+%! p = (3*n + 2)*x;
+%! q = mod(p, 3);
+%! assert (isequal (q, 2*x))
+
+%!test
+%! % coeff has variable
+%! syms x a
+%! p = a*x;
+%! q = mod(p, 3);
+%! q = children(q);
+%! q = q(2);  % order might be fragile!
+%! w = subs(q, a, 5);
+%! assert (isequal (w, 2))
+
+%!test
+%! % different modulo
+%! syms x y
+%! q = mod([5*x + 10  5*y + 10], [2 3]);
+%! assert (isequal (q, [x  2*y + 1]))

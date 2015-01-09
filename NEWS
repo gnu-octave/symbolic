@@ -3,7 +3,10 @@ octsympy x.y.z (yyyy-mm-dd)
 
  *  New commands:
 
+          coeffs
           ipermute
+          isallconstant
+          isconstant
           nchoosek
           permute
 
