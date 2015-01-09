@@ -118,7 +118,12 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.display = 'unicode';
+      if (ispc () && (~isunix ()))
+        % Unicode not working on Windows, Issue #83.
+        settings.display = 'ascii';
+      else
+        settings.display = 'unicode';
+      end
       settings.whichpython = '';
       settings.digits = 32;
       settings.snippet = true;  % Should be false for a release
