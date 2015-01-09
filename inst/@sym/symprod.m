@@ -53,34 +53,20 @@ function S = symprod(f, n, a, b)
 end
 
 
-%!shared n,a,oo,zoo
-%! syms n a
-%! oo = sym(inf);
-%! zoo = sym('zoo');
-
 %!test
 %! % simple
+%! syms n
 %! assert (isequal (symprod(n, n, 1, 10), factorial(sym(10))))
 %! assert (isequal (symprod(n, n, sym(1), sym(10)), factorial(10)))
 
 %!test
 %! % infinite product
+%! syms a n oo
+%! zoo = sym('zoo');
 %! assert (isequal (symprod(a, n, 1, oo), a^oo))
 %! assert (isequal (symprod(a, n, 1, inf), a^oo))
-%! % not with oo, but true with zoo, see below
-%! assert (isequal (symprod(1, n, 1, zoo), sym(1)))
 
-%!test
-%! %% a^oo, when a == 1
-%! % sympy 0.7.4: gives 1
-%! % sympy 0.7.5: gives NaN  [https://github.com/sympy/sympy/wiki/Release-Notes-for-0.7.5]
-%! % SMT R2013b: gives 1
-%! if (~isnan(1^oo))
-%!   warning('1 known failure on SymPy 0.7.4, fixed in 0.7.5')
-%! end
-%! assert(isnan(1^oo))
-
-%!test
-%! %% a^zoo, when a == 1
-%! % on both sympy 0.7.4 and 0.7.5 this is 1
-%! assert (isequal (1^zoo, sym(1)))
+%%!test
+%%! % SymPy 0.7.6: nan
+%%! % SymPy git: interesting that 1**oo is nan but this is still 1
+%%! assert (isequal (symprod(1, n, 1, oo), sym(1)))
