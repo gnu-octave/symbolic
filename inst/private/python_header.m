@@ -1,30 +1,18 @@
 function s = python_header()
 %private
 
-  if (1 == 1)
-    %s = sprintf('import sympy as sp\nimport pickle\n\n');
-    s = python_header_embed();
-    return
+  persistent PyStrCache
 
-
-  else
-    % for debugging/development
-    %s = fileread('python_header.py');
-    [f,msg] = fopen('private/python_header.py');
-    if (f == -1)
-      error(['Error reading python header: ' msg])
+  if (isempty(PyStrCache))
+    % FIXME: does Octave 3.6 have fileread?
+    PyStrCache = fileread('private/python_header.py');
+    % octave 3.6 workaround
+    sz = size(PyStrCache);
+    if (sz(1) > sz(2))
+      PyStrCache = PyStrCache';
     end
-    A = '';
-    while(1)
-      s = fgets (f);
-      if (ischar (s))
-        A = [A s];
-      else
-        break
-      end
-    end
-    fclose(f);
-    s = A;
-    return
   end
+
+  s = PyStrCache;
+
 end
