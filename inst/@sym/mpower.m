@@ -49,9 +49,15 @@ function z = mpower(x, y)
     % FIXME: sympy can do int and rat, could use MatPow otherwise,
     % rather than error.  SMT just leaves them unevaluted.
 
+    % FIXME: sin(MatrixExpr) also fails, any easy way in SymPy to express
+    % component-wise operations on a MatrixExpr?
+
     cmd = { 'x, y = _ins'
             'try:'
-            '    z = x**y'
+            '    if not y.is_number:'
+            '        z = sympy.MatPow(x, y)'
+            '    else:'
+            '        z = x**y'
             '    r = True'
             'except NotImplementedError as e:'
             '    z = str(e)'
@@ -99,10 +105,25 @@ end
 %! A = sym([1 2; 0 3]);
 %! B = A^sym(pi);
 
-%!error <not implemented.*Only integer and rational values are supported>
+%!test
+%! % matpow
+%! syms n
+%! A = sym([1 2; 3 4]);
+%! B = A^n;
+%! C = 10 + B + B^2;
+%! D = subs(C, n, 1);
+%! E = 10 + A + A^2;
+%! assert (isequal (D, E))
+
+%!xtest
+%! % matpow, fails in sympy-0.7.5, fixed by https://github.com/sympy/sympy/pull/8137
 %! A = sym([1 2; 0 3]);
-%! syms x;
-%! B = A^x;
+%! syms n;
+%! B = A^n;
+%! C = subs(B, n, 1);
+%! assert (isequal (C, A))
+%! C = subs(B, n, 0);
+%! assert (isequal (C, sym(eye(2))))
 
 %!error <not implemented>
 %! % scalar^array not implemented

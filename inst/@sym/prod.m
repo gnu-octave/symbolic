@@ -33,7 +33,7 @@
 %% f = prod([x y; x z], 2)
 %% @end example
 %%
-%% @seealso{sum}
+%% @seealso{sum, symprod}
 %% @end deftypefn
 
 function y = prod(x, n)

@@ -186,7 +186,8 @@ end
 %! syms 'g(x,y)'
 %! f(t) = g(t,t);
 %! f(5);
-%! assert (length(f.vars) == 1)
+%! assert (length (argnames (f)) == 1)
+%! assert (isequal (argnames (f), t))
 %! assert (isequal( diff(f,x), sym(0)))
 
 %!test

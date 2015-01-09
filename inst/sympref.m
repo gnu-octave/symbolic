@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,6 +83,14 @@
 %% sympref snippet 1|0   % or true/false, on/off
 %% @end example
 %%
+%% Control default precision used by variable precision arithmetic:
+%% @example
+%% sympref digits          % get
+%% sympref digits 64       % set
+%% sympref digits default  % factory setting (32)
+%% @end example
+%% See also the @xref{digits} command.
+%%
 %% Report the version number:
 %% @example
 %% sympref version
@@ -110,13 +118,19 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.display = 'unicode';
-      settings.snippet = true;
+      if (ispc () && (~isunix ()))
+        % Unicode not working on Windows, Issue #83.
+        settings.display = 'ascii';
+      else
+        settings.display = 'unicode';
+      end
       settings.whichpython = '';
+      settings.digits = 32;
+      settings.snippet = true;  % Should be false for a release
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '0.1.2-git';
+      varargout{1} = '0.1.3-git';
 
     case 'display'
       if (nargin == 1)
@@ -126,6 +140,22 @@ function varargout = sympref(cmd, arg)
         assert(strcmp(arg, 'flat') || strcmp(arg, 'ascii') || ...
                strcmp(arg, 'unicode'))
         settings.display = arg;
+      end
+
+    case 'digits'
+      if (nargin == 1)
+        varargout{1} = settings.digits;
+      else
+        if (ischar(arg))
+          if (strcmpi(arg, 'default'))
+            arg = 32;
+          else
+            arg = str2double(arg);
+          end
+        end
+        arg = int32(arg);
+        assert(arg > 0, 'precision must be positive')
+        settings.digits = arg;
       end
 
     case 'snippet'

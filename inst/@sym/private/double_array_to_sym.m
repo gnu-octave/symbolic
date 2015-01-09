@@ -10,12 +10,9 @@ function z = double_array_to_sym(A)
     return
   end
 
-  % todo: could split to fcn mat2list()?
   Ac = cell(n,1);
   for i=1:n
-    % todo: this is fast and works great for ints but in general we
-    % want all sym creation to go through the ctor.
-    %Ac{i} = num2cell(A(i,:));
+    % we want all sym creation to go through the ctor.
     Ac{i} = cell(m,1);
     for j=1:m
       Ac{i}{j} = sym(A(i,j));

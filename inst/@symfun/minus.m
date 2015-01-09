@@ -60,12 +60,12 @@ end
 %! g(y) = sin(y);
 %! h = f - g(x);
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.vars, f.vars))
+%! assert( isequal (argnames (h), argnames (f)))
 %! assert( isequal (h.sym, 2*x - sin(x)))
 %! % and even if rh-sym has a dummy variable:
 %! h = f - g(y);
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.vars, f.vars))
+%! assert( isequal (argnames (h), argnames(f)))
 %! assert( isequal (h.sym, 2*x - sin(y)))
 
 %!test
@@ -75,5 +75,5 @@ end
 %! g(y) = sin(y);
 %! h = f - g(y) + g(x);
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.vars, f.vars))
+%! assert( isequal (argnames (h), argnames (f)))
 %! assert( isequal (h.sym, 2*x*y - sin(y) + sin(x)))

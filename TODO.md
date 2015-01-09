@@ -68,25 +68,6 @@ SymPy: bool(LHS.expand() == RHS.expand())
 [https://github.com/sympy/sympy/wiki/Faq]
 
 
-## double
-
-python generates C "%a" formatting:
-
-  0.11 -> '0x1.c28f5c28f5c29p-4'
-
-java might work, or write some custom code.  In first instance, I'll
-use a string with many digits but it would be good to pass the
-bit-exact double precision value back from sympy.
-
-
-## symfuns, DE solving
-
-symfun: probably this is:
-
-f = Function('f')
-
-todo: can't pickle f (!)   solution seems to be to use "dill".
-
 ## matrices
 
 Fundamental choice:
@@ -103,28 +84,6 @@ essential issue is that scalars are not (1,1) matrices in sympy.
 Could do that but, e.g., diff might not work... well we could just
 generate the code to make it work.
 
-
-
-## converting to .m function
-
-matlabFunction() in SMT is convenient.  Parse from string?
-
-TODO: perhaps we want a "filter" method that runs after each return
-from sympy on the .text field: convert "oo" to "inf", "Abs -> abs",
-etc.
-
-
-## bugs
-
-potential: double values are passdd directly to python in many spaces: potential problems with not going thru sym constructor
-
-Maybe the python command defaults to syming argements?
-
-Sympy: S(zoo) should be inf?
-
-sympy: nan==nan returning True sounds about given == symantics, but Eq(nan,nan) giving True seems undesirable.
-
-parsing errors in octave: need to test on 3.8
 
 ## IPC
 
