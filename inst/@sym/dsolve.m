@@ -236,3 +236,18 @@ end
 %! g = -1 / (x - 1);
 %! soln = dsolve(e, y(0) == 1);
 %! assert (isequal (rhs(soln), g))
+
+%!xtest
+%! % forcing, Issue #183
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
+%! else
+%!   syms x(t) y(t)
+%!   ode1 = diff(x) == x + sin(t) + 2;
+%!   ode2 = diff(y) == y - t - 3;
+%!   soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
+%!   X = rhs(soln{1});
+%!   Y = rhs(soln{2});
+%!   assert (isequal (diff(X) - (X + sin(t) + 2), 0))
+%!   assert (isequal (diff(Y) - (Y - t - 3), 0))
+%! end
