@@ -55,13 +55,22 @@ function r = vpasolve(e, x, x0)
     'if sympy.__version__ in ("0.7.5", "0.7.6"):'
     '    try:'
     '        sympy.mpmath.mp.dps = n'
+    '        findroot = sympy.mpmath.findroot'
     '    except AttributeError:'
     '        import mpmath'
     '        mpmath.mp.dps = n'
+    '        findroot = mpmath.findroot'
     'else:'
     '        import mpmath'
     '        mpmath.mp.dps = n'
-    'r = nsolve(e, x, x0)'
+    '        findroot = mpmath.findroot'
+    '#r = nsolve(e, x, x0)'  % https://github.com/sympy/sympy/issues/8564
+    '#r = sympy.N(r, n)'  % deal with mpf
+    'if isinstance(e, Equality):'
+    '    e = e.lhs - e.rhs'
+    'e = e.evalf(n)'
+    'f = lambda meh: e.subs(x, meh)'
+    'r = findroot(f, x0)'
     'r = sympy.N(r, n)'  % deal with mpf
     'return r,' };
 
@@ -107,14 +116,12 @@ end
 %! assert (double(abs(q*q - 2)) < 1e-256)
 %! digits(m);
 
-%!xtest
+%!test
 %! % very accurate sqrt pi
 %! % fails: https://github.com/sympy/sympy/issues/8564
 %! syms x
 %! e = x*x == sym(pi);
 %! m = digits(256);
 %! q = vpasolve(e, x, 3);
-%! q*q - vpa(pi)
-%! sin(q*q)
-%! assert (double(abs(sin(q))) < 1e-256)
+%! assert (double(abs(sin(q*q))) < 1e-256)
 %! digits(m);
