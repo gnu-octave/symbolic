@@ -60,46 +60,49 @@ except:
     raise
 
 
-try:
-    class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
-        def _print_Symbol(self, expr):
-            asm = expr.assumptions0
-            # Not strictly necessary but here are some common cases so we
-            # can abbreviate them.  Even better would be some
-            # "minimal_assumptions" code, but I did not see such a thing.
-            asm_default = {"commutative":True}
-            asm_real = {"commutative":True, "complex":True, "hermitian":True,
-                        "imaginary":False, "real":True}
-            asm_pos = {"commutative":True, "complex":True, "hermitian":True,
-                       "imaginary":False, "negative":False, "nonnegative":True,
-                       "nonpositive":False, "nonzero":True, "positive":True,
-                       "real":True, "zero":False}
-            asm_neg = {"commutative":True, "complex":True, "hermitian":True,
-                       "imaginary":False, "negative":True, "nonnegative":False,
-                       "nonpositive":True, "nonzero":True, "positive":False,
-                       "prime":False, "composite":False, "real":True,
-                       "zero":False}
-            if asm == asm_default:
-                xtra = ""
-            elif asm == asm_real:
-                xtra = ", real=True"
-            elif asm == asm_pos:
-                xtra = ", positive=True"
-            elif asm == asm_neg:
-                xtra = ", negative=True"
-            else:
-                xtra = ""
-                for (key, val) in asm.iteritems():
-                    xtra = xtra + ", %s=%s" % (key, val)
-            return "%s(%s%s)" % (expr.__class__.__name__,
-                                 self._print(expr.name), xtra)
-    #
-    def my_srepr(expr, **settings):
-        """return expr in repr form w/ assumptions listed"""
-        return _ReprPrinter_w_asm(settings).doprint(expr)
-except:
-    myerr(sys.exc_info())
-    raise
+# FIXME: Remove all this when we deprecate 0.7.6 support.
+if sympy.__version__ not in ("0.7.5", "0.7.6"):
+    my_srepr = sympy.srepr
+else:
+    try:
+        class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
+            def _print_Symbol(self, expr):
+                asm = expr.assumptions0
+                # SymPy <= 0.7.6: srepr does not list assumptions.
+                # Abbreviate some common cases.
+                asm_default = {"commutative":True}
+                asm_real = {"commutative":True, "complex":True, "hermitian":True,
+                            "imaginary":False, "real":True}
+                asm_pos = {"commutative":True, "complex":True, "hermitian":True,
+                           "imaginary":False, "negative":False, "nonnegative":True,
+                           "nonpositive":False, "nonzero":True, "positive":True,
+                           "real":True, "zero":False}
+                asm_neg = {"commutative":True, "complex":True, "hermitian":True,
+                           "imaginary":False, "negative":True, "nonnegative":False,
+                           "nonpositive":True, "nonzero":True, "positive":False,
+                           "prime":False, "composite":False, "real":True,
+                           "zero":False}
+                if asm == asm_default:
+                    xtra = ""
+                elif asm == asm_real:
+                    xtra = ", real=True"
+                elif asm == asm_pos:
+                    xtra = ", positive=True"
+                elif asm == asm_neg:
+                    xtra = ", negative=True"
+                else:
+                    xtra = ""
+                    for (key, val) in asm.iteritems():
+                        xtra = xtra + ", %s=%s" % (key, val)
+                return "%s(%s%s)" % (expr.__class__.__name__,
+                                     self._print(expr.name), xtra)
+        #
+        def my_srepr(expr, **settings):
+            """return expr in repr form w/ assumptions listed"""
+            return _ReprPrinter_w_asm(settings).doprint(expr)
+    except:
+        myerr(sys.exc_info())
+        raise
 
 
 
