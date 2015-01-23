@@ -123,7 +123,5 @@ end
 %! e = x*x == sym(pi);
 %! m = digits(256);
 %! q = vpasolve(e, x, 3);
-%! q*q - vpa(sym(pi))
-%! sin(q*q)
 %! assert (double(abs(sin(q*q))) < 1e-256)
 %! digits(m);
