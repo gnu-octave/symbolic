@@ -176,7 +176,7 @@ end
 %! assert(isempty(assumptions()))
 
 %!test
-%! A = {'real' 'positive' 'integer' 'even' 'odd' 'rational'};
+%! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
 %! for i = 1:length(A)
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
