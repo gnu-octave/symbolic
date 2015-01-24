@@ -328,7 +328,7 @@ end
 %!test
 %! % System of ODEs (general solution, polynomial rhs)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms t x(t) y(t);
 %!  e1 = diff(x,t) == x+4*y - t + 2;
@@ -341,7 +341,7 @@ end
 %!test
 %! % System of ODEs (general solution, trigonometric + constant rhs)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms t x(t) y(t);
 %!  e1 = diff(x,t) == x + 2*sin(t) + 2;
@@ -354,7 +354,7 @@ end
 %!test
 %! % System of ODEs (general solution)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms t x(t) y(t);
 %!  e1 = diff(x,t) == 3*t;
@@ -367,7 +367,7 @@ end
 %!test
 %! % System of ODEs (general solution)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %! syms t x(t) y(t)
 %!  ode_1=diff(x(t),t) == 2*y(t);
@@ -381,7 +381,7 @@ end
 %!test
 %! % System of ODEs (explicit initial conditions)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms t x(t) y(t)
 %!  ode_1=diff(x(t),t) == 2*y(t);
@@ -396,7 +396,7 @@ end
 %!test
 %! % System of ODEs (implicit initial conditions)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms t x(t) y(t)
 %!  ode_1=diff(x(t),t) == 2*y(t);
@@ -411,7 +411,7 @@ end
 %!test
 %! % System of ODEs (implicit initial conditions with symbolic constants)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy > 0.7.6 )
+%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
 %! else
 %!  syms a b t x(t) y(t)
 %!  ode_1=diff(x(t),t) == 2*y(t);
