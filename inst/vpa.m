@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -191,9 +191,9 @@ end
 %!test
 %! % inf/-inf do not become symbol('inf')
 %! S = {'oo', '-oo', 'inf', 'Inf', '-inf', '+inf'};
-%! for i = 1:length(S)
-%!   a = vpa(S{i});
-%!   b = vpa(sym(S{i}));
+%! for j = 1:length(S)
+%!   a = vpa(S{j});
+%!   b = vpa(sym(S{j}));
 %!   assert (isequal (a, b))
 %! end
 
