@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
 %%
 %% This file is part of OctSymPy.
 %%
@@ -53,22 +53,23 @@ function [soln,classify] = dsolve(ode,varargin)
     classify='';
   end
 
-  % FIXME: the initial/boundary conditions admit parameters
-  %        but only on their values (not at the evaluation point) 
-
   % FIXME: it is not currently supported a list of boundary/initial conditions
   if (isscalar(ode) && nargin>=2)
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           'sol=sp.dsolve(ode)'
-          '# Application of the initial conditions'
-          'init_var=list(sp.ordered(reduce(set.union, [ics_i.atoms(sp.function.AppliedUndef) for ics_i in ics], set())))'
-          'init_values=sp.solve(ics,init_var).items()'
-          '# Impose boundary conditions'
+          'x=list(ode.free_symbols)[0]'
           'ic_eqs=[]'
-          'for solu in sol:'
-          '    ic_eqs.append(solu)'
-          '    for val in init_values:'
-          '        ic_eqs[-1]=ic_eqs[-1].subs(independent_var[0],val[0].args[0]).subs(val[0],val[1])'
+          'for ic in ics:'
+          '    funcarg=ic.lhs'
+          '    if isinstance(funcarg, sp.Subs):'
+          '        x0=funcarg.point[0]'
+          '        dorder=sp.ode_order(funcarg.expr, x)'
+          '        dsol_eq=sp.Eq(sp.diff(sol.lhs,x,dorder),sp.diff(sol.rhs,x,dorder))'
+          '        dy_at_x0=funcarg.expr.subs(x,x0)'
+          '        ic_eqs.append(dsol_eq.subs(x,x0).subs(dy_at_x0,ic.rhs))'
+          '    elif isinstance(funcarg, sp.function.AppliedUndef):'
+          '        x0=funcarg.args[0]'
+          '        ic_eqs.append(sol.subs(x,x0).subs(funcarg,ic.rhs))'
           'sol_C=sp.solve(ic_eqs)'
           'if type(sol_C)==dict:'
           '    sol_final=sol.subs(sol_C)'
@@ -146,15 +147,11 @@ function [soln,classify] = dsolve(ode,varargin)
           '    for val in init_values:'
           '        ic_eqs[-1]=ic_eqs[-1].subs(independent_var[0],val[0].args[0]).subs(val[0],val[1])'
           'sol_C=sp.solve(ic_eqs)'
-          'Possibly the initial condition sysmtem leads to different solutions'
-          'if type(sol_C)==dict:'
-          '    for y in sol:'
-          '        sol_final.append(y.subs(sol_C))'
-          'elif type(sol_C)==list:'
-          '    sol_final=[]'
-          '    for c in sol_C:'
-          '        for y in sol:'
-          '            sol_final.append(y.subs(c))'
+          'if(type(sol_C)==list):'
+          '    sol_C=sol_C[0]'
+          'sol_final=[]'
+          'for y in sol:'
+          '    sol_final.append(y.subs(sol_C))'
           'return sol_final,'};
 
     soln = python_cmd (cmd, ode, varargin{:});
@@ -297,37 +294,20 @@ end
 %! assert (isequal (rhs(f), g))
 
 %!test
-%! % System of ODEs
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t) C1 C2
-%!   ode_1=diff(x(t),t) == 2*y(t);
-%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!   sol_sodes=dsolve([ode_1,ode_2]);
-%!   g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
-%!   assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
-%! end
-
-%!test
-%! % System of ODEs (initial-value problem)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t)
-%!   ode_1=diff(x(t),t) == 2*y(t);
-%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!   sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
-%!   g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
-%!   assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
-%! end
-
-%!test
 %! syms y(x)
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 0, y(sym(pi)/4) == 1);
 %! g = sin(2*x);
 %! assert (isequal (rhs(f), g))
+
+%!test
+%! % Test with symbolic constants on initial conditions
+%! syms a b t x(t);
+%! e1 = diff(x,t) == x + 2*t + 2;
+%! S=dsolve(e1,x(a)==b);
+%! X=rhs(S{1});
+%! assert (isequal(simplify(diff(X) - (X + 2*t + 2)),0))
+%! assert (isequal(simplify(subs(X,t,a)),b))
 
 %!test
 %! % Nonlinear example
@@ -345,17 +325,72 @@ end
 %! soln = dsolve(e, y(0) == 1);
 %! assert (isequal (rhs(soln), g))
 
-%!xtest
-%! % forcing, Issue #183
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t)
-%!   ode1 = diff(x) == x + sin(t) + 2;
-%!   ode2 = diff(y) == y - t - 3;
-%!   soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
-%!   X = rhs(soln{1});
-%!   Y = rhs(soln{2});
-%!   assert (isequal (diff(X) - (X + sin(t) + 2), 0))
-%!   assert (isequal (diff(Y) - (Y - t - 3), 0))
-%! end
+%!test
+%! % System of ODEs (general solution, polynomial rhs)
+%! syms t x(t) y(t);
+%! e1 = diff(x,t) == x+4*y - t + 2;
+%! e2 = diff(y,t) == x - 2*y + 5*t;
+%! S = dsolve([e1, e2]);
+%! X = rhs(S{1});  Y = rhs(S{2});  
+%! assert (isequal(simplify(diff(X,t) - (X+4*Y - t + 2)),0) && isequal(simplify(diff(Y,t) - (X - 2*Y + 5*t)),0))
+
+%!test
+%! % System of ODEs (general solution, trigonometric + constant rhs)
+%! syms t x(t) y(t);
+%! e1 = diff(x,t) == x + 2*sin(t) + 2;
+%! e2 = diff(y,t) == y;
+%! S = dsolve([e1, e2]);
+%! X = rhs(S{1});  Y = rhs(S{2});  
+%! assert (isequal(simplify(diff(X,t) - (X + 2*sin(t) + 2)),0) && isequal(simplify(diff(Y,t) - Y),0))
+
+%!test
+%! % System of ODEs (general solution)
+%! syms t x(t) y(t);
+%! e1 = diff(x,t) == 3*t;
+%! e2 = diff(y,t) == y;
+%! S = dsolve([e1, e2]);
+%! X = rhs(S{1});  Y = rhs(S{2});  
+%! assert (isequal(simplify(diff(X,t) - 3*t),0) && isequal(simplify(diff(Y,t) - Y),0))
+
+%!test
+%! % System of ODEs (general solution)
+%! syms t x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! sol_sodes=dsolve([ode_1,ode_2]);
+%! X=rhs(sol_sodes{1});
+%! Y=rhs(sol_sodes{2});
+%! assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
+
+%!test
+%! % System of ODEs (explicit initial conditions)
+%! syms t x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
+%! X=rhs(sol_ivp{1});
+%! Y=rhs(sol_ivp{2});
+%! assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
+%! assert (isequal(subs(X,t,0),1) && isequal(subs(Y,t,0),0))
+
+%!test
+%! % System of ODEs (implicit initial conditions)
+%! syms t x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! sol_ivp=dsolve([ode_1,ode_2],x(0)+y(0)==1,y(0)-x(0)==-1);
+%! X=rhs(sol_ivp{1});
+%! Y=rhs(sol_ivp{2});
+%! assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
+%! assert (isequal(subs(X,t,0),1) && isequal(subs(Y,t,0),0))
+
+%!test
+%! % System of ODEs (implicit initial conditions with symbolic constants)
+%! syms a b t x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! sol_ivp=dsolve([ode_1,ode_2],x(a)+y(a)==b,y(a)-x(a)==-b);
+%! X=rhs(sol_ivp{1});
+%! Y=rhs(sol_ivp{2});
+%! assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
+%! assert (isequal(simplify(subs(X,t,a)),b) && isequal(simplify(subs(Y,t,a)),0))
