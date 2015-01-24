@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -86,7 +86,6 @@ function r = vpa(x, n)
     class(x)
     error('conversion to vpa with those arguments not (yet) supported');
   end
-
 
 end
 
@@ -220,3 +219,18 @@ end
 %! z = vpa(1/3, 32);
 %! assert (isequal (x, y))
 %! assert (~isequal (x, z))
+
+%!test
+%! % big integers
+%! a = int64(12345678);
+%! a = a*a;
+%! b = vpa(a);
+%! c = vpa('152415765279684');
+%! assert (isequal (b, c))
+
+%!xtest
+%! % big integers (num2str broken in Octave)
+%! a = int64(1234567891);  a = a*a;
+%! b = vpa(a);
+%! c = vpa('1524157877488187881');
+%! assert (isequal (b, c))

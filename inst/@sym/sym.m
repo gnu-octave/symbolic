@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -111,16 +111,20 @@ function s = sym(x, varargin)
     s = cell_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double')  &&  ~isscalar (x)  &&  nargin==1)
-    s = double_array_to_sym (x);
+  elseif (isnumeric(x)  &&  ~isscalar (x)  &&  nargin==1)
+    s = numeric_array_to_sym (x);
     return
 
   elseif (islogical (x)  &&  ~isscalar (x)  &&  nargin==1)
-    s = double_array_to_sym (x);
+    s = numeric_array_to_sym (x);
     return
 
   elseif (isa (x, 'double')  &&  ~isreal (x)  &&  nargin==1)
     s = sym(real(x)) + sym('I')*sym(imag(x));
+    return
+
+  elseif (isinteger(x)  &&  nargin==1)
+    s = sym(num2str(x));
     return
 
   elseif (isa (x, 'double')  &&  nargin==1)
@@ -467,3 +471,44 @@ end
 %!   assert (isequal (a, a3))
 %!   assert (isequal (a, a4))
 %! end
+
+%!test
+%! % doubles bigger than int32 INTMAX should not fail
+%! d = 4294967295;
+%! a = sym(d);
+%! assert (isequal (double(a), d))
+%! d = d + 123456;
+%! a = sym(d);
+%! assert (isequal (double(a), d))
+
+%!test
+%! % int32 integer types
+%! a = sym(100);
+%! b = sym(int32(100));
+%! assert (isequal (a, b))
+
+%!test
+%! % int32 MAXINT integers
+%! a = sym('2147483647');
+%! b = sym(int32(2147483647));
+%! assert (isequal (a, b))
+%! a = sym('-2147483647');
+%! b = sym(int32(-2147483647));
+%! assert (isequal (a, b))
+%! a = sym('4294967295');
+%! b = sym(uint32(4294967295));
+%! assert (isequal (a, b))
+
+%!test
+%! % int64 integer types
+%! a = sym('123456789012345');
+%! b = sym(int64(123456789012345));
+%! c = sym(uint64(123456789012345));
+%! assert (isequal (a, b))
+%! assert (isequal (a, c))
+
+%!test
+%! % integer arrays
+%! a = int64([1 2 100]);
+%! s = sym(a);
+%! assert (isequal (double(a), [1 2 100]))
