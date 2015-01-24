@@ -124,17 +124,8 @@ function s = sym(x, varargin)
     return
 
   elseif (isa (x, 'double')  &&  nargin==1)
-    if (x == pi)
-      s = sym('pi');
-    elseif (isinf(x)) && (x > 0)
-      s = sym('inf');
-    elseif (isinf(x)) && (x < 0)
-      s = sym('-inf');
-    elseif (isnan(x))
-      s = sym('nan');
-    elseif (mod(x,1) == 0)   % is integer
-      s = sym(sprintf('%d', x));
-    else
+    [s, flag] = magic_double_str(x);
+    if (~flag)
       % Allow 1/3 and other "small" fractions.
       % Personally, I like a warning here so I can catch bugs.
       % Matlab SMT does this (w/o warning).
@@ -142,9 +133,9 @@ function s = sym(x, varargin)
       warning('OctSymPy:sym:rationalapprox', ...
               'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
       [N, D] = rat(x, 1e-15);
-      %s = sym(N) / sym(D);   % three round trips
-      s = sym(sprintf('Rational(%d, %d)', N, D));
+      s = sprintf('Rational(%d, %d)', N, D);
     end
+    s = sym(s);
     return
 
   elseif (islogical (x)  &&  isscalar(x)  &&  nargin==1)
