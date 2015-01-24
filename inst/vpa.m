@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -37,44 +37,57 @@
 
 function r = vpa(x, n)
 
-  if (numel(x) ~= 1 && ~ischar(x) && ~isa(x, 'sym'))
-    x = mat2list(x);
-    cmd = {
-      'L = _ins[0]'
-      'o = _ins[1:]'
-      'L = [[sympy.N(b, *o) for b in a] for a in L]'
-      'return sympy.Matrix(L),' };
-  else
-    cmd = {
-      'x = _ins[0]'
-      'o = _ins[1:]'
-      'return sympy.N(x, *o),' };
-  end
-
-  %if (nargin == 1)
-  %  r = python_cmd (cmd, x);
-  %else
-  %  r = python_cmd (cmd, x, n);
-  %end
-
   if (nargin == 1)
     n = digits();
   end
-  r = python_cmd (cmd, x, n);
-
-end
 
 
-function Ac = mat2list(A)
-%private helper
-%   convert an array to a list of lists
-
-  [n, m] = size(A);
-
-  Ac = cell(n,1);
-  for i=1:n
-    Ac{i} = num2cell(A(i,:));
+  if (isa(x, 'sym'))
+    cmd = {
+        'x, n = _ins'
+        'return sympy.N(x, n),' };
+    r = python_cmd (cmd, x, n);
+  elseif (ischar(x))
+    x = magic_str_str(x);
+    % Want Float if its '2.3' but N if its 'pi'
+    cmd = {
+        'x, n = _ins'
+        'try:'
+        '    return sympy.Float(x, n),'
+        'except ValueError:'
+        '    pass'
+        'return sympy.N(x, n),' };
+    r = python_cmd (cmd, x, n);
+  elseif (isfloat(x) && ~isreal (x))
+    r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);
+  elseif (isfloat(x) && isscalar(x) == 1)
+    [s, flag] = magic_double_str(x);
+    if (flag)
+      r = vpa(s, n);
+    else
+      cmd = {
+          'x, n = _ins'
+          'return sympy.Float(x, n),' };
+      r = python_cmd (cmd, x, n);
+    end
+  elseif (isinteger(x) && isscalar(x) == 1)
+    cmd = {
+        'x, n = _ins'
+        'return sympy.N(x, n),' };
+    r = python_cmd (cmd, x, n);
+  elseif (~isscalar(x))
+    cmd = { sprintf('return sympy.ZeroMatrix(%d, %d).as_mutable(),', size(x)) };
+    r = python_cmd (cmd);
+    for i=1:numel(x)
+      r(i) = vpa(x(i), n);
+    end
+  else
+    x
+    class(x)
+    error('conversion to vpa with those arguments not (yet) supported');
   end
+
+
 end
 
 
@@ -89,9 +102,14 @@ end
 %! assert(abs(double(b)) < 1e-4)
 
 %!test
+%! % vpa from double is ok, doesn't warn (c.f., sym(2.3))
+%! a = vpa(2.3);
+%! assert(true)
+
+%!test
 %! % vpa from double not more than 16 digits
-%! a = vpa(pi, 32);
-%! b = sin(a);
+%! a = vpa(sqrt(pi), 32);
+%! b = sin(a^2);
 %! assert(abs(double(b)) > 1e-20)
 %! assert(abs(double(b)) < 1e-15)
 
@@ -137,7 +155,68 @@ end
 %! assert(max(max(abs(double(c)-b))) < 1e-6)
 
 %!test
+%! % integer type
+%! a = vpa(int32(6), 64);
+%! b = vpa(6, 64);
+%! assert (isequal (a, b))
+
+%!test
 %! % matrix of int
 %! b = int32([pi 0; 6.25 1]);
 %! c = vpa(b, 6);
 %! assert (isequal (double(c), [3 0; 6 1]))
+
+%!test
+%! % can pass pi directly to vpa
+%! a = vpa(sym(pi), 128);
+%! b = vpa(pi, 128);
+%! assert (isequal (a, b))
+
+%!test
+%! % can pass pi directly to vpa, even in array
+%! a = vpa(sym([2 pi]), 128);
+%! b = vpa([2 pi], 128);
+%! assert (isequal (a, b))
+
+%!test
+%! % can pass i directly to vpa
+%! a = vpa(sym(i));
+%! b = vpa(i);
+%! c = vpa('i');
+%! d = vpa('I');
+%! assert (isequal (a, b))
+%! assert (isequal (a, c))
+%! assert (isequal (a, d))
+
+%!test
+%! % inf/-inf do not become symbol('inf')
+%! S = {'oo', '-oo', 'inf', 'Inf', '-inf', '+inf'};
+%! for j = 1:length(S)
+%!   a = vpa(S{j});
+%!   b = vpa(sym(S{j}));
+%!   assert (isequal (a, b))
+%! end
+
+%!test
+%! a = vpa('2.3', 20);
+%! s = strtrim(disp(a, 'flat'));
+%! assert (strcmp (s, '2.3000000000000000000'))
+
+%!test
+%! % these should *not* be the same
+%! a = vpa(2.3, 40);
+%! b = vpa('2.3', 40);
+%! sa = char(a);
+%! sb = char(b);
+%! assert (~isequal (a, b))
+%! assert (abs(double(a - b)) > 1e-20)
+%! assert (abs(double(a - b)) < 1e-15)
+%! assert (~strcmp(sa, sb))
+
+%!test
+%! % these should *not* be the same
+%! x = vpa('1/3', 32);
+%! y = vpa(sym(1)/3, 32);
+%! z = vpa(1/3, 32);
+%! assert (isequal (x, y))
+%! assert (~isequal (x, z))
