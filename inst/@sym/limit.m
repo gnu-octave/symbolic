@@ -17,7 +17,10 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{y} =} limit (@var{expr}, @var{x}, @var{a}, @var{dir})
+%% @deftypefn  {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a}, @var{dir})
+%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a})
+%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{a})
+%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr})
 %% Evaluate symbolic limits.
 %%
 %% The limit of @var{expr} as @var{x} tends to @var{a} from
@@ -32,8 +35,8 @@
 %% L = limit(1/x, x, 0, 'right')
 %% @end example
 %%
-%% FIXME: Matlab's Symbolic Math Toolbox supports omitting @var{x}
-%% and then @var{a} but we don't currently support that.
+%% If @var{x} is omitted, @code{symvar} is used to determine the
+%% variable.  If @var{a} is omitted, it defaults to 0.
 %%
 %% @var{dir} defaults to @code{right}.  Note this is different from
 %% Matlab's Symbolic Math Toolbox which returns @code{NaN} for
@@ -47,14 +50,18 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function L = limit(f,x,a,dir)
+function L = limit(f, x, a, dir)
 
   if (nargin < 4)
     dir= 'right';
-  %elseif (nargin < 3)
-  %  x = symvar(f);  % todo: not implemented
-  elseif (nargin < 3)
-    error('You must specify the var and limit');
+  end
+  if (nargin == 2)
+    a = x;
+    x = symvar(f, 1);
+  end
+  if (nargin == 1)
+    x = symvar(f, 1);
+    a = 0;
   end
 
   switch (lower (dir))
@@ -104,3 +111,11 @@ end
 %! A = [x 1/x x*y];
 %! B = sym([3 sym(1)/3 3*y]);
 %! assert (isequal (limit(A, x, 3), B))
+
+%!test
+%! % omitting arguments
+%! syms a
+%! assert (isequal (limit(a*x+a+2), a+2))
+%! assert (isequal (limit(a*x+a+2, 6), 7*a+2))
+%! assert (isequal (limit(sym(6)), 6))
+%! assert (isequal (limit(sym(6), 7), 6))
