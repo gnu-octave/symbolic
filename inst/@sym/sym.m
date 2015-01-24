@@ -133,7 +133,7 @@ function s = sym(x, varargin)
       warning('OctSymPy:sym:rationalapprox', ...
               'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
       [N, D] = rat(x, 1e-15);
-      s = sprintf('Rational(%d, %d)', N, D);
+      s = sprintf('Rational(%s, %s)', num2str(N), num2str(D));
     end
     s = sym(s);
     return

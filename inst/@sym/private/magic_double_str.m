@@ -47,7 +47,7 @@ function [s, flag] = magic_double_str(x)
   elseif (isnan(x))
     s = 'nan';
   elseif (isreal(x) && (mod(x,1) == 0))   % is integer
-    s = sprintf('%d', x);
+    s = num2str(x);  % better than sprintf('%d', large)
   else
     s = '';
     flag = 0;
