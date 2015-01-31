@@ -98,11 +98,11 @@ How to hack on the code:
 Implementation
 --------------
 
-Generate Python code to do the actual work.  Sym objects keep a text
-field for display purposes and a string (currently a customized SymPy
-`srepr`) of their python object.  The objects are communicated between
-Python and Octave by passing the srepr's back-and-forth.  Currently
-pure m-file (and Python) implementation, no code to be compiled.
+Python code is generated to do the actual work.  Each sym objects keep
+a text field for display purposes and a string (a SymPy `srepr`).  The
+objects are communicated between Python and Octave by passing the
+srepr's back-and-forth.  Currently pure m-file (and Python)
+implementation, no code to be compiled.
 
 
 
