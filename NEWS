@@ -20,6 +20,10 @@ octsympy 2.0.0 (yyyy-mm-dd)
 
  *  Fixes for vpa and vpasolve: high precision should be more reliable.
 
+ *  Improve handling `sym(pi/3)` and other small fractions of pi.  It
+    works but you'll still get a warning and 2*sym(pi)/3 is really the
+    preferred approach!  `sym(-pi)` now works.
+
  *  On Windows, default to ascii rendering for now (until unicode
     is fixed in Octave on that platform).
 
