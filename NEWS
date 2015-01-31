@@ -1,5 +1,11 @@
-octsympy x.y.z (yyyy-mm-dd)
+octsympy 2.0.0 (yyyy-mm-dd)
 ===========================
+
+ *  Octsympy is now the "symbolic" package for Octave Forge.  There
+    was a previous "symbolic" package (based on GiNaC) which reached
+    version 1.1.0.  To prevent confusion, we are now at version 2.0.0.
+    Additionally, the history of the two projects has been merged
+    (thanks Carnë Draug).
 
  *  New commands:
 
