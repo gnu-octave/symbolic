@@ -18,6 +18,8 @@ octsympy 2.0.0 (yyyy-mm-dd)
 
  *  Fixes for developement version of SymPy.
 
+ *  Fixes for vpa and vpasolve: high precision should be more reliable.
+
  *  On Windows, default to ascii rendering for now (until unicode
     is fixed in Octave on that platform).
 
