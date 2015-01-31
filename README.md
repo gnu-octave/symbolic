@@ -118,7 +118,9 @@ implemented.
 Related Projects
 ----------------
 
-* The Octave-Forge symbolic toolbox [http://octave.sourceforge.net/symbolic/index.html].  My impression is the VPA is pretty good.
+  * There was a previous "symbolic" package in Octave Forge based on
+    GiNaC.  Its history has now been merged into octsympy.
 
-* "SymPy CAS" by Jonathan Lister [http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab].  Calls SymPy commands using calls to system().
+  * ["SymPy CAS" by Jonathan Lister](http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab).
+    Calls SymPy commands using system().
 
