@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -111,30 +111,25 @@ function s = sym(x, varargin)
     s = cell_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double')  &&  ~isscalar (x)  &&  nargin==1)
-    s = double_array_to_sym (x);
+  elseif (isnumeric(x)  &&  ~isscalar (x)  &&  nargin==1)
+    s = numeric_array_to_sym (x);
     return
 
   elseif (islogical (x)  &&  ~isscalar (x)  &&  nargin==1)
-    s = double_array_to_sym (x);
+    s = numeric_array_to_sym (x);
     return
 
   elseif (isa (x, 'double')  &&  ~isreal (x)  &&  nargin==1)
     s = sym(real(x)) + sym('I')*sym(imag(x));
     return
 
+  elseif (isinteger(x)  &&  nargin==1)
+    s = sym(num2str(x));
+    return
+
   elseif (isa (x, 'double')  &&  nargin==1)
-    if (x == pi)
-      s = sym('pi');
-    elseif (isinf(x)) && (x > 0)
-      s = sym('inf');
-    elseif (isinf(x)) && (x < 0)
-      s = sym('-inf');
-    elseif (isnan(x))
-      s = sym('nan');
-    elseif (mod(x,1) == 0)   % is integer
-      s = sym(sprintf('%d', x));
-    else
+    [s, flag] = magic_double_str(x);
+    if (~flag)
       % Allow 1/3 and other "small" fractions.
       % Personally, I like a warning here so I can catch bugs.
       % Matlab SMT does this (w/o warning).
@@ -142,9 +137,9 @@ function s = sym(x, varargin)
       warning('OctSymPy:sym:rationalapprox', ...
               'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
       [N, D] = rat(x, 1e-15);
-      %s = sym(N) / sym(D);   % three round trips
-      s = sym(sprintf('Rational(%d, %d)', N, D));
+      s = sprintf('Rational(%s, %s)', num2str(N), num2str(D));
     end
+    s = sym(s);
     return
 
   elseif (islogical (x)  &&  isscalar(x)  &&  nargin==1)
@@ -476,3 +471,44 @@ end
 %!   assert (isequal (a, a3))
 %!   assert (isequal (a, a4))
 %! end
+
+%!test
+%! % doubles bigger than int32 INTMAX should not fail
+%! d = 4294967295;
+%! a = sym(d);
+%! assert (isequal (double(a), d))
+%! d = d + 123456;
+%! a = sym(d);
+%! assert (isequal (double(a), d))
+
+%!test
+%! % int32 integer types
+%! a = sym(100);
+%! b = sym(int32(100));
+%! assert (isequal (a, b))
+
+%!test
+%! % int32 MAXINT integers
+%! a = sym('2147483647');
+%! b = sym(int32(2147483647));
+%! assert (isequal (a, b))
+%! a = sym('-2147483647');
+%! b = sym(int32(-2147483647));
+%! assert (isequal (a, b))
+%! a = sym('4294967295');
+%! b = sym(uint32(4294967295));
+%! assert (isequal (a, b))
+
+%!test
+%! % int64 integer types
+%! a = sym('123456789012345');
+%! b = sym(int64(123456789012345));
+%! c = sym(uint64(123456789012345));
+%! assert (isequal (a, b))
+%! assert (isequal (a, c))
+
+%!test
+%! % integer arrays
+%! a = int64([1 2 100]);
+%! s = sym(a);
+%! assert (isequal (double(a), [1 2 100]))
