@@ -112,8 +112,13 @@ function f = symfun(expr, vars)
     expr = python_cmd (cmd, vars{:});
   end
 
-  % sanity check and allows symfun(10, x)
-  expr = sym(expr);
+  if (isa(expr, 'symfun'))
+    % allow symfun(<symfun>, x)
+    expr = expr.sym;
+  else
+    % e.g., allow symfun(<double>, x)
+    expr = sym(expr);
+  end
 
   assert (isa (vars, 'cell'))
   for i=1:length(vars)
@@ -251,3 +256,25 @@ end
 %! syms 'f(y, x)'
 %! v = f.vars;
 %! assert (isequal (v{1}, y) && isequal (v{2}, x))
+
+%!test
+%! % assignment of symfun to symfun, issue #189
+%! syms t
+%! x(t) = 2*t;
+%! y(t) = x;
+%! assert (isa (y, 'symfun'))
+%! y = symfun(x, t);
+%! assert (isa (y, 'symfun'))
+%! % others
+%! y = x;
+%! assert (isa (y, 'symfun'))
+%! y(t) = x(t);
+%! assert (isa (y, 'symfun'))
+
+%!test
+%! % assignment of generic symfun to symfun
+%! syms t x(t)
+%! y(t) = x;
+%! assert (isa (y, 'symfun'))
+%! y = symfun(x, t);
+%! assert (isa (y, 'symfun'))
