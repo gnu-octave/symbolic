@@ -135,9 +135,15 @@ function s = sym(x, varargin)
       % Matlab SMT does this (w/o warning).
       % FIXME: could have sympy do this?  Or just make symbolic floats?
       warning('OctSymPy:sym:rationalapprox', ...
-              'Using rat() for rational approx (are you sure you want to pass a noninteger?)');
-      [N, D] = rat(x, 1e-15);
-      s = sprintf('Rational(%s, %s)', num2str(N), num2str(D));
+              'Using rat() heuristics for double-precision input (is this what you wanted?)');
+      [N1, D1] = rat(x);
+      [N2, D2] = rat(x/pi);
+      if (10*abs(D2) < abs(D1))
+        % use frac*pi if demoninator significantly shorter
+        s = sprintf('Rational(%s, %s)*pi', num2str(N2), num2str(D2));
+      else
+        s = sprintf('Rational(%s, %s)', num2str(N1), num2str(D1));
+      end
     end
     s = sym(s);
     return
@@ -314,7 +320,7 @@ end
 %! assert( double(x) == 1/2 )
 %! assert( isequal( 2*x, sym(1)))
 
-%!warning <rational approx> x = sym(1/2);
+%!warning <heuristic> x = sym(1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
@@ -512,3 +518,14 @@ end
 %! a = int64([1 2 100]);
 %! s = sym(a);
 %! assert (isequal (double(a), [1 2 100]))
+
+%!test
+%! % sym(double) heuristic
+%! s = warning ('off', 'OctSymPy:sym:rationalapprox');
+%! x = sym(2*pi/3);
+%! assert (isequal (x/sym(pi), sym(2)/3))
+%! x = sym(22*pi);
+%! assert (isequal (x/sym(pi), sym(22)))
+%! x = sym(pi/123);
+%! assert (isequal (x/sym(pi), sym(1)/123))
+%! warning (s)

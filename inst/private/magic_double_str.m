@@ -40,6 +40,8 @@ function [s, flag] = magic_double_str(x)
   % NOTE: yes, these are floating point equality checks!
   if (x == pi)
     s = 'pi';
+  elseif (x == -pi)
+    s = '-pi';
   elseif ((isinf(x)) && (x > 0))
     s = 'inf';
   elseif ((isinf(x)) && (x < 0))
