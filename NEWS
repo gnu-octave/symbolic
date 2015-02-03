@@ -5,6 +5,7 @@ octsympy 2.x.y (yyyy-mm-dd)
 
           columns
           degree
+          ismatrix
           numden
           rows
 

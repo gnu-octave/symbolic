@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,27 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{b} =} isvector (@var{x})
-%% Return true if this symbolic expression is a vector.
+%% @deftypefn {Function File} {@var{b} =} ismatrix (@var{x})
+%% Return true if this symbolic expression is a matrix.
 %%
-%% @seealso{size, numel, isscalar}
+%% @seealso{isscalar, isvector, size}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function b = isvector(x)
+function b = ismatrix(x)
 
-  d = size(x);
-  b = any(d == 1);
+  b = true;
 
 end
 
 
-%!assert(isvector(sym('x')))
-%!assert(isvector(sym([1 2 3])))
-%!assert(isvector(sym([1; 2])))
-%!assert(~isvector(sym([1 2; 3 4])))
-%!assert(~isvector(sym([])))
-%!assert(isvector(sym(ones(1,0))))
-%!assert(~isvector(sym(ones(0,3))))
+%!assert(ismatrix(sym('x')))
+%!assert(ismatrix(sym([1 2 3])))
+%!assert(ismatrix(sym([1; 2])))
+%!assert(ismatrix(sym([1 2; 3 4])))
+%!assert(ismatrix(sym([])))
+%!assert(ismatrix(sym(ones(1,0))))
+%!assert(ismatrix(sym(ones(0,3))))
