@@ -42,8 +42,6 @@
 %% @seealso{sym2poly, polyval, roots}
 %% @end deftypefn
 
-%% FIXME: doesn't work?  PKG_ADD: autoload ('poly2sym', which ('@sym/poly2sym'))
-
 function p = poly2sym(c,x)
 
   if (nargin == 1)
@@ -66,8 +64,6 @@ function p = poly2sym(c,x)
     end
   end
 
-  % we don't have vpa yet
-  %p = vpa(0);
   p = sym(0);
   for i=1:N
     % horner form
