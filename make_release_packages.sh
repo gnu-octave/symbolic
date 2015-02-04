@@ -42,6 +42,7 @@ cp -r octsympy ${DIR}
 pushd ${DIR}/
 rm -rf .git/
 rm -f screenshot.png
+rm -f screenshot-install.png
 popd
 
 # make clean
