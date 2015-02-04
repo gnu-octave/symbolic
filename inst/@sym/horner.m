@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -57,9 +57,9 @@ function y = horner(p, x)
   end
 
   if (isempty(x))
-    y = python_cmd ('return ( sp.horner(*_ins), )', p);
+    y = python_cmd ('return sp.horner(*_ins),', sym(p));
   else
-    y = python_cmd ('return ( sp.horner(*_ins), )', p, x);
+    y = python_cmd ('return sp.horner(*_ins),', sym(p), sym(x));
   end
 
 end
@@ -85,3 +85,8 @@ end
 %! q = horner (p);
 %! assert (isAlways (p == q))
 %! assert (isAlways (horner(2*x^3 + 4*x^2 + 6*x + 8) == q))
+
+%!test
+%! % non-sym input
+%! syms x
+%! assert (isequal (horner(6, x), sym(6)))
