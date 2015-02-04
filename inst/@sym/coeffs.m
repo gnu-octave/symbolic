@@ -70,6 +70,8 @@ function [c, t] = coeffs(p, x)
 
   cmd = { 'f = _ins[0]'
           'xx = _ins[1]'
+          'if xx == [] and f.is_constant():'  % special case
+          '    xx = sympy.S("x")'
           'try:'
           '    xx = list(xx)'
           'except TypeError:'
@@ -181,3 +183,7 @@ end
 %! % non sym input
 %! syms x
 %! assert (isequal (coeffs(6, x), sym(6)))
+
+%!test
+%! % constant input without x
+%! assert (isequal (coeffs(sym(6)), sym(6)))
