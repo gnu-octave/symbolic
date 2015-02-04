@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=0.1.2-git
+VER=2.0.0-git
 # for release
-#VER=0.1.2
+#VER=0.1.3
 #TAG=v${VER}
 
 #----------------------------------------------------------------
-PKG=octsympy-$VER
+PKG=symbolic-$VER
 DIR=$PKG
 
 MLPKG=octsympy-matlab-$VER

@@ -15,14 +15,14 @@ How to do a release
     testing them first without using the tag.  Then test the packages
     by running the test suite.
 
-      - make_release_packages.sh, use "day-to-day testing" mode
+      - make_release_packages.sh, use "day-to-day testing" mode instead
+        of tag.
 
-      - make_windows_package.sh, use "git checkout master" instead of
-        tag.
+      - make_windows_package.sh, use "day-to-day testing" mode.
 
   * If packages seem ok, then tag the repo with:
 
-    `git tag -a v0.1.2 -m "Version 0.1.2"`
+    `git tag -a v2.0.0 -m "Version 2.0.0"`
 
   * `git push --tags origin master`.  If messed up and want to change
     anything after this, need to bump version number (tag is public).
