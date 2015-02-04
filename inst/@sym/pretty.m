@@ -74,9 +74,9 @@ end
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))
 
 %!test
-%! % with unicode, probably fails on Matlab
+%! % force unicode
 %! syms x
-%! s1 = pretty(sin(x/2));
+%! s1 = pretty(sin(x/2), 'unicode');
 %! s2 = sprintf('     ⎛x⎞\n  sin⎜─⎟\n     ⎝2⎠');
 %! s3 = strrep(s2, sprintf('\n'), sprintf('\r\n'));
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))
