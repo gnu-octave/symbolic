@@ -1,4 +1,4 @@
-%% Copyright (C) 2003 Willem J. Atsma <watsma@users.sf.net>
+%% Copyright (C) 2003, 2014, 2015 Willem J. Atsma and Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -16,23 +16,30 @@
 %% see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{p} =} poly2sym (@var{c}, @var{x})
-%% Creates a symbolic polynomial expression @var{p} with coefficients @var{c}.
+%% @deftypefn  {Function File} {@var{p} =} poly2sym (@var{c})
+%% @deftypefnx {Function File} {@var{p} =} poly2sym (@var{c}, @var{x})
+%% Create a symbolic polynomial expression from coefficients.
 %%
-%% If @var{x} is not specified, the free variable is set to sym('x'). @var{c}
+%% If @var{x} is not specified, the free variable is set to @code{x}. @var{c}
 %% may be a vector of doubles or syms. It can also be a cell array vector.
 %% @var{x} may be a symbolic expression or something that converts to one.
 %% The coefficients correspond to decreasing exponent of the free variable.
 %%
 %% Example:
 %% @example
+%% @group
 %% x = sym ('x');
 %% y = sym ('y');
-%% p = poly2sym ([2 5 -3]);        % p = 2*x^2 + 5*x - 3
-%% p = poly2sym (@{2*y 5 -3@},x);    % p = 2*y*x^2 + 5*x - 3
+%% poly2sym ([2 5])
+%%    @result{} 2⋅x + 5
+%% poly2sym (@{2*y 5 -3@}, x)
+%%    @result{}
+%%          2
+%%       2⋅x ⋅y + 5⋅x - 3
+%% @group
 %% @end example
 %%
-%% @seealso{sym2poly,polyval,roots}
+%% @seealso{sym2poly, polyval, roots}
 %% @end deftypefn
 
 %% FIXME: doesn't work?  PKG_ADD: autoload ('poly2sym', which ('@sym/poly2sym'))
@@ -94,3 +101,13 @@ end
 %!assert(isequal(  poly2sym ({}, x),  0  ))
 %% weird cases (matlab SMT does this too, I think it should be an error)
 %!assert(isAlways(  poly2sym([x x], x) == x^2 + x  ))
+
+%!test
+%! % mixed cell array with doubles and syms
+%! assert (isequal (poly2sym ({2.0 sym(3) int64(4)}), 2*x^2 + 3*x + 4))
+
+%!test
+%! % string for x
+%! p = poly2sym ([1 2], 's');
+%! syms s
+%! assert (isequal (p, s + 2))
