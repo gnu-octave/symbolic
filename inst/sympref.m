@@ -126,11 +126,11 @@ function varargout = sympref(cmd, arg)
       end
       settings.whichpython = '';
       settings.digits = 32;
-      settings.snippet = false;  % Should be false for a release
+      settings.snippet = true;  % Should be false for a release
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.0.0';
+      varargout{1} = '2.0.0-git';
 
     case 'display'
       if (nargin == 1)
