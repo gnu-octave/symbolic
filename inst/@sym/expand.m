@@ -28,7 +28,7 @@
 
 function y = expand(x)
 
-  evalpy('y = expand(x);;', x)
+  y = python_cmd( 'return sympy.expand(*_ins),', sym(x));
 
 end
 
