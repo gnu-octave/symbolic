@@ -71,6 +71,12 @@ Differences
   `[X, Y] = solve(x*x == 4, x == 2*y)` does the same on both, returning
   column vectors for X and Y.
 
+  * SMT sym2poly converts to a double array.  We *currently* copy this
+    behaviour but might change in the future.  We recommend
+    `double(sym2poly(x^2 + 3))` for clarity and compatibility.  Our
+    sym2poly also takes an optional extra argument to specify `x`
+    which returns a symbolic row vector.
+
 
 Differences in assumptions
 --------------------------
