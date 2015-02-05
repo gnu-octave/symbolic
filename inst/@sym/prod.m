@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,22 +21,37 @@
 %% @deftypefnx {Function File} {@var{y} =} prod (@var{x}, @var{n})
 %% Product of symbolic expressions.
 %%
-%% Can specify row or column sums using @var{n}.
-%%
 %% Example:
 %% @example
+%% @group
 %% syms x y z
 %% f = prod([x y z])
+%%    @result{} x*y*z
+%% @end group
 %% @end example
+%%
+%% Can specify row or column sums using @var{n}:
 %% @example
+%% @group
 %% f = prod([x y; x z], 1)
+%%    @result{}
+%%       ⎡ 2     ⎤
+%%       ⎣x   y⋅z⎦
 %% f = prod([x y; x z], 2)
+%%    @result{}
+%%       ⎡x⋅y⎤
+%%       ⎢   ⎥
+%%       ⎣x⋅z⎦
+%% @end group
 %% @end example
 %%
 %% @seealso{sum, symprod}
 %% @end deftypefn
 
 function y = prod(x, n)
+
+  x = sym(x);
+  n = double(n);
 
   if (isscalar(x))
     y = x;
