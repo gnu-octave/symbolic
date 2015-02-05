@@ -18,18 +18,34 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{y} =} symprod (@var{f}, @var{n}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n}, [@var{a}, @var{b}])
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, [@var{a}, @var{b}])
+%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n}, [@var{a} @var{b}])
+%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{a}, @var{b})
+%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, [@var{a} @var{b}])
 %% Symbolic product.
 %%
-%% FIXME: symprod(f, [a b]), other calling forms
-%%
-%% FIXME: revisit witn sympy 0.7.5:
+%% Examples:
 %% @example
-%% symprod(q,n,1,oo )
-%% ans = [sym] q**oo
-%% 0^oo
-%% ans = [sym] 0
+%% @group
+%% syms n m x
+%% symprod(sin(n*x), n, [1 3])
+%%    @result{} sin(x)⋅sin(2⋅x)⋅sin(3⋅x)
+%% symprod(n, n, 1, m)
+%%    @result{} m!
+%% @end group
+%% @end example
+%%
+%% Unevaluated product:
+%% @example
+%% @group
+%% syms x m
+%% symprod(sin(x), x, [1 m])
+%%    @result{}
+%%         m
+%%       ┬───┬
+%%       │   │ sin(x)
+%%       │   │
+%%       x = 1
+%% @end group
 %% @end example
 %%
 %% @seealso{symsum, prod}
@@ -40,9 +56,54 @@
 
 function S = symprod(f, n, a, b)
 
-  % FIXME: symvar
-  %if (nargin == 3)
-  %  n = symvar
+  idx1.type = '()';
+  idx1.subs = {1};
+  idx2.type = '()';
+  idx2.subs = {2};
+
+  if (nargin == 1)
+    n = symvar(f, 1);
+    if (isempty(n))
+      n = sym('x');
+    end
+    a = sym(1);
+    b = n;
+  elseif (nargin == 2) && (length(n) == 2)
+    f = sym(f);
+    %a = n(1);  % issue #17
+    %b = n(2);
+    a = subsref(n, idx1);
+    b = subsref(n, idx2);
+    n = symvar(f, 1);
+    if (isempty(n))
+      n = sym('x');
+    end
+  elseif (nargin == 2)
+    f = sym(f);
+    n = sym(n);
+    a = sym(1);
+    b = n;
+  elseif (nargin == 3) && (length(a) == 2)
+    f = sym(f);
+    n = sym(n);
+    %b = a(2);  % issue #17
+    %a = a(1);
+    b = subsref(a, idx2);
+    a = subsref(a, idx1);
+  elseif (nargin == 3)
+    f = sym(f);
+    b = a;
+    a = n;
+    n = symvar(f, 1);
+    if (isempty(n))
+      n = sym('x');
+    end
+  else
+    f = sym(f);
+    n = sym(n);
+    a = sym(a);
+    b = sym(b);
+  end
 
   cmd = { '(f, n, a, b) = _ins'
           'S = sp.product(f, (n, a, b))'
@@ -58,6 +119,66 @@ end
 %! syms n
 %! assert (isequal (symprod(n, n, 1, 10), factorial(sym(10))))
 %! assert (isequal (symprod(n, n, sym(1), sym(10)), factorial(10)))
+
+%!test
+%! % one input
+%! syms n
+%! f = symprod (n);
+%! g = factorial (n);
+%! assert (isequal (f, g))
+%! f = symprod (2*n);
+%! g = 2^n * factorial (n);
+%! assert (isequal (f, g))
+
+%!test
+%! % constant input
+%! f = symprod (sym(2));
+%! syms x
+%! g = 2^x;
+%! assert (isequal (f, g))
+
+%!test
+%! % two inputs
+%! syms n
+%! f = symprod (2*n, n);
+%! g = 2^n * factorial (n);
+%! assert (isequal (f, g))
+
+%!test
+%! % two inputs, second is range
+%! syms n
+%! f = symprod (n, [1 6]);
+%! g = 720;
+%! assert (isequal (f, g))
+%! f = symprod (n, [sym(1) 6]);
+%! g = 720;
+%! assert (isequal (f, g))
+%! f = symprod (2*n, [1 6]);
+%! g = sym(2)^6*720;
+%! assert (isequal (f, g))
+
+%!test
+%! % three inputs, last is range
+%! syms n
+%! f = symprod (2*n, n, [1 4]);
+%! g = sym(384);
+%! assert (isequal (f, g))
+%! f = symprod (2*n, n, [sym(1) 4]);
+%! g = sym(384);
+%! assert (isequal (f, g))
+%! f = symprod (2, n, [sym(1) 4]);
+%! g = sym(16);
+%! assert (isequal (f, g))
+
+%!test
+%! % three inputs, no range
+%! syms n
+%! f = symprod (2*n, 1, 4);
+%! g = sym(384);
+%! assert (isequal (f, g))
+%! f = symprod (5, sym(1), 3);
+%! g = sym(125);
+%! assert (isequal (f, g))
 
 %!test
 %! % infinite product
