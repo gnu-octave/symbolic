@@ -33,43 +33,44 @@ These should be updated to match SMT if/when they are added.
 Differences
 -----------
 
-* bernoulli in octsympy gives explicit polynomials whereas SMT treats
-  e.g., diff() using identities.
+  * bernoulli in octsympy gives explicit polynomials whereas SMT treats e.g.,
+    diff() using identities.
 
-* SMT's sym() constructor allows big string expressions: we don't
-  really support that (and its not the way modern SMT is used either).
-  Build your expressions like sym('x')/2 rather than sym('x/2').
-  (If you do want to pass long strings, they should be valid Python
-  SymPy `srepr` syntax---i.e., you probably don't want to do this!)
+  * SMT's sym() constructor allows big string expressions: we don't really
+    support that (and its not the way modern SMT is used either).  Build your
+    expressions like sym('x')/2 rather than sym('x/2').  (If you do want to
+    pass long strings, they should be valid Python SymPy `srepr`
+    syntax---i.e., you probably don't want to do this!)
 
-* OctSymPy has [p,m] = factor(a) which returns an array of the
-  prime factors and their multiplicities.  Pure Matlab 'factor' has
-  this but strangely SMT 'factor' does not.
+  * OctSymPy has [p,m] = factor(a) which returns an array of the prime
+    factors and their multiplicities.  Pure Matlab 'factor' has this but
+    strangely SMT 'factor' does not.
 
-* Assumptions are quite different, although we fake quite a bit for
-  compatibility, see section below.
+  * Assumptions are quite different, although we fake quite a bit for
+    compatibility, see section below.
 
-* SMT has isinf(x + oo) and isinf(x*oo) true.  SymPy says false.
+  * SMT has isinf(x + oo) and isinf(x*oo) true.  SymPy says false.
 
-* SMT logical(sym('x')), logical(sym(pi)) are errors.  OctSymPy has true (b/c nonzero).  FIXME: double-check later
+  * SMT logical(sym('x')), logical(sym(pi)) are errors.  OctSymPy has true
+    (b/c nonzero).  FIXME: double-check later
 
-* SMT char(expr) outputs MuPAD code string; OctSymPy outputs SymPy string.
+  * SMT char(expr) outputs MuPAD code string; OctSymPy outputs SymPy string.
 
-* Suppose we have a symfun `g(s,t) = x`.  Both SMT and OctSymPy agree
-  that `symvar(g, 1)` is `s` (i.e., preference for the independent
-  variables).  However, `symvar(g)` gives `[s t x]` in OctSymPy and
-  `x] in SMT.  I suspect this is an SMT bug.
+  * Suppose we have a symfun `g(s,t) = x`.  Both SMT and OctSymPy
+    agree that `symvar(g, 1)` is `s` (i.e., preference for the
+    independent variables).  However, `symvar(g)` gives `[s t x]` in
+    OctSymPy and `x` in SMT.  I suspect this is an SMT bug.
 
-* SMT and OctSymPy differ in how the return solutions to systems of
-  equation has multiple solutions.  For example:
-  `d = solve(x*x == 4, x == 2*y)`
-  In OctSymPy, the two solutions are `d{1}` and `d{2}`.  Components are
-  accessed as `d{1}.x` (the x component of the first solution).  In SMT, its
-  the opposite: `d.x` gives the x component of both solutions as a column vector.
-  I prefer our way (but this could be changed fairly easily.)
+  * SMT and OctSymPy differ in how the return solutions to systems of
+    equation has multiple solutions.  For example: `d = solve(x*x ==
+    4, x == 2*y)` In OctSymPy, the two solutions are `d{1}` and
+    `d{2}`.  Components are accessed as `d{1}.x` (the x component of
+    the first solution).  In SMT, its the opposite: `d.x` gives the x
+    component of both solutions as a column vector.  I prefer our way
+    (but this could be changed fairly easily.)
 
-  `[X, Y] = solve(x*x == 4, x == 2*y)` does the same on both, returning
-  column vectors for X and Y.
+    `[X, Y] = solve(x*x == 4, x == 2*y)` does the same on both, returning
+    column vectors for X and Y.
 
   * SMT sym2poly converts to a double array.  We *currently* copy this
     behaviour but might change in the future.  We recommend
