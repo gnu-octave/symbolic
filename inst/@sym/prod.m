@@ -50,9 +50,6 @@
 
 function y = prod(x, n)
 
-  x = sym(x);
-  n = double(n);
-
   if (isscalar(x))
     y = x;
     return
@@ -67,6 +64,9 @@ function y = prod(x, n)
       n = 1;
     end
   end
+
+  x = sym(x);
+  n = double(n);
 
   %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
   cmd = { 'A = _ins[0]'
