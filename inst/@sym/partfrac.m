@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,7 +32,7 @@
 %% Other examples:
 %% @example
 %% partfrac(y/(x + y)/(x + 1), x)
-%% partfrac(y/(x + y)/(x + 1), y)    
+%% partfrac(y/(x + y)/(x + 1), y)
 %% @end example
 %%
 %% @seealso{factor}
@@ -41,22 +41,19 @@
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, fractions
 
-function z = partfrac(f, varargin)
+function z = partfrac(f, x)
 
-  %% some special cases for SMT compat.
-  if (nargin == 1)  
+  % some special cases for SMT compat.
+  if (nargin == 1)
     x = symvar(f, 1);
     if (isempty(x))
-      x = sym('x');  
+      x = sym('x');
     end
-    z = partfrac(f, x);
-    return
   end
 
   cmd = 'return sp.polys.partfrac.apart(_ins[0],_ins[1]),';
 
-  x = sym(varargin);
-  z = python_cmd (cmd, sym(f), x);
+  z = python_cmd (cmd, sym(f), sym(x));
 
 end
 

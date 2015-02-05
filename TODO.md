@@ -1,14 +1,4 @@
-# TODO List
-
-## commands
-
-nchoosek binomial
-
-taylor
-
-isinf for oo,zoo, also symum unittext
- isnan(double(sym('NaN'))) fails but nan works
-
+# TODO List, mostly historial now
 
 ## assumptions
 
@@ -89,10 +79,9 @@ generate the code to make it work.
 
 Currently we have two approaches implemented:
 
-* Using system()
+  * Using system()
 
-* Using popen2().  Octave has this but it might be unix-specific.
-
+  * Using popen2()
 
 There are quite a few options out there:
 

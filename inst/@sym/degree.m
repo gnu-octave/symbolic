@@ -1,0 +1,91 @@
+%% Copyright (C) 2015 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File} {@var{n} =} degree (@var{p})
+%% @deftypefnx {Function File} {@var{n} =} degree (@var{p}, @var{x})
+%% Extract numerator and demoninator of symbolic expression.
+%%
+%% Examples:
+%% @example
+%% @group
+%% syms x
+%% degree(x^2 + 6)
+%%    @result{} 2
+%% @end group
+%% @end example
+%%
+%% You can specify the variable or rely on the @code{symvar} default:
+%% @example
+%% @group
+%% syms x y
+%% degree(x^2 + y*x + 1)
+%%    @result{} 2
+%% degree(x^2 + y*x + 1, x)
+%%    @result{} 2
+%% degree(x^2 + y*x + 1, y)
+%%    @result{} 1
+%% @end group
+%% @end example
+%%
+%% FIXME: @code{degree(x^n, x)} does not work here (nor in SMT).
+%%
+%% @seealso{sym2poly, poly2sym}
+%% @end deftypefn
+
+function n = degree(p, x)
+
+  if (nargin == 1)
+    x = symvar(p, 1);
+  end
+
+  if (isempty(x))
+    % degree will fail if p is constant and no generator given
+    x = sym('x');
+  end
+
+  n = python_cmd ('return sympy.degree(*_ins),', sym(p), sym(x));
+
+end
+
+
+%!test
+%! syms x
+%! assert (isequal (degree(x^3), 3))
+%! assert (isequal (degree(x^3 + 6), 3))
+
+%!test
+%! % specify variable
+%! syms x y
+%! p = x**2 + y*x + 1;
+%! assert (isequal (degree(p), 2))
+%! assert (isequal (degree(p, x), 2))
+%! assert (isequal (degree(p, y), 1))
+
+%!test
+%! syms x a oo
+%! assert (isequal (degree(x^3, a), 0))
+%! assert (isequal (degree(sym(1), a), 0))
+%! assert (isequal (degree(sym(0), a), -oo))
+
+%!xtest
+%! % constant inputs
+%! syms oo
+%! assert (isequal (degree(sym(1)), 0))
+%! assert (isequal (degree(sym(0)), -oo))
+

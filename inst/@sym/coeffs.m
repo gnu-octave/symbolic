@@ -70,6 +70,8 @@ function [c, t] = coeffs(p, x)
 
   cmd = { 'f = _ins[0]'
           'xx = _ins[1]'
+          'if xx == [] and f.is_constant():'  % special case
+          '    xx = sympy.S("x")'
           'try:'
           '    xx = list(xx)'
           'except TypeError:'
@@ -82,10 +84,11 @@ function [c, t] = coeffs(p, x)
           '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
           'return (Matrix([cc]), Matrix([tt]))' };
 
+  % don't use symvar: if input has x, y we want both
   if (nargin == 1)
-    [c, t] = python_cmd (cmd, p, {});
+    [c, t] = python_cmd (cmd, sym(p), {});
   else
-    [c, t] = python_cmd (cmd, p, x);
+    [c, t] = python_cmd (cmd, sym(p), sym(x));
   end
 
   %% matlab SMT bug?
@@ -169,3 +172,18 @@ end
 %! assert (isequal (c, a))
 %! [c, t] = coeffs(6*x*x + 27*y*x  + 36);
 %! assert (isequal (c, a))
+
+%!test
+%! % no input defaults to all symbols (not symvar to get x)
+%! syms x y
+%! [c, t] = coeffs(6*x*x + 27*y*x  + 36);
+%! assert (isequal (c, [6 27 36]))
+
+%!test
+%! % non sym input
+%! syms x
+%! assert (isequal (coeffs(6, x), sym(6)))
+
+%!test
+%! % constant input without x
+%! assert (isequal (coeffs(sym(6)), sym(6)))

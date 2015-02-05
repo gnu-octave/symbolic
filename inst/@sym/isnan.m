@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -99,7 +99,7 @@ end
 
 %!test
 %! % Must not contain string 'symbol'; these all should make an
-%! % actual infinity.  Actually a ctor test, not isnan.
+%! % actual nan.  Actually a ctor test, not isnan.
 %! y = sym(nan);
 %! assert (isempty( strfind(y.pickle, 'Symbol') ))
 %! y = sym('nan');
