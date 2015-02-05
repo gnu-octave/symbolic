@@ -60,7 +60,7 @@ function c = sym2poly(p,x)
 
   if (nargin == 1)
     ss = findsymbols(p);
-    if (length(ss) > 2)
+    if (length(ss) >= 2)
       error('Input has more than one symbol: not clear what you want me to do')
     end
     x = ss{1};
@@ -111,3 +111,8 @@ function c = sym2poly(p,x)
 %!assert (isequal (sym2poly (poly2sym ([a b c], x), x), [a b c]))
 %!assert (isequal (poly2sym (sym2poly(a*x^2 + c, x), x), a*x^2 + c))
 %!assert (isequal (sym2poly (poly2sym ([1 2 3])), [1 2 3]))
+
+%!error <more than one symbol>
+%! % too many symbols for single-input
+%! p = a*x^2 + 2;
+%! c = sym2poly (p);
