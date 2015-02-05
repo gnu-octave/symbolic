@@ -179,3 +179,61 @@ end
 %! assert (isequal(  b(1:2:4,:), a(1:2:4,:)  ))
 %! assert (isequal(  b(2:2:4,3), a(2:2:4,3)  ))
 %! assert (isequal(  b(2:2:4,3), a(2:2:4,3)  ))
+
+%!test
+%! % 2D arrays
+%! b = [1:4]; b = [b; 3*b; 5*b];
+%! a = sym(b);
+%! I = rand(size(b)) > 0.5;
+%! assert (isequal (a(I), b(I)))
+%! I = I(:);
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%! assert (isequal (a(I), b(I)))
+%! I = I';
+%! assert (isequal (a(I), b(I)))
+%! warning (s)
+%! I = logical(zeros(size(b)));
+%! assert (isequal (a(I), b(I)))
+
+%!warning <not same shape>
+%! % some warnings when I is wrong shape
+%! r = [1:6];
+%! ar = sym(r);
+%! c = r';
+%! ac = sym(c);
+%! Ir = rand(size(r)) > 0.5;
+%! temp = ac(Ir);
+
+%!warning <not same shape>
+%! % some warnings when I is wrong shape
+%! r = [1:6];
+%! ar = sym(r);
+%! c = r';
+%! ac = sym(c);
+%! Ic = rand(size(c)) > 0.5;
+%! temp = ar(Ic);
+
+%!test
+%! % 1D arrays, does right with despite warning
+%! r = [1:6];
+%! ar = sym(r);
+%! c = r';
+%! ac = sym(c);
+%! Ir = rand(size(r)) > 0.5;
+%! Ic = rand(size(c)) > 0.5;
+%! assert (isequal (ar(Ir), r(Ir)))
+%! assert (isequal (ac(Ic), c(Ic)))
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%! assert (isequal (ar(Ic), r(Ic)))
+%! assert (isequal (ac(Ir), c(Ir)))
+%! warning (s)
+
+%!test
+%! % rccross tests
+%! B = [1 2 3 4; 5 6 7 9; 10 11 12 13];
+%! A = sym(B);
+%! assert (isequal (A([1 3],[2 3]), B([1 3], [2 3])  ))
+%! assert (isequal (A(1,[2 3]), B(1,[2 3])  ))
+%! assert (isequal (A([1 2],4), B([1 2],4)  ))
+%! assert (isequal (A([2 1],[4 2]), B([2 1],[4 2])  ))
+%! assert (isequal (A([],[]), B([],[])  ))
