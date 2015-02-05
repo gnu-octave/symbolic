@@ -3,7 +3,7 @@ octsympy 2.x.y (yyyy-mm-dd)
 
   * New commands:
 
-  * Other...
+  * Drop python_cmd_string, which has been deprecated since v0.1.1.
 
 
 

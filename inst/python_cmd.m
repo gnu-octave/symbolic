@@ -67,12 +67,6 @@
 %% It might be a good idea to avoid blank lines as they can cause
 %% problems with some of the ipc mechanisms.
 %%
-%% In older versions (OctSymPy v0.1.0 and older), you could use
-%% newlines and/or escaped newlines in the string to represent
-%% multiline input; this was fragile and made it hard to write
-%% python code with e.g., escaped chars in strings.  This form is
-%% deprecated but still available (for now) as python_cmd_string.
-%%
 %% Possible input types:
 %%    sym objects;
 %%    strings (char);
@@ -137,10 +131,9 @@ function varargout = python_cmd(cmd, varargin)
     varargout{i} = A{i};
   end
 
-  % re-enable after python_cmd_string is gone?
-  %if nargout ~= M
-  %  warning('number of outputs don''t match, was this intentional?')
-  %end
+  if nargout ~= M
+    warning('number of outputs don''t match, was this intentional?')
+  end
 end
 
 
