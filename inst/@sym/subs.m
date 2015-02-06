@@ -17,7 +17,8 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
+%% @deftypefn  {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
+%% @deftypefnx {Function File} {@var{g} =} subs (@var{f}, @var{y})
 %% Replace symbols in an expression with other expressions.
 %%
 %% Example replacing x with y.
@@ -57,6 +58,17 @@
 
 
 function g = subs(f, in, out)
+
+  if (nargin == 1)
+    % FIXME: SMT will take values of x from the workspace in this case.
+    error('subs: we do not support single-input w/ substitution from workspace')
+  elseif (nargin == 2)
+    out = in;
+    in = symvar(f, 1);
+    if (isempty(in))
+      in = sym('x');
+    end
+  end
 
   %% special case: scalar f, scalar in, vector out
   % A workaround for Issue #10, also upstream Sympy Issue @2962
@@ -187,6 +199,8 @@ end
 %! % but of course both x and y to t still works
 %! assert( isequal( subs(f, [x y], [t t]), t*sin(t) ))
 
+%% reset the shared variables
+%!shared
 
 %!test
 %! % Issue #10, subbing matrices in for scalars
@@ -204,3 +218,11 @@ end
 %! g = subs(f, y, a);
 %! assert (isequal (g, 2*a))
 %! assert (isa (g, 'sym'))
+
+%!test
+%! % two inputs
+%! syms x y
+%! assert (isequal (subs(sym(2)*x, 6), 12))
+%! assert (isequal (subs(sym(2)*x*y^2, 6), 12*y^2))
+%! assert (isequal (subs(sym(2)*y, 6), 12))
+%! assert (isequal (subs(sym(2), 6), 2))
