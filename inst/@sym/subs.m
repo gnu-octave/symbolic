@@ -21,30 +21,46 @@
 %% @deftypefnx {Function File} {@var{g} =} subs (@var{f}, @var{y})
 %% Replace symbols in an expression with other expressions.
 %%
-%% Example replacing x with y.
+%% Example substituting a value for a variable:
 %% @example
+%% @group
+%% syms x y
 %% f = x*y;
-%% subs(f, x, y)
+%% subs(f, x, 2)
+%%    @result{} 2⋅y
+%% @end group
 %% @end example
 %%
+%% If @var{x} is omitted, @code{symvar} is used on @var{f}.
+%%
+%% @var{x} and @var{y} can also be vectors or lists of syms to
+%% replace:
 %% @example
-%% subs(f, x, sin(x))
+%% @group
 %% subs(f, @{x y@}, @{sin(x) 16@})
+%%    @result{} 16⋅sin(x)
 %%
 %% F = [x x*y; 2*x*y y];
-%% subs(F, @{x y@}, @{2 sym(pi)@})
 %% subs(F, @{x y@}, [2 sym(pi)])
-%% subs(F, [x y], [2 sym(pi)])
-%% subs(F, [x y], @{2 sym(pi)@})
+%%    @result{}
+%%         ⎡ 2   2⋅π⎤
+%%         ⎢        ⎥
+%%         ⎣4⋅π   π ⎦
+%% @end group
 %% @end example
 %%
 %% Note: There are many possibilities that we don't support (FIXME)
 %% if you start mixing scalars and matrices.  We support one simple
 %% case of subbing a matrix in for a scalar in a scalar expression:
 %% @example
-%% syms x
-%% f = sin(x)
+%% @group
+%% f = sin(x);
 %% g = subs(f, x, [1 2; 3 4])
+%%    @result{}
+%%         ⎡sin(1)  sin(2)⎤
+%%         ⎢              ⎥
+%%         ⎣sin(3)  sin(4)⎦
+%% @end group
 %% @end example
 %% If you want to extend support to more cases, a good place to
 %% start, as of July 2014, is the Sympy Issue #2962
