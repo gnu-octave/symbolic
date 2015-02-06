@@ -21,7 +21,15 @@
 %% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n}, [@var{a} @var{b}])
 %% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{a}, @var{b})
 %% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, [@var{a} @var{b}])
+%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n})
+%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f})
 %% Symbolic product.
+%%
+%% The product of the expression @var{f} as variable @var{n} changes
+%% from @var{a} to @var{b}.  When @var{n} is omitted it is determined
+%% using @code{symvar} and defaults to @code{x} if @var{f} is
+%% constant. The limits @var{a} and @var{b} default to @code{1} and
+%% @var{n} respectively.
 %%
 %% Examples:
 %% @example
