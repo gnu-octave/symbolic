@@ -40,4 +40,3 @@ end
 %!test
 %! a = sym([1; 2]);
 %! assert (columns(a) == 1)
-

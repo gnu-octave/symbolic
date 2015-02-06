@@ -40,4 +40,3 @@ end
 %!test
 %! a = sym([1 2 3; 4 5 6]);
 %! assert (rows(a) == 2)
-
