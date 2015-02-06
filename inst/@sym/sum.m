@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -40,6 +40,8 @@
 
 function y = sum(x, n)
 
+  x = sym(x);
+
   if (isscalar(x))
     y = x;
     return
@@ -53,6 +55,8 @@ function y = sum(x, n)
     else
       n = 1;
     end
+  else
+    n = double(n);
   end
 
   %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
@@ -85,3 +89,8 @@ end
 %!assert (isequal (sum(a), sum(b)))
 %!assert (isequal (sum(a,1), sum(b,1)))
 %!assert (isequal (sum(a,2), sum(b,2)))
+
+%!test
+%! % weird inputs
+%! a = sum('xx', sym(1));
+%! assert (isequal (a, sym('xx')))

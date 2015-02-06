@@ -50,6 +50,8 @@
 
 function y = prod(x, n)
 
+  x = sym(x);
+
   if (isscalar(x))
     y = x;
     return
@@ -63,10 +65,9 @@ function y = prod(x, n)
     else
       n = 1;
     end
+  else
+    n = double(n);
   end
-
-  x = sym(x);
-  n = double(n);
 
   %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
   cmd = { 'A = _ins[0]'
@@ -98,3 +99,8 @@ end
 %!assert (isequal (prod(a), prod(b)))
 %!assert (isequal (prod(a,1), prod(b,1)))
 %!assert (isequal (prod(a,2), prod(b,2)))
+
+%!test
+%! % weird inputs
+%! a = prod('xx', sym(1));
+%! assert (isequal (a, sym('xx')))
