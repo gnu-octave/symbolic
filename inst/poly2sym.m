@@ -36,7 +36,7 @@
 %%    @result{}
 %%          2
 %%       2⋅x ⋅y + 5⋅x - 3
-%% @group
+%% @end group
 %% @end example
 %%
 %% @seealso{sym2poly, polyval, roots}

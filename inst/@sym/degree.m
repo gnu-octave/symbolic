@@ -72,7 +72,7 @@ end
 %!test
 %! % specify variable
 %! syms x y
-%! p = x**2 + y*x + 1;
+%! p = x^2 + y*x + 1;
 %! assert (isequal (degree(p), 2))
 %! assert (isequal (degree(p, x), 2))
 %! assert (isequal (degree(p, y), 1))
