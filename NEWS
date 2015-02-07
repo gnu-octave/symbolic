@@ -9,6 +9,14 @@ octsympy 2.x.y (yyyy-mm-dd)
           numden
           rows
 
+  * Additional ways of calling symsum, symprod, and subs for better
+    compatibility with other symbolic toolboxes.
+
+  * Bug fixes in poly2sym, sym2poly, symfun (thanks @rocketsound),
+    prod, horner, coeffs.
+
+  * Documentation improvements.
+
   * Drop python_cmd_string, which has been deprecated since v0.1.1.
 
 
