@@ -81,7 +81,7 @@ function display(x)
 
 
   elseif (isempty (x))
-    n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', name, ...
+    n = fprintf ('%s = (%s) %s (empty %g%s%g matrix)', name, ...
                  class (x), strtrim(disp(x)), d(1), timesstr, d(2));
     if (unicode_dec)
       n = n - 1;  % FIXME: b/c times unicode is two bytes
@@ -91,7 +91,7 @@ function display(x)
 
   elseif (length (d) == 2)
     %% 2D Array
-    n = fprintf ('%s = (%s %d%s%d matrix)', name, class (x), ...
+    n = fprintf ('%s = (%s %g%s%g matrix)', name, class (x), ...
                  d(1), timesstr, d(2));
     if (unicode_dec)
       n = n - 1;  % FIXME: b/c times unicode is two bytes
