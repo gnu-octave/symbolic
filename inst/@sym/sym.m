@@ -19,6 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
 %% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr})
+%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
 %% @deftypefnx {Function File} {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
 %% Define symbols and numbers as symbolic expressions.
 %%
@@ -38,15 +39,16 @@
 %% y = sym (sym (pi))   % idempotent
 %% @end example
 %%
-%% A second argument can provide an assumption @xref{assumptions},
-%% or restriction on the type of the symbol.
+%% A second (and further) arguments can provide assumptions
+%% @xref{assumptions}, or restriction on the type of the symbol:
 %% @example
 %% x = sym ('x', 'positive')
+%% x = sym ('x', 'positive', 'integer')
 %% @end example
 %% The following options are supported:
 %% 'real', 'positive', 'negative', 'integer', 'even', 'odd',
 %% 'rational', 'finite'.
-%% Others are supported in SymPy but not exposed directly here.
+%% Others may be supported in SymPy but not exposed directly here.
 %%
 %% Caution: it is possible to create multiple variants of the
 %% same symbol with different assumptions.
@@ -180,9 +182,9 @@ function s = sym(x, varargin)
     % ---------------------------------------------
     return
 
-  elseif (isa (x, 'sym')  &&  nargin==2)
+  elseif (isa (x, 'sym')  &&  (nargin >= 2))
     % support sym(x, assumption) for existing sym x
-    s = sym(x.flat, varargin{1});
+    s = sym(x.flat, varargin{:});
     return
 
 
@@ -194,9 +196,9 @@ function s = sym(x, varargin)
     if (nargin == 2 && isequal(size(varargin{1}), [1 2]))
       s = make_sym_matrix(x, varargin{1});
       return
-    elseif (nargin == 2)
-      % we have assumptions
-      asm = varargin{1};
+    elseif (nargin >= 2)
+      % assume the remaining inputs are assumptions
+      asm = varargin;
       useSymbolNotS = true;
     end
 
@@ -244,24 +246,29 @@ function s = sym(x, varargin)
       end
     else % useSymbolNotS
       assert(isempty(cmd), 'inconsistent input')
-      if isempty(asm)
+      if (isempty(asm))
         cmd = sprintf('z = sympy.Symbol("%s")', x);
-      elseif isstruct(asm) && isscalar(asm)
+
+      elseif (isscalar(asm) && isscalar(asm{1}) && isstruct(asm{1}))
         % we have an assumptions dict
-        cmd = { sprintf('s = sympy.Symbol("%s", **_ins[0])', x) ...
-                        'return s,' };
-        s = python_cmd (cmd, asm);
+        cmd = sprintf('return sympy.Symbol("%s", **_ins[0]),', x);
+        s = python_cmd (cmd, asm{1});
         return
 
-      % FIXME: split out some helper with list of assumptions we
-      % consider valid?  Also syms.m and assumptions.m tests.
-      elseif (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
-              strcmp(asm, 'negative') || strcmp(asm, 'integer') || ...
-              strcmp(asm, 'even') || strcmp(asm, 'odd') || ...
-              strcmp(asm, 'rational') || strcmp(asm, 'finite'))
-        cmd = sprintf('z = sympy.Symbol("%s", %s=True)', x, asm);
+      elseif (iscell(asm))
+        % FIXME: split out some helper with list of assumptions we
+        % consider valid?  Also syms.m and assumptions.m tests.
+        valid_asm = {'real', 'positive', 'negative', 'integer', ...
+                     'even', 'odd', 'rational', 'finite'};
+        for n=1:length(asm)
+          assert(ischar(asm{n}), 'sym: assumption must be a string')
+          assert(ismember(asm{n}, valid_asm), ...
+                 'sym: that assumption is not supported')
+        end
+        cmd = ['z = sympy.Symbol("' x '"' ...
+               sprintf(', %s=True', asm{:}) ')'];
       else
-        error('sym: that assumption not supported')
+        error('sym: invalid extra input, perhaps invalid assumptions?');
       end
     end % useSymbolNotS
 
@@ -531,3 +538,12 @@ end
 %! x = sym(pi/123);
 %! assert (isequal (x/sym(pi), sym(1)/123))
 %! warning (s)
+
+%!test
+%! % multiple assumptions
+%! n = sym('n', 'negative', 'even');
+%! %a = assumptions(n);
+%! %assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+%! % FIXME: slightly obtuse testing b/c for <= sympy 0.7.6)
+%! assert (isequal (n > 0, sym(false)))
+%! assert (isequal (n == -1, sym(false)))
