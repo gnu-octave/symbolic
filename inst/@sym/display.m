@@ -62,7 +62,13 @@ function display(x)
   name = priv_disp_name(x, inputname (1));
   d = size (x);
 
-  if (isscalar (x))
+  if (strncmp(char(x), 'MatrixSymbol', 12))
+    is_matrix_symbol = true;
+  else
+    is_matrix_symbol = false;
+  end
+
+  if (isscalar (x)) && (~is_matrix_symbol)
     n = fprintf ('%s = (%s)', name, class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
@@ -78,6 +84,19 @@ function display(x)
       disp(x)
       if (loose), fprintf ('\n'); end
     end
+
+  elseif (is_matrix_symbol)
+    nn = python_cmd('return _ins[0].rows,', x);
+    mm = python_cmd('return _ins[0].cols,', x);
+    numrstr = strtrim(disp(nn, 'flat'));
+    numcstr = strtrim(disp(mm, 'flat'));
+    n = fprintf ('%s = (%s) %s (%s%s%s symbolic-sized matrix)', name, ...
+                 class (x), strtrim(disp(x)), numrstr, timesstr, numcstr);
+    if (unicode_dec)
+      n = n - 1;  % FIXME: b/c times unicode is two bytes
+    end
+    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
+
 
 
   elseif (isempty (x))
