@@ -80,14 +80,16 @@ function s = sym(x, varargin)
   end
 
   %% The actual class constructor
-  % tempting to put this elsewhere (the 'private ctor') but we need
-  % to access it from the python ipc stuff: outside the class.
-  if (nargin > 2)
-    s.pickle = x;
-    s.size = varargin{1};
-    s.flat = varargin{2};
-    s.ascii = varargin{3};
-    s.unicode = varargin{4};
+  % Tempting to make a 'private constructor' but we need to access
+  % this from the python ipc stuff: outside the class.  We identify
+  % this non-user-facing usage by empty x and 6 inputs total.  Note
+  % that "sym([])" is valid but "sym([], ...)" is otherwise not.
+  if (isempty(x) && (nargin == 6))
+    s.pickle = varargin{1};
+    s.size = varargin{2};
+    s.flat = varargin{3};
+    s.ascii = varargin{4};
+    s.unicode = varargin{5};
     s.extra = [];
     s = class(s, 'sym');
     return
