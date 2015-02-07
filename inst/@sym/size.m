@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,7 +30,10 @@
 
 function [n, m] = size(x, dim)
 
+  % Note: symbolic sized matrices should return double, not sym/string.
+
   n = x.size;
+
   if (nargin == 2) && (nargout == 2)
     error('size: invalid call')
   elseif (nargout == 2)
@@ -79,3 +82,28 @@ end
 %! assert (n == 3)
 %! m = size(a, 2);
 %! assert (m == 1)
+
+%!test
+%! % symbolic-size matrices
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! d = size(A);
+%! assert (~isa(d, 'sym'))
+%! assert (isnumeric(d))
+%! assert (isequaln (d, [NaN NaN]))
+
+%!test
+%! % half-symbolic-size matrices
+%! syms n integer
+%! A = sym('A', [n 3]);
+%! assert (isequaln (size(A), [NaN 3]))
+%! A = sym('A', [4 n]);
+%! assert (isequaln (size(A), [4 NaN]))
+
+%!test
+%! % half-symbolic-size empty matrices
+%! syms n integer
+%! A = sym('A', [n 0]);
+%! d = size(A);
+%! assert (isequaln (size(A), [NaN 0]))
+%! assert (isempty(A))

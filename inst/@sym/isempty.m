@@ -61,3 +61,13 @@ end
 %! assert (isempty (A))
 %! A = sym(ones(3,0));
 %! assert (isempty (A))
+
+%!test
+%! % empty symbolic-size matrices
+%! syms n integer
+%! A = sym('A', [3 n]);
+%! assert (~isempty (A))
+%! A = sym('A', [0 n]);
+%! assert (isempty (A))
+%! A = sym('A', [n 0]);
+%! assert (isempty (A))

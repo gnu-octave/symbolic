@@ -134,11 +134,8 @@ function r = process_item(item)
       r = strcmpi(C{2}, 'true');
     case OCTCODE_SYM
       assert(M == 6)
-      %warning('FIXME: wip?  more error checking')
       sz1 = str2double(C{3});
       sz2 = str2double(C{4});
-      assert(~isnan(sz1));
-      assert(~isnan(sz2));
       % fixme: should we use <item>'s for these not raw <f>?
       str = str_post_xml_filter(C{2});
       flat = str_post_xml_filter(C{5});
