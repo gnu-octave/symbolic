@@ -88,10 +88,15 @@ function display(x)
   elseif (is_matrix_symbol)
     nn = python_cmd('return _ins[0].rows,', x);
     mm = python_cmd('return _ins[0].cols,', x);
+    if (logical(nn == 0) || logical(mm == 0))
+      estr = 'empty ';
+    else
+      estr = '';
+    end
     numrstr = strtrim(disp(nn, 'flat'));
     numcstr = strtrim(disp(mm, 'flat'));
-    n = fprintf ('%s = (%s) %s (%s%s%s symbolic-sized matrix)', name, ...
-                 class (x), strtrim(disp(x)), numrstr, timesstr, numcstr);
+    n = fprintf ('%s = (%s) %s (%s%s%s%s symbolic-sized matrix)', name, ...
+                 class (x), strtrim(disp(x)), estr, numrstr, timesstr, numcstr);
     if (unicode_dec)
       n = n - 1;  % FIXME: b/c times unicode is two bytes
     end
