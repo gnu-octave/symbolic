@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x} =} assume (@var{x}, @var{cond})
+%% @deftypefn  {Function File} {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypefnx {Function File} {} assume (@var{x}, @var{cond})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
@@ -67,9 +67,12 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assume(x, cond)
+function varargout = assume(x, varargin)
 
-  ca.(cond) = true;
+  for n=2:nargin
+    cond = varargin{n-1};
+    ca.(cond) = true;
+  end
 
   xstr = x.flat;
   newx = sym(xstr, ca);
@@ -100,12 +103,46 @@ end
 
 %!test
 %! syms x
-%! assume(x, 'positive')
+%! x = assume(x, 'positive');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: positive'))
-%! assume(x, 'even')
+%! x = assume(x, 'even');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: even'))
-%! assume(x, 'odd')
+%! x = assume(x, 'odd');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: odd'))
+
+%!test
+%! % multiple assumptions
+%! syms x
+%! x = assume(x, 'positive', 'integer');
+%! [tilde, a] = assumptions(x, 'dict');
+%! assert(a{1}.integer)
+%! assert(a{1}.positive)
+
+%!test
+%! % has output so avoids workspace
+%! syms x positive
+%! x2 = x;
+%! f = sin(x);
+%! x = assume(x, 'negative');
+%! a = assumptions(x);
+%! assert(strcmp(a, 'x: negative'))
+%! a = assumptions(x2);
+%! assert(strcmp(a, 'x: positive'))
+%! a = assumptions(f);
+%! assert(strcmp(a, 'x: positive'))
+
+%!test
+%! % has no output so does workspace
+%! syms x positive
+%! x2 = x;
+%! f = sin(x);
+%! assume(x, 'negative');
+%! a = assumptions(x);
+%! assert(strcmp(a, 'x: negative'))
+%! a = assumptions(x2);
+%! assert(strcmp(a, 'x: negative'))
+%! a = assumptions(f);
+%! assert(strcmp(a, 'x: negative'))

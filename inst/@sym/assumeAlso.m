@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond})
+%% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
 %% @deftypefnx {Function File} {} assumeAlso (@var{x}, @var{cond})
 %% Add additional assumptions on a symbolic variable.
 %%
@@ -26,7 +26,7 @@
 %%
 %% @strong{Warning}: with no output argument, this tries to find
 %% and replace any @var{x} within expressions in the caller's
-%% workspace.  See @xref{assume}
+%% workspace.  See @ref{assume}.
 %%
 %% @seealso{assume, assumptions, sym, syms}
 %% @end deftypefn
@@ -34,7 +34,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assumeAlso(x, cond)
+function varargout = assumeAlso(x, varargin)
 
   [tilde,ca] = assumptions(x, 'dict');
 
@@ -47,7 +47,10 @@ function varargout = assumeAlso(x, cond)
     error('expected at most one dict')
   end
 
-  ca.(cond) = true;
+  for n=2:nargin
+    cond = varargin{n-1};
+    ca.(cond) = true;
+  end
 
   xstr = x.flat;
   newx = sym(xstr, ca);
@@ -78,13 +81,48 @@ end
 
 %!test
 %! syms x
-%! assumeAlso(x, 'positive')
+%! x = assumeAlso(x, 'positive');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: positive'))
 
 %!test
 %! syms x positive
-%! assumeAlso(x, 'integer')
-%! [tilde,a] = assumptions(x, 'dict');
+%! x = assumeAlso(x, 'integer');
+%! [tilde, a] = assumptions(x, 'dict');
 %! assert(a{1}.integer)
 %! assert(a{1}.positive)
+
+%!test
+%! % multiple assumptions
+%! syms x positive
+%! x = assumeAlso(x, 'integer', 'even');
+%! [tilde, a] = assumptions(x, 'dict');
+%! assert(a{1}.integer)
+%! assert(a{1}.positive)
+%! assert(a{1}.even)
+
+%!test
+%! % has output so avoids workspace
+%! syms x positive
+%! x2 = x;
+%! f = sin(x);
+%! assumeAlso(x, 'integer');
+%! a = assumptions(x);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! a = assumptions(x2);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! a = assumptions(f);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+
+%!test
+%! % has no output so does workspace
+%! syms x positive
+%! x2 = x;
+%! f = sin(x);
+%! assumeAlso(x, 'integer');
+%! a = assumptions(x);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! a = assumptions(x2);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! a = assumptions(f);
+%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
