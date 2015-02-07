@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{s} =} fortran (@var{g})
-%% @deftypefnx {Function File} {@var{s} =} fortran (@var{g1}, ..., @var{gn})
-%% @deftypefnx {Function File} {} fortran (..., 'file', @var{filename})
-%% @deftypefnx {Function File} {[@var{F}, @var{H}] =} fortran (..., 'file', '')
+%% @deftypefnx {Function File} {@var{s} =} fortran (@var{g1}, @dots{}, @var{gn})
+%% @deftypefnx {Function File} {} fortran (@dots{}, 'file', @var{filename})
+%% @deftypefnx {Function File} {[@var{F}, @var{H}] =} fortran (@dots{}, 'file', '')
 %% Convert symbolic expression into C code.
 %%
 %% FIXME: make sure this works

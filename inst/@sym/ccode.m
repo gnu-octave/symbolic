@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{s} =} ccode (@var{f})
-%% @deftypefnx {Function File} {@var{s} =} ccode (@var{f1}, ..., @var{fn})
-%% @deftypefnx {Function File} {} ccode (..., 'file', @var{filename})
-%% @deftypefnx {Function File} {[@var{c_stuff}, @var{h_stuff}] =} ccode (..., 'file', '')
+%% @deftypefnx {Function File} {@var{s} =} ccode (@var{f1}, @dots{}, @var{fn})
+%% @deftypefnx {Function File} {} ccode (@dots{}, 'file', @var{filename})
+%% @deftypefnx {Function File} {[@var{c_stuff}, @var{h_stuff}] =} ccode (@dots{}, 'file', '')
 %% Convert symbolic expression into C code.
 %%
 %% FIXME: make sure this works

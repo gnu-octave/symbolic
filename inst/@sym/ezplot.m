@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{h} =} ezplot (@var{f})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{f2})
-%% @deftypefnx {Function File} {@var{h} =} ezplot (...)
+%% @deftypefnx {Function File} {@var{h} =} ezplot (@dots{})
 %% Simple plotting of symbolic expressions.
 %%
 %% See help for the (non-symbolic) @code{ezplot}, which this

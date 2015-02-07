@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} vertcat (@var{x}, @var{y}, ...)
+%% @deftypefn  {Function File} {@var{z} =} vertcat (@var{x}, @var{y}, @dots{})
 %% Vertically concatentate symbolic arrays.
 %%
 %% @seealso{horzcat}

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{r} =} isequal (@var{f}, @var{g})
-%% @deftypefnx {Function File} {@var{r} =} isequal (@var{f}, @var{g}, ...)
+%% @deftypefnx {Function File} {@var{r} =} isequal (@var{f}, @var{g}, @dots{})
 %% Test if contents of two or more arrays are equal.
 %%
 %% Here nan's are considered nonequal, see also @code{isequaln}

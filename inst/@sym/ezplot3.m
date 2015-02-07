@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{h} =} ezplot3 (@var{f1}, @var{f2},@var{f3})
-%% @deftypefnx {Function File} {@var{h} =} ezplot3 (...)
+%% @deftypefnx {Function File} {@var{h} =} ezplot3 (@dots{})
 %% Simple 3D parametric plotting of symbolic expressions.
 %%
 %% See help for the (non-symbolic) @code{ezplot3}, which this

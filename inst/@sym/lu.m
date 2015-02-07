@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{L}, @var{U} =} lu (@var{A})
 %% @deftypefnx {Function File} {@var{L}, @var{U}, @var{P} =} lu (@var{A})
-%% @deftypefnx {Function File} {... =} lu (@var{A}, 'vector')
+%% @deftypefnx {Function File} {@dots{} =} lu (@var{A}, 'vector')
 %% Symbolic LU factorization of a matrix.
 %%
 %% @end deftypefn

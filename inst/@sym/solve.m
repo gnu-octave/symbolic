@@ -19,8 +19,8 @@
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{sol} =} solve (@var{eq, var})
 %% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, eq2})
-%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, ..., eqn, v1, ..., vm})
-%% @deftypefnx {Function File} {[@var{s1, ..., sn}] =} solve (@var{eq1, ..., eqm, v1, ..., vn})
+%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
+%% @deftypefnx {Function File} {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
 %% Symbolic solutions of equations and systems.
 %%
 %% Examples

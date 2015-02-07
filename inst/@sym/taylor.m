@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,7 +20,7 @@
 %% @deftypefn  {Function File} {@var{g} =} taylor (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
-%% @deftypefnx {Function File} {@var{g} =} taylor (..., @var{key}, @var{value})
+%% @deftypefnx {Function File} {@var{g} =} taylor (@dots{}, @var{key}, @var{value})
 %% Symbolic Taylor series.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}

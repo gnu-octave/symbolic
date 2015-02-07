@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {} evalpy (@var{cmd})
-%% @deftypefnx {Function File} {} evalpy (@var{cmd}, @var{x}, @var{y}, ...)
+%% @deftypefnx {Function File} {} evalpy (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run Python code, automatically transferring results.
 %%
 %% Examples:

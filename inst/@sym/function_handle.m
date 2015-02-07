@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,11 +18,11 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{g} =} function_handle (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, ..., @var{fn})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (..., @var{param}, @var{value})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (..., 'vars', [@var{x} ... @var{z}])
-%% @deftypefnx {Function File} {...} function_handle (..., 'file', @var{name})
-%% @deftypefnx {Function File} {...} function_handle (..., 'outputs', [@var{o1} ... @var{on}])
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, @dots{}, @var{fn})
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, @var{param}, @var{value})
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, 'vars', [@var{x} @dots{} @var{z}])
+%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'file', @var{name})
+%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'outputs', [@var{o1} @dots{} @var{on}])
 %% Convert symbolic expression into a standard function.
 %%
 %% This can make anonymous functions from symbolic expressions:
