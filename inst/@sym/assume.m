@@ -17,13 +17,46 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} assume (@var{x}, @var{cond})
-%% @deftypefnx {Function File} {@var{x} =} assume (@var{x}, @var{cond})
+%% @deftypefn  {Function File} {@var{x} =} assume (@var{x}, @var{cond})
+%% @deftypefnx {Function File} {} assume (@var{x}, @var{cond})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
-%% Note: operates on the caller's workspace via evalin/assignin.
-%% So if you call this from other functions, it will operate in
-%% your function's  workspace (not the @code{base} workspace).
+%% This function has two different behaviours depending on whether
+%% it has an output argument or not.  The first form is simpler;
+%% it returns a new sym with assumptions given by @var{cond}, for
+%% example:
+%% @example
+%% syms x
+%% x1 = x;
+%% x = assume(x, 'positive');
+%% assumptions(x)
+%%    % x: positive
+%% assumptions(x1)
+%%    % empty, x1 still has tke original sym('x')
+%% @end example
+%%
+%% The second form---with no output argument---is different; it
+%% attempts to find @emph{all} instances of symbols with the same name
+%% as @var{x} and replace them with the new version (with @var{cond}
+%% assumptions).  For example:
+%% @example
+%% syms x
+%% x1 = x;
+%% f = sin(x);
+%% assume(x, 'positive');
+%% assumptions(x)
+%%    % x: positive
+%% assumptions(x1)
+%%    % x: positive
+%% assumptions(f)
+%%    % x: positive
+%% @end example
+%%
+%% @strong{Warning}: this second form operates on the caller's
+%% workspace via evalin/assignin.  So if you call this from other
+%% functions, it will operate in your function's workspace (and not
+%% the @code{base} workspace).  This behaviour is for compatibility
+%% with other symbolic toolboxes.
 %%
 %% FIXME: idea of rewriting all sym vars is a bit of a hack, not
 %% well tested (for example, with global vars.)
@@ -34,12 +67,17 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assume(x, cond, varargin)
+function varargout = assume(x, cond)
 
   ca.(cond) = true;
 
   xstr = x.flat;
   newx = sym(xstr, ca);
+
+  if (nargout > 0)
+    varargout{1} = newx;
+    return
+  end
 
   % ---------------------------------------------
   % Muck around in the caller's namespace, replacing syms
@@ -57,9 +95,6 @@ function varargout = assume(x, cond, varargin)
   end
   % ---------------------------------------------
 
-  if (nargout > 0)
-    varargout{1} = newx;
-  end
 end
 
 

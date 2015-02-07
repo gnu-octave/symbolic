@@ -17,16 +17,16 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} assumeAlso (@var{x}, @var{cond})
-%% @deftypefnx {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond})
+%% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond})
+%% @deftypefnx {Function File} {} assumeAlso (@var{x}, @var{cond})
 %% Add additional assumptions on a symbolic variable.
 %%
-%% Note: operates on the caller's workspace via evalin/assignin.
-%% So if you call this from other functions, it will operate in
-%% your function's  workspace (not the @code{base} workspace).
+%% Behaviour is similar to @code{assume}; however @var{cond} is combined
+%% with any existing assumptions of @var{x} instead of replacing them.
 %%
-%% FIXME: idea of rewriting all sym vars is a bit of a hack, not
-%% well tested (for example, with global vars.)
+%% @strong{Warning}: with no output argument, this tries to find
+%% and replace any @var{x} within expressions in the caller's
+%% workspace.  See @xref{assume}
 %%
 %% @seealso{assume, assumptions, sym, syms}
 %% @end deftypefn
@@ -34,7 +34,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assumeAlso(x, cond, varargin)
+function varargout = assumeAlso(x, cond)
 
   [tilde,ca] = assumptions(x, 'dict');
 
@@ -52,6 +52,11 @@ function varargout = assumeAlso(x, cond, varargin)
   xstr = x.flat;
   newx = sym(xstr, ca);
 
+  if (nargout > 0)
+    varargout{1} = newx;
+    return
+  end
+
   % ---------------------------------------------
   % Muck around in the caller's namespace, replacing syms
   % that match 'xstr' (a string) with the 'newx' sym.
@@ -68,9 +73,6 @@ function varargout = assumeAlso(x, cond, varargin)
   end
   % ---------------------------------------------
 
-  if (nargout > 0)
-    varargout{1} = newx;
-  end
 end
 
 
