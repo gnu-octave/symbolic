@@ -66,6 +66,7 @@ function display(x)
     n = fprintf ('%s = (%s)', name, class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
+    % FIXME: length(s) lies on Octave; it counts bytes not chars
     toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
     if (~toobig)
       fprintf(' %s', s)
@@ -80,9 +81,11 @@ function display(x)
 
 
   elseif (isempty (x))
-    formatstr = [  ];
     n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', name, ...
                  class (x), strtrim(disp(x)), d(1), timesstr, d(2));
+    if (unicode_dec)
+      n = n - 1;  % FIXME: b/c times unicode is two bytes
+    end
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
 
@@ -90,6 +93,9 @@ function display(x)
     %% 2D Array
     n = fprintf ('%s = (%s %d%s%d matrix)', name, class (x), ...
                  d(1), timesstr, d(2));
+    if (unicode_dec)
+      n = n - 1;  % FIXME: b/c times unicode is two bytes
+    end
     snippet_of_sympy (x, 7, term_width - n, unicode_dec)
 
     if (loose), fprintf ('\n'); end
@@ -121,20 +127,24 @@ function snippet_of_sympy(x, padw, width, unicode)
   if (unicode)
     ell = '…';
     lquot = '“'; rquot = '”';
+    lendec = 3;
   else
     ell = '...';
     lquot = '"'; rquot = lquot;
+    lendec = 5;
   end
+
+  rightpad = 1;
 
   % indent
   pad = repmat(' ', 1, padw);
 
   % trim newlines (if there are any)
   s = regexprep (x.pickle, '\n', '\\n');
-  %s = regexprep (x.pickle, '\n', '\');
+  % no unicode in pickle (I think) so this length is (probably) reliable
   len = length (s);
-  if len > width-padw-2
-    n = width-padw-2-length(ell);
+  if (len > (width - padw - rightpad - 2))
+    n = width - rightpad - padw - lendec;
     s = [s(1:n) ell];
   end
   fprintf([pad lquot '%s' rquot '\n'], s)
