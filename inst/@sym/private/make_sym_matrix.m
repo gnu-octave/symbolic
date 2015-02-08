@@ -39,7 +39,7 @@ function A = make_sym_matrix(As, sz)
             '    extra = ""'
             'else:'
             '    extra = "_"'
-            'L = [[Symbol("A%d%s%d" % (i+1, extra, j+1)) \'
+            'L = [[Symbol("%s%d%s%d" % (As, i+1, extra, j+1)) \'
             '      for j in range(0, m)] \'
             '      for i in range(0, n)]'
             'A = sympy.Matrix(L)'

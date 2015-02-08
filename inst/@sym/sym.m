@@ -63,7 +63,7 @@
 %% or even with symbolic size
 %% @example
 %% syms n positive
-%% A = sym('A', [n, n])
+%% B = sym('b', [n, n])
 %% @end example
 %%
 %% @seealso{syms, assumptions, assume, assumeAlso}
