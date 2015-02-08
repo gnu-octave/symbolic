@@ -35,6 +35,9 @@ function A = make_sym_matrix(As, sz)
     % MatrixSymbol internally.
     cmd = { 'As, n, m = _ins'
             '#A = sympy.MatrixSymbol(As, n, m)'
+            'if n == 0 or m == 0:'
+            '    return sympy.Matrix(n, m, []),'
+            '    #sympy.MatrixSymbol(As, n, m),' % broken?
             'if n < 10 and m < 10:'
             '    extra = ""'
             'else:'

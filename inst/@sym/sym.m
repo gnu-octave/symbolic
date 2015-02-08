@@ -464,6 +464,15 @@ end
 %! assert (isequal (size (a), [0 0]))
 
 %!test
+%! % moar empty
+%! a = sym('a', [0 3]);
+%! assert (isa (a, 'sym'))
+%! assert (isequal (size (a), [0 3]))
+%! a = sym('a', [2 0]);
+%! assert (isa (a, 'sym'))
+%! assert (isequal (size (a), [2 0]))
+
+%!test
 %! % embedded sympy commands, various quotes, issue #143
 %! a = sym('a');
 %! a1 = sym('Symbol("a")');
