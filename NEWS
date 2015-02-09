@@ -5,6 +5,7 @@ octsympy 2.x.y (yyyy-mm-dd)
 
           columns
           degree
+          formula
           ismatrix
           numden
           rows
@@ -16,6 +17,10 @@ octsympy 2.x.y (yyyy-mm-dd)
     prod, horner, coeffs.
 
   * Documentation improvements.
+
+  * Improvements to "argnames" and "formula" for the dependent
+    variables and dependent expression of a symfun.  These are now
+    implemented for basic sym objects as well.
 
   * Drop python_cmd_string, which has been deprecated since v0.1.1.
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
+%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,39 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
-%% Return the independent variables in a symfun.
+%% @deftypefn {Function File} {@var{g}} formula (@var{f})
+%% Return a symbolic expression for this object.
 %%
-%% The counterpart of @code{argname} is @code{formula}:
-%% @code{argname} for the independent
-%% variables and @code{formula} for the dependent expression.
+%% For a @@sym, this simply returns the sym itself.  Subclasses
+%% such as @@symfun may do more interesting things.
 %%
-%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
+%% @seealso{@@symfun/formula, argnames}
 %%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function vars = argnames(F)
-
-  vars = [F.vars{:}];
-
+function g = formula(f)
+  g = f;
 end
 
 
 %!test
-%! % basic test
-%! syms f(x)
-%! assert (isequal (argnames (f), x))
-
-%!test
-%! % Multiple variables, abstract symfun (quotes are oct 3.6 workaround)
-%! syms 'f(t, x, y)'
-%! assert (isequal (argnames (f), [t x y]))
-
-%!test
-%! % Concrete symfun
-%! syms x y z t
-%! f(t, x, y) = x + y + z;
-%! assert (isequal (argnames (f), [t x y]))
+%! syms x
+%! assert (isequal (formula(x), x))
+%! assert (isequal (formula(2*x), 2*x))

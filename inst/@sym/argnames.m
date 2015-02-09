@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
+%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,12 +20,10 @@
 %% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
 %% Return the independent variables in a symfun.
 %%
-%% The counterpart of @code{argname} is @code{formula}:
-%% @code{argname} for the independent
-%% variables and @code{formula} for the dependent expression.
+%% For a @@sym, this always returns the empty sym, but
+%% subclasses like @@symfun do something more interesting.
 %%
-%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
-%%
+%% @seealso{@@symfun/argnames, symvar, findsym, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -33,23 +31,14 @@
 
 function vars = argnames(F)
 
-  vars = [F.vars{:}];
+  vars = sym([]);
 
 end
 
 
 %!test
-%! % basic test
-%! syms f(x)
-%! assert (isequal (argnames (f), x))
-
-%!test
-%! % Multiple variables, abstract symfun (quotes are oct 3.6 workaround)
-%! syms 'f(t, x, y)'
-%! assert (isequal (argnames (f), [t x y]))
-
-%!test
-%! % Concrete symfun
-%! syms x y z t
-%! f(t, x, y) = x + y + z;
-%! assert (isequal (argnames (f), [t x y]))
+%! % basic tests
+%! syms x
+%! f = 2*x;
+%! assert (isempty (argnames(x)))
+%! assert (isempty (argnames(f)))
