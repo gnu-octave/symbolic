@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -107,7 +107,7 @@ function syms(varargin)
         warning('syms: should not combine "clear" with other assumptions')
       end
       if (n ~= nargin)
-        warning('syms: "clear" should be the final argument')
+        error('syms: "clear" should be the final argument')
       end
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')
@@ -204,3 +204,26 @@ end
 %! assert (~logical(exist('x', 'var')))
 %! syms x clear
 %! assert (logical(exist('x', 'var')))
+
+%!error <symbols after assumptions>
+%! syms x positive y
+
+%!error <symbols after assumptions>
+%! % this sometimes catches typos or errors in assumption names
+%! % (if you need careful checking, use sym not syms)
+%! syms x positive evne
+
+%!warning <should not combine>
+%! syms x positive clear
+
+%!error <should be the final argument>
+%! syms x clear y
+
+%!error <cannot have only assumptions>
+%! syms positive integer
+
+%!test
+%! % does not create a variable called positive
+%! syms x positive integer
+%! assert (logical(exist('x', 'var')))
+%! assert (~logical(exist('positive', 'var')))
