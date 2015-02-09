@@ -539,6 +539,15 @@ end
 %! assert (isequal (x/sym(pi), sym(1)/123))
 %! warning (s)
 
+%!error <assumption is not supported>
+%! x = sym('x', 'positive2');
+
+%!error <assumption is not supported>
+%! x = sym('x', 'integer', 'positive2');
+
+%!error <assumption is not supported>
+%! x = sym('x', 'integer2', 'positive');
+
 %!xtest
 %! % multiple assumptions
 %! % FIXME: xtest for sympy <= 0.7.6 where a is the full dict
