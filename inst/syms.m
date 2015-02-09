@@ -162,9 +162,9 @@ function syms(varargin)
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
       % regex matches: abc(x,y), f(var), f(x, y, z), f(r2d2), f( x, y )
       % should not match: Rational(2, 3), f(2br02b)
-      assert(~isempty(regexp(varargin{i}, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
+      assert(~isempty(regexp(expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
              'invalid symfun expression')
-      s = sym(varargin{i});
+      s = sym(expr);
       %vars = symvar(s)  % might re-order the inputs, instead:
       cmd = { 'f = _ins[0]'
               'return (f.func.__name__, f.args)' };
