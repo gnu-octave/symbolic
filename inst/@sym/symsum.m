@@ -25,7 +25,7 @@
 %% @deftypefnx {Function File} {@var{y} =} symsum (@var{f})
 %% Symbolic summation.
 %%
-%% The sum of the expression @var{f} for {n} from @var{a} to
+%% The sum of the expression @var{f} for @var{n} from @var{a} to
 %% @var{b}.  When @var{n} is omitted it is determined using
 %% @code{symvar} and defaults to @code{x} if @var{f} is constant. The
 %% limits @var{a} and @var{b} default to 0 and @var{n} - 1
