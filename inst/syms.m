@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {} syms @var{x}
-%% @deftypefn  {Function File} {} syms @var{x} @var{y} @dots{}
+%% @deftypefnx {Function File} {} syms @var{x} @var{y} @dots{}
 %% @deftypefnx {Function File} {} syms @var{f(x)}
 %% @deftypefnx {Function File} {} syms @var{x} @var{asm}
 %% @deftypefnx {Function File} {} syms @var{x} @var{asm} @var{asm2} @dots{}
