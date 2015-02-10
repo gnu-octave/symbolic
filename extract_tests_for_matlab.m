@@ -55,7 +55,7 @@ function r = proc_file(base, basestr, nm, outdir)
   dskip = 'fprintf(''s'')';
   body = regexprep(body, '^test\n', [nl ddot nl '%test' nl], 'lineanchors');
   body = regexprep(body, '^test ', [nl ddot nl '%test' nl], 'lineanchors');
-  body = regexprep(body, '^(shared .*)\n', ['%$1' nl], 'lineanchors', 'dotexceptnewline');
+  body = regexprep(body, '^(shared.*)\n', ['%$1' nl], 'lineanchors', 'dotexceptnewline');
   % FIXME: better to put these inside appropriate try catch end"
   body = regexprep(body, '^xtest\n( [^\n]*\n)*', [nl dskip nl '%xtest' ...
                       ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
