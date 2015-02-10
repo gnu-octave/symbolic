@@ -89,8 +89,7 @@ function syms(varargin)
 
 
   %% Find assumptions
-  valid_asm = {'real', 'positive', 'negative', 'integer', ...
-               'even', 'odd', 'rational', 'finite'};
+  valid_asm = assumptions('possible');
   last = -1;
   doclear = false;
   for n=1:nargin

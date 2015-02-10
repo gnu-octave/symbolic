@@ -256,10 +256,7 @@ function s = sym(x, varargin)
         return
 
       elseif (iscell(asm))
-        % FIXME: split out some helper with list of assumptions we
-        % consider valid?  Also syms.m and assumptions.m tests.
-        valid_asm = {'real', 'positive', 'negative', 'integer', ...
-                     'even', 'odd', 'rational', 'finite'};
+        valid_asm = assumptions('possible');
         for n=1:length(asm)
           assert(ischar(asm{n}), 'sym: assumption must be a string')
           assert(ismember(asm{n}, valid_asm), ...
