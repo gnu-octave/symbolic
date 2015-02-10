@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -86,8 +86,7 @@ function display(x)
     end
 
   elseif (is_matrix_symbol)
-    nn = python_cmd('return _ins[0].rows,', x);
-    mm = python_cmd('return _ins[0].cols,', x);
+    [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
     if (logical(nn == 0) || logical(mm == 0))
       estr = 'empty ';
     else
