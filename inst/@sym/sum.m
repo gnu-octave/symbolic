@@ -25,16 +25,26 @@
 %% over the rows.  Can specify row or column sums using @var{n}.
 %% To perform symbolic summations, see @xref{symsum}.
 %%
-%% Example:
+%% Examples:
 %% @example
-%% syms x y z
-%% f = sum([x y z])
-%% @end example
-%% @example
-%% f = sum([x y; x z], 1)
-%% f = sum([x y; x z], 2)
-%% @end example
+%% @group
+%% >> syms x y z
+%% >> sum([x y z])
+%% ans = (sym) x + y + z
 %%
+%% >> sum([x y; x z], 1)
+%% ans = (sym 1×2 matrix)
+%%   [2⋅x  y + z]
+%%
+%% >> sum([x y; x z], 2)
+%% ans = (sym 2×1 matrix)
+%%   ⎡x + y⎤
+%%   ⎢     ⎥
+%%   ⎣x + z⎦
+%%
+%%
+%% @end group
+%% @end example
 %% @seealso{prod, symsum}
 %% @end deftypefn
 

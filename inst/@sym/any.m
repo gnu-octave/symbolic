@@ -26,6 +26,15 @@
 %%
 %% Throws an error if any entries are non-numeric.
 %%
+%% Example:
+%% @example
+%% @group
+%% >> any([0; sym(pi); 0])
+%% ans =  1
+%%
+%%
+%% @end group
+%% @end example
 %% @seealso{all}
 %% @end deftypefn
 

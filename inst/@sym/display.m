@@ -20,6 +20,20 @@
 %% @deftypefn {Function File}  {} display (@var{x})
 %% Display, on command line, the contents of a symbolic expression.
 %%
+%% Examples:
+%% @example
+%% @group
+%% >> x = sym('x')
+%% x = (sym) x
+%%
+%% >> display([x 2 pi])
+%%  = (sym 1×3 matrix)
+%%
+%%  [x  2  π]
+%%
+%%
+%% @end group
+%% @end example
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

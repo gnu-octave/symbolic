@@ -21,6 +21,40 @@
 %% @deftypefnx {Function File}  {@var{s} =} disp (@var{x})
 %% Display the value of a symbolic expression.
 %%
+%% Examples:
+%% @example
+%% @group
+%% >> syms x a c
+%% >> str = disp(sin(2*sym(pi)*x))
+%% str =   sin(2⋅π⋅x)
+%%
+%% >> A = [sin(x/2) floor(a^(x*c)); acosh(2*x/pi) ceil(sin(x/gamma(x)))];
+%% >> disp(A, 'unicode')
+%%   ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
+%%   ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
+%%   ⎢     ⎝2⎠               ⎥
+%%   ⎢                       ⎥
+%%   ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
+%%   ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
+%%   ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
+%% @end group
+%%
+%% @group
+%% >> disp(A, 'ascii')
+%%   [     /x\              / c*x\      ]
+%%   [  sin|-|         floor\a   /      ]
+%%   [     \2/                          ]
+%%   [                                  ]
+%%   [     /2*x\         /   /   x    \\]
+%%   [acosh|---|  ceiling|sin|--------||]
+%%   [     \ pi/         \   \gamma(x)//]
+%%
+%% >> disp(A, 'flat')
+%% Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]]
+%%
+%%
+%% @end group
+%% @end example
 %% @seealso{pretty}
 %% @end deftypefn
 

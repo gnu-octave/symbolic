@@ -24,10 +24,12 @@
 %% the symfun @var{f}.  Typically this is the RHS of the symfun:
 %% @example
 %% @group
-%% syms x
-%% f(x) = sin(x)
-%% formula(f)
-%%    @result{} sin(x)
+%% >> syms x
+%% >> f(x) = sin(x);
+%% >> formula(f)
+%% ans = (sym) sin(x)
+%%
+%%
 %% @end group
 %% @end example
 %%
@@ -39,9 +41,11 @@
 %% sym:
 %% @example
 %% @group
-%% syms f(x)
-%% formula(f)
-%%    @result{} f(x)  % but note its a sym
+%% >> syms f(x)
+%% >> formula(f)   % but note it's a sym
+%% ans = (sym) f(x)
+%%
+%%
 %% @end group
 %% @end example
 %%
