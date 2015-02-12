@@ -22,6 +22,12 @@ octsympy 2.x.y (yyyy-mm-dd)
     variables and dependent expression of a symfun.  These are now
     implemented for basic sym objects as well.
 
+  * Improvements to assumptions.  E.g., `x = assume(x, 'positive')` no
+    longer mucks around in the workspace for other instances of x (it
+    still does this with no output argument, for compatibility with
+    other symbolic toolboxes).  You can use multiple assumptions with
+    sym and syms, e.g., `syms n m positive even`.
+
   * Drop python_cmd_string, which has been deprecated since v0.1.1.
 
 
