@@ -151,4 +151,7 @@ function snippet_of_sympy(x, padw, width, unicode)
 end
 
 
-% FIXME: tricky to test without spamming stdout
+% FIXME: Could quietly test with "evalc", but [missing in
+% Octave](https://savannah.gnu.org/patch/?8033).  For now, a dummy test.
+%!test
+%! assert(true)
