@@ -144,7 +144,8 @@ function r = process_item(item)
       flat = str_post_xml_filter(C{5});
       ascii = str_post_xml_filter(C{6});
       unicode = str_post_xml_filter(C{7});
-      r = sym(str, [sz1 sz2], flat, ascii, unicode);
+      % empty [] here identifies this to the sym ctor
+      r = sym([], str, [sz1 sz2], flat, ascii, unicode);
     case OCTCODE_DICT
       %warning('FIXME: wip');
       keys = C{2}{1};

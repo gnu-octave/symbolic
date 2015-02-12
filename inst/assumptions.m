@@ -20,6 +20,7 @@
 %% @deftypefn  {Function File} {@var{A} =} assumptions ()
 %% @deftypefnx {Function File} {@var{A} =} assumptions (@var{x})
 %% @deftypefnx {Function File} {[@var{v}, @var{d}] =} assumptions (@var{x}, 'dict')
+%% @deftypefnx {Function File} {@var{L} =} assumptions ('possible')
 %% List assumptions on symbolic variables.
 %%
 %% The assumptions are turned as a cell-array of strings.
@@ -34,7 +35,12 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function [A,B] = assumptions(F, outp)
+function [A, B] = assumptions(F, outp)
+
+  if ((nargin == 1) && ischar(F) && strcmp(F, 'possible'))
+    A = valid_sym_assumptions();
+    return
+  end
 
   if ((nargin == 0) || isempty(F))
     find_all_free_symbols = true;
@@ -194,6 +200,7 @@ end
 
 %!test
 %! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
+%! % FIXME: remove once SymPy 0.7.6 support deprecated
 %! for i = 1:length(A)
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
@@ -204,9 +211,11 @@ end
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=76)
 %!   disp('skipping: char(x) of assumptions suboptimal in <= 0.7.6')
 %! else
-%!   A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
+%!   A = assumptions('possible');
 %!   for i = 1:length(A)
 %!     x = sym('x', A{i});
+%!     a = assumptions(x);
+%!     assert(strcmp(a{1}, ['x: ' A{i}] ))
 %!     s1 = char(x);
 %!     s2 = ['Symbol(''x'', ' A{i} '=True)'];
 %!     assert (strcmp (s1, s2))

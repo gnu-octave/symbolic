@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,10 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {} syms @var{x}
+%% @deftypefnx {Function File} {} syms @var{x} @var{y} @dots{}
 %% @deftypefnx {Function File} {} syms @var{f(x)}
+%% @deftypefnx {Function File} {} syms @var{x} @var{asm}
+%% @deftypefnx {Function File} {} syms @var{x} @var{asm} @var{asm2} @dots{}
 %% @deftypefnx {Function File} {} syms
 %% Create symbolic variables and symbolic functions.
 %%
@@ -33,10 +36,11 @@
 %% z = sym('z');
 %% @end example
 %%
-%% The last argument can provide an assumption (type or
+%% The last arguments can provide one or more assumptions (type or
 %% restriction) on the variable (@xref{sym}, for details.)
 %% @example
 %% syms x y z positive
+%% syms n positive even
 %% @end example
 %%
 %% Symfuns represent abstract or concrete functions.  Abstract
@@ -82,28 +86,53 @@ function syms(varargin)
     return
   end
 
-  % Check if final input is assumption
-  asm = varargin{end};
-  if (strcmp(asm, 'real') || strcmp(asm, 'positive') || ...
-      strcmp(asm, 'negative') || strcmp(asm, 'integer') || ...
-      strcmp(asm, 'even') || strcmp(asm, 'odd') || ...
-      strcmp(asm, 'rational') || strcmp(asm, 'finite') || strcmp(asm, 'clear'))
-    last = nargin - 1;
-  else
-    asm = '';
-    last = nargin;
+
+
+  %% Find assumptions
+  valid_asm = assumptions('possible');
+  last = -1;
+  doclear = false;
+  for n=1:nargin
+    assert(ischar(varargin{n}), 'syms: expected string inputs')
+    if (ismember(varargin{n}, valid_asm))
+      if (last < 0)
+        last = n - 1;
+      end
+    elseif (strcmp(varargin{n}, 'clear'))
+      doclear = true;
+      if (last < 0)
+        last = n - 1;
+      else
+        warning('syms: should not combine "clear" with other assumptions')
+      end
+      if (n ~= nargin)
+        error('syms: "clear" should be the final argument')
+      end
+    elseif (last > 0)
+      error('syms: cannot have symbols after assumptions')
+    end
   end
 
+  if (last < 0)
+    asm = {};
+    exprs = varargin;
+  elseif (last == 0)
+    error('syms: cannot have only assumptions w/o symbols')
+  else
+    asm = varargin((last+1):end);
+    exprs = varargin(1:last);
+  end
+
+
+
   % loop over each input
-  for i = 1:last
-    expr = varargin{i};
+  for i = 1:length(exprs)
+    expr = exprs{i};
 
     % look for parenthesis: check if we're making a symfun
     if (isempty (strfind (expr, '(') ))  % no
       assert(isvarname(expr)); % help prevent malicious strings
-      if isempty(asm)
-        assignin('caller', expr, sym(expr))
-      elseif strcmp(asm, 'clear')
+      if (doclear)
         % We do this here instead of calling sym() because sym()
         % would modify this workspace instead of the caller's.
         newx = sym(expr);
@@ -125,16 +154,16 @@ function syms(varargin)
         end
         % ---------------------------------------------
       else
-        assignin('caller', expr, sym(expr, asm))
+        assignin('caller', expr, sym(expr, asm{:}))
       end
 
     else  % yes, this is a symfun
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
       % regex matches: abc(x,y), f(var), f(x, y, z), f(r2d2), f( x, y )
       % should not match: Rational(2, 3), f(2br02b)
-      assert(~isempty(regexp(varargin{i}, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
+      assert(~isempty(regexp(expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
              'invalid symfun expression')
-      s = sym(varargin{i});
+      s = sym(expr);
       %vars = symvar(s)  % might re-order the inputs, instead:
       cmd = { 'f = _ins[0]'
               'return (f.func.__name__, f.args)' };
@@ -174,3 +203,26 @@ end
 %! assert (~logical(exist('x', 'var')))
 %! syms x clear
 %! assert (logical(exist('x', 'var')))
+
+%!error <symbols after assumptions>
+%! syms x positive y
+
+%!error <symbols after assumptions>
+%! % this sometimes catches typos or errors in assumption names
+%! % (if you need careful checking, use sym not syms)
+%! syms x positive evne
+
+%!warning <should not combine>
+%! syms x positive clear
+
+%!error <should be the final argument>
+%! syms x clear y
+
+%!error <cannot have only assumptions>
+%! syms positive integer
+
+%!test
+%! % does not create a variable called positive
+%! syms x positive integer
+%! assert (logical(exist('x', 'var')))
+%! assert (~logical(exist('positive', 'var')))
