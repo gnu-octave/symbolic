@@ -40,6 +40,7 @@ cp -r octsympy ${DIR}
 
 # remove .git dir and other things not needed for package
 pushd ${DIR}/
+rm .gitignore
 rm -rf .git/
 rm -f screenshot.png
 rm -f screenshot-install.png
