@@ -27,23 +27,27 @@
 %% Example:
 %% @example
 %% @group
-%% syms x
-%% p = poly2sym ([2 4 6 8], x)
-%%    @result{}
+%% >> syms x
+%% >> p = poly2sym ([2 4 6 8], x)
+%% p = (sym)
 %%          3      2
 %%       2⋅x  + 4⋅x  + 6⋅x + 8
-%% horner (p)
-%%    @result{} x⋅(x⋅(2⋅x + 4) + 6) + 8
+%% >> horner (p)
+%% ans = (sym) x⋅(x⋅(2⋅x + 4) + 6) + 8
+%%
+%%
 %% @end group
 %% @end example
 %%
 %% You can specify the variable as a second input:
 %% @example
 %% @group
-%% syms x a
-%% p = expand((a+2)*(2*a+x)*(3*a+7))
-%% horner(p, a)
-%%    @result{} a⋅(a⋅(6⋅a + 26) + 28) + x⋅(a⋅(3⋅a + 13) + 14)
+%% >> syms x a
+%% >> p = expand((a+2)*(2*a+x)*(3*a+7));
+%% >> horner(p, a)
+%% ans = (sym) a⋅(a⋅(6⋅a + 3⋅x + 26) + 13⋅x + 28) + 14⋅x
+%%
+%%
 %% @end group
 %% @end example
 %%
