@@ -20,6 +20,8 @@
 %% @deftypefn {Function File} {@var{b} =} ismatrix (@var{x})
 %% Return true if this symbolic expression is a matrix.
 %%
+%% That is, a 2D array including scalar and empty matrices.
+%%
 %% @seealso{isscalar, isvector, size}
 %% @end deftypefn
 
@@ -28,7 +30,7 @@
 
 function b = ismatrix(x)
 
-  b = true;
+  b = (length(size(x)) == 2);
 
 end
 
