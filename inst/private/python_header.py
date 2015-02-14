@@ -154,7 +154,7 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif isinstance(x, (sp.Basic, sp.Matrix, sp.MatrixExpr)):
+        elif isinstance(x, (sp.Basic, sp.MatrixBase)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
             elif isinstance(x, (sp.Expr, Boolean)):
