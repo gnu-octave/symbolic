@@ -111,15 +111,10 @@ try:
         """Perform final fixes before passing objects back to Octave"""
         if isinstance(x, sp.Matrix) and x.shape == (1, 1):
             return x[0, 0]
-        elif isinstance(x, sp.MatrixExpr):
-            try:
-                # expands MatPow(A, 2) and known-size MatrixSymbols
-                y = x.as_explicit()
-                if sympy.__version__ == "0.7.5" and any([p is None for p in y]):
-                    raise NotImplementedError()
-                return y
-            except:
-                return x
+        elif isinstance(x, sp.MatPow):
+            # should fix matpow.doit instead
+            if isinstance(x.args[0], sp.MatrixBase) and x.args[1].is_Rational:
+                return x.args[0]**x.args[1]
         return x
     #
     def octoutput_drv(x):
