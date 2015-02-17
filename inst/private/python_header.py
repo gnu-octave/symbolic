@@ -64,6 +64,33 @@ except:
 if sympy.__version__ not in ("0.7.5", "0.7.6"):
     my_srepr = sympy.srepr
 else:
+    def _monkey_patch_matpow_doit(self, **kwargs):
+        deep = kwargs.get('deep', True)
+        if deep:
+            args = [arg.doit(**kwargs) for arg in self.args]
+        else:
+            args = self.args
+        base = args[0]
+        exp = args[1]
+        if isinstance(base, MatrixBase) and exp.is_number:
+            if exp is S.One:
+                return base
+            return base**exp
+        if exp.is_zero and base.is_square:
+            return Identity(base.shape[0])
+        elif exp is S.One:
+            return base
+        return MatPow(base, exp)
+    sympy.MatPow.doit = _monkey_patch_matpow_doit
+    sympy.MatAdd.doit_orig = sympy.MatAdd.doit
+    def _monkey_patch_matadd_doit(self, **kwargs):
+        deep = kwargs.get('deep', True)
+        if deep:
+            args = [arg.doit(**kwargs) for arg in self.args]
+        else:
+            args = self.args
+        return MatAdd(*args).doit_orig(**kwargs)
+    sympy.MatAdd.doit = _monkey_patch_matadd_doit
     try:
         class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
             def _print_Symbol(self, expr):
@@ -111,10 +138,8 @@ try:
         """Perform final fixes before passing objects back to Octave"""
         if isinstance(x, sp.Matrix) and x.shape == (1, 1):
             return x[0, 0]
-        elif isinstance(x, sp.MatPow):
-            # should fix matpow.doit instead
-            if isinstance(x.args[0], sp.MatrixBase) and x.args[1].is_Rational:
-                return x.args[0]**x.args[1]
+        elif isinstance(x, sp.MatrixExpr):
+            return x.doit()
         return x
     #
     def octoutput_drv(x):
