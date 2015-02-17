@@ -138,8 +138,8 @@ try:
         """Perform final fixes before passing objects back to Octave"""
         if isinstance(x, sp.Matrix) and x.shape == (1, 1):
             return x[0, 0]
-        elif isinstance(x, sp.MatrixExpr):
-            return x.doit()
+        #elif isinstance(x, sp.MatrixExpr):
+        #    return x.doit()
         return x
     #
     def octoutput_drv(x):

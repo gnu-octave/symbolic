@@ -109,7 +109,7 @@ function g = subs(f, in, out)
   % debugging easier, e.g., without simultaneous mode?
   if (isscalar(in) && ~iscell(in) && ~iscell(out))
     cmd = { '(f, x, y) = _ins'
-            'return f.subs(x, y),' };
+            'return f.subs(x, y).doit(),' };
     g = python_cmd (cmd, sym(f), sym(in), sym(out));
     return
   end
@@ -149,7 +149,7 @@ function g = subs(f, in, out)
   % simultaneous=True is important so we can do subs(f,[x y], [y x])
 
   cmd = { '(f, sublist) = _ins'
-          'g = f.subs(sublist, simultaneous=True)'
+          'g = f.subs(sublist, simultaneous=True).doit()'
           'return g,' };
 
   g = python_cmd (cmd, sym(f), sublist);
