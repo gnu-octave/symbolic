@@ -7,7 +7,7 @@ Title: Octave Symbolic Package using SymPy
 Description: Adds symbolic calculation features to GNU Octave.
  These include common Computer Algebra System tools such as algebraic
  operations, calculus, equation solving, Fourier and Laplace transforms,
- variable precision arithmetic and and other features.  Internally, the
+ variable precision arithmetic and other features.  Internally, the
  package uses [SymPy](www.sympy.org), but no knowledge of Python is
  required.  Compatibility with other symbolic toolboxes is a goal.
 Categories: symbolic
