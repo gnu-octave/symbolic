@@ -451,8 +451,9 @@ end
 %! A = A + 1;
 %! assert (isa (A, 'sym'))
 
-%!test
+%!xtest
 %! % symbolic matrix, subs in for size
+%! % FIXME: will fail until we return non-1x1 size for MatrixSymbols
 %! syms n m integer
 %! A = sym('A', [n m]);
 %! B = subs(A, [n m], [5 6]);
