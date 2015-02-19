@@ -98,8 +98,11 @@ end
 %! a = [x; x*y^2];
 %! assert (isnan (potential (a)))
 
+
+%!shared
+
 %!xtest
 %! % fails b/c of sympy #8458 (piecewise expr that should simplify)
+%! syms x
 %! f = cos(x);
 %! assert (isequal (potential(f, x), sin(x)))
-
