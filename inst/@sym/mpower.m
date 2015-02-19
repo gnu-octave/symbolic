@@ -107,6 +107,9 @@ end
 
 %!test
 %! % matpow
+%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
+%!   disp('skipping: fails on SymPy 0.7.5')
+%! else
 %! syms n
 %! A = sym([1 2; 3 4]);
 %! B = A^n;
@@ -114,9 +117,13 @@ end
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
 %! assert (isequal (D, E))
+%! end
 
-%!xtest
-%! % matpow, fails in sympy-0.7.5, fixed by https://github.com/sympy/sympy/pull/8137
+%!test
+%! % matpow, sub in zero gives identity
+%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
+%!   disp('skipping: fails on SymPy 0.7.5')
+%! else
 %! A = sym([1 2; 0 3]);
 %! syms n;
 %! B = A^n;
@@ -124,6 +131,7 @@ end
 %! assert (isequal (C, A))
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
+%! end
 
 %!error <not implemented>
 %! % scalar^array not implemented
