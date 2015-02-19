@@ -28,6 +28,10 @@ octsympy 2.x.y (yyyy-mm-dd)
     other symbolic toolboxes).  You can use multiple assumptions with
     sym and syms, e.g., `syms n m positive even`.
 
+  * Improve symbolic sized matrices such as `A = sym('a', [n m])`.
+    These are still experimental; they correspond to MatixSymbols in
+    SymPy and may need a recent SymPy development version.
+
   * Drop python_cmd_string, which has been deprecated since v0.1.1.
 
 
