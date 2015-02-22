@@ -62,10 +62,13 @@ function display(x)
   name = priv_disp_name(x, inputname (1));
   d = size (x);
 
-  if (strncmp(char(x), 'MatrixSymbol', 12))
-    is_matrix_symbol = true;
-  else
-    is_matrix_symbol = false;
+  % sort of isinstance(x, MatrixExpr) but cheaper
+  is_matrix_symbol = false;
+  matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatMul'};
+  for i=1:length(matexprlist)
+    if (strncmp(char(x), matexprlist{i}, length(matexprlist{i})))
+      is_matrix_symbol = true;
+    end
   end
 
   if (isscalar (x)) && (~is_matrix_symbol)
@@ -94,7 +97,7 @@ function display(x)
     end
     numrstr = strtrim(disp(nn, 'flat'));
     numcstr = strtrim(disp(mm, 'flat'));
-    n = fprintf ('%s = (%s) %s (%s%s%s%s symbolic-sized matrix)', name, ...
+    n = fprintf ('%s = (%s) %s (%s%s%s%s matrix expression)', name, ...
                  class (x), strtrim(disp(x)), estr, numrstr, timesstr, numcstr);
     if (unicode_dec)
       n = n - 1;  % FIXME: b/c times unicode is two bytes
