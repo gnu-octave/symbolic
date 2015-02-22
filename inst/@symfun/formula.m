@@ -27,9 +27,7 @@
 %% >> syms x
 %% >> f(x) = sin(x);
 %% >> formula(f)
-%% ans = (sym) sin(x)
-%%
-%%
+%%  @result{} ans = (sym) sin(x)
 %% @end group
 %% @end example
 %%
@@ -43,14 +41,11 @@
 %% @group
 %% >> syms f(x)
 %% >> formula(f)   % but note it's a sym
-%% ans = (sym) f(x)
-%%
-%%
+%%  @result{} ans = (sym) f(x)
 %% @end group
 %% @end example
 %%
 %% @seealso{@@symfun/argnames}
-%%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

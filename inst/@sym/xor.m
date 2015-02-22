@@ -24,11 +24,10 @@
 %% @example
 %% @group
 %% >> xor(sym(true), sym(true))
-%% ans = (sym) False
-%%
-%%
+%%  @result{} ans = (sym) False
 %% @end group
 %% @end example
+%%
 %% @seealso{and, or, not, eq, ne, logical, isAlways, isequal}
 %% @end deftypefn
 

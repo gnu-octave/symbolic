@@ -26,9 +26,7 @@
 %% @group
 %% >> syms x y z
 %% >> prod([x y z])
-%% ans = (sym) x⋅y⋅z
-%%
-%%
+%%  @result{} ans = (sym) x⋅y⋅z
 %% @end group
 %% @end example
 %%
@@ -36,18 +34,17 @@
 %% @example
 %% @group
 %% >> f = prod([x y; x z], 1)
-%% f = (sym 1×2 matrix)
+%%  @result{} f = (sym 1×2 matrix)
 %%
 %%       ⎡ 2     ⎤
 %%       ⎣x   y⋅z⎦
 %%
 %% >> f = prod([x y; x z], 2)
-%% f = (sym 2×1 matrix)
+%%  @result{} f = (sym 2×1 matrix)
 %%
 %%       ⎡x⋅y⎤
 %%       ⎢   ⎥
 %%       ⎣x⋅z⎦
-%%
 %%
 %% @end group
 %% @end example

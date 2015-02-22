@@ -24,16 +24,18 @@
 %% @example
 %% @group
 %% >> x = sym('x')
-%% x = (sym) x
+%%  @result{} x = (sym) x
+%%
+%% >> display(x)
+%%  @result{} x = (sym) x
 %%
 %% >> display([x 2 pi])
-%%  = (sym 1×3 matrix)
+%%  @result{} = (sym 1×3 matrix)
 %%
 %%  [x  2  π]
-%%
-%%
 %% @end group
 %% @end example
+%%
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

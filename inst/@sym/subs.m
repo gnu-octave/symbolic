@@ -27,9 +27,7 @@
 %% >> syms x y
 %% >> f = x*y;
 %% >> subs(f, x, 2)
-%% ans = (sym) 2⋅y
-%%
-%%
+%%  @result{} ans = (sym) 2⋅y
 %% @end group
 %% @end example
 %% If @var{x} is omitted, @code{symvar} is used on @var{f}.
@@ -39,16 +37,15 @@
 %% @example
 %% @group
 %% >> subs(f, @{x y@}, @{sin(x) 16@})
-%% ans = (sym) 16⋅sin(x)
+%%  @result{} ans = (sym) 16⋅sin(x)
 %%
 %% >> F = [x x*y; 2*x*y y];
 %% >> subs(F, @{x y@}, [2 sym(pi)])
-%% ans = (sym 2×2 matrix)
+%%  @result{} ans = (sym 2×2 matrix)
 %%
 %%         ⎡ 2   2⋅π⎤
 %%         ⎢        ⎥
 %%         ⎣4⋅π   π ⎦
-%%
 %%
 %% @end group
 %% @end example
@@ -60,12 +57,11 @@
 %% @group
 %% >> f = sin(x);
 %% >> g = subs(f, x, [1 2; 3 4])
-%% g = (sym 2×2 matrix)
+%%  @result{} g = (sym 2×2 matrix)
 %%
 %%         ⎡sin(1)  sin(2)⎤
 %%         ⎢              ⎥
 %%         ⎣sin(3)  sin(4)⎦
-%%
 %%
 %% @end group
 %% @end example

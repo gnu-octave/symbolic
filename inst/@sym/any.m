@@ -30,11 +30,10 @@
 %% @example
 %% @group
 %% >> any([0; sym(pi); 0])
-%% ans =  1
-%%
-%%
+%%  @result{} ans =  1
 %% @end group
 %% @end example
+%%
 %% @seealso{all}
 %% @end deftypefn
 
