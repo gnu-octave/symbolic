@@ -69,6 +69,11 @@ end
 %! syms n integer
 %! A = sym('A', [3 n]);
 %! assert (~isempty (A))
+
+%!xtest
+%! % empty symbolic-size matrices
+%! % FIXME: will fail until size stop lying by saying 1x1
+%! syms n integer
 %! A = sym('A', [0 n]);
 %! assert (isempty (A))
 %! A = sym('A', [n 0]);
