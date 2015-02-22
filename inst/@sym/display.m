@@ -89,7 +89,15 @@ function display(x)
     end
 
   elseif (is_matrix_symbol)
-    [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
+    %if (any(isnan(d)))  % may not tell the truth
+    if (any(isnan(x.size)))
+      [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
+      numrstr = strtrim(disp(nn, 'flat'));
+      numcstr = strtrim(disp(mm, 'flat'));
+    else
+      numrstr = num2str(d(1));
+      numcstr = num2str(d(2));
+    end
     if (logical(nn == 0) || logical(mm == 0))
       estr = 'empty ';
     else
