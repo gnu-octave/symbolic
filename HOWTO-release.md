@@ -4,8 +4,12 @@ How to do a release
 We use x.y.z.  Bump y for minor changes or z for "micro" changes (bug
 fixes etc).
 
+OctaveForge process: http://octave.sourceforge.net/developers.html
+TODO: read this during next release, and update below.
 
-Checklist:
+
+Checklist
+---------
 
   * Update sympref.m:
 
@@ -40,7 +44,7 @@ Checklist:
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
 
-      - email the .tar.gz and .zip to Carnë Draug.
+      - do something with binaries on sourceforge.
 
 
 
