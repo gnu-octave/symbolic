@@ -55,6 +55,8 @@ end
 %!test assert ( isa (se, 'sym'))
 %!test assert ( isequal (se, 10))
 
+%!shared
+
 %!test
 %! % empty matrices
 %! A = sym('A', [3 0]);
@@ -63,7 +65,7 @@ end
 %! assert (isempty (A))
 
 %!test
-%! % empty symbolic-size matrices
+%! % non-empty symbolic-size matrices
 %! syms n integer
 %! A = sym('A', [3 n]);
 %! assert (~isempty (A))
