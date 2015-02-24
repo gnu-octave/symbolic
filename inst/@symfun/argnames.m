@@ -24,8 +24,18 @@
 %% @code{argname} for the independent
 %% variables and @code{formula} for the dependent expression.
 %%
-%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
+%% Examples:
+%% @example
+%% @group
+%% >> syms x y
+%% >> f(x, y) = x^2;
+%% >> argnames(f)
+%%  @result{} ans = (sym 1×2 matrix)
+%%       [x  y]
+%% @end group
+%% @end example
 %%
+%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

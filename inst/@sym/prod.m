@@ -24,24 +24,28 @@
 %% Example:
 %% @example
 %% @group
-%% syms x y z
-%% f = prod([x y z])
-%%    @result{} x*y*z
+%% >> syms x y z
+%% >> prod([x y z])
+%%  @result{} ans = (sym) x⋅y⋅z
 %% @end group
 %% @end example
 %%
 %% Can specify row or column sums using @var{n}:
 %% @example
 %% @group
-%% f = prod([x y; x z], 1)
-%%    @result{}
+%% >> f = prod([x y; x z], 1)
+%%  @result{} f = (sym 1×2 matrix)
+%%
 %%       ⎡ 2     ⎤
 %%       ⎣x   y⋅z⎦
-%% f = prod([x y; x z], 2)
-%%    @result{}
+%%
+%% >> f = prod([x y; x z], 2)
+%%  @result{} f = (sym 2×1 matrix)
+%%
 %%       ⎡x⋅y⎤
 %%       ⎢   ⎥
 %%       ⎣x⋅z⎦
+%%
 %% @end group
 %% @end example
 %%

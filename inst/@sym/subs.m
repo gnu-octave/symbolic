@@ -24,28 +24,29 @@
 %% Example substituting a value for a variable:
 %% @example
 %% @group
-%% syms x y
-%% f = x*y;
-%% subs(f, x, 2)
-%%    @result{} 2⋅y
+%% >> syms x y
+%% >> f = x*y;
+%% >> subs(f, x, 2)
+%%  @result{} ans = (sym) 2⋅y
 %% @end group
 %% @end example
-%%
 %% If @var{x} is omitted, @code{symvar} is used on @var{f}.
 %%
 %% @var{x} and @var{y} can also be vectors or lists of syms to
 %% replace:
 %% @example
 %% @group
-%% subs(f, @{x y@}, @{sin(x) 16@})
-%%    @result{} 16⋅sin(x)
+%% >> subs(f, @{x y@}, @{sin(x) 16@})
+%%  @result{} ans = (sym) 16⋅sin(x)
 %%
-%% F = [x x*y; 2*x*y y];
-%% subs(F, @{x y@}, [2 sym(pi)])
-%%    @result{}
+%% >> F = [x x*y; 2*x*y y];
+%% >> subs(F, @{x y@}, [2 sym(pi)])
+%%  @result{} ans = (sym 2×2 matrix)
+%%
 %%         ⎡ 2   2⋅π⎤
 %%         ⎢        ⎥
 %%         ⎣4⋅π   π ⎦
+%%
 %% @end group
 %% @end example
 %%
@@ -54,12 +55,14 @@
 %% case of subbing a matrix in for a scalar in a scalar expression:
 %% @example
 %% @group
-%% f = sin(x);
-%% g = subs(f, x, [1 2; 3 4])
-%%    @result{}
+%% >> f = sin(x);
+%% >> g = subs(f, x, [1 2; 3 4])
+%%  @result{} g = (sym 2×2 matrix)
+%%
 %%         ⎡sin(1)  sin(2)⎤
 %%         ⎢              ⎥
 %%         ⎣sin(3)  sin(4)⎦
+%%
 %% @end group
 %% @end example
 %% If you want to extend support to more cases, a good place to
