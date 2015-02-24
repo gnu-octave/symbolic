@@ -30,7 +30,10 @@ octsympy 2.x.y (yyyy-mm-dd)
 
   * Improve symbolic sized matrices such as `A = sym('a', [n m])`.
     These are still experimental; they correspond to MatixSymbols in
-    SymPy and may need a recent SymPy development version.
+    SymPy and may need a recent SymPy development version.  For now,
+    the `size(A)` returns "1x1" although internally `NaN` is used for
+    symbolic-sized dimensions.  Enabling `size(A)` to return "NaNx3"
+    may occur later.
 
   * Drop python_cmd_string, which has been deprecated since v0.1.1.
 
