@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,7 +62,16 @@ function display(x)
   name = priv_disp_name(x, inputname (1));
   d = size (x);
 
-  if (isscalar (x))
+  % sort of isinstance(x, MatrixExpr) but cheaper
+  is_matrix_symbol = false;
+  matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatMul'};
+  for i=1:length(matexprlist)
+    if (strncmp(char(x), matexprlist{i}, length(matexprlist{i})))
+      is_matrix_symbol = true;
+    end
+  end
+
+  if (isscalar (x)) && (~is_matrix_symbol)
     n = fprintf ('%s = (%s)', name, class (x));
     s = strtrim(disp(x));
     hasnewlines = strfind(s, newl);
@@ -78,6 +87,31 @@ function display(x)
       disp(x)
       if (loose), fprintf ('\n'); end
     end
+
+  elseif (is_matrix_symbol)
+    %if (any(isnan(d)))  % may not tell the truth
+    if (any(isnan(x.size)))
+      [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
+      numrstr = strtrim(disp(nn, 'flat'));
+      numcstr = strtrim(disp(mm, 'flat'));
+    else
+      numrstr = num2str(d(1));
+      numcstr = num2str(d(2));
+    end
+    if (logical(nn == 0) || logical(mm == 0))
+      estr = 'empty ';
+    else
+      estr = '';
+    end
+    numrstr = strtrim(disp(nn, 'flat'));
+    numcstr = strtrim(disp(mm, 'flat'));
+    n = fprintf ('%s = (%s) %s (%s%s%s%s matrix expression)', name, ...
+                 class (x), strtrim(disp(x)), estr, numrstr, timesstr, numcstr);
+    if (unicode_dec)
+      n = n - 1;  % FIXME: b/c times unicode is two bytes
+    end
+    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
+
 
 
   elseif (isempty (x))

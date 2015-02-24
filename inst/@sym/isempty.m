@@ -55,9 +55,26 @@ end
 %!test assert ( isa (se, 'sym'))
 %!test assert ( isequal (se, 10))
 
+%!shared
+
 %!test
 %! % empty matrices
 %! A = sym('A', [3 0]);
 %! assert (isempty (A))
 %! A = sym(ones(3,0));
+%! assert (isempty (A))
+
+%!test
+%! % non-empty symbolic-size matrices
+%! syms n integer
+%! A = sym('A', [3 n]);
+%! assert (~isempty (A))
+
+%!xtest
+%! % empty symbolic-size matrices
+%! % FIXME: will fail until size stop lying by saying 1x1
+%! syms n integer
+%! A = sym('A', [0 n]);
+%! assert (isempty (A))
+%! A = sym('A', [n 0]);
 %! assert (isempty (A))

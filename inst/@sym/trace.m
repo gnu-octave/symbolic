@@ -30,7 +30,7 @@ function z = trace(x)
   cmd = { 'x, = _ins'
           'if not x.is_Matrix:'
           '    x = sp.Matrix([[x]])'
-          'return x.trace(),' };
+          'return sp.trace(x),' };
 
   z = python_cmd (cmd, x);
 

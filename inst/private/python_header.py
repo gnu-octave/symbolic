@@ -180,8 +180,8 @@ try:
             elif isinstance(x, (sp.Expr, Boolean)):
                 _d = (1, 1)
             elif isinstance(x, sp.MatrixExpr):
-                # FIXME: play with x.shape instead
-                _d = (1, 1)
+                # nan for symbolic size
+                _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
             else:
                 dbout("Treating unexpected SymPy obj as scalar: " + str(type(x)))
                 _d = (1,1)
