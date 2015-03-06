@@ -30,6 +30,9 @@ Checklist
 
       - make_windows_package.sh, use "day-to-day testing" mode.
 
+  * Test regenerating the html documentation.  As of 2015-03, you need
+    hg tip generate_html pkg for the utf-8 to work.
+
   * If packages seem ok, then tag the repo with:
 
     `git tag -a v2.0.0 -m "Version 2.0.0"`
@@ -43,6 +46,8 @@ Checklist
 
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
+
+      - regenerating the html documentation.
 
       - do something with binaries on sourceforge.
 
