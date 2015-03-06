@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{q} =} horner (@var{p})
 %% @deftypefnx {Function File} {@var{q} =} horner (@var{p}, @var{x})
 %% Convert a symbolic polynomial to Horner form.

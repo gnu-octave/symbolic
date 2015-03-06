@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {} pretty (@var{x})
 %% @deftypefnx {Function File}  {@var{s} =} pretty (@var{x})
 %% Return/display ASCII-art/unicode representation of expression.

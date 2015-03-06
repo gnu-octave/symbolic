@@ -16,6 +16,7 @@
 %% see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{p} =} poly2sym (@var{c})
 %% @deftypefnx {Function File} {@var{p} =} poly2sym (@var{c}, @var{x})
 %% Create a symbolic polynomial expression from coefficients.

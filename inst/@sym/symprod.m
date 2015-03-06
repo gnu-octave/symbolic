@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} symprod (@var{f}, @var{n}, @var{a}, @var{b})
 %% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n}, [@var{a} @var{b}])
 %% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{a}, @var{b})

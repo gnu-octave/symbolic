@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{sol} =} solve (@var{eq, var})
 %% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, eq2})
 %% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})

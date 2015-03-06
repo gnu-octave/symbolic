@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{sol} =} dsolve (@var{ode})
 %% @deftypefnx {Function File} {@var{sol} =} dsolve (@var{ode}, @var{ics})
 %% Solve ordinary differentual equations (ODEs) symbolically.

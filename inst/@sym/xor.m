@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{z} =} xor (@var{x}, @var{y})
 %% Logical xor of symbolic arrays.
 %%

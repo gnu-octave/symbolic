@@ -16,6 +16,7 @@
 %% see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{c} =} sym2poly (@var{p})
 %% @deftypefnx {Function File} {@var{c} =} sym2poly (@var{p}, @var{x})
 %% Return vector of coefficients of a symbolic polynomial.

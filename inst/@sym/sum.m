@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} sum (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} sum (@var{x}, @var{n})
 %% Sum of symbolic expressions.

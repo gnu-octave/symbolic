@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
