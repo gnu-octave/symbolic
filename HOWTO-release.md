@@ -1,9 +1,19 @@
 How to do a release
 ===================
 
+We use x.y.z.  Bump y for minor changes or z for "micro" changes (bug
+fixes etc).
+
+OctaveForge process: http://octave.sourceforge.net/developers.html
+TODO: read this during next release, and update below.
+
+
+Checklist
+---------
+
   * Update sympref.m:
 
-      - update version number (bump and remove -git).
+      - update version number (remove ".dev", check if bump needed).
 
       - Make sure snippet defaults to false.
 
@@ -27,19 +37,25 @@ How to do a release
   * `git push --tags origin master`.  If messed up and want to change
     anything after this, need to bump version number (tag is public).
 
-  * Then redo the packages using the tag.
+  * Push and push tags to sourceforge.
+
+  * Then redo the packages using the "tag" mode.
 
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
+
+      - do something with binaries on sourceforge.
 
 
 
 AFTER release
 =============
 
-  * Append -git to version in sympref.m
+  * Bump version to the next anticipated version and append ".dev" in
+    in sympref.m.  See
+    [PEP 440](https://www.python.org/dev/peps/pep-0440).
 
-  * Leave old version in DESCRIPTION (-git not supported here).  We'll
-    bump it at the next release.
+  * Leave old version in DESCRIPTION (".dev" not supported here).  We
+    will bump it at the next release.  FIXME: this is unfortunate.
 
-  * Snippets should default to true in sympref.m
+  * Snippets could default to true in sympref.m
