@@ -17,22 +17,39 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{g} =} partfrac (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} partfrac (@var{f}, @var{x})
 %% Compute partial fraction decomposition of a rational function.
 %%
 %% Examples:
 %% @example
-%% syms x
-%% f = 2/(x + 4)/(x + 1)
-%% partfrac(f)
-%% partfrac(f, x)
+%% >> syms x
+%% >> f = 2/(x + 4)/(x + 1)
+%%  @result{} f = (sym)
+%%               2
+%%        ───────────────
+%%        (x + 1)⋅(x + 4)
+%% >> partfrac(f)
+%%  @result{} ans = (sym)
+%%            2           2
+%%      - ───────── + ─────────
+%%        3⋅(x + 4)   3⋅(x + 1)
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% partfrac(y/(x + y)/(x + 1), x)
-%% partfrac(y/(x + y)/(x + 1), y)
+%% >> syms x y
+%% >> partfrac(y/(x + y)/(x + 1), x)
+%%  @result{} ans = (sym)
+%%                y                 y
+%%       - ─────────────── + ───────────────
+%%         (x + y)⋅(y - 1)   (x + 1)⋅(y - 1)
+%% >> partfrac(y/(x + y)/(x + 1), y)
+%%  @result{} ans = (sym)
+%%                x            1
+%%       - ─────────────── + ─────
+%%         (x + 1)⋅(x + y)   x + 1
 %% @end example
 %%
 %% @seealso{factor}
