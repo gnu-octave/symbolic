@@ -20,9 +20,7 @@
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.  Note the order is not the
-%% same as @code{symvar} and @code{findsym}: use one of those if
-%% Matlab Symbolic Math Toolbox compatibility is important.
+%% The list is sorted alphabetically.  See @code{symvar}.
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
@@ -31,6 +29,9 @@
 %% @var{x} could be a sym, sym array, cell array, or struct.
 %%
 %% Note E, I, pi, etc are not counted as symbols.
+%%
+%% Note only returns symbols actually appearing in the RHS of a
+%% @code{symfun}.
 %%
 %% @seealso{symvar, findsym}
 %% @end deftypefn
@@ -59,9 +60,6 @@ function L = findsymbols(obj, dosort)
             'l = sorted(l, key=str)'
             'return l,' };
     L = python_cmd (cmd, obj);
-    if isa(obj, 'symfun')
-      warning('FIXME: need to do anything special for symfun vars?')
-    end
 
 
   elseif iscell(obj)
@@ -137,15 +135,18 @@ end
 %! syms x f(y)
 %! a = f*x;
 %! b = f(y)*x;
-%! c(y) = x;
 %! assert (isequal (findsymbols(a), {x y}))
 %! assert (isequal (findsymbols(b), {x y}))
 
-%!xtest
-%! % FIXME: symfun, yes need to do sth special or doc, see smt in symvar
+%!test
+%! % findsymbols on symfun does not find the argnames (unless they
+%! % are on the RHS of course, this matches SMT 2014a).
 %! syms a x y
 %! f(x, y) = a;  % const symfun
-%! assert (isequal (findsymbols(f), {a x y}))
+%! assert (isequal (findsymbols(f), {a}))
+%! syms a x y
+%! f(x, y) = a*y;
+%! assert (isequal (findsymbols(f), {a y}))
 
 %!test
 %! % sorts lexigraphically, same as symvar *with single input*

@@ -60,8 +60,11 @@ function vars = symvar(F, Nout)
       idx.type = '()'; idx.subs = {i};
       vars = subsasgn(vars, idx, symlist{i});
     end
+    return
+  end
 
-  else
+
+  % behaviour is rather different specific number of outputs requests
     assert(Nout >= 0, 'number of requested symbols should be positive')
 
     if (Nlist < Nout)
@@ -108,7 +111,6 @@ function vars = symvar(F, Nout)
       vars = subsasgn(vars, idx, symlist{I(i)});
     end
 
-  end
 end
 
 
