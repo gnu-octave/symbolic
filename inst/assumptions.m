@@ -23,11 +23,45 @@
 %% @deftypefnx {Function File} {@var{L} =} assumptions ('possible')
 %% List assumptions on symbolic variables.
 %%
-%% The assumptions are turned as a cell-array of strings.
+%% The assumptions are returned as a cell-array of strings:
+%% @example
+%% @group
+%% >> syms x y positive
+%% >> syms n integer
+%% >> assumptions
+%%  @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%       [1,2] = x: positive
+%%       [1,3] = y: positive
+%%     @}
+%% >> f = sin(n*x);
+%% >> assumptions(f)
+%%  @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%       [1,2] = x: positive
+%%     @}
+%% >> assumptions(n)
+%%  @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%     @}
+%% @end group
+%% @end example
 %%
 %% With the optional second argument set to @code{'dict'},
 %% return the assumption dictionaries in @var{d} corresponding
 %% to the variables in @var{v}.
+%%
+%% You can also get a list of possible assumptions:
+%% @example
+%% @group
+%% >> A = assumptions('possible');
+%% >> sprintf('%s ', A{:})
+%%  @result{} ans = real positive negative integer even odd rational finite
+%% @end group
+%% @end example
 %%
 %% @seealso{sym, syms, assume, assumeAlso}
 %% @end deftypefn
