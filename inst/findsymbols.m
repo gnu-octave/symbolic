@@ -46,13 +46,15 @@ function L = findsymbols(obj, dosort)
 
   if isa(obj, 'sym')
     cmd = { 'x = _ins[0]'
-            '#s = x.free_symbols'   % in 0.7.5-git
-            'if not x.is_Matrix:'
-            '    s = x.free_symbols'
+            'if sympy.__version__ == "0.7.5":'   % deprecate with Issue #164
+            '    if not x.is_Matrix:'
+            '        s = x.free_symbols'
+            '    else:'
+            '        s = set()'
+            '        for i in x.values():'
+            '            s = s.union(i.free_symbols)'
             'else:'
-            '    s = set()'
-            '    for i in x.values():'
-            '        s = s.union(i.free_symbols)'
+            '    s = x.free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
@@ -152,3 +154,16 @@ end
 %! f = A*a*B*b*y*X*Y*x;
 %! assert (isequal (findsymbols(f), {A B X Y a b x y}))
 %! assert (isequal (symvar(f), [A B X Y a b x y]))
+
+%!test
+%! % symbols in matpow
+%! syms x y
+%! syms n
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=75)
+%!   disp('skipping known failure b/c SymPy <= 0.7.5')
+%! else
+%!   A = [sin(x) 2; y 1];
+%!   B = A^n;
+%!   L = findsymbols(B);
+%!   assert (isequal (L, {n x y}))
+%! end
