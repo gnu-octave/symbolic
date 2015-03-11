@@ -49,7 +49,7 @@ Checklist
 
       - regenerating the html documentation.
 
-      - do something with binaries on sourceforge.
+      - create ticket for binaries and doc tarball on sourceforge.
 
 
 
