@@ -184,21 +184,20 @@ function [A, B] = assumptions(F, outp)
   end
   s = findsymbols(F);
   for i=1:length(s)
-      x = s{i};
-      if strcmp(outp, 'dict')
-        [astr, adict] = python_cmd(cmd, x, true);
-      else
-        astr = python_cmd(cmd, x, false);
-      end
+    x = s{i};
+    if strcmp(outp, 'dict')
+      [astr, adict] = python_cmd(cmd, x, true);
       if ~isempty(astr)
-        str = [x.flat ': ' astr];
         c = c + 1;
-        if strcmp(outp, 'dict')
-          A{c} = s;
-          B{c} = adict;
-        else
-          A{c} = str;
-        end
+        A{c} = x;
+        B{c} = adict;
+      end
+    else
+      astr = python_cmd(cmd, x, false);
+      if ~isempty(astr)
+        c = c + 1;
+        str = [x.flat ': ' astr];
+        A{c} = str;
         %if c == 1
         %  A = str;
         %elseif c == 2
@@ -207,6 +206,7 @@ function [A, B] = assumptions(F, outp)
         %  A{c} = str;
         %end
       end
+    end
   end
 
 end
@@ -265,6 +265,22 @@ end
 %! assert(length(a) == 2)
 %! assert(~isempty(strfind(a{1}, 'positive')))
 %! assert(~isempty(strfind(a{2}, 'real')))
+
+%!test
+%! % dict output
+%! syms x positive
+%! syms y real
+%! syms z
+%! f = x*y*z;
+%! [v, d] = assumptions(f, 'dict');
+%! assert(length(v) == 2)
+%! assert(iscell(v))
+%! assert(isa(v{1}, 'sym'))
+%! assert(isa(v{2}, 'sym'))
+%! assert(length(d) == 2)
+%! assert(iscell(d))
+%! assert(isstruct(d{1}))
+%! assert(isstruct(d{2}))
 
 %!test
 %! %% assumptions on just the vars in an expression
