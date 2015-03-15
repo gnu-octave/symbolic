@@ -1,6 +1,11 @@
 octsympy 2.1.1.dev
 ==================
 
+  * New commands:
+
+          catalan
+          eulergamma
+
   * Documentation improvements: assumptions.
 
   * Bug fixes: #201 (assumptions, symvar and symbolic matrix power).
