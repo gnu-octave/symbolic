@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge symbolic package], [2.1.0+])
+AC_INIT([Octave-Forge symbolic package], [2.1.1.dev])
 
 AC_CHECK_PROG(HAVE_PYTHON, python, [yes], [no])
 if test $HAVE_PYTHON = no; then
