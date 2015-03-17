@@ -73,10 +73,14 @@ end
 
 %!test
 %! % k, x not x, k to match SMT
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: SymPy 0.7.5 is too old')  # clean up in Issue #164
+%! else
 %! syms x
 %! T = lambertw(2, x)*exp(lambertw(2, x));
 %! T = double (subs (T, x, 10));
 %! assert (abs(T - 10) < 1e-15)
+%! end
 
 %!xtest
 %! % W(x)*exp(W(x)) == x
