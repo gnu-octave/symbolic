@@ -21,6 +21,8 @@ Checklist
 
   * Update NEWS file (date, version number, reformat).
 
+  * Update the version in src/configure.ac.  Run bootstrap script.
+
   * Packages: need to run the following two scripts.  I recommend
     testing them first without using the tag.  Then test the packages
     by running the test suite.
@@ -59,6 +61,8 @@ AFTER release
   * Bump version to the next anticipated version and append ".dev" in
     in sympref.m.  See
     [PEP 440](https://www.python.org/dev/peps/pep-0440).
+
+  * Update the version in src/configure.ac: .dev seems ok there.
 
   * Leave old version in DESCRIPTION (".dev" not supported here).  We
     will bump it at the next release.  FIXME: this is unfortunate.
