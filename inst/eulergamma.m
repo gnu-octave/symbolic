@@ -35,3 +35,5 @@ function g = eulergamma ()
   g = python_cmd ('return sympy.S.EulerGamma,');
 end
 
+%!assert (double (eulergamma ()) > 0.577215664901)
+%!assert (double (eulergamma ()) < 0.577215664902)

@@ -35,3 +35,5 @@ function g = catalan ()
   g = python_cmd ('return sympy.S.Catalan,');
 end
 
+%!assert (double (catalan ()) > 0.915965594177)
+%!assert (double (catalan ()) < 0.915965594178)
