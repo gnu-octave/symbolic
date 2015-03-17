@@ -5,6 +5,7 @@ octsympy 2.1.1.dev
 
           catalan
           eulergamma
+          lambertw
 
   * Documentation improvements: assumptions.
 
