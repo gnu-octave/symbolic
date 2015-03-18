@@ -9,3 +9,9 @@ outlog.txt
 
 # matlab package subdir
 matlab/
+
+# autoconf
+src/configure
+src/config.log
+src/aclocal.m4
+src/autom4te.cache

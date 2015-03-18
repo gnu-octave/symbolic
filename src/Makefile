@@ -63,3 +63,7 @@ matlab_clean:
 	rm -rf ../matlab/@logical
 	rm -rf ../matlab/private
 	rm -rf ../matlab/tests_matlab
+
+distclean:
+	rm -f configure config.log aclocal.m4
+	rm -rf autom4te.cache
