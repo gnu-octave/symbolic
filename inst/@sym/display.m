@@ -25,18 +25,44 @@
 %% @example
 %% @group
 %% >> x = sym('x')
-%%  @result{} x = (sym) x
+%%    @result{} x = (sym) x
 %%
 %% >> display(x)
-%%  @result{} x = (sym) x
+%%    @result{} x = (sym) x
 %%
 %% >> display([x 2 pi])
-%%  @result{} = (sym 1×3 matrix)
-%%
-%%  [x  2  π]
+%%    @result{} (sym) [x  2  π] (1×3 matrix)
 %% @end group
 %% @end example
 %%
+%% Other examples:
+%% @example
+%% @group
+%% >> A = sym([1 2; 3 4])
+%%    @result{} A = (sym 2×2 matrix)
+%%        ⎡1  2⎤
+%%        ⎢    ⎥
+%%        ⎣3  4⎦
+%%
+%% >> syms n
+%% >> B = A^n
+%%    @result{} B = (sym 2×2 matrix expression)
+%%                n
+%%        ⎛⎡1  2⎤⎞
+%%        ⎜⎢    ⎥⎟
+%%        ⎝⎣3  4⎦⎠
+%% @end group
+%%
+%% @group
+%% >> A = sym(ones(0, 3))
+%%    @result{} A = (sym) [] (empty 0×3 matrix)
+%%
+%% >> B = 3*A^n
+%%    @result{} B = (sym empty 0×3 matrix expression)
+%%              n
+%%        3⋅([])
+%% @end group
+%% @end example
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -195,6 +221,7 @@ end
 
 
 % FIXME: Could quietly test with "evalc", but [missing in
-% Octave](https://savannah.gnu.org/patch/?8033).  For now, a dummy test.
+% Octave](https://savannah.gnu.org/patch/?8033).  For now, a dummy
+% test.  Doctests will cover this anyway.
 %!test
 %! assert(true)
