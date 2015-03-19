@@ -112,6 +112,7 @@ function display(x)
       numrstr = strtrim(disp(nn, 'flat'));
       numcstr = strtrim(disp(mm, 'flat'));
     else
+      nn = d(1);  mm = d(2);
       numrstr = num2str(d(1));
       numcstr = num2str(d(2));
     end
