@@ -7,9 +7,15 @@ octsympy 2.1.1.dev
           eulergamma
           lambertw
 
-  * Documentation improvements: assumptions.
+  * Installing symbolic package now check for Python and minimum
+    version of SymPy (thanks Carnë Draug for autoconf).
 
-  * Bug fixes: #201 (assumptions, symvar and symbolic matrix power).
+  * Documentation improvements especially to assumptions.
+
+  * Fix a warning on Octave 4.0.0-rc1.
+
+  * Other bug fixes: assumptions; symvar and symbolic matrix powers;
+    various display issues.
 
 
 
