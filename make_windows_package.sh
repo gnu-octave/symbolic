@@ -8,9 +8,9 @@ PYEXEREADME=py27910.readme.txt   # from the src package
 SYMPY=sympy-0.7.6
 
 # for day-to-day testing
-VER=2.1.0.dev
+VER=2.1.1.dev
 # for release
-#VER=2.1.0
+#VER=2.1.1
 #TAG=v${VER}
 
 
@@ -41,10 +41,11 @@ rm -rf ${WINDIR}
 rm -rf ${WINDIRTMP}
 
 
-# "make install" needs python so we make it now, then remove src from
-# the package
 cp -r octsympy ${WINDIRTMP}
 pushd ${WINDIRTMP}/src/
+make distclean
+./bootstrap
+./configure
 make
 popd
 

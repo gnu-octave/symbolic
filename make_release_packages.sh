@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=2.1.0.dev
+VER=2.1.1.dev
 # for release
-#VER=2.1.0
+#VER=2.1.1
 #TAG=v${VER}
 
 #----------------------------------------------------------------
@@ -48,6 +48,8 @@ popd
 
 # make clean
 pushd ${DIR}/src/
+make distclean
+./bootstrap
 make clean
 popd
 
