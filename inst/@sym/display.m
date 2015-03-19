@@ -81,7 +81,7 @@ function display(x)
 
   % sort of isinstance(x, MatrixExpr) but cheaper
   is_matrix_symbol = false;
-  matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatMul'};
+  matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatPow'};
   for i=1:length(matexprlist)
     if (strncmp(char(x), matexprlist{i}, length(matexprlist{i})))
       is_matrix_symbol = true;
