@@ -68,43 +68,77 @@ function display(x)
     term_width = term_width(1);
   end
 
+  name = priv_disp_name(x, inputname (1));
+  dispstr = disp (x);
+  dispstrtrim = strtrim (dispstr);
+  hasnewlines = ~isempty (strfind (dispstrtrim, sprintf('\n')));
+
+  [desc_start, desc_end] = sym_describe (x, unicode_dec);
+
+  if display_snippet
+    toobig = true;
+  else
+    toobig = hasnewlines;
+    %toobig = hasnewlines || ~(isempty(x) || isscalar(x));
+  end
+
+  s1 = '';
+  if (~isempty(name))
+    s1 = sprintf ('%s = ', name);
+  end
+
+  if (toobig)
+    if (isempty(desc_end))
+      s2 = sprintf('(%s)', desc_start);
+    else
+      s2 = sprintf('(%s %s)', desc_start, desc_end);
+    end
+  else
+    if (isempty(desc_end))
+      s2 = sprintf('(%s) %s', desc_start, dispstrtrim);
+    else
+      s2 = sprintf('(%s) %s  (%s)', desc_start, dispstrtrim, desc_end);
+    end
+  end
+  s = [s1 s2];
+  n = ustr_length (s);
+  fprintf (s)
+  if (display_snippet)
+    fprintf (snippet_of_sympy (x, 7, term_width - n, unicode_dec))
+  end
+  fprintf ('\n');
+
+  if (toobig)
+    if (loose), fprintf ('\n'); end
+    fprintf (dispstr)
+    if (loose), fprintf ('\n'); end
+    fprintf ('\n');
+  end
+end
+
+
+function [s1 s2] = sym_describe(x, unicode_dec)
   if (unicode_dec)
     timesstr = '×';
   else
     timesstr = 'x';
   end
-  newl = sprintf('\n');
 
-  % an appropriate label for this variable, likely just inputname itself
-  name = priv_disp_name(x, inputname (1));
+  s1 = class (x);
+  srepr = char (x);
   d = size (x);
 
   % sort of isinstance(x, MatrixExpr) but cheaper
   is_matrix_symbol = false;
   matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatPow'};
   for i=1:length(matexprlist)
-    if (strncmp(char(x), matexprlist{i}, length(matexprlist{i})))
+    if (strncmp(srepr, matexprlist{i}, length(matexprlist{i})))
       is_matrix_symbol = true;
     end
   end
 
   if (isscalar (x)) && (~is_matrix_symbol)
-    n = fprintf ('%s = (%s)', name, class (x));
-    s = strtrim(disp(x));
-    hasnewlines = strfind(s, newl);
-    % FIXME: length(s) lies on Octave; it counts bytes not chars
-    toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
-    if (~toobig)
-      fprintf(' %s', s)
-      n = n + 1 + length(s);
-      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-    else
-      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-      if (loose), fprintf ('\n'); end
-      disp(x)
-      if (loose), fprintf ('\n'); end
-    end
-
+    s2 = '';
   elseif (is_matrix_symbol)
     %if (any(isnan(d)))  % may not tell the truth
     if (any(isnan(x.size)))
@@ -113,93 +147,50 @@ function display(x)
       numcstr = strtrim(disp(mm, 'flat'));
     else
       nn = d(1);  mm = d(2);
-      numrstr = num2str(d(1));
-      numcstr = num2str(d(2));
+      numrstr = num2str(d(1), '%g');
+      numcstr = num2str(d(2), '%g');
     end
     if (logical(nn == 0) || logical(mm == 0))
       estr = 'empty ';
     else
       estr = '';
     end
-    numrstr = strtrim(disp(nn, 'flat'));
-    numcstr = strtrim(disp(mm, 'flat'));
-    n = fprintf ('%s = (%s) %s (%s%s%s%s matrix expression)', name, ...
-                 class (x), strtrim(disp(x)), estr, numrstr, timesstr, numcstr);
-    if (unicode_dec)
-      n = n - 1;  % FIXME: b/c times unicode is two bytes
-    end
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-
-
-  elseif (isempty (x))
-    n = fprintf ('%s = (%s) %s (empty %g%s%g matrix)', name, ...
-                 class (x), strtrim(disp(x)), d(1), timesstr, d(2));
-    if (unicode_dec)
-      n = n - 1;  % FIXME: b/c times unicode is two bytes
-    end
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-
+    s2 = sprintf ('%s%s%s%s matrix expression', estr, numrstr, timesstr, numcstr);
   elseif (length (d) == 2)
-    %% 2D Array
-    n = fprintf ('%s = (%s %g%s%g matrix)', name, class (x), ...
-                 d(1), timesstr, d(2));
-    if (unicode_dec)
-      n = n - 1;  % FIXME: b/c times unicode is two bytes
+    if (isempty (x))
+      estr = 'empty ';
+    else
+      estr = '';
     end
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-    if (loose), fprintf ('\n'); end
-    disp(x)
-    if (loose), fprintf ('\n'); end
-
-
+    s2 = sprintf ('%s%g%s%g matrix', estr, d(1), timesstr, d(2));
   else
-    %% nD Array
-    % (not possible with sympy matrix)
-    fprintf ('%s = (%s nD array)', name, class (x))
-
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-    if (loose), fprintf ('\n'); end
-    disp(x)
-    if (loose), fprintf ('\n'); end
+    s2 = sprintf ('%d-dim array', length (d))
   end
 end
 
 
-function snippet_of_sympy(x, padw, width, unicode)
-
-  if ( ~ sympref('snippet'))
-    fprintf('\n');
-    return
-  end
-
+function snip = snippet_of_sympy(x, padw, width, unicode)
   if (unicode)
     ell = '…';
     lquot = '“'; rquot = '”';
-    lendec = 3;
   else
     ell = '...';
     lquot = '"'; rquot = lquot;
-    lendec = 5;
   end
-
   rightpad = 1;
-
-  % indent
   pad = repmat(' ', 1, padw);
 
   % trim newlines (if there are any)
-  s = regexprep (x.pickle, '\n', '\\n');
-  % no unicode in pickle (I think) so this length is (probably) reliable
-  len = length (s);
-  if (len > (width - padw - rightpad - 2))
-    n = width - rightpad - padw - lendec;
-    s = [s(1:n) ell];
+  s = regexprep (char (x), '\n', '\\n');
+  snip = [pad lquot s rquot];
+  if (ustr_length (snip) > width)
+    n = width - rightpad - padw - ustr_length ([lquot rquot ell]);
+    if (n < 8)
+      snip = '';
+    else
+      snip = sprintf ([pad lquot '%s' ell rquot], s(1:n));
+    end
   end
-  fprintf([pad lquot '%s' rquot '\n'], s)
 end
 
 
