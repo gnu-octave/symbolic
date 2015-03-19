@@ -68,13 +68,13 @@ end
 %! % W(x)*exp(W(x)) == x
 %! syms x
 %! T = lambertw(x)*exp(lambertw(x));
-%! T = double (subs (T, x, 10))
+%! T = double (subs (T, x, 10));
 %! assert (isequal (T, 10));
 
 %!test
 %! % k, x not x, k to match SMT
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: SymPy 0.7.5 is too old')  # clean up in Issue #164
+%!   disp('skipping: SymPy 0.7.5 is too old')  % clean up in Issue #164
 %! else
 %! syms x
 %! T = lambertw(2, x)*exp(lambertw(2, x));
@@ -83,8 +83,7 @@ end
 %! end
 
 %!xtest
-%! % W(x)*exp(W(x)) == x
+%! % W(x)*exp(W(x)) == x;  FIXME: a failure in SymPy?
 %! syms x
-%! T = lambertw(x)*exp(lambertw(x));
-%! T = simplify(T);
+%! T = simplify(lambertw(x)*exp(lambertw(x)));
 %! assert (isequal (T, x))
