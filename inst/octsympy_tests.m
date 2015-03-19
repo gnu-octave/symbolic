@@ -75,7 +75,7 @@ function anyfail = octsympy_tests ()
 
     puts ("\nSummary:\n\n");
 
-    nfail = dn - dp;
+    nfail = dn - dp - dxf;
     printf ("  PASS    %6d\n", dp);
     printf ("  FAIL    %6d\n", nfail);
     if (dxf > 0)
@@ -133,7 +133,7 @@ endfunction
 function print_pass_fail (p, n, xf, sk)
   if ((n + sk) > 0)
     printf (" PASS %3d/%-3d", p, n);
-    nfail = n - p;
+    nfail = n - p - xf;
     if (nfail > 0)
       printf (" \033[1;40;31m%s %d\033[m", "FAIL", nfail);
     endif
