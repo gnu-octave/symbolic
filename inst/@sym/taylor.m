@@ -28,9 +28,14 @@
 %%
 %% Key/value pairs can be used to set the order:
 %% @example
-%% syms x
-%% f = exp(x)
-%% taylor(f,x,0,'order',6)
+%% >> syms x
+%% >> f = exp(x);
+%% >> taylor(f, x, 0, 'order', 6)
+%%    @result{}
+%%            5    4    3    2
+%%           x    x    x    x
+%%          ─── + ── + ── + ── + x + 1
+%%          120   24   6    2
 %% @end example
 %% One can also set 'expansionPoint' instead of passing @var{a}.
 %%

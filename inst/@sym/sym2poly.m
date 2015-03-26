@@ -1,4 +1,5 @@
-%% Copyright (C) 2003, 2014, 2015 Willem J. Atsma and Colin B. Macdonald
+%% Copyright (C) 2003 Willem J. Atsma
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -42,8 +43,8 @@
 %% @example
 %% @group
 %% syms x
-%% double(sym2poly(pi*x^2 + 3*x/2 + exp(sym(1)))
-%%    @result{}     3.1416         1.5      2.7183
+%% double(sym2poly(pi*x^2 + 3*x/2 + exp(sym(1))))
+%%    @result{}     3.1416   1.5000   2.7183
 %% @end group
 %% @end example
 %%

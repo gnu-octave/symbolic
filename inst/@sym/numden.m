@@ -23,18 +23,20 @@
 %% Examples:
 %% @example
 %% @group
-%% [n, d] = numden(sym(4)/5)
-%%    @result{} 4
-%%    @result{} 5
+%% >> [n, d] = numden(sym(4)/5)
+%%    @result{}
+%%      n = (sym) 4
+%%      d = (sym) 5
 %% @end group
 %% @end example
 %%
 %% @example
 %% @group
-%% syms x y
-%% [n, d] = numden((x+y)/sin(x))
-%%    @result{} x + y
-%%    @result{} sin(x)
+%% >> syms x y
+%% >> [n, d] = numden((x+y)/sin(x))
+%%    @result{}
+%%      n = (sym) x + y
+%%      d = (sym) sin(x)
 %% @end group
 %% @end example
 %%

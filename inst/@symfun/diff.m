@@ -27,17 +27,36 @@
 %%
 %% The derivative is itself a symfun so you can evaluate at a point like:
 %% @example
-%% syms u(x)
-%% up = diff(u)  % u'(x)
-%% up(2)         % u'(2)
+%% >> syms u(x)
+%% >> up = diff(u)  % u'(x)
+%%    @result{} up(x) = (symfun)
+%%         d
+%%         ──(u(x))
+%%         dx
+%% >> up(2)         % u'(2)
+%%    @result{} ans = (sym)
+%%         ⎛d       ⎞│
+%%         ⎜──(u(x))⎟│
+%%         ⎝dx      ⎠│x=2
 %% @end example
 %%
 %% At least on GNU Octave, a further shortcut is possible:
 %% @example
-%% syms u(x)
-%% diff(u)(2)  % u'(2)
-%% syms f(x, y)
-%% diff(f, x, y, y)(3, 2)  % a third partial eval at (3, 2)
+%% >> syms u(x)
+%% >> diff(u)(2)
+%%    @result{} ans = (sym)
+%%         ⎛d       ⎞│
+%%         ⎜──(u(x))⎟│
+%%         ⎝dx      ⎠│x=2
+%%
+%% >> syms f(x, y)
+%% >> diff(f, x, y, y)(3, 2)  % a third partial eval at (3, 2)
+%%    @result{} ans = (sym)
+%%         ⎛⎛   3           ⎞│   ⎞│
+%%         ⎜⎜  ∂            ⎟│   ⎟│
+%%         ⎜⎜──────(f(x, y))⎟│   ⎟│
+%%         ⎜⎜  2            ⎟│   ⎟│
+%%         ⎝⎝∂y  ∂x         ⎠│x=3⎠│y=2
 %% @end example
 %%
 %% @seealso{int}
