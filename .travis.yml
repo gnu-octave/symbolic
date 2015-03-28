@@ -10,6 +10,7 @@ install:
   - sudo apt-get update
   - sudo apt-get install octave
   - "pip install sympy==$SYMPY_VER"
+  - git clone --single-branch --branch fortravis https://github.com/cbm755/doctest-for-matlab
 
 # all commands here must have exit code 0 for the build to be called "passing"
 script:
@@ -19,6 +20,7 @@ script:
   - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
+  - octave --eval "r = octsympy_doctests; exit(r)"
   - popd
 
 #after_script:
