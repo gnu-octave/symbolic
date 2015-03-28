@@ -87,8 +87,9 @@
 %% This allows, for example, creating an abstract function formally
 %% of x, y but depending only on x:
 %% @example
-%% syms x y
-%% h = symfun(sym('h(x)'), [x y])
+%% >> syms x y
+%% >> h = symfun(sym('h(x)'), [x y])
+%%    @result{} h(x, y) = (symfun) h(x)
 %% @end example
 %%
 %% @seealso{sym, syms}
