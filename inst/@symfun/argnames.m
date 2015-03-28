@@ -31,8 +31,7 @@
 %% >> syms x y
 %% >> f(x, y) = x^2;
 %% >> argnames(f)
-%%  @result{} ans = (sym 1×2 matrix)
-%%       [x  y]
+%%    @result{} [x  y]
 %% @end group
 %% @end example
 %%

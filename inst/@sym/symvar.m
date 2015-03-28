@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald and others
+%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,10 +27,12 @@
 %%
 %% Example:
 %% @example
-%% syms x,y
-%% f     = x^2+3*x*y-y^2;
-%% vars  = symvar (f);
-%% vars2 = symvar (f,1);
+%% >> syms x y
+%% >> f = x^2 + 3*x*y - y^2;
+%% >> symvar (f)
+%%    @result{} [x y]
+%% >> symvar (f, 1)
+%%    @result{} x
 %% @end example
 %%
 %% Compatibility with other implementations: the output should

@@ -42,8 +42,7 @@
 %% @group
 %% >> syms x y
 %% >> lambertw([0 1], [x y])
-%%    @result{} ans = (sym 1×2 matrix)
-%%         [LambertW(x)  LambertW(y, 1)]
+%%    @result{} [LambertW(x)  LambertW(y, 1)]
 %% @end group
 %% @end example
 %%
