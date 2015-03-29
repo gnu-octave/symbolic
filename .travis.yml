@@ -1,9 +1,14 @@
 language: python
 # well its really octave, but that is not supported
 
-env:
-  - SYMPY_VER=0.7.5
-  - SYMPY_VER=0.7.6
+matrix:
+  include:
+    - python: "2.7"
+      env: SYMPY_VER=0.7.5 DOCTEST=no
+    - python: "2.7"
+      env: SYMPY_VER=0.7.6 DOCTEST=yes
+#    - python: "3.4"
+#      env: SYMPY_VER=0.7.6 DOCTEST=yes
 
 install:
   - sudo apt-add-repository --yes ppa:octave/stable
@@ -20,7 +25,7 @@ script:
   - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
-  - octave --eval "r = octsympy_doctests; exit(r)"
+  - if [ "x$DOCTEST" = "xyes" ]; then  octave --eval "r = octsympy_doctests; exit(r)";  fi
   - popd
 
 #after_script:
