@@ -43,8 +43,8 @@ try:
     def dbout(l):
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
-        # used to pass doubles back-and-forth
-        return binascii.hexlify(struct.pack(">d", x))
+        # used to pass doubles back-and-forth (.decode for py3)
+        return binascii.hexlify(struct.pack(">d", x)).decode()
     def hex2d(s):
         bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
         return struct.unpack(">d", bins)[0]
@@ -151,7 +151,10 @@ try:
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
-        print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
+        if sys.version_info >= (3, 0):
+            print(DOM.toprettyxml(indent="", newl="\n"))
+        else:
+            print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
     myerr(sys.exc_info())
     raise
