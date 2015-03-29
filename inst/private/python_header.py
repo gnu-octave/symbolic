@@ -119,7 +119,7 @@ else:
                     xtra = ", negative=True"
                 else:
                     xtra = ""
-                    for (key, val) in asm.iteritems():
+                    for (key, val) in asm.items():
                         xtra = xtra + ", %s=%s" % (key, val)
                 return "%s(%s%s)" % (expr.__class__.__name__,
                                      self._print(expr.name), xtra)
