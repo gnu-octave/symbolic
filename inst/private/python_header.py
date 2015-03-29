@@ -222,19 +222,11 @@ try:
             f.text = str(OCTCODE_DOUBLE)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x)
-        elif isinstance(x, str):
+        elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
             f = ET.SubElement(a, "f")
-            f.text = x
-        elif isinstance(x, unicode):
-            a = ET.SubElement(et, "item")
-            f = ET.SubElement(a, "f")
-            f.text = str(OCTCODE_USTR)
-            f = ET.SubElement(a, "f")
-            # newlines are ok with new regexp parser
-            #f.text = x.replace("\n","\\n")
             f.text = x
         elif isinstance(x, dict):
             # Note: the dict cannot be too complex, keys must convert to
