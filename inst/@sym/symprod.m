@@ -37,9 +37,9 @@
 %% @group
 %% syms n m x
 %% symprod(sin(n*x), n, [1 3])
-%%    @result{} sin(x)⋅sin(2⋅x)⋅sin(3⋅x)
+%%    @result{} (sym) sin(x)⋅sin(2⋅x)⋅sin(3⋅x)
 %% symprod(n, n, 1, m)
-%%    @result{} m!
+%%    @result{} (sym) m!
 %% @end group
 %% @end example
 %%
@@ -48,7 +48,7 @@
 %% @group
 %% syms x m
 %% symprod(sin(x), x, [1 m])
-%%    @result{}
+%%    @result{} (sym)
 %%         m
 %%       ┬───┬
 %%       │   │ sin(x)

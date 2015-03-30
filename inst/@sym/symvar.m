@@ -30,9 +30,9 @@
 %% >> syms x y
 %% >> f = x^2 + 3*x*y - y^2;
 %% >> symvar (f)
-%%    @result{} [x y]
+%%    @result{} (sym) [x  y]  (1×2 matrix)
 %% >> symvar (f, 1)
-%%    @result{} x
+%%    @result{} (sym) x
 %% @end example
 %%
 %% Compatibility with other implementations: the output should

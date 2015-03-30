@@ -29,9 +29,9 @@
 %% @group
 %% >> syms x
 %% >> lambertw(x)
-%%    @result{} ans = (sym) LambertW(x)
+%%    @result{} (sym) LambertW(x)
 %% >> lambertw(2, x)
-%%    @result{} ans = (sym) LambertW(x, 2)
+%%    @result{} (sym) LambertW(x, 2)
 %% @end group
 %% @end example
 %% (@strong{Note} that the branch @var{k} must come first in the
@@ -42,7 +42,7 @@
 %% @group
 %% >> syms x y
 %% >> lambertw([0 1], [x y])
-%%    @result{} [LambertW(x)  LambertW(y, 1)]
+%%    @result{} (sym) [LambertW(x)  LambertW(y, 1)]  (1×2 matrix)
 %% @end group
 %% @end example
 %%

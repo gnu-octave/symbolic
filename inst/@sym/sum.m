@@ -31,13 +31,13 @@
 %% @group
 %% >> syms x y z
 %% >> sum([x y z])
-%%    @result{} ans = (sym) x + y + z
+%%    @result{} (sym) x + y + z
 %%
 %% >> sum([x y; x z], 1)
-%%    @result{} [2⋅x  y + z]
+%%    @result{} (sym) [2⋅x  y + z]  (1×2 matrix)
 %%
 %% >> sum([x y; x z], 2)
-%%    @result{}
+%%    @result{} (sym 2×1 matrix)
 %%       ⎡x + y⎤
 %%       ⎢     ⎥
 %%       ⎣x + z⎦

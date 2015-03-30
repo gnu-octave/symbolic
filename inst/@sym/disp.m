@@ -53,7 +53,7 @@
 %%   [     \ pi/         \   \gamma(x)//]
 %%
 %% >> disp(A, 'flat')
-%% Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]]
+%%  @result{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
 %% @end group
 %% @end example
 %%

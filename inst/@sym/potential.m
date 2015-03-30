@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{p} =} potential (@var{v})
 %% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x})
 %% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x}, @var{y})
@@ -34,14 +35,14 @@
 %% syms x y z
 %% f = x*y*z;
 %% g = gradient (f)
-%%  @result{}
-%%     ⎡y⋅z⎤
-%%     ⎢   ⎥
-%%     ⎢x⋅z⎥
-%%     ⎢   ⎥
-%%     ⎣x⋅y⎦
+%%  @result{} g = (sym 3×1 matrix)
+%%      ⎡y⋅z⎤
+%%      ⎢   ⎥
+%%      ⎢x⋅z⎥
+%%      ⎢   ⎥
+%%      ⎣x⋅y⎦
 %% potential (g)
-%%  @result{} x⋅y⋅z
+%%  @result{} (sym) x⋅y⋅z
 %% @end group
 %% @end example
 %%

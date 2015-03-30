@@ -26,7 +26,7 @@
 %% @group
 %% syms x
 %% degree(x^2 + 6)
-%%    @result{} 2
+%%    @result{} (sym) 2
 %% @end group
 %% @end example
 %%
@@ -35,11 +35,11 @@
 %% @group
 %% syms x y
 %% degree(x^2 + y*x + 1)
-%%    @result{} 2
+%%    @result{} (sym) 2
 %% degree(x^2 + y*x + 1, x)
-%%    @result{} 2
+%%    @result{} (sym) 2
 %% degree(x^2 + y*x + 1, y)
-%%    @result{} 1
+%%    @result{} (sym) 1
 %% @end group
 %% @end example
 %%

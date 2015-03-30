@@ -31,7 +31,7 @@
 %% >> syms x
 %% >> f = exp(x);
 %% >> taylor(f, x, 0, 'order', 6)
-%%    @result{}
+%%    @result{} (sym)
 %%            5    4    3    2
 %%           x    x    x    x
 %%          ─── + ── + ── + ── + x + 1
