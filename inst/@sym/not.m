@@ -67,7 +67,7 @@ function r = not(x)
     '    else:'
     '        r = scalar_case(p)'
     '    flag = True'
-    'except TypeError, e:'
+    'except TypeError as e:'
     '    r = str(e)'
     '    flag = False'
     'return (flag, r)' };
