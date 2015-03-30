@@ -17,25 +17,34 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
-%% Run doctests, and return true if passing.
+%% @deftypefn  {Function File} {@var{r} =} octsympy_doctests ()
+%% Run doctests for OctSymPy, and return true if passing.
 %%
+%% You will need to have @code{doctest-for-matlab} installed from
+%% @url{https://github.com/catch22/doctest-for-matlab}.  It must
+%% already be in your path.
 %%
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald, David Bateman
+%% Author: Colin B. Macdonald
 %% Keywords: tests
 
 function r = octsympy_doctests()
 
-syms x
-sympref snippet off
-% FIXME: probably others to do not have it installed here!
-addpath('../doctest-for-matlab')
+  syms x
+  sympref snippet off
+  % FIXME: probably others to do not have it installed here!
+  % addpath('../doctest-for-matlab')
 
-[n, fail, extract_fail] = doctest('logical', 'symfun', 'sym', ...
+  [n, fail, extract_fail] = doctest('logical', 'symfun', 'sym', ...
     'assumptions', 'catalan', 'eulergamma', 'fibonacci', 'python_cmd', ...
     'sympref', 'vpa', 'bernoulli', 'digits', 'evalpy', 'findsymbols', ...
     'poly2sym', 'syms', 'vpasolve');
 
-r = fail;
+  r = fail;
+
+end
+
+
+% just to keep octsympy_tests quiet
+%!assert(true)
