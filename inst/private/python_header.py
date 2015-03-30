@@ -46,7 +46,10 @@ try:
         # used to pass doubles back-and-forth (.decode for py3)
         return binascii.hexlify(struct.pack(">d", x)).decode()
     def hex2d(s):
-        bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+        if sys.version_info >= (3, 0):
+            bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
+        else:
+            bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
         return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
