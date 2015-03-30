@@ -7,8 +7,8 @@ matrix:
       env: SYMPY_VER=0.7.5 DOCTEST=no
     - python: "2.7"
       env: SYMPY_VER=0.7.6 DOCTEST=yes
-#    - python: "3.4"
-#      env: SYMPY_VER=0.7.6 DOCTEST=yes
+    - python: "3.4"
+      env: SYMPY_VER=0.7.6 DOCTEST=yes
 
 install:
   - sudo apt-add-repository --yes ppa:octave/stable

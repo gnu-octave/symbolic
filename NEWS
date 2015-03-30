@@ -10,6 +10,8 @@ octsympy 2.1.1.dev
   * Installing symbolic package now check for Python and minimum
     version of SymPy (thanks Carnë Draug for autoconf).
 
+  * Added support for Python 3 (still works with Python 2 as well).
+
   * Documentation improvements especially to assumptions.  Examples
     within documentation can now be tested with doctests, see the
     `octsympy_doctests.m` function.

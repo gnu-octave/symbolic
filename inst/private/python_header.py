@@ -43,10 +43,13 @@ try:
     def dbout(l):
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
-        # used to pass doubles back-and-forth
-        return binascii.hexlify(struct.pack(">d", x))
+        # used to pass doubles back-and-forth (.decode for py3)
+        return binascii.hexlify(struct.pack(">d", x)).decode()
     def hex2d(s):
-        bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+        if sys.version_info >= (3, 0):
+            bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
+        else:
+            bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
         return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
@@ -119,7 +122,7 @@ else:
                     xtra = ", negative=True"
                 else:
                     xtra = ""
-                    for (key, val) in asm.iteritems():
+                    for (key, val) in asm.items():
                         xtra = xtra + ", %s=%s" % (key, val)
                 return "%s(%s%s)" % (expr.__class__.__name__,
                                      self._print(expr.name), xtra)
@@ -151,7 +154,10 @@ try:
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
-        print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
+        if sys.version_info >= (3, 0):
+            print(DOM.toprettyxml(indent="", newl="\n"))
+        else:
+            print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
     myerr(sys.exc_info())
     raise
@@ -219,19 +225,11 @@ try:
             f.text = str(OCTCODE_DOUBLE)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x)
-        elif isinstance(x, str):
+        elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
             f = ET.SubElement(a, "f")
-            f.text = x
-        elif isinstance(x, unicode):
-            a = ET.SubElement(et, "item")
-            f = ET.SubElement(a, "f")
-            f.text = str(OCTCODE_USTR)
-            f = ET.SubElement(a, "f")
-            # newlines are ok with new regexp parser
-            #f.text = x.replace("\n","\\n")
             f.text = x
         elif isinstance(x, dict):
             # Note: the dict cannot be too complex, keys must convert to
@@ -244,7 +242,11 @@ try:
             c = ET.SubElement(a, "list")
             octoutput(keystr, c)
             c = ET.SubElement(a, "list")
-            octoutput(x.values(), c)
+            # FIXME: bit of a kludge, use iterable instead of list, tuple above?
+            if sys.version_info >= (3, 0):
+                octoutput(list(x.values()), c)
+            else:
+                octoutput(x.values(), c)
         else:
             dbout("error exporting variable:")
             dbout("x: " + str(x))
