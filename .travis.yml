@@ -25,7 +25,9 @@ script:
   - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
-  - if [ "x$DOCTEST" = "xyes" ]; then  octave --eval "r = octsympy_doctests; exit(r)";  fi
+  - if [ "x$DOCTEST" = "xyes" ]; then
+        octave --eval "addpath('../doctest-for-matlab'); r = octsympy_doctests; exit(r)";
+    fi
   - popd
 
 #after_script:

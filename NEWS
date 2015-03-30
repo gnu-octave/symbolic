@@ -10,7 +10,9 @@ octsympy 2.1.1.dev
   * Installing symbolic package now check for Python and minimum
     version of SymPy (thanks Carnë Draug for autoconf).
 
-  * Documentation improvements especially to assumptions.
+  * Documentation improvements especially to assumptions.  Examples
+    within documentation can now be tested with doctests, see the
+    `octsympy_doctests.m` function.
 
   * Fix a warning on Octave 4.0.0-rc1 and make tests work properly.
 
