@@ -242,7 +242,11 @@ try:
             c = ET.SubElement(a, "list")
             octoutput(keystr, c)
             c = ET.SubElement(a, "list")
-            octoutput(x.values(), c)
+            # FIXME: bit of a kludge, use iterable instead of list, tuple above?
+            if sys.version_info >= (3, 0):
+                octoutput(list(x.values()), c)
+            else:
+                octoutput(x.values(), c)
         else:
             dbout("error exporting variable:")
             dbout("x: " + str(x))
