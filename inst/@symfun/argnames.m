@@ -31,7 +31,7 @@
 %% >> syms x y
 %% >> f(x, y) = x^2;
 %% >> argnames(f)
-%%    @result{} [x  y]
+%%    @result{} (sym) [x  y]
 %% @end group
 %% @end example
 %%
