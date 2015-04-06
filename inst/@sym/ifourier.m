@@ -21,7 +21,7 @@
 %% @deftypefn  {Function File} {@var{f} =} ifourier (@var{FF}, @var{w}, @var{x})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
-%% Symbolic Fourier transform.
+%% Symbolic inverse Fourier transform.
 %%
 %% FIXME: doc
 %%
