@@ -22,7 +22,37 @@
 %%
 %% FIXME: doc, examples
 %%
-%% @seealso{laplace}
+%% Examples:
+%% @example
+%% syms x s
+%% f = exp(-2*abs(x))
+%% fourier(f)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  w  + 4
+%%
+%% fourier(f, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
+%% fourier(f, x, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
+%% @end example
+%%
+%% @seealso{ifourier,laplace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

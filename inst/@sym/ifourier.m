@@ -22,7 +22,19 @@
 %%
 %% FIXME: doc, examples
 %%
-%% @seealso{ilaplace}
+%% Examples:
+%% @example
+%% syms x w
+%% F = 2*pi*dirac(x);
+%% ifourier(F)
+%% @result{} ans = (sym) 1.00000000000000
+%% ifourier(F, w)
+%% @result{} ans = (sym) 1.00000000000000
+%% ifourier(F, x, w)
+%% @result{} ans = (sym) 1.00000000000000
+%% @end example
+%%
+%% @seealso{fourier,laplace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
