@@ -28,7 +28,7 @@
 %% Examples:
 %% @example
 %% syms x w
-%% f = x^2
+%% f = exp(-2*abs(x))
 %% fourier(f)
 %% fourier(f, w)
 %% fourier(f, x, w)
@@ -40,7 +40,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function F = fourier_tr(varargin)
+function F = fourier(varargin)
 
   syms f x w;
   if (nargin == 1)
