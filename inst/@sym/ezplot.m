@@ -41,7 +41,7 @@
 %% and Octave's ezplot and Matlab 2014a does not support N as
 %% number of points.  Disabled some tests.
 %%
-%% @seealso{ezplot3, ezsurf, ezmesh, matlabFunction}
+%% @seealso{ezplot3, ezsurf, ezmesh, function_handle}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -83,7 +83,7 @@ function varargout = ezplot(varargin)
             assert(logical(thissym == firstsym), ...
               'ezplot: all functions must be in terms of the same variables');
           end
-          thisf = matlabFunction(varargin{i});
+          thisf = function_handle(varargin{i});
         end
 
         varargin{i} = thisf;
@@ -108,7 +108,7 @@ end
 %! % simple
 %! syms x
 %! f = cos(x);
-%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(f);
 %! warning(s)
 %! xx = get(h, 'xdata');
@@ -123,7 +123,7 @@ end
 %! syms t
 %! x = cos(t);
 %! y = sin(t);
-%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(x, y);
 %! warning(s)
 %! xx = get(h, 'xdata');
@@ -141,7 +141,7 @@ end
 %%! % contour, FIXME: broken on Matlab?  Issue #108
 %%! syms x y
 %%! f = sqrt(x*x + y*y) - 1;
-%%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %%! h = ezplot(f);
 %%! warning(s)
 %%! y = get(h, 'ydata');
@@ -152,7 +152,7 @@ end
 %%! % FIXME: this number-of-points option no supported on matlab
 %%! syms x
 %%! f = cos(x);
-%%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %%! h = ezplot(f, [0 2*sym(pi)], sym(42));
 %%! warning(s)
 %%! y = get(h, 'ydata');

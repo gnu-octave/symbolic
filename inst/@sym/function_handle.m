@@ -64,8 +64,7 @@
 %% 0.7.6.  On earlier versions, the workaround only works for
 %% very simple expressions such as polynomials and trig functions.
 %%
-%% @seealso{ccode, fortran, latex}
-%%
+%% @seealso{ccode, fortran, latex, matlabFunction}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

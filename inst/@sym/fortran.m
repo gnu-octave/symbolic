@@ -46,7 +46,7 @@
 %% anyway.  Sympy has a "cse" module that will do it.  See:
 %% http://stackoverflow.com/questions/22665990/optimize-code-generated-by-sympy
 %%
-%% @seealso{ccode, latex, matlabFunction}
+%% @seealso{ccode, latex, function_handle}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
