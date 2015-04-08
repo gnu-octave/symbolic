@@ -27,11 +27,32 @@
 %%
 %% Examples:
 %% @example
-%% syms x w
+%% syms x s
 %% f = exp(-2*abs(x))
 %% fourier(f)
-%% fourier(f, w)
-%% fourier(f, x, w)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  w  + 4
+%%
+%% fourier(f, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
+%% fourier(f, x, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
 %% @end example
 %%
 %% @seealso{ifourier,laplace}

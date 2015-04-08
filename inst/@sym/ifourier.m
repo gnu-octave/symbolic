@@ -21,17 +21,20 @@
 %% @deftypefn  {Function File} {@var{f} =} ifourier (@var{FF}, @var{w}, @var{x})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
-%% Symbolic inverse Fourier transform.
+%% Symbolic Fourier transform.
 %%
 %% FIXME: doc
 %%
 %% Examples:
 %% @example
 %% syms x w
-%% F = 1/(1+w^2)
+%% F = 2*pi*dirac(x);
 %% ifourier(F)
+%% @result{} ans = (sym) 1.00000000000000
 %% ifourier(F, w)
+%% @result{} ans = (sym) 1.00000000000000
 %% ifourier(F, x, w)
+%% @result{} ans = (sym) 1.00000000000000
 %% @end example
 %%
 %% @seealso{fourier,laplace}
