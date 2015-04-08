@@ -123,26 +123,32 @@ function f = function_handle(varargin)
       expr = varargin{i};
       cmd = { '(f,) = _ins' ...
               'try:' ...
-              '    s = octave_code(f)' ...
+              '    a, b, s = octave_code(f, human=False)' ...
               'except NameError as e:' ...
               '    return (False, str(e))' ...
+              'if len(b) != 0:' ...
+              '    return (False, s)' ...
+              'if len(a) != 0:' ...
+              '    return (False, "expected symbols-to-declare to be empty")' ...
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
       %worked = false;
       if (worked)
         codestr = vectorize(codestr);
       else
-        assert(strcmp(codestr, 'global name ''octave_code'' is not defined'))
-        warning('OctSymPy:function_handle:nocodegen', ...
-                'function_handle: your SymPy has no octave codegen: partial workaround');
-
-        %% As of Aug 2014, origin/master SymPy has no octave_code()
-        % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
-        codestr = expr.flat;
-        % Matlab: ** to ^ substition.  On Octave, vectorize does this
-        % automatically
-        codestr = strrep(codestr, '**', '^');
-        codestr = vectorize(codestr);
+        %% SymPy 0.7.5 has no octave_code command
+        % Use a crude workaround (e.g., Abs, ceiling will fail).
+        if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...
+            && strcmp(codestr, 'global name ''octave_code'' is not defined'))
+          warning('OctSymPy:function_handle:nocodegen', ...
+                  'function_handle: your SymPy has no octave codegen: partial workaround');
+          codestr = expr.flat;
+          % Matlab: ** to ^ substition.  On Octave, vectorize does this
+          codestr = strrep(codestr, '**', '^');
+          codestr = vectorize(codestr);
+        else
+          error('function_handle: python codegen failed: %s', codestr)
+        end
       end
       exprstr{i} = codestr;
     end
