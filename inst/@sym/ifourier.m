@@ -28,7 +28,7 @@
 %% Examples:
 %% @example
 %% syms x w
-%% F = 2*pi*dirac(x);
+%% F = 2*sym(pi)*dirac(x);
 %% ifourier(F)
 %% @result{} ans = (sym) 1.00000000000000
 %% ifourier(F, w)
@@ -65,9 +65,8 @@ function f = ifourier(varargin)
  
   endif
 
-  cmd = { 'sp.InverseFourierTransform._a = 0.5/S.Pi'
-          'sp.InverseFourierTransform._b = 1'
-          'F = sp.inverse_fourier_transform(*_ins)'
+  cmd = { 'from sympy.integrals.transforms import _fourier_transform'
+          "F = _fourier_transform(*(_ins+[0.5/S.Pi,1,'Inverse Fourier']))"
           'return F,'};
   f = python_cmd(cmd,F,w,x);
 

@@ -28,7 +28,7 @@
 %% Examples:
 %% @example
 %% syms x s
-%% f = exp(-2*abs(x))
+%% f = exp(-2*abs(x));
 %% fourier(f)
 %% @result{} ans = (sym)
 %%
@@ -83,8 +83,8 @@ function F = fourier(varargin)
  
   endif
 
-  cmd = { 'sp.FourierTransform._b = -1'
-          'F = sp.fourier_transform(*_ins)'
+  cmd = { 'from sympy.integrals.transforms import _fourier_transform'
+          "F = _fourier_transform(*(_ins+[1,-1,'Fourier']))"
           'return F,'};
   F = python_cmd(cmd,f,x,w);
 
