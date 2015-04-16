@@ -59,9 +59,9 @@ cp -ra ${WINDIRTMP}/COPYING ${WINDIR}/
 cp -ra ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -ra ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
-# relocate the mydbpy.bat file
+# relocate the winwrapy.bat file
 mkdir ${WINDIR}/bin/
-mv ${WINDIR}/inst/mydbpy.bat ${WINDIR}/bin/
+mv ${WINDIR}/inst/winwrapy.bat ${WINDIR}/bin/
 # py.exe
 cp ${PYEXE} ${WINDIR}/bin/py.exe
 cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
