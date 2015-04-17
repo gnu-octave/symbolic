@@ -10,6 +10,11 @@ octsympy 2.1.1.dev
   * Installing symbolic package now check for Python and minimum
     version of SymPy (thanks Carnë Draug for autoconf).
 
+  * Installations from Octave-Forge ("pkg install -forge symbolic")
+    should now work on Windows (thanks vassbu).  You will need the
+    Python and SymPy dependencies.  Or you can use the [bundled
+    package](https://github.com/cbm755/octsympy/releases)
+
   * Added support for Python 3 (still works with Python 2 as well).
 
   * Documentation improvements especially to assumptions.  Examples
