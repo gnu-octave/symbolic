@@ -52,6 +52,7 @@ popd
 # copy things to the package
 mkdir ${WINDIR}
 cp -ra ${WINDIRTMP}/inst ${WINDIR}/
+cp -ra ${WINDIRTMP}/bin ${WINDIR}/
 cp -ra ${WINDIRTMP}/NEWS ${WINDIR}/
 cp -ra ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
 cp -ra ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
