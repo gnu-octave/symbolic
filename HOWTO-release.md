@@ -32,8 +32,10 @@ Checklist
 
       - make_windows_package.sh, use "day-to-day testing" mode.
 
-  * Test regenerating the html documentation.  As of 2015-03, you need
-    hg tip generate_html pkg for the utf-8 to work.
+  * Test regenerating the html documentation.  Needs version >= 0.1.7.
+      - pkg load generate_html
+      - options = get_html_options ("octave-forge");
+      - generate_package_html ("symbolic", "html", options)
 
   * If packages seem ok, then tag the repo with:
 
