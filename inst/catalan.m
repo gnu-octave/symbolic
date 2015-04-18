@@ -22,7 +22,7 @@
 %%
 %% @example
 %% vpa (catalan ())
-%% @result {} (sym) 0.91596559417721901505460351493238
+%% @result{} (sym) 0.91596559417721901505460351493238
 %% @end example
 %%
 %% @seealso{eulergamma}
