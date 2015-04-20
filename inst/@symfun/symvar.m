@@ -29,7 +29,7 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms a x f(t, s)
+%% >> syms a x 'f(t, s)'
 %% >> symvar (f, 1)
 %%    @result{} (sym) t
 %% >> symvar (f, 2)
