@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypefnx {Function File} {} assume (@var{x}, @var{cond})
 %% New assumptions on a symbolic variable (replace old if any).
@@ -26,30 +27,65 @@
 %% it returns a new sym with assumptions given by @var{cond}, for
 %% example:
 %% @example
-%% syms x
-%% x1 = x;
-%% x = assume(x, 'positive');
-%% assumptions(x)
-%%    % x: positive
-%% assumptions(x1)
-%%    % empty, x1 still has tke original sym('x')
+%% @group
+%% >> syms x
+%% >> x1 = x;
+%% >> x = assume(x, 'positive');
+%% >> assumptions(x)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: positive
+%%      @}
+%% >> assumptions(x1)  % empty, x1 still has the original x
+%%    @result{} ans = @{@}(0x0)
+%% @end group
 %% @end example
 %%
+%% Another example to help clarify:
+%% @example
+%% @group
+%% >> x1 = sym('x', 'positive');
+%% >> x2 = assume(x1, 'negative');
+%% >> assumptions(x1)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: positive
+%%      @}
+%% >> assumptions(x2)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: negative
+%%      @}
+%% @end group
+%% @end example
+%%
+%%
 %% The second form---with no output argument---is different; it
-%% attempts to find @emph{all} instances of symbols with the same name
+%% attempts to find @strong{all} instances of symbols with the same name
 %% as @var{x} and replace them with the new version (with @var{cond}
 %% assumptions).  For example:
 %% @example
-%% syms x
-%% x1 = x;
-%% f = sin(x);
-%% assume(x, 'positive');
-%% assumptions(x)
-%%    % x: positive
-%% assumptions(x1)
-%%    % x: positive
-%% assumptions(f)
-%%    % x: positive
+%% @group
+%% >> syms x
+%% >> x1 = x;
+%% >> f = sin(x);
+%% >> assume(x, 'positive');
+%% >> assumptions(x)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: positive
+%%      @}
+%% >> assumptions(x1)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: positive
+%%      @}
+%% >> assumptions(f)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: positive
+%%      @}
+%% @end group
 %% @end example
 %%
 %% @strong{Warning}: this second form operates on the caller's
