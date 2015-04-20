@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
 %% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr})
 %% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
@@ -27,46 +28,125 @@
 %% double values.  It can also be a double matrix or a cell
 %% array.
 %%
-%% FIXME: needs more documentation.
-%%
 %% Examples:
 %% @example
-%% x = sym ('x')
-%% y = sym ('2')
-%% y = sym (3)
-%% y = sym (inf)
-%% y = sym (pi)
-%% y = sym (sym (pi))   % idempotent
+%% @group
+%% >> x = sym ('x')
+%%    @result{} x = (sym) x
+%% >> y = sym ('2')
+%%    @result{} y = (sym) 2
+%% >> y = sym (3)
+%%    @result{} y = (sym) 3
+%% >> y = sym (inf)
+%%    @result{} y = (sym) ∞
+%% >> y = sym (pi)
+%%    @result{} y = (sym) π
+%% @end group
 %% @end example
 %%
-%% A second (and further) arguments can provide assumptions
-%% @xref{assumptions}, or restriction on the type of the symbol:
+%% A sym of a sym is a sym (idempotence):
 %% @example
-%% x = sym ('x', 'positive')
-%% x = sym ('x', 'positive', 'integer')
+%% @group
+%% >> sym (sym (pi))
+%%    @result{} (sym) π
+%% @end group
 %% @end example
-%% The following options are supported:
-%% 'real', 'positive', 'negative', 'integer', 'even', 'odd',
-%% 'rational', 'finite'.
-%% Others may be supported in SymPy but not exposed directly here.
+%%
+%% A matrix can be input:
+%% @example
+%% @group
+%% >> sym ([1 2; 3 4])
+%%    @result{} (sym 2×2 matrix)
+%%        ⎡1  2⎤
+%%        ⎢    ⎥
+%%        ⎣3  4⎦
+%% @end group
+%% @end example
+%%
+%% Boolean input, giving symbolic True/False:
+%% @example
+%% @group
+%% >> sym (true)
+%%    @result{} (sym) True
+%% >> sym (false)
+%%    @result{} (sym) False
+%% @end group
+%% @end example
+%%
+%% Some special double values are recognized but its all a
+%% bit heuristic/magical:
+%% @example
+%% @group
+%% >> y = sym(pi/100)
+%%    @result{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
+%%      y = (sym)
+%%         π
+%%        ───
+%%        100
+%% @end group
+%% @end example
+%% While this works fine for “small” fractions, its probably safer to do:
+%% @example
+%% @group
+%% >> y = sym(pi)/100
+%%    @result{} y = (sym)
+%%         π
+%%        ───
+%%        100
+%% @end group
+%% @end example
+%%
+%%
+%% A second (and further) arguments can provide assumptions
+%% or restrictions on the type of the symbol:
+%% @example
+%% @group
+%% >> x = sym ('x', 'positive')
+%%    @result{} x = (sym) x
+%% >> x = sym ('x', 'positive', 'integer')
+%%    @result{} x = (sym) x
+%% @end group
+%% @end example
+%% @xref{assumptions}, for the list of supported assumptions.
 %%
 %% Caution: it is possible to create multiple variants of the
 %% same symbol with different assumptions.
 %% @example
-%% x1 = sym('x')
-%% x2 = sym('x', 'positive')
-%% x1 == x2   % false
+%% @group
+%% >> x1 = sym('x')
+%%    @result{} x1 = (sym) x
+%% >> x2 = sym('x', 'positive')
+%%    @result{} x2 = (sym) x
+%% >> x1 == x2
+%%    @result{} (sym) x = x
+%% >> isAlways(x1 == x2)
+%%    @result{} 0
+%% >> logical(x1 == x2)
+%    @result{} 0
+%% @end group
 %% @end example
 %%
-%% The second argument can also specify the size of a matrix
+%% The second argument can also specify the size of a matrix:
 %% @example
-%% A = sym('A', [2, 3])
+%% @group
+%% >> A = sym('a', [2 3])
+%%    @result{} A = (sym 2×3 matrix)
+%%        ⎡a₁₁  a₁₂  a₁₃⎤
+%%        ⎢             ⎥
+%%        ⎣a₂₁  a₂₂  a₂₃⎦
+%% @end group
 %% @end example
-%% or even with symbolic size
+%% or even with symbolic size:
 %% @example
-%% syms n positive
-%% B = sym('b', [n, n])
+%% @group
+%% >> syms m n positive integer
+%% >> B = sym('B', [m n])
+%%    @result{} B = (sym) B  (m×n matrix expression)
+%% @end group
 %% @end example
+%%
+%% The underlying SymPy “srepr” can also be passed directly to
+%% @code{sym}: @pxref{char} for details.
 %%
 %% @seealso{syms, assumptions, assume, assumeAlso}
 %% @end deftypefn
