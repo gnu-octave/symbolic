@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{A} =} assumptions ()
 %% @deftypefnx {Function File} {@var{A} =} assumptions (@var{x})
 %% @deftypefnx {Function File} {[@var{v}, @var{d}] =} assumptions (@var{x}, 'dict')
@@ -29,28 +30,28 @@
 %% >> syms x y positive
 %% >> syms n integer
 %% >> assumptions
-%%  @result{} ans =
-%%     @{
-%%       [1,1] = n: integer
-%%       [1,2] = x: positive
-%%       [1,3] = y: positive
-%%     @}
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = n: integer
+%%        [1,2] = x: positive
+%%        [1,3] = y: positive
+%%      @}
 %% >> f = sin(n*x);
 %% >> assumptions(f)
-%%  @result{} ans =
-%%     @{
-%%       [1,1] = n: integer
-%%       [1,2] = x: positive
-%%     @}
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = n: integer
+%%        [1,2] = x: positive
+%%      @}
 %% >> assumptions(n)
-%%  @result{} ans =
-%%     @{
-%%       [1,1] = n: integer
-%%     @}
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = n: integer
+%%      @}
 %% @end group
 %% @end example
 %%
-%% With the optional second argument set to @code{'dict'},
+%% With the optional second argument set to the string @code{'dict'},
 %% return the assumption dictionaries in @var{d} corresponding
 %% to the variables in @var{v}.
 %%
@@ -59,7 +60,7 @@
 %% @group
 %% >> A = assumptions('possible');
 %% >> sprintf('%s ', A@{:@})
-%%  @result{} ans = real positive negative integer even odd rational finite
+%%    @result{} ans = real positive negative integer even odd rational finite
 %% @end group
 %% @end example
 %%
