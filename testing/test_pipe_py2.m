@@ -12,7 +12,7 @@ disp('** calling popen2')
 %[in, out, pid] = popen2 ('py.exe', {'-i' '--help'})
 %[in, out, pid] = popen2 ('busybox.exe', {'cat'})
 %[in, out, pid] = popen2 ('myecho.bat')
-[in, out, pid] = popen2 ('mydbpy.bat')
+[in, out, pid] = popen2 ('winwrapy.bat')
 
 
 %[in, out, pid] = popen2 ('C:\Windows\system32\sort.exe', '/R')

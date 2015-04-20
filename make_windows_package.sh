@@ -52,6 +52,7 @@ popd
 # copy things to the package
 mkdir ${WINDIR}
 cp -ra ${WINDIRTMP}/inst ${WINDIR}/
+cp -ra ${WINDIRTMP}/bin ${WINDIR}/
 cp -ra ${WINDIRTMP}/NEWS ${WINDIR}/
 cp -ra ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
 cp -ra ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
@@ -59,9 +60,6 @@ cp -ra ${WINDIRTMP}/COPYING ${WINDIR}/
 cp -ra ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -ra ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
-# relocate the mydbpy.bat file
-mkdir ${WINDIR}/bin/
-mv ${WINDIR}/inst/mydbpy.bat ${WINDIR}/bin/
 # py.exe
 cp ${PYEXE} ${WINDIR}/bin/py.exe
 cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
