@@ -59,7 +59,9 @@ Differences
   * Suppose we have a symfun `g(s,t) = x`.  Both SMT and OctSymPy
     agree that `symvar(g, 1)` is `s` (i.e., preference for the
     independent variables).  However, `symvar(g)` gives `[s t x]` in
-    OctSymPy and `x` in SMT.  I suspect this is an SMT bug.
+    OctSymPy and `x` in SMT.  I suspect this is an SMT bug.  At any
+    rate, its probably better to use `argnames` and `symvar(formula)` if
+    these sorts of subtlies are important to you.
 
   * SMT and OctSymPy differ in how the return solutions to systems of
     equation has multiple solutions.  For example: `d = solve(x*x ==

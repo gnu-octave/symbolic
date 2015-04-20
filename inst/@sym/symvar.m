@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
 %% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
 %% Find symbols in expression and return them as a symbolic vector.
@@ -27,13 +28,37 @@
 %%
 %% Example:
 %% @example
+%% @group
 %% >> syms x y
 %% >> f = x^2 + 3*x*y - y^2;
 %% >> symvar (f)
 %%    @result{} (sym) [x  y]  (1×2 matrix)
 %% >> symvar (f, 1)
 %%    @result{} (sym) x
+%% @end group
 %% @end example
+%%
+%% Further examples:
+%% @example
+%% @group
+%% >> syms a x t
+%% >> f = a*x + t;
+%% >> symvar (f, 1)
+%%    @result{} (sym) x
+%% >> symvar (f, 2)
+%%    @result{} (sym) [x  t]  (1×2 matrix)
+%% >> symvar (f, 3)
+%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% @end group
+%% @end example
+%% And note its ok to ask for more:
+%% @example
+%% @group
+%% >> symvar (f, 1000)
+%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
 %%
 %% Compatibility with other implementations: the output should
 %% match the order of the equivalent command in the Matlab Symbolic
