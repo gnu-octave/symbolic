@@ -17,83 +17,130 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{r} =} sympref ()
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{r} =} sympref ()
+%% @deftypefnx {Function File} {@var{r} =} sympref (@var{cmd})
+%% @deftypefnx {Function File} {} sympref @var{cmd}
+%% @deftypefnx {Function File} {} sympref @var{cmd} @var{args}
 %% Preferences for the OctSymPy symbolic computing package.
 %%
-%% Python executable path/command:
-%% @example
-%% sympref python '/usr/bin/python'
-%% sympref python 'C:\Python\python.exe'
-%% sympref python 'N:\myprogs\py.exe'
-%% @end example
+%% @code{sympref} can set or get various preferences and
+%% configurations.  The various choices for @var{cmd} and
+%% @var{args} are documented below.
+%%
+%%
+%% *Python executable* path/command:
+%% @verbatim
+%%      >> sympref python '/usr/bin/python'
+%%      >> sympref python 'C:\Python\python.exe'
+%%      >> sympref python 'N:\myprogs\py.exe'
+%% @end verbatim
 %% Default is an empty string; in which case OctSymPy just runs
 %% @code{python} and assumes the path is set appropriately.
 %%
-%% Display of syms:
+%% *Display* of syms:
 %% @example
-%% sympref display flat
-%% sympref display ascii
-%% sympref display unicode
+%% @group
+%% >> sympref display
+%%    @result{} ans = unicode
+%% @end group
+%% @group
+%% >> syms x
+%% >> sympref display flat
+%% >> sin(x/2)
+%%    @result{} (sym) sin(x/2)
+%%
+%% >> sympref display ascii
+%% >> sin(x/2)
+%%    @result{} (sym)
+%%              /x\
+%%           sin|-|
+%%              \2/
+%%
+%% >> sympref display unicode
+%% >> sin(x/2)
+%%    @result{} (sym)
+%%              ⎛x⎞
+%%           sin⎜─⎟
+%%              ⎝2⎠
+%%
+%% >> sympref display default
+%% @end group
 %% @end example
-%% By default OctSymPy uses a unicode pretty printer to display
+%% By default OctSymPy uses the unicode pretty printer to display
 %% symbolic expressions.  If that doesn't work (e.g., if you
 %% see @code{?} characters) then try the @code{ascii} option.
 %%
-%% Communication mechanism:
+%% *Communication mechanism*:
 %% @example
-%% sympref ipc default    % default, autodetected
-%% sympref ipc system     % slower
-%% sympref ipc systmpfile % debugging!
-%% sympref ipc sysoneline % debugging!
-%% w = sympref('ipc')     % query the ipc mechanism
+%% >> sympref ipc
+%%    @result{} ans = default
 %% @end example
 %% The default will typically be the @code{popen2} mechanism which
 %% uses a pipe to communicate with Python and should be fairly fast.
-%% There are other options which are mostly based on calls using the
-%% @code{'system()'} command.  These are slower as a new Python
-%% process is started for each operation (and many commands use more
+%% If that doesn't work, try @code{sympref display system} which is
+%% much slower, as a new Python
+%% process is started for each operation (many commands use more
 %% than one operation).
 %% Other options for @code{sympref ipc} include:
 %% @itemize
-%% @item popen2, force popen2 choice (e.g., on Matlab were it would
-%% not be the default).
-%% @item system, construct a large string of the command
-%% and pass directly to the python interpreter with the
-%% @code{system()} command.  This typically assembles a multiline
+%% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
+%% on Matlab were it would not be the default).
+%% @item @code{sympref ipc system}: construct a long string of
+%% the command and pass it directly to the python interpreter with
+%% the @code{system()} command.  This typically assembles a multiline
 %% string for the commands, except on Windows where a long one-line
 %% string is used.
-%% @item systmpfile, output the python commands to a
-%% @code{tmp_python_cmd.py} file and then call that [for
+%% @item @code{sympref ipc systmpfile}: output the python commands
+%% to a @code{tmp_python_cmd.py} file and then call that [for
 %% debugging, may not be supported long-term].
-%% @item sysoneline, put the python commands all on one line and
-%% pass to "python -c" using a call to @code{system()}.  [for
-%% debugging, may not be supported long-term].
+%% @item @code{sympref ipc sysoneline}: put the python commands all
+%% on one line and pass to @code{python -c} using a call to @code{system()}.
+%% [for debugging, may not be supported long-term].
 %% @end itemize
 %%
-%% Reset: reset the SymPy communication mechanism.  This can be
-%% useful after an error occurs where the connection with Python
+%% *Reset*: reset the SymPy communication mechanism.  This can be
+%% useful after an error occurs and the connection with Python
 %% becomes confused.
+%% @verbatim
+%%      >> sympref reset
+%% @end verbatim
+%%
+%% *Snippets*: when displaying a sym object, we quote the SymPy
+%% representation (or a small part of it):
 %% @example
-%% sympref reset
+%% @group
+%% >> syms x
+%% >> y = [pi x];
+%% >> sympref snippet on
+%% >> y
+%%    @result{} y = (sym 1×2 matrix)   “MutableDenseMatrix([[pi, Symbol('x')]])”
+%%        [π  x]
+%% >> sympref snippet off
+%% >> y
+%%    @result{} y = (sym) [π  x]  (1×2 matrix)
+%% >> sympref snippet default
+%% @end group
 %% @end example
 %%
-%% Snippets: when displaying a sym object, we show the first
-%% few characters of the SymPy representation.
+%% *Default precision*: control the number of digits used by
+%% variable-precision arithmetic (see also the @ref{digits} command).
 %% @example
-%% sympref snippet 1|0   % or true/false, on/off
+%% @group
+%% >> sympref digits          % get
+%%    @result{} ans = 32
+%% >> sympref digits 64       % set
+%% >> sympref digits default
+%% @end group
 %% @end example
 %%
-%% Control default precision used by variable precision arithmetic:
-%% @example
-%% sympref digits          % get
-%% sympref digits 64       % set
-%% sympref digits default  % factory setting (32)
-%% @end example
-%% See also the @xref{digits} command.
 %%
-%% Report the version number:
+%% Report the *version* number:
 %% @example
-%% sympref version
+%% @group
+%% >> sympref version
+%%    @result{} 2.2.1-dev
+%% @end group
 %% @end example
 %%
 %% @seealso{sym, syms}
@@ -118,15 +165,10 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      if (ispc () && (~isunix ()))
-        % Unicode not working on Windows, Issue #83.
-        settings.display = 'ascii';
-      else
-        settings.display = 'unicode';
-      end
       settings.whichpython = '';
-      settings.digits = 32;
-      settings.snippet = false;  % Should be false for a release
+      sympref ('display', 'default')
+      sympref ('digits', 'default')
+      sympref ('snippet', 'default')
 
     case 'version'
       assert (nargin == 1)
@@ -136,7 +178,14 @@ function varargout = sympref(cmd, arg)
       if (nargin == 1)
         varargout{1} = settings.display;
       else
-        arg = lower(arg);
+        arg = lower (arg);
+        if (strcmp (arg, 'default'))
+          arg = 'unicode';
+          if (ispc () && (~isunix ()))
+            % Unicode not working on Windows, Issue #83.
+            arg = 'ascii';
+          end
+        end
         assert(strcmp(arg, 'flat') || strcmp(arg, 'ascii') || ...
                strcmp(arg, 'unicode'))
         settings.display = arg;
@@ -162,7 +211,11 @@ function varargout = sympref(cmd, arg)
       if (nargin == 1)
         varargout{1} = settings.snippet;
       else
-        settings.snippet = tf_from_input(arg);
+	if (strcmpi(arg, 'default'))
+	  settings.snippet = false;  % Should be false for a release
+	else
+          settings.snippet = tf_from_input(arg);
+	end
       end
 
     case 'python'
