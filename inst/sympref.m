@@ -130,7 +130,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.2.0';
+      varargout{1} = '2.2.1-dev';
 
     case 'display'
       if (nargin == 1)
