@@ -39,9 +39,9 @@
 %% >> syms x
 %% >> evalpy ('y = 3*x; x = 1.5; z = x**2', x)
 %%    @result{}
+%%      x = 1.5000
 %%      y = (sym) 3⋅x
 %%      z = 2.2500
-%%      x = 1.5000
 %% @end group
 %% @end example
 %%
@@ -174,6 +174,11 @@ function evalpy(cmd, varargin)
 
   [names, values] = python_cmd (fullcmd, varargin{:});
   assert (length(names) == length(values))
+
+  % Make the visual display of the results deterministic.  Not easy to
+  % use OrderedDict in Python because `locals()` is a regular dict.
+  [names, I] = sort(names);
+  values = values(I);
 
   %fprintf('assigning to %s...\n', names{i})
   for i=1:length(names)
