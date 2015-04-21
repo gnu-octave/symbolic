@@ -249,7 +249,7 @@ function [newobj, flag] = symreplace_helper(obj, xstr, newx)
   end
 
   if ~(flag)
-    newobj = [];
+    newobj = obj;
   end
 end
 
