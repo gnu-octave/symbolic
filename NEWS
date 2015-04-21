@@ -1,6 +1,9 @@
 octsympy 2.2.1-dev
 ==================
 
+  * Fix an ASCII pretty printing regression (Issue #234).
+
+  * Other minor fixes for doctests and symreplace.
 
 
 
