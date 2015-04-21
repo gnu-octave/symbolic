@@ -169,11 +169,6 @@ function varargout = symreplace(varargin)
   %xstr =
   %newx =
   %context = 'caller';
-  % alt implementation w/ script
-  % ---------------------------------------------
-  %assignin(context, 'hack__newx__', newx);
-  %assignin(context, 'hack__xstr__', xstr);
-  %evalin(context, 'fix_assumptions_script');
   S = evalin(context, 'whos');
   evalin(context, '[];');  % clear 'ans'
   for i = 1:numel(S)
