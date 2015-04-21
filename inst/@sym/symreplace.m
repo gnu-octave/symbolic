@@ -127,8 +127,8 @@
 
 function varargout = symreplace(varargin)
 
-  %% we have output: this is the first ("benign") form
-  if (nargout >= 1)
+  %% This is the first ("benign") form
+  if ((nargout >= 1) || (nargin == 3 && ~ischar(varargin{3})))
     [varargout{1:2}] = symreplace_helper(varargin{:});
     return
   end
@@ -137,16 +137,28 @@ function varargout = symreplace(varargin)
   if (nargin == 1)
     newx = varargin{1};
     xstr = newx.flat;
-  end
-  if (nargin == 2)
-    % this works if x is string or sym
-    xstr = varargin{1}.flat;
-    newx = varargin{2};
-  end
-  if (nargin < 3)
     context = 'caller';
+  elseif (nargin == 2)
+    xstr = varargin{1};
+    newx = varargin{2};
+    context = 'caller';
+  elseif (nargin == 3)
+    xstr = varargin{1};
+    newx = varargin{2};
+    context = varargin{3};
+  else
+    % FIXME: matlab doesn't have
+    %print_usage ();
+    error('symreplace: invalid call')
   end
-  assert(strcmp(context, 'caller') || strcmp(context, 'base'))
+
+  assert(ischar(context) && ...
+         (strcmp(context, 'caller') || strcmp(context, 'base')))
+
+  % we just want the string
+  if (isa(xstr, 'sym'))
+    xstr = xstr.flat;
+  end
 
   %% Here's the piece with side-effects
   % This is the part that you might want to copy into your function
@@ -180,7 +192,11 @@ end
 function [newobj, flag] = symreplace_helper(obj, xstr, newx)
 % If you need to add other things other than struct/cell/sym, this is
 % place to do it.
-% This code used to be called fix_assumptions()
+
+  if (isa (xstr, 'sym'))
+    xstr = xstr.flat;
+  end
+  assert (ischar (xstr))
 
   flag = false;
 
