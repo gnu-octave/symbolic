@@ -67,11 +67,11 @@
 %% @group
 %% >> syms x positive
 %% >> f = x^2;
-%% >> assumptions(f){:}
+%% >> assumptions(f)@{:@}
 %%    @result{} x: positive
 %% >> x = sym('x', 'real');
 %% >> f = symreplace(f, 'x', x);
-%% >> assumptions(f){:}
+%% >> assumptions(f)@{:@}
 %%    @result{} x: real
 %% @end group
 %% @end example
