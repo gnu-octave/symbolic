@@ -1,9 +1,9 @@
-octsympy 2.2.1-dev
-==================
+octsympy 2.2.1 (2015-04-22)
+===========================
 
-  * Fix an ASCII pretty printing regression (Issue #234).
+  * Fix an ascii pretty printing regression (issue #234).
 
-  * Other minor fixes for doctests and symreplace.
+  * Other minor fixes for doctests, sympref and symreplace.
 
 
 
