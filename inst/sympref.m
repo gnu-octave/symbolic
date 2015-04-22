@@ -274,7 +274,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     otherwise
-      error ('invalid input')
+      print_usage ();
   end
 end
 

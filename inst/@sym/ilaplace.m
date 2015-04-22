@@ -73,9 +73,9 @@ function f = ilaplace(varargin)
     f = python_cmd(cmd,F,s,t);
 
   else
-    error('Wrong number of input arguments') 
- 
-  endif
+    print_usage ();
+
+  end
 
 end
 

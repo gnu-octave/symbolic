@@ -105,7 +105,7 @@ function f = symfun(expr, vars)
     expr = sym(0);
     vars = sym('x');
   elseif (nargin == 1)
-    error('takes two input arguments')
+    print_usage ();
   end
 
   % if the vars are in a sym array, put them in a cell array

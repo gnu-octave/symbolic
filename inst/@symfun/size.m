@@ -32,7 +32,7 @@ function [n, m] = size(x, dim)
 
   n = [1 1];
   if (nargin == 2) && (nargout == 2)
-    error('size: invalid call')
+    print_usage ();
   elseif (nargout == 2)
     m = 1;
     n = 1;
