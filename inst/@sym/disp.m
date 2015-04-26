@@ -19,6 +19,9 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {} disp (@var{x})
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'unicode')
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'ascii')
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'flat')
 %% @deftypefnx {Function File}  {@var{s} =} disp (@var{x})
 %% Display the value of a symbolic expression.
 %%
@@ -79,7 +82,7 @@ function varargout = disp(x, wh)
     case 'unicode'
       s = x.unicode;
     otherwise
-      error('invalid display type')
+      print_usage ();
   end
   s = make_indented(s);
 

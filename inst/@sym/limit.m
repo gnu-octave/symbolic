@@ -53,6 +53,10 @@
 
 function L = limit(f, x, a, dir)
 
+  if (nargin > 4 || nargin < 1)
+    print_usage ();
+  end
+
   if (nargin < 4)
     dir= 'right';
   end
@@ -71,7 +75,7 @@ function L = limit(f, x, a, dir)
     case {'right' '+'}
       pdir = '+';
     otherwise
-      error('invalid')
+      print_usage ();
   end
 
   cmd = { '(f, x, a, pdir) = _ins'

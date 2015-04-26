@@ -139,7 +139,7 @@
 %% @example
 %% @group
 %% >> sympref version
-%%    @result{} 2.2.1
+%%    @result{} 2.2.2-dev
 %% @end group
 %% @end example
 %%
@@ -172,7 +172,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.2.1';
+      varargout{1} = '2.2.2-dev';
 
     case 'display'
       if (nargin == 1)
@@ -274,7 +274,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     otherwise
-      error ('invalid input')
+      print_usage ();
   end
 end
 

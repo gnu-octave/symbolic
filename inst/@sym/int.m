@@ -106,7 +106,8 @@ function F = int(f, x, a, b)
 
 
   else
-    error('invalid input');
+    print_usage ();
+
   end
 
 

@@ -44,7 +44,7 @@ function [n, m] = size(x, dim)
   %n(isnan(n)) = 1;
 
   if (nargin == 2) && (nargout == 2)
-    error('size: invalid call')
+    print_usage ();
   elseif (nargout == 2)
     m = n(2);
     n = n(1);

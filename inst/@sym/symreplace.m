@@ -147,9 +147,7 @@ function varargout = symreplace(varargin)
     newx = varargin{2};
     context = varargin{3};
   else
-    % FIXME: matlab doesn't have
-    %print_usage ();
-    error('symreplace: invalid call')
+    print_usage ();
   end
 
   assert(ischar(context) && ...

@@ -17,38 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{B} =} permute (@var{A}, @var{perm})
-%% Permute the indices of a symbolic array.
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {} print_usage ()
+%% Wrapper for print_usage on Matlab.
 %%
-%% Generalizes transpose, but currently doesn't do much as we only
-%% support 2D symbolic arrays.
+%% Matlab has no print_usage function.  Preparing
+%% the Matlab package should rename this from
+%% "my_print_usage.m" to "print_usage.m".
 %%
-%% @seealso{ipermute}
+%% @seealso{error}
 %% @end deftypefn
 
-function B = permute(A, perm)
+function print_usage ()
 
-  if (isequal(perm, [1 2]))
-    B = A;
-  elseif  (isequal(perm, [2 1]))
-    B = A.';
-  else
-    print_usage ();
+  % if we are on Octave
+  if (exist ('octave_config_info', 'builtin'))
+    %evalin ('caller', 'print_usage ();' );
+    %return
   end
 
+  H = dbstack;
+  name = H(2).name;
+
+  msgid = sprintf('%s:invalidCall', name);
+  errmsg = sprintf('Invalid call to "%s": see documentation', name);
+
+  %error('Invalid call to "%s": see documentation', name)
+  ME = MException(msgid, errmsg);
+  ME.throwAsCaller();
+
 end
-
-
-%!test
-%! D = round(10*rand(5,3));
-%! A = sym(D);
-%! B = permute(A, [1 2]);
-%! assert (isequal(B, A))
-%! B = permute(A, [2 1]);
-%! assert (isequal(B, A.'))
-
-%!test
-%! syms x
-%! A = [1 x];
-%! B = permute(A, [2 1]);
-%! assert (isequal(B, [1; x]))

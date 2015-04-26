@@ -85,9 +85,9 @@ function F = laplace(varargin)
     F = python_cmd(cmd,f,t,s);
 
   else
-    error('Wrong number of input arguments') 
- 
-  endif
+    print_usage ();
+
+  end
 
 end
 
