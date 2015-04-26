@@ -60,7 +60,7 @@
 %% @end example
 %%
 %%
-%% The second form (with no output argument) is different; it
+%% The second form---with no output argument---is different; it
 %% attempts to find @strong{all} instances of symbols with the same name
 %% as @var{x} and replace them with the new version (with @var{cond}
 %% assumptions).  For example:
