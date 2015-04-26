@@ -18,6 +18,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{c} =} coeffs (@var{p}, @var{x})
 %% @deftypefnx {Function File} {@var{c} =} coeffs (@var{p})
 %% @deftypefnx {Function File} {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
@@ -29,30 +30,60 @@
 %%
 %% Example:
 %% @example
-%% syms x
-%% [c, t] = coeffs (x^6 + 3*x - 4);
-%% % gives c = [1 3 -4]
-%% %   and t = [x^6 x 1]
+%% @group
+%% >> syms x
+%% >> [c, t] = coeffs (x^6 + 3*x - 4)
+%%    @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%%      t = (sym 1×3 matrix)
+%%        ⎡ 6      ⎤
+%%        ⎣x   x  1⎦
+%% @end group
 %% @end example
 %%
 %% The polynomial can be multivariate:
 %% @example
-%% syms x y
-%% [c, t] = coeffs (x^2 + y*x);  % c = [1 1], t = [x^2 x*y]
-%% [c, t] = coeffs (x^2 + y*x, [x y]);  % same
-%% [c, t] = coeffs (x^2 + y*x, @{x y@});  % same
+%% @group
+%% >> syms x y
+%% >> [c, t] = coeffs (x^2 + y*x)
+%%    @result{} c = (sym) [1  1]  (1×2 matrix)
+%%      t = (sym 1×2 matrix)
+%%        ⎡ 2     ⎤
+%%        ⎣x   x⋅y⎦
+%%
+%% @end group
+%% @group
+%% >> [c, t] = coeffs (x^2 + y*x, [x y])   % same
+%%    @result{} c = (sym) [1  1]  (1×2 matrix)
+%%      t = (sym 1×2 matrix)
+%%        ⎡ 2     ⎤
+%%        ⎣x   x⋅y⎦
+%%
+%% >> [c, t] = coeffs (x^2 + y*x, @{x y@})   % same
+%%    @result{} c = (sym) [1  1]  (1×2 matrix)
+%%      t = (sym 1×2 matrix)
+%%        ⎡ 2     ⎤
+%%        ⎣x   x⋅y⎦
+%% @end group
 %% @end example
 %%
 %% You can use the second argument to specify a vector or list of
 %% variables:
 %% @example
-%% [c, t] = coeffs (x^2 + y*x, x);
-%% % c = [1 y] and t = [x^2 x]
+%% @group
+%% >> [c, t] = coeffs (x^2 + y*x, x)
+%%    @result{} c = (sym) [1  y]  (1×2 matrix)
+%%      t = (sym 1×2 matrix)
+%%        ⎡ 2   ⎤
+%%        ⎣x   x⎦
+%% @end group
 %% @end example
 %%
 %% Omitting the second output gives only the coefficients:
 %% @example
-%% c = coeffs (x^6 + 3*x - 4);   % c = [1 3 -4]
+%% @group
+%% >> c = coeffs (x^6 + 3*x - 4)
+%%    @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%% @end group
 %% @end example
 %% WARNING: Matlab's Symbolic Math Toolbox returns c = [-4 3 1]
 %% here (as of version 2014a).  I suspect they have a bug as its
