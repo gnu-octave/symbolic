@@ -165,3 +165,11 @@ end
 %! assert (isequal (g, 4*x+(x-2)^2-4))
 %! g = taylor(f,x,a);
 %! assert (isequal (simplify(g), f))
+
+%!xtest
+%! % wrong order-1 series with nonzero expansion pt:
+%! % upstream bug https://github.com/sympy/sympy/issues/9351
+%! syms x
+%! g = x^2 + 2*x + 3;
+%! h = taylor (g, x, 4, 'order', 1);
+%! assert (isequal (h, 27))
