@@ -30,7 +30,8 @@
 function s = priv_disp_name(x, input_name)
 
   s = input_name;
-  % (subclasses might do something more interesting)
+  % subclasses might do something more interesting, but they should
+  % be careful to ensure empty input_name gives empty s.
 
 end
 
