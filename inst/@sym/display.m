@@ -94,7 +94,9 @@ function display(x)
     term_width = term_width(1);
   end
 
+  % weird hack to support "ans(x) = " output for @symfun
   name = priv_disp_name(x, inputname (1));
+
   dispstr = disp (x);
   dispstrtrim = strtrim (dispstr);
   hasnewlines = ~isempty (strfind (dispstrtrim, sprintf('\n')));
