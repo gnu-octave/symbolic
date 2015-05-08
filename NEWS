@@ -1,6 +1,8 @@
 octsympy 2.2.2-dev
 ==================
 
+  * Fix for configure script using Python 3 (thanks Vadim Gribanov).
+
 
 
 octsympy 2.2.1 (2015-04-22)
