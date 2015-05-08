@@ -3,6 +3,11 @@ octsympy 2.2.2-dev
 
   * Fix for configure script using Python 3 (thanks Vadim Gribanov).
 
+  * Bug fixes and update doctests.
+
+  * Start using "print_usage" for invalid inputs as is common
+    practice in Octave.
+
 
 
 octsympy 2.2.1 (2015-04-22)
