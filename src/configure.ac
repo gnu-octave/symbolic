@@ -10,7 +10,7 @@ AX_PYTHON_MODULE(sympy, fatal)
 
 AC_MSG_CHECKING(checking for SymPy version)
 min_sympy_version='0.7.5'
-version=`$PYTHON -c "import sympy; print sympy.__version__" 2>/dev/null`
+version=`$PYTHON -c "import sympy; print(sympy.__version__)" 2>/dev/null`
 if test $? -eq 0; then
   AC_MSG_RESULT($version)
 else
