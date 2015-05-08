@@ -8,6 +8,8 @@ octsympy 2.2.2-dev
   * Start using "print_usage" for invalid inputs as is common
     practice in Octave.
 
+  * Support for SymPy 0.7.7.dev version.
+
 
 
 octsympy 2.2.1 (2015-04-22)
