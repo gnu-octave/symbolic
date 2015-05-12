@@ -35,7 +35,9 @@
 %% >> f = sin(t);
 %% >> N = sym(50);
 %% >> ezplot(f, double(N))  % plot f vs t using 50 pts
+%%    @result{} ***
 %% >> ezplot(f, N)          % Careful, parametric plot of f(t), N(t)
+%%    @result{} ***
 %% @end group
 %% @end example
 %% the solution, as above, is to convert the sym to a double.
