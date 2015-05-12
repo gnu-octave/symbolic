@@ -17,41 +17,50 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} function_handle (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, @dots{}, @var{fn})
 %% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, @var{param}, @var{value})
 %% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, 'vars', [@var{x} @dots{} @var{z}])
-%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'file', @var{name})
+%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'file', @var{filename})
 %% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'outputs', [@var{o1} @dots{} @var{on}])
 %% Convert symbolic expression into a standard function.
 %%
 %% This can make anonymous functions from symbolic expressions:
 %% @example
-%% syms x y
-%% f = x^2 + sin(y)
-%% h = function_handle(f)
-%% % output: h = @@(x,y) x.^2 + sin(y)
+%% @group
+%% >> syms x y
+%% >> f = x^2 + sin(y)
+%%    @result{} f = (sym)
+%%         2
+%%        x  + sin(y)
+%% >> h = function_handle(f)
+%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% @end group
 %% @end example
+%%
 %% The order and number of inputs can be specified:
 %% @example
-%% syms x y
-%% f = x^2 + sin(y)
-%% h = function_handle(f, 'vars', [z y x])
-%% % output: h = @@(z,y,x) x.^2 + sin(y)
+%% @group
+%% >> syms x y z
+%% >> h = function_handle(f, 'vars', [z y x])
+%%    @result{} h = @@(z, y, x) x .^ 2 + sin (y)
+%% @end group
 %% @end example
 %%
 %% For compatibility with the Symbolic Math Toolbox in Matlab, we
 %% provide a synonym: @xref{matlabFunction}
 %%
-%% OctSymPy can also generate a @code{.m} file from symbolic
-%% expression:
+%% OctSymPy can also generate an @code{.m} file from a symbolic
+%% expression by passing the keyword @code{file} with a string
+%% argument for @var{filename}.  A handle to the function in the
+%% file will be returned.
+%% Passing an empty @var{filename} creates an anonymous function:
 %% @example
-%% h = function_handle(f, 'file', 'myfcn')
-%% % creates a file called myfcn.m and returns a handle
-%% @end example
-%% Passing an empty filename creates an anonymous function:
-%% @example
-%% h = function_handle(f, 'vars', [z y x], 'file', '')
+%% @group
+%% >> h = function_handle(f, 'file', '')
+%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% @end group
 %% @end example
 %%
 %% FIXME: naming outputs with @var{PARAM} as
