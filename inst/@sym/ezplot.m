@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{h} =} ezplot (@var{f})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{f2})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@dots{})
@@ -29,11 +30,13 @@
 %% Using sym arguments for @var{dom} and @var{n} can lead to
 %% ambiguity.  For example
 %% @example
-%% syms t
-%% f = sin(t)
-%% N = sym(50)
-%% ezplot(f, N)    % a parametric plot of f(t), N(t)
-%% ezplot(f, double(N))   % plot f vs t using 50 pts
+%% @group
+%% >> syms t
+%% >> f = sin(t);
+%% >> N = sym(50);
+%% >> ezplot(f, double(N))  % plot f vs t using 50 pts
+%% >> ezplot(f, N)          % Careful, parametric plot of f(t), N(t)
+%% @end group
 %% @end example
 %% the solution, as above, is to convert the sym to a double.
 %%
