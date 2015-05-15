@@ -23,13 +23,18 @@
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
 %% Laplace transform.
 %%
-%% Examples:
+%% Example:
 %% @example
-%% syms t s
-%% f = t^2
-%% laplace(f)
-%% laplace(f, t)
-%% laplace(f, t, s)
+%% @group
+%% >> syms t
+%% >> f = t^2;
+%% >> laplace(f)
+%%    @result{} (sym)
+%%        2
+%%        ──
+%%         3
+%%        s
+%% @end group
 %% @end example
 %%
 %% @seealso{ilaplace}
