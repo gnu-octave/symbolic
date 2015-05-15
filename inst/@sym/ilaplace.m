@@ -23,13 +23,14 @@
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
 %% Inverse Laplace transform.
 %%
-%% Examples:
+%% Example:
 %% @example
-%% syms t s
-%% F = 1/s^2
-%% ilaplace(F)
-%% ilaplace(F, s)
-%% ilaplace(F, s, t)
+%% @group
+%% >> syms s
+%% >> F = 1/s^2;
+%% >> ilaplace(F)
+%%    @result{} (sym) t
+%% @end group
 %% @end example
 %%
 %% @seealso{laplace}

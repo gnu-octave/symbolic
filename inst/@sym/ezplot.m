@@ -20,6 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{h} =} ezplot (@var{f})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{f2})
+%% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{n})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@dots{})
 %% Simple plotting of symbolic expressions.
 %%
@@ -28,19 +29,24 @@
 %% anonymous functions.
 %%
 %% Using sym arguments for @var{dom} and @var{n} can lead to
-%% ambiguity.  For example
+%% ambiguity where OctSymPy cannot tell if you are specifying @var{n}
+%% or @var{f2}.  For example:
 %% @example
 %% @group
 %% >> syms t
 %% >> f = sin(t);
 %% >> N = sym(50);
-%% >> ezplot(f, double(N))  % plot f vs t using 50 pts
-%%    @result{} ***
-%% >> ezplot(f, N)          % Careful, parametric plot of f(t), N(t)
-%%    @result{} ***
+%%
+%% >> % parametric plot of f(t), N(t)
+%% >> ezplot(f, N)                       % doctest: +SKIP
+%%
+%% >> % plot f vs t using 50 pts
+%% >> ezplot(f, double(N))               % doctest: +SKIP
 %% @end group
 %% @end example
-%% the solution, as above, is to convert the sym to a double.
+%%
+%% The solution, as shown in the example, is to convert the sym to
+%% a double.
 %%
 %% FIXME: Sept 2014, there are differences between Matlab
 %% and Octave's ezplot and Matlab 2014a does not support N as
