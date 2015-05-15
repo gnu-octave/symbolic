@@ -27,6 +27,10 @@
 %% solved, including initial-value problems involving linear systems
 %% of first order ODEs with constant coefficients.
 %%
+%% *WARNING*: As of SymPy 0.7.6 (May 2015), there are many problems
+%% with systems, even very simple ones.  Use these at your own risk,
+%% or even better: help us fix SymPy.
+%%
 %% FIXME: SMT supports strings like 'Dy + y = 0': we are unlikely
 %% to support this.
 %%
