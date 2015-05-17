@@ -43,10 +43,13 @@ try:
     def dbout(l):
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
-        # used to pass doubles back-and-forth
-        return binascii.hexlify(struct.pack(">d", x))
+        # used to pass doubles back-and-forth (.decode for py3)
+        return binascii.hexlify(struct.pack(">d", x)).decode()
     def hex2d(s):
-        bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+        if sys.version_info >= (3, 0):
+            bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
+        else:
+            bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
         return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
@@ -64,6 +67,33 @@ except:
 if sympy.__version__ not in ("0.7.5", "0.7.6"):
     my_srepr = sympy.srepr
 else:
+    def _monkey_patch_matpow_doit(self, **kwargs):
+        deep = kwargs.get('deep', True)
+        if deep:
+            args = [arg.doit(**kwargs) for arg in self.args]
+        else:
+            args = self.args
+        base = args[0]
+        exp = args[1]
+        if isinstance(base, MatrixBase) and exp.is_number:
+            if exp is S.One:
+                return base
+            return base**exp
+        if exp.is_zero and base.is_square:
+            return Identity(base.shape[0])
+        elif exp is S.One:
+            return base
+        return MatPow(base, exp)
+    sympy.MatPow.doit = _monkey_patch_matpow_doit
+    sympy.MatAdd.doit_orig = sympy.MatAdd.doit
+    def _monkey_patch_matadd_doit(self, **kwargs):
+        deep = kwargs.get('deep', True)
+        if deep:
+            args = [arg.doit(**kwargs) for arg in self.args]
+        else:
+            args = self.args
+        return MatAdd(*args).doit_orig(**kwargs)
+    sympy.MatAdd.doit = _monkey_patch_matadd_doit
     try:
         class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
             def _print_Symbol(self, expr):
@@ -92,7 +122,7 @@ else:
                     xtra = ", negative=True"
                 else:
                     xtra = ""
-                    for (key, val) in asm.iteritems():
+                    for (key, val) in asm.items():
                         xtra = xtra + ", %s=%s" % (key, val)
                 return "%s(%s%s)" % (expr.__class__.__name__,
                                      self._print(expr.name), xtra)
@@ -111,15 +141,8 @@ try:
         """Perform final fixes before passing objects back to Octave"""
         if isinstance(x, sp.Matrix) and x.shape == (1, 1):
             return x[0, 0]
-        elif isinstance(x, sp.MatrixExpr):
-            try:
-                # expands MatPow(A, 2) and known-size MatrixSymbols
-                y = x.as_explicit()
-                if sympy.__version__ == "0.7.5" and any([p is None for p in y]):
-                    raise NotImplementedError()
-                return y
-            except:
-                return x
+        #elif isinstance(x, sp.MatrixExpr):
+        #    return x.doit()
         return x
     #
     def octoutput_drv(x):
@@ -131,7 +154,10 @@ try:
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
-        print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
+        if sys.version_info >= (3, 0):
+            print(DOM.toprettyxml(indent="", newl="\n"))
+        else:
+            print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
     myerr(sys.exc_info())
     raise
@@ -154,14 +180,14 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif isinstance(x, (sp.Basic, sp.Matrix, sp.MatrixExpr)):
+        elif isinstance(x, (sp.Basic, sp.MatrixBase)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
             elif isinstance(x, (sp.Expr, Boolean)):
                 _d = (1, 1)
             elif isinstance(x, sp.MatrixExpr):
-                # FIXME: play with x.shape instead
-                _d = (1, 1)
+                # nan for symbolic size
+                _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
             else:
                 dbout("Treating unexpected SymPy obj as scalar: " + str(type(x)))
                 _d = (1,1)
@@ -199,19 +225,11 @@ try:
             f.text = str(OCTCODE_DOUBLE)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x)
-        elif isinstance(x, str):
+        elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
             f = ET.SubElement(a, "f")
-            f.text = x
-        elif isinstance(x, unicode):
-            a = ET.SubElement(et, "item")
-            f = ET.SubElement(a, "f")
-            f.text = str(OCTCODE_USTR)
-            f = ET.SubElement(a, "f")
-            # newlines are ok with new regexp parser
-            #f.text = x.replace("\n","\\n")
             f.text = x
         elif isinstance(x, dict):
             # Note: the dict cannot be too complex, keys must convert to
@@ -224,7 +242,11 @@ try:
             c = ET.SubElement(a, "list")
             octoutput(keystr, c)
             c = ET.SubElement(a, "list")
-            octoutput(x.values(), c)
+            # FIXME: bit of a kludge, use iterable instead of list, tuple above?
+            if sys.version_info >= (3, 0):
+                octoutput(list(x.values()), c)
+            else:
+                octoutput(x.values(), c)
         else:
             dbout("error exporting variable:")
             dbout("x: " + str(x))

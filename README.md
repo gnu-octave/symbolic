@@ -98,11 +98,11 @@ How to hack on the code:
 Implementation
 --------------
 
-Generate Python code to do the actual work.  Sym objects keep a text
-field for display purposes and a string (currently a customized SymPy
-`srepr`) of their python object.  The objects are communicated between
-Python and Octave by passing the srepr's back-and-forth.  Currently
-pure m-file (and Python) implementation, no code to be compiled.
+Python code is generated to do the actual work.  Each sym objects keep
+a text field for display purposes and a string (a SymPy `srepr`).  The
+objects are communicated between Python and Octave by passing the
+srepr's back-and-forth.  Currently pure m-file (and Python)
+implementation, no code to be compiled.
 
 
 
@@ -118,7 +118,9 @@ implemented.
 Related Projects
 ----------------
 
-* The Octave-Forge symbolic toolbox [http://octave.sourceforge.net/symbolic/index.html].  My impression is the VPA is pretty good.
+  * There was a previous "symbolic" package in Octave Forge based on
+    GiNaC.  Its history has now been merged into octsympy.
 
-* "SymPy CAS" by Jonathan Lister [http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab].  Calls SymPy commands using calls to system().
+  * ["SymPy CAS" by Jonathan Lister](http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab).
+    Calls SymPy commands using system().
 

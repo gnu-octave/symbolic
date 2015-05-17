@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,18 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
 %% Inverse Laplace transform.
 %%
-%% Examples:
+%% Example:
 %% @example
-%% syms t s
-%% F = 1/s^2
-%% ilaplace(F)
-%% ilaplace(F, s)
-%% ilaplace(F, s, t)
+%% @group
+%% >> syms s
+%% >> F = 1/s^2;
+%% >> ilaplace(F)
+%%    @result{} (sym) t
+%% @end group
 %% @end example
 %%
 %% @seealso{laplace}
@@ -72,9 +74,9 @@ function f = ilaplace(varargin)
     f = python_cmd(cmd,F,s,t);
 
   else
-    error('Wrong number of input arguments') 
- 
-  endif
+    print_usage ();
+
+  end
 
 end
 

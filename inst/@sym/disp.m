@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,48 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {} disp (@var{x})
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'unicode')
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'ascii')
+%% @deftypefnx {Function File}  {} disp (@var{x}, 'flat')
 %% @deftypefnx {Function File}  {@var{s} =} disp (@var{x})
 %% Display the value of a symbolic expression.
+%%
+%% Examples:
+%% @example
+%% @group
+%% >> syms x a c
+%% >> str = disp(sin(2*sym(pi)*x))
+%%  @result{} str =   sin(2⋅π⋅x)
+%%
+%% >> A = [sin(x/2) floor(a^(x*c)); acosh(2*x/pi) ceil(sin(x/gamma(x)))];
+%% >> disp(A, 'unicode')
+%%  @result{}
+%%   ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
+%%   ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
+%%   ⎢     ⎝2⎠               ⎥
+%%   ⎢                       ⎥
+%%   ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
+%%   ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
+%%   ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
+%% @end group
+%%
+%% @group
+%% >> disp(A, 'ascii')
+%%  @result{}
+%%   [     /x\              / c*x\      ]
+%%   [  sin|-|         floor\a   /      ]
+%%   [     \2/                          ]
+%%   [                                  ]
+%%   [     /2*x\         /   /   x    \\]
+%%   [acosh|---|  ceiling|sin|--------||]
+%%   [     \ pi/         \   \gamma(x)//]
+%%
+%% >> disp(A, 'flat')
+%%  @result{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
+%% @end group
+%% @end example
 %%
 %% @seealso{pretty}
 %% @end deftypefn
@@ -43,7 +82,7 @@ function varargout = disp(x, wh)
     case 'unicode'
       s = x.unicode;
     otherwise
-      error('invalid display type')
+      print_usage ();
   end
   s = make_indented(s);
 

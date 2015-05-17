@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,33 +17,54 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
+%% @deftypefnx {Function File} {@var{g} =} subs (@var{f}, @var{y})
 %% Replace symbols in an expression with other expressions.
 %%
-%% Example replacing x with y.
+%% Example substituting a value for a variable:
 %% @example
-%% f = x*y;
-%% subs(f, x, y)
+%% @group
+%% >> syms x y
+%% >> f = x*y;
+%% >> subs(f, x, 2)
+%%  @result{} ans = (sym) 2⋅y
+%% @end group
 %% @end example
+%% If @var{x} is omitted, @code{symvar} is used on @var{f}.
 %%
+%% @var{x} and @var{y} can also be vectors or lists of syms to
+%% replace:
 %% @example
-%% subs(f, x, sin(x))
-%% subs(f, @{x y@}, @{sin(x) 16@})
+%% @group
+%% >> subs(f, @{x y@}, @{sin(x) 16@})
+%%  @result{} ans = (sym) 16⋅sin(x)
 %%
-%% F = [x x*y; 2*x*y y];
-%% subs(F, @{x y@}, @{2 sym(pi)@})
-%% subs(F, @{x y@}, [2 sym(pi)])
-%% subs(F, [x y], [2 sym(pi)])
-%% subs(F, [x y], @{2 sym(pi)@})
+%% >> F = [x x*y; 2*x*y y];
+%% >> subs(F, @{x y@}, [2 sym(pi)])
+%%  @result{} ans = (sym 2×2 matrix)
+%%
+%%         ⎡ 2   2⋅π⎤
+%%         ⎢        ⎥
+%%         ⎣4⋅π   π ⎦
+%%
+%% @end group
 %% @end example
 %%
 %% Note: There are many possibilities that we don't support (FIXME)
 %% if you start mixing scalars and matrices.  We support one simple
 %% case of subbing a matrix in for a scalar in a scalar expression:
 %% @example
-%% syms x
-%% f = sin(x)
-%% g = subs(f, x, [1 2; 3 4])
+%% @group
+%% >> f = sin(x);
+%% >> g = subs(f, x, [1 2; 3 4])
+%%  @result{} g = (sym 2×2 matrix)
+%%
+%%         ⎡sin(1)  sin(2)⎤
+%%         ⎢              ⎥
+%%         ⎣sin(3)  sin(4)⎦
+%%
+%% @end group
 %% @end example
 %% If you want to extend support to more cases, a good place to
 %% start, as of July 2014, is the Sympy Issue #2962
@@ -57,6 +78,17 @@
 
 
 function g = subs(f, in, out)
+
+  if (nargin == 1)
+    % FIXME: SMT will take values of x from the workspace in this case.
+    error('subs: we do not support single-input w/ substitution from workspace')
+  elseif (nargin == 2)
+    out = in;
+    in = symvar(f, 1);
+    if (isempty(in))
+      in = sym('x');
+    end
+  end
 
   %% special case: scalar f, scalar in, vector out
   % A workaround for Issue #10, also upstream Sympy Issue @2962
@@ -81,7 +113,7 @@ function g = subs(f, in, out)
   % debugging easier, e.g., without simultaneous mode?
   if (isscalar(in) && ~iscell(in) && ~iscell(out))
     cmd = { '(f, x, y) = _ins'
-            'return f.subs(x, y),' };
+            'return f.subs(x, y).doit(),' };
     g = python_cmd (cmd, sym(f), sym(in), sym(out));
     return
   end
@@ -121,7 +153,7 @@ function g = subs(f, in, out)
   % simultaneous=True is important so we can do subs(f,[x y], [y x])
 
   cmd = { '(f, sublist) = _ins'
-          'g = f.subs(sublist, simultaneous=True)'
+          'g = f.subs(sublist, simultaneous=True).doit()'
           'return g,' };
 
   g = python_cmd (cmd, sym(f), sublist);
@@ -187,6 +219,8 @@ end
 %! % but of course both x and y to t still works
 %! assert( isequal( subs(f, [x y], [t t]), t*sin(t) ))
 
+%% reset the shared variables
+%!shared
 
 %!test
 %! % Issue #10, subbing matrices in for scalars
@@ -204,3 +238,11 @@ end
 %! g = subs(f, y, a);
 %! assert (isequal (g, 2*a))
 %! assert (isa (g, 'sym'))
+
+%!test
+%! % two inputs
+%! syms x y
+%! assert (isequal (subs(sym(2)*x, 6), 12))
+%! assert (isequal (subs(sym(2)*x*y^2, 6), 12*y^2))
+%! assert (isequal (subs(sym(2)*y, 6), 12))
+%! assert (isequal (subs(sym(2), 6), 2))

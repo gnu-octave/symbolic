@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=0.1.2-git
+VER=2.2.2-dev
 # for release
-#VER=0.1.2
+#VER=2.2.2
 #TAG=v${VER}
 
 #----------------------------------------------------------------
-PKG=octsympy-$VER
+PKG=symbolic-$VER
 DIR=$PKG
 
 MLPKG=octsympy-matlab-$VER
@@ -40,12 +40,16 @@ cp -r octsympy ${DIR}
 
 # remove .git dir and other things not needed for package
 pushd ${DIR}/
+rm .gitignore
 rm -rf .git/
 rm -f screenshot.png
+rm -f screenshot-install.png
 popd
 
 # make clean
 pushd ${DIR}/src/
+make distclean
+./bootstrap
 make clean
 popd
 

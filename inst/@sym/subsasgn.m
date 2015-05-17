@@ -284,3 +284,80 @@ end
 %! e = a == b;
 %! e(1:2) = true;
 %! assert (isequal (e, [sym(1)==1  sym(2)==2  x==10  sym(3)==4]))
+
+
+%% 2D arrays from mat_mask_asgn
+
+%!shared a, b, I
+%! b = [1:4]; b = [b; 3*b; 5*b];
+%! a = sym(b);
+%! I = rand(size(b)) > 0.5;
+
+%!test
+%! A = a;  A(I) = 2*b(I);
+%! B = b;  B(I) = 2*b(I);
+%! assert (isequal (A, B))
+
+%!test
+%! % scalar RHS
+%! A = a;  A(I) = 17;
+%! B = b;  B(I) = 17;
+%! assert (isequal (A, B))
+
+%!warning <unusual>
+%! % strange non-vector (matrix) RHS ("rhs2"), should be warning
+%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
+%! rhs2 = reshape(2*b(I), 2, 3);  % strange bit
+%! A = a;
+%! A(I) = rhs2;
+
+%!test
+%! % nonetheless, above strange case should give right answer
+%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
+%! rhs = 2*b(I);
+%! rhs2 = reshape(rhs, 2, 3);
+%! s = warning ('off', 'OctSymPy:subsagn:rhs_shape');
+%! A0 = a; A1 = a;
+%! A0(I) = rhs;
+%! A1(I) = rhs2;
+%! warning (s)
+%! assert (isequal (A0, A1))
+
+
+%% Tests from mat_rclist_asgn
+
+%!shared AA, BB
+%! BB = [1 2 3; 4 5 6];
+%! AA = sym(BB);
+
+%!test
+%! A = AA; B = BB;
+%! B([1 6]) = [8 9];
+%! A([1 6]) = [8 9];
+%! assert (isequal (A, B))
+
+%!test
+%! % rhs scalar
+%! A = AA; B = BB;
+%! B([1 6]) = 88;
+%! A([1 6]) = 88;
+%! assert (isequal (A, B))
+
+%!test
+%! % If rhs is not a vector, make sure col-based access works
+%! rhs = [18 20; 19 21];
+%! A = AA; B = BB;
+%! B([1 6]) = 88;
+%! A([1 6]) = 88;
+%! B([1 2 3 4]) = rhs;
+%! A([1 2 3 4]) = rhs;
+%! assert (isequal (A, B))
+
+%!test
+%! % Growth
+%! A = AA; B = BB;
+%! A(1,5) = 10;
+%! B(1,5) = 10;
+%! assert (isequal (A, B))
+
+%% End of mat_* tests

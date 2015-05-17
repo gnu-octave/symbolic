@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{r} =} isAlways (@var{eq})
 %% @deftypefnx {Function File} {@var{r} =} isAlways (@var{eq}, 'Unknown', 'false')
 %% @deftypefnx {Function File} {@var{r} =} isAlways (@var{eq}, 'Unknown', 'true')
@@ -25,31 +26,45 @@
 %%
 %% Example:
 %% @example
-%% syms x
-%% isAlways(x*(1+y) == x+x*y)
+%% @group
+%% >> syms x y
+%% >> isAlways(x*(1+y) == x+x*y)
+%%    @result{} 1
+%% @end group
 %% @end example
-%% This returns @code{true}, in contrast with
-%% @code{logical(x*(1+y) == x+x*y)}
-%% which returns @code{false}.
+%% Contrast this with a test for “structural equality“:
+%% @example
+%% @group
+%% >> logical(x*(1+y) == x+x*y)
+%%    @result{} 0
+%% @end group
+%% @end example
 %%
-%% The optional keyword argument 'unknown' specifies that happens
+%% The optional keyword argument 'Unknown' specifies that happens
 %% for expressions that cannot simplify.  By default these return
 %% false (that is, cannot verify it is always true).  Pass the
 %% strings 'true', 'false' or 'error' to change the behaviour.  You
 %% can also pass logical true/false.
 %%
-%% FIXME: SMT behaviour: want?
 %% If @code{isAlways} is called on expressions without relationals,
-%% it will return true for non-zero numbers.
-%%
-%% Note using this in practice often falls back to
-%% @@logical/isAlways (which we provide, essentially a no-op), in
-%% case the result has already simplified to double == double.
-%% Here is an example:
+%% it will return true for non-zero numbers:
 %% @example
-%% syms x
-%% isAlways (sin(x) - sin(x) == 0)
+%% @group
+%% >> isAlways (sym (10))
+%%    @result{} 1
+%% @end group
 %% @end example
+%%
+%% It is safe to use isAlways even when the expression does not
+%% require simplifying:
+%% @example
+%% >> syms x
+%% >> isAlways (sin(x) - sin(x) == 0)
+%%    @result{} 1
+%% @end example
+%% In practice, @code{isAlways} might get called on a simple
+%% boolean variable, so OctSymPy implements @@logical/isAlways
+%% (which is essentially a no-op).
 %%
 %% @seealso{logical, isequal, eq (==)}
 %% @end deftypefn
@@ -88,8 +103,9 @@ function r = isAlways(p, varargin)
     '    #FIXME; Boolean, simplify more than once?'
     '    if r in (S.true, S.false):'
     '        return bool(r)'
-    '    # hopefully we get sympy patched for some of this'
-    '    if sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6"):'
+    '    # FIXME: hopefully we get sympy patched for some of this'
+    '    #if sympy.__version__ in ("0.7.5", "0.7.6") or sympy.__version__.startswith("0.7.7"):'
+    '    if True:'
     '        if isinstance(p, Equality):'
     '            r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
     '            r = simplify(r)'

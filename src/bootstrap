@@ -1,0 +1,6 @@
+#! /bin/sh
+
+aclocal
+autoconf
+
+echo "$0: done.  Now you can run './configure'."

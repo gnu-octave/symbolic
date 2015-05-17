@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{S} =} findsym (@var{expr})
 %% @deftypefnx {Function File} {@var{S} =} findsym (@var{expr}, @var{n})
 %% Find symbols in expression, return them as comma-separated string.
@@ -26,9 +27,14 @@
 %%
 %% Example:
 %% @example
-%% syms y,a,b
-%% vars  = findsym (f);     % outputs 'a,b,y'
-%% vars2 = findsym (f,1);   % outputs 'y'
+%% @group
+%% syms y a b
+%% f = a*y + b;
+%% v = findsym (f)
+%%  @result{} v = a,b,y
+%% v = findsym (f, 1)
+%%  @result{} v = y
+%% @end group
 %% @end example
 %%
 %% @seealso{symvar, findsymbols}

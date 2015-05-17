@@ -1,5 +1,105 @@
-octsympy x.y.z (yyyy-mm-dd)
+octsympy 2.2.2-dev
+==================
+
+  * Fix for configure script using Python 3 (thanks Vadim Gribanov).
+
+  * Bug fixes and update doctests.
+
+  * Start using "print_usage" for invalid inputs as is common
+    practice in Octave.
+
+  * Support for SymPy 0.7.7.dev version.
+
+
+
+octsympy 2.2.1 (2015-04-22)
 ===========================
+
+  * Fix an ascii pretty printing regression (issue #234).
+
+  * Other minor fixes for doctests, sympref and symreplace.
+
+
+
+octsympy 2.2.0 (2015-04-20)
+===========================
+
+  * New commands:
+
+          catalan
+          eulergamma
+          lambertw
+
+  * Installing symbolic package now check for Python and minimum
+    version of SymPy (thanks Carnë Draug for autoconf).
+
+  * Installations from Octave-Forge ("pkg install -forge symbolic")
+    should now work on Windows (thanks vassbu).  You will need the
+    Python and SymPy dependencies.  Or you can use the [bundled
+    package](https://github.com/cbm755/octsympy/releases)
+
+  * Added support for Python 3 (still works with Python 2 as well).
+
+  * Documentation improvements especially to assumptions.  Examples
+    within documentation can now be tested with doctests, see the
+    `octsympy_doctests.m` function.
+
+  * Fix a warning on Octave 4.0.0-rc1 and make tests work properly.
+
+  * Other bug fixes: assumptions; symvar and symbolic matrix powers;
+    various display issues.
+
+
+
+octsympy 2.1.0 (2015-03-06)
+===========================
+
+  * New commands:
+
+          columns
+          degree
+          formula
+          ismatrix
+          numden
+          rows
+
+  * Additional ways of calling symsum, symprod, and subs for better
+    compatibility with other symbolic toolboxes.
+
+  * Bug fixes in poly2sym, sym2poly, symfun (thanks @rocketsound),
+    prod, horner, coeffs.
+
+  * Documentation improvements.
+
+  * Improvements to "argnames" and "formula" for the dependent
+    variables and dependent expression of a symfun.  These are now
+    implemented for basic sym objects as well.
+
+  * Improvements to assumptions.  E.g., `x = assume(x, 'positive')` no
+    longer mucks around in the workspace for other instances of x (it
+    still does this with no output argument, for compatibility with
+    other symbolic toolboxes).  You can use multiple assumptions with
+    sym and syms, e.g., `syms n m positive even`.
+
+  * Improve symbolic sized matrices such as `A = sym('a', [n m])`.
+    These are still experimental; they correspond to MatixSymbols in
+    SymPy and may need a recent SymPy development version.  For now,
+    the `size(A)` returns "1x1" although internally `NaN` is used for
+    symbolic-sized dimensions.  Enabling `size(A)` to return "NaNx3"
+    may occur later.
+
+  * Drop python_cmd_string, which has been deprecated since v0.1.1.
+
+
+
+octsympy 2.0.0 (2015-02-04)
+===========================
+
+ *  Octsympy is now the "symbolic" package for Octave Forge.  There
+    was a previous "symbolic" package (based on GiNaC) which reached
+    version 1.1.0.  To prevent confusion, we are now at version 2.0.0.
+    Additionally, the history of the two projects has been merged
+    (thanks Carnë Draug).
 
  *  New commands:
 
@@ -11,6 +111,12 @@ octsympy x.y.z (yyyy-mm-dd)
           permute
 
  *  Fixes for developement version of SymPy.
+
+ *  Fixes for vpa and vpasolve: high precision should be more reliable.
+
+ *  Improve handling `sym(pi/3)` and other small fractions of pi.  It
+    works but you'll still get a warning and 2*sym(pi)/3 is really the
+    preferred approach!  `sym(-pi)` now works.
 
  *  On Windows, default to ascii rendering for now (until unicode
     is fixed in Octave on that platform).

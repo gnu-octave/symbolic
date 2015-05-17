@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,52 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {} display (@var{x})
 %% Display, on command line, the contents of a symbolic expression.
 %%
+%% Examples:
+%% @example
+%% @group
+%% >> x = sym('x')
+%%    @result{} x = (sym) x
+%%
+%% >> display(x)
+%%    @result{} x = (sym) x
+%%
+%% >> display([x 2 pi])
+%%    @result{} (sym) [x  2  π] (1×3 matrix)
+%% @end group
+%% @end example
+%%
+%% Other examples:
+%% @example
+%% @group
+%% >> A = sym([1 2; 3 4])
+%%    @result{} A = (sym 2×2 matrix)
+%%        ⎡1  2⎤
+%%        ⎢    ⎥
+%%        ⎣3  4⎦
+%%
+%% >> syms n
+%% >> B = A^n
+%%    @result{} B = (sym 2×2 matrix expression)
+%%                n
+%%        ⎛⎡1  2⎤⎞
+%%        ⎜⎢    ⎥⎟
+%%        ⎝⎣3  4⎦⎠
+%% @end group
+%%
+%% @group
+%% >> A = sym(ones(0, 3))
+%%    @result{} A = (sym) [] (empty 0×3 matrix)
+%%
+%% >> B = 3*A^n
+%%    @result{} B = (sym empty 0×3 matrix expression)
+%%              n
+%%        3⋅([])
+%% @end group
+%% @end example
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -51,73 +94,112 @@ function display(x)
     term_width = term_width(1);
   end
 
-  if (unicode_dec)
-    timesstr = '×';
-  else
-    timesstr = 'x';
-  end
-  newl = sprintf('\n');
-
-  % an appropriate label for this variable, likely just inputname itself
+  % weird hack to support "ans(x) = " output for @symfun
   name = priv_disp_name(x, inputname (1));
-  d = size (x);
 
-  if (isscalar (x))
-    n = fprintf ('%s = (%s)', name, class (x));
-    s = strtrim(disp(x));
-    hasnewlines = strfind(s, newl);
-    toobig = ~isempty(hasnewlines) || (length(s) + n + 18 > term_width);
-    if (~toobig)
-      fprintf(' %s', s)
-      n = n + 1 + length(s);
-      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-    else
-      snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-      if (loose), fprintf ('\n'); end
-      disp(x)
-      if (loose), fprintf ('\n'); end
-    end
+  dispstr = disp (x);
+  dispstrtrim = strtrim (dispstr);
+  hasnewlines = ~isempty (strfind (dispstrtrim, sprintf('\n')));
 
+  [desc_start, desc_end] = sym_describe (x, unicode_dec);
 
-  elseif (isempty (x))
-    formatstr = [  ];
-    n = fprintf ('%s = (%s) %s (empty %d%s%d matrix)', name, ...
-                 class (x), strtrim(disp(x)), d(1), timesstr, d(2));
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-
-  elseif (length (d) == 2)
-    %% 2D Array
-    n = fprintf ('%s = (%s %d%s%d matrix)', name, class (x), ...
-                 d(1), timesstr, d(2));
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
-
-    if (loose), fprintf ('\n'); end
-    disp(x)
-    if (loose), fprintf ('\n'); end
-
-
+  if display_snippet
+    toobig = true;
   else
-    %% nD Array
-    % (not possible with sympy matrix)
-    fprintf ('%s = (%s nD array)', name, class (x))
+    toobig = hasnewlines;
+    %toobig = hasnewlines || ~(isempty(x) || isscalar(x));
+  end
 
-    snippet_of_sympy (x, 7, term_width - n, unicode_dec)
+  s1 = '';
+  if (~isempty(name))
+    s1 = sprintf ('%s = ', name);
+  end
 
+  if (toobig)
+    if (isempty(desc_end))
+      s2 = sprintf('(%s)', desc_start);
+    else
+      s2 = sprintf('(%s %s)', desc_start, desc_end);
+    end
+  else
+    if (isempty(desc_end))
+      s2 = sprintf('(%s) %s', desc_start, dispstrtrim);
+    else
+      s2 = sprintf('(%s) %s  (%s)', desc_start, dispstrtrim, desc_end);
+    end
+  end
+  s = [s1 s2];
+  n = ustr_length (s);
+  %fputs (1, s);  % only in octave, not matlab
+  fprintf (s)
+  if (display_snippet)
+    % again, fputs safer, but not in matlab
+    fprintf (snippet_of_sympy (x, 7, term_width - n, unicode_dec))
+  end
+  fprintf ('\n');
+
+  if (toobig)
     if (loose), fprintf ('\n'); end
-    disp(x)
+    % don't use printf b/c ascii-art might have slashes
+    disp (dispstr);  % appends newline
     if (loose), fprintf ('\n'); end
   end
 end
 
 
-function snippet_of_sympy(x, padw, width, unicode)
-
-  if ( ~ sympref('snippet'))
-    fprintf('\n');
-    return
+function [s1 s2] = sym_describe(x, unicode_dec)
+  if (unicode_dec)
+    timesstr = '×';
+  else
+    timesstr = 'x';
   end
 
+  s1 = class (x);
+  srepr = char (x);
+  d = size (x);
+
+  % sort of isinstance(x, MatrixExpr) but cheaper
+  is_matrix_symbol = false;
+  matexprlist = {'MatrixSymbol' 'MatMul' 'MatAdd' 'MatPow'};
+  for i=1:length(matexprlist)
+    if (strncmp(srepr, matexprlist{i}, length(matexprlist{i})))
+      is_matrix_symbol = true;
+    end
+  end
+
+  if (isscalar (x)) && (~is_matrix_symbol)
+    s2 = '';
+  elseif (is_matrix_symbol)
+    %if (any(isnan(d)))  % may not tell the truth
+    if (any(isnan(x.size)))
+      [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
+      numrstr = strtrim(disp(nn, 'flat'));
+      numcstr = strtrim(disp(mm, 'flat'));
+    else
+      nn = d(1);  mm = d(2);
+      numrstr = num2str(d(1), '%g');
+      numcstr = num2str(d(2), '%g');
+    end
+    if (logical(nn == 0) || logical(mm == 0))
+      estr = 'empty ';
+    else
+      estr = '';
+    end
+    s2 = sprintf ('%s%s%s%s matrix expression', estr, numrstr, timesstr, numcstr);
+  elseif (length (d) == 2)
+    if (isempty (x))
+      estr = 'empty ';
+    else
+      estr = '';
+    end
+    s2 = sprintf ('%s%g%s%g matrix', estr, d(1), timesstr, d(2));
+  else
+    s2 = sprintf ('%d-dim array', length (d))
+  end
+end
+
+
+function snip = snippet_of_sympy(x, padw, width, unicode)
   if (unicode)
     ell = '…';
     lquot = '“'; rquot = '”';
@@ -125,20 +207,25 @@ function snippet_of_sympy(x, padw, width, unicode)
     ell = '...';
     lquot = '"'; rquot = lquot;
   end
-
-  % indent
+  rightpad = 1;
   pad = repmat(' ', 1, padw);
 
   % trim newlines (if there are any)
-  s = regexprep (x.pickle, '\n', '\\n');
-  %s = regexprep (x.pickle, '\n', '\');
-  len = length (s);
-  if len > width-padw-2
-    n = width-padw-2-length(ell);
-    s = [s(1:n) ell];
+  s = regexprep (char (x), '\n', '\\n');
+  snip = [pad lquot s rquot];
+  if (ustr_length (snip) > width)
+    n = width - rightpad - padw - ustr_length ([lquot rquot ell]);
+    if (n < 8)
+      snip = '';
+    else
+      snip = sprintf ([pad lquot '%s' ell rquot], s(1:n));
+    end
   end
-  fprintf([pad lquot '%s' rquot '\n'], s)
 end
 
 
-% FIXME: tricky to test without spamming stdout
+% FIXME: Could quietly test with "evalc", but [missing in
+% Octave](https://savannah.gnu.org/patch/?8033).  For now, a dummy
+% test.  Doctests will cover this anyway.
+%!test
+%! assert(true)

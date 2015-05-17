@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,15 +17,47 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{p} =} potential (@var{v})
 %% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x})
 %% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x}, @var{y})
 %% Symbolic potential of a vector field.
 %%
-%% Return symbolic nan if the field has no potential (based on
-%% checking if the Jacobian matrix of the field is nonsymmetric).
+%% Finds the potential of the vector field @var{v} with respect to
+%% the variables @var{x}$.  The potential is defined up to an
+%% additive constant, unless the third argument is given; in which
+%% case the potential is such that @var{p} is zero at the point
+%% @var{y}.
 %%
-%% @seealso{gradient}
+%% Example:
+%% @example
+%% @group
+%% syms x y z
+%% f = x*y*z;
+%% g = gradient (f)
+%%  @result{} g = (sym 3×1 matrix)
+%%      ⎡y⋅z⎤
+%%      ⎢   ⎥
+%%      ⎢x⋅z⎥
+%%      ⎢   ⎥
+%%      ⎣x⋅y⎦
+%% potential (g)
+%%  @result{} (sym) x⋅y⋅z
+%% @end group
+%% @end example
+%%
+%% Return symbolic @code{nan} if the field has no potential (based
+%% on checking if the Jacobian matrix of the field is
+%% nonsymmetric).  For example:
+%% @example
+%% @group
+%% syms x y
+%% a = [x; x*y^2];
+%% potential (a)
+%%  @result{} (sym) nan
+%% @end group
+%% @end example
+%% @seealso{gradient, jacobian}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -57,11 +89,13 @@ function p = potential(v, x, y)
           'G = v.jacobian(x)'
           'if not G.is_symmetric():'
           '    return S.NaN,'
-          '_lambda = sympy.Dummy(real=True)'
+          '_lambda = sympy.Dummy("lambda", real=True)'
           'q = y + _lambda*(x - y)'
-          'vlx = v.subs(zip(list(x), list(q)))'
+          'vlx = v.subs([a for a in zip(list(x), list(q))], simultaneous=True)'
           'p = integrate((x-y).dot(vlx), (_lambda, 0, 1))'
           'return p.simplify(),' };
+  % FIXME: [a for a in zip] is a hack for python 3: why is this
+  % necessary?  SymPy bug?
 
   p = python_cmd (cmd, sym(v), x, sym(y));
 
@@ -94,12 +128,15 @@ end
 
 %!test
 %! % no potential exists
-%! syms x y;
+%! syms x y
 %! a = [x; x*y^2];
 %! assert (isnan (potential (a)))
 
+
+%!shared
+
 %!xtest
 %! % fails b/c of sympy #8458 (piecewise expr that should simplify)
+%! syms x
 %! f = cos(x);
 %! assert (isequal (potential(f, x), sin(x)))
-

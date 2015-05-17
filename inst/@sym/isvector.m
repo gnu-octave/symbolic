@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -37,6 +37,7 @@ end
 %!assert(isvector(sym('x')))
 %!assert(isvector(sym([1 2 3])))
 %!assert(isvector(sym([1; 2])))
-%!assert(isvector(sym([1; 2])))
 %!assert(~isvector(sym([1 2; 3 4])))
 %!assert(~isvector(sym([])))
+%!assert(isvector(sym(ones(1,0))))
+%!assert(~isvector(sym(ones(0,3))))

@@ -84,3 +84,5 @@ function z = mat_replace(A, subs, b)
   end
 
   z = mat_rclist_asgn(A, r, c, b);
+
+end

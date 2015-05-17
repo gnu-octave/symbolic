@@ -27,53 +27,69 @@
 %%
 %% A concrete symfun:
 %% @example
-%% syms x
-%% f(x) = sin(x)
+%% >> syms x
+%% >> f(x) = sin(x)
+%%    @result{} f(x) = (symfun) sin(x)
+%% >> f
+%%    @result{} f(x) = (symfun) sin(x)
+%% >> f(1)
+%%    @result{} ans = (sym) sin(1)
+%% >> f(x)
+%%    @result{} ans = (sym) sin(x)
 %% @end example
 %%
 %% An abstract symfun:
 %% @example
-%% syms g(x)
+%% >> syms g(x)
+%% >> g
+%%    @result{} g(x) = (symfun) g(x)
 %% @end example
 %% and note this creates the sym @code{x} automatically.
 %%
 %% Alternatively:
 %% @example
-%% x = sym('x')
-%% g(x) = sym('g(x)')
+%% >> x = sym('x');
+%% >> g(x) = sym('g(x)')
+%%    @result{} g(x) = (symfun) g(x)
 %% @end example
 %% Note the following is @strong{not} the way to create an abstract
 %% symfun:
 %% @example
-%% g = sym('g(x)')
+%% >> g = sym('g(x)')  % just the symbolic expression g(x)
+%%    @result{} g = (sym) g(x)
 %% @end example
 %% Instead, use @code{g(x)} on the left-hand side as above.
 %%
-%% You can make multidimensional concrete or abstract symfuns:
+%% You can make multidimensional concrete or abstract symfuns using
+%% @code{syms g(x,y)}.  However, a bug in the Octave parser in
+%% versions before 4.0 means this 2D example will give a parse
+%% error.  A workaround is to enclose the argument in a string:
 %% @example
-%% syms g(x, y)
-%% @end example
-%% However, a bug in the Octave parser in versions before 4.0 means
-%% the 2D example will give a parse error.  A workaround:
-%% @example
-%% syms 'g(x, y)'
+%% >> syms 'g(x, y)'
+%% >> g
+%%    @result{} g(x, y) = (symfun) g(x, y)
 %% @end example
 %%
 %% As the above examples demonstrate, it is usually not necessary to
 %% call symfun directly.  However, it can be done:
 %% @example
-%% syms x y
-%% f = symfun(sin(x), x)
-%% F = symfun(x*y, [x y])
-%% g = symfun(sym('g(x)'), x)
-%% G = symfun(sym('G(x, y)'), [x y])
+%% >> syms x y
+%% >> f = symfun(sin(x), x)
+%%    @result{} f(x) = (symfun) sin(x)
+%% >> F = symfun(x*y, [x y])
+%%    @result{} F(x, y) = (symfun) x⋅y
+%% >> g = symfun(sym('g(x)'), x)
+%%    @result{} g(x) = (symfun) g(x)
+%% >> G = symfun(sym('G(x, y)'), [x y])
+%%    @result{} G(x, y) = (symfun) G(x, y)
 %% @end example
 %%
 %% This allows, for example, creating an abstract function formally
 %% of x, y but depending only on x:
 %% @example
-%% syms x y
-%% h = symfun(sym('h(x)'), [x y])
+%% >> syms x y
+%% >> h = symfun(sym('h(x)'), [x y])
+%%    @result{} h(x, y) = (symfun) h(x)
 %% @end example
 %%
 %% @seealso{sym, syms}
@@ -89,7 +105,7 @@ function f = symfun(expr, vars)
     expr = sym(0);
     vars = sym('x');
   elseif (nargin == 1)
-    error('takes two input arguments')
+    print_usage ();
   end
 
   % if the vars are in a sym array, put them in a cell array
@@ -112,8 +128,13 @@ function f = symfun(expr, vars)
     expr = python_cmd (cmd, vars{:});
   end
 
-  % sanity check and allows symfun(10, x)
-  expr = sym(expr);
+  if (isa(expr, 'symfun'))
+    % allow symfun(<symfun>, x)
+    expr = expr.sym;
+  else
+    % e.g., allow symfun(<double>, x)
+    expr = sym(expr);
+  end
 
   assert (isa (vars, 'cell'))
   for i=1:length(vars)
@@ -251,3 +272,25 @@ end
 %! syms 'f(y, x)'
 %! v = f.vars;
 %! assert (isequal (v{1}, y) && isequal (v{2}, x))
+
+%!test
+%! % assignment of symfun to symfun, issue #189
+%! syms t
+%! x(t) = 2*t;
+%! y(t) = x;
+%! assert (isa (y, 'symfun'))
+%! y = symfun(x, t);
+%! assert (isa (y, 'symfun'))
+%! % others
+%! y = x;
+%! assert (isa (y, 'symfun'))
+%! y(t) = x(t);
+%! assert (isa (y, 'symfun'))
+
+%!test
+%! % assignment of generic symfun to symfun
+%! syms t x(t)
+%! y(t) = x;
+%! assert (isa (y, 'symfun'))
+%! y = symfun(x, t);
+%! assert (isa (y, 'symfun'))

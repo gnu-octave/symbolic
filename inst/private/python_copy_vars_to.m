@@ -50,7 +50,7 @@ function a = do_list(indent, in, varlist)
       end
 
     elseif (isinteger(x) && isscalar(x))
-      c=c+1; a{c} = sprintf('%s%s.append(%d)  # int type', sp, in, x);
+      c=c+1; a{c} = sprintf('%s%s.append(%s)  # int type', sp, in, num2str(x));
 
     elseif (isfloat(x) && isscalar(x))
       % Floating point input.  By default, all Octave numbers are
@@ -59,9 +59,6 @@ function a = do_list(indent, in, varlist)
       % (double-precision) integers specially (which might
       % help with indexing in some places) but I think it might be
       % too magical.  For now, all doubles become floats in Python.
-
-      %if (mod(x,1) == 0)  % pass integers
-      %  s = sprintf('%s%s%s.append(%d)\n', s, sp, in, x);
 
       if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway

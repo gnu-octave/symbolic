@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald and others
+%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
 %% Return the independent variables in a symfun.
 %%
-%% @seealso{symvar, findsym, findsymbols}
+%% The counterpart of @code{argname} is @code{formula}:
+%% @code{argname} for the independent
+%% variables and @code{formula} for the dependent expression.
+%%
+%% Examples:
+%% @example
+%% @group
+%% >> syms x y
+%% >> f(x, y) = x^2;
+%% >> argnames(f)
+%%    @result{} (sym) [x  y]  (1×2 matrix)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

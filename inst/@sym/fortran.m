@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,27 +17,55 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{s} =} fortran (@var{g})
-%% @deftypefnx {Function File} {@var{s} =} fortran (@var{g1}, ..., @var{gn})
-%% @deftypefnx {Function File} {} fortran (..., 'file', @var{filename})
-%% @deftypefnx {Function File} {[@var{F}, @var{H}] =} fortran (..., 'file', '')
+%% @deftypefnx {Function File} {@var{s} =} fortran (@var{g1}, @dots{}, @var{gn})
+%% @deftypefnx {Function File} {} fortran (@dots{}, 'file', @var{filename})
+%% @deftypefnx {Function File} {[@var{F}, @var{H}] =} fortran (@dots{}, 'file', '')
 %% Convert symbolic expression into C code.
 %%
-%% FIXME: make sure this works
+%% Example:
 %% @example
-%% syms x
-%% g = taylor(log(1+x),x,0,6)  % a polynomial
-%% g = horner(g)   % optimize w/ Horner's nested evaluation
-%% fortran(g)
+%% @group
+%% >> syms x
+%% >> g = taylor(log(1 + x), x, 0, 'order', 5);
+%% >> g = horner(g)
+%%    @result{} g = (sym)
+%%          ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
+%%        x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
+%%          ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
+%% >> fortran(g)
+%%    @result{} x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%% @end group
 %% @end example
 %%
 %% We can write to a file or obtain the contents directly:
 %% @example
-%% [f90, h] = fortran(f, 'file', '')
-%% f90.name   % .f90 filename
-%% f90.code   % .f90 file contents
-%% h.name     % similarly for .h file
-%% h.code
+%% @group
+%% >> [f90, h] = fortran(g, 'file', '', 'show_header', false);
+%% >> f90.name
+%%    @result{} file.f90
+%% >> h.name
+%%    @result{} file.h
+%% >> f90.code
+%%    @result{}
+%%      REAL*8 function myfun(x)
+%%      implicit none
+%%      REAL*8, intent(in) :: x
+%%
+%%      myfun = x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%%
+%%      end function
+%%
+%% >> h.code
+%%    @result{}
+%%      interface
+%%      REAL*8 function myfun(x)
+%%      implicit none
+%%      REAL*8, intent(in) :: x
+%%      end function
+%%      end interface
+%% @end group
 %% @end example
 %%
 %% FIXME: This doesn't write "optimized" code like Matlab's
@@ -46,7 +74,7 @@
 %% anyway.  Sympy has a "cse" module that will do it.  See:
 %% http://stackoverflow.com/questions/22665990/optimize-code-generated-by-sympy
 %%
-%% @seealso{ccode, latex, matlabFunction}
+%% @seealso{ccode, latex, function_handle}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

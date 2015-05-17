@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} sum (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} sum (@var{x}, @var{n})
 %% Sum of symbolic expressions.
@@ -25,20 +26,30 @@
 %% over the rows.  Can specify row or column sums using @var{n}.
 %% To perform symbolic summations, see @xref{symsum}.
 %%
-%% Example:
+%% Examples:
 %% @example
-%% syms x y z
-%% f = sum([x y z])
-%% @end example
-%% @example
-%% f = sum([x y; x z], 1)
-%% f = sum([x y; x z], 2)
-%% @end example
+%% @group
+%% >> syms x y z
+%% >> sum([x y z])
+%%    @result{} (sym) x + y + z
 %%
+%% >> sum([x y; x z], 1)
+%%    @result{} (sym) [2⋅x  y + z]  (1×2 matrix)
+%%
+%% >> sum([x y; x z], 2)
+%%    @result{} (sym 2×1 matrix)
+%%       ⎡x + y⎤
+%%       ⎢     ⎥
+%%       ⎣x + z⎦
+%%
+%% @end group
+%% @end example
 %% @seealso{prod, symsum}
 %% @end deftypefn
 
 function y = sum(x, n)
+
+  x = sym(x);
 
   if (isscalar(x))
     y = x;
@@ -53,6 +64,8 @@ function y = sum(x, n)
     else
       n = 1;
     end
+  else
+    n = double(n);
   end
 
   %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
@@ -67,7 +80,7 @@ function y = sum(x, n)
   elseif (n == 2)
     y = python_cmd (cmd, x);
   else
-    error('unsupported');
+    print_usage ();
   end
 end
 
@@ -85,3 +98,8 @@ end
 %!assert (isequal (sum(a), sum(b)))
 %!assert (isequal (sum(a,1), sum(b,1)))
 %!assert (isequal (sum(a,2), sum(b,2)))
+
+%!test
+%! % weird inputs
+%! a = sum('xx', sym(1));
+%! assert (isequal (a, sym('xx')))

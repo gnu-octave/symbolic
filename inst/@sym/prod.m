@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,26 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} prod (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} prod (@var{x}, @var{n})
 %% Product of symbolic expressions.
 %%
-%% Can specify row or column sums using @var{n}.
-%%
 %% Example:
 %% @example
-%% syms x y z
-%% f = prod([x y z])
+%% @group
+%% >> syms x y z
+%% >> prod([x y z])
+%%  @result{} ans = (sym) x⋅y⋅z
+%% @end group
 %% @end example
+%%
+%% Can specify row or column sums using @var{n}:
 %% @example
-%% f = prod([x y; x z], 1)
-%% f = prod([x y; x z], 2)
+%% @group
+%% >> f = prod([x y; x z], 1)
+%%  @result{} f = (sym 1×2 matrix)
+%%
+%%       ⎡ 2     ⎤
+%%       ⎣x   y⋅z⎦
+%%
+%% >> f = prod([x y; x z], 2)
+%%  @result{} f = (sym 2×1 matrix)
+%%
+%%       ⎡x⋅y⎤
+%%       ⎢   ⎥
+%%       ⎣x⋅z⎦
+%%
+%% @end group
 %% @end example
 %%
 %% @seealso{sum, symprod}
 %% @end deftypefn
 
 function y = prod(x, n)
+
+  x = sym(x);
 
   if (isscalar(x))
     y = x;
@@ -51,6 +70,8 @@ function y = prod(x, n)
     else
       n = 1;
     end
+  else
+    n = double(n);
   end
 
   %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
@@ -65,7 +86,7 @@ function y = prod(x, n)
   elseif (n == 2)
     y = python_cmd (cmd, x);
   else
-    error('unsupported');
+    print_usage ();
   end
 end
 
@@ -83,3 +104,8 @@ end
 %!assert (isequal (prod(a), prod(b)))
 %!assert (isequal (prod(a,1), prod(b,1)))
 %!assert (isequal (prod(a,2), prod(b,2)))
+
+%!test
+%! % weird inputs
+%! a = prod('xx', sym(1));
+%! assert (isequal (a, sym('xx')))

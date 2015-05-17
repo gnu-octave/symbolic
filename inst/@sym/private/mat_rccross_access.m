@@ -96,11 +96,16 @@ function z = mat_rccross_access(A, r, c)
 end
 
 
+%% Note: tests in @sym/private/ not executed
+% To run these in the test suite, you could move this mfile up to @sym.
+% However, note these are generally tested elsewhere indirectly.
+
 %!shared A,B
 %! B = [1 2 3 4; 5 6 7 9; 10 11 12 13];
 %! A = sym(B);
-%!assert(isequal(  mat_rccross_access(A,[1 3],[2 3]), B([1 3], [2 3])  ))
-%!assert(isequal(  mat_rccross_access(A,1,[2 3]), B(1,[2 3])  ))
-%!assert(isequal(  mat_rccross_access(A,[1 2],4), B([1 2],4)  ))
-%!assert(isequal(  mat_rccross_access(A,[2 1],[4 2]), B([2 1],[4 2])  ))
-%!assert(isequal(  mat_rccross_access(A,[],[]), B([],[])  ))
+
+%!assert (isequal (mat_rccross_access(A,[1 3],[2 3]), B([1 3], [2 3])  ))
+%!assert (isequal (mat_rccross_access(A,1,[2 3]), B(1,[2 3])  ))
+%!assert (isequal (mat_rccross_access(A,[1 2],4), B([1 2],4)  ))
+%!assert (isequal (mat_rccross_access(A,[2 1],[4 2]), B([2 1],[4 2])  ))
+%!assert (isequal (mat_rccross_access(A,[],[]), B([],[])  ))

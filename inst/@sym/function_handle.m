@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,41 +17,50 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} function_handle (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, ..., @var{fn})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (..., @var{param}, @var{value})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (..., 'vars', [@var{x} ... @var{z}])
-%% @deftypefnx {Function File} {...} function_handle (..., 'file', @var{name})
-%% @deftypefnx {Function File} {...} function_handle (..., 'outputs', [@var{o1} ... @var{on}])
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, @dots{}, @var{fn})
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, @var{param}, @var{value})
+%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, 'vars', [@var{x} @dots{} @var{z}])
+%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'file', @var{filename})
+%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'outputs', [@var{o1} @dots{} @var{on}])
 %% Convert symbolic expression into a standard function.
 %%
 %% This can make anonymous functions from symbolic expressions:
 %% @example
-%% syms x y
-%% f = x^2 + sin(y)
-%% h = function_handle(f)
-%% % output: h = @@(x,y) x.^2 + sin(y)
+%% @group
+%% >> syms x y
+%% >> f = x^2 + sin(y)
+%%    @result{} f = (sym)
+%%         2
+%%        x  + sin(y)
+%% >> h = function_handle(f)
+%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% @end group
 %% @end example
+%%
 %% The order and number of inputs can be specified:
 %% @example
-%% syms x y
-%% f = x^2 + sin(y)
-%% h = function_handle(f, 'vars', [z y x])
-%% % output: h = @@(z,y,x) x.^2 + sin(y)
+%% @group
+%% >> syms x y z
+%% >> h = function_handle(f, 'vars', [z y x])
+%%    @result{} h = @@(z, y, x) x .^ 2 + sin (y)
+%% @end group
 %% @end example
 %%
 %% For compatibility with the Symbolic Math Toolbox in Matlab, we
 %% provide a synonym: @xref{matlabFunction}
 %%
-%% OctSymPy can also generate a @code{.m} file from symbolic
-%% expression:
+%% OctSymPy can also generate an @code{.m} file from a symbolic
+%% expression by passing the keyword @code{file} with a string
+%% argument for @var{filename}.  A handle to the function in the
+%% file will be returned.
+%% Passing an empty @var{filename} creates an anonymous function:
 %% @example
-%% h = function_handle(f, 'file', 'myfcn')
-%% % creates a file called myfcn.m and returns a handle
-%% @end example
-%% Passing an empty filename creates an anonymous function:
-%% @example
-%% h = function_handle(f, 'vars', [z y x], 'file', '')
+%% @group
+%% >> h = function_handle(f, 'file', '')
+%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% @end group
 %% @end example
 %%
 %% FIXME: naming outputs with @var{PARAM} as
@@ -64,8 +73,7 @@
 %% 0.7.6.  On earlier versions, the workaround only works for
 %% very simple expressions such as polynomials and trig functions.
 %%
-%% @seealso{ccode, fortran, latex}
-%%
+%% @seealso{ccode, fortran, latex, matlabFunction}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -86,7 +94,7 @@ function f = function_handle(varargin)
            ['    out = codegen((fcnname,expr), "' param.lang ...
             '", filename, header=showhdr' ...
             ', argument_sequence=in_vars)'] ...
-            'except ValueError, e:' ...
+            'except ValueError as e:' ...
             '    return (False, str(e))' ...
             'return (True, out)' };
 
@@ -124,26 +132,32 @@ function f = function_handle(varargin)
       expr = varargin{i};
       cmd = { '(f,) = _ins' ...
               'try:' ...
-              '    s = octave_code(f)' ...
-              'except NameError, e:' ...
+              '    a, b, s = octave_code(f, human=False)' ...
+              'except NameError as e:' ...
               '    return (False, str(e))' ...
+              'if len(b) != 0:' ...
+              '    return (False, s)' ...
+              'if len(a) != 0:' ...
+              '    return (False, "expected symbols-to-declare to be empty")' ...
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
       %worked = false;
       if (worked)
         codestr = vectorize(codestr);
       else
-        assert(strcmp(codestr, 'global name ''octave_code'' is not defined'))
-        warning('OctSymPy:function_handle:nocodegen', ...
-                'function_handle: your SymPy has no octave codegen: partial workaround');
-
-        %% As of Aug 2014, origin/master SymPy has no octave_code()
-        % Instead, a crude workaround.  E.g., Abs, ceiling will fail.
-        codestr = expr.flat;
-        % Matlab: ** to ^ substition.  On Octave, vectorize does this
-        % automatically
-        codestr = strrep(codestr, '**', '^');
-        codestr = vectorize(codestr);
+        %% SymPy 0.7.5 has no octave_code command
+        % Use a crude workaround (e.g., Abs, ceiling will fail).
+        if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...
+            && strcmp(codestr, 'global name ''octave_code'' is not defined'))
+          warning('OctSymPy:function_handle:nocodegen', ...
+                  'function_handle: your SymPy has no octave codegen: partial workaround');
+          codestr = expr.flat;
+          % Matlab: ** to ^ substition.  On Octave, vectorize does this
+          codestr = strrep(codestr, '**', '^');
+          codestr = vectorize(codestr);
+        else
+          error('function_handle: python codegen failed: %s', codestr)
+        end
       end
       exprstr{i} = codestr;
     end

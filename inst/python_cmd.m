@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,20 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{a}, @var{b}, ...] =} python_cmd (@var{cmd}, @var{x}, @var{y}, ...)
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File}  {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run some Python command on some objects and return other objects.
 %%
 %% Here @var{cmd} is a string of Python code.
-%% Inputs @var{x}, @var{y}, ... can be a variety of objects
-%% (possible types listed below). Outputs @var{a}, @var{b}, ... are
+%% Inputs @var{x}, @var{y}, @dots{} can be a variety of objects
+%% (possible types listed below). Outputs @var{a}, @var{b}, @dots{} are
 %% converted from Python objects: not all types are possible, see
 %% below.
 %%
 %% Example:
 %% @example
-%% cmd = '(x,y) = _ins; return (x+y,x-y)';
-%% [a,b] = python_cmd (cmd, x, y);
-%% % now a == x + y and b == x - y
+%% @group
+%% >> x = 10; y = 2;
+%% >> cmd = '(x,y) = _ins; return (x+y,x-y)';
+%% >> [a, b] = python_cmd (cmd, x, y)
+%%    @result{}
+%%      a =  12
+%%      b =  8
+%% @end group
 %% @end example
 %%
 %% The inputs will be in a list called '_ins'.  The command should
@@ -38,63 +44,69 @@
 %% If you have just one return value, you probably want to append
 %% an extra comma.  Either of these approaches will work:
 %% @example
-%% cmd = '(x,y) = _ins; return (x+y,)'
-%% cmd = '(x,y) = _ins; return x+y,'
-%% a = python_cmd (cmd, x, y)
+%% @group
+%% >> cmd = '(x,y) = _ins; return (x+y,)';
+%% >> a = python_cmd (cmd, x, y)
+%%    @result{} a =  12
+%% >> cmd = '(x,y) = _ins; return x+y,';
+%% >> a = python_cmd (cmd, x, y)
+%%    @result{} a =  12
+%% @end group
 %% @end example
 %% (Python gurus will know why).
 %%
 %% Instead of @code{return}, you can append to the Python list
 %% @code{_outs}@:
 %% @example
-%% cmd = '(x,y) = _ins; _outs.append(x**y)'
-%% a = python_cmd (cmd, x, y)
+%% @group
+%% >> cmd = '(x,y) = _ins; _outs.append(x**y)';
+%% >> a = python_cmd (cmd, x, y)
+%%    @result{} a =  100
+%% @end group
 %% @end example
 %%
 %% You can also pass a cell-array of lines of code.  But be careful
 %% with whitespace: its Python!
-%% @example
-%% cmd = @{ '(x,) = _ins'
-%%         'if x.is_Matrix:'
-%%         '    return (x.T,)'
-%%         'else:'
-%%         '    return (x,)' @};
-%% @end example
+%% @verbatim
+%%      cmd = { '(x,) = _ins'
+%%              'if x.is_Matrix:'
+%%              '    return (x.T,)'
+%%              'else:'
+%%              '    return (x,)' };
+%% @end verbatim
 %% The cell array can be either a row or a column vector.
 %% Each of these strings probably should not have any newlines
 %% (other than escaped ones e.g., inside strings).  An exception
-%% might be python """ multiline strings """.  FIXME: test this.
+%% might be Python triple-quoted """ multiline strings """.
+%% FIXME: test this.
 %% It might be a good idea to avoid blank lines as they can cause
-%% problems with some of the ipc mechanisms.
-%%
-%% In older versions (OctSymPy v0.1.0 and older), you could use
-%% newlines and/or escaped newlines in the string to represent
-%% multiline input; this was fragile and made it hard to write
-%% python code with e.g., escaped chars in strings.  This form is
-%% deprecated but still available (for now) as python_cmd_string.
+%% problems with some of the IPC mechanisms.
 %%
 %% Possible input types:
-%%    sym objects;
-%%    strings (char);
-%%    scalar doubles.
+%% @itemize
+%% @item sym objects
+%% @item strings (char)
+%% @item scalar doubles
+%% @end itemize
 %% They can also be cell arrays of these items.  Multi-D cell
 %% arrays may not work properly.
 %%
 %% Possible output types:
-%%    SymPy objects (Matrix and Expr at least);
-%%    int;
-%%    float;
-%%    string;
-%%    unicode strings;
-%%    bool;
-%%    dict (converted to structs);
-%%    lists/tuples (converted to cell vectors).
-%%
+%% @itemize
+%% @item SymPy objects (Matrix and Expr at least)
+%% @item int
+%% @item float
+%% @item string
+%% @item unicode strings
+%% @item bool
+%% @item dict (converted to structs)
+%% @item lists/tuples (converted to cell vectors)
+%% @end itemize
 %% FIXME: add a py_config to change the header?  The python
 %% environment is defined in python_header.py.  Changing it is
 %% currently harder than it should be.
 %%
-%% Note: if you don't pass in any sym's, this shouldn't need SymPy.
+%% Note: if you don't pass in any syms, this shouldn't need SymPy.
 %% But it still imports it in that case.  If  you want to run this
 %% w/o having the SymPy package, you'd need to hack a bit.
 %%
@@ -137,10 +149,9 @@ function varargout = python_cmd(cmd, varargin)
     varargout{i} = A{i};
   end
 
-  % re-enable after python_cmd_string is gone?
-  %if nargout ~= M
-  %  warning('number of outputs don''t match, was this intentional?')
-  %end
+  if nargout ~= M
+    warning('number of outputs don''t match, was this intentional?')
+  end
 end
 
 

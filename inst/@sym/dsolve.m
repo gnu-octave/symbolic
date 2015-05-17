@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{sol} =} dsolve (@var{ode})
 %% @deftypefnx {Function File} {@var{sol} =} dsolve (@var{ode}, @var{ics})
 %% Solve ordinary differentual equations (ODEs) symbolically.
@@ -25,6 +26,10 @@
 %% problems and boundary-value problem.  Some systems can be
 %% solved, including initial-value problems involving linear systems
 %% of first order ODEs with constant coefficients.
+%%
+%% *WARNING*: As of SymPy 0.7.6 (May 2015), there are many problems
+%% with systems, even very simple ones.  Use these at your own risk,
+%% or even better: help us fix SymPy.
 %%
 %% FIXME: SMT supports strings like 'Dy + y = 0': we are unlikely
 %% to support this.
@@ -52,6 +57,9 @@ function [soln,classify] = dsolve(ode,varargin)
     disp('Classification of systems of ODEs is currently not supported')
     classify='';
   end
+
+  % FIXME: the initial/boundary conditions admit parameters
+  %        but only on their values (not at the evaluation point) 
 
   % FIXME: it is not currently supported a list of boundary/initial conditions
   if (isscalar(ode) && nargin>=2)
@@ -87,68 +95,17 @@ function [soln,classify] = dsolve(ode,varargin)
   elseif(~isscalar(ode) && nargin>=2)
 
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
-          '# Auxiliary function'
-          'def eqs2matrix(eqs, syms):'
-          '    s = sp.Matrix([si.lhs - si.rhs if isinstance(si, sp.Equality) else si for si in eqs])'
-          '    j = s.jacobian(syms)'
-          '    return (j, -sp.simplify(s - j*sp.Matrix(syms)))'
-          '# Identify dependent and independent variables'
-          'dependent_var = list(sp.ordered(reduce(set.union, [ode_i.atoms(sp.function.AppliedUndef) for ode_i in ode], set())))'
-          'independent_var = list(sp.ordered(reduce(set.union, [ode_i.free_symbols for ode_i in ode], set())))'
-          'if (sp.symbols("s")==independent_var):'
-          '    laplace_var = sp.symbols("x")'
-          'else:'
-          '    laplace_var = sp.symbols("s")'
-          '# matrix formulation of the linear system'
-          'diff_dependent_var=list()'
-          'for fun in dependent_var:'
-          '    diff_dependent_var.append(sp.diff(fun))'
-          '# ODE system: K*dX+M*X-B==0'
-          'K,rhs=eqs2matrix(ode, diff_dependent_var)'
-          'M,rhs=eqs2matrix(ode, dependent_var)'
-          'X=sp.Matrix(dependent_var)'
-          'dX=sp.Matrix(diff_dependent_var)'
-          'B=rhs+K*dX'
-          '# Transformed rhs B: Z=laplace(B)'
-          'Z=sp.laplace_transform(B, independent_var[0], laplace_var)'
-          'D=sp.Matrix(list(it[0] for it in list(Z)))'
-          '# First term of the homogeneous ODE'
-          'Y=sp.Matrix(sp.symbols("Y1:"+str(len(ode)+1)))'
-          '# Homogeneous general solution Y=laplace(X), then (K*s+M)Y==B-K*C'
-          'sol=sp.zeros(len(ode),1)'
-          'for i in range(0,len(ode)):'
-          '    C=sp.zeros(len(ode),1);C[i]=1'
-          '    sol_h=sp.solve((K*laplace_var+M)*Y+K*C,Y)'
-          '    Yh=sp.zeros(len(ode),1)'
-          '    for el in sol_h.items():'
-          '        for j in range(0,len(ode)): '
-          '            if Y[j]==el[0]:'
-          '                Yh[j]=el[1]'
-          '    sol=sol+sp.symbols("C"+str(i+1))*sp.inverse_laplace_transform(Yh, laplace_var, independent_var[0])'
-          '# Particular solution'
-          'sol_p=sp.solve((K*laplace_var+M)*Y-D,Y)'
-          'Yp=sp.zeros(len(ode),1)'
-          'for el in sol_p.items():'
-          '    for j in range(0,len(ode)): '
-          '        if Y[j]==el[0]:'
-          '            Yp[j]=el[1]'
-          'sol=sol+sp.inverse_laplace_transform(Yp, laplace_var, independent_var[0])'
-          '# Constant simplification'
-          'sol=sp.Subs(sol,sp.Heaviside(independent_var[0]),1).doit()'
-          'sol=sp.ode.constantsimp(sp.simplify(sol), set(sp.symbols("C1:"+str(len(ode)+1))))'
-          'sol=list(sp.Eq(dependent_var[i],sol[i]) for i in range(0,len(ode)))'
-          '# Application of the initial conditions'
-          'init_var=list(sp.ordered(reduce(set.union, [ics_i.atoms(sp.function.AppliedUndef) for ics_i in ics], set())))'
-          'init_values=sp.solve(ics,init_var).items()'
-          '# Impose boundary conditions'
+          'sol=sp.dsolve(ode)'
+          'x=list(ode[0].free_symbols)[0]'
           'ic_eqs=[]'
           'for solu in sol:'
           '    ic_eqs.append(solu)'
-          '    for val in init_values:'
-          '        ic_eqs[-1]=ic_eqs[-1].subs(independent_var[0],val[0].args[0]).subs(val[0],val[1])'
+          '    for ic in ics:'
+          '        funcarg=ic.lhs'
+          '        if isinstance(funcarg, sp.function.AppliedUndef):'
+          '            x0=funcarg.args[0]'
+          '            ic_eqs[-1]=ic_eqs[-1].subs(x,x0).subs(funcarg,ic.rhs)'
           'sol_C=sp.solve(ic_eqs)'
-          'if(type(sol_C)==list):'
-          '    sol_C=sol_C[0]'
           'sol_final=[]'
           'for y in sol:'
           '    sol_final.append(y.subs(sol_C))'
@@ -156,66 +113,9 @@ function [soln,classify] = dsolve(ode,varargin)
 
     soln = python_cmd (cmd, ode, varargin{:});
 
-  elseif(isscalar(ode) && nargin==1)
+  elseif(nargin==1)
 
     soln = python_cmd ('return sp.dsolve(*_ins),', ode);
-
-  elseif(~isscalar(ode) && nargin==1)
-
-  cmd = { 'ode=_ins[0]'
-          '# Auxiliary function'
-          'def eqs2matrix(eqs, syms):'
-          '    s = sp.Matrix([si.lhs - si.rhs if isinstance(si, sp.Equality) else si for si in eqs])'
-          '    j = s.jacobian(syms)'
-          '    return (j, -sp.simplify(s - j*sp.Matrix(syms)))'
-          '# Identify dependent and independent variables'
-          'dependent_var = list(sp.ordered(reduce(set.union, [ode_i.atoms(sp.function.AppliedUndef) for ode_i in ode], set())))'
-          'independent_var = list(sp.ordered(reduce(set.union, [ode_i.free_symbols for ode_i in ode], set())))'
-          'if (sp.symbols("s")==independent_var):'
-          '    laplace_var = sp.symbols("x")'
-          'else:'
-          '    laplace_var = sp.symbols("s")'
-          '# matrix formulation of the linear system'
-          'diff_dependent_var=list()'
-          'for fun in dependent_var:'
-          '    diff_dependent_var.append(sp.diff(fun))'
-          '# ODE system: K*dX+M*X-B==0'
-          'K,rhs=eqs2matrix(ode, diff_dependent_var)'
-          'M,rhs=eqs2matrix(ode, dependent_var)'
-          'X=sp.Matrix(dependent_var)'
-          'dX=sp.Matrix(diff_dependent_var)'
-          'B=rhs+K*dX'
-          '# Transformed rhs B: Z=laplace(B)'
-          'Z=sp.laplace_transform(B, independent_var[0], laplace_var)'
-          'D=sp.Matrix(list(it[0] for it in list(Z)))'
-          '# First term of the homogeneous ODE'
-          'Y=sp.Matrix(sp.symbols("Y1:"+str(len(ode)+1)))'
-          '# Homogeneous general solution Y=laplace(X), then (K*s+M)Y==B-K*C'
-          'sol=sp.zeros(len(ode),1)'
-          'for i in range(0,len(ode)):'
-          '    C=sp.zeros(len(ode),1);C[i]=1'
-          '    sol_h=sp.solve((K*laplace_var+M)*Y+K*C,Y)'
-          '    Yh=sp.zeros(len(ode),1)'
-          '    for el in sol_h.items():'
-          '        for j in range(0,len(ode)): '
-          '            if Y[j]==el[0]:'
-          '                Yh[j]=el[1]'
-          '    sol=sol+sp.symbols("C"+str(i+1))*sp.inverse_laplace_transform(Yh, laplace_var, independent_var[0])'
-          '# Particular solution'
-          'sol_p=sp.solve((K*laplace_var+M)*Y-D,Y)'
-          'Yp=sp.zeros(len(ode),1)'
-          'for el in sol_p.items():'
-          '    for j in range(0,len(ode)): '
-          '        if Y[j]==el[0]:'
-          '            Yp[j]=el[1]'
-          'sol=sol+sp.inverse_laplace_transform(Yp, laplace_var, independent_var[0])'
-          '# Constant simplification'
-          'sol=sp.Subs(sol,sp.Heaviside(independent_var[0]),1).doit()'
-          'sol=sp.ode.constantsimp(sp.simplify(sol), set(sp.symbols("C1:"+str(len(ode)+1))))'
-          'sol=list(sp.Eq(dependent_var[i],sol[i]) for i in range(0,len(ode)))'
-          'return sol,'};
-
-    soln = python_cmd (cmd, ode);
 
   end
 end
@@ -294,20 +194,37 @@ end
 %! assert (isequal (rhs(f), g))
 
 %!test
+%! % System of ODEs
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
+%! else
+%!   syms x(t) y(t) C1 C2
+%!   ode_1=diff(x(t),t) == 2*y(t);
+%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%!   sol_sodes=dsolve([ode_1,ode_2]);
+%!   g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
+%!   assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
+%! end
+
+%!test
+%! % System of ODEs (initial-value problem)
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
+%! else
+%!   syms x(t) y(t)
+%!   ode_1=diff(x(t),t) == 2*y(t);
+%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%!   sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
+%!   g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
+%!   assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
+%! end
+
+%!test
 %! syms y(x)
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 0, y(sym(pi)/4) == 1);
 %! g = sin(2*x);
 %! assert (isequal (rhs(f), g))
-
-%!test
-%! % Test with symbolic constants on initial conditions
-%! syms a b t x(t);
-%! e1 = diff(x,t) == x + 2*t + 2;
-%! S=dsolve(e1,x(a)==b);
-%! X=rhs(S{1});
-%! assert (isequal(simplify(diff(X) - (X + 2*t + 2)),0))
-%! assert (isequal(simplify(subs(X,t,a)),b))
 
 %!test
 %! % Nonlinear example
@@ -325,100 +242,17 @@ end
 %! soln = dsolve(e, y(0) == 1);
 %! assert (isequal (rhs(soln), g))
 
-%!test
-%! % System of ODEs (general solution, polynomial rhs)
+%!xtest
+%! % forcing, Issue #183
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
+%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
 %! else
-%!  syms t x(t) y(t);
-%!  e1 = diff(x,t) == x+4*y - t + 2;
-%!  e2 = diff(y,t) == x - 2*y + 5*t;
-%!  S = dsolve([e1, e2]);
-%!  X = rhs(S{1});  Y = rhs(S{2});  
-%!  assert (isequal(simplify(diff(X,t) - (X+4*Y - t + 2)),0) && isequal(simplify(diff(Y,t) - (X - 2*Y + 5*t)),0))
-%! end
-
-%!test
-%! % System of ODEs (general solution, trigonometric + constant rhs)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%!  syms t x(t) y(t);
-%!  e1 = diff(x,t) == x + 2*sin(t) + 2;
-%!  e2 = diff(y,t) == y;
-%!  S = dsolve([e1, e2]);
-%!  X = rhs(S{1});  Y = rhs(S{2});  
-%!  assert (isequal(simplify(diff(X,t) - (X + 2*sin(t) + 2)),0) && isequal(simplify(diff(Y,t) - Y),0))
-%! end
-
-%!test
-%! % System of ODEs (general solution)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%!  syms t x(t) y(t);
-%!  e1 = diff(x,t) == 3*t;
-%!  e2 = diff(y,t) == y;
-%!  S = dsolve([e1, e2]);
-%!  X = rhs(S{1});  Y = rhs(S{2});  
-%!  assert (isequal(simplify(diff(X,t) - 3*t),0) && isequal(simplify(diff(Y,t) - Y),0))
-%! end
-
-%!test
-%! % System of ODEs (general solution)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%! syms t x(t) y(t)
-%!  ode_1=diff(x(t),t) == 2*y(t);
-%!  ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!  sol_sodes=dsolve([ode_1,ode_2]);
-%!  X=rhs(sol_sodes{1});
-%!  Y=rhs(sol_sodes{2});
-%!  assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
-%! end
-
-%!test
-%! % System of ODEs (explicit initial conditions)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%!  syms t x(t) y(t)
-%!  ode_1=diff(x(t),t) == 2*y(t);
-%!  ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!  sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
-%!  X=rhs(sol_ivp{1});
-%!  Y=rhs(sol_ivp{2});
-%!  assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
-%!  assert (isequal(subs(X,t,0),1) && isequal(subs(Y,t,0),0))
-%! end
-
-%!test
-%! % System of ODEs (implicit initial conditions)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%!  syms t x(t) y(t)
-%!  ode_1=diff(x(t),t) == 2*y(t);
-%!  ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!  sol_ivp=dsolve([ode_1,ode_2],x(0)+y(0)==1,y(0)-x(0)==-1);
-%!  X=rhs(sol_ivp{1});
-%!  Y=rhs(sol_ivp{2});
-%!  assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
-%!  assert (isequal(subs(X,t,0),1) && isequal(subs(Y,t,0),0))
-%! end
-
-%!test
-%! % System of ODEs (implicit initial conditions with symbolic constants)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!  disp('skipping: Solution of ODE systems needs sympy >= 0.7.6')
-%! else
-%!  syms a b t x(t) y(t)
-%!  ode_1=diff(x(t),t) == 2*y(t);
-%!  ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!  sol_ivp=dsolve([ode_1,ode_2],x(a)+y(a)==b,y(a)-x(a)==-b);
-%!  X=rhs(sol_ivp{1});
-%!  Y=rhs(sol_ivp{2});
-%!  assert (isequal(diff(X,t) -2*Y,0) && isequal(diff(Y,t)-2*X+3*t,0))
-%!  assert (isequal(simplify(subs(X,t,a)),b) && isequal(simplify(subs(Y,t,a)),0))
+%!   syms x(t) y(t)
+%!   ode1 = diff(x) == x + sin(t) + 2;
+%!   ode2 = diff(y) == y - t - 3;
+%!   soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
+%!   X = rhs(soln{1});
+%!   Y = rhs(soln{2});
+%!   assert (isequal (diff(X) - (X + sin(t) + 2), 0))
+%!   assert (isequal (diff(Y) - (Y - t - 3), 0))
 %! end

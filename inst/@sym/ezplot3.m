@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,14 +18,14 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{h} =} ezplot3 (@var{f1}, @var{f2},@var{f3})
-%% @deftypefnx {Function File} {@var{h} =} ezplot3 (...)
+%% @deftypefnx {Function File} {@var{h} =} ezplot3 (@dots{})
 %% Simple 3D parametric plotting of symbolic expressions.
 %%
 %% See help for the (non-symbolic) @code{ezplot3}, which this
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
 %%
-%% @seealso{ezplot, ezsurf, ezmesh, matlabFunction}
+%% @seealso{ezplot, ezsurf, ezmesh, function_handle}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -65,7 +65,7 @@ function varargout = ezplot3(varargin)
             assert(logical(thissym == firstsym), ...
               'ezplot3: all functions must be in terms of the same variables');
           end
-          thisf = matlabFunction(varargin{i});
+          thisf = function_handle(varargin{i});
         end
 
         varargin{i} = thisf;
@@ -92,7 +92,7 @@ end
 %! f1 = cos(t);
 %! f2 = sin(t);
 %! f3 = t;
-%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot3(f1, f2, f3);
 %! warning(s)
 %! zz = get(h, 'zdata');
@@ -113,10 +113,9 @@ end
 %%! f1 = cos(t);
 %%! f2 = sin(t);
 %%! f3 = t;
-%%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %%! h = ezplot3(f1, f2, f3, [sym(0) sym(pi)], sym(42));
 %%! warning(s)
 %%! zz = get(h, 'zdata');
 %%! assert (length(zz) == 42)
 %%! assert (abs(zz(end) - pi) <= 4*eps)
-

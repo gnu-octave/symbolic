@@ -17,8 +17,17 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{z} =} xor (@var{x}, @var{y})
 %% Logical xor of symbolic arrays.
+%%
+%% Example:
+%% @example
+%% @group
+%% >> xor(sym(true), sym(true))
+%%  @result{} ans = (sym) False
+%% @end group
+%% @end example
 %%
 %% @seealso{and, or, not, eq, ne, logical, isAlways, isequal}
 %% @end deftypefn

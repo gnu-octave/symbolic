@@ -89,9 +89,12 @@ function z = mat_mask_asgn(A, I, B)
 end
 
 
+%% Note: tests in @sym/private/ not executed
+% To run these in the test suite, you could move this mfile up to @sym.
+% However, note these are generally tested elsewhere indirectly.
 
 %% 2D arrays
-%!shared a,b,I
+%!shared a, b, I
 %! b = [1:4]; b = [b; 3*b; 5*b];
 %! a = sym(b);
 %! I = rand(size(b)) > 0.5;
@@ -99,29 +102,10 @@ end
 %!test
 %! A = mat_mask_asgn(a,I, 2*b(I));
 %! B = b;  B(I) = 2*b(I);
-%! assert(isequal( A, B ))
-
-%!test  % scalar RHS
-%! A = mat_mask_asgn(a,I, 17);
-%! B = b;  B(I) = 17;
-%! assert(isequal( A, B ))
-
-%!warning <unusual>
-%! % strange non-vector (matrix) RHS ("rhs2"), should be warning
-%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
-%! rhs2 = reshape(2*b(I), 2, 3);  % strange bit
-%! A = a;
-%! A(I) = rhs2;
+%! assert (isequal (A, B))
 
 %!test
-%! % nonetheless, above strange case should give right answer
-%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
-%! rhs = 2*b(I);
-%! rhs2 = reshape(rhs, 2, 3);
-%! s = warning ('off', 'OctSymPy:subsagn:rhs_shape');
-%! A0 = a; A1 = a;
-%! A0(I) = rhs;
-%! A1(I) = rhs2;
-%! A2 = mat_mask_asgn(a, I, rhs2);
-%! warning (s)
-%! assert(isequal( A0, A1, A2 ))
+%! % scalar RHS
+%! A = mat_mask_asgn(a,I, 17);
+%! B = b;  B(I) = 17;
+%! assert (isequal (A, B))

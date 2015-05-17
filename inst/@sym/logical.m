@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{r} =} logical (@var{eq})
 %% Test if expression is "structurally" true.
 %%
@@ -24,15 +25,24 @@
 %%
 %% Example:
 %% @example
-%% logical(x*(1+y) == x*(y+1))    % true
-%% logical(x == y)    % false
+%% @group
+%% >> syms x y
+%% >> logical(x*(1+y) == x*(y+1))
+%%    @result{} 1
+%% >> logical(x == y)
+%%    @result{} 0
+%% @end group
 %% @end example
 %%
 %% Note this is different from @code{isAlways} which tries to
 %% determine mathematical truth:
 %% @example
-%% isAlways(x*(1+y) == x+x*y)    % true
-%% logical(x*(1+y) == x+x*y)   % false!
+%% @group
+%% >> isAlways(x*(1+y) == x+x*y)
+%%    @result{} 1
+%% >> logical(x*(1+y) == x+x*y)
+%%    @result{} 0
+%% @end group
 %% @end example
 %%
 %% @code{logical} treats objects according to:

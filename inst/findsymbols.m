@@ -17,12 +17,11 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.  Note the order is not the
-%% same as @code{symvar} and @code{findsym}: use one of those if
-%% Matlab Symbolic Math Toolbox compatibility is important.
+%% The list is sorted alphabetically.  @xref{symvar}, for details.
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
@@ -30,7 +29,24 @@
 %%
 %% @var{x} could be a sym, sym array, cell array, or struct.
 %%
+%% @example
+%% @group
+%% >> syms x y z
+%% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
+%% >> findsymbols (C)
+%%    @result{}
+%%      @{
+%%        (sym) x
+%%        (sym) y
+%%        (sym) z
+%%      @}
+%% @end group
+%% @end example
+%%
 %% Note E, I, pi, etc are not counted as symbols.
+%%
+%% Note only returns symbols actually appearing in the RHS of a
+%% @code{symfun}.
 %%
 %% @seealso{symvar, findsym}
 %% @end deftypefn
@@ -46,20 +62,19 @@ function L = findsymbols(obj, dosort)
 
   if isa(obj, 'sym')
     cmd = { 'x = _ins[0]'
-            '#s = x.free_symbols'   % in 0.7.5-git
-            'if not x.is_Matrix:'
-            '    s = x.free_symbols'
+            'if sympy.__version__ == "0.7.5":'   % deprecate with Issue #164
+            '    if not x.is_Matrix:'
+            '        s = x.free_symbols'
+            '    else:'
+            '        s = set()'
+            '        for i in x.values():'
+            '            s = s.union(i.free_symbols)'
             'else:'
-            '    s = set()'
-            '    for i in x.values():'
-            '        s = s.union(i.free_symbols)'
+            '    s = x.free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
     L = python_cmd (cmd, obj);
-    if isa(obj, 'symfun')
-      warning('FIXME: need to do anything special for symfun vars?')
-    end
 
 
   elseif iscell(obj)
@@ -135,15 +150,18 @@ end
 %! syms x f(y)
 %! a = f*x;
 %! b = f(y)*x;
-%! c(y) = x;
 %! assert (isequal (findsymbols(a), {x y}))
 %! assert (isequal (findsymbols(b), {x y}))
 
-%!xtest
-%! % FIXME: symfun, yes need to do sth special or doc, see smt in symvar
+%!test
+%! % findsymbols on symfun does not find the argnames (unless they
+%! % are on the RHS of course, this matches SMT 2014a).
 %! syms a x y
 %! f(x, y) = a;  % const symfun
-%! assert (isequal (findsymbols(f), {a x y}))
+%! assert (isequal (findsymbols(f), {a}))
+%! syms a x y
+%! f(x, y) = a*y;
+%! assert (isequal (findsymbols(f), {a y}))
 
 %!test
 %! % sorts lexigraphically, same as symvar *with single input*
@@ -152,3 +170,16 @@ end
 %! f = A*a*B*b*y*X*Y*x;
 %! assert (isequal (findsymbols(f), {A B X Y a b x y}))
 %! assert (isequal (symvar(f), [A B X Y a b x y]))
+
+%!test
+%! % symbols in matpow
+%! syms x y
+%! syms n
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=75)
+%!   disp('skipping known failure b/c SymPy <= 0.7.5')
+%! else
+%!   A = [sin(x) 2; y 1];
+%!   B = A^n;
+%!   L = findsymbols(B);
+%!   assert (isequal (L, {n x y}))
+%! end

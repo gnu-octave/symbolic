@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {} pretty (@var{x})
 %% @deftypefnx {Function File}  {@var{s} =} pretty (@var{x})
 %% Return/display ASCII-art/unicode representation of expression.
@@ -74,9 +75,9 @@ end
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))
 
 %!test
-%! % with unicode, probably fails on Matlab
+%! % force unicode
 %! syms x
-%! s1 = pretty(sin(x/2));
+%! s1 = pretty(sin(x/2), 'unicode');
 %! s2 = sprintf('     ⎛x⎞\n  sin⎜─⎟\n     ⎝2⎠');
 %! s3 = strrep(s2, sprintf('\n'), sprintf('\r\n'));
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))

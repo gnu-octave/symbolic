@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,22 +17,39 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{g} =} partfrac (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} partfrac (@var{f}, @var{x})
 %% Compute partial fraction decomposition of a rational function.
 %%
 %% Examples:
 %% @example
-%% syms x
-%% f = 2/(x + 4)/(x + 1)
-%% partfrac(f)
-%% partfrac(f, x)
+%% >> syms x
+%% >> f = 2/(x + 4)/(x + 1)
+%%  @result{} f = (sym)
+%%               2
+%%        ───────────────
+%%        (x + 1)⋅(x + 4)
+%% >> partfrac(f)
+%%  @result{} ans = (sym)
+%%            2           2
+%%      - ───────── + ─────────
+%%        3⋅(x + 4)   3⋅(x + 1)
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% partfrac(y/(x + y)/(x + 1), x)
-%% partfrac(y/(x + y)/(x + 1), y)    
+%% >> syms x y
+%% >> partfrac(y/(x + y)/(x + 1), x)
+%%  @result{} ans = (sym)
+%%                y                 y
+%%       - ─────────────── + ───────────────
+%%         (x + y)⋅(y - 1)   (x + 1)⋅(y - 1)
+%% >> partfrac(y/(x + y)/(x + 1), y)
+%%  @result{} ans = (sym)
+%%                x            1
+%%       - ─────────────── + ─────
+%%         (x + 1)⋅(x + y)   x + 1
 %% @end example
 %%
 %% @seealso{factor}
@@ -41,22 +58,19 @@
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, fractions
 
-function z = partfrac(f, varargin)
+function z = partfrac(f, x)
 
-  %% some special cases for SMT compat.
-  if (nargin == 1)  
+  % some special cases for SMT compat.
+  if (nargin == 1)
     x = symvar(f, 1);
     if (isempty(x))
-      x = sym('x');  
+      x = sym('x');
     end
-    z = partfrac(f, x);
-    return
   end
 
   cmd = 'return sp.polys.partfrac.apart(_ins[0],_ins[1]),';
 
-  x = sym(varargin);
-  z = python_cmd (cmd, sym(f), x);
+  z = python_cmd (cmd, sym(f), sym(x));
 
 end
 

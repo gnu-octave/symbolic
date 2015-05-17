@@ -17,25 +17,42 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{sol} =} solve (@var{eq, var})
 %% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, eq2})
-%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, ..., eqn, v1, ..., vm})
-%% @deftypefnx {Function File} {[@var{s1, ..., sn}] =} solve (@var{eq1, ..., eqm, v1, ..., vn})
+%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
+%% @deftypefnx {Function File} {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
 %% Symbolic solutions of equations and systems.
 %%
 %% Examples
 %% @example
-%% solve(x == 2*x + 6, x)    % -6
-%% solve(x^2 + 6 == 5*x, x)  % [2; 3]
+%% @group
+%% >> syms x
+%% >> solve(x == 2*x + 6, x)
+%%    @result{} ans = (sym) -6
+%% >> solve(x^2 + 6 == 5*x, x)
+%%    @result{} ans = (sym 2×1 matrix)
+%%        ⎡2⎤
+%%        ⎢ ⎥
+%%        ⎣3⎦
+%% @end group
 %% @end example
 %%
 %% You can specify a variable or even an expression to solve for:
 %% @example
-%% syms x y
-%% e = 10*x == 20*y
-%% d = solve(e, x)    % gives 2*y
-%% d = solve(e, y)    % gives x/2
-%% d = solve(e, 2*x)  % gives 4*y
+%% @group
+%% >> syms x y
+%% >> e = 10*x == 20*y;
+%% >> d = solve(e, x)    % gives 2*y
+%%    @result{} d = (sym) 2⋅y
+%% >> d = solve(e, y)    % gives x/2
+%%    @result{} d = (sym)
+%%        x
+%%        ─
+%%        2
+%% >> d = solve(e, 2*x)  % gives 4*y
+%%    @result{} d = (sym) 4⋅y
+%% @end group
 %% @end example
 %%
 %% In general, the output will be a list of dictionaries.  Each
@@ -43,12 +60,22 @@
 %% up that solutions are keys of the dictionary (fieldnames of the
 %% struct).
 %% @example
-%% syms x y
-%% d = solve(x^2 == 4, x + y == 1)
-%% d@{1@}.x   % the first solution
-%% d@{1@}.y
-%% d@{2@}.x   % the second solution
-%% d@{2@}.y
+%% @group
+%% >> syms x y
+%% >> d = solve(x^2 == 4, x + y == 1);
+%%
+%% >> % the first solution
+%% >> d@{1@}.x
+%%    @result{} (sym) -2
+%% >> d@{1@}.y
+%%    @result{} (sym) 3
+%%
+%% >> % the second solution
+%% >> d@{2@}.x
+%%    @result{} (sym) 2
+%% >> d@{2@}.y
+%%    @result{} (sym) -1
+%% @end group
 %% @end example
 %%
 %% But there are various special cases for the output (single
@@ -57,9 +84,19 @@
 %% FIXME: provide a 'raw_output' argument or something to
 %% always give the general output.
 %%
-%% Alternatively
+%% Alternatively:
 %% @example
-%% [X, Y, Z] = solve(eq1, eq2, x, y, z)
+%% @group
+%% >> [X, Y] = solve(x^2 == 4, x + y == 1, x, y)
+%%    @result{} X = (sym 2×1 matrix)
+%%        ⎡-2⎤
+%%        ⎢  ⎥
+%%        ⎣2 ⎦
+%%      Y = (sym 2×1 matrix)
+%%        ⎡3 ⎤
+%%        ⎢  ⎥
+%%        ⎣-1⎦
+%% @end group
 %% @end example
 %%
 %% @seealso{dsolve}

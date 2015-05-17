@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,9 +30,21 @@
 
 function [n, m] = size(x, dim)
 
+  % Note: symbolic sized matrices should return double, not sym/string.
+
   n = x.size;
+
+  % FIXME: for now, we artificially force symbolic sized objects
+  % (where one or more dimension is recorded as NaN) to be 1x1.
+  % This effects MatrixSymbol and MatrixExpr.  See Issue #159.
+  if (any(isnan(n)))
+    n = [1 1];
+  end
+  % Alternatively:
+  %n(isnan(n)) = 1;
+
   if (nargin == 2) && (nargout == 2)
-    error('size: invalid call')
+    print_usage ();
   elseif (nargout == 2)
     m = n(2);
     n = n(1);
@@ -79,3 +91,28 @@ end
 %! assert (n == 3)
 %! m = size(a, 2);
 %! assert (m == 1)
+
+%!xtest
+%! % symbolic-size matrices
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! d = size(A);
+%! assert (~isa(d, 'sym'))
+%! assert (isnumeric(d))
+%! assert (isequaln (d, [NaN NaN]))
+
+%!xtest
+%! % half-symbolic-size matrices
+%! % FIXME: will fail until size stop lying by saying 1x1
+%! syms n integer
+%! A = sym('A', [n 3]);
+%! assert (isequaln (size(A), [NaN 3]))
+%! A = sym('A', [4 n]);
+%! assert (isequaln (size(A), [4 NaN]))
+
+%!xtest
+%! % half-symbolic-size empty matrices
+%! % FIXME: will fail until size stop lying by saying 1x1
+%! syms n integer
+%! A = sym('A', [n 0]);
+%! assert (isequaln (size(A), [NaN 0]))

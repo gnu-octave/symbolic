@@ -29,6 +29,11 @@
 
 function s = priv_disp_name(f, input_name)
 
+  if (isempty(input_name))
+    s = input_name;
+    return
+  end
+
   vars = f.vars;
   if length(vars) == 0
     varstr = '';
@@ -55,3 +60,7 @@ end
 %! g(y, x) = x + y;
 %! s = priv_disp_name(g, 'g');
 %! assert (strcmp (s, 'g(y, x)'))
+
+%!test
+%! syms f(x)
+%! assert (isempty (priv_disp_name(f, '')))

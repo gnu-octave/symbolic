@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{z} =} and (@var{x}, @var{y})
 %% Logical and of symbolic arrays.
 %%
@@ -72,4 +73,3 @@ end
 %! syms x
 %! e = (x == 3) & (x^2 == 9);
 %! assert (isequal (subs(e, x, [-3 0 3]), [f f t]))
-

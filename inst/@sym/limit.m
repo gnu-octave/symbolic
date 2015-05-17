@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a}, @var{dir})
 %% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a})
 %% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{a})
@@ -28,11 +29,17 @@
 %%
 %% Examples:
 %% @example
-%% syms x
-%% L = limit(sin(x)/x, x, 0)
-%% L = limit(1/x, x, sym(inf))
-%% L = limit(1/x, x, 0, 'left')
-%% L = limit(1/x, x, 0, 'right')
+%% @group
+%% >> syms x
+%% >> L = limit(sin(x)/x, x, 0)
+%%    @result{} L = (sym) 1
+%% >> L = limit(1/x, x, sym(inf))
+%%    @result{} L = (sym) 0
+%% >> L = limit(1/x, x, 0, 'left')
+%%    @result{} L = (sym) -∞
+%% >> L = limit(1/x, x, 0, 'right')
+%%    @result{} L = (sym) ∞
+%% @end group
 %% @end example
 %%
 %% If @var{x} is omitted, @code{symvar} is used to determine the
@@ -53,6 +60,10 @@
 
 function L = limit(f, x, a, dir)
 
+  if (nargin > 4 || nargin < 1)
+    print_usage ();
+  end
+
   if (nargin < 4)
     dir= 'right';
   end
@@ -71,7 +82,7 @@ function L = limit(f, x, a, dir)
     case {'right' '+'}
       pdir = '+';
     otherwise
-      error('invalid')
+      print_usage ();
   end
 
   cmd = { '(f, x, a, pdir) = _ins'

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald and others
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
 %% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
 %% Find symbols in symfun and return them as a symbolic vector.
@@ -27,39 +28,72 @@
 %%
 %% Example:
 %% @example
-%% syms a x f(t, s)
-%% symvar (f, 1);  % t
-%% symvar (f, 2);  % [t s]
+%% @group
+%% >> syms a x 'f(t, s)'
+%% >> symvar (f, 1)
+%%    @result{} (sym) t
+%% >> symvar (f, 2)
+%%    @result{} (sym) [t s]  (1×2 matrix)
+%% @end group
 %% @end example
-%% Note preference for the variables of @code{f}:
+%% Note preference for the arguments of the symfun:
 %% @example
-%% h = a*f + x
-%% symvar (f, 1);  % t
-%% symvar (f, 2);  % [t s]
-%% symvar (f, 3);  % [t s x]
-%% symvar (f, 4);  % [t s x a]
-%% @end example
-%% But:
-%% @example
-%% symvar (f);  % [x a s t]
+%% @group
+%% >> h = f*a + x
+%%    @result{} h(t, s) = (symfun) a⋅f(t, s) + x
+%% >> symvar (h, 1)
+%%    @result{} (sym) t
+%% >> symvar (h, 2)
+%%    @result{} (sym) [t s]  (1×2 matrix)
+%% >> symvar (h, 3)
+%%    @result{} (sym) [t s x]  (1×3 matrix)
+%% >> symvar (h, 4)
+%%    @result{} (sym) [t s x a]  (1×4 matrix)
+%% @end group
 %% @end example
 %%
-%% Compatibility with other implementations: the output should
-%% match the equivalent command in the Matlab Symbolic Toolbox
-%% version 2014a.  FIXME: without @var{n} not same:
+%% On the other hand, if @var{n} is omitted, the results are
+%% sorted as explained elsewhere (@pxref{@@sym/symvar}).
+%% For example:
 %% @example
-%% syms x y s t
-%% f(t, s) = 1  % constant symfun
-%% symvar (f, 1);  % t
-%% symvar (f, 2);  % [t s]
-%% symvar (f);     % [t s], SMT gives [] 
+%% @group
+%% >> symvar (f, 2)
+%%    @result{} (sym) [t s]  (1×2 matrix)
+%% >> symvar (f)
+%%    @result{} (sym) [s t]  (1×2 matrix)
+%% >> symvar (h)
+%%    @result{} (sym) [a s t x]  (1×4 matrix)
+%% @end group
+%% @end example
+%%
+%% @strong{Compatibility with other implementations}: the output generally
+%% matches the equivalent command in the Matlab Symbolic Toolbox
+%% (tested with version 2014a).  For example:
+%% @example
+%% @group
+%% >> syms x y s t
+%% >> f(t, s) = 1
+%%    @result{} f(t, s) = (symfun) 1
+%% >> symvar (f, 1)
+%%    @result{} (sym) t
+%% >> symvar (f, 2)
+%%    @result{} (sym) [t s]  (1×2 matrix)
+%% @end group
+%% @end example
+%% However, when the symfun formula does not depend on the
+%% arguments, the results are not the same:
+%% @example
+%% @group
+%% >> symvar (f)  % SMT would give []
+%%    @result{} (sym) [s t]  (1×2 matrix)
+%% @end group
 %% @end example
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
 %% in what order they appear.
 %%
-%% @seealso{findsym, findsymbols}
+%% @seealso{findsym, findsymbols, argnames, formula}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

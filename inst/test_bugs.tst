@@ -162,7 +162,7 @@
 %!xtest
 %! % FIXME: symbolic matrix size, Issue #159
 %! syms n m integer
-%! A = sym('A', [n m])
+%! A = sym('A', [n m]);
 %! assert (isequal (size (A), [n m]))
 
 %!xtest

@@ -93,6 +93,9 @@ function Z = mat_mask_access(A, I)
 end
 
 
+%% Note: tests in @sym/private/ not executed
+% To run these in the test suite, you could move this mfile up to @sym.
+% However, note these are generally tested elsewhere indirectly.
 
 %!test
 %! % 2D arrays
@@ -119,8 +122,6 @@ end
 %! Ic = rand(size(c)) > 0.5;
 %! temp = mat_mask_access(ar, Ic);
 %! temp = mat_mask_access(ac, Ir);
-%! temp = ar(Ic);
-%! temp = ac(Ir);
 
 %!test
 %! % 1D arrays
@@ -130,9 +131,9 @@ end
 %! ac = sym(c);
 %! Ir = rand(size(r)) > 0.5;
 %! Ic = rand(size(c)) > 0.5;
-%! assert(isequal( mat_mask_access(ar,Ir), r(Ir) ))
-%! assert(isequal( mat_mask_access(ac,Ic), c(Ic) ))
+%! assert (isequal (mat_mask_access(ar,Ir), r(Ir)))
+%! assert (isequal (mat_mask_access(ac,Ic), c(Ic)))
 %! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
-%! assert(isequal( mat_mask_access(ar,Ic), r(Ic) ))
-%! assert(isequal( mat_mask_access(ac,Ir), c(Ir) ))
+%! assert (isequal (mat_mask_access(ar,Ic), r(Ic)))
+%! assert (isequal (mat_mask_access(ac,Ir), c(Ir)))
 %! warning (s)

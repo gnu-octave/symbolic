@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,18 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
 %% Laplace transform.
 %%
-%% Examples:
+%% Example:
 %% @example
-%% syms t s
-%% f = t^2
-%% laplace(f)
-%% laplace(f, t)
-%% laplace(f, t, s)
+%% @group
+%% >> syms t
+%% >> f = t^2;
+%% >> laplace(f)
+%%    @result{} (sym)
+%%        2
+%%        ──
+%%         3
+%%        s
+%% @end group
 %% @end example
 %%
 %% @seealso{ilaplace}
@@ -84,9 +90,9 @@ function F = laplace(varargin)
     F = python_cmd(cmd,f,t,s);
 
   else
-    error('Wrong number of input arguments') 
- 
-  endif
+    print_usage ();
+
+  end
 
 end
 

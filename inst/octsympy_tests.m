@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
-%% Run the tests, log results, and return true if passing.
+%% Run the OctSymPy tests, log results, and return true if passing.
 %%
 %% I threw this together by modifying "__run_test_suite__.m" which
 %% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
@@ -75,7 +75,7 @@ function anyfail = octsympy_tests ()
 
     puts ("\nSummary:\n\n");
 
-    nfail = dn - dp;
+    nfail = dn - dp - dxf;
     printf ("  PASS    %6d\n", dp);
     printf ("  FAIL    %6d\n", nfail);
     if (dxf > 0)
@@ -133,12 +133,12 @@ endfunction
 function print_pass_fail (p, n, xf, sk)
   if ((n + sk) > 0)
     printf (" PASS %3d/%-3d", p, n);
-    nfail = n - p;
+    nfail = n - p - xf;
     if (nfail > 0)
       printf (" \033[1;40;31m%s %d\033[m", "FAIL", nfail);
     endif
     if (sk > 0)
-      printf (" \033[1;40;33m%s %d", "SKIP", sk);
+      printf (" \033[1;40;33m%s %d\033[m", "SKIP", sk);
     endif
     if (xf > 0)
       printf (" \033[1;40;33m%s %d\033[m", "XFAIL", xf);
@@ -218,6 +218,9 @@ function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
 	tmp = f;
         print_test_file_name (tmp);
         [p, n, xf, sk] = test (f, "quiet", fid);
+        if (compare_versions (OCTAVE_VERSION (), '3.9', '<'))
+          p -= xf;
+        end
         print_pass_fail (p, n, xf, sk);
         dp += p;
         dn += n;

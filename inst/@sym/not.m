@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{y} =} not (@var{x})
 %% Logical not of a symbolic array.
 %%
@@ -66,7 +67,7 @@ function r = not(x)
     '    else:'
     '        r = scalar_case(p)'
     '    flag = True'
-    'except TypeError, e:'
+    'except TypeError as e:'
     '    r = str(e)'
     '    flag = False'
     'return (flag, r)' };

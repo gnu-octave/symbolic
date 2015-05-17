@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,32 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{b} =} bernoulli (@var{n})
 %% @deftypefnx {Function File} {@var{p} =} bernoulli (@var{n}, @var{x})
-%% Return Bernouilli numbers and polynomials.
+%% Return Bernoulli numbers and polynomials.
 %%
+%% Examples:
+%% @example
+%% @group
+%% >> bernoulli(6)
+%%    @result{} (sym) 1/42
+%% >> bernoulli(7)
+%%    @result{} (sym) 0
+%% @end group
+%% @end example
 %%
+%% Polynomial example:
+%% @example
+%% @group
+%% >> syms x
+%% >> bernoulli(2, x)
+%%    @result{} (sym)
+%%        2       1
+%%       x  - x + ─
+%%                6
+%% @end group
+%% @end example
 %% @seealso{euler}
 %% @end deftypefn
 

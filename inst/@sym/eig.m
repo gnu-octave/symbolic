@@ -42,7 +42,7 @@ function [V, D] = eig(A, B)
             '    A = sp.Matrix([A])'
             'd = A.eigenvals()'
             'L = []'
-            'for (e, m) in d.iteritems():'
+            'for (e, m) in d.items():'
             '    L.extend([e]*m)'
             'L = sympy.Matrix(L)'
             'return L,' };

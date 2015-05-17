@@ -28,9 +28,13 @@
 function r = isempty(x)
 
   d = size(x);
+
   % Octave can have n x 0 and 0 x m empty arrays
-  %r = isequal(d, [0 0]);
-  r = prod(d) == 0;
+  % logical in case one has symbolic size
+  % r = logical(prod(d) == 0);
+
+  % safer, in case we use NaN later
+  r = any(logical(d == 0));
 
 end
 
@@ -50,3 +54,27 @@ end
 %!test se(1) = 10;
 %!test assert ( isa (se, 'sym'))
 %!test assert ( isequal (se, 10))
+
+%!shared
+
+%!test
+%! % empty matrices
+%! A = sym('A', [3 0]);
+%! assert (isempty (A))
+%! A = sym(ones(3,0));
+%! assert (isempty (A))
+
+%!test
+%! % non-empty symbolic-size matrices
+%! syms n integer
+%! A = sym('A', [3 n]);
+%! assert (~isempty (A))
+
+%!xtest
+%! % empty symbolic-size matrices
+%! % FIXME: will fail until size stop lying by saying 1x1
+%! syms n integer
+%! A = sym('A', [0 n]);
+%! assert (isempty (A))
+%! A = sym('A', [n 0]);
+%! assert (isempty (A))
