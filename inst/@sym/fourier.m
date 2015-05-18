@@ -92,11 +92,14 @@ end
 %!test
 %! % basic
 %! syms r x u w
+%! fourier(exp(-abs(x)))
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(w))) == 2/(t^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
+%! fourier(exp(-x^2))
 %! Pi=sym('pi'); assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
+%! fourier(x*exp(-abs(x)))
 %! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
 
 %!xtest
