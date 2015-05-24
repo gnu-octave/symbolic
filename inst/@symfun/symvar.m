@@ -33,7 +33,7 @@
 %% >> symvar (f, 1)
 %%    @result{} (sym) t
 %% >> symvar (f, 2)
-%%    @result{} (sym) [t s]  (1×2 matrix)
+%%    @result{} (sym) [t  s]  (1×2 matrix)
 %% @end group
 %% @end example
 %% Note preference for the arguments of the symfun:
@@ -44,11 +44,11 @@
 %% >> symvar (h, 1)
 %%    @result{} (sym) t
 %% >> symvar (h, 2)
-%%    @result{} (sym) [t s]  (1×2 matrix)
+%%    @result{} (sym) [t  s]  (1×2 matrix)
 %% >> symvar (h, 3)
-%%    @result{} (sym) [t s x]  (1×3 matrix)
+%%    @result{} (sym) [t  s  x]  (1×3 matrix)
 %% >> symvar (h, 4)
-%%    @result{} (sym) [t s x a]  (1×4 matrix)
+%%    @result{} (sym) [t  s  x  a]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -58,11 +58,11 @@
 %% @example
 %% @group
 %% >> symvar (f, 2)
-%%    @result{} (sym) [t s]  (1×2 matrix)
+%%    @result{} (sym) [t  s]  (1×2 matrix)
 %% >> symvar (f)
-%%    @result{} (sym) [s t]  (1×2 matrix)
+%%    @result{} (sym) [s  t]  (1×2 matrix)
 %% >> symvar (h)
-%%    @result{} (sym) [a s t x]  (1×4 matrix)
+%%    @result{} (sym) [a  s  t  x]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -77,7 +77,7 @@
 %% >> symvar (f, 1)
 %%    @result{} (sym) t
 %% >> symvar (f, 2)
-%%    @result{} (sym) [t s]  (1×2 matrix)
+%%    @result{} (sym) [t  s]  (1×2 matrix)
 %% @end group
 %% @end example
 %% However, when the symfun formula does not depend on the
@@ -85,7 +85,7 @@
 %% @example
 %% @group
 %% >> symvar (f)  % SMT would give []
-%%    @result{} (sym) [s t]  (1×2 matrix)
+%%    @result{} (sym) [s  t]  (1×2 matrix)
 %% @end group
 %% @end example
 %%

@@ -30,9 +30,9 @@
 %% @group
 %% syms x y
 %% sym2poly(2*x^2 + 3*x - pi, x)
-%%    @result{} (sym) [2 3 -π]  (1×3 matrix)
+%%    @result{} (sym) [2  3  -π]  (1×3 matrix)
 %% sym2poly(x^2 + y*x, x)
-%%    @result{} (sym)  [1 y 0]  (1×3 matrix)
+%%    @result{} (sym) [1  y  0]  (1×3 matrix)
 %% @end group
 %% @end example
 %%

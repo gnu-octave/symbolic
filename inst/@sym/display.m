@@ -31,7 +31,7 @@
 %%    @result{} x = (sym) x
 %%
 %% >> display([x 2 pi])
-%%    @result{} (sym) [x  2  π] (1×3 matrix)
+%%    @result{} (sym) [x  2  π]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
@@ -55,7 +55,7 @@
 %%
 %% @group
 %% >> A = sym(ones(0, 3))
-%%    @result{} A = (sym) [] (empty 0×3 matrix)
+%%    @result{} A = (sym) []  (empty 0×3 matrix)
 %%
 %% >> B = 3*A^n
 %%    @result{} B = (sym empty 0×3 matrix expression)
