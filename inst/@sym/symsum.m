@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,10 +43,10 @@
 %%           6⋅m
 %%           ____
 %%           ╲
-%%            ╲     2⋅n
-%%             ╲   ℯ
-%%             ╱  ──────
-%%            ╱   sin(n)
+%%            ╲      2⋅n
+%%             ╲    ℯ
+%%             ╱   ──────
+%%            ╱    sin(n)
 %%           ╱
 %%           ‾‾‾‾
 %%         n = 2⋅m

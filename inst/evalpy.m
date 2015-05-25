@@ -25,11 +25,11 @@
 %% Examples:
 %% @example
 %% @group
-%% >> x = 4;
+%% >> x = -4;
 %% >> evalpy ('y = 2*x', x)
-%%    @result{} y =  8
+%%    @result{} y = -8
 %% >> y
-%%    @result{} y =  8
+%%    @result{} y = -8
 %% @end group
 %% @end example
 %%
@@ -37,11 +37,11 @@
 %% @example
 %% @group
 %% >> syms x
-%% >> evalpy ('y = 3*x; x = 1.5; z = x**2', x)
+%% >> evalpy ('y = 3*x; x = -1.5; z = x**2', x)
 %%    @result{}
-%%      x = 1.5000
+%%      x = -1.5000
 %%      y = (sym) 3⋅x
-%%      z = 2.2500
+%%      z =  2.2500
 %% @end group
 %% @end example
 %%
