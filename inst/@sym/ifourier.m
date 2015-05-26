@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2015 Colin B. Macdonald, Alexander Misel
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,31 +17,65 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{f} =} ifourier (@var{FF}, @var{k}, @var{x})
-%% Symbolic inverse Fourier transform.
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{f} =} ifourier (@var{FF}, @var{w}, @var{x})
+%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
+%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
+%% Symbolic Fourier transform.
 %%
-%% FIXME: doc, examples
+%% FIXME: doc
 %%
-%% @seealso{ilaplace}
+%% Examples:
+%% @example
+%% syms x w
+%% F = 2*sym(pi)*dirac(x);
+%% ifourier(F)
+%% @result{} ans = (sym) 1.00000000000000
+%% ifourier(F, w)
+%% @result{} ans = (sym) 1.00000000000000
+%% ifourier(F, x, w)
+%% @result{} ans = (sym) 1.00000000000000
+%% @end example
+%%
+%% @seealso{fourier,laplace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function f = ifourier(F, k, x)
+function f = ifourier(varargin)
 
-  if (nargin < 3)
-    syms k
-    warning('todo: check SMT for 2nd argument behavoir');
-  end
+  syms F w x;
+  if (nargin == 1)
+    F=varargin{1};
+    w=symvar(F,1);
 
-  cmd = { 'd = sp.inverse_fourier_transform(*_ins)'
-          'return d,' };
+  elseif (nargin == 2)
+    F=varargin{1};
+    w=symvar(F,1);
+    x=varargin{2};
 
-  f = python_cmd (cmd, sym(F), sym(k), sym(x));
+  elseif (nargin == 3)
+    F=varargin{1};
+    w=varargin{2}; 
+    x=varargin{3};
+
+  else
+    error('Wrong number of input arguments') 
+ 
+  endif
+
+  cmd = { 'from sympy.integrals.transforms import _fourier_transform'
+          "F = _fourier_transform(*(_ins+[0.5/S.Pi,1,'Inverse Fourier']))"
+          'return F,'};
+  f = python_cmd(cmd,F,w,x);
 
 end
 
 
-%! % tests in fourier.m
-%!assert(true)
+%!test
+%! syms x k
+%! f = exp(-x^2);
+%! F = fourier(f,x,k);
+%! g = ifourier(F,k,x);
+%! assert(isequal(f,g))

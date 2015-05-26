@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2015 Colin B. Macdonald, Alexander Misel
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,28 +17,76 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{w})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{w})
 %% Symbolic Fourier transform.
 %%
-%% FIXME: doc, examples
+%% FIXME: doc
 %%
-%% @seealso{laplace}
+%% Examples:
+%% @example
+%% syms x s
+%% f = exp(-2*abs(x));
+%% fourier(f)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  w  + 4
+%%
+%% fourier(f, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
+%% fourier(f, x, s)
+%% @result{} ans = (sym)
+%%
+%%    4   
+%%  ──────
+%%   2    
+%%  s  + 4
+%%
+%% @end example
+%%
+%% @seealso{ifourier,laplace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function F = fourier(f, x, k)
+function F = fourier(varargin)
 
-  if (nargin < 3)
-    syms k
-    warning('todo: check SMT for 2nd argument behavoir');
-  end
+  syms f x w;
+  if (nargin == 1)
+    f=varargin{1};
+    x=symvar(f,1);
 
-  cmd = { 'd = sp.fourier_transform(*_ins)'
-          'return d,' };
+  elseif (nargin == 2)
+    f=varargin{1};
+    x=symvar(f,1);
+    w=varargin{2};
 
-  F = python_cmd (cmd, sym(f), sym(x), sym(k));
+  elseif (nargin == 3)
+    f=varargin{1};
+    x=varargin{2}; 
+    w=varargin{3};
+
+  else
+    error('Wrong number of input arguments') 
+ 
+  endif
+
+  cmd = { 'from sympy.integrals.transforms import _fourier_transform'
+          "F = _fourier_transform(*(_ins+[1,-1,'Fourier']))"
+          'return F,'};
+  F = python_cmd(cmd,f,x,w);
 
 end
 
