@@ -20,7 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
 %% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{t})
+%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{s})
 %% Laplace transform.
 %%
 %% Example:
@@ -62,32 +62,33 @@ function F = laplace(varargin)
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd,f,t);
+    F = python_cmd(cmd, f, t);
 
   elseif (nargin == 2)
     f=varargin{1};
-    t=varargin{2}; 
-    cmd = { 'f=_ins[0]; s=sp.Symbol("s"); t=_ins[1]'
+    s=varargin{2}; 
+    t=symvar(f,1);
+    cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd,f,t);
+    F = python_cmd(cmd, f, t, s);
 
   elseif (nargin == 3)
     f=varargin{1};
     t=varargin{2}; 
     s=varargin{3};
-    cmd = { 'f=_ins[0]; s=_ins[2]; t=_ins[1]'
+    cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd,f,t,s);
+    F = python_cmd(cmd, f, t, s);
 
   else
     print_usage ();
@@ -101,9 +102,9 @@ end
 %! % basic
 %! syms t s u w
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
-%! assert(logical( laplace(exp(2*u),u) == 1/(s-2) ))
-%! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
 %! assert(logical( laplace(exp(2*s)) == 1/(t-2) ))
+%! assert(logical( laplace(exp(2*u),w) == 1/(w-2) ))
+%! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
 %! assert(logical( laplace(cos(3*t)) == s/(s^2+9) ))
 %! assert(logical( laplace(t^3) == 6/s^4 ))
 
