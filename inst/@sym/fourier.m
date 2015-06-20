@@ -26,14 +26,14 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
+%% >> syms t
 %% >> f = exp(-abs(t));
 %% >> fourier(f)
 %%    @result{} (sym)
-%%     2   
-%%   ──────
-%%    2    
-%%   w  + 1  
+%%        2
+%%      ──────
+%%       2
+%%      w  + 1
 %% @end group
 %% @end example
 %%

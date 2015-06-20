@@ -27,13 +27,12 @@
 %% @example
 %% @group
 %% >> syms k
-%% >> F = 1/k^2;
+%% >> F = pi*exp(-k^2/4);
 %% >> ifourier(F)
 %%    @result{} (sym)
-%%        2
-%%        ──
-%%         3
-%%        s
+%%            2
+%%          -x
+%%      √π⋅ℯ
 %% @end group
 %% @end example
 %%
