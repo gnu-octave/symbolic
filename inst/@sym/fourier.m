@@ -63,7 +63,7 @@ function F = fourier(varargin)
 
   elseif (nargin == 2)
     f=varargin{1};
-    k=varargin{2}; 
+    k=varargin{2};
     x=symvar(f,1);
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
@@ -73,7 +73,7 @@ function F = fourier(varargin)
 
   elseif (nargin == 3)
     f=varargin{1};
-    x=varargin{2}; 
+    x=varargin{2};
     k=varargin{3};
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'

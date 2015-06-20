@@ -62,7 +62,7 @@ function f = ifourier(varargin)
 
   elseif (nargin == 2)
     F=varargin{1};
-    x=varargin{2}; 
+    x=varargin{2};
     k=symvar(F,1);
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
             'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
@@ -72,7 +72,7 @@ function f = ifourier(varargin)
 
   elseif (nargin == 3)
     F=varargin{1};
-    k=varargin{2}; 
+    k=varargin{2};
     x=varargin{3};
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
             'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
