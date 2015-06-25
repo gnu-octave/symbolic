@@ -50,13 +50,13 @@ function F = fourier(varargin)
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
   % If the physical variable of f is equal to "w",
-  % "t" is the frequency domain variable (analogously to SMT)
+  % "v" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
     f=varargin{1};
     x=symvar(f,1);
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
-            '    k=sp.Symbol("t")'
+            '    k=sp.Symbol("v")'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
 
@@ -94,7 +94,7 @@ end
 %! % matlab SMT compatibiliy for arguments
 %! syms r t x u w
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
-%! assert(logical( fourier(exp(-abs(w))) == 2/(t^2 + 1) ))
+%! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
 
