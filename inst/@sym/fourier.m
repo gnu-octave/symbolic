@@ -92,7 +92,7 @@ end
 
 %!test
 %! % matlab SMT compatibiliy for arguments
-%! syms r t x u w
+%! syms r x u w v
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
