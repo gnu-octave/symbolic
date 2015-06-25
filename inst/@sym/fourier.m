@@ -27,8 +27,8 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms t
-%% >> f = exp(-abs(t));
+%% >> syms x
+%% >> f = exp(-abs(x));
 %% >> fourier(f)
 %%    @result{} (sym)
 %%        2
