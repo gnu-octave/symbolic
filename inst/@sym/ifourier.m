@@ -53,8 +53,8 @@ function f = ifourier(varargin)
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
-  % If the physical variable of f is equal to "s",
-  % "t" is the frequency domain variable (analogously to SMT)
+  % If the frequency variable determined to be "x", then
+  % use "t" as the spatial domain variable (analogously to SMT)
   if (nargin == 1)
     F=varargin{1};
     k=symvar(F,1);
