@@ -74,7 +74,7 @@ function f = ilaplace(varargin)
   elseif (nargin == 2)
     F=varargin{1};
     t=varargin{2};
-    s=symvar(F,1);
+    s=symvar(F, 1);  % note SMT does something different, prefers s
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 

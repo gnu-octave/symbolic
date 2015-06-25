@@ -68,7 +68,7 @@ function F = laplace(varargin)
   elseif (nargin == 2)
     f=varargin{1};
     s=varargin{2};
-    t=symvar(f,1);
+    t=symvar(f, 1);  % note SMT does something different, prefers t
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
@@ -100,12 +100,24 @@ end
 
 
 %!test
-%! % basic
-%! syms t s u w
+%! % matlab SMT compat
+%! syms t s u w z
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
 %! assert(logical( laplace(exp(2*s)) == 1/(t-2) ))
 %! assert(logical( laplace(exp(2*u),w) == 1/(w-2) ))
 %! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
+
+%!test
+%! syms x s t z
+%! % matlab SMT prefers t over x (WTF not symvar like we do?)
+%! assert (isequal (laplace(x*exp(t), z), exp(t)/z^2))
+%! % as usual, you can just specify:
+%! assert (isequal (laplace(x*exp(t), t, z), x/(z - 1)))  % SMT result
+%! assert (isequal (laplace(x*exp(t), x, z), exp(t)/z^2))
+
+%!test
+%! % basic
+%! syms t s u w
 %! assert(logical( laplace(cos(3*t)) == s/(s^2+9) ))
 %! assert(logical( laplace(t^3) == 6/s^4 ))
 
