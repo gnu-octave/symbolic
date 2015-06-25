@@ -124,6 +124,12 @@ end
 
 
 %!test
+%! % basic
+%! syms t s u w
+%! assert(logical( laplace(cos(3*t)) == s/(s^2+9) ))
+%! assert(logical( laplace(t^3) == 6/s^4 ))
+
+%!test
 %! % matlab SMT compat
 %! syms t s u w z
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
@@ -138,12 +144,6 @@ end
 %! % as usual, you can just specify:
 %! assert (isequal (laplace(x*exp(t), t, z), x/(z - 1)))  % SMT result
 %! assert (isequal (laplace(x*exp(t), x, z), exp(t)/z^2))
-
-%!test
-%! % basic
-%! syms t s u w
-%! assert(logical( laplace(cos(3*t)) == s/(s^2+9) ))
-%! assert(logical( laplace(t^3) == 6/s^4 ))
 
 %!xtest
 %! % Differential operator to algebraic
