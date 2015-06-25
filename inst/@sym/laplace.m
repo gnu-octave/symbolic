@@ -38,6 +38,30 @@
 %% @end group
 %% @end example
 %%
+%% By default the ouput is a function of @code{s} (or @code{z} if the Laplace
+%% transform happens to be with respect to @code{s}).  This can be overriden
+%% by specifying @var{s}.  For example:
+%% @example
+%% @group
+%% >> syms t s z
+%% >> laplace(exp(t))
+%%    @result{} (sym)
+%%        1
+%%      ─────
+%%      s - 1
+%% >> laplace(exp(s))
+%%    @result{} (sym)
+%%        1
+%%      ─────
+%%      z - 1
+%% >> laplace(exp(t), z)
+%%    @result{} (sym)
+%%        1
+%%      ─────
+%%      z - 1
+%% @end group
+%% @end example
+%%
 %% @seealso{ilaplace}
 %% @end deftypefn
 
@@ -50,13 +74,13 @@ function F = laplace(varargin)
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
   % If the physical variable of f is equal to "s",
-  % "t" is the frequency domain variable (analogously to SMT)
+  % "z" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
     f=varargin{1};
     t=symvar(f,1);
     cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
-            '    s=sp.Symbol("t")'
+            '    s=sp.Symbol("z")'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
             '    return F,'
@@ -103,7 +127,7 @@ end
 %! % matlab SMT compat
 %! syms t s u w z
 %! assert(logical( laplace(exp(2*t)) == 1/(s-2) ))
-%! assert(logical( laplace(exp(2*s)) == 1/(t-2) ))
+%! assert(logical( laplace(exp(2*s)) == 1/(z-2) ))
 %! assert(logical( laplace(exp(2*u),w) == 1/(w-2) ))
 %! assert(logical( laplace(exp(2*u),u,w) == 1/(w-2) ))
 
