@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -66,7 +67,7 @@ function F = laplace(varargin)
 
   elseif (nargin == 2)
     f=varargin{1};
-    s=varargin{2}; 
+    s=varargin{2};
     t=symvar(f,1);
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
@@ -79,7 +80,7 @@ function F = laplace(varargin)
 
   elseif (nargin == 3)
     f=varargin{1};
-    t=varargin{2}; 
+    t=varargin{2};
     s=varargin{3};
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'

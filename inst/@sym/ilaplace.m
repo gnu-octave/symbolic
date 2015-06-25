@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
