@@ -36,7 +36,7 @@
 %%      √π⋅ℯ
 %% @end group
 %% @group
-%% >> F = 2*sym(pi)*dirac(x);
+%% >> F = 2*sym(pi)*dirac(k);
 %% >> ifourier(F)
 %%    @result{} ans = (sym) 1
 %% @end group
