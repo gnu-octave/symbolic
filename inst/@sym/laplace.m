@@ -76,8 +76,11 @@ function F = laplace(varargin)
   % If the physical variable of f is equal to "s",
   % "z" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
-    f=varargin{1};
-    t=symvar(f,1);
+    f = sym(varargin{1});
+    t = symvar(f, 1);
+    if (isempty(t))
+      t = sym('t');
+    end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
             '    s=sp.Symbol("z")'
@@ -90,9 +93,12 @@ function F = laplace(varargin)
     F = python_cmd(cmd, f, t);
 
   elseif (nargin == 2)
-    f=varargin{1};
-    s=varargin{2};
-    t=symvar(f, 1);  % note SMT does something different, prefers t
+    f = sym(varargin{1});
+    s = sym(varargin{2});
+    t = symvar(f, 1);  % note SMT does something different, prefers t
+    if (isempty(t))
+      t = sym('t');
+    end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
@@ -103,9 +109,9 @@ function F = laplace(varargin)
     F = python_cmd(cmd, f, t, s);
 
   elseif (nargin == 3)
-    f=varargin{1};
-    t=varargin{2};
-    s=varargin{3};
+    f = sym(varargin{1});
+    t = sym(varargin{2});
+    s = sym(varargin{3});
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
@@ -144,6 +150,12 @@ end
 %! % as usual, you can just specify:
 %! assert (isequal (laplace(x*exp(t), t, z), x/(z - 1)))  % SMT result
 %! assert (isequal (laplace(x*exp(t), x, z), exp(t)/z^2))
+
+%!test
+%! % constant, issue #250
+%! syms s
+%! f = laplace(2, s);
+%! assert (isequal (f, 2/s))
 
 %!xtest
 %! % Differential operator to algebraic

@@ -62,8 +62,11 @@ function f = ilaplace(varargin)
   % If the Laplace variable in the frequency domain is equal to "t",
   % "x" will be the physical variable (analogously to SMT)
   if (nargin == 1)
-    F=varargin{1};
-    s=symvar(F,1);
+    F = sym(varargin{1});
+    s = symvar(F, 1);
+    if (isempty(s))
+      s = sym('s');
+    end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
             'if t==s:'
             '    t=sp.Symbol("x")'
@@ -72,18 +75,21 @@ function f = ilaplace(varargin)
     f = python_cmd(cmd,F,s);
 
   elseif (nargin == 2)
-    F=varargin{1};
-    t=varargin{2};
-    s=symvar(F, 1);  % note SMT does something different, prefers s
+    F = sym(varargin{1});
+    t = sym(varargin{2});
+    s = symvar(F, 1);  % note SMT does something different, prefers s
+    if (isempty(s))
+      s = sym('s');
+    end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s,t);
 
   elseif (nargin == 3)
-    F=varargin{1};
-    s=varargin{2};
-    t=varargin{3};
+    F = sym(varargin{1});
+    s = sym(varargin{2});
+    t = sym(varargin{3});
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 

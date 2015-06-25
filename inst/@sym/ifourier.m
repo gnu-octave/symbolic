@@ -56,8 +56,11 @@ function f = ifourier(varargin)
   % If the frequency variable determined to be "x", then
   % use "t" as the spatial domain variable (analogously to SMT)
   if (nargin == 1)
-    F=varargin{1};
-    k=symvar(F,1);
+    F = sym(varargin{1});
+    k = symvar(F, 1);
+    if (isempty(k))
+      k = sym('k');
+    end
     cmd = { 'F=_ins[0]; k=_ins[1]; x=sp.Symbol("x")'
             'if x==k:'
             '    x=sp.Symbol("t")'
@@ -67,9 +70,12 @@ function f = ifourier(varargin)
     f = python_cmd(cmd, F, k);
 
   elseif (nargin == 2)
-    F=varargin{1};
-    x=varargin{2};
-    k=symvar(F, 1);  % note SMT does something different, prefers w
+    F = sym(varargin{1});
+    x = sym(varargin{2});
+    k = symvar(F, 1);  % note SMT does something different, prefers w
+    if (isempty(k))
+      k = sym('k');
+    end
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
             'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
             'return f,'};
@@ -77,9 +83,9 @@ function f = ifourier(varargin)
     f = python_cmd(cmd, F, k, x);
 
   elseif (nargin == 3)
-    F=varargin{1};
-    k=varargin{2};
-    x=varargin{3};
+    F = sym(varargin{1});
+    k = sym(varargin{2});
+    x = sym(varargin{3});
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
             'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
             'return f,'};

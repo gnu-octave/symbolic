@@ -52,8 +52,11 @@ function F = fourier(varargin)
   % If the physical variable of f is equal to "w",
   % "v" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
-    f=varargin{1};
-    x=symvar(f,1);
+    f = sym(varargin{1});
+    x = symvar(f, 1);
+    if (isempty(x))
+      x = sym('x');
+    end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
             '    k=sp.Symbol("v")'
@@ -63,9 +66,12 @@ function F = fourier(varargin)
     F = python_cmd(cmd, f, x);
 
   elseif (nargin == 2)
-    f=varargin{1};
-    k=varargin{2};
-    x=symvar(f,1);
+    f = sym(varargin{1});
+    k = sym(varargin{2});
+    x = symvar(f, 1);
+    if (isempty(x))
+      x = sym('x');  % FIXME: should be dummy variable in case k was x
+    end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
@@ -73,9 +79,9 @@ function F = fourier(varargin)
     F = python_cmd(cmd, f, x, k);
 
   elseif (nargin == 3)
-    f=varargin{1};
-    x=varargin{2};
-    k=varargin{3};
+    f = sym(varargin{1});
+    x = sym(varargin{2});
+    k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
