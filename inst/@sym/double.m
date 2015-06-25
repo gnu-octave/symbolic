@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -36,9 +36,9 @@
 %% floating point:
 %% @example
 %% @group
-%% >> z = sym(4i) + 3;
+%% >> z = sym(4i) - 3;
 %% >> double (z)
-%%    @result{} ans = 3 + 4i
+%%    @result{} ans = -3 + 4i
 %% @end group
 %% @end example
 %%

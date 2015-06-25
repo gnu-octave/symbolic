@@ -35,7 +35,8 @@
 %%         2
 %%        x  + sin(y)
 %% >> h = function_handle(f)
-%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%%    @result{} h =
+%%      @@(x, y) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
@@ -44,7 +45,8 @@
 %% @group
 %% >> syms x y z
 %% >> h = function_handle(f, 'vars', [z y x])
-%%    @result{} h = @@(z, y, x) x .^ 2 + sin (y)
+%%    @result{} h =
+%%      @@(z, y, x) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
@@ -59,7 +61,8 @@
 %% @example
 %% @group
 %% >> h = function_handle(f, 'file', '')
-%%    @result{} h = @@(x, y) x .^ 2 + sin (y)
+%%    @result{} h =
+%%      @@(x, y) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
