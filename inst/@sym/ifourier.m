@@ -95,13 +95,18 @@ end
 
 
 %!test
-%! % basic
+%! % matlab SMT compat
 %! syms t r u x w
 %! Pi=sym('pi');
 %! assert(logical( ifourier(exp(-abs(w))) == 1/(Pi*(x^2 + 1)) ))
 %! assert(logical( ifourier(exp(-abs(x))) == 1/(Pi*(t^2 + 1)) ))
 %! assert(logical( ifourier(exp(-abs(r)),u) == 1/(Pi*(u^2 + 1)) ))
 %! assert(logical( ifourier(exp(-abs(r)),r,u) == 1/(Pi*(u^2 + 1)) ))
+
+%!test
+%! % basic
+%! syms x w
+%! Pi=sym('pi');
 %! assert(logical( ifourier(exp(-w^2/4)) == 1/(sqrt(Pi)*exp(x^2)) ))
 %! assert(logical( ifourier(sqrt(Pi)/exp(w^2/4)) == exp(-x^2) ))
 
