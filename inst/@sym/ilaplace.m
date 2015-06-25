@@ -58,7 +58,7 @@ function f = ilaplace(varargin)
 
   elseif (nargin == 2)
     F=varargin{1};
-    t=varargin{2}; 
+    t=varargin{2};
     s=symvar(F,1);
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
@@ -85,9 +85,13 @@ end
 %!test
 %! % basic
 %! syms t s r u x
-%! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(1/t^2) == x ))
 %! assert(logical( ilaplace(1/r^2,u) == u ))
 %! assert(logical( ilaplace(1/r^2,r,u) == u ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
 %! assert(logical( ilaplace(6/s^4) == t^3 ))
+
+%!test
+%! % SMT compact
+%! syms t s x
+%! assert(logical( ilaplace(1/s^2) == t ))
+%! assert(logical( ilaplace(1/t^2) == x ))
