@@ -34,6 +34,21 @@
 %% @end group
 %% @end example
 %%
+%% By default the ouput is a function of @code{t} (or @code{x} if the
+%% inverse transform happens to be with respect to @code{t}).  This can
+%% be overriden by specifying @var{t}.  For example:
+%% @example
+%% @group
+%% >> syms s t x
+%% >> ilaplace(1/s^2)
+%%    @result{} (sym) t
+%% >> ilaplace(1/t^2)
+%%    @result{} (sym) x
+%% >> ilaplace(1/s^2, x)
+%%    @result{} (sym) x
+%% @end group
+%% @end example
+%%
 %% @seealso{laplace}
 %% @end deftypefn
 
