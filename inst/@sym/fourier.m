@@ -111,6 +111,12 @@ end
 %! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
 
 %!xtest
+%! % Issue #251, upstream failure?  TODO: upstream issue?
+%! syms x w
+%! f = fourier(sym(2), x, w);
+%! assert (isequal (f, 4*sym(pi)*dirac(w)))
+
+%!xtest
 %! % Differential operator to algebraic
 %! % SymPy cannot evaluate? (Issue #170)
 %! syms x w f(x)
