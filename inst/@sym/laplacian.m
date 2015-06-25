@@ -17,9 +17,18 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{G} =} laplacian (@var{f})
 %% @deftypefnx {Function File} {@var{G} =} laplacian (@var{f}, @var{x})
 %% Symbolic laplacian of symbolic expression.
+%%
+%% @example
+%% @group
+%% >> syms x y
+%% >> laplacian(x^3 + 5*y^2)
+%%    @result{} (sym) 6⋅x + 10
+%% @end group
+%% @end example
 %%
 %% @var{x} can be a scalar, vector or cell list.  If omitted,
 %% it is determined using @code{symvar}.

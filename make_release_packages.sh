@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=2.1.1.dev
+VER=2.2.2-dev
 # for release
-#VER=2.1.1
+#VER=2.2.2
 #TAG=v${VER}
 
 #----------------------------------------------------------------

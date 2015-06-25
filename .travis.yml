@@ -26,7 +26,7 @@ script:
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --eval "addpath('../doctest-for-matlab'); r = octsympy_doctests; exit(r)";
+        octave --path ../doctest-for-matlab/inst --eval "r = octsympy_doctests; exit(~r)";
     fi
   - popd
 

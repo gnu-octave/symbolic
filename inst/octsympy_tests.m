@@ -218,6 +218,9 @@ function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
 	tmp = f;
         print_test_file_name (tmp);
         [p, n, xf, sk] = test (f, "quiet", fid);
+        if (compare_versions (OCTAVE_VERSION (), '3.9', '<'))
+          p -= xf;
+        end
         print_pass_fail (p, n, xf, sk);
         dp += p;
         dn += n;

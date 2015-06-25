@@ -33,7 +33,7 @@ function B = permute(A, perm)
   elseif  (isequal(perm, [2 1]))
     B = A.';
   else
-    error('permute: invalid input');
+    print_usage ();
   end
 
 end

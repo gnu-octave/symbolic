@@ -17,11 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{r} =} isAlways (@var{t})
 %% Test if expression is mathematically true.
 %%
 %% For inputs of type logical (true/false) this is just the
 %% logical itself.  See sym/isAlways for why we need this function.
+%%
+%% Examples:
+%% @example
+%% @group
+%% >> isAlways(true)
+%%    @result{} ans = 1
+%% >> isAlways(false)
+%%    @result{} ans = 0
+%% @end group
+%% @end example
 %%
 %% @seealso{sym/isAlways}
 %% @end deftypefn

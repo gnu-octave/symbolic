@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {} syms @var{x}
 %% @deftypefnx {Function File} {} syms @var{x} @var{y} @dots{}
 %% @deftypefnx {Function File} {} syms @var{f(x)}
@@ -27,26 +28,26 @@
 %%
 %% This is a convenience function.  For example:
 %% @example
-%% syms x y z
+%% >> syms x y z
 %% @end example
 %% instead of:
 %% @example
-%% x = sym('x');
-%% y = sym('y');
-%% z = sym('z');
+%% >> x = sym('x');
+%% >> y = sym('y');
+%% >> z = sym('z');
 %% @end example
 %%
 %% The last arguments can provide one or more assumptions (type or
-%% restriction) on the variable (@xref{sym}, for details.)
+%% restriction) on the variable (@pxref{sym}).
 %% @example
-%% syms x y z positive
-%% syms n positive even
+%% >> syms x y z positive
+%% >> syms n positive even
 %% @end example
 %%
 %% Symfuns represent abstract or concrete functions.  Abstract
 %% symfuns can be created with @code{syms}:
 %% @example
-%% syms f(x)
+%% >> syms f(x)
 %% @end example
 %% If @code{x} does not exist in the callers workspace, it
 %% is created as a @strong{side effect} in that workspace.

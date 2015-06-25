@@ -13,7 +13,7 @@ Checklist
 
   * Update sympref.m:
 
-      - update version number (remove ".dev", check if bump needed).
+      - update version number (remove "-dev", check if bump needed).
 
       - Make sure snippet defaults to false.
 
@@ -32,8 +32,10 @@ Checklist
 
       - make_windows_package.sh, use "day-to-day testing" mode.
 
-  * Test regenerating the html documentation.  As of 2015-03, you need
-    hg tip generate_html pkg for the utf-8 to work.
+  * Test regenerating the html documentation.  Needs version >= 0.1.7.
+      - pkg load generate_html
+      - options = get_html_options ("octave-forge");
+      - generate_package_html ("symbolic", "html", options)
 
   * If packages seem ok, then tag the repo with:
 
@@ -58,13 +60,15 @@ Checklist
 AFTER release
 =============
 
-  * Bump version to the next anticipated version and append ".dev" in
+  * Bump version to the next anticipated version and append "-dev" in
     in sympref.m.  See
     [PEP 440](https://www.python.org/dev/peps/pep-0440).
 
-  * Update the version in src/configure.ac: .dev seems ok there.
+  * Update the version in src/configure.ac: -dev seems ok there.
 
-  * Leave old version in DESCRIPTION (".dev" not supported here).  We
+  * Optionally, update the make_*releases* scripts.
+
+  * Leave old version in DESCRIPTION ("-dev" not supported here).  We
     will bump it at the next release.  FIXME: this is unfortunate.
 
   * Snippets could default to true in sympref.m

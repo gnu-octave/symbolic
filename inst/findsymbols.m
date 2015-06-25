@@ -17,16 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.  See @code{symvar}.
+%% The list is sorted alphabetically.  @xref{symvar}, for details.
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
 %% in what order they appear.
 %%
 %% @var{x} could be a sym, sym array, cell array, or struct.
+%%
+%% @example
+%% @group
+%% >> syms x y z
+%% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
+%% >> findsymbols (C)
+%%    @result{}
+%%      @{
+%%        (sym) x
+%%        (sym) y
+%%        (sym) z
+%%      @}
+%% @end group
+%% @end example
 %%
 %% Note E, I, pi, etc are not counted as symbols.
 %%

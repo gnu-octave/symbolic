@@ -17,17 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{y} =} simplify (@var{x})
 %% Simplify an expression.
 %%
 %% Example:
 %% @example
-%% syms x
-%% p = x^2 + x + 1
-%% q = horner (p)
-%% d = p - q          % probably not expressions "0"
-%% isAlways(p == q)   % yes (of course)
-%% simplify(p - q)    % this is zero
+%% @group
+%% >> syms x
+%% >> p = x^2 + x + 1
+%%    @result{} p = (sym)
+%%       2
+%%      x  + x + 1
+%% >> q = horner (p)
+%%    @result{} q = (sym) x⋅(x + 1) + 1
+%% >> d = p - q
+%%    @result{} d = (sym)
+%%       2
+%%      x  - x⋅(x + 1) + x
+%%
+%% >> isAlways(p == q)
+%%    @result{} 1
+%%
+%% >> simplify(p - q)
+%%    @result{} (sym) 0
+%% @end group
 %% @end example
 %%
 %% FIXME: SymPy has other operations to manipulate expressions,

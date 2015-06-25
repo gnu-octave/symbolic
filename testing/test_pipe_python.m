@@ -10,7 +10,7 @@ disp('** calling popen2')
 
 %[in, out, pid] = popen2 ('python', '-i')
 %[in, out, pid] = popen2 ('n:\win32\py.exe', '-i')
-%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\mydbpy.bat')
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\winwrapy.bat')
 %[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe', 'cat')
 %[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-i -c "a=42;print(a);print(a,a)"')
 
@@ -22,7 +22,7 @@ disp('** calling popen2')
 %[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-V')
 
 % does not work:
-%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe cat')  
+%[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\busybox.exe cat')
 
 % should work but does not:
 %[in, out, pid] = popen2 ('n:\win32\octsympy.git\testing\py.exe', '-i')

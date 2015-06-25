@@ -17,12 +17,13 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {} eulergamma ()
 %% Return Euler-Mascheroni constant.
 %%
 %% @example
 %% vpa (eulergamma ())
-%% @result {} (sym) 0.57721566490153286060651209008240
+%% @result{} (sym) 0.57721566490153286060651209008240
 %% @end example
 %%
 %% @seealso{catalan}

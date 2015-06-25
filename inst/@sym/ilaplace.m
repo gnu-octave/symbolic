@@ -20,16 +20,17 @@
 %% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
 %% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{s})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{t})
 %% Inverse Laplace transform.
 %%
-%% Examples:
+%% Example:
 %% @example
-%% syms t s
-%% F = 1/s^2
-%% ilaplace(F)
-%% ilaplace(F, s)
-%% ilaplace(F, s, t)
+%% @group
+%% >> syms s
+%% >> F = 1/s^2;
+%% >> ilaplace(F)
+%%    @result{} (sym) t
+%% @end group
 %% @end example
 %%
 %% @seealso{laplace}
@@ -41,7 +42,6 @@
 function f = ilaplace(varargin)
 
   % FIXME: it only works for scalar functions
-  % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
   % If the Laplace variable in the frequency domain is equal to "t",
   % "x" will be the physical variable (analogously to SMT)
@@ -57,25 +57,26 @@ function f = ilaplace(varargin)
 
   elseif (nargin == 2)
     F=varargin{1};
-    s=varargin{2}; 
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
+    t=varargin{2}; 
+    s=symvar(F,1);
+    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
-    f = python_cmd(cmd,F,s);
+    f = python_cmd(cmd,F,s,t);
 
   elseif (nargin == 3)
     F=varargin{1};
     s=varargin{2};
     t=varargin{3};
-    cmd = { 'F=_ins[0];t=_ins[2];s=_ins[1]'
+    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s,t);
 
   else
-    error('Wrong number of input arguments') 
- 
-  endif
+    print_usage ();
+
+  end
 
 end
 
@@ -84,8 +85,8 @@ end
 %! % basic
 %! syms t s r u x
 %! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(1/r^2,r) == t ))
-%! assert(logical( ilaplace(1/s^2,s,u) == u ))
 %! assert(logical( ilaplace(1/t^2) == x ))
+%! assert(logical( ilaplace(1/r^2,u) == u ))
+%! assert(logical( ilaplace(1/r^2,r,u) == u ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
 %! assert(logical( ilaplace(6/s^4) == t^3 ))

@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Andrés Prieto, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,65 +18,90 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
-%% Symbolic Fourier transform.
+%% @documentencoding UTF-8
+%% @deftypefn {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{k})
+%% Symbolic Fourier transform (non-unitary, angular frequency).
 %%
-%% FIXME: doc, examples
-%%
-%% Examples:
+%% Example:
 %% @example
-%% syms x s
-%% f = exp(-2*abs(x))
-%% fourier(f)
-%% @result{} ans = (sym)
-%%
-%%    4   
-%%  ──────
-%%   2    
-%%  w  + 4
-%%
-%% fourier(f, s)
-%% @result{} ans = (sym)
-%%
-%%    4   
-%%  ──────
-%%   2    
-%%  s  + 4
-%%
-%% fourier(f, x, s)
-%% @result{} ans = (sym)
-%%
-%%    4   
-%%  ──────
-%%   2    
-%%  s  + 4
-%%
+%% @group
+%% >> syms t
+%% >> f = exp(-abs(t));
+%% >> fourier(f)
+%%    @result{} (sym)
+%%        2
+%%      ──────
+%%       2
+%%      w  + 1
+%% @end group
 %% @end example
 %%
-%% @seealso{ifourier,laplace}
+%% @seealso{ifourier}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Author: Colin B. Macdonald, Andrés Prieto
+%% Keywords: symbolic, integral transforms
 
-function F = fourier(f, x, k)
+function F = fourier(varargin)
 
-  if (nargin < 3)
-    syms k
-    warning('todo: check SMT for 2nd argument behavoir');
+  % FIXME: it only works for scalar functions
+  % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
+
+  % If the physical variable of f is equal to "w",
+  % "t" is the frequency domain variable (analogously to SMT)
+  if (nargin == 1)
+    f=varargin{1};
+    x=symvar(f,1);
+    cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
+            'if x==k:'
+            '    k=sp.Symbol("t")'
+            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'return F,'};
+
+    F = python_cmd(cmd, f, x);
+
+  elseif (nargin == 2)
+    f=varargin{1};
+    k=varargin{2};
+    x=symvar(f,1);
+    cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
+            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'return F,'};
+
+    F = python_cmd(cmd, f, x, k);
+
+  elseif (nargin == 3)
+    f=varargin{1};
+    x=varargin{2};
+    k=varargin{3};
+    cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
+            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'return F,'};
+
+    F = python_cmd(cmd, f, x, k);
+
+  else
+    print_usage ();
+
   end
-
-  cmd = { 'd = sp.fourier_transform(*_ins)'
-          'return d,' };
-
-  F = python_cmd (cmd, sym(f), sym(x), sym(k));
 
 end
 
 
 %!test
-%! syms x k
-%! f = exp(-x^2);
-%! F = fourier(f,x,k);
-%! g = ifourier(F,k,x);
-%! assert(isequal(f,g))
+%! % basic
+%! syms r t x u w
+%! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
+%! assert(logical( fourier(exp(-abs(w))) == 2/(t^2 + 1) ))
+%! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
+%! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
+%! Pi=sym('pi'); assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
+%! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
+
+%!xtest
+%! % Differential operator to algebraic
+%! % SymPy cannot evaluate? (Issue #170)
+%! syms x w f(x)
+%! assert(logical( fourier(diff(f(x),x),x,w) == -1i*w*fourier(f(x),x,w) ))

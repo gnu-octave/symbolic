@@ -17,10 +17,32 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{f} =} fibonacci (@var{n})
 %% @deftypefnx {Function File} {@var{p} =} fibonacci (@var{n}, @var{x})
 %% Return Fibonacci numbers and polynomials.
 %%
+%% Examples:
+%% @example
+%% @group
+%% >> fibonacci(15)
+%%    @result{} (sym) 610
+%% >> syms n
+%% >> fibonacci(n)
+%%    @result{} (sym) fibonacci(n)
+%% @end group
+%% @end example
+%%
+%% Polynomial example:
+%% @example
+%% @group
+%% >> syms x
+%% >> fibonacci(10, x)
+%%    @result{} (sym)
+%%       9      7       5       3
+%%      x  + 8⋅x  + 21⋅x  + 20⋅x  + 5⋅x
+%% @end group
+%% @end example
 %%
 %% @seealso{euler, bernouilli}
 %% @end deftypefn

@@ -17,19 +17,35 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} vpa (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} vpa (@var{x}, @var{n})
-%% Create a variable precision floating point number.
+%% Create a variable-precision floating point number.
 %%
 %% @var{x} can be a string, a sym or a double.  Example:
 %% @example
-%% x = vpa('1/3', 32)   # 32 digits 0.333...
-%% a = sym(1)/3;
-%% x = vpa(a, 32)       # same
-%% x = vpa(1/3, 32)     # no!  first makes double 1/3 (15 digits)
+%% @group
+%% >> x = vpa('1/3', 32)
+%%    @result{} x = (sym) 0.33333333333333333333333333333333
+%% >> a = sym(1)/3;
+%% >> x = vpa(a, 32)
+%%    @result{} x = (sym) 0.33333333333333333333333333333333
+%% @end group
 %% @end example
 %%
-%% @seealso{sym, vpasolve}
+%% Be careful when creating a high-precision float from a
+%% double as you will generally only get 15 digits:
+%% @example
+%% @group
+%% >> vpa(1/3, 32)
+%%    @result{} (sym) 0.33333333333333331482961625624739
+%% @end group
+%% @end example
+%%
+%% If @var{n} is omitted it defaults to the current value of
+%% @code{digits()}.
+%%
+%% @seealso{sym, vpasolve, digits}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

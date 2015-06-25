@@ -31,7 +31,7 @@
 %%    @result{} x = (sym) x
 %%
 %% >> display([x 2 pi])
-%%    @result{} (sym) [x  2  π] (1×3 matrix)
+%%    @result{} (sym) [x  2  π]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
@@ -55,7 +55,7 @@
 %%
 %% @group
 %% >> A = sym(ones(0, 3))
-%%    @result{} A = (sym) [] (empty 0×3 matrix)
+%%    @result{} A = (sym) []  (empty 0×3 matrix)
 %%
 %% >> B = 3*A^n
 %%    @result{} B = (sym empty 0×3 matrix expression)
@@ -94,7 +94,9 @@ function display(x)
     term_width = term_width(1);
   end
 
+  % weird hack to support "ans(x) = " output for @symfun
   name = priv_disp_name(x, inputname (1));
+
   dispstr = disp (x);
   dispstrtrim = strtrim (dispstr);
   hasnewlines = ~isempty (strfind (dispstrtrim, sprintf('\n')));
@@ -128,17 +130,19 @@ function display(x)
   end
   s = [s1 s2];
   n = ustr_length (s);
+  %fputs (1, s);  % only in octave, not matlab
   fprintf (s)
   if (display_snippet)
+    % again, fputs safer, but not in matlab
     fprintf (snippet_of_sympy (x, 7, term_width - n, unicode_dec))
   end
   fprintf ('\n');
 
   if (toobig)
     if (loose), fprintf ('\n'); end
-    fprintf (dispstr)
+    % don't use printf b/c ascii-art might have slashes
+    disp (dispstr);  % appends newline
     if (loose), fprintf ('\n'); end
-    fprintf ('\n');
   end
 end
 

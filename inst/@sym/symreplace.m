@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,60 +17,94 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {} symreplace (@var{newx})
 %% @deftypefnx {Function File} {} symreplace (@var{x}, @var{newx})
-%% @deftypefnx {Function File} {} symreplace (@var{xstr}, @var{newx})
 %% @deftypefnx {Function File} {} symreplace (@var{x}, @var{newx}, @var{context})
-%% @deftypefnx {Function File} {[@var{f},@var{flag}] =} symreplace (@var{f}, @var{x}, @var{newx})
-%% @deftypefnx {Function File} {[@var{f},@var{flag}] =} symreplace (@var{f}, @var{xstr}, @var{newx})
-%% @deftypefnx {Function File} {[@var{f},@var{flag}] =} symreplace (@var{f}, @var{newx})
+%% @deftypefnx {Function File} {} symreplace (@var{xstr}, @var{newx})
+%% @deftypefnx {Function File} {} symreplace (@var{xstr}, @var{newx}, @var{context})
+%% @deftypefnx {Function File} {[@var{f}, @var{flag}] =} symreplace (@var{f}, @var{xstr}, @var{newx})
 %% Replace symbols in caller's workspace or in syms/struct/cells.
 %%
-%% You probably do not need this for normal operations, see
-%% @code{subs()} instead.
+%% @strong{WARNING}: you probably do not need this for normal
+%% usage; @pxref{subs} instead.
 %%
 %% One mode of operation is similar to @code{subs()}:
 %% @example
-%% syms x y
-%% f = @{x; x^2; sin(x)@};
-%% f = symreplace(f, x, y)
-%% f = symreplace(f, 'x', y)   % alt.
-%% @end example
-%% This is used internally for assumptions, to replace one @code{x}
-%% with another @code{x} with possibly different assumptions.  For
-%% example:
-%% @example
-%% syms x positive
-%% f = x^2;
-%% x = sym('x', 'real');
-%% f = symreplace(f, 'x', x);
+%% @group
+%% >> syms x y
+%% >> f = @{x; 2*x; sin(x)@};
+%% >> g = symreplace(f, x, y)
+%%    @result{} g =
+%%      @{
+%%      (sym) y
+%%      (sym) 2⋅y
+%%      (sym) sin(y)
+%%      @}
+%% >> g = symreplace(f, 'x', y);   % alternative
+%% @end group
 %% @end example
 %% However, unlike @code{subs()}, here @code{f} can be a cell array
-%% or struct, which we recursively traverse down into.  @var{flag}
-%% indicates if the output @var{f} is any different from the input
-%% @var{f}.
+%% or struct, which we recursively traverse down into.
+%%
+%% @var{flag} is true if the output @var{f} was changed from
+%% the input @var{f}:
+%% @example
+%% @group
+%% >> syms x y
+%% >> f = sin(y);
+%% >> [g, flag] = symreplace(f, x, y)
+%%    @result{} g = (sym) sin(y)
+%%      flag = 0
+%% @end group
+%% @end example
+%%
+%% The alternative form using @var{xstr} is used internally by
+%% OctSymPy for assumptions (@pxref{assume}, @pxref{assumeAlso}),
+%% to replace one @code{x} with another @code{x} with possibly
+%% different assumptions.  For example:
+%% @example
+%% @group
+%% >> syms x positive
+%% >> f = x^2;
+%% >> assumptions(f)@{:@}
+%%    @result{} x: positive
+%% >> x = sym('x', 'real');
+%% >> f = symreplace(f, 'x', x);
+%% >> assumptions(f)@{:@}
+%%    @result{} x: real
+%% @end group
+%% @end example
 %%
 %% The other mode of operation is also used by OctSymPy for
 %% supporting assumptions.  It has no output but plenty of
 %% side-effects!  Not scared off yet?  Here's what it does:
 %% @example
-%% syms x real
-%% f = abs(x)
-%% syms x positive
-%% % but note f is still abs(x)
-%% symreplace('x', x)
-%% % now f is just x
+%% @group
+%% >> syms x real
+%% >> f = abs(x);
+%% >> syms x positive
+%% >> f
+%%    @result{} f = (sym) │x│
+%% >> symreplace ('x', x)
+%% >> f
+%%    @result{} f = (sym) x
+%% @end group
 %% @end example
+%%
 %% Here is the scary part: this works by searching expressions in
 %% the @strong{callers workspace} for variables with same name as
 %% @var{x}/@var{xstr}.  We then substitute @var{newx}.  If @var{x}
 %% is omitted, the string of @var{newx} is used instead.  This is
 %% precisely what happens when using @code{assume}:
 %% @example
-%% syms x
-%% f = abs(x)
-%% assume(x, 'positive')
-%% % now f is just x
+%% @group
+%% >> syms x
+%% >> f = abs(x);
+%% >> assume(x, 'positive')
+%% >> f
+%%    @result{} f = (sym) x
+%% @end group
 %% @end example
 %%
 %% Note: operates on the caller's workspace via evalin/assignin.
@@ -93,8 +127,8 @@
 
 function varargout = symreplace(varargin)
 
-  %% we have output: this is the first ("benign") form
-  if (nargout >= 1)
+  %% This is the first ("benign") form
+  if ((nargout >= 1) || (nargin == 3 && ~ischar(varargin{3})))
     [varargout{1:2}] = symreplace_helper(varargin{:});
     return
   end
@@ -103,16 +137,26 @@ function varargout = symreplace(varargin)
   if (nargin == 1)
     newx = varargin{1};
     xstr = newx.flat;
-  end
-  if (nargin == 2)
-    % this works if x is string or sym
-    xstr = varargin{1}.flat;
-    newx = varargin{2};
-  end
-  if (nargin < 3)
     context = 'caller';
+  elseif (nargin == 2)
+    xstr = varargin{1};
+    newx = varargin{2};
+    context = 'caller';
+  elseif (nargin == 3)
+    xstr = varargin{1};
+    newx = varargin{2};
+    context = varargin{3};
+  else
+    print_usage ();
   end
-  assert(strcmp(context, 'caller') || strcmp(context, 'base'))
+
+  assert(ischar(context) && ...
+         (strcmp(context, 'caller') || strcmp(context, 'base')))
+
+  % we just want the string
+  if (isa(xstr, 'sym'))
+    xstr = xstr.flat;
+  end
 
   %% Here's the piece with side-effects
   % This is the part that you might want to copy into your function
@@ -123,11 +167,6 @@ function varargout = symreplace(varargin)
   %xstr =
   %newx =
   %context = 'caller';
-  % alt implementation w/ script
-  % ---------------------------------------------
-  %assignin(context, 'hack__newx__', newx);
-  %assignin(context, 'hack__xstr__', xstr);
-  %evalin(context, 'fix_assumptions_script');
   S = evalin(context, 'whos');
   evalin(context, '[];');  % clear 'ans'
   for i = 1:numel(S)
@@ -146,7 +185,11 @@ end
 function [newobj, flag] = symreplace_helper(obj, xstr, newx)
 % If you need to add other things other than struct/cell/sym, this is
 % place to do it.
-% This code used to be called fix_assumptions()
+
+  if (isa (xstr, 'sym'))
+    xstr = xstr.flat;
+  end
+  assert (ischar (xstr))
 
   flag = false;
 
@@ -199,7 +242,7 @@ function [newobj, flag] = symreplace_helper(obj, xstr, newx)
   end
 
   if ~(flag)
-    newobj = [];
+    newobj = obj;
   end
 end
 

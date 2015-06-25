@@ -17,8 +17,10 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{h} =} ezplot (@var{f})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{f2})
+%% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{n})
 %% @deftypefnx {Function File} {@var{h} =} ezplot (@dots{})
 %% Simple plotting of symbolic expressions.
 %%
@@ -27,21 +29,30 @@
 %% anonymous functions.
 %%
 %% Using sym arguments for @var{dom} and @var{n} can lead to
-%% ambiguity.  For example
+%% ambiguity where OctSymPy cannot tell if you are specifying @var{n}
+%% or @var{f2}.  For example:
 %% @example
-%% syms t
-%% f = sin(t)
-%% N = sym(50)
-%% ezplot(f, N)    % a parametric plot of f(t), N(t)
-%% ezplot(f, double(N))   % plot f vs t using 50 pts
+%% @group
+%% >> syms t
+%% >> f = sin(t);
+%% >> N = sym(50);
+%%
+%% >> % parametric plot of f(t), N(t)
+%% >> ezplot(f, N)                       % doctest: +SKIP
+%%
+%% >> % plot f vs t using 50 pts
+%% >> ezplot(f, double(N))               % doctest: +SKIP
+%% @end group
 %% @end example
-%% the solution, as above, is to convert the sym to a double.
+%%
+%% The solution, as shown in the example, is to convert the sym to
+%% a double.
 %%
 %% FIXME: Sept 2014, there are differences between Matlab
 %% and Octave's ezplot and Matlab 2014a does not support N as
 %% number of points.  Disabled some tests.
 %%
-%% @seealso{ezplot3, ezsurf, ezmesh, matlabFunction}
+%% @seealso{ezplot3, ezsurf, ezmesh, function_handle}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -83,7 +94,7 @@ function varargout = ezplot(varargin)
             assert(logical(thissym == firstsym), ...
               'ezplot: all functions must be in terms of the same variables');
           end
-          thisf = matlabFunction(varargin{i});
+          thisf = function_handle(varargin{i});
         end
 
         varargin{i} = thisf;
@@ -108,7 +119,7 @@ end
 %! % simple
 %! syms x
 %! f = cos(x);
-%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(f);
 %! warning(s)
 %! xx = get(h, 'xdata');
@@ -123,7 +134,7 @@ end
 %! syms t
 %! x = cos(t);
 %! y = sin(t);
-%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(x, y);
 %! warning(s)
 %! xx = get(h, 'xdata');
@@ -141,7 +152,7 @@ end
 %%! % contour, FIXME: broken on Matlab?  Issue #108
 %%! syms x y
 %%! f = sqrt(x*x + y*y) - 1;
-%%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %%! h = ezplot(f);
 %%! warning(s)
 %%! y = get(h, 'ydata');
@@ -152,7 +163,7 @@ end
 %%! % FIXME: this number-of-points option no supported on matlab
 %%! syms x
 %%! f = cos(x);
-%%! s = warning('off', 'OctSymPy:matlabFunction:nocodegen');
+%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %%! h = ezplot(f, [0 2*sym(pi)], sym(42));
 %%! warning(s)
 %%! y = get(h, 'ydata');

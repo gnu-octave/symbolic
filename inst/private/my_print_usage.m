@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,26 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{x})
-%% A string appropriate for representing the name of this sym.
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {} print_usage ()
+%% Wrapper for print_usage on Matlab.
 %%
-%% Private method: this is not the method you are looking for.
+%% Matlab has no print_usage function.  Preparing
+%% the Matlab package should rename this from
+%% "my_print_usage.m" to "print_usage.m".
 %%
+%% @seealso{error}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function print_usage ()
 
-function s = priv_disp_name(x, input_name)
+  % if we are on Octave
+  if (exist ('octave_config_info', 'builtin'))
+    %evalin ('caller', 'print_usage ();' );
+    %return
+  end
 
-  s = input_name;
-  % subclasses might do something more interesting, but they should
-  % be careful to ensure empty input_name gives empty s.
+  H = dbstack;
+  name = H(2).name;
+
+  msgid = sprintf('%s:invalidCall', name);
+  errmsg = sprintf('Invalid call to "%s": see documentation', name);
+
+  %error('Invalid call to "%s": see documentation', name)
+  ME = MException(msgid, errmsg);
+  ME.throwAsCaller();
 
 end
-
-
-%!test
-%! syms x
-%! s = priv_disp_name(x, 'x');
-%! assert (strcmp (s, 'x'))

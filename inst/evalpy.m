@@ -17,42 +17,56 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {} evalpy (@var{cmd})
 %% @deftypefnx {Function File} {} evalpy (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run Python code, automatically transferring results.
 %%
 %% Examples:
 %% @example
-%% clear y
-%% x = 4
-%% evalpy ('y = 2*x', x)
-%% y   % y is now 8
+%% @group
+%% >> x = -4;
+%% >> evalpy ('y = 2*x', x)
+%%    @result{} y = -8
+%% >> y
+%%    @result{} y = -8
+%% @end group
 %% @end example
 %%
-%% You can replace x with a new value in the Python code:
+%% You can replace @code{x} with a new value in the Python code:
 %% @example
-%% syms x
-%% evalpy ('y = 3*x; x = 1.5; z = x**2', x)
-%% x   % 1.5  (double)
-%% y   % 3*x  (sym)
-%% z   % 2.25 (double)
+%% @group
+%% >> syms x
+%% >> evalpy ('y = 3*x; x = -1.5; z = x**2', x)
+%%    @result{}
+%%      x = -1.5000
+%%      y = (sym) 3⋅x
+%%      z =  2.2500
+%% @end group
 %% @end example
 %%
 %% All arguments can be accessed as @code{i0}, @code{i1}, etc.
 %% This is useful if they don't have inputnames:
 %% @example
-%% x = 10
-%% evalpy ('y = " ".join( (str(x),str(i0),str(i1)) )', x, 5)
-%% y = '10 10 5'
+%% @group
+%% >> x = 10;
+%% >> evalpy ('y = ", ".join( (str(x),str(i0),str(i1)) )', x, 5)
+%%    @result{} y = 10.0, 10.0, 5.0
+%% @end group
 %% @end example
 %%
 %% If you need a variable in Python but don't want it passed back
 %% to Octave, put an @code{_} (underscore) at the beginning or end.
 %% @example
-%% x = 20
-%% evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
-%% my      % 5
-%% _y, z_  % error, undefined
+%% @group
+%% >> x = 20;
+%% >> evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
+%%    @result{} Variables effected: my
+%% >> _y
+%%    @result{} ??? '_y' undefined near line 1 column 1
+%% >> z_
+%%    @result{} ??? 'z_' undefined near line 1 column 1
+%% @end group
 %% @end example
 %%
 %% The final few characters of @var{cmd} effect the verbosity:
@@ -160,6 +174,11 @@ function evalpy(cmd, varargin)
 
   [names, values] = python_cmd (fullcmd, varargin{:});
   assert (length(names) == length(values))
+
+  % Make the visual display of the results deterministic.  Not easy to
+  % use OrderedDict in Python because `locals()` is a regular dict.
+  [names, I] = sort(names);
+  values = values(I);
 
   %fprintf('assigning to %s...\n', names{i})
   for i=1:length(names)

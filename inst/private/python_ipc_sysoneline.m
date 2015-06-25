@@ -31,7 +31,8 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % Windows.  We have a 8000 char budget, and the header uses all
   % of it.
   mydir = fileparts (mfilename ('fullpath'));
-  headers = ['execfile(\"' mydir filesep() 'python_header.py\"); '];
+  % execfile() only works on python 2
+  headers = ['exec(open(\"' mydir filesep() 'python_header.py\").read()); '];
   %s = python_header_embed2();
   %headers = ['exec(\"' s '\"); '];
 

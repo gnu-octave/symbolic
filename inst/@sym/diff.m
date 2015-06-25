@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @dots{})
@@ -24,24 +25,38 @@
 %%
 %% Examples:
 %% @example
-%% syms x
-%% f = sqrt(sin(x/2))
-%% diff(f)
-%% diff(f,x)
-%% diff(f,x,x,x)
+%% @group
+%% >> syms x
+%% >> f = sin (cos (x));
+%% >> diff (f)
+%%    @result{} (sym) -sin(x)⋅cos(cos(x))
+%% >> diff (f, x)
+%%    @result{} (sym) -sin(x)⋅cos(cos(x))
+%% >> simplify (diff (f, x, x))
+%%    @result{} (sym)
+%%             2
+%%        - sin (x)⋅sin(cos(x)) - cos(x)⋅cos(cos(x))
+%% @end group
 %% @end example
 %%
 %% Partial differentiation:
 %% @example
-%% syms x y
-%% f = cos(2*x + 3*y)
-%% diff(f,x,y,x);
-%% diff(f,x,2,y,3);
+%% @group
+%% >> syms x y
+%% >> f = cos(2*x + 3*y);
+%% >> diff(f, x, y, x)
+%%    @result{} (sym) 12⋅sin(2⋅x + 3⋅y)
+%% >> diff(f, x, 2, y, 3)
+%%    @result{} (sym) -108⋅sin(2⋅x + 3⋅y)
+%% @end group
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% diff(sym(1))
+%% @group
+%% >> diff(sym(1))
+%%    @result{} (sym) 0
+%% @end group
 %% @end example
 %%
 %% @seealso{int}

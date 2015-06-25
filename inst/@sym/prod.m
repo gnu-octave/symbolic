@@ -86,7 +86,7 @@ function y = prod(x, n)
   elseif (n == 2)
     y = python_cmd (cmd, x);
   else
-    error('unsupported');
+    print_usage ();
   end
 end
 

@@ -1,4 +1,5 @@
-%% Copyright (C) 2003, 2014, 2015 Willem J. Atsma and Colin B. Macdonald
+%% Copyright (C) 2003 Willem J. Atsma
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public

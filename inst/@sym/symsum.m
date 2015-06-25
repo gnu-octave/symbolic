@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} symsum (@var{f}, @var{n}, @var{a}, @var{b})
 %% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, @var{n}, [@var{a} @var{b}])
 %% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, @var{a}, @var{b})
@@ -30,6 +31,27 @@
 %% @code{symvar} and defaults to @code{x} if @var{f} is constant. The
 %% limits @var{a} and @var{b} default to 0 and @var{n} - 1
 %% respectively.
+%%
+%% @example
+%% @group
+%% >> syms n m
+%% >> symsum(1/n^2, n, 1, m)
+%%    @result{} (sym) harmonic(m, 2)
+%%
+%% >> symsum(exp(2*n)/sin(n), n, 2*m, 6*m)
+%%    @result{} (sym)
+%%           6⋅m
+%%           ____
+%%           ╲
+%%            ╲      2⋅n
+%%             ╲    ℯ
+%%             ╱   ──────
+%%            ╱    sin(n)
+%%           ╱
+%%           ‾‾‾‾
+%%         n = 2⋅m
+%% @end group
+%% @end example
 %%
 %% @seealso{symprod, sum}
 %% @end deftypefn

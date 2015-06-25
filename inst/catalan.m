@@ -17,12 +17,13 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {} catalan ()
 %% Return Catalan constant.
 %%
 %% @example
 %% vpa (catalan ())
-%% @result {} (sym) 0.91596559417721901505460351493238
+%% @result{} (sym) 0.91596559417721901505460351493238
 %% @end example
 %%
 %% @seealso{eulergamma}

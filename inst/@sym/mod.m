@@ -17,31 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{y} =} mod (@var{x}, @var{n})
 %% @deftypefnx {Function File}  {@var{y} =} mod (@var{x}, @var{n}, false)
 %% Element-wise modular arithmetic on symbolic arrays and polynomials.
 %%
 %% Example:
 %% @example
-%% mod([10 3 1], sym(3))   % [1 0 1]
+%% @group
+%% >> mod([10 3 1], sym(3))
+%%    @result{} ans = (sym) [1  0  1]  (1×3 matrix)
+%% @end group
 %% @end example
 %%
 %% If any of the entries contain variables, we assume they are
 %% univariate polynomials and convert their coefficients to mod
 %% @var{n}:
 %% @example
-%% syms x
-%% mod(5*x + 7, 3)   % '2*x + 1'
-%% mod(x, 3)         % 'x' (coefficient is 1 mod 3)
+%% @group
+%% >> syms x
+%% >> mod(5*x + 7, 3)
+%%    @result{} (sym) 2⋅x + 1
+%% >> mod(x, 3)  % (coefficient is 1 mod 3)
+%%    @result{} (sym) x
+%% @end group
 %% @end example
 %% You can disable this behaviour by passing @code{false} as the
 %% third argument:
 %% @example
-%% syms x
-%% q = mod(x, 3, false)  % 'Mod(x, 3)'
-%% subs(q, x, 10)        % '1'
-%% syms n integer
-%% mod(3*n+2, 3, false)  % '2'
+%% @group
+%% >> syms x
+%% >> q = mod(x, 3, false)
+%%    @result{} q = (sym) Mod(x, 3)
+%% >> subs(q, x, 10)
+%%    @result{} ans = (sym) 1
+%%
+%% >> syms n integer
+%% >> mod(3*n + 2, 3, false)
+%%    @result{} (sym) 2
+%% @end group
 %% @end example
 %%
 %% @seealso{coeffs}

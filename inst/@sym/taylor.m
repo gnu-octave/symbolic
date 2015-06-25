@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} taylor (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
@@ -28,6 +29,7 @@
 %%
 %% Key/value pairs can be used to set the order:
 %% @example
+%% @group
 %% >> syms x
 %% >> f = exp(x);
 %% >> taylor(f, x, 0, 'order', 6)
@@ -36,16 +38,28 @@
 %%           x    x    x    x
 %%          ─── + ── + ── + ── + x + 1
 %%          120   24   6    2
+%% @end group
 %% @end example
-%% One can also set 'expansionPoint' instead of passing @var{a}.
 %%
+%% As an alternative to passing @var{a}), you can also set the
+%% expansion point using a key/value notation:
+%% @example
+%% @group
+%% >> taylor(f, 'expansionPoint', 1, 'order', 4)
+%%    @result{} (sym)
+%%                   3            2
+%%          ℯ⋅(x - 1)    ℯ⋅(x - 1)
+%%          ────────── + ────────── + ℯ⋅(x - 1) + ℯ
+%%              6            2
+%% @end group
+%% @end example
 %% @seealso{diff}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, differentiation
 
-function s = taylor(f,varargin)
+function s = taylor(f, varargin)
 
   if (nargin == 1)  % taylor(f)
     x = symvar(f,1);
@@ -118,6 +132,13 @@ end
 %! assert (isequal (taylor(f,x,'order',5), expected))
 %! assert (isequal (taylor(f,x,0,'order',5), expected))
 
+%!test
+%! % key/value ordering doesn't matter
+%! syms x
+%! f = exp(x);
+%! g1 = taylor(f, 'expansionPoint', 1, 'order', 3);
+%! g2 = taylor(f, 'order', 3, 'expansionPoint', 1);
+%! assert (isequal (g1, g2))
 
 %!test
 %! syms x
@@ -144,3 +165,11 @@ end
 %! assert (isequal (g, 4*x+(x-2)^2-4))
 %! g = taylor(f,x,a);
 %! assert (isequal (simplify(g), f))
+
+%!xtest
+%! % wrong order-1 series with nonzero expansion pt:
+%! % upstream bug https://github.com/sympy/sympy/issues/9351
+%! syms x
+%! g = x^2 + 2*x + 3;
+%! h = taylor (g, x, 4, 'order', 1);
+%! assert (isequal (h, 27))

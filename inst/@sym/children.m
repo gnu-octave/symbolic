@@ -17,21 +17,48 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{r} =} children (@var{f})
 %% Return "children" (terms, lhs/rhs, etc) of symbolic expression.
 %%
 %% For a scalar expression, return a row vector of sym expressions:
 %% @example
-%% syms x y
-%% f = 2*x*y + sin(x)
-%% C = children(f)    % gives [2*x*y  sin(x)]
-%% children(C(1))     % gives [2 x y]
-%% children(C(2))     % gives x
+%% @group
+%% >> syms x y
+%% >> f = 2*x*y + sin(x);
+%% >> C = children(f)
+%%    @result{} C = (sym) [2⋅x⋅y  sin(x)]  (1×2 matrix)
+%%
+%% >> children(C(1))
+%%    @result{} ans = (sym) [2  x  y]  (1×3 matrix)
+%% >> children(C(2))
+%%    @result{} ans = (sym) x
+%% @end group
 %% @end example
 %%
 %%
 %% For matrices/vectors, return a cell array where each entry is
 %% a row vector.  The cell array is the same shape as the input.
+%% @example
+%% @group
+%% >> A = [x*y 2; 3 x]
+%%    @result{} A = (sym 2×2 matrix)
+%%        ⎡x⋅y  2⎤
+%%        ⎢      ⎥
+%%        ⎣ 3   x⎦
+%% >> children(A)
+%%    @result{} ans =
+%%      @{
+%%      (sym) [x  y]  (1×2 matrix)
+%%      (sym) 3
+%%      (sym) 2
+%%      (sym) x
+%%      @}
+%% >> size(children(A))
+%%    @result{} ans =
+%%         2   2
+%% @end group
+%% @end example
 %%
 %% A symbol/number/boolean has itself as children.
 %%

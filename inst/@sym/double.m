@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,38 +17,50 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} double (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} double (@var{x}, false)
 %% Convert symbolic to doubles.
 %%
 %% Example:
 %% @example
-%% x = sym(1) / 3
-%% double (x)
+%% @group
+%% >> x = sym(1) / 3
+%%    @result{} x = (sym) 1/3
+%% >> double (x)
+%%    @result{} ans =  0.33333
+%% @end group
 %% @end example
 %%
-%% Despite the name, this is how you get convert a complex sym to
-%% floating point too:
+%% Despite the name, this is one way to convert a complex sym to
+%% floating point:
 %% @example
-%% z = sym(4i) + 3;
-%% double (z)
+%% @group
+%% >> z = sym(4i) - 3;
+%% >> double (z)
+%%    @result{} ans = -3 + 4i
+%% @end group
 %% @end example
 %%
 %% If conversion fails, you get an error:
 %% @example
-%% syms x
-%% double (x)
+%% @group
+%% >> syms x
+%% >> double (x)
+%%    @result{} ??? cannot convert to double
+%% @end group
 %% @end example
 %%
 %% You can pass an optional second argument of @code{false} to
 %% return an empty array if conversion fails on any component.
-%%
-%% Example:
+%% For example:
 %% @example
-%% syms x
-%% a = [1 2 x];
-%% b = double (a, false)
-%% isempty (b)
+%% @group
+%% >> syms x
+%% >> a = [1 2 x];
+%% >> b = double (a, false)
+%%    @result{} b = [](0x0)
+%% @end group
 %% @end example
 %%
 %% @seealso{sym}

@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} int (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, @var{a}, @var{b})
@@ -27,17 +28,37 @@
 %%
 %% Definite integral:
 %% @example
-%% F = int(f, x, 0, 2)
+%% @group
+%% >> syms x
+%% >> f = x^2;
+%% >> F = int(f, x, 1, 2)
+%%    @result{} F = (sym) 7/3
+%% @end group
 %% @end example
 %% or alternatively
 %% @example
-%% F = int(f, x, [0 2])
+%% @group
+%% >> F = int(f, x, [1 2])
+%%    @result{} F = (sym) 7/3
+%% @end group
 %% @end example
 %%
 %% Indefinite integral:
 %% @example
-%% F = int(f, x)
-%% F = int(f)
+%% @group
+%% >> F = int(f, x)
+%%    @result{} F = (sym)
+%%         3
+%%        x
+%%        ──
+%%        3
+%% >> F = int(f)
+%%    @result{} F = (sym)
+%%         3
+%%        x
+%%        ──
+%%        3
+%% @end group
 %% @end example
 %%
 %% @seealso{diff}
@@ -106,7 +127,8 @@ function F = int(f, x, a, b)
 
 
   else
-    error('invalid input');
+    print_usage ();
+
   end
 
 
