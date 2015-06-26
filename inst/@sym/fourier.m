@@ -27,8 +27,8 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms t
-%% >> f = exp(-abs(t));
+%% >> syms x
+%% >> f = exp(-abs(x));
 %% >> fourier(f)
 %%    @result{} (sym)
 %%        2
@@ -50,22 +50,28 @@ function F = fourier(varargin)
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
   % If the physical variable of f is equal to "w",
-  % "t" is the frequency domain variable (analogously to SMT)
+  % "v" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
-    f=varargin{1};
-    x=symvar(f,1);
+    f = sym(varargin{1});
+    x = symvar(f, 1);
+    if (isempty(x))
+      x = sym('x');
+    end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
-            '    k=sp.Symbol("t")'
+            '    k=sp.Symbol("v")'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
 
     F = python_cmd(cmd, f, x);
 
   elseif (nargin == 2)
-    f=varargin{1};
-    k=varargin{2};
-    x=symvar(f,1);
+    f = sym(varargin{1});
+    k = sym(varargin{2});
+    x = symvar(f, 1);
+    if (isempty(x))
+      x = sym('x');  % FIXME: should be dummy variable in case k was x
+    end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
@@ -73,9 +79,9 @@ function F = fourier(varargin)
     F = python_cmd(cmd, f, x, k);
 
   elseif (nargin == 3)
-    f=varargin{1};
-    x=varargin{2};
-    k=varargin{3};
+    f = sym(varargin{1});
+    x = sym(varargin{2});
+    k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
@@ -92,9 +98,9 @@ end
 
 %!test
 %! % matlab SMT compatibiliy for arguments
-%! syms r t x u w
+%! syms r x u w v
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
-%! assert(logical( fourier(exp(-abs(w))) == 2/(t^2 + 1) ))
+%! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
 
@@ -103,6 +109,12 @@ end
 %! syms x w
 %! Pi=sym('pi'); assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
 %! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
+
+%!xtest
+%! % Issue #251, upstream failure?  TODO: upstream issue?
+%! syms x w
+%! f = fourier(sym(2), x, w);
+%! assert (isequal (f, 4*sym(pi)*dirac(w)))
 
 %!xtest
 %! % Differential operator to algebraic

@@ -80,6 +80,10 @@ Differences
     sym2poly also takes an optional extra argument to specify `x`
     which returns a symbolic row vector.
 
+  * SMT fourier/ifourier/laplace/ilaplace have strange rules for determining
+    a transform with respect to what variable.  We just use symvar (that is,
+    a preference for `x` over other variables like `t`).
+
 
 Differences in assumptions
 --------------------------
