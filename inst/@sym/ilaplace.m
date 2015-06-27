@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2014 Andrés Prieto
+%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,6 +34,21 @@
 %% @end group
 %% @end example
 %%
+%% By default the ouput is a function of @code{t} (or @code{x} if the
+%% inverse transform happens to be with respect to @code{t}).  This can
+%% be overriden by specifying @var{t}.  For example:
+%% @example
+%% @group
+%% >> syms s t x
+%% >> ilaplace(1/s^2)
+%%    @result{} (sym) t
+%% >> ilaplace(1/t^2)
+%%    @result{} (sym) x
+%% >> ilaplace(1/s^2, x)
+%%    @result{} (sym) x
+%% @end group
+%% @end example
+%%
 %% @seealso{laplace}
 %% @end deftypefn
 
@@ -46,8 +62,11 @@ function f = ilaplace(varargin)
   % If the Laplace variable in the frequency domain is equal to "t",
   % "x" will be the physical variable (analogously to SMT)
   if (nargin == 1)
-    F=varargin{1};
-    s=symvar(F,1);
+    F = sym(varargin{1});
+    s = symvar(F, 1);
+    if (isempty(s))
+      s = sym('s');
+    end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
             'if t==s:'
             '    t=sp.Symbol("x")'
@@ -56,18 +75,21 @@ function f = ilaplace(varargin)
     f = python_cmd(cmd,F,s);
 
   elseif (nargin == 2)
-    F=varargin{1};
-    t=varargin{2}; 
-    s=symvar(F,1);
+    F = sym(varargin{1});
+    t = sym(varargin{2});
+    s = symvar(F, 1);  % note SMT does something different, prefers s
+    if (isempty(s))
+      s = sym('s');
+    end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
     f = python_cmd(cmd,F,s,t);
 
   elseif (nargin == 3)
-    F=varargin{1};
-    s=varargin{2};
-    t=varargin{3};
+    F = sym(varargin{1});
+    s = sym(varargin{2});
+    t = sym(varargin{3});
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
             'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
 
@@ -84,9 +106,13 @@ end
 %!test
 %! % basic
 %! syms t s r u x
-%! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(1/t^2) == x ))
 %! assert(logical( ilaplace(1/r^2,u) == u ))
 %! assert(logical( ilaplace(1/r^2,r,u) == u ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
 %! assert(logical( ilaplace(6/s^4) == t^3 ))
+
+%!test
+%! % SMT compact
+%! syms t s x
+%! assert(logical( ilaplace(1/s^2) == t ))
+%! assert(logical( ilaplace(1/t^2) == x ))
