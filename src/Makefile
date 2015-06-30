@@ -32,10 +32,10 @@ ml_extract_tests: ml_copy
 ml_copy: ml_convert
 	cp -ra ../inst/private ../matlab/
 	mv ../matlab/private/my_print_usage.m ../matlab/private/print_usage.m
-	cp -ra ../matlab/private/print_usage.m ../matlab/@sym/private/
-	cp -ra ../matlab/private/print_usage.m ../matlab/@symfun/private/
 	cp -ra ../inst/@sym/private ../matlab/@sym/
 	cp -ra ../inst/@symfun/private ../matlab/@symfun/
+	cp -ra ../matlab/private/print_usage.m ../matlab/@sym/private/
+	cp -ra ../matlab/private/print_usage.m ../matlab/@symfun/private/
 	cp -af ../CONTRIBUTORS ../matlab/
 	cp -af ../NEWS ../matlab/
 	cp -af ../COPYING ../matlab/
