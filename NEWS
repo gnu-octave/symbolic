@@ -6,6 +6,7 @@ octsympy 2.2.2-dev
   * Bug fixes and update doctests.
 
   * Fourier transform fixes (thanks Alexander Misel, Andrés Prieto).
+    They now follow the non-unitary angular frequency convention.
 
   * Start using "print_usage" for invalid inputs as is common
     practice in Octave.
