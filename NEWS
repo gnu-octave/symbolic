@@ -13,6 +13,9 @@ octsympy 2.2.2-dev
 
   * Support for SymPy 0.7.7.dev version.
 
+  * Add some warnings to the documentation about unreliable results
+    for "dsolve" on systems and from Fourier transforms.
+
 
 
 octsympy 2.2.1 (2015-04-22)

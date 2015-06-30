@@ -41,6 +41,10 @@
 %% Note @code{fourier} and @code{ifourier} implement the non-unitary,
 %% angular frequency convention.
 %%
+%% *WARNING*: As of SymPy 0.7.6 (June 2015), there are many problems
+%% with fourier transforms, even very simple ones.  Use at your own risk,
+%% or even better: help us fix SymPy.
+%%
 %% @seealso{ifourier}
 %% @end deftypefn
 
