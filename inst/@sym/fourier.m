@@ -22,7 +22,7 @@
 %% @deftypefn {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
 %% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
 %% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{k})
-%% Symbolic Fourier transform (non-unitary, angular frequency).
+%% Symbolic Fourier transform.
 %%
 %% Example:
 %% @example
@@ -37,6 +37,9 @@
 %%      w  + 1
 %% @end group
 %% @end example
+%%
+%% Note @code{fourier} and @code{ifourier} implement the non-unitary,
+%% angular frequency convention.
 %%
 %% @seealso{ifourier}
 %% @end deftypefn
