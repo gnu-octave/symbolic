@@ -141,7 +141,7 @@ function display(x)
   if (toobig)
     if (loose), fprintf ('\n'); end
     % don't use printf b/c ascii-art might have slashes
-    disp (dispstr);  % appends newline
+    disp (dispstr(1:end-1));  % remove existing newline, disp adds one
     if (loose), fprintf ('\n'); end
   end
 end

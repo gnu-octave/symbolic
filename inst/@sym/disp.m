@@ -89,7 +89,7 @@ function varargout = disp(x, wh)
   if (nargout == 0)
     disp(s)
   else
-    varargout = {s};
+    varargout = {disp(s)};  % add a newline
   end
 end
 
@@ -108,12 +108,12 @@ end
 %!test
 %! syms x
 %! s = disp(sin(x));
-%! assert(strcmp(s, '  sin(x)'))
+%! assert(strcmp(s, sprintf('  sin(x)\n')))
 
 %!test
 %! syms x
 %! s = disp(sin(x/2), 'flat');
-%! assert(strcmp(s, '  sin(x/2)'))
+%! assert(strcmp(s, sprintf('  sin(x/2)\n')))
 
 %!test
 %! % Examples of 2x0 and 0x2 empty matrices:
@@ -123,6 +123,6 @@ end
 %! assert (isequal (size (b2x0), [2 0]))
 %! assert (isequal (size (b0x2), [0 2]))
 %! s = disp(b2x0);
-%! assert(strcmp(s, '  []'))
+%! assert(strcmp(s, sprintf('  []\n')))
 %! s = disp(b0x2);
-%! assert(strcmp(s, '  []'))
+%! assert(strcmp(s, sprintf('  []\n')))
