@@ -63,14 +63,14 @@ end
 %! % simple
 %! syms x
 %! s1 = pretty(sin(x));
-%! s2 = '  sin(x)';
-%! assert(strcmp(s1,s2))
+%! s2 = sprintf('  sin(x)\n');
+%! assert (strcmp (s1, s2))
 
 %!test
 %! % force ascii
 %! syms x
 %! s1 = pretty(sin(x/2), 'ascii');
-%! s2 = sprintf('     /x\\\n  sin|-|\n     \\2/');
+%! s2 = sprintf('     /x\\\n  sin|-|\n     \\2/\n');
 %! s3 = strrep(s2, sprintf('\n'), sprintf('\r\n'));
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))
 
@@ -78,6 +78,6 @@ end
 %! % force unicode
 %! syms x
 %! s1 = pretty(sin(x/2), 'unicode');
-%! s2 = sprintf('     ⎛x⎞\n  sin⎜─⎟\n     ⎝2⎠');
+%! s2 = sprintf('     ⎛x⎞\n  sin⎜─⎟\n     ⎝2⎠\n');
 %! s3 = strrep(s2, sprintf('\n'), sprintf('\r\n'));
 %! assert (strcmp (s1, s2) || strcmp (s1, s3))
