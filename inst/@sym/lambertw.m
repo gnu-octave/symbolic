@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} lambertw (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} lambertw (@var{k}, @var{x})
 %% Symbolic Lambert W function.

@@ -30,6 +30,7 @@
 %%
 %%
 %% *Python executable* path/command:
+%% @comment TODO switch to DOCSKIP example once CI has recent doctest
 %% @verbatim
 %%      >> sympref python '/usr/bin/python'
 %%      >> sympref python 'C:\Python\python.exe'

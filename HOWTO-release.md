@@ -21,7 +21,8 @@ Checklist
 
   * Update NEWS file (date, version number, reformat).
 
-  * Update the version in src/configure.ac.  Run bootstrap script.
+  * Update version in src/configure.ac.  Test the bootstrap script (note
+    the scripts below will run bootstrap for the packages).
 
   * Packages: need to run the following two scripts.  I recommend
     testing them first without using the tag.  Then test the packages
