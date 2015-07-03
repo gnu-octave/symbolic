@@ -21,11 +21,11 @@ install:
   - octave --eval "pkg install doctest-0.4.0.tar.gz"
 
 # all commands here must have exit code 0 for the build to be called "passing"
+# debugging: octave --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
-  - octave --eval "a=42;disp(a);ver;pwd;exit(0)"
+  - octave --eval "ver; pwd; exit(0)"
   - pushd src; make; popd
   - pushd inst
-  - octave --eval "syms x; A = [x sin(x) x^3]; exit(0)"
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
