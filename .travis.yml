@@ -10,12 +10,15 @@ matrix:
     - python: "3.4"
       env: SYMPY_VER=0.7.6 DOCTEST=yes
 
+# need octave devel pkgs for doctest (has compiled code as of July 2015)
+# TODO: once doctest is in OF, change to "install -forge" below
 install:
   - sudo apt-add-repository --yes ppa:octave/stable
   - sudo apt-get update
-  - sudo apt-get install octave
+  - sudo apt-get install octave liboctave-dev
   - "pip install sympy==$SYMPY_VER"
-  - git clone --single-branch --branch fortravis https://github.com/cbm755/doctest-for-matlab
+  - wget https://github.com/catch22/octave-doctest/releases/download/v0.4.0/doctest-0.4.0.tar.gz
+  - octave --eval "pkg install doctest-0.4.0.tar.gz"
 
 # all commands here must have exit code 0 for the build to be called "passing"
 script:
@@ -26,7 +29,7 @@ script:
   - octave --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --path ../doctest-for-matlab/inst --eval "r = octsympy_doctests; exit(~r)";
+        octave --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 
