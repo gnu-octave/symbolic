@@ -28,12 +28,12 @@
 %% @example
 %% @group
 %% >> syms k
-%% >> F = pi*exp(-k^2/4);
+%% >> F = sqrt(sym(pi))*exp(-k^2/4);
 %% >> ifourier(F)
 %%    @result{} (sym)
-%%            2
-%%          -x
-%%      √π⋅ℯ
+%%         2
+%%       -x
+%%      ℯ
 %% @end group
 %% @group
 %% >> F = 2*sym(pi)*dirac(k);
