@@ -31,9 +31,10 @@
 %% >> f = exp(-abs(x));
 %% >> fourier(f)
 %%    @result{} (sym)
-%%            2
-%%          -x
-%%      √π⋅ℯ
+%%        2
+%%      ──────
+%%       2
+%%      w  + 1
 %% @end group
 %% @end example
 %%
@@ -66,7 +67,7 @@ function F = fourier(varargin)
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
             '    k=sp.Symbol("v")'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
             'return F,'};
 
     F = python_cmd(cmd, f, x);
@@ -79,7 +80,7 @@ function F = fourier(varargin)
       x = sym('x');  % FIXME: should be dummy variable in case k was x
     end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
             'return F,'};
 
     F = python_cmd(cmd, f, x, k);
@@ -89,7 +90,7 @@ function F = fourier(varargin)
     x = sym(varargin{2});
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
             'return F,'};
 
     F = python_cmd(cmd, f, x, k);
@@ -109,6 +110,12 @@ end
 %! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
+
+%!test
+%! % basic tests
+%! syms x w
+%! Pi=sym('pi'); assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
+%! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
 
 %!xtest
 %! % Issue #251, upstream failure?  TODO: upstream issue?

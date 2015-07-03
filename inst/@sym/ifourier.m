@@ -67,7 +67,7 @@ function f = ifourier(varargin)
     cmd = { 'F=_ins[0]; k=_ins[1]; x=sp.Symbol("x")'
             'if x==k:'
             '    x=sp.Symbol("t")'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
+            'f = sp.transforms._fourier_transform(F, k, x, 1/(2*sp.pi), 1,"Inverse Fourier")'
             'return f,'};
 
     f = python_cmd(cmd, F, k);
@@ -80,7 +80,7 @@ function f = ifourier(varargin)
       k = sym('k');
     end
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
+            'f = sp.transforms._fourier_transform(F, k, x, 1/(2*sp.pi), 1,"Inverse Fourier")'
             'return f,'};
 
     f = python_cmd(cmd, F, k, x);
@@ -90,7 +90,7 @@ function f = ifourier(varargin)
     k = sym(varargin{2});
     x = sym(varargin{3});
     cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
+            'f = sp.transforms._fourier_transform(F, k, x, 1/(2*sp.pi), 1,"Inverse Fourier")'
             'return f,'};
 
     f = python_cmd(cmd, F, k, x);
