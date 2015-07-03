@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge symbolic package], [2.2.2])
+AC_INIT([Octave-Forge symbolic package], [2.2.3-dev])
 
 AC_PATH_PROG(PYTHON, python)
 if test -z $PYTHON; then

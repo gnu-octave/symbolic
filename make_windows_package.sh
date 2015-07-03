@@ -8,9 +8,9 @@ PYEXEREADME=py27910.readme.txt   # from the src package
 SYMPY=sympy-0.7.6
 
 # for day-to-day testing
-VER=2.2.2-dev
+VER=2.2.3-dev
 # for release
-#VER=2.2.2
+#VER=2.2.3
 #TAG=v${VER}
 
 
