@@ -35,11 +35,6 @@
 %%          -x
 %%      √π⋅ℯ
 %% @end group
-%% @group
-%% >> F = 2*sym(pi)*dirac(k);
-%% >> ifourier(F)
-%%    @result{} ans = (sym) 1
-%% @end group
 %% @end example
 %%
 %% Note @code{fourier} and @code{ifourier} implement the non-unitary,
@@ -55,7 +50,7 @@
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms
 
-function f = ifourier(varargin)
+function F = fourier(varargin)
 
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
@@ -74,7 +69,7 @@ function f = ifourier(varargin)
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
 
-    f = python_cmd(cmd, F, k);
+    F = python_cmd(cmd, f, x);
 
   elseif (nargin == 2)
     f = sym(varargin{1});
@@ -87,7 +82,7 @@ function f = ifourier(varargin)
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
 
-    f = python_cmd(cmd, F, k, x);
+    F = python_cmd(cmd, f, x, k);
 
   elseif (nargin == 3)
     f = sym(varargin{1});
@@ -97,7 +92,7 @@ function f = ifourier(varargin)
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
 
-    f = python_cmd(cmd, F, k, x);
+    F = python_cmd(cmd, f, x, k);
 
   else
     print_usage ();
@@ -114,13 +109,6 @@ end
 %! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
-
-%!test
-%! % basic
-%! syms x w
-%! Pi=sym('pi');
-%! assert(logical( ifourier(exp(-w^2/4)) == 1/(sqrt(Pi)*exp(x^2)) ))
-%! assert(logical( ifourier(sqrt(Pi)/exp(w^2/4)) == exp(-x^2) ))
 
 %!xtest
 %! % Issue #251, upstream failure?  TODO: upstream issue?
