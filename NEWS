@@ -1,16 +1,25 @@
-octsympy 2.2.2-dev
+octsympy 2.2.3-dev
 ==================
+
+
+
+octsympy 2.2.2 (2015-07-03)
+===========================
 
   * Fix for configure script using Python 3 (thanks Vadim Gribanov).
 
-  * Bug fixes and update doctests.
-
   * Fourier transform fixes (thanks Alexander Misel, Andrés Prieto).
+    They now follow the non-unitary angular frequency convention.
+
+  * Support for SymPy 0.7.7.dev version.
+
+  * Add some warnings to the documentation about unreliable results
+    for "dsolve" on systems and from Fourier transforms.
 
   * Start using "print_usage" for invalid inputs as is common
     practice in Octave.
 
-  * Support for SymPy 0.7.7.dev version.
+  * Bug fixes and update doctests.
 
 
 

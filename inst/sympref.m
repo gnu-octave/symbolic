@@ -30,11 +30,13 @@
 %%
 %%
 %% *Python executable* path/command:
-%% @verbatim
-%%      >> sympref python '/usr/bin/python'
-%%      >> sympref python 'C:\Python\python.exe'
-%%      >> sympref python 'N:\myprogs\py.exe'
-%% @end verbatim
+%% @example
+%% @group
+%% >> sympref python '/usr/bin/python'       @c doctest: +SKIP
+%% >> sympref python 'C:\Python\python.exe'  @c doctest: +SKIP
+%% >> sympref python 'N:\myprogs\py.exe'     @c doctest: +SKIP
+%% @end group
+%% @end example
 %% Default is an empty string; in which case OctSymPy just runs
 %% @code{python} and assumes the path is set appropriately.
 %%
@@ -102,9 +104,9 @@
 %% *Reset*: reset the SymPy communication mechanism.  This can be
 %% useful after an error occurs and the connection with Python
 %% becomes confused.
-%% @verbatim
-%%      >> sympref reset
-%% @end verbatim
+%% @example
+%% >> sympref reset     @c doctest: +SKIP
+%% @end example
 %%
 %% *Snippets*: when displaying a sym object, we quote the SymPy
 %% representation (or a small part of it):
@@ -114,7 +116,7 @@
 %% >> y = [pi x];
 %% >> sympref snippet on
 %% >> y
-%%    @result{} y = (sym 1×2 matrix)   “MutableDenseMatrix([[pi, Symbol('x')]])”
+%%    @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
 %%        [π  x]
 %% >> sympref snippet off
 %% >> y
@@ -139,7 +141,7 @@
 %% @example
 %% @group
 %% >> sympref version
-%%    @result{} 2.2.2-dev
+%%    @result{} 2.2.3-dev
 %% @end group
 %% @end example
 %%
@@ -172,7 +174,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.2.2-dev';
+      varargout{1} = '2.2.3-dev';
 
     case 'display'
       if (nargin == 1)

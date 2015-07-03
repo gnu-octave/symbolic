@@ -22,18 +22,18 @@
 %% @deftypefn {Function File} {@var{f} =} ifourier (@var{FF}, @var{k}, @var{x})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
 %% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
-%% Symbolic inverse Fourier transform (non-unitary, angular frequency).
+%% Symbolic inverse Fourier transform.
 %%
 %% Example:
 %% @example
 %% @group
 %% >> syms k
-%% >> F = pi*exp(-k^2/4);
+%% >> F = sqrt(sym(pi))*exp(-k^2/4);
 %% >> ifourier(F)
 %%    @result{} (sym)
-%%            2
-%%          -x
-%%      √π⋅ℯ
+%%         2
+%%       -x
+%%      ℯ
 %% @end group
 %% @group
 %% >> F = 2*sym(pi)*dirac(k);
@@ -41,6 +41,9 @@
 %%    @result{} ans = (sym) 1
 %% @end group
 %% @end example
+%%
+%% Note @code{fourier} and @code{ifourier} implement the non-unitary,
+%% angular frequency convention.
 %%
 %% @seealso{fourier}
 %% @end deftypefn

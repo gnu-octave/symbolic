@@ -2,7 +2,7 @@ function [A, err] = readblock(fout, timeout)
 %private function: read one block
 
   % how long to wait before displaying "Waiting..."
-  wait_disp_thres = 2.0;
+  wait_disp_thres = 4.0;
 
   tagblock = '<output_block>';
   tagendblock = '</output_block>';

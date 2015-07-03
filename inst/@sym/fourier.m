@@ -19,23 +19,17 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{f} =} ifourier (@var{FF}, @var{k}, @var{x})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
-%% Symbolic inverse Fourier transform (non-unitary, angular frequency).
+%% @deftypefn {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{k})
+%% Symbolic Fourier transform.
 %%
 %% Example:
 %% @example
 %% @group
-<<<<<<< HEAD
-%% >> syms k
-%% >> F = pi*exp(-k^2/4);
-%% >> ifourier(F)
-=======
 %% >> syms x
 %% >> f = exp(-abs(x));
 %% >> fourier(f)
->>>>>>> octsympy_colin/master
 %%    @result{} (sym)
 %%            2
 %%          -x
@@ -48,7 +42,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{fourier}
+%% Note @code{fourier} and @code{ifourier} implement the non-unitary,
+%% angular frequency convention.
+%%
+%% *WARNING*: As of SymPy 0.7.6 (June 2015), there are many problems
+%% with fourier transforms, even very simple ones.  Use at your own risk,
+%% or even better: help us fix SymPy.
+%%
+%% @seealso{ifourier}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald, Andrés Prieto
@@ -59,18 +60,6 @@ function f = ifourier(varargin)
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
-<<<<<<< HEAD
-  % If the physical variable of f is equal to "s",
-  % "t" is the frequency domain variable (analogously to SMT)
-  if (nargin == 1)
-    F=varargin{1};
-    k=symvar(F,1);
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=sp.Symbol("x")'
-            'if x==k:'
-            '    x=sp.Symbol("t")'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
-            'return f,'};
-=======
   % If the physical variable of f is equal to "w",
   % "v" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
@@ -84,19 +73,10 @@ function f = ifourier(varargin)
             '    k=sp.Symbol("v")'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
->>>>>>> octsympy_colin/master
 
     f = python_cmd(cmd, F, k);
 
   elseif (nargin == 2)
-<<<<<<< HEAD
-    F=varargin{1};
-    x=varargin{2};
-    k=symvar(F,1);
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
-            'return f,'};
-=======
     f = sym(varargin{1});
     k = sym(varargin{2});
     x = symvar(f, 1);
@@ -106,26 +86,16 @@ function f = ifourier(varargin)
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
->>>>>>> octsympy_colin/master
 
     f = python_cmd(cmd, F, k, x);
 
   elseif (nargin == 3)
-<<<<<<< HEAD
-    F=varargin{1};
-    k=varargin{2};
-    x=varargin{3};
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
-            'f = sp.inverse_fourier_transform(F, k, x/(2*sp.pi))/(2*sp.pi)'
-            'return f,'};
-=======
     f = sym(varargin{1});
     x = sym(varargin{2});
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
             'return F,'};
->>>>>>> octsympy_colin/master
 
     f = python_cmd(cmd, F, k, x);
 
@@ -138,22 +108,12 @@ end
 
 
 %!test
-<<<<<<< HEAD
-%! % matlab SMT compat
-%! syms t r u x w
-%! Pi=sym('pi');
-%! assert(logical( ifourier(exp(-abs(w))) == 1/(Pi*(x^2 + 1)) ))
-%! assert(logical( ifourier(exp(-abs(x))) == 1/(Pi*(t^2 + 1)) ))
-%! assert(logical( ifourier(exp(-abs(r)),u) == 1/(Pi*(u^2 + 1)) ))
-%! assert(logical( ifourier(exp(-abs(r)),r,u) == 1/(Pi*(u^2 + 1)) ))
-=======
 %! % matlab SMT compatibiliy for arguments
 %! syms r x u w v
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
 %! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
->>>>>>> octsympy_colin/master
 
 %!test
 %! % basic
@@ -163,15 +123,6 @@ end
 %! assert(logical( ifourier(sqrt(Pi)/exp(w^2/4)) == exp(-x^2) ))
 
 %!xtest
-<<<<<<< HEAD
-%! % Inverse Fourier transform cannot handle non-smooth functions
-%! % SymPy cannot evaluate correctly??
-%! syms x w
-%! assert(logical( ifourier(2/(w^2 + 1)) == exp(-abs(x)) ))
-%! assert(logical( ifourier(2/(w^2 + 1)) == heaviside(x)/exp(x) + heaviside(-x)*exp(x) ))
-%! assert(logical( ifourier(-(w*4)/(w^4 + 2*w^2 + 1) )== -x*exp(-abs(x))*1i ))
-%! assert(logical( ifourier(-(w*4)/(w^4 + 2*w^2 + 1) )== -x*(heaviside(x)/exp(x) + heaviside(-x)*exp(x))*1i ))
-=======
 %! % Issue #251, upstream failure?  TODO: upstream issue?
 %! syms x w
 %! f = fourier(sym(2), x, w);
@@ -182,4 +133,3 @@ end
 %! % SymPy cannot evaluate? (Issue #170)
 %! syms x w f(x)
 %! assert(logical( fourier(diff(f(x),x),x,w) == -1i*w*fourier(f(x),x,w) ))
->>>>>>> octsympy_colin/master
