@@ -296,9 +296,8 @@ function s = sym(x, varargin)
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I';
     %% Symbols with special meanings in SymPy: Issue #23
-    elseif (strcmp(x, 'beta') || strcmp(x, 'gamma') || ...
-            strcmp(x, 'zeta') || strcmp(x, 'Chi') || ...
-            strcmp(x, 'S') || strcmp(x, 'N') || strcmp(x, 'Q'))
+    elseif (any(strcmp(x, {'beta' 'gamma' 'zeta' 'Chi' 'E' 'E1' 'Ei' ...
+                           'Eijk' 'S' 'N' 'Q'})))
       useSymbolNotS = true;
     elseif (strcmp(x, 'lambda'))
       x = 'lamda';
