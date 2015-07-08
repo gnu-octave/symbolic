@@ -287,6 +287,8 @@ function s = sym(x, varargin)
       x = '-oo';
     elseif (strcmpi(x, 'i'))
       x = 'I';
+    elseif (strcmpi(x, '-i'))
+      x = '-I';
     elseif (strcmpi(x, 'nan'))
       x = 'nan';
     elseif (strcmp(x, 'lambda'))
