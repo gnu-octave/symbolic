@@ -269,9 +269,6 @@ function s = sym(x, varargin)
 
 
   elseif (isa (x, 'char'))
-    useSymbolNotS = false;
-    cmd = [];
-
     asm = [];
     if (nargin == 2 && isequal(size(varargin{1}), [1 2]))
       s = make_sym_matrix(x, varargin{1});
@@ -284,23 +281,24 @@ function s = sym(x, varargin)
 
     doDecimalCheck = true;
 
-    % various special cases for x
-    if (strcmp(x, 'pi'))
-      cmd = 'z = sp.pi';
-    elseif (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
-      cmd = 'z = sp.oo';
+    % preprocess
+    if (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
+      x = 'oo';
     elseif (strcmpi(x, '-inf'))
-      cmd = 'z = -sp.oo';
-    elseif (strcmpi(x, 'nan'))
-      cmd = 'z = sp.nan';
+      x = '-oo';
     elseif (strcmpi(x, 'i'))
-      cmd = 'z = sp.I';
+      x = 'I';
+    elseif (strcmpi(x, 'nan'))
+      x = 'nan';
     elseif (strcmp(x, 'lambda'))
       x = 'lamda';
-      useSymbolNotS = true;
     elseif (strcmp(x, 'Lambda'))
       x = 'Lamda';
-      useSymbolNotS = true;
+    end
+
+    % Decide whether to pass to S() or Symbol()
+    if (any(strcmp(x, {'pi', 'I', 'oo', 'zoo', 'nan'})))
+      useSymbolNotS = false;
     elseif (regexp(x, '^-?\d*\.?\d*(e-?\d+)?$'))
       % Numbers: integers and floats
       useSymbolNotS = false;
@@ -320,17 +318,14 @@ function s = sym(x, varargin)
     end
 
     if (~useSymbolNotS)
-      % if we're not forcing Symbol() then we use S(), unless
-      % cmd already set.
-      if (isempty(cmd))
-        if (doDecimalCheck && ~isempty(strfind(x, '.')))
-          warning('possibly unintended decimal point in constructor string');
-        end
-        % x is raw sympy, could have various quotes in it
-        cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+      % Use S(), as we're not forcing Symbol()
+      if (doDecimalCheck && ~isempty(strfind(x, '.')))
+        warning('possibly unintended decimal point in constructor string');
       end
+      % x is raw sympy, could have various quotes in it
+      cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+
     else % useSymbolNotS
-      assert(isempty(cmd), 'inconsistent input')
       if (isempty(asm))
         cmd = sprintf('z = sympy.Symbol("%s")', x);
 
