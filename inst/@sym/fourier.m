@@ -67,8 +67,9 @@ function F = fourier(varargin)
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
             '    k=sp.Symbol("v")'
-            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
-            'return F,'};
+            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
+            'F, cond = F.args[0]'
+            'return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x);
 
@@ -80,8 +81,9 @@ function F = fourier(varargin)
       x = sym('x');  % FIXME: should be dummy variable in case k was x
     end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
-            'return F,'};
+            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
+            'F, cond = F.args[0]'
+            'return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x, k);
 
@@ -90,8 +92,9 @@ function F = fourier(varargin)
     x = sym(varargin{2});
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.transforms._fourier_transform(f, x, k, 1,-1,"Fourier")'
-            'return F,'};
+            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
+            'F, cond = F.args[0]'
+            'return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x, k);
 
