@@ -68,8 +68,10 @@ function F = fourier(varargin)
             'if x==k:'
             '    k=sp.Symbol("v")'
             'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'F, cond = F.args[0]'
-            'return sp.simplify(F),'};
+            'if F.is_Piecewise:'
+            '    return sp.simplify(F.args[0][0]),'
+            'else:'
+            '    return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x);
 
@@ -82,8 +84,10 @@ function F = fourier(varargin)
     end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'F, cond = F.args[0]'
-            'return sp.simplify(F),'};
+            'if F.is_Piecewise:'
+            '    return sp.simplify(F.args[0][0]),'
+            'else:'
+            '    return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x, k);
 
@@ -93,8 +97,10 @@ function F = fourier(varargin)
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
             'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'F, cond = F.args[0]'
-            'return sp.simplify(F),'};
+            'if F.is_Piecewise:'
+            '    return sp.simplify(F.args[0][0]),'
+            'else:'
+            '    return sp.simplify(F),'};
 
     F = python_cmd(cmd, f, x, k);
 
