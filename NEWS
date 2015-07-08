@@ -1,6 +1,10 @@
 octsympy 2.2.3-dev
 ==================
 
+  * sym('var') is more robust in case var happens to be a special
+    value in SymPy.  Now sym('E') is just a symbol rather than
+    exp(sym(1)).  Also sym('E1') and sym('Eq') no longer give errors.
+
 
 
 octsympy 2.2.2 (2015-07-03)

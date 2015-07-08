@@ -269,9 +269,6 @@ function s = sym(x, varargin)
 
 
   elseif (isa (x, 'char'))
-    useSymbolNotS = false;
-    cmd = [];
-
     asm = [];
     if (nargin == 2 && isequal(size(varargin{1}), [1 2]))
       s = make_sym_matrix(x, varargin{1});
@@ -279,52 +276,58 @@ function s = sym(x, varargin)
     elseif (nargin >= 2)
       % assume the remaining inputs are assumptions
       asm = varargin;
-      useSymbolNotS = true;
     end
 
     doDecimalCheck = true;
 
-    % various special cases for x
-    if (strcmp(x, 'pi'))
-      cmd = 'z = sp.pi';
-    elseif (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
-      cmd = 'z = sp.oo';
+    % preprocess
+    if (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
+      x = 'oo';
     elseif (strcmpi(x, '-inf'))
-      cmd = 'z = -sp.oo';
-    elseif (strcmpi(x, 'nan'))
-      cmd = 'z = sp.nan';
+      x = '-oo';
     elseif (strcmpi(x, 'i'))
-      cmd = 'z = sp.I';
-    %% Symbols with special meanings in SymPy: Issue #23
-    elseif (any(strcmp(x, {'beta' 'gamma' 'zeta' 'Chi' 'E' 'E1' 'Ei' ...
-                           'Eijk' 'S' 'N' 'Q'})))
-      useSymbolNotS = true;
+      x = 'I';
+    elseif (strcmpi(x, '-i'))
+      x = '-I';
+    elseif (strcmpi(x, 'nan'))
+      x = 'nan';
     elseif (strcmp(x, 'lambda'))
       x = 'lamda';
-      useSymbolNotS = true;
     elseif (strcmp(x, 'Lambda'))
       x = 'Lamda';
+    end
+
+    % Decide whether to pass to S() or Symbol()
+    if (any(strcmp(x, {'pi', 'I', 'oo', 'zoo', 'nan'})))
+      useSymbolNotS = false;
+    elseif (regexp(x, '^-?\d*\.?\d*(e-?\d+)?$'))
+      % Numbers: integers and floats
+      useSymbolNotS = false;
+    elseif (regexp(x, '^\w+$'))
+      % Words.  Note must follow numbers case.
+      % Use Symbol instead of S, e.g., for Issue #23:
+      % strcmp(x, {'beta' 'gamma' 'zeta' 'Chi' 'E' 'E1' 'Ei' 'S' 'N' 'Q'})
+      % But we also expect sym('Eq') to work, so match all single words
       useSymbolNotS = true;
     elseif (~isempty (strfind (x, '(') ))
-      %disp('debug: has a "(", not a symfun, assuming srepr!')
+      % SymPy "srepr" or other raw python code
       useSymbolNotS = false;
       doDecimalCheck = false;
     else
-      %disp(['debug: just a regular symbol: ' x])
+      % Other non-symbols such as sym('1/3')
+      useSymbolNotS = false;
     end
 
     if (~useSymbolNotS)
-      % if we're not forcing Symbol() then we use S(), unless
-      % cmd already set.
-      if (isempty(cmd))
-        if (doDecimalCheck && ~isempty(strfind(x, '.')))
-          warning('possibly unintended decimal point in constructor string');
-        end
-        % x is raw sympy, could have various quotes in it
-        cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+      % Use S(), as we're not forcing Symbol()
+      assert (isempty (asm))   % sym('pi', 'integer')
+      if (doDecimalCheck && ~isempty(strfind(x, '.')))
+        warning('possibly unintended decimal point in constructor string');
       end
+      % x is raw sympy, could have various quotes in it
+      cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+
     else % useSymbolNotS
-      assert(isempty(cmd), 'inconsistent input')
       if (isempty(asm))
         cmd = sprintf('z = sympy.Symbol("%s")', x);
 
@@ -625,6 +628,17 @@ end
 %! assert (isequal (x/sym(pi), sym(1)/123))
 %! warning (s)
 
+%!test
+%! % symbols with special sympy names
+%! syms Ei Eq
+%! assert (regexp(char(Eq), '^Symbol'))
+%! assert (regexp(char(Ei), '^Symbol'))
+
+%!test
+%! % E can be a sym not just exp(sym(1))
+%! syms E
+%! assert (~logical (E == exp(sym(1))))
+
 %!error <assumption is not supported>
 %! x = sym('x', 'positive2');
 
@@ -633,6 +647,12 @@ end
 
 %!error <assumption is not supported>
 %! x = sym('x', 'integer2', 'positive');
+
+%!error <failed>
+%! x = sym('-pi', 'positive')
+
+%!error <failed>
+%! x = sym('pi', 'integer')
 
 %!xtest
 %! % multiple assumptions
