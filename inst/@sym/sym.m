@@ -276,7 +276,6 @@ function s = sym(x, varargin)
     elseif (nargin >= 2)
       % assume the remaining inputs are assumptions
       asm = varargin;
-      useSymbolNotS = true;
     end
 
     doDecimalCheck = true;
@@ -319,6 +318,7 @@ function s = sym(x, varargin)
 
     if (~useSymbolNotS)
       % Use S(), as we're not forcing Symbol()
+      assert (isempty (asm))   % sym('pi', 'integer')
       if (doDecimalCheck && ~isempty(strfind(x, '.')))
         warning('possibly unintended decimal point in constructor string');
       end
@@ -645,6 +645,12 @@ end
 
 %!error <assumption is not supported>
 %! x = sym('x', 'integer2', 'positive');
+
+%!error <failed>
+%! x = sym('-pi', 'positive')
+
+%!error <failed>
+%! x = sym('pi', 'integer')
 
 %!xtest
 %! % multiple assumptions
