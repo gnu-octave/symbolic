@@ -295,22 +295,28 @@ function s = sym(x, varargin)
       cmd = 'z = sp.nan';
     elseif (strcmpi(x, 'i'))
       cmd = 'z = sp.I';
-    %% Symbols with special meanings in SymPy: Issue #23
-    elseif (any(strcmp(x, {'beta' 'gamma' 'zeta' 'Chi' 'E' 'E1' 'Ei' ...
-                           'Eijk' 'S' 'N' 'Q'})))
-      useSymbolNotS = true;
     elseif (strcmp(x, 'lambda'))
       x = 'lamda';
       useSymbolNotS = true;
     elseif (strcmp(x, 'Lambda'))
       x = 'Lamda';
       useSymbolNotS = true;
+    elseif (regexp(x, '^-?\d*\.?\d*(e-?\d+)?$'))
+      % Numbers: integers and floats
+      useSymbolNotS = false;
+    elseif (regexp(x, '^\w+$'))
+      % Words.  Note must follow numbers case.
+      % Use Symbol instead of S, e.g., for Issue #23:
+      % strcmp(x, {'beta' 'gamma' 'zeta' 'Chi' 'E' 'E1' 'Ei' 'S' 'N' 'Q'})
+      % But we also expect sym('Eq') to work, so match all single words
+      useSymbolNotS = true;
     elseif (~isempty (strfind (x, '(') ))
-      %disp('debug: has a "(", not a symfun, assuming srepr!')
+      % SymPy "srepr" or other raw python code
       useSymbolNotS = false;
       doDecimalCheck = false;
     else
-      %disp(['debug: just a regular symbol: ' x])
+      % Other non-symbols such as sym('1/3')
+      useSymbolNotS = false;
     end
 
     if (~useSymbolNotS)
@@ -624,6 +630,17 @@ end
 %! x = sym(pi/123);
 %! assert (isequal (x/sym(pi), sym(1)/123))
 %! warning (s)
+
+%!test
+%! % symbols with special sympy names
+%! syms Ei Eq
+%! assert (regexp(char(Eq), '^Symbol'))
+%! assert (regexp(char(Ei), '^Symbol'))
+
+%!test
+%! % E can be a sym not just exp(sym(1))
+%! syms E
+%! assert (~logical (E == exp(sym(1))))
 
 %!error <assumption is not supported>
 %! x = sym('x', 'positive2');
