@@ -244,8 +244,8 @@ end
 %! c = vpa('152415765279684');
 %! assert (isequal (b, c))
 
-%!xtest
-%! % big integers (num2str broken in Octave)
+%!test
+%! % big integers (workaround poor num2str)
 %! a = int64(1234567891);  a = a*a;
 %! b = vpa(a);
 %! c = vpa('1524157877488187881');

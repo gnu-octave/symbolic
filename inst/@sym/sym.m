@@ -208,7 +208,7 @@ function s = sym(x, varargin)
     return
 
   elseif (isinteger(x)  &&  nargin==1)
-    s = sym(num2str(x));
+    s = sym(num2str(x, '%d'));
     return
 
   elseif (isa (x, 'double')  &&  nargin==1)
@@ -616,6 +616,14 @@ end
 %! a = int64([1 2 100]);
 %! s = sym(a);
 %! assert (isequal (double(a), [1 2 100]))
+
+%!test
+%! % bigger int64 integer types
+%! q = int64(123456789012345);
+%! w = 10000*q + 123;
+%! a = sym('1234567890123450123');
+%! b = sym(w);
+%! assert (isequal (a, b))
 
 %!test
 %! % sym(double) heuristic
