@@ -244,8 +244,8 @@ end
 %! c = vpa('152415765279684');
 %! assert (isequal (b, c))
 
-%!test
-%! % big integers (workaround poor num2str)
+%!xtest
+%! % big integers (workaround poor num2str, works in 4.0?)
 %! a = int64(1234567891);  a = a*a;
 %! b = vpa(a);
 %! c = vpa('1524157877488187881');

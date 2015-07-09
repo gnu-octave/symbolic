@@ -51,7 +51,7 @@ function a = do_list(indent, in, varlist)
 
     elseif (isinteger(x) && isscalar(x))
       c=c+1; a{c} = sprintf('%s%s.append(%s)  # int type', ...
-                            sp, in, num2str(x, '%d'));
+                            sp, in, num2str(x, '%ld'));
 
     elseif (isfloat(x) && isscalar(x))
       % Floating point input.  By default, all Octave numbers are
