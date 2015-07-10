@@ -39,11 +39,11 @@
 %% @end example
 %%
 %% Note @code{fourier} and @code{ifourier} implement the non-unitary,
-%% angular frequency convention.
+%% angular frequency convention for L^2 functions (and constant functions)
 %%
 %% *WARNING*: As of SymPy 0.7.6 (June 2015), there are many problems
-%% with fourier transforms, even very simple ones.  Use at your own risk,
-%% or even better: help us fix SymPy.
+%% with Fourier transforms of functions not belonging to L^2, even very 
+%% simple ones.  Use at your own risk, or even better: help us fix SymPy.
 %%
 %% @seealso{ifourier}
 %% @end deftypefn
@@ -67,11 +67,27 @@ function F = fourier(varargin)
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
             '    k=sp.Symbol("v")'
-            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'if F.is_Piecewise:'
-            '    return sp.simplify(F.args[0][0]),'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
             'else:'
-            '    return sp.simplify(F),'};
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '    
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r.values()[0]'
+            '    phase=r.values()[1]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
+            'return F,'};
 
     F = python_cmd(cmd, f, x);
 
@@ -83,11 +99,27 @@ function F = fourier(varargin)
       x = sym('x');  % FIXME: should be dummy variable in case k was x
     end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'if F.is_Piecewise:'
-            '    return sp.simplify(F.args[0][0]),'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
             'else:'
-            '    return sp.simplify(F),'};
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '    
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r.values()[0]'
+            '    phase=r.values()[1]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
+            'return F,'};
 
     F = python_cmd(cmd, f, x, k);
 
@@ -96,11 +128,27 @@ function F = fourier(varargin)
     x = sym(varargin{2});
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.integrate(f*sp.exp(-sp.I*x*k), (x, -sp.oo, sp.oo))'
-            'if F.is_Piecewise:'
-            '    return sp.simplify(F.args[0][0]),'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
             'else:'
-            '    return sp.simplify(F),'};
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '    
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r.values()[0]'
+            '    phase=r.values()[1]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
+            'return F,'};
 
     F = python_cmd(cmd, f, x, k);
 
@@ -124,16 +172,19 @@ end
 %!test
 %! % basic tests
 %! syms x w
-%! Pi=sym('pi'); 
 %! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
 %! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
-%! assert(logical( fourier(delta(x-2)) == exp(2*1i*w) ))
 
-%!xtest
-%! % Issue #251, upstream failure?  TODO: upstream issue?
-%! syms x w
-%! f = fourier(sym(2), x, w);
-%! assert (isequal (f, 4*sym(pi)*dirac(w)))
+%!test
+%! % Dirac delta tests
+%! assert(logical( fourier(dirac(x-2)) == exp(-2*1i*w) ))
+%! assert (logical( fourier(sym(2), x, w) == 4*sym(pi)*dirac(w) ))
+
+%!test
+%! % advanced test
+%! syms x w c d
+%! Pi=sym('pi');
+%! assert(logical( fourier(cos(c*x)+2*sin(3*d*x)+exp(-abs(x))) == Pi*(dirac(w-c)+dirac(w+c))+2*Pi*1i(dirac(w+3*d)-dirac(w-3*d))+2/(w^2+1) ))
 
 %!xtest
 %! % Differential operator to algebraic
