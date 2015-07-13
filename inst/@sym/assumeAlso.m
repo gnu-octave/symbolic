@@ -17,12 +17,38 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
 %% @deftypefnx {Function File} {} assumeAlso (@var{x}, @var{cond})
 %% Add additional assumptions on a symbolic variable.
 %%
 %% Behaviour is similar to @code{assume}; however @var{cond} is combined
 %% with any existing assumptions of @var{x} instead of replacing them.
+%%
+%% Example:
+%% @example
+%% @group
+%% >> syms x integer
+%% >> x1 = x;
+%% >> x = assumeAlso(x, 'positive');
+%% >> assumptions(x)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: integer, positive
+%%      @}
+%% @end group
+%% @end example
+%%
+%% But as with @code{assume}, note @code{x1} is unchanged:
+%% @example
+%% @group
+%% >> assumptions(x1)
+%%    @result{} ans =
+%%      @{
+%%        [1,1] = x: integer
+%%      @}
+%% @end group
+%% @end example
 %%
 %% @strong{Warning}: with no output argument, this tries to find
 %% and replace any @var{x} within expressions in the caller's
