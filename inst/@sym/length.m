@@ -17,13 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n} =} length (@var{x})
 %% Length of a symbolic vector.
+%%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = [1 2 x; x 3 4];
+%% length(A)
+%%    @result{} 3
+%% @end group
+%% @end example
 %%
 %% As usual, be careful with this and matrices: you may want
 %% @code{numel} instead.
 %%
-%% @seealso{numel,size}
+%% @seealso{numel, size}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
