@@ -30,33 +30,31 @@
 %% @group
 %% >> syms x a c
 %% >> str = disp(sin(2*sym(pi)*x))
-%%  @result{} str =   sin(2⋅π⋅x)
+%%    @result{} str =   sin(2⋅π⋅x)
 %%
 %% >> A = [sin(x/2) floor(a^(x*c)); acosh(2*x/pi) ceil(sin(x/gamma(x)))];
 %% >> disp(A, 'unicode')
-%%  @result{}
-%%   ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
-%%   ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
-%%   ⎢     ⎝2⎠               ⎥
-%%   ⎢                       ⎥
-%%   ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
-%%   ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
-%%   ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
+%%    @print{} ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
+%%    @print{} ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
+%%    @print{} ⎢     ⎝2⎠               ⎥
+%%    @print{} ⎢                       ⎥
+%%    @print{} ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
+%%    @print{} ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
+%%    @print{} ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
 %% @end group
 %%
 %% @group
 %% >> disp(A, 'ascii')
-%%  @result{}
-%%   [     /x\              / c*x\      ]
-%%   [  sin|-|         floor\a   /      ]
-%%   [     \2/                          ]
-%%   [                                  ]
-%%   [     /2*x\         /   /   x    \\]
-%%   [acosh|---|  ceiling|sin|--------||]
-%%   [     \ pi/         \   \gamma(x)//]
+%%    @print{} [     /x\              / c*x\      ]
+%%    @print{} [  sin|-|         floor\a   /      ]
+%%    @print{} [     \2/                          ]
+%%    @print{} [                                  ]
+%%    @print{} [     /2*x\         /   /   x    \\]
+%%    @print{} [acosh|---|  ceiling|sin|--------||]
+%%    @print{} [     \ pi/         \   \gamma(x)//]
 %%
 %% >> disp(A, 'flat')
-%%  @result{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
+%%    @print{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
 %% @end group
 %% @end example
 %%
