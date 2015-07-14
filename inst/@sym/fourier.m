@@ -39,10 +39,10 @@
 %% @end example
 %%
 %% Note @code{fourier} and @code{ifourier} implement the non-unitary,
-%% angular frequency convention for L^2 functions (and constant functions)
+%% angular frequency convention for L^2 functions and distributions.
 %%
 %% *WARNING*: As of SymPy 0.7.6 (June 2015), there are many problems
-%% with Fourier transforms of functions not belonging to L^2, even very 
+%% with (inverse) Fourier transforms of non-smooth functions, even very 
 %% simple ones.  Use at your own risk, or even better: help us fix SymPy.
 %%
 %% @seealso{ifourier}
@@ -177,14 +177,17 @@ end
 
 %!test
 %! % Dirac delta tests
+%! syms x w
+%! Pi=sym('pi');
 %! assert(logical( fourier(dirac(x-2)) == exp(-2*1i*w) ))
-%! assert (logical( fourier(sym(2), x, w) == 4*sym(pi)*dirac(w) ))
+%! assert (logical( fourier(sym(2), x, w) == 4*Pi*dirac(w) ))
 
 %!test
 %! % advanced test
 %! syms x w c d
 %! Pi=sym('pi');
-%! assert(logical( fourier(cos(c*x)+2*sin(3*d*x)+exp(-abs(x))) == Pi*(dirac(w-c)+dirac(w+c))+2*Pi*1i(dirac(w+3*d)-dirac(w-3*d))+2/(w^2+1) ))
+%! F=Pi*(dirac(w-c)+dirac(w+c))+2*Pi*1i*(dirac(w+3*d)-dirac(w-3*d))+2/(w^2+1);
+%! assert(logical( fourier(cos(c*x)+2*sin(3*d*x)+exp(-abs(x))) == expand(F) ))
 
 %!xtest
 %! % Differential operator to algebraic

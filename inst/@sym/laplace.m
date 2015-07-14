@@ -65,7 +65,7 @@
 %% @seealso{ilaplace}
 %% @end deftypefn
 
-%% Author: Andrés Prieto
+%% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms
 
 function F = laplace(varargin)
@@ -77,9 +77,9 @@ function F = laplace(varargin)
   % "z" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
     f = sym(varargin{1});
-    t = symvar(f, 1);
+    t = symvar(f, 1);  % note SMT does something different, prefers t
     if (isempty(t))
-      t = sym('t');
+      t = sym('t','positive');
     end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
@@ -97,7 +97,7 @@ function F = laplace(varargin)
     s = sym(varargin{2});
     t = symvar(f, 1);  % note SMT does something different, prefers t
     if (isempty(t))
-      t = sym('t');
+      t = sym('t','positive');
     end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
@@ -156,6 +156,12 @@ end
 %! syms s
 %! f = laplace(2, s);
 %! assert (isequal (f, 2/s))
+
+%!test
+%! % Dirac delta and Heaviside tests
+%! syms t s
+%! assert (isequal (laplace(dirac(t-3)), exp(-3*s)))
+%! assert (isequal (laplace((t-3)*heaviside(t-3)), exp(-3*s)/s^2))
 
 %!xtest
 %! % Differential operator to algebraic
