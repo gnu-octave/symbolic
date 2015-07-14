@@ -33,9 +33,8 @@
 %% >> x = 10; y = 2;
 %% >> cmd = '(x,y) = _ins; return (x+y,x-y)';
 %% >> [a, b] = python_cmd (cmd, x, y)
-%%    @result{}
-%%      a =  12
-%%      b =  8
+%%    @result{} a =  12
+%%    @result{} b =  8
 %% @end group
 %% @end example
 %%
@@ -56,7 +55,7 @@
 %% (Python gurus will know why).
 %%
 %% Instead of @code{return}, you can append to the Python list
-%% @code{_outs}@:
+%% @code{_outs}:
 %% @example
 %% @group
 %% >> cmd = '(x,y) = _ins; _outs.append(x**y)';
@@ -69,11 +68,11 @@
 %% with whitespace: its Python!
 %% @example
 %% @group
-%% >> cmd = { '(x,) = _ins'
+%% >> cmd = @{ '(x,) = _ins'
 %% ..         'if x.is_Matrix:'
 %% ..         '    return (x.T,)'
 %% ..         'else:'
-%% ..         '    return (x,)' };
+%% ..         '    return (x,)' @};
 %% @end group
 %% @end example
 %% The cell array can be either a row or a column vector.

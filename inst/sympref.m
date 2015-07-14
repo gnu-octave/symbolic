@@ -29,7 +29,7 @@
 %% @var{args} are documented below.
 %%
 %%
-%% *Python executable* path/command:
+%% @strong{Python executable} path/command:
 %% @example
 %% @group
 %% >> sympref python '/usr/bin/python'       @c doctest: +SKIP
@@ -40,7 +40,7 @@
 %% Default is an empty string; in which case OctSymPy just runs
 %% @code{python} and assumes the path is set appropriately.
 %%
-%% *Display* of syms:
+%% @strong{Display} of syms:
 %% @example
 %% @group
 %% >> sympref display
@@ -73,7 +73,7 @@
 %% symbolic expressions.  If that doesn't work (e.g., if you
 %% see @code{?} characters) then try the @code{ascii} option.
 %%
-%% *Communication mechanism*:
+%% @strong{Communication mechanism}:
 %% @example
 %% >> sympref ipc
 %%    @result{} ans = default
@@ -101,14 +101,14 @@
 %% [for debugging, may not be supported long-term].
 %% @end itemize
 %%
-%% *Reset*: reset the SymPy communication mechanism.  This can be
+%% @strong{Reset}: reset the SymPy communication mechanism.  This can be
 %% useful after an error occurs and the connection with Python
 %% becomes confused.
 %% @example
 %% >> sympref reset     @c doctest: +SKIP
 %% @end example
 %%
-%% *Snippets*: when displaying a sym object, we quote the SymPy
+%% @strong{Snippets}: when displaying a sym object, we quote the SymPy
 %% representation (or a small part of it):
 %% @example
 %% @group
@@ -125,7 +125,7 @@
 %% @end group
 %% @end example
 %%
-%% *Default precision*: control the number of digits used by
+%% @strong{Default precision}: control the number of digits used by
 %% variable-precision arithmetic (see also the @ref{digits} command).
 %% @example
 %% @group
@@ -137,7 +137,7 @@
 %% @end example
 %%
 %%
-%% Report the *version* number:
+%% Report the @strong{version} number:
 %% @example
 %% @group
 %% >> sympref version
