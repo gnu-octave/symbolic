@@ -5,7 +5,7 @@ AC_INIT([Octave-Forge symbolic package], [2.2.3-dev])
 ## so we check if we really are running GNU sort
 AC_PATH_PROG(SORT, sort)
 AC_MSG_CHECKING(for GNU coreutils)
-$SORT --version | grep -q GNU
+$SORT --version 2>/dev/null | grep -q GNU
 if test $? -ne 0;
 then
   AC_MSG_RESULT(no)
