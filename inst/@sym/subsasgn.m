@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -183,6 +183,10 @@ end
 %! x(true) = 88;
 %! assert(isequal( x, sym(88) ));
 
+%% bug: assignment to column vector used to fail
+%!test
+%! A = sym(zeros(3,1));
+%! A(1) = 5;
 
 %% symfun creation (generic function)
 %!test

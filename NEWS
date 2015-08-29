@@ -5,6 +5,8 @@ octsympy 2.2.3-dev
     value in SymPy.  Now sym('E') is just a symbol rather than
     exp(sym(1)).  Also sym('E1') and sym('Eq') no longer give errors.
 
+  * Fix bug in assigning to column vectors, thanks to Grzegorz Dudziuk.
+
   * During install, test for PATH problems on Windows (issue #236).
 
 
