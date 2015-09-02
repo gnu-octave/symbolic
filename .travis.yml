@@ -12,11 +12,9 @@ matrix:
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 # TODO: once doctest is in OF, change to "install -forge" below
-# octave-4.0 on Ubuntu Precise often fails without libatlas3gf-base
 install:
   - sudo apt-add-repository --yes ppa:octave/stable
   - sudo apt-get update
-  - sudo apt-get install libatlas3gf-base
   - sudo apt-get install octave liboctave-dev
   - "pip install sympy==$SYMPY_VER"
   - wget https://github.com/catch22/octave-doctest/releases/download/v0.4.0/doctest-0.4.0.tar.gz
