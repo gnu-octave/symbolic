@@ -78,7 +78,7 @@ function display(x)
     unicode_dec = false;
   end
   display_snippet = sympref('snippet');
-  loose = strcmp(get(0,'FormatSpacing'), 'loose');
+  loose = ! __compactformat__ ();
 
   %% Get terminal width, mainly for snippets
   % works in matlab gui & -nodesktop but not the most up-to-date
