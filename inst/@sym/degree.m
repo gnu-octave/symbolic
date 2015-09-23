@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n} =} degree (@var{p})
 %% @deftypefnx {Function File} {@var{n} =} degree (@var{p}, @var{x})
 %% Extract numerator and demoninator of symbolic expression.

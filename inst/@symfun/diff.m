@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @dots{})
