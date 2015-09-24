@@ -61,10 +61,17 @@
 %% @end example
 %% Instead, use @code{g(x)} on the left-hand side as above.
 %%
-%% You can make multidimensional concrete or abstract symfuns using
-%% @code{syms g(x,y)}.  However, a bug in the Octave parser in
-%% versions before 4.0 means this 2D example will give a parse
-%% error.  A workaround is to enclose the argument in a string:
+%% You can make multidimensional concrete or abstract symfuns:
+%% @example
+%% >> g(x, y) = 2*x + sin(y)
+%% >> g
+%%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
+%% >> syms g(x, y)
+%% >> g
+%%    @result{} g(x, y) = (symfun) g(x, y)
+%% @end example
+%% However, on old versions of Octave (before 4.0), one needs to
+%% workaround a bug in the parser:
 %% @example
 %% >> syms 'g(x, y)'
 %% >> g
