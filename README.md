@@ -57,6 +57,11 @@ Octave itself (it includes SymPy and a Python interpreter.)
 Alternatively, you can install Python and SymPy yourself and use the
 standard `octsympy-0.1.2.zip` package.
 
+If you encounter any difficulties (even minor ones) please read and
+if possible help us improve the
+[wiki page on Windows Installation](https://github.com/cbm755/octsympy/wiki/Notes-on-Windows-installation).
+
+
 
 
 How to Install on Matlab
