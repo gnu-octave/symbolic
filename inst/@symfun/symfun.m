@@ -23,8 +23,13 @@
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
 %% represents an unknown function (for example, in a differential
-%% equation).  A concrete symfun represents a known function such
-%% as f(x) = sin(x).
+%% equation).  A concrete symfun represents a known function such as
+%% @iftex
+%% @math{f(x) = \sin(x)}.
+%% @end iftex
+%% @ifnottex
+%% f(x) = sin(x).
+%% @ifnottex
 %%
 %% A concrete symfun:
 %% @example
@@ -93,10 +98,15 @@
 %% @end example
 %%
 %% This allows, for example, creating an abstract function formally
-%% of x, y but depending only on x:
+%% of @code{x}, @code{y} but depending only on @code{x}:
 %% @example
 %% >> syms x y
 %% >> h = symfun(sym('h(x)'), [x y])
+%%    @result{} h(x, y) = (symfun) h(x)
+%% @end example
+%% which is the same as:
+%% @example
+%% >> h(x,y) = sym('h(x)')
 %%    @result{} h(x, y) = (symfun) h(x)
 %% @end example
 %%
