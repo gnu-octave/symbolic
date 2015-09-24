@@ -14,6 +14,8 @@ octsympy 2.2.3-dev
 
   * During install, test for PATH problems on Windows (issue #236).
 
+  * Fix for Octave 4.1+ developement versions, thanks to Mike Miller.
+
 
 
 octsympy 2.2.2 (2015-07-03)
