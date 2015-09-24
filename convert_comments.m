@@ -174,7 +174,7 @@ function success = convert_oct_2_ml (fname, foutname)
 
   usestr = usestr([1:(I-1) J:end]);
 
-  use = strsplit(usestr, newl);
+  use = strsplit(usestr, newl, 'CollapseDelimiters', false);
 
   %% remove this string
   % and make sure these lines have the correct function name
