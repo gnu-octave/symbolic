@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,7 +29,7 @@
 %% @end iftex
 %% @ifnottex
 %% f(x) = sin(x).
-%% @ifnottex
+%% @end ifnottex
 %%
 %% A concrete symfun:
 %% @example
