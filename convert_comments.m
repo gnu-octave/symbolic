@@ -42,14 +42,7 @@ end
 
 function success = convert_oct_2_ml (fname, foutname)
 
-%function convert_oct_2_ml (fcn)
-  %fname = sprintf('@sym/%s.m', fcn)
-  %foutname = sprintf('ml_%s.m', fcn)
-
-%fname, foutname
   [dir, fcn, ext] = fileparts(fname);
-%chdir(dir)
-%fname = [fcn ext]
 
   newl = sprintf('\n');
 
