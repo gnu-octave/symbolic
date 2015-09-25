@@ -68,6 +68,7 @@
 %%
 %% You can make multidimensional concrete or abstract symfuns:
 %% @example
+%% >> syms x y
 %% >> g(x, y) = 2*x + sin(y)
 %% >> g
 %%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
@@ -76,7 +77,7 @@
 %%    @result{} g(x, y) = (symfun) g(x, y)
 %% @end example
 %% However, on old versions of Octave (before 4.0), one needs to
-%% workaround a bug in the parser:
+%% workaround a parsing bug:
 %% @example
 %% >> syms 'g(x, y)'
 %% >> g
