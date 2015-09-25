@@ -70,7 +70,6 @@
 %% @example
 %% >> syms x y
 %% >> g(x, y) = 2*x + sin(y)
-%% >> g
 %%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
 %% >> syms g(x, y)
 %% >> g
