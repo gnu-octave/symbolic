@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,42 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} transpose (@var{x})
-%% Transpose of a symbolic array.
+%% Structural transpose (not conjugate) of a symbolic array.
+%%
+%% Example:
+%% @example
+%% @group
+%% >> syms z
+%% >> syms x real
+%% >> A = [1 x z; sym(4) 5 6+7i]
+%%    @result{} A = (sym 2×3 matrix)
+%%        ⎡1  x     z   ⎤
+%%        ⎢             ⎥
+%%        ⎣4  5  6 + 7⋅ⅈ⎦
+%% >> transpose(A)
+%%    @result{} (sym 3×2 matrix)
+%%        ⎡1     4   ⎤
+%%        ⎢          ⎥
+%%        ⎢x     5   ⎥
+%%        ⎢          ⎥
+%%        ⎣z  6 + 7⋅ⅈ⎦
+%% @end group
+%% @end example
+%%
+%% This can be abbreviated to:
+%% @example
+%% @group
+%% >> A.'
+%%    @result{} (sym 3×2 matrix)
+%%        ⎡1     4   ⎤
+%%        ⎢          ⎥
+%%        ⎢x     5   ⎥
+%%        ⎢          ⎥
+%%        ⎣z  6 + 7⋅ⅈ⎦
+%% @end group
+%% @end example
 %%
 %% @seealso{ctranspose}
 %% @end deftypefn

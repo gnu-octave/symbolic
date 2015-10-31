@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{B} =} expm (@var{A})
 %% Symbolic matrix exponential.
+%%
+%% Example:
+%% @example
+%% @group
+%% >> A = [sym(4) 1; sym(0) 4]
+%%    @result{} A = (sym 2×2 matrix)
+%%        ⎡4  1⎤
+%%        ⎢    ⎥
+%%        ⎣0  4⎦
+%% >> expm(A)
+%%    @result{} (sym 2×2 matrix)
+%%        ⎡ 4   4⎤
+%%        ⎢ℯ   ℯ ⎥
+%%        ⎢      ⎥
+%%        ⎢     4⎥
+%%        ⎣0   ℯ ⎦
+%% @end group
+%% @end example
 %%
 %% @end deftypefn
 
