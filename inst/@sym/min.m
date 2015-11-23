@@ -56,7 +56,7 @@ function [z, I] = min(A, B, dim)
     else
       [z, I] = min(A, [], 1);
     end
-  elseif (nargin == 2)
+  elseif (nargin == 2) && (nargout <= 1)
     A = sym(A);
     B = sym(B);
     assert (isequal (size(A), size(B)));  % TODO: WIP

@@ -47,7 +47,7 @@ function [z, I] = max(A, B, dim)
   if (nargin == 1)
     [z, I] = min(-A);
     z = -z;
-  elseif (nargin == 2)
+  elseif (nargin == 2) && (nargout <= 1)
     z = -min(-A, -B);
   elseif (nargin == 3)
     [z, I] = min(-A, -B, dim);
