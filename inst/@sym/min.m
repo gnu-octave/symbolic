@@ -59,12 +59,13 @@ function [z, I] = min(A, B, dim)
   elseif (nargin == 2) && (nargout <= 1)
     A = sym(A);
     B = sym(B);
-    assert (isequal (size(A), size(B)));  % TODO: WIP
     cmd = { '(A, B) = _ins'
+            'if not A.is_Matrix and not B.is_Matrix:'
+            '    return min(A, B)'
             'if not A.is_Matrix:'
-            '    A = sp.Matrix([A])'
-            'if not B.is_Matrix:'
-            '    B = sp.Matrix([B])'
+            '    A = sp.Matrix(B.rows, B.cols, [A]*(B.rows*B.cols))'
+            'elif not B.is_Matrix:'
+            '    B = sp.Matrix(A.rows, A.cols, [B]*(A.rows*A.cols))'
             'M = A.copy()'
             'for i in range(0, A.rows):'
             '    for j in range(0, A.cols):'
@@ -261,3 +262,15 @@ end
 %! [m, I] =  min(A, [], 2);
 %! assert (isempty (m))
 %! assert (isempty (I))
+
+%!test
+%! % binary op form, one a scalar
+%! A = sym([3 1 9]);
+%! m = min(A, sym(2));
+%! M = max(A, sym(2));
+%! assert (isequal (m, sym([2 1 2])))
+%! assert (isequal (M, sym([3 2 9])))
+%! m = min(sym(2), A);
+%! M = max(sym(2), A);
+%! assert (isequal (m, sym([2 1 2])))
+%! assert (isequal (M, sym([3 2 9])))
