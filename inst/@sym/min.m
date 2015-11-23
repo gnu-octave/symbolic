@@ -49,9 +49,12 @@ function [z, I] = min(A, B, dim)
 
   if (nargin == 1)
     if (isvector(A))
-      z = python_cmd ('return min(_ins[0]),', A);
+      cmd = { 'A = _ins[0]'
+              'val, idx = min((val, idx) for (idx, val) in enumerate(A))'
+              'return val, idx+1' };
+      [z, I] = python_cmd (cmd, A);
     else
-      z = min(A, [], 1);
+      [z, I] = min(A, [], 1);
     end
   elseif (nargin == 2)
     A = sym(A);
@@ -74,18 +77,32 @@ function [z, I] = min(A, B, dim)
     assert (logical(dim == 1) || logical(dim == 2))
 
     cmd = { '(A, dim) = _ins'
+            'def myargmin(z):'
+            '    return min((val, idx) for (idx, val) in enumerate(z))'
             'if not A.is_Matrix:'
             '    A = sp.Matrix([A])'
             'if dim == 0:'
-            '    m = [min(A.col(i)) for i in range(0, A.cols)]'
-            '    m = Matrix([m])'
+            '    if (A.cols == 0):'
+            '        return (Matrix(0, 0, []), Matrix(0, 0, []))'
+            '    if (A.rows == 0):'
+            '        return (A, A)'
+            '    val_idx_pairs = [myargmin(A.col(i)) for i in range(0, A.cols)]'
+            '    m, I = zip(*val_idx_pairs)'
+            '    return (Matrix([m]), Matrix([I]))'
             'elif dim == 1:'
-            '    m = [min(A.row(i)) for i in range(0, A.rows)]'
-            '    m = Matrix(m)'
-            'return m,' };
+            '    if (A.rows == 0):'
+            '        return (Matrix(0,0,[]), Matrix(0,0,[]))'
+            '    if (A.cols == 0):'
+            '        return (A, A)'
+            '    val_idx_pairs = [myargmin(A.row(i)) for i in range(0, A.rows)]'
+            '    m, I = zip(*val_idx_pairs)'
+            '    return (Matrix(m), Matrix(I))' };
 
-    z = python_cmd (cmd, A, dim - 1);
-
+    [z, I] = python_cmd (cmd, A, dim - 1);
+    I = double(I);
+    if (~isempty(I))
+      I = I + 1;
+    end
   else
     print_usage ();
   end
@@ -158,3 +175,89 @@ end
 %! assert (isequal (max(A), sym([2 4 6])))
 %! assert (isequal (max(A, [], 1), sym([2 4 6])))
 %! assert (isequal (max(A, [], 2), sym([6; 5])))
+
+%!test
+%! % index output is double not sym
+%! [m, I] = min(sym(2), [], 1);
+%! assert (strcmp(class(I), 'double'))
+%! [m, I] = max(sym(2), [], 1);
+%! assert (strcmp(class(I), 'double'))
+
+%!test
+%! % empty rows/columns, I is double
+%! A = sym(zeros(0, 4));
+%! [m, I] =  min(A, [], 1);
+%! assert (strcmp(class(I), 'double'))
+%! [m, I] =  max(A, [], 1);
+%! assert (strcmp(class(I), 'double'))
+%! A = sym(zeros(3, 0));
+%! [m, I] =  min(A, [], 2);
+%! assert (strcmp(class(I), 'double'))
+%! [m, I] =  max(A, [], 2);
+%! assert (strcmp(class(I), 'double'))
+
+%!test
+%! % index output
+%! A = [0 1 9; 10 7 4];
+%! B = sym(A);
+%! [m1, I1] = min(A);
+%! [m2, I2] = min(B);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+%! [m1, I1] = max(A);
+%! [m2, I2] = max(B);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+
+%!test
+%! % index output, with dim
+%! A = [0 1 9; 10 7 4];
+%! B = sym(A);
+%! [m1, I1] = min(A, [], 1);
+%! [m2, I2] = min(B, [], 1);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+%! [m1, I1] = min(A, [], 2);
+%! [m2, I2] = min(B, [], 2);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+%! [m1, I1] = max(A, [], 1);
+%! [m2, I2] = max(B, [], 1);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+%! [m1, I1] = max(A, [], 2);
+%! [m2, I2] = max(B, [], 2);
+%! assert (isequal (I1, I2))
+%! assert (isequal (m1, double(m2)))
+
+%!test
+%! % empty columns
+%! A = sym(zeros(0, 4));
+%! [m, I] =  min(A, [], 1);
+%! assert (isequal (size(m), [0 4]))
+%! assert (isequal (size(I), [0 4]))
+%! [m, I] =  max(A, [], 1);
+%! assert (isequal (size(m), [0 4]))
+%! assert (isequal (size(I), [0 4]))
+
+%!test
+%! % empty rows
+%! A = sym(zeros(3, 0));
+%! [m, I] =  min(A, [], 2);
+%! assert (isequal (size(m), [3 0]))
+%! assert (isequal (size(I), [3 0]))
+%! [m, I] =  max(A, [], 2);
+%! assert (isequal (size(m), [3 0]))
+%! assert (isequal (size(I), [3 0]))
+
+%!test
+%! % another empty case
+%! % we differ slightly from double which gives 1x0/0x1
+%! A = sym(zeros(3, 0));
+%! [m, I] =  min(A, [], 1);
+%! assert (isempty (m))
+%! assert (isempty (I))
+%! A = sym(zeros(0, 3));
+%! [m, I] =  min(A, [], 2);
+%! assert (isempty (m))
+%! assert (isempty (I))

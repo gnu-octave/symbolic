@@ -42,14 +42,16 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function z = max(A, B, dim)
+function [z, I] = max(A, B, dim)
 
   if (nargin == 1)
-    z = -min(-A);
+    [z, I] = min(-A);
+    z = -z;
   elseif (nargin == 2)
     z = -min(-A, -B);
   elseif (nargin == 3)
-    z = -min(-A, -B, dim);
+    [z, I] = min(-A, -B, dim);
+    z = -z;
   else
     print_usage ();
   end
