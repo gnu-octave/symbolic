@@ -26,13 +26,13 @@
 %% Example:
 %% @example
 %% @group
-%% max(sym(1), sym(2))
-%%   @result{} (sym) 2
-%% max([1 2*sym(pi) 6])
-%%   @result{} (sym) 2⋅π
-%% [M, I] = max([1 2*sym(pi) 6])      % doctest: +XFAIL
-%%   @result{} M = (sym) 2⋅π
-%%   @result{} I = 2
+%% >> max(sym(1), sym(2))
+%%    @result{} (sym) 2
+%% >> max([1 2*sym(pi) 6])
+%%    @result{} (sym) 2⋅π
+%% >> [M, I] = max([1 2*sym(pi) 6])
+%%    @result{} M = (sym) 2⋅π
+%%    @result{} I = 2
 %% @end group
 %% @end example
 %%

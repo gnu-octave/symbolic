@@ -26,16 +26,16 @@
 %% Example:
 %% @example
 %% @group
-%% min(sym(1), sym(2))
-%%   @result{} (sym) 1
-%% m = min([1 sym(pi)/4 6])
-%%   @result{} m = (sym)
+%% >> min(sym(1), sym(2))
+%%    @result{} (sym) 1
+%% >> m = min([1 sym(pi)/4 6])
+%%    @result{} m = (sym)
 %%        π
 %%        ─
 %%        4
-%% [m, I] = min([sym(1) 0 6])   % doctest: +XFAIL
-%%   @result{} m = (sym) 0
-%%   @result{} I = 2
+%% >> [m, I] = min([sym(1) 0 6])
+%%    @result{} m = (sym) 0
+%%    @result{} I = 2
 %% @end group
 %% @end example
 %%
