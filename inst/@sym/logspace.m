@@ -30,8 +30,8 @@
 %% @group
 %% logspace(sym(-2), 1, 4)
 %%   @result{} (sym) [1/100  1/10  1  10]  (1×4 matrix)
-%% logspace(sym(0),3,3)
-%%   @result{} (sym) [1  10⋅√10  1000]  (1×3 matrix)
+%% logspace(sym(0), 3, 4)
+%%   @result{} (sym) [1  10  100  1000]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -40,15 +40,17 @@
 %% between @code{10^@var{a}} and @code{pi} instead:
 %% @example
 %% @group
-%% logspace(0, sym(pi), 3)
-%%   @result{} (sym) [1  √π  π]  (1×3 matrix)
+%% logspace(0, sym(pi), 4)
+%%   @result{} (sym 1×4 matrix)
+%%       ⎡   3 ___   2/3   ⎤
+%%       ⎣1  ╲╱ π   π     π⎦
 %% @end group
 %% @end example
 %%
 %% @code{logspace} can be combined with @code{vpa}:
 %% @example
 %% @group
-%% logspace(vpa(-1), vpa(2), 5)'
+%% logspace(vpa(-1), vpa(2), 5)'              % doctest: +XFAIL
 %%   @result{} ans = (sym 5×1 matrix)
 %%       ⎡               0.1                ⎤
 %%       ⎢                                  ⎥
@@ -61,6 +63,7 @@
 %%       ⎣              100.0               ⎦
 %% @end group
 %% @end example
+%% (As of 2015-11, this example needs an unreleased SymPy.)
 %%
 %% @seealso{linspace, colon}
 %% @end deftypefn
