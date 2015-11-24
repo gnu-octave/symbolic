@@ -17,8 +17,21 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{b} =} isscalar (@var{x})
 %% Return true if this symbolic expression is a scalar.
+%%
+%% Example:
+%% @example
+%% @group
+%% s = sym(1);
+%% v = sym([1 2 3]);
+%% isscalar(s)
+%%   @result{} 1
+%% isscalar(v)
+%%   @result{} 0
+%% @end group
+%% @end example
 %%
 %% @seealso{size, numel, isvector}
 %% @end deftypefn

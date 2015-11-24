@@ -17,8 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{b} =} isvector (@var{x})
 %% Return true if this symbolic expression is a vector.
+%%
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%% v = sym([1 2 3]);
+%% h = v';
+%% isvector(A)
+%%   @result{} 0
+%% isvector(v)
+%%   @result{} 1
+%% isvector(h)
+%%   @result{} 1
+%% @end group
+%% @end example
 %%
 %% @seealso{size, numel, isscalar}
 %% @end deftypefn
