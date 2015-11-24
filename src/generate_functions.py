@@ -9,6 +9,7 @@ import sys
 import os
 
 input_list = """sqrt
+cbrt
 exp
 log
 abs|Abs|-1
