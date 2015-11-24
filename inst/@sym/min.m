@@ -61,7 +61,7 @@ function [z, I] = min(A, B, dim)
     B = sym(B);
     cmd = { '(A, B) = _ins'
             'if not A.is_Matrix and not B.is_Matrix:'
-            '    return min(A, B)'
+            '    return min(A, B),'
             'if not A.is_Matrix:'
             '    A = sp.Matrix(B.rows, B.cols, [A]*(B.rows*B.cols))'
             'elif not B.is_Matrix:'
@@ -274,3 +274,10 @@ end
 %! M = max(sym(2), A);
 %! assert (isequal (m, sym([2 1 2])))
 %! assert (isequal (M, sym([3 2 9])))
+
+%!test
+%! % binary op form, both scalar
+%! m = min(sym(1), sym(2));
+%! M = max(sym(2), sym(2));
+%! assert (isequal (m, sym(1)))
+%! assert (isequal (M, sym(2)))
