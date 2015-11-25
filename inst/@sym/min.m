@@ -233,6 +233,9 @@ end
 
 %!test
 %! % empty columns
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: SymPy 0.7.5 is too old')  % clean up in Issue #164
+%! else
 %! A = sym(zeros(0, 4));
 %! [m, I] =  min(A, [], 1);
 %! assert (isequal (size(m), [0 4]))
@@ -240,9 +243,13 @@ end
 %! [m, I] =  max(A, [], 1);
 %! assert (isequal (size(m), [0 4]))
 %! assert (isequal (size(I), [0 4]))
+%! end
 
 %!test
 %! % empty rows
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
+%!   disp('skipping: SymPy 0.7.5 is too old')  % clean up in Issue #164
+%! else
 %! A = sym(zeros(3, 0));
 %! [m, I] =  min(A, [], 2);
 %! assert (isequal (size(m), [3 0]))
@@ -250,6 +257,7 @@ end
 %! [m, I] =  max(A, [], 2);
 %! assert (isequal (size(m), [3 0]))
 %! assert (isequal (size(I), [3 0]))
+%! end
 
 %!test
 %! % another empty case
