@@ -78,10 +78,12 @@ function display(x)
     unicode_dec = false;
   end
   display_snippet = sympref('snippet');
-  if (exist('OCTAVE_VERSION', 'builtin'))
+  if (exist('OCTAVE_VERSION', 'builtin') && ...
+      compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
     % Octave 4.1 dropped (temporarily?) the get(0,...) approach
     loose = eval('! __compactformat__ ()');
   else
+    % Matlab and Octave < 4
     loose = strcmp(get(0, 'FormatSpacing'), 'loose');
   end
 
