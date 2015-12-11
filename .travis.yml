@@ -8,7 +8,7 @@ matrix:
     - python: "2.7"
       env: SYMPY_VER=0.7.6 DOCTEST=yes
     - python: "3.4"
-      env: SYMPY_VER=0.7.6 DOCTEST=yes
+      env: SYMPY_VER=0.7.6.1 DOCTEST=yes
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 # TODO: once doctest is in OF, change to "install -forge" below
