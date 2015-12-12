@@ -197,6 +197,7 @@ end
 %! assert (isequal (symprod(a, n, 1, inf), a^oo))
 
 %%!test
+%%! % FIXME: commented out test...
 %%! % SymPy 0.7.6: nan
 %%! % SymPy git: interesting that 1**oo is nan but this is still 1
 %%! assert (isequal (symprod(1, n, 1, oo), sym(1)))

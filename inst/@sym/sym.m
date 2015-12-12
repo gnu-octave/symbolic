@@ -664,7 +664,7 @@ end
 
 %!xtest
 %! % multiple assumptions
-%! % FIXME: xtest for sympy <= 0.7.6 where a is the full dict
+%! % FIXME: xtest for sympy <= 0.7.6.x where a is the full dict
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
