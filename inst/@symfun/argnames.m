@@ -54,8 +54,8 @@ end
 %! assert (isequal (argnames (f), x))
 
 %!test
-%! % Multiple variables, abstract symfun (quotes are oct 3.6 workaround)
-%! syms 'f(t, x, y)'
+%! % Multiple variables, abstract symfun
+%! syms f(t, x, y)
 %! assert (isequal (argnames (f), [t x y]))
 
 %!test
