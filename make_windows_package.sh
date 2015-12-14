@@ -5,7 +5,7 @@ PYEXE=py27910.exe
 PYEXEREADME=py27910.readme.txt   # from the src package
 
 # download sympy release, unpack in the directory with this script
-SYMPY=sympy-0.7.6
+SYMPY=sympy-0.7.6.1
 
 # for day-to-day testing
 VER=2.2.4-dev
