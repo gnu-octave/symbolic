@@ -195,8 +195,7 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
   %% get input string
   if (param.user_provided_vars)
     Nin = length(inputs);
-    % FIXME: once Octave 3.6 is ancient history, use strjoin
-    inputstr = mystrjoin(syms2charcells(inputs), ',');
+    inputstr = strjoin(syms2charcells(inputs), ',');
   else
     % findsymbols works on cell input, previous comment worried
     % about differences with symvar, but don't think there are any
