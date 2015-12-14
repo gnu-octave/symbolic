@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge symbolic package], [2.2.4-dev])
+AC_INIT([Octave-Forge symbolic package], [2.2.4])
 
 ## Window users seem to often have their path misconfigured (issue #236)
 ## so we check if we really are running GNU sort
