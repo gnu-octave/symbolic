@@ -14,9 +14,10 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
     error('unsupported command')
   end
 
-  vstr = sympref('version');
+  verbose = ~sympref('quiet');
 
-  if (isempty(show_msg))
+  if (verbose && isempty(show_msg))
+    vstr = sympref('version');
     disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
     disp('You are using the slower system() communications with SymPy.')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
