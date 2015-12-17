@@ -17,9 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{B} =} inv (@var{A})
 %% Symbolic inverse of a matrix.
 %%
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%% inv(A)
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡-2    1  ⎤
+%%       ⎢         ⎥
+%%       ⎣3/2  -1/2⎦
+%% @end group
+%% @end example
+%%
+%% If the matrix is singular, an error is raised:
+%% @example
+%% @group
+%% syms x
+%% A = [x x; x x];
+%% inv(A)
+%%   @print{} ??? Matrix det == 0; not invertible.
+%% @end group
+%% @end example
+%%
+%% @seealso{ldivide, rdivide}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
