@@ -97,7 +97,7 @@
 
 %!xtest
 %! % Issue #8: array construction when row is only doubles
-%! % fails on: Octave 3.6.4, 3.8.1, hg tip July 2014.
+%! % fails on: Octave 3.6.4, 3.8.1, 4.0.0, hg tip Dec 2015.
 %! % works on: Matlab
 %! try
 %!   A = [sym(0) 1; 2 3];
