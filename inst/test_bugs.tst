@@ -40,6 +40,50 @@
 %! a = sym([1 inf]);
 %! assert( isequaln (a, [1 inf]))
 
+%!test
+%! % Issue #103: rot90, fliplr, flipud, flip on scalars
+%! % (In Octave, we do not need to overload these)
+%! syms x
+%! assert (isequal (rot90(x), x))
+%! assert (isequal (rot90(x, 1), x))
+%! assert (isequal (rot90(x, 17), x))
+%! assert (isequal (fliplr(x), x))
+%! assert (isequal (flipud(x), x))
+%! assert (isequal (flip(x), x))
+%! assert (isequal (flip(x, 1), x))
+%! assert (isequal (flip(x, 2), x))
+
+%!test
+%! % Issue #103: rot90, fliplr, flipud, flip on vectors
+%! syms x
+%! h = [1 2 x];
+%! v = [1; 2; x];
+%! assert (isequal (rot90(h), flipud(v)))
+%! assert (isequal (rot90(h, 1), flipud(v)))
+%! assert (isequal (rot90(h, 2), fliplr(h)))
+%! assert (isequal (rot90(h, 3), v))
+%! assert (isequal (rot90(h, 4), h))
+%! assert (isequal (rot90(h, 17), rot90(h, 1)))
+%! assert (isequal (rot90(v), h))
+%! assert (isequal (flipud(h), h))
+%! assert (isequal (fliplr(v), v))
+%! assert (isequal (fliplr(h), [x 2 1]))
+%! assert (isequal (flipud(v), [x; 2; 1]))
+%! assert (isequal (flip(h, 1), h))
+%! assert (isequal (flip(h, 2), fliplr(h)))
+
+%!test
+%! % Issue #103: rot90, fliplr, flipud, flip on matrices
+%! syms x
+%! A = [1 x 3; x 5 6];
+%! assert (isequal (rot90(A), [sym(3) 6; x 5; 1 x]))
+%! assert (isequal (rot90(A, 2), [6 5 x; 3 x 1]))
+%! assert (isequal (rot90(A, 3), [x 1; 5 x; sym(6) 3]))
+%! assert (isequal (rot90(A, 4), A))
+%! assert (isequal (flipud(A), [x 5 6; 1 x 3]))
+%! assert (isequal (fliplr(A), [3 x 1; 6 5 x]))
+%! assert (isequal (flip(A, 1), flipud(A)))
+%! assert (isequal (flip(A, 2), fliplr(A)))
 
 
 %% Bugs still active
