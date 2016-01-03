@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="addon">
   <id>octave-symbolic</id>
-  <extends>octave.desktop</extends>
+  <extends>www.octave.org-octave.desktop</extends>
   <name>Symbolic</name>
   <summary>Symbolic manipulation, calculus, variable precision arithmetic, and other computer algebra features</summary>
   <url type="homepage">http://octave.sourceforge.net/symbolic</url>
