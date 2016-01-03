@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g}} formula (@var{f})
+%% @deftypefn {Function File} {@var{g} =} formula (@var{f})
 %% Return a symbolic expression for this object.
 %%
 %% For a @@sym, this simply returns the sym itself.  Subclasses

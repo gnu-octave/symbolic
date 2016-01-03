@@ -20,7 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n} =} degree (@var{p})
 %% @deftypefnx {Function File} {@var{n} =} degree (@var{p}, @var{x})
-%% Extract numerator and demoninator of symbolic expression.
+%% Return the degree of a polynomial expression.
 %%
 %% Examples:
 %% @example
