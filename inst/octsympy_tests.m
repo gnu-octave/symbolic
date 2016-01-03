@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
-%% Run the OctSymPy tests, log results, and return true if passing.
+%% Run the OctSymPy tests, log results, and return true if any fail.
 %%
 %% I threw this together by modifying "__run_test_suite__.m" which
 %% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
