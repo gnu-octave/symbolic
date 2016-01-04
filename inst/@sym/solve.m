@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,23 +36,6 @@
 %%        ⎡2⎤
 %%        ⎢ ⎥
 %%        ⎣3⎦
-%% @end group
-%% @end example
-%%
-%% You can specify a variable or even an expression to solve for:
-%% @example
-%% @group
-%% >> syms x y
-%% >> e = 10*x == 20*y;
-%% >> d = solve(e, x)    % gives 2*y
-%%    @result{} d = (sym) 2⋅y
-%% >> d = solve(e, y)    % gives x/2
-%%    @result{} d = (sym)
-%%        x
-%%        ─
-%%        2
-%% >> d = solve(e, 2*x)  % gives 4*y
-%%    @result{} d = (sym) 4⋅y
 %% @end group
 %% @end example
 %%
@@ -190,20 +174,11 @@ end
 %! assert (isequal (d, 2*y))
 
 %!test
-%! % now this works because we don't return a dict, see next comments
+%! % Solve for an expression 2*x instead of a variable.  Note only very
+%! % simple examples will work, see "?solve" in SymPy, hence this is no
+%! % longer documented in the help text.
 %! d = solve(e, 2*x);
 %! assert (isequal (d, 4*y))
-
-%%!test
-%%! % solve for 2*x (won't work on Matlab/Octave 3.6)
-%%! % FIXME: design a test with both x and y?  Should we support this?
-%%! if exist('octave_config_info', 'builtin')
-%%!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
-%%!     d = solve(e, 2*x);
-%%!     s = d.('2*x');
-%%!     assert (isequal (s, 4*y))
-%%!   end
-%%! end
 
 %!test
 %! d = solve(2*x - 3*y == 0, x + y == 1);
