@@ -18,25 +18,25 @@ install:
   - sudo apt-get install octave liboctave-dev
   - "pip install sympy==$SYMPY_VER"
   - #if [ "x$DOCTEST" = "xyes" ]; then
-    #    octave -W --eval "pkg install -forge doctest";
+    #    octave -W --no-gui --eval "pkg install -forge doctest";
     #fi
   - # Or for a specific doctest version:
     if [ "x$DOCTEST" = "xyes" ]; then
         wget https://github.com/catch22/octave-doctest/releases/download/v0.4.1/doctest-0.4.1.tar.gz;
-        octave -W --eval "pkg install doctest-0.4.1.tar.gz";
+        octave -W --no-gui --eval "pkg install doctest-0.4.1.tar.gz";
     fi
 
 # all commands here must have exit code 0 for the build to be called "passing"
-# debugging: octave -W --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
+# debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
-  - octave -W --eval "ver; pwd; exit(0)"
+  - octave -W --no-gui --eval "ver; pwd; exit(0)"
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
-  - octave -W --eval "r = octsympy_tests; exit(r)"
+  - octave -W --no-gui --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave -W --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 
