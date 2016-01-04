@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,8 +24,17 @@
 %% For a @@sym, this simply returns the sym itself.  Subclasses
 %% such as @@symfun may do more interesting things.
 %%
-%% @seealso{@@symfun/formula, argnames}
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% f = 2*x;
+%% formula(f)
+%%    @result{} ans = (sym) 2⋅x
+%% @end group
+%% @end example
 %%
+%% @seealso{@@symfun/formula, argnames}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
