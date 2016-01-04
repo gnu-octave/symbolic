@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,16 +17,16 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n}, @var{d} =} numden (@var{x})
-%% Extract numerator and demoninator of symbolic expression.
+%% Extract numerator and denominator of symbolic expression.
 %%
 %% Examples:
 %% @example
 %% @group
 %% >> [n, d] = numden(sym(4)/5)
-%%    @result{}
-%%      n = (sym) 4
-%%      d = (sym) 5
+%%    @result{} n = (sym) 4
+%%    @result{} d = (sym) 5
 %% @end group
 %% @end example
 %%
@@ -34,9 +34,8 @@
 %% @group
 %% >> syms x y
 %% >> [n, d] = numden((x+y)/sin(x))
-%%    @result{}
-%%      n = (sym) x + y
-%%      d = (sym) sin(x)
+%%    @result{} n = (sym) x + y
+%%    @result{} d = (sym) sin(x)
 %% @end group
 %% @end example
 %%

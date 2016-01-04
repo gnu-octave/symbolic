@@ -17,7 +17,8 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g}} formula (@var{f})
+%% @documentencoding UTF-8
+%% @deftypefn {Function File} {@var{g} =} formula (@var{f})
 %% Return a symbolic expression for this symfun.
 %%
 %% This returns the expression that defines the function given by

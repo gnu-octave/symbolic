@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,7 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n} =} degree (@var{p})
 %% @deftypefnx {Function File} {@var{n} =} degree (@var{p}, @var{x})
-%% Extract numerator and demoninator of symbolic expression.
+%% Return the degree of a polynomial expression.
 %%
 %% Examples:
 %% @example
