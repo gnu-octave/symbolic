@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
 %% Return the independent variables in a symfun.
 %%
 %% For a @@sym, this always returns the empty sym, but
 %% subclasses like @@symfun do something more interesting.
+%%
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% f = 2*x*y;
+%% argnames(f)
+%%   @result{} (sym) []  (empty 0×0 matrix)
+%% @end group
+%% @end example
 %%
 %% @seealso{@@symfun/argnames, symvar, findsym, findsymbols}
 %% @end deftypefn
