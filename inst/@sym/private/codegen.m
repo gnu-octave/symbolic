@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -193,18 +193,11 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
 
 
   %% get input string
-  if (param.user_provided_vars)
-    Nin = length(inputs);
-    inputstr = strjoin(syms2charcells(inputs), ',');
-  else
-    % findsymbols works on cell input, previous comment worried
-    % about differences with symvar, but don't think there are any
-    % here: only for two inputs like symvar(f, 2).
+  if (~param.user_provided_vars)
     inputs = findsymbols(varargin(1:Nout));
-    Nin = length(inputs);
-    inputs_array = cell2symarray(inputs);
-    inputstr = findsym(inputs_array);
   end
+  Nin = length(inputs);
+  inputstr = strjoin(syms2charcells(inputs), ',');
 
 
   %fprintf('debug: %d inputs, %d outputs\n', Nin, Nout);
