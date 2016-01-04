@@ -17,8 +17,14 @@ install:
   - sudo apt-get update
   - sudo apt-get install octave liboctave-dev
   - "pip install sympy==$SYMPY_VER"
-  - wget https://github.com/catch22/octave-doctest/releases/download/v0.4.1/doctest-0.4.1.tar.gz
-  - octave --eval "pkg install doctest-0.4.1.tar.gz"
+  - #if [ "x$DOCTEST" = "xyes" ]; then
+    #    octave --eval "pkg install -forge doctest";
+    #fi
+  - # Or for a specific doctest version:
+    if [ "x$DOCTEST" = "xyes" ]; then
+        wget https://github.com/catch22/octave-doctest/releases/download/v0.4.1/doctest-0.4.1.tar.gz;
+        octave --eval "pkg install doctest-0.4.1.tar.gz";
+    fi
 
 # all commands here must have exit code 0 for the build to be called "passing"
 # debugging: octave --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
