@@ -30,7 +30,7 @@
 %% syms x y
 %% f = 2*x*y;
 %% argnames(f)
-%%    @result{} (sym) []  (empty 0×0 matrix)
+%%   @result{} (sym) []  (empty 0×0 matrix)
 %% @end group
 %% @end example
 %%

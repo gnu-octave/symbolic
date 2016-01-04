@@ -30,7 +30,7 @@
 %% syms x
 %% f = 2*x;
 %% formula(f)
-%%    @result{} ans = (sym) 2⋅x
+%%   @result{} ans = (sym) 2⋅x
 %% @end group
 %% @end example
 %%
