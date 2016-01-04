@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014, 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,7 +47,7 @@
 %% @group
 %% >> syms x
 %% >> double (x)
-%%    @result{} ??? cannot convert to double
+%%    @print{} ??? cannot convert to double
 %% @end group
 %% @end example
 %%
