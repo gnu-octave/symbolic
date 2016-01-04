@@ -31,7 +31,7 @@
 %% >> syms x integer
 %% >> x1 = x;
 %% >> x = assumeAlso(x, 'positive');
-%% >> assumptions(x)
+%% >> assumptions(x)                     % doctest: +SKIP
 %%    @result{} ans =
 %%      @{
 %%        [1,1] = x: integer, positive
@@ -39,7 +39,10 @@
 %% @end group
 %% @end example
 %%
-%% But as with @code{assume}, note @code{x1} is unchanged:
+%% Note the previous output will be more verbose if you are using
+%% a version of SymPy before SymPy 0.7.7.
+%%
+%% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
 %% @group
 %% >> assumptions(x1)
