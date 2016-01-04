@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -137,6 +137,16 @@ end
 %!assert (isempty (findsymbols (sym (nan))))
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
+
+%!test
+%! % empty sym for findsymbols, findsym, and symvar
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping: findsymbols of empty sym broken before SymPy 0.7.7')
+%! else
+%!   assert (isempty (findsymbols (sym([]))))
+%!   assert (isempty (findsym (sym([]))))
+%!   assert (isempty (symvar (sym([]))))
+%! end
 
 %!test
 %! % diff. assumptions make diff. symbols
