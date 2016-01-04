@@ -150,7 +150,7 @@ end
 %! assert (isequal (e, sym(true)))
 
 %!xtest
-%! % -oo, positive var (known failure w/ sympy 0.7.6)
+%! % -oo, positive var (known failure w/ sympy 0.7.6.x)
 %! syms oo
 %! syms z positive
 %! e = -oo < z;

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,50 +18,57 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n}, @var{d} =} numden (@var{x})
-%% Extract numerator and denominator of symbolic expression.
+%% @deftypefn  {Function File} {@var{s} =} dot (@var{a}, @var{b})
+%% Symbolic dot (scalar) product.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> [n, d] = numden(sym(4)/5)
-%%    @result{} n = (sym) 4
-%%    @result{} d = (sym) 5
+%% a = [sym('a1'); sym('a2'); sym('a3')];
+%% b = [sym('b1'); sym('b2'); sym('b3')];
+%% dot(a, b)
+%%    @result{} (sym) a₁⋅b₁ + a₂⋅b₂ + a₃⋅b₃
+%% dot(a, a)
+%%    @result{} (sym)
+%%         2     2     2
+%%       a₁  + a₂  + a₃
 %% @end group
 %% @end example
 %%
 %% @example
 %% @group
-%% >> syms x y
-%% >> [n, d] = numden((x+y)/sin(x))
-%%    @result{} n = (sym) x + y
-%%    @result{} d = (sym) sin(x)
+%% syms x
+%% a = [x; 0; 0];
+%% b = [0; 0; sym(1)];
+%% dot(a, b)
+%%    @result{} ans = (sym) 0
 %% @end group
 %% @end example
 %%
-%% @seealso{coeffs, children, lhs, rhs}
+%% @seealso{cross}
 %% @end deftypefn
 
-function [n, d] = numden(x)
+function c = dot(a, b)
 
-  [n, d] = python_cmd ('return (sympy.numer(*_ins), sympy.denom(*_ins))', sym(x));
+  cmd = { 'a, b = _ins'
+          'return a.dot(b),'
+        };
+
+  c = python_cmd (cmd, sym(a), sym(b));
 
 end
 
 
 %!test
-%! [n, d] = numden(sym(2));
-%! assert (isequal (n, 2));
-%! assert (isequal (d, 1));
+%! a = sym([1; 1; 0]);
+%! b = sym([1; 2; 4]);
+%! c = dot(a, b);
+%! assert (isequal (c, sym(3)))
 
 %!test
-%! syms x y
-%! [n, d] = numden((x + pi)/(y + 6));
-%! assert (isequal (n, x + pi));
-%! assert (isequal (d, y + 6));
+%! syms x
+%! a = sym([x; 0; 0]);
+%! b = sym([0; 1; 0]);
+%! c = dot(a, b);
+%! assert (isequal (c, sym(0)))
 
-%!test
-%! syms x y
-%! [n, d] = numden((x^2 + y^2)/(x*y));
-%! assert (isequal (n, x^2 + y^2));
-%! assert (isequal (d, x*y));

@@ -13,7 +13,7 @@ function convert_comments (basedir, subdir, dirout)
 
   for i=1:length(files)
     if (~files(i).isdir)
-      [dir,name,ext,ver] = fileparts(files(i).name);
+      [dir, name, ext] = fileparts(files(i).name);
       if (strcmp(ext, '.m'))
         if isempty(subdir)
           octname = [name ext];
@@ -42,14 +42,7 @@ end
 
 function success = convert_oct_2_ml (fname, foutname)
 
-%function convert_oct_2_ml (fcn)
-  %fname = sprintf('@sym/%s.m', fcn)
-  %foutname = sprintf('ml_%s.m', fcn)
-
-%fname, foutname
-  [dir,fcn,ext,ver] = fileparts(fname);
-%chdir(dir)
-%fname = [fcn ext]
+  [dir, fcn, ext] = fileparts(fname);
 
   newl = sprintf('\n');
 
@@ -156,22 +149,25 @@ function success = convert_oct_2_ml (fname, foutname)
     error('too many lookfor lines?')
   end
   len = length(lookforstr);
-  J = I(1) + len;
+  J = I + len;
 
-  % find next non-empty char
-  %while isspace(usestr(J))
-  %  J = J + 1;
-  %end
+  % if usestr has only a lookfor line then no need to see what's next
+  if (J < length(usestr))
+    % find next non-empty char
+    %while isspace(usestr(J))
+    %  J = J + 1;
+    %end
 
-  % let's be more conservative trim newline in usual case:
-  if ~isspace(usestr(J))
-    error('no space or newline after lookfor line?');
+    % let's be more conservative trim newline in usual case:
+    if ~isspace(usestr(J))
+      error('no space or newline after lookfor line?');
+    end
+    J = J + 1;
   end
-  J = J + 1;
 
-  usestr = usestr([1:(I(1)-1) J:end]);
+  usestr = usestr([1:(I-1) J:end]);
 
-  use = strsplit(usestr, newl);
+  use = strsplit(usestr, newl, 'CollapseDelimiters', false);
 
   %% remove this string
   % and make sure these lines have the correct function name

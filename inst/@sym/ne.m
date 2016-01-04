@@ -63,7 +63,7 @@ end
 %! e = oo ~= x;
 %! assert (isa (e, 'sym'))
 %! s = strtrim (disp (e, 'flat'));
-%! % SymPy <= 0.7.6 will be '!=', newer gives 'Ne', test both
+%! % SymPy <= 0.7.6.x will be '!=', newer gives 'Ne', test both
 %! assert (strcmp (s, 'oo != x') || strcmp (s, 'Ne(oo, x)'))
 
 %!test

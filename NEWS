@@ -1,9 +1,34 @@
-octsympy 2.2.3-dev
+octsympy 2.3.0-dev
 ==================
+
+
+
+octsympy 2.2.4 (2015-12-14)
+===========================
+
+  * Fix display on Octave 3.8.
+
+  * Support for SymPy 0.7.6.1.
+
+
+
+octsympy 2.2.3 (2015-11-25)
+===========================
+
+  * New commands:
+
+          cross
+          dot
 
   * sym('var') is more robust in case var happens to be a special
     value in SymPy.  Now sym('E') is just a symbol rather than
     exp(sym(1)).  Also sym('E1') and sym('Eq') no longer give errors.
+
+  * Fix bug in assigning to column vectors, thanks to Grzegorz Dudziuk.
+
+  * During install, test for PATH problems on Windows (issue #236).
+
+  * Fix for Octave 4.1+ development versions, thanks to Mike Miller.
 
 
 
@@ -125,7 +150,7 @@ octsympy 2.0.0 (2015-02-04)
           nchoosek
           permute
 
- *  Fixes for developement version of SymPy.
+ *  Fixes for development version of SymPy.
 
  *  Fixes for vpa and vpasolve: high precision should be more reliable.
 
@@ -152,7 +177,7 @@ octsympy 0.1.3 (2015-01-06)
           laplace            rref
           ldivide            sum
           mldivide           vpa
-          null	             vpasolve
+          null               vpasolve
 
  *  Symbolic backslash support.
 
@@ -164,7 +189,7 @@ octsympy 0.1.3 (2015-01-06)
 
  *  Partial fractions (Andrés Prieto).
 
- *  Improvments to solve (Andrés Prieto).
+ *  Improvements to solve (Andrés Prieto).
 
  *  Preliminary support for matrix expressions, e.g., matrix to a symbolic
     power.
@@ -179,9 +204,9 @@ octsympy 0.1.2 (2014-12-01)
  *  New commands:
 
           children           rhs
-          expm	             setdiff
-          lhs	             setxor
-          pinv	             trace
+          expm               setdiff
+          lhs                setxor
+          pinv               trace
           potential
 
  *  Support new SymPy 0.7.6.  This adds Octave code generation which means
@@ -228,11 +253,11 @@ Minor Changes
 
  *  Improved handling of symfuns.
 
- *  Improvements to internel string handling/escaping especially newlines.
+ *  Improvements to internal string handling/escaping especially newlines.
 
      -  Enter a multiline command using a cell array of lines e.g.,
         `python_cmd({'a = 10' 'return (a, 2*a)'})
-	or
+        or
         `python_cmd({'a = 10'; 'return (a, 2*a)'})
      -  The same applies to `evalpy`.  If you need the old deprecated
         behaviour, it is still available as `python_cmd_string`.

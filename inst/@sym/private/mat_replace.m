@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -39,7 +39,7 @@ function z = mat_replace(A, subs, b)
     if (n == 0 || n == 1)
       c = subs{1};  r = ones(size(c));
     elseif (m == 1)
-      r = subs{1};  c = one(size(r));
+      r = subs{1};  c = ones(size(r));
     else
       % linear indices into 2D array
       [r, c] = ind2sub (size(A), subs{1});

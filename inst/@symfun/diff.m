@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @dots{})
@@ -49,7 +50,7 @@
 %%         ⎜──(u(x))⎟│
 %%         ⎝dx      ⎠│x=2
 %%
-%% >> syms 'f(x, y)'
+%% >> syms f(x, y)
 %% >> diff(f, x, y, y)(3, 2)  % a third partial eval at (3, 2)
 %%    @result{} ans = (sym)
 %%         ⎛⎛   3           ⎞│   ⎞│

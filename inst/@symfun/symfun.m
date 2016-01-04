@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,19 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{f} =} symfun (@var{expr}, @var{vars})
 %% Define a symbolic function (not usually called directly).
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
 %% represents an unknown function (for example, in a differential
-%% equation).  A concrete symfun represents a known function such
-%% as f(x) = sin(x).
+%% equation).  A concrete symfun represents a known function such as
+%% @iftex
+%% @math{f(x) = \sin(x)}.
+%% @end iftex
+%% @ifnottex
+%% f(x) = sin(x).
+%% @end ifnottex
 %%
 %% A concrete symfun:
 %% @example
@@ -60,10 +66,17 @@
 %% @end example
 %% Instead, use @code{g(x)} on the left-hand side as above.
 %%
-%% You can make multidimensional concrete or abstract symfuns using
-%% @code{syms g(x,y)}.  However, a bug in the Octave parser in
-%% versions before 4.0 means this 2D example will give a parse
-%% error.  A workaround is to enclose the argument in a string:
+%% You can make multidimensional concrete or abstract symfuns:
+%% @example
+%% >> syms x y
+%% >> g(x, y) = 2*x + sin(y)
+%%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
+%% >> syms g(x, y)
+%% >> g
+%%    @result{} g(x, y) = (symfun) g(x, y)
+%% @end example
+%% However, on old versions of Octave (before 4.0), one needs to
+%% workaround a parsing bug:
 %% @example
 %% >> syms 'g(x, y)'
 %% >> g
@@ -85,10 +98,15 @@
 %% @end example
 %%
 %% This allows, for example, creating an abstract function formally
-%% of x, y but depending only on x:
+%% of @code{x}, @code{y} but depending only on @code{x}:
 %% @example
 %% >> syms x y
 %% >> h = symfun(sym('h(x)'), [x y])
+%%    @result{} h(x, y) = (symfun) h(x)
+%% @end example
+%% which is the same as:
+%% @example
+%% >> h(x,y) = sym('h(x)')
 %%    @result{} h(x, y) = (symfun) h(x)
 %% @end example
 %%

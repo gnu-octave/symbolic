@@ -87,7 +87,7 @@ function varargout = disp(x, wh)
   if (nargout == 0)
     disp(s)
   else
-    varargout = {disp(s)};  % add a newline
+    varargout = {[s sprintf('\n')]};  % add a newline
   end
 end
 

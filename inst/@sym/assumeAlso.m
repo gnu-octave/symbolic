@@ -129,7 +129,7 @@ end
 
 %!xtest
 %! % has output so avoids workspace
-%! % FIXME: xtest for sympy 0.7.6 where a is the full dict
+%! % FIXME: xtest for sympy 0.7.6.x where a is the full dict
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);

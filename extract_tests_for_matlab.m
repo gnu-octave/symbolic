@@ -86,7 +86,7 @@ endfunction
 % GPL
 function body = __extract_test_code (nm)
   fid = fopen (nm, "rt");
-  body = [];
+  body = '';
   if (fid >= 0)
     while (! feof (fid))
       ln = fgetl (fid);

@@ -196,7 +196,7 @@ end
 %!test
 %! % System of ODEs
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy > 0.7.6, issue #169')
+%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
 %! else
 %!   syms x(t) y(t) C1 C2
 %!   ode_1=diff(x(t),t) == 2*y(t);

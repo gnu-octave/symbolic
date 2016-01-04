@@ -63,8 +63,8 @@ except:
     raise
 
 
-# FIXME: Remove all this when we deprecate 0.7.6 support.
-if sympy.__version__ not in ("0.7.5", "0.7.6"):
+# FIXME: Remove all this when we deprecate 0.7.6.x support.
+if not (sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6")):
     my_srepr = sympy.srepr
 else:
     def _monkey_patch_matpow_doit(self, **kwargs):
@@ -98,7 +98,7 @@ else:
         class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
             def _print_Symbol(self, expr):
                 asm = expr.assumptions0
-                # SymPy <= 0.7.6: srepr does not list assumptions.
+                # SymPy < 0.7.7: srepr does not list assumptions.
                 # Abbreviate some common cases.
                 asm_default = {"commutative":True}
                 asm_real = {"commutative":True, "complex":True, "hermitian":True,
