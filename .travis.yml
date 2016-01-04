@@ -7,8 +7,6 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: SYMPY_VER=0.7.5 OCT_PPA=no DOCTEST=no
-    - python: "2.7"
       env: SYMPY_VER=0.7.6 OCT_PPA=no DOCTEST=no
     - python: "2.7"
       env: SYMPY_VER=0.7.6 OCT_PPA=yes DOCTEST=yes COLUMNS=80
