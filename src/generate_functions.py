@@ -7,9 +7,10 @@ generator to write your code generators!
 
 import sys
 import os
+import sympy as sp
 
-input_list = """sqrt
-exp
+input_list = """exp
+sqrt|||exp(x)
 log
 abs|Abs|-1
 floor
@@ -38,7 +39,7 @@ gamma
 erf
 erfc
 erfinv||1/2
-erfcinv|||% Note: the erfcinv unit test fails on Octave < 3.8
+erfcinv||||% Note: the erfcinv unit test fails on Octave < 3.8
 erfi||0,0|
 heaviside|Heaviside|1,1
 dirac|DiracDelta|1,0
@@ -53,7 +54,7 @@ dirac|DiracDelta|1,0
 
 
 copyright_block = \
-"""%% Copyright (C) 2015 Colin B. Macdonald
+"""%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -99,8 +100,12 @@ def process_input_list(L):
             d['test_in_val'] = '1'
             d['out_val_from_oct'] = True
             d['octname'] = f
-        if (len(it) >= 4):
-            d['extra_code'] = it[3]
+        if (len(it) >= 4) and it[3] != '':
+            d['docexpr'] = it[3]
+        else:
+            d['docexpr'] = 'x'
+        if (len(it) >= 5):
+            d['extra_code'] = it[4]
         else:
             d['extra_code'] = ''
         L.append(d);
@@ -131,8 +136,30 @@ def autogen_functions(L, where):
         fd.write(copyright_block)
 
         fd.write('\n%% -*- texinfo -*-\n')
+        fd.write("%% @documentencoding UTF-8\n")
         fd.write("%%%% @deftypefn  {Function File} {@var{y} =} %s (@var{x})\n" % f)
         fd.write("%%%% Symbolic %s function.\n" % f)
+
+        # Build and out example block for doctest
+        xstr = d['docexpr']
+        x = sp.S(xstr)
+        y = eval("sp.%s(x)" % d['spname'])
+        ystr = sp.pretty(y, use_unicode=True)
+        lines = ystr.splitlines()
+        if len(lines) > 1:
+            # indent multiline output
+            lines = [("%%       " + a).strip() for a in lines]
+            ystr = "\n" + "\n".join(lines)
+        else:
+            ystr = " " + ystr
+        yutf8 = ystr.encode('utf-8')
+
+        fd.write("%%\n%% Example:\n%% @example\n%% @group\n")
+        fd.write("%% syms x\n")
+        fd.write("%%%% y = %s(%s)\n" % (f, xstr))
+        fd.write("%%%%   @result{} y = (sym)%s\n" % yutf8)
+        fd.write("%% @end group\n%% @end example\n")
+
 
         fd.write( \
 """%%
