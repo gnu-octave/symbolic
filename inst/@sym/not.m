@@ -138,9 +138,8 @@ end
 %! assert (isa (e, 'sym'))
 %! assert (strncmp(char(e), 'Unequality', 10))
 
-%!xtest
-%! % output is sym even for scalar t/f
-%! % ₣IXME: should match other bool fcns
+%!test
+%! % output is sym even for scalar t/f (should match other bool fcns)
 %! assert (isa (~t, 'sym'))
 
 %!test
@@ -161,3 +160,6 @@ end
 %! end
 %! assert (waserr)
 
+%!error <cannot logically negate sym "x">
+%! syms x
+%! ~x
