@@ -42,7 +42,6 @@ erfcinv|||% Note: the erfcinv unit test fails on Octave < 3.8
 erfi||0,0|
 heaviside|Heaviside|1,1
 dirac|DiracDelta|1,0
-nextprime||123,127
 """
 # todo:
 #psi(x)|polygamma(0,x)

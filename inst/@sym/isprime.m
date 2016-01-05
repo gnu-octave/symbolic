@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{r} =} isprime (@var{n})
 %% Return true if a symbolic number is prime.
+%%
+%% Example:
+%% @example
+%% @group
+%% n = sym(127);
+%% m = 2^n - 1
+%%   @result{} m = (sym) 170141183460469231731687303715884105727
+%% isprime(m)
+%%   @result{} ans =  1
+%% @end group
+%% @end example
 %%
 %% @seealso{nextprime}
 %% @end deftypefn
