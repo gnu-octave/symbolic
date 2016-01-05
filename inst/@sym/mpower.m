@@ -101,9 +101,16 @@ end
 %! Bd = Ad^(1/3);
 %! assert (max(max(abs(double(B) - Bd))) < 1e-14)
 
-%!error <not implemented.*Only integer and rational values are supported>
+%!test
+%! % non-integer power
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
+%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%! else
 %! A = sym([1 2; 0 3]);
-%! B = A^sym(pi);
+%! B = A^pi;
+%! C = [1 -1+3^sym(pi); 0 sym(3)^pi];
+%! assert (isequal (B, C))
+%! end
 
 %!test
 %! % matpow
