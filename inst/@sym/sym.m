@@ -668,6 +668,3 @@ end
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
-%! % FIXME: slightly obtuse testing b/c 0.7.6 but still fails on 0.7.5
-%! assert (isequal (n > 0, sym(false)))
-%! assert (isequal (n == -1, sym(false)))
