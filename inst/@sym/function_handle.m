@@ -157,10 +157,7 @@ function f = function_handle(varargin)
               '    return (False, "expected symbols-to-declare to be empty")' ...
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
-      %worked = false;
-      if (worked)
-        codestr = vectorize(codestr);
-      else
+      if (~worked)
         %% SymPy 0.7.5 has no octave_code command
         % Use a crude workaround (e.g., Abs, ceiling will fail).
         if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...
