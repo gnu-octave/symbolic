@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{s} =} latex (@var{x})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File}  {} latex (@var{x})
+%% @deftypefnx {Function File}  {@var{s} =} latex (@var{x})
 %% Return LaTeX typesetting code for a symbolic expression.
+%%
+%% Example:
+%% @example
+%% @group
+%% >> syms x
+%% >> latex(sin(x/2))
+%%    @print{} \sin@{\left (\frac@{x@}@{2@} \right )@}
+%%
+%% >> A = [sym(1) 2; sym(3) 4];
+%% >> s = latex(A)
+%%    @result{} s = \left[\begin@{matrix@}1 & 2\\3 & 4\end@{matrix@}\right]
+%% @end group
+%% @end example
 %%
 %% @seealso{disp, pretty}
 %% @end deftypefn

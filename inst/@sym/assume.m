@@ -44,8 +44,10 @@
 %% Another example to help clarify:
 %% @example
 %% @group
-%% >> x1 = sym('x', 'positive');
-%% >> x2 = assume(x1, 'negative');
+%% >> x1 = sym('x', 'positive')
+%%    @result{} x1 = (sym) x
+%% >> x2 = assume(x1, 'negative')
+%%    @result{} x2 = (sym) x
 %% >> assumptions(x1)
 %%    @result{} ans =
 %%      @{
