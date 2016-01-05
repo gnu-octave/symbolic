@@ -185,11 +185,7 @@ end
 %! % symbols in matpow
 %! syms x y
 %! syms n
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=75)
-%!   disp('skipping known failure b/c SymPy <= 0.7.5')
-%! else
-%!   A = [sin(x) 2; y 1];
-%!   B = A^n;
-%!   L = findsymbols(B);
-%!   assert (isequal (L, {n x y}))
-%! end
+%! A = [sin(x) 2; y 1];
+%! B = A^n;
+%! L = findsymbols(B);
+%! assert (isequal (L, {n x y}))
