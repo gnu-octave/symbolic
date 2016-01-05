@@ -38,6 +38,7 @@
 %%      @}
 %% @end group
 %% @end example
+%% @c FIXME: remove SKIP (and text below) once SymPy 0.7.7 is out.
 %%
 %% Note the previous output will be more verbose if you are using
 %% a version of SymPy before SymPy 0.7.7.
