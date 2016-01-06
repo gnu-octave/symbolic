@@ -27,7 +27,7 @@
 %% syms x y
 %% eqn = 2*x == y
 %%   @result{} eqn = (sym) 2⋅x = y
-%% not(eq)
+%% not(eqn)
 %%   @result{} ans = (sym) 2⋅x ≠ y
 %% @end group
 %% @end example
