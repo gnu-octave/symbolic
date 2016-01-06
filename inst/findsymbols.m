@@ -34,7 +34,7 @@
 %% >> syms x y z
 %% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
 %% >> findsymbols (C)
-%%    @result{}
+%%    @result{} ans =
 %%      @{
 %%        (sym) x
 %%        (sym) y
@@ -43,7 +43,7 @@
 %% @end group
 %% @end example
 %%
-%% Note E, I, pi, etc are not counted as symbols.
+%% Note ℯ, ⅈ, π, etc are not counted as symbols.
 %%
 %% Note only returns symbols actually appearing in the RHS of a
 %% @code{symfun}.

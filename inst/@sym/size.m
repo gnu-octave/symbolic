@@ -17,10 +17,46 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{d} =} size (@var{x})
 %% @deftypefnx {Function File} {[@var{n}, @var{m}] =} size (@var{x})
 %% @deftypefnx {Function File} {@var{d} =} size (@var{x}, @var{dim})
 %% Return the size of a symbolic array.
+%%
+%% Examples:
+%% @example
+%% @group
+%% syms x
+%% A = [1 2 x; x 3 4];
+%% [n, m] = size(A)
+%%    @result{} n = 2
+%%    @result{} m = 3
+%% @end group
+%%
+%% @group
+%% A = sym('a', [3 4]);
+%% [n, m] = size(A)
+%%    @result{} n = 3
+%%    @result{} m = 4
+%% size(A, 1)
+%%    @result{} 3
+%% size(A, 2)
+%%    @result{} 4
+%% @end group
+%% @end example
+%%
+%% Symbolic-sized matrices currently return @code{1 × 1} but we might
+%% prefer @code{NaN × NaN}:
+%% @example
+%% @group
+%% syms n m integer
+%% A = sym('a', [n m])
+%%    @result{} A = (sym) a  (n×m matrix expression)
+%%
+%% size(A)          % doctest: +XFAIL
+%%    @result{} NaN   NaN
+%% @end group
+%% @end example
 %%
 %% @seealso{length, numel}
 %% @end deftypefn

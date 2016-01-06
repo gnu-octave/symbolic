@@ -533,9 +533,8 @@ end
 %! A = A + 1;
 %! assert (isa (A, 'sym'))
 
-%!xtest
+%!test
 %! % symbolic matrix, subs in for size
-%! % FIXME: will fail until we return non-1x1 size for MatrixSymbols
 %! syms n m integer
 %! A = sym('A', [n m]);
 %! B = subs(A, [n m], [5 6]);
@@ -639,8 +638,8 @@ end
 %!test
 %! % symbols with special sympy names
 %! syms Ei Eq
-%! assert (regexp(char(Eq), '^Symbol'))
-%! assert (regexp(char(Ei), '^Symbol'))
+%! assert (~isempty(regexp(char(Eq), '^Symbol')))
+%! assert (~isempty(regexp(char(Ei), '^Symbol')))
 
 %!test
 %! % E can be a sym not just exp(sym(1))

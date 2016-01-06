@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn {Function File} {} eulergamma ()
-%% Return Euler-Mascheroni constant.
+%% Return Euler--Mascheroni constant.
 %%
 %% @example
 %% vpa (eulergamma ())
