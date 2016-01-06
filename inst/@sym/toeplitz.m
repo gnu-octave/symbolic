@@ -17,9 +17,37 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{A} =} toeplitz (@var{c}, @var{r})
 %% @deftypefnx {Function File} {@var{A} =} toeplitz (@var{r})
 %% Construct a symbolic Toeplitz matrix.
+%%
+%% Examples:
+%% @example
+%% @group
+%% A = toeplitz (sym([0 1 2 3]))
+%%   @result{} A = (sym 4×4 matrix)
+%%
+%%       ⎡0  1  2  3⎤
+%%       ⎢          ⎥
+%%       ⎢1  0  1  2⎥
+%%       ⎢          ⎥
+%%       ⎢2  1  0  1⎥
+%%       ⎢          ⎥
+%%       ⎣3  2  1  0⎦
+%%
+%% A = toeplitz (sym([0 1 2 3]), sym([0 -1 -2 -3 -4]))
+%%   @result{} A = (sym 4×5 matrix)
+%%
+%%       ⎡0  -1  -2  -3  -4⎤
+%%       ⎢                 ⎥
+%%       ⎢1  0   -1  -2  -3⎥
+%%       ⎢                 ⎥
+%%       ⎢2  1   0   -1  -2⎥
+%%       ⎢                 ⎥
+%%       ⎣3  2   1   0   -1⎦
+%% @end group
+%% @end example
 %%
 %% @end deftypefn
 
