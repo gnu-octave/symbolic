@@ -172,7 +172,7 @@ function varargout = solve(varargin)
     [flag, out] = python_cmd (cmd, varargin{:});
 
 	if (flag)
-		error("Booleans equations.")
+		error(flag)
 	end
 
     varargout = out;
