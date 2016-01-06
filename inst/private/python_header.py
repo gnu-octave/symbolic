@@ -153,9 +153,23 @@ try:
         #print("\n")
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
-        DOM = minidom.parseString(ET.tostring(xroot))
+        #xmlstr = ET.tostring(xroot)
+        xmlstr = ET.tostring(xroot, encoding="utf-8")
+        DOM = minidom.parseString(xmlstr)
         if sys.version_info >= (3, 0):
-            print(DOM.toprettyxml(indent="", newl="\n"))
+            dbout("<xml>")
+            dbout(xmlstr)
+            dbout("</xml>")
+            # original in py3
+            #pxml = DOM.toprettyxml(indent="", newl="\n")
+            # someone says this works on cp1252 Windows, but timeouts on Fedora...
+            #pxml = DOM.toprettyxml(indent="", newl="\n", encoding='utf-8')
+            # works in py3 on fedora: windows cp1252 works or not?
+            pxml = DOM.toprettyxml(indent="", newl="\n", encoding='utf-8').decode("utf-8")
+            dbout("<pxml>")
+            dbout(pxml)
+            dbout("</pxml>")
+            print(pxml)
         else:
             print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
