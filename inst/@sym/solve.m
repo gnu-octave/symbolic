@@ -111,49 +111,70 @@ function varargout = solve(varargin)
 
   if (nargout == 0 || nargout == 1)
     cmd = { 'eqs = list(); symbols = list()'
+	    'flag = 0'
             'for arg in _ins:'
             '    if arg.is_Relational:'
             '        eqs.append(arg)'
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'if len(symbols) > 0:'
-            '    d = sp.solve(eqs, symbols, dict=True)'
-            'else:'
-            '    d = sp.solve(eqs, dict=True)'
+	    'try:'
+            '	if len(symbols) > 0:'
+            '		d = sp.solve(eqs, symbols, dict=True)'
+            '	else:'
+            '		d = sp.solve(eqs, dict=True)'
+	    'except Exception as e:'
+	    '	return (str(e), "whatev")'
             '#'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
-            '        return d[0].popitem()[1],'
+            '        return (flag, d[0].popitem()[1])'
             '    else:'  % one variable, multiple solutions
-            '        return sp.Matrix([r.popitem()[1] for r in d]),'
+            '        return (flag, sp.Matrix([r.popitem()[1] for r in d]))'
             '#'
             'if len(d) == 1:'
             '    d = d[0]'
-            'return d,' };
+            'return (flag, d)' };
 
-    out = python_cmd (cmd, varargin{:});
+    [flag, out] = python_cmd (cmd, varargin{:});
+
+	if (flag)
+		error(flag)
+	end
+
     varargout = {out};
 
   else  % multiple outputs
     cmd = { 'eqs = list(); symbols = list()'
+	    'flag = 0'
             'for arg in _ins:'
             '    if arg.is_Relational:'
             '        eqs.append(arg)'
             '    else:'
             '        symbols.append(arg)'
             '#'
+	    'try:'
             'if len(symbols) > 0:'
             '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
             'else:'
             '    (vars, solns) = sp.solve(eqs, set=True)'
+	    'except Exception as e:'
+ 	    '	return (str(e), "whatev")'
             '#'
+	    'if flag:'
+	    '	return (flag, "whatev")'
+	    '#'
             'd = []'
             'for (i, var) in enumerate(vars):'
             '    d.append(sp.Matrix([t[i] for t in solns]))'
-            'return d,' };
+            'return (flag, d)' };
 
-    out = python_cmd (cmd, varargin{:});
+    [flag, out] = python_cmd (cmd, varargin{:});
+
+	if (flag)
+		error("Booleans equations.")
+	end
+
     varargout = out;
     if (length(out) ~= nargout)
       warning('solve: number of outputs did not match solution vars');
