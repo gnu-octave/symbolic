@@ -139,8 +139,8 @@ function r = process_item(item)
       % fixme: should we use <item>'s for these not raw <f>?
       str = str_post_xml_filter(C{2});
       flat = str_post_xml_filter(C{5});
-      ascii = str_post_xml_filter(C{6});
-      unicode = str_post_xml_filter(C{7});
+      ascii = do_string_escapes(str_post_xml_filter(C{6}));
+      unicode = do_string_escapes(do_highbyte_escapes(str_post_xml_filter(C{7})));
       % empty [] here identifies this to the sym ctor
       r = sym([], str, [sz1 sz2], flat, ascii, unicode);
     case OCTCODE_DICT

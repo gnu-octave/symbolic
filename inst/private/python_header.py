@@ -206,10 +206,22 @@ try:
             f.text = str(_d[1])
             f = ET.SubElement(a, "f")
             f.text = str(x)
+            import codecs
             f = ET.SubElement(a, "f")
-            f.text = pretty_ascii
+            #f.text = pretty_ascii
+            if sys.version_info >= (3, 0):
+                b, n = codecs.escape_encode(pretty_ascii.encode('utf-8'))
+                f.text = b.decode('ascii')
+            else:
+                f.text = pretty_ascii.encode().encode('string_escape')
             f = ET.SubElement(a, "f")
-            f.text = pretty_unicode
+            #f.text = pretty_unicode
+            if sys.version_info >= (3, 0):
+                b, n = codecs.escape_encode(pretty_unicode.encode('utf-8'))
+                # now from bytes back str (but now only ascii with out \xhh escaped utf-8)
+                f.text = b.decode('ascii')
+            else:
+                f.text = pretty_unicode.encode('utf-8').encode('string_escape')
         elif isinstance(x, (list, tuple)):
             c = ET.SubElement(et, "list")
             for y in x:
