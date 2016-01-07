@@ -11,6 +11,12 @@ octsympy 2.3.0-dev
 
   * Bug fix for working with certain unevaluated integrals.
 
+  * Bug fixes for function_handle, fortran and ccode.
+
+  * Calling "inv" on a singular matrix now explicitly gives an error.
+
+  * Documentation improvements.
+
 
 
 octsympy 2.2.4 (2015-12-14)
