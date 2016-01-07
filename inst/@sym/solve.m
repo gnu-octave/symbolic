@@ -111,7 +111,6 @@ function varargout = solve(varargin)
 
   if (nargout == 0 || nargout == 1)
     cmd = { 'eqs = list(); symbols = list()'
-	    'flag = 0'
             'for arg in _ins:'
             '    if arg.is_Relational:'
             '        eqs.append(arg)'
@@ -124,29 +123,28 @@ function varargout = solve(varargin)
             '	else:'
             '		d = sp.solve(eqs, dict=True)'
 	    'except Exception as e:'
-	    '	return (str(e), "whatev")'
+	    '	return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
-            '        return (flag, d[0].popitem()[1])'
+            '        return (0, d[0].popitem()[1])'
             '    else:'  % one variable, multiple solutions
-            '        return (flag, sp.Matrix([r.popitem()[1] for r in d]))'
+            '        return (0, sp.Matrix([r.popitem()[1] for r in d]))'
             '#'
             'if len(d) == 1:'
             '    d = d[0]'
-            'return (flag, d)' };
+            'return (0, d)' };
 
     [flag, out] = python_cmd (cmd, varargin{:});
 
 	if (flag)
-		error(flag)
+		error(out)
 	end
 
     varargout = {out};
 
   else  % multiple outputs
     cmd = { 'eqs = list(); symbols = list()'
-	    'flag = 0'
             'for arg in _ins:'
             '    if arg.is_Relational:'
             '        eqs.append(arg)'
@@ -159,17 +157,17 @@ function varargout = solve(varargin)
             'else:'
             '    (vars, solns) = sp.solve(eqs, set=True)'
 	    'except Exception as e:'
- 	    '	return (str(e), "whatev")'
+	    '	return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'd = []'
             'for (i, var) in enumerate(vars):'
             '    d.append(sp.Matrix([t[i] for t in solns]))'
-            'return (flag, d)' };
+            'return (0, d)' };
 
     [flag, out] = python_cmd (cmd, varargin{:});
 
 	if (flag)
-		error(flag)
+		error(out)
 	end
 
     varargout = out;
