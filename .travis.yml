@@ -37,6 +37,7 @@ install:
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
+  - stty cols 80 rows 40
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
