@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -187,3 +187,12 @@ end
 %! % componentwise int of array
 %! A = [x x*x];
 %! assert (isequal (int(A, x), [x^2/2 x^3/3]))
+
+%!test
+%! % NonElementaryIntegral bug
+%! % https://savannah.gnu.org/bugs/index.php?46831
+%! f = int(exp(exp(x)));
+%! f = f + 2;
+%! g = diff(f);
+%! assert (isequal (g, exp(exp(x))))
+b

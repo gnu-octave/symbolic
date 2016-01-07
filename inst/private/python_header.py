@@ -30,6 +30,7 @@ try:
     from sympy.core.relational import Relational
     # temporary? for piecewise support
     from sympy.functions.elementary.piecewise import ExprCondPair
+    from sympy.integrals.risch import NonElementaryIntegral
     import copy
     import binascii
     import struct

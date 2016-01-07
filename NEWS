@@ -9,6 +9,8 @@ octsympy 2.3.0-dev
           max
           min
 
+  * Bug fix for working with certain unevaluated integrals.
+
 
 
 octsympy 2.2.4 (2015-12-14)
