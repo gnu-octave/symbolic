@@ -20,8 +20,8 @@ matrix:
 install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
         sudo apt-add-repository --yes ppa:octave/stable;
-        sudo apt-get update --yes;
     fi
+  - sudo apt-get update --yes;
   - sudo apt-get install --yes octave liboctave-dev;
   - "pip install sympy==$SYMPY_VER"
   - #if [ "x$DOCTEST" = "xyes" ]; then
