@@ -9,7 +9,7 @@ matrix:
     - python: "2.7"
       env: SYMPY_VER=0.7.5 OCT_PPA=no DOCTEST=no
     - python: "2.7"
-      env: SYMPY_VER=0.7.6 OCT_PPA=no DOCTEST=yes COLUMNS=80
+      env: SYMPY_VER=0.7.6 OCT_PPA=no DOCTEST=no
     - python: "2.7"
       env: SYMPY_VER=0.7.6 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "3.4"
@@ -19,10 +19,10 @@ matrix:
 # TODO: once doctest is in OF, change to "install -forge" below
 install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
-        sudo apt-add-repository --yes ppa:octave/stable;
+        sudo apt-add-repository -y ppa:octave/stable;
     fi
-  - sudo apt-get update --yes;
-  - sudo apt-get install --yes octave liboctave-dev;
+  - sudo apt-get update -qq -y;
+  - sudo apt-get install -y octave liboctave-dev;
   - "pip install sympy==$SYMPY_VER"
   - #if [ "x$DOCTEST" = "xyes" ]; then
     #    octave -W --no-gui --eval "pkg install -forge doctest";
