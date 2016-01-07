@@ -1,21 +1,28 @@
+sudo: required
+dist: trusty
+
 language: python
 # well its really octave, but that is not supported
 
 matrix:
   include:
     - python: "2.7"
-      env: SYMPY_VER=0.7.5 DOCTEST=no
+      env: SYMPY_VER=0.7.5 OCT_PPA=no DOCTEST=no
     - python: "2.7"
-      env: SYMPY_VER=0.7.6 DOCTEST=yes COLUMNS=80
+      env: SYMPY_VER=0.7.6 OCT_PPA=no DOCTEST=no
+    - python: "2.7"
+      env: SYMPY_VER=0.7.6 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "3.4"
-      env: SYMPY_VER=0.7.6.1 DOCTEST=yes COLUMNS=80
+      env: SYMPY_VER=0.7.6.1 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 # TODO: once doctest is in OF, change to "install -forge" below
 install:
-  - sudo apt-add-repository --yes ppa:octave/stable
-  - sudo apt-get update
-  - sudo apt-get install octave liboctave-dev
+  - if [ "x$OCT_PPA" = "xyes" ]; then
+        sudo apt-add-repository -y ppa:octave/stable;
+    fi
+  - sudo apt-get update -qq -y;
+  - sudo apt-get install -y octave liboctave-dev;
   - "pip install sympy==$SYMPY_VER"
   - #if [ "x$DOCTEST" = "xyes" ]; then
     #    octave -W --no-gui --eval "pkg install -forge doctest";
@@ -30,6 +37,7 @@ install:
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
+  - stty cols 80 rows 40
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
