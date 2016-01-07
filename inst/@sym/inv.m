@@ -98,7 +98,6 @@ end
 %! assert (max (max (abs (double (inv (sym (A))) - inv(A)))) <= 3*eps)
 
 %!error <Matrix det == 0; not invertible.>
-%! % det 0
 %! syms a;
 %! A = [a a; a a];
 %! inv(A)
