@@ -112,27 +112,27 @@ function varargout = solve(varargin)
   if (nargout == 0 || nargout == 1)
     cmd = { 'eqs = list(); symbols = list()'
             'for arg in _ins:'
-            ' if arg.is_Relational:'
-            '  eqs.append(arg)'
-            ' else:'
-            '  symbols.append(arg)'
+            '  if arg.is_Relational:'
+            '    eqs.append(arg)'
+            '  else:'
+            '    symbols.append(arg)'
             '#'
             'try:'
-            ' if len(symbols) > 0:'
-            '  d = sp.solve(eqs, symbols, dict=True)'
-            ' else:'
-            '  d = sp.solve(eqs, dict=True)'
+            '  if len(symbols) > 0:'
+            '    d = sp.solve(eqs, symbols, dict=True)'
+            '  else:'
+            '    d = sp.solve(eqs, dict=True)'
             'except Exception as e:'
-            ' return (1, type(e).__name__ + ": " + str(e))'
+            '  return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
-            ' if len(d) == 1:'  % one variable, single solution
-            '  return (0, d[0].popitem()[1])'
-            ' else:'  % one variable, multiple solutions
-            '  return (0, sp.Matrix([r.popitem()[1] for r in d]))'
+            '  if len(d) == 1:'  % one variable, single solution
+            '    return (0, d[0].popitem()[1])'
+            '  else:'  % one variable, multiple solutions
+            '    return (0, sp.Matrix([r.popitem()[1] for r in d]))'
             '#'
             'if len(d) == 1:'
-            ' d = d[0]'
+            '  d = d[0]'
             'return (0, d)' };
 
     [flag, out] = python_cmd (cmd, varargin{:});
@@ -146,22 +146,22 @@ function varargout = solve(varargin)
   else  % multiple outputs
     cmd = { 'eqs = list(); symbols = list()'
             'for arg in _ins:'
-            ' if arg.is_Relational:'
-            '  eqs.append(arg)'
-            ' else:'
-            '  symbols.append(arg)'
+            '  if arg.is_Relational:'
+            '    eqs.append(arg)'
+            '  else:'
+            '    symbols.append(arg)'
             '#'
             'try:'
-            ' if len(symbols) > 0:'
-            '  (vars, solns) = sp.solve(eqs, symbols, set=True)'
-            ' else:'
-            '  (vars, solns) = sp.solve(eqs, set=True)'
+            '  if len(symbols) > 0:'
+            '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
+            '  else:'
+            '    (vars, solns) = sp.solve(eqs, set=True)'
             'except Exception as e:'
-            ' return (1, type(e).__name__ + ": " + str(e))'
+            '  return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'd = []'
             'for (i, var) in enumerate(vars):'
-            ' d.append(sp.Matrix([t[i] for t in solns]))'
+            '  d.append(sp.Matrix([t[i] for t in solns]))'
             'return (0, d)' };
 
     [flag, out] = python_cmd (cmd, varargin{:});
