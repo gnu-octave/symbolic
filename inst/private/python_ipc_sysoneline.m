@@ -14,10 +14,11 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     error('unsupported command')
   end
 
-  vstr = sympref('version');
+  verbose = ~sympref('quiet');
 
-  if (isempty(show_msg))
-    disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
+  if (verbose && isempty(show_msg))
+    fprintf('OctSymPy v%s: this is free software without warranty, see source.', ...
+            sympref('version'))
     disp('Using system()-based communication with Python [sysoneline].')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')

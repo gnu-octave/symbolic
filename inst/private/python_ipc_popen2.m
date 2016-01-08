@@ -5,9 +5,13 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
 
   py_startup_timeout = 30;  % seconds
 
+  verbose = ~sympref('quiet');
+
   if (strcmp(what, 'reset'))
     if (~isempty(pid))
-      disp('Closing the Python pipe...');
+      if (verbose)
+        disp('Closing the Python pipe...');
+      end
     end
     if (~isempty(fin))
       t = fclose(fin); fin = [];
@@ -31,18 +35,20 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
 
   newl = sprintf('\n');
 
-  vstr = sympref('version');
-
   if isempty(pid)
-    disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
-    disp('Initializing communication with SymPy using a popen2() pipe.')
-
+    if (verbose)
+      fprintf('OctSymPy v%s: this is free software without warranty, see source.', ...
+              sympref('version'))
+      disp('Initializing communication with SymPy using a popen2() pipe.')
+    end
     pyexec = sympref('python');
     if (isempty(pyexec))
       if (ispc() && ~isunix())
         % Octave popen2 on Windows can't tolerate stderr output
         % https://savannah.gnu.org/bugs/?43036
-        disp(['Detected Windows: using "winwrapy.bat" to workaround Octave bug #43036'])
+        if (verbose)
+          disp('Detected Windows: using "winwrapy.bat" to workaround Octave bug #43036')
+        end
         pyexec = 'winwrapy.bat';
       else
         pyexec = 'python';
@@ -51,8 +57,10 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     % perhaps the the '-i' is not always wanted?
     [fin, fout, pid] = popen2 (pyexec, '-i');
 
-    fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)
-    %fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n', fin, fout, pid)
+    if (verbose)
+      fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)
+      %fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n', fin, fout, pid)
+    end
     fflush (stdout);
 
     if (pid < 0)
@@ -86,10 +94,12 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       out
       error('ipc_popen2: something has gone wrong in starting python')
     else
-      disp(['OctSymPy: ' A{1} '  SymPy v' A{2} '.']);
-      % on unix we're seen this on stderr
-      if (ispc() && ~isunix())
-        disp(['Python ' strrep(A{3}, newl, '')])
+      if (verbose)
+        disp(['OctSymPy: ' A{1} '  SymPy v' A{2} '.']);
+        % on unix we're seen this on stderr
+        if (ispc() && ~isunix())
+          disp(['Python ' strrep(A{3}, newl, '')])
+        end
       end
     end
   end

@@ -154,6 +154,15 @@
 %% @end group
 %% @end example
 %%
+%% Be @strong{quiet} by minimizing startup and diagnostics messages:
+%% @example
+%% @group
+%% >> sympref quiet
+%%    @result{} ans = 0
+%% >> sympref quiet on
+%% >> sympref quiet default
+%% @end group
+%% @end example
 %%
 %% Report the @strong{version} number:
 %%
@@ -190,6 +199,7 @@ function varargout = sympref(cmd, arg)
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('snippet', 'default')
+      sympref ('quiet', 'default')
 
     case 'version'
       assert (nargin == 1)
@@ -237,6 +247,17 @@ function varargout = sympref(cmd, arg)
 	else
           settings.snippet = tf_from_input(arg);
 	end
+      end
+
+    case 'quiet'
+      if (nargin == 1)
+        varargout{1} = settings.quiet;
+      else
+        if (strcmpi(arg, 'default'))
+          settings.quiet = false;
+        else
+          settings.quiet = tf_from_input(arg);
+        end
       end
 
     case 'python'
@@ -321,6 +342,12 @@ function r = tf_from_input(s)
   end
 end
 
+
+%!test
+%! % test quiet, side effect of making following tests a bit less noisy!
+%! sympref quiet on
+%! a = sympref('quiet');
+%! assert(a == 1)
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
