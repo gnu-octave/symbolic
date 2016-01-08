@@ -177,7 +177,7 @@ end
 
 %!test
 %! % SMT compact
-%! syms r s t u 
+%! syms r s t u
 %! assert(logical( ilaplace(1/r^2,u) == u ))
 %! assert(logical( ilaplace(1/r^2,r,u) == u ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
@@ -195,4 +195,3 @@ end
 %! t=sym('t','positive');
 %! assert(logical( ilaplace(sym('2'),t) == 2*dirac(t) ))
 %! assert(logical( ilaplace(5*exp(-3*s)+2*exp(c*s)-2*exp(-2*s)/s,t) == 5*dirac(t-3)+2*dirac(c+t)-2*heaviside(t-2)))
-
