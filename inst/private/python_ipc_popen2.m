@@ -37,7 +37,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
 
   if isempty(pid)
     if (verbose)
-      fprintf('OctSymPy v%s: this is free software without warranty, see source.', ...
+      fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
               sympref('version'))
       disp('Initializing communication with SymPy using a popen2() pipe.')
     end

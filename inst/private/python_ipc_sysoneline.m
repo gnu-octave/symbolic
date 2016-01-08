@@ -17,7 +17,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   verbose = ~sympref('quiet');
 
   if (verbose && isempty(show_msg))
-    fprintf('OctSymPy v%s: this is free software without warranty, see source.', ...
+    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
             sympref('version'))
     disp('Using system()-based communication with Python [sysoneline].')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')

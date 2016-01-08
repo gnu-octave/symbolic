@@ -17,8 +17,8 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
   verbose = ~sympref('quiet');
 
   if (verbose && isempty(show_msg))
-    vstr = sympref('version');
-    disp(['OctSymPy v' vstr ': this is free software without warranty, see source.'])
+    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
+            sympref('version'))
     disp('You are using the slower system() communications with SymPy.')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new python process and many operations involve several round-trips.')
