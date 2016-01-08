@@ -22,6 +22,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     disp('Using system()-based communication with Python [sysoneline].')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')
+    disp('Warning: "sysoneline" will fail when using very long expressions.')
     show_msg = true;
   end
 
