@@ -37,44 +37,10 @@ function z = mpower(x, y)
     return
   end
 
+  z = binop_helper(x, y, 'lambda a,b: a**b');
 
-  if isscalar(x) && isscalar(y)
-    cmd = 'return _ins[0]**_ins[1],';
-    z = python_cmd (cmd, sym(x), sym(y));
-
-  elseif isscalar(x) && ~isscalar(y)
-    error('scalar^array not implemented');
-
-  elseif ~isscalar(x) && isscalar(y)
-    % FIXME: sympy can do int and rat, could use MatPow otherwise,
-    % rather than error.  SMT just leaves them unevaluted.
-
-    % FIXME: sin(MatrixExpr) also fails, any easy way in SymPy to express
-    % component-wise operations on a MatrixExpr?
-
-    cmd = { 'x, y = _ins'
-            'try:'
-            '    if not y.is_number:'
-            '        z = sympy.MatPow(x, y)'
-            '    else:'
-            '        z = x**y'
-            '    r = True'
-            'except NotImplementedError as e:'
-            '    z = str(e)'
-            '    r = False'
-            'return (r, z)' };
-
-    [r, z] = python_cmd (cmd, sym(x), sym(y));
-    if ~r
-      error('mpower: not implemented; sympy says: %s', z)
-    end
-
-  else  % two array's case
-    error('array^array not implemented');
-  end
 
 end
-
 
 %!test
 %! syms x

@@ -136,7 +136,8 @@ function varargout = python_cmd(cmd, varargin)
           '        return _outs' ...
           '    except Exception as e:' ...
           '        return ("COMMAND_ERROR_PYTHON", type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__)' ...
-          '_outs = _fcn(_ins)' };
+          '_outs = _fcn(_ins)'
+         };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
