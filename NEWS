@@ -13,7 +13,9 @@ octsympy 2.3.0-dev
 
   * Bug fixes for function_handle, fortran and ccode.
 
-  * Calling "inv" on a singular matrix now explicitly gives an error.
+  * Some functions now use a more flexible system for reporting errors
+    raised in Python code.  Note some error messages may have changed
+    slightly.  Thanks to @latot.
 
   * Fourier and Laplace transforms (and their inverses) use a
     different implementation which improves handling of delta
