@@ -8,6 +8,7 @@ octsympy 2.3.0-dev
           logspace
           max
           min
+          rewrite
 
   * Bug fix for working with certain unevaluated integrals.
 
