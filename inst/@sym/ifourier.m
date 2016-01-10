@@ -1,5 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2014, 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2016 Andrés Prieto, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,10 +20,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{f} =} ifourier (@var{FF}, @var{k}, @var{x})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{FF}, @var{x})
+%% @deftypefn  {Function File} {@var{f} =} ifourier (@var{G}, @var{w}, @var{x})
+%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{G})
+%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{G}, @var{x})
 %% Symbolic inverse Fourier transform.
+%%
+%% The inverse Fourier transform of a function @var{G} of @var{w}
+%% is a function @var{f} of @var{x} defined by the integral below.
+%% @example
+%% @group
+%% syms G(w) x
+%% f(x) = rewrite(ifourier(G), 'Integral')
+%%   @result{} f(x) = (symfun)
+%%       ∞
+%%       ⌠
+%%       ⎮        ⅈ⋅w⋅x
+%%       ⎮  G(w)⋅ℯ      dw
+%%       ⌡
+%%       -∞
+%%       ─────────────────
+%%              2⋅π
+%% @end group
+%% @end example
 %%
 %% Example:
 %% @example
