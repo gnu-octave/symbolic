@@ -80,10 +80,6 @@ end
 %! syms x
 %! lhs(x)
 
-%!error <AttributeError: 'Symbol' object has no attribute 'rhs'>
-%! syms x
-%! rhs(x)
-
 %!error <AttributeError: 'BooleanTrue' object has no attribute 'lhs'>
 %! lhs(sym(true))
 
