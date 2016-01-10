@@ -56,6 +56,6 @@ end
 %! f = x + 1 == 2*x;
 %! assert (isequal (rhs(f), 2*x))
 
-%!error <AttributeError: 'Symbol' object has no attribute 'rhs'>
+%!error <AttributeError>
 %! syms x
 %! rhs(x)

@@ -157,6 +157,6 @@ end
 %! end
 %! assert (waserr)
 
-%!error <TypeError: cannot logically negate sym "x">
+%!error <TypeError>
 %! syms x
 %! ~x
