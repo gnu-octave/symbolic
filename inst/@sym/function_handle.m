@@ -127,7 +127,7 @@ function f = function_handle(varargin)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
         error('function_handle: your SymPy has no octave codegen, cannot workaround');
       else
-        ou
+        out
         error('function_handle: Some other error from SymPy code gen?  file a bug!');
       end
     end
