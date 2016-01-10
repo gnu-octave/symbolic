@@ -36,10 +36,9 @@
 %% If the matrix is singular, an error is raised:
 %% @example
 %% @group
-%% syms x
-%% A = [x x; x x];
+%% A = sym([1 2; 1 2]);
 %% inv(A)
-%%   @print{} ??? Matrix det == 0; not invertible.
+%%   @print{} ??? ... Matrix det == 0; not invertible.
 %% @end group
 %% @end example
 %%
