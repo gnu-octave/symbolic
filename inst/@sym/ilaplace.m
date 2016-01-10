@@ -1,5 +1,5 @@
 %% Copyright (C) 2014 Andrés Prieto
-%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2015-2016 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,10 +29,8 @@
 %% @example
 %% @group
 %% syms g(s) t
-%% f(t) = ilaplace(g)
-%%   @result{} f(t) = (symfun) InverseLaplaceTransform(g(s), s, t, None)
-%% evalpy('f = f.as_integral', f)
-%%   @result{} f = (sym)
+%% f(t) = rewrite(ilaplace(g), 'Integral')
+%%   @result{} f(t) = (symfun)
 %%           c + ∞⋅ⅈ
 %%              ⌠
 %%              ⎮          s⋅t

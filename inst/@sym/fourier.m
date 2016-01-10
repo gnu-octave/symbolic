@@ -1,5 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2014, 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2016 Andrés Prieto, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,10 +20,26 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
+%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{w})
 %% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
-%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{k})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{w})
 %% Symbolic Fourier transform.
+%%
+%% The Fourier transform of a function @var{f} of @var{x}
+%% is a function @var{FF} of @var{w} defined by the integral below.
+%% @example
+%% @group
+%% syms f(x) w
+%% FF(w) = rewrite(fourier(f), 'Integral')
+%%   @result{} FF(w) = (symfun)
+%%       ∞
+%%       ⌠
+%%       ⎮        -ⅈ⋅w⋅x
+%%       ⎮  f(x)⋅ℯ       dx
+%%       ⌡
+%%       -∞
+%% @end group
+%% @end example
 %%
 %% Example:
 %% @example
