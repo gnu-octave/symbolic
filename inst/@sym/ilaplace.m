@@ -19,10 +19,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{t})
+%% @deftypefn  {Function File} {@var{f} =} ilaplace (@var{G}, @var{s}, @var{t})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G}, @var{t})
 %% Inverse Laplace transform.
+%%
+%% The inverse Laplace transform of a function @var{G} of @var{s}
+%% is a function @var{f} of @var{t} defined by the integral below.
+%% @example
+%% @group
+%% syms g(s) t
+%% f(t) = ilaplace(g)
+%%   @result{} f(t) = (symfun) InverseLaplaceTransform(g(s), s, t, None)
+%% evalpy('f = f.as_integral', f)
+%%   @result{} f = (sym)
+%%           c + ∞⋅ⅈ
+%%              ⌠
+%%              ⎮          s⋅t
+%%              ⎮    g(s)⋅ℯ    ds
+%%              ⌡
+%%           c - ∞⋅ⅈ
+%% @end group
+%% @end example
 %%
 %% Example:
 %% @example

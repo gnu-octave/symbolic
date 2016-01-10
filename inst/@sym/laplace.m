@@ -19,22 +19,41 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{s})
+%% @deftypefn  {Function File} {@var{G} =} laplace (@var{f}, @var{t}, @var{s})
+%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f})
+%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f}, @var{s})
 %% Laplace transform.
+%%
+%% The Laplace transform of a function @var{f} of @var{t}
+%% is a function @var{G} of @var{s} defined by the integral below.
+%% @example
+%% @group
+%% syms f(t) s
+%% G(s) = laplace(f)
+%%   @result{} G(s) = (symfun) LaplaceTransform(f(t), t, s)
+%% evalpy('G = G.as_integral', G)
+%%   @result{} G = (sym)
+%%       ∞
+%%       ⌠
+%%       ⎮       -s⋅t
+%%       ⎮ f(t)⋅ℯ     dt
+%%       ⌡
+%%       0
+%% @end group
+%% @end example
+%%
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms t
-%% >> f = t^2;
-%% >> laplace(f)
-%%    @result{} (sym)
-%%        2
-%%        ──
-%%         3
-%%        s
+%% syms t
+%% f = t^2;
+%% laplace(f)
+%%   @result{} (sym)
+%%       2
+%%       ──
+%%        3
+%%       s
 %% @end group
 %% @end example
 %%
@@ -43,22 +62,22 @@
 %% by specifying @var{s}.  For example:
 %% @example
 %% @group
-%% >> syms t s z
-%% >> laplace(exp(t))
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      s - 1
-%% >> laplace(exp(s))
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      z - 1
-%% >> laplace(exp(t), z)
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      z - 1
+%% syms t s z
+%% laplace(exp(t))
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       s - 1
+%% laplace(exp(s))
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       z - 1
+%% laplace(exp(t), z)
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       z - 1
 %% @end group
 %% @end example
 %%
