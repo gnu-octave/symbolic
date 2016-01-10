@@ -123,7 +123,7 @@ end
 %! q = sym(ones(0, 2));
 %! assert (isequal ([v; q], v))
 
-%!error <ShapeError>
+%!error <ShapeError: `self` and `bott` must have the same number of columns.>
 %! % FIXME: clean-up when we drop 0.7.5 support (Issue #164)
 %! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
 %!   disp('skipping: test passes on sympy >= 0.7.6')

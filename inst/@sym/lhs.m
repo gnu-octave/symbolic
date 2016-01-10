@@ -76,18 +76,18 @@ end
 %! assert (isequal( lhs(A), L))
 %! assert (isequal( rhs(A), R))
 
-%!error
+%!error <AttributeError: 'Symbol' object has no attribute 'lhs'>
 %! syms x
 %! lhs(x)
 
-%!error
+%!error <AttributeError: 'Symbol' object has no attribute 'rhs'>
 %! syms x
 %! rhs(x)
 
-%!error
+%!error <AttributeError: 'BooleanTrue' object has no attribute 'lhs'>
 %! lhs(sym(true))
 
-%!error
+%!error <AttributeError: 'Integer' object has no attribute 'lhs'>
 %! syms x
 %! A = [1 + x == 2*x  sym(6)];
 %! lhs(A)
