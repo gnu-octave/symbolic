@@ -94,19 +94,16 @@ function r = not(x)
     '        raise TE'
     'try:'
     '    if p.is_Matrix:'
-    '        r = p.applyfunc(lambda a: scalar_case(a))'
+    '        return (0, p.applyfunc(lambda a: scalar_case(a)))'
     '    else:'
-    '        r = scalar_case(p)'
-    '    flag = True'
-    'except TypeError as e:'
-    '    r = str(e)'
-    '    flag = False'
-    'return (flag, r)' };
+    '        return (0, scalar_case(p))'
+    'except Exception as e:'
+    '    return (1, type(e).__name__ + ": " + str(e))'
+    };
 
   [flag, r] = python_cmd (cmd, x);
-  if (~flag)
-    assert (ischar (r), '<not>: programming error?')
-    error(['<not>: ' r])
+  if (flag)
+    error(r)
   end
 end
 

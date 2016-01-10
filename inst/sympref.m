@@ -242,11 +242,11 @@ function varargout = sympref(cmd, arg)
       if (nargin == 1)
         varargout{1} = settings.snippet;
       else
-	if (strcmpi(arg, 'default'))
-	  settings.snippet = false;  % Should be false for a release
-	else
+        if (strcmpi(arg, 'default'))
+          settings.snippet = false;  % Should be false for a release
+        else
           settings.snippet = tf_from_input(arg);
-	end
+        end
       end
 
     case 'quiet'

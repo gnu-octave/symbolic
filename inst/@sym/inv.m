@@ -51,30 +51,21 @@
 
 function z = inv(x)
 
-  [n,m] = size(x);
-  if n ~= m
-    error('matrix is not square')
-  end
-
   cmd = {
-	'x, = _ins'
-	'flag = 0'
-	'r = "whatev"'
-	''
-	'if x.is_Matrix:'
-	'	try:'
-	'		r = x.inv()'
-	'	except ValueError:'
-	'		flag = 1'
-	'else:'
-	'		r = S.One/x'
-	''
-	'return (flag, r)'};
+        'x, = _ins'
+        'try:'
+        '    if x.is_Matrix:'
+        '        return (0, x.inv())'
+        '    else:'
+        '        return (0, S.One/x)'
+        'except Exception as e:'
+        '    return (1, type(e).__name__ + ": " + str(e))'
+        };
 
   [flag, z] = python_cmd (cmd, x);
 
   if (flag)
-    error('Matrix det == 0; not invertible.')
+    error(z)
   end
 
 end
