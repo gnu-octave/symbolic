@@ -92,3 +92,9 @@ end
 %! syms a;
 %! A = [a a; a a];
 %! inv(A)
+
+%!error <NonSquareMatrixError:>
+%! syms a;
+%! A = [a a];
+%! inv(A)
+
