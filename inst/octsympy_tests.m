@@ -215,7 +215,7 @@ function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
       p = n = xf = 0;
       ## Only run if it contains %!test, %!assert, %!error, %!fail, or %!warning
       if (has_tests (f))
-	tmp = f;
+        tmp = f;
         print_test_file_name (tmp);
         [p, n, xf, sk] = test (f, "quiet", fid);
         if (compare_versions (OCTAVE_VERSION (), '3.9', '<'))
@@ -226,7 +226,7 @@ function [dp, dn, dxf, dsk, FWT, FWNT] = run_test_script (fid, d);
         dn += n;
         dxf += xf;
         dsk += sk;
-	FWT{end+1} = f;
+        FWT{end+1} = f;
       else
         ## To reduce the list length, only mark .cc files that contain
         ## DEFUN definitions.

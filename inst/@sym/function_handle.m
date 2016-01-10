@@ -125,10 +125,10 @@ function f = function_handle(varargin)
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
-	error('function_handle: your SymPy has no octave codegen, cannot workaround');
+        error('function_handle: your SymPy has no octave codegen, cannot workaround');
       else
-	ou
-	error('function_handle: Some other error from SymPy code gen?  file a bug!');
+        out
+        error('function_handle: Some other error from SymPy code gen?  file a bug!');
       end
     end
     M.name = out{1}{1};

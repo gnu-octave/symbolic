@@ -32,24 +32,19 @@ function R = rhs(f)
 
   cmd = {
     'f, = _ins'
-    'flag = 0'
-    'r = 0'
-    'if f.is_Matrix:'
-    '    try:'
-    '        r = f.applyfunc(lambda a: a.rhs)'
-    '    except:'
-    '        flag = 1'
-    'else:'
-    '    try:'
-    '        r = f.rhs'
-    '    except:'
-    '        flag = 1'
-    'return (flag, r)' };
+    'try:'
+    '    if f.is_Matrix:'
+    '        return (0, f.applyfunc(lambda a: a.rhs))'
+    '    else:'
+    '        return (0, f.rhs)'
+    'except Exception as e:'
+    '    return (1, type(e).__name__ + ": " + str(e))'
+    };
 
   [flag, R] = python_cmd (cmd, f);
 
   if (flag)
-    error('rhs: one or more entries have no ''rhs'' attribute')
+    error(R)
   end
 
 end
@@ -61,3 +56,6 @@ end
 %! f = x + 1 == 2*x;
 %! assert (isequal (rhs(f), 2*x))
 
+%!error <AttributeError>
+%! syms x
+%! rhs(x)
