@@ -40,7 +40,7 @@ function h = vertcat(varargin)
           '            _proc.append(i)'
           '    else:'
           '        _proc.append(sp.Matrix([[i]]))'
-          '    return sp.Matrix.vstack(*_proc),'
+          'return sp.Matrix.vstack(*_proc),'
           };
 
   varargin = sym(varargin);
