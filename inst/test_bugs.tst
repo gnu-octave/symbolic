@@ -164,13 +164,11 @@
 %! e = x == x;
 %! assert (strcmp (strtrim(disp(e, 'flat')), 'x == x'))
 
-%%!xtest
-%%! % this is more serious!
-%%! % FIXME: is it? currently goes to false which is reasonable
-%%! syms x
-%%! e = x - 5 == x - 3;
-%%! assert (isa(e, 'sym'))
-%%! assert (~isa(e, 'logical'))
+%!xtest
+%! % "fails" on SymPy 0.7.5 (well goes to false, which is reasonable enough)
+%! syms x
+%! e = x - 5 == x - 3;
+%! assert (strcmp (strtrim(disp(e, 'flat')), 'x - 5 == x - 3'))
 
 %%!test
 %%! % using eq for == and "same obj" is strange, part 1
