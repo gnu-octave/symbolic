@@ -28,7 +28,6 @@
 function z = mrdivide(x, y)
 
   % Dear hacker from the distant future... maybe you can delete this?
-
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
@@ -36,11 +35,7 @@ function z = mrdivide(x, y)
     return
   end
 
-  if isscalar(x) && ~isscalar(y)
-    error('Scalar/Array not supported by this operator.')
-  end
-
-  z = rdivide(x, y);
+  z = python_cmd ('return _ins[0]/_ins[1],', sym(x), sym(y));
 
 end
 
