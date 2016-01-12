@@ -1,5 +1,5 @@
 %% Copyright (C) 2014 Andrés Prieto
-%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2015-2016 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,10 +19,26 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{f} =} ilaplace (@var{F}, @var{s}, @var{t})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{F}, @var{t})
+%% @deftypefn  {Function File} {@var{f} =} ilaplace (@var{G}, @var{s}, @var{t})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G})
+%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G}, @var{t})
 %% Inverse Laplace transform.
+%%
+%% The inverse Laplace transform of a function @var{G} of @var{s}
+%% is a function @var{f} of @var{t} defined by the integral below.
+%% @example
+%% @group
+%% syms g(s) t
+%% f(t) = rewrite(ilaplace(g), 'Integral')
+%%   @result{} f(t) = (symfun)
+%%           c + ∞⋅ⅈ
+%%              ⌠
+%%              ⎮          s⋅t
+%%              ⎮    g(s)⋅ℯ    ds
+%%              ⌡
+%%           c - ∞⋅ⅈ
+%% @end group
+%% @end example
 %%
 %% Example:
 %% @example
@@ -52,7 +68,7 @@
 %% @seealso{laplace}
 %% @end deftypefn
 
-%% Author: Andrés Prieto
+%% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms
 
 function f = ilaplace(varargin)
@@ -63,14 +79,35 @@ function f = ilaplace(varargin)
   % "x" will be the physical variable (analogously to SMT)
   if (nargin == 1)
     F = sym(varargin{1});
-    s = symvar(F, 1);
+    s = symvar(F, 1);  % note SMT does something different, prefers s
     if (isempty(s))
       s = sym('s');
     end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
             'if t==s:'
-            '    t=sp.Symbol("x")'
-            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
+            '    t=sp.Symbol("x", positive=True)'
+            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'Fr=F.rewrite(sp.exp)'
+            'if type(Fr)==sp.Add:'
+            '    terms=Fr.expand().args'
+            'else:'
+            '    terms=(Fr,)'
+            'for term in terms:'
+            '    #compute the Laplace transform for each term'
+            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
+            '    if r!=None and sp.diff(term,s)!=0:'
+            '        modulus=r[a_]'
+            '        phase=r[b_]/s'
+            '        # if a is constant and b/s is constant'
+            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
+            '            f = f + modulus*sp.DiracDelta(t+phase)'
+            '        else:'
+            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            '    elif sp.diff(term,s)==0:'
+            '        f = f + term*sp.DiracDelta(t)'
+            '    else:'
+            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            'return f,'};
 
     f = python_cmd(cmd,F,s);
 
@@ -82,7 +119,28 @@ function f = ilaplace(varargin)
       s = sym('s');
     end
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
-            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
+            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'Fr=F.rewrite(sp.exp)'
+            'if type(Fr)==sp.Add:'
+            '    terms=Fr.expand().args'
+            'else:'
+            '    terms=(Fr,)'
+            'for term in terms:'
+            '    #compute the Laplace transform for each term'
+            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
+            '    if r!=None and sp.diff(term,s)!=0:'
+            '        modulus=r[a_]'
+            '        phase=r[b_]/s'
+            '        # if a is constant and b/s is constant'
+            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
+            '            f = f + modulus*sp.DiracDelta(t+phase)'
+            '        else:'
+            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            '    elif sp.diff(term,s)==0:'
+            '        f = f + term*sp.DiracDelta(t)'
+            '    else:'
+            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            'return f,'};
 
     f = python_cmd(cmd,F,s,t);
 
@@ -91,7 +149,28 @@ function f = ilaplace(varargin)
     s = sym(varargin{2});
     t = sym(varargin{3});
     cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
-            'return sp.Subs(sp.inverse_laplace_transform(F, s, t),sp.Heaviside(t),1).doit(),'};
+            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'Fr=F.rewrite(sp.exp)'
+            'if type(Fr)==sp.Add:'
+            '    terms=Fr.expand().args'
+            'else:'
+            '    terms=(Fr,)'
+            'for term in terms:'
+            '    #compute the Laplace transform for each term'
+            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
+            '    if r!=None and sp.diff(term,s)!=0:'
+            '        modulus=r[a_]'
+            '        phase=r[b_]/s'
+            '        # if a is constant and b/s is constant'
+            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
+            '            f = f + modulus*sp.DiracDelta(t+phase)'
+            '        else:'
+            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            '    elif sp.diff(term,s)==0:'
+            '        f = f + term*sp.DiracDelta(t)'
+            '    else:'
+            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
+            'return f,'};
 
     f = python_cmd(cmd,F,s,t);
 
@@ -105,14 +184,27 @@ end
 
 %!test
 %! % basic
-%! syms t s r u x
+%! syms s t
+%! assert(logical( ilaplace(1/s^2) == t ))
+%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
+
+%!test
+%! % SMT compact
+%! syms r s t u
 %! assert(logical( ilaplace(1/r^2,u) == u ))
 %! assert(logical( ilaplace(1/r^2,r,u) == u ))
 %! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
 %! assert(logical( ilaplace(6/s^4) == t^3 ))
 
 %!test
-%! % SMT compact
-%! syms t s x
-%! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(1/t^2) == x ))
+%! % Heaviside test
+%! syms s
+%! t=sym('t', 'positive');
+%! assert(logical( ilaplace(exp(-5*s)/s^2,t) == (t-5)*heaviside(t-5) ))
+
+%!test
+%! % Delta dirac tests
+%! syms s c
+%! t=sym('t','positive');
+%! assert(logical( ilaplace(sym('2'),t) == 2*dirac(t) ))
+%! assert(logical( ilaplace(5*exp(-3*s)+2*exp(c*s)-2*exp(-2*s)/s,t) == 5*dirac(t-3)+2*dirac(c+t)-2*heaviside(t-2)))

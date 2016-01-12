@@ -1,6 +1,30 @@
 octsympy 2.3.0-dev
 ==================
 
+  * New commands:
+
+          cbrt
+          linspace
+          logspace
+          max
+          min
+          rewrite
+
+  * Bug fix for working with certain unevaluated integrals.
+
+  * Bug fixes for function_handle, fortran and ccode.
+
+  * Some functions now use a more flexible system for reporting errors
+    raised in Python code.  Note some error messages may have changed
+    slightly.  Thanks to @latot.
+
+  * Fourier and Laplace transforms (and their inverses) use a
+    different implementation which improves handling of delta
+    functions.  Ideally, a later version will consolidate this with
+    SymPy's original implementations.
+
+  * Documentation improvements.
+
 
 
 octsympy 2.2.4 (2015-12-14)

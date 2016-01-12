@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{r} =} iscolumn (@var{x})
 %% Return true if symbolic expression is a column vector.
+%%
+%% Example:
+%% @example
+%% @group
+%% v = sym([1; 2; 3]);
+%% iscolumn(v)
+%%   @result{} 1
+%% iscolumn(sym(1))
+%%   @result{} 1
+%% iscolumn(v')
+%%   @result{} 0
+%% @end group
+%% @end example
 %%
 %% @seealso{isrow, isvector, isscalar}
 %% @end deftypefn

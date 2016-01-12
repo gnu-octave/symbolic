@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{r} =} isempty (@var{x})
 %% Return true a symbolic array is empty (one dimension is zero).
 %%
+%% Examples:
+%% @example
+%% @group
+%% isempty(sym([]))
+%%   @result{} 1
+%% isempty(sym(pi))
+%%   @result{} 0
+%% isempty(sym(zeros(4, 0)))
+%%   @result{} 1
+%% @end group
+%% @end example
+%%
+%% @seealso{size, numel}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

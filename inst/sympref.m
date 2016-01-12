@@ -30,21 +30,26 @@
 %%
 %%
 %% @strong{Python executable} path/command:
+%%
 %% @example
 %% @group
-%% >> sympref python '/usr/bin/python'       @c doctest: +SKIP
-%% >> sympref python 'C:\Python\python.exe'  @c doctest: +SKIP
-%% >> sympref python 'N:\myprogs\py.exe'     @c doctest: +SKIP
+%% >> sympref python '/usr/bin/python'        % doctest: +SKIP
+%% >> sympref python 'C:\Python\python.exe'   % doctest: +SKIP
+%% >> sympref python 'N:\myprogs\py.exe'      % doctest: +SKIP
 %% @end group
 %% @end example
+%%
 %% Default is an empty string; in which case OctSymPy just runs
 %% @code{python} and assumes the path is set appropriately.
 %%
+%%
 %% @strong{Display} of syms:
+%%
 %% @example
 %% @group
 %% >> sympref display
 %%    @result{} ans = unicode
+%%
 %% @end group
 %% @group
 %% >> syms x
@@ -69,15 +74,21 @@
 %% >> sympref display default
 %% @end group
 %% @end example
+%%
 %% By default OctSymPy uses the unicode pretty printer to display
 %% symbolic expressions.  If that doesn't work (e.g., if you
 %% see @code{?} characters) then try the @code{ascii} option.
 %%
+%%
 %% @strong{Communication mechanism}:
+%%
 %% @example
+%% @group
 %% >> sympref ipc
 %%    @result{} ans = default
+%% @end group
 %% @end example
+%%
 %% The default will typically be the @code{popen2} mechanism which
 %% uses a pipe to communicate with Python and should be fairly fast.
 %% If that doesn't work, try @code{sympref display system} which is
@@ -101,19 +112,24 @@
 %% [for debugging, may not be supported long-term].
 %% @end itemize
 %%
+%%
 %% @strong{Reset}: reset the SymPy communication mechanism.  This can be
 %% useful after an error occurs and the connection with Python
 %% becomes confused.
-%% @example
-%% >> sympref reset     @c doctest: +SKIP
-%% @end example
 %%
-%% @strong{Snippets}: when displaying a sym object, we quote the SymPy
-%% representation (or a small part of it):
 %% @example
 %% @group
-%% >> syms x
-%% >> y = [pi x];
+%% >> sympref reset    % doctest: +SKIP
+%% @end group
+%% @end example
+%%
+%%
+%% @strong{Snippets}: when displaying a sym object, we can optionally
+%% quote a small part of the SymPy representation:
+%%
+%% @example
+%% @group
+%% >> syms x;  y = [pi x];
 %% >> sympref snippet on
 %% >> y
 %%    @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
@@ -125,8 +141,10 @@
 %% @end group
 %% @end example
 %%
+%%
 %% @strong{Default precision}: control the number of digits used by
 %% variable-precision arithmetic (see also the @ref{digits} command).
+%%
 %% @example
 %% @group
 %% >> sympref digits          % get
@@ -136,8 +154,18 @@
 %% @end group
 %% @end example
 %%
+%% Be @strong{quiet} by minimizing startup and diagnostics messages:
+%% @example
+%% @group
+%% >> sympref quiet
+%%    @result{} ans = 0
+%% >> sympref quiet on
+%% >> sympref quiet default
+%% @end group
+%% @end example
 %%
 %% Report the @strong{version} number:
+%%
 %% @example
 %% @group
 %% >> sympref version
@@ -171,6 +199,7 @@ function varargout = sympref(cmd, arg)
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('snippet', 'default')
+      sympref ('quiet', 'default')
 
     case 'version'
       assert (nargin == 1)
@@ -213,11 +242,22 @@ function varargout = sympref(cmd, arg)
       if (nargin == 1)
         varargout{1} = settings.snippet;
       else
-	if (strcmpi(arg, 'default'))
-	  settings.snippet = false;  % Should be false for a release
-	else
+        if (strcmpi(arg, 'default'))
+          settings.snippet = false;  % Should be false for a release
+        else
           settings.snippet = tf_from_input(arg);
-	end
+        end
+      end
+
+    case 'quiet'
+      if (nargin == 1)
+        varargout{1} = settings.quiet;
+      else
+        if (strcmpi(arg, 'default'))
+          settings.quiet = false;
+        else
+          settings.quiet = tf_from_input(arg);
+        end
       end
 
     case 'python'
@@ -302,6 +342,12 @@ function r = tf_from_input(s)
   end
 end
 
+
+%!test
+%! % test quiet, side effect of making following tests a bit less noisy!
+%! sympref quiet on
+%! a = sympref('quiet');
+%! assert(a == 1)
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows

@@ -1,5 +1,5 @@
 %% Copyright (C) 2014 Andrés Prieto
-%% Copyright (C) 2015 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2015-2016 Andrés Prieto, Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,22 +19,39 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{F} =} laplace (@var{f}, @var{t}, @var{s})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f})
-%% @deftypefnx {Function File} {@var{F} =} laplace (@var{f}, @var{s})
+%% @deftypefn  {Function File} {@var{G} =} laplace (@var{f}, @var{t}, @var{s})
+%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f})
+%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f}, @var{s})
 %% Laplace transform.
+%%
+%% The Laplace transform of a function @var{f} of @var{t}
+%% is a function @var{G} of @var{s} defined by the integral below.
+%% @example
+%% @group
+%% syms f(t) s
+%% G(s) = rewrite(laplace(f), 'Integral')
+%%   @result{} G(s) = (symfun)
+%%       ∞
+%%       ⌠
+%%       ⎮       -s⋅t
+%%       ⎮ f(t)⋅ℯ     dt
+%%       ⌡
+%%       0
+%% @end group
+%% @end example
+%%
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms t
-%% >> f = t^2;
-%% >> laplace(f)
-%%    @result{} (sym)
-%%        2
-%%        ──
-%%         3
-%%        s
+%% syms t
+%% f = t^2;
+%% laplace(f)
+%%   @result{} (sym)
+%%       2
+%%       ──
+%%        3
+%%       s
 %% @end group
 %% @end example
 %%
@@ -43,29 +60,29 @@
 %% by specifying @var{s}.  For example:
 %% @example
 %% @group
-%% >> syms t s z
-%% >> laplace(exp(t))
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      s - 1
-%% >> laplace(exp(s))
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      z - 1
-%% >> laplace(exp(t), z)
-%%    @result{} (sym)
-%%        1
-%%      ─────
-%%      z - 1
+%% syms t s z
+%% laplace(exp(t))
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       s - 1
+%% laplace(exp(s))
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       z - 1
+%% laplace(exp(t), z)
+%%   @result{} (sym)
+%%         1
+%%       ─────
+%%       z - 1
 %% @end group
 %% @end example
 %%
 %% @seealso{ilaplace}
 %% @end deftypefn
 
-%% Author: Andrés Prieto
+%% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms
 
 function F = laplace(varargin)
@@ -77,9 +94,9 @@ function F = laplace(varargin)
   % "z" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
     f = sym(varargin{1});
-    t = symvar(f, 1);
+    t = symvar(f, 1);  % note SMT does something different, prefers t
     if (isempty(t))
-      t = sym('t');
+      t = sym('t','positive');
     end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
@@ -97,7 +114,7 @@ function F = laplace(varargin)
     s = sym(varargin{2});
     t = symvar(f, 1);  % note SMT does something different, prefers t
     if (isempty(t))
-      t = sym('t');
+      t = sym('t','positive');
     end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
@@ -156,6 +173,12 @@ end
 %! syms s
 %! f = laplace(2, s);
 %! assert (isequal (f, 2/s))
+
+%!test
+%! % Dirac delta and Heaviside tests
+%! syms t s
+%! assert (isequal (laplace(dirac(t-3)), exp(-3*s)))
+%! assert (isequal (laplace((t-3)*heaviside(t-3)), exp(-3*s)/s^2))
 
 %!xtest
 %! % Differential operator to algebraic

@@ -21,6 +21,37 @@
 %% @deftypefn {Function File} {@var{y} =} not (@var{x})
 %% Logical not of a symbolic array.
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% eqn = 2*x == y
+%%   @result{} eqn = (sym) 2⋅x = y
+%% not(eqn)
+%%   @result{} ans = (sym) 2⋅x ≠ y
+%% @end group
+%% @end example
+%%
+%% More briefly:
+%% @example
+%% @group
+%% ~(x==y)
+%%   @result{} ans = (sym) x ≠ y
+%% !(x==y)
+%%   @result{} ans = (sym) x ≠ y
+%% @end group
+%% @end example
+%%
+%% Applies to each entry of a matrix:
+%% @example
+%% @group
+%% A = [x < y, 2*x + y >= 0, true]
+%%   @result{} A = (sym) [x < y  2⋅x + y ≥ 0  True]  (1×3 matrix)
+%% ~A
+%%   @result{} ans = (sym) [x ≥ y  2⋅x + y < 0  False]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
 %% @seealso{eq, ne, logical, isAlways, isequal}
 %% @end deftypefn
 
@@ -63,19 +94,16 @@ function r = not(x)
     '        raise TE'
     'try:'
     '    if p.is_Matrix:'
-    '        r = p.applyfunc(lambda a: scalar_case(a))'
+    '        return (0, p.applyfunc(lambda a: scalar_case(a)))'
     '    else:'
-    '        r = scalar_case(p)'
-    '    flag = True'
-    'except TypeError as e:'
-    '    r = str(e)'
-    '    flag = False'
-    'return (flag, r)' };
+    '        return (0, scalar_case(p))'
+    'except Exception as e:'
+    '    return (1, type(e).__name__ + ": " + str(e))'
+    };
 
   [flag, r] = python_cmd (cmd, x);
-  if (~flag)
-    assert (ischar (r), '<not>: programming error?')
-    error(['<not>: ' r])
+  if (flag)
+    error(r)
   end
 end
 
@@ -107,9 +135,8 @@ end
 %! assert (isa (e, 'sym'))
 %! assert (strncmp(char(e), 'Unequality', 10))
 
-%!xtest
-%! % output is sym even for scalar t/f
-%! % ₣IXME: should match other bool fcns
+%!test
+%! % output is sym even for scalar t/f (should match other bool fcns)
 %! assert (isa (~t, 'sym'))
 
 %!test
@@ -130,3 +157,6 @@ end
 %! end
 %! assert (waserr)
 
+%!error <TypeError>
+%! syms x
+%! ~x

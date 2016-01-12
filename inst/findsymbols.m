@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,7 +34,7 @@
 %% >> syms x y z
 %% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
 %% >> findsymbols (C)
-%%    @result{}
+%%    @result{} ans =
 %%      @{
 %%        (sym) x
 %%        (sym) y
@@ -43,7 +43,7 @@
 %% @end group
 %% @end example
 %%
-%% Note E, I, pi, etc are not counted as symbols.
+%% Note ℯ, ⅈ, π, etc are not counted as symbols.
 %%
 %% Note only returns symbols actually appearing in the RHS of a
 %% @code{symfun}.
@@ -137,6 +137,16 @@ end
 %!assert (isempty (findsymbols (sym (nan))))
 %!assert (isempty (findsymbols (sym (inf))))
 %!assert (isempty (findsymbols (exp (sym (2)))))
+
+%!test
+%! % empty sym for findsymbols, findsym, and symvar
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping: findsymbols of empty sym broken before SymPy 0.7.7')
+%! else
+%!   assert (isempty (findsymbols (sym([]))))
+%!   assert (isempty (findsym (sym([]))))
+%!   assert (isempty (symvar (sym([]))))
+%! end
 
 %!test
 %! % diff. assumptions make diff. symbols

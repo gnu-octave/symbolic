@@ -125,10 +125,10 @@ function f = function_handle(varargin)
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
-	error('function_handle: your SymPy has no octave codegen, cannot workaround');
+        error('function_handle: your SymPy has no octave codegen, cannot workaround');
       else
-	ou
-	error('function_handle: Some other error from SymPy code gen?  file a bug!');
+        out
+        error('function_handle: Some other error from SymPy code gen?  file a bug!');
       end
     end
     M.name = out{1}{1};
@@ -157,10 +157,7 @@ function f = function_handle(varargin)
               '    return (False, "expected symbols-to-declare to be empty")' ...
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
-      %worked = false;
-      if (worked)
-        codestr = vectorize(codestr);
-      else
+      if (~worked)
         %% SymPy 0.7.5 has no octave_code command
         % Use a crude workaround (e.g., Abs, ceiling will fail).
         if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...

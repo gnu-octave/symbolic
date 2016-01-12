@@ -49,9 +49,6 @@
 %! assert (isequal (rot90(x, 17), x))
 %! assert (isequal (fliplr(x), x))
 %! assert (isequal (flipud(x), x))
-%! assert (isequal (flip(x), x))
-%! assert (isequal (flip(x, 1), x))
-%! assert (isequal (flip(x, 2), x))
 
 %!test
 %! % Issue #103: rot90, fliplr, flipud, flip on vectors
@@ -69,8 +66,6 @@
 %! assert (isequal (fliplr(v), v))
 %! assert (isequal (fliplr(h), [x 2 1]))
 %! assert (isequal (flipud(v), [x; 2; 1]))
-%! assert (isequal (flip(h, 1), h))
-%! assert (isequal (flip(h, 2), fliplr(h)))
 
 %!test
 %! % Issue #103: rot90, fliplr, flipud, flip on matrices
@@ -82,6 +77,18 @@
 %! assert (isequal (rot90(A, 4), A))
 %! assert (isequal (flipud(A), [x 5 6; 1 x 3]))
 %! assert (isequal (fliplr(A), [3 x 1; 6 5 x]))
+
+%!xtest
+%! % flip: FIXME: fails in Octave 3.8
+%! syms x
+%! h = [1 2 x];
+%! v = [1; 2; x];
+%! A = [1 x 3; x 5 6];
+%! assert (isequal (flip(x), x))
+%! assert (isequal (flip(x, 1), x))
+%! assert (isequal (flip(x, 2), x))
+%! assert (isequal (flip(h, 1), h))
+%! assert (isequal (flip(h, 2), fliplr(h)))
 %! assert (isequal (flip(A, 1), flipud(A)))
 %! assert (isequal (flip(A, 2), fliplr(A)))
 
@@ -157,13 +164,11 @@
 %! e = x == x;
 %! assert (strcmp (strtrim(disp(e, 'flat')), 'x == x'))
 
-%%!xtest
-%%! % this is more serious!
-%%! % FIXME: is it? currently goes to false which is reasonable
-%%! syms x
-%%! e = x - 5 == x - 3;
-%%! assert (isa(e, 'sym'))
-%%! assert (~isa(e, 'logical'))
+%!xtest
+%! % "fails" on SymPy 0.7.5 (well goes to false, which is reasonable enough)
+%! syms x
+%! e = x - 5 == x - 3;
+%! assert (strcmp (strtrim(disp(e, 'flat')), 'x - 5 == x - 3'))
 
 %%!test
 %%! % using eq for == and "same obj" is strange, part 1
@@ -219,16 +224,14 @@
 %! % FIXME: not same as an freshly created 5 x 6.
 %! C = sym('B', [5 6]);
 %! assert (isequal(B, C))
-%! % FIXME: e.g., cannot add to it
-%! B = B + 1
-%! assert (isa (B, 'sym'))
 
-%!xtest
-%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
-%! syms x
-%!xtest
-%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
-%! syms x
 %!test
-%! % previous leave things so broken, takes a couple ops to clear up (yuck!)
-%! syms x
+%! % ensure these kinds of MatrixExpr can be manipulated somewhat
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! B = subs(A, [n m], [5 6]);
+%! B = B + 1;
+%! assert (isa (B, 'sym'))
+%! C = B(1, 1);  % currently makes a MatrixElement
+%! C = C + 1;
+%! assert (isa (C, 'sym'))
