@@ -47,7 +47,7 @@
 %% @group
 %% >> syms x
 %% >> double (x)
-%%    @print{} ??? cannot convert to double
+%%    @print{} ??? ... can't convert expression ...
 %% @end group
 %% @end example
 %%

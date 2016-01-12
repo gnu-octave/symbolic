@@ -141,7 +141,7 @@ function varargout = python_cmd(cmd, varargin)
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
-  if (strcmp(A{1}, "COMMAND_ERROR_PYTHON"))
+  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     error(A{2});
   end
 
