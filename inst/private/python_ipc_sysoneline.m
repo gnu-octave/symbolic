@@ -44,7 +44,7 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % extra escaping
   s = myesc(s);
   % join all the cell arrays with escaped newline
-  s = mystrjoin(s, '\\n');
+  s = strjoin(s, '\\n');
   s1 = ['exec(\"' s '\"); '];
 
 
@@ -53,14 +53,14 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % with _ins and produce _outs.
   s = python_format_cmd(cmd);
   s = myesc(s);
-  s = mystrjoin(s, '\\n');
+  s = strjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];
 
 
   %% output, or perhaps a thrown error
   s = python_copy_vars_from('_outs');
   s = myesc(s);
-  s = mystrjoin(s, '\\n');
+  s = strjoin(s, '\\n');
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');

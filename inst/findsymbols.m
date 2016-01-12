@@ -62,15 +62,7 @@ function L = findsymbols(obj, dosort)
 
   if isa(obj, 'sym')
     cmd = { 'x = _ins[0]'
-            'if sympy.__version__ == "0.7.5":'   % deprecate with Issue #164
-            '    if not x.is_Matrix:'
-            '        s = x.free_symbols'
-            '    else:'
-            '        s = set()'
-            '        for i in x.values():'
-            '            s = s.union(i.free_symbols)'
-            'else:'
-            '    s = x.free_symbols'
+            's = x.free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
@@ -185,11 +177,7 @@ end
 %! % symbols in matpow
 %! syms x y
 %! syms n
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=75)
-%!   disp('skipping known failure b/c SymPy <= 0.7.5')
-%! else
-%!   A = [sin(x) 2; y 1];
-%!   B = A^n;
-%!   L = findsymbols(B);
-%!   assert (isequal (L, {n x y}))
-%! end
+%! A = [sin(x) 2; y 1];
+%! B = A^n;
+%! L = findsymbols(B);
+%! assert (isequal (L, {n x y}))

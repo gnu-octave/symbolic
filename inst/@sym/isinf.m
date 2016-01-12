@@ -37,10 +37,7 @@ function r = isinf(x)
   if isscalar(x)
 
     cmd = { 'd = _ins[0]'
-            'if sympy.__version__ == "0.7.5":'
-            '    d = d.is_unbounded'
-            'else:'
-            '    d = d.is_infinite'
+            'd = d.is_infinite'
             'if d == True:'
             '    return True,'
             'elif d == False:'

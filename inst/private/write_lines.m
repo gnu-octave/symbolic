@@ -7,7 +7,7 @@ function A = write_lines(f, L, xtra)
     L(end+1:end+2) = {'' ''};
   end
 
-  fputs(f, mystrjoin(L, newl));
+  fputs(f, strjoin(L, newl));
 
 end
 

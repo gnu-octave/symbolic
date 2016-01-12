@@ -229,7 +229,7 @@ end
 %! assert (isAlways(expr))
 
 %!test
-%! % more differences 1, these don't simplify in sympy 0.7.5
+%! % more differences 1, these don't simplify in sympy (as of 2016-01)
 %! expr = (x+1)^2 == x*x + 2*x + 1;
 %! assert (~logical(expr))
 %! assert (isAlways(expr))

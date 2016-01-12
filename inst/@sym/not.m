@@ -75,13 +75,6 @@ function r = not(x)
     '(p,) = _ins'
     'def scalar_case(p,):'
     '    TE = TypeError("cannot logically negate sym \"%s\"" % str(p))'
-    '    if sympy.__version__ == "0.7.5":' % later Not(p) below ok
-    '        if isinstance(p, Eq): return Ne(p.lhs, p.rhs)'
-    '        elif isinstance(p, Ne): return Eq(p.lhs, p.rhs)'
-    '        elif isinstance(p, Lt): return Ge(p.lts, p.gts)'
-    '        elif isinstance(p, Le): return Gt(p.lts, p.gts)'
-    '        elif isinstance(p, Gt): return Le(p.gts, p.lts)'
-    '        elif isinstance(p, Ge): return Lt(p.gts, p.lts)'
     '    if p is nan:'
     '        raise TE'  % FIXME: check SMT
     '    elif isinstance(p, (BooleanFunction, Relational)):'
