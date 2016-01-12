@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,23 +36,6 @@
 %%        ⎡2⎤
 %%        ⎢ ⎥
 %%        ⎣3⎦
-%% @end group
-%% @end example
-%%
-%% You can specify a variable or even an expression to solve for:
-%% @example
-%% @group
-%% >> syms x y
-%% >> e = 10*x == 20*y;
-%% >> d = solve(e, x)    % gives 2*y
-%%    @result{} d = (sym) 2⋅y
-%% >> d = solve(e, y)    % gives x/2
-%%    @result{} d = (sym)
-%%        x
-%%        ─
-%%        2
-%% >> d = solve(e, 2*x)  % gives 4*y
-%%    @result{} d = (sym) 4⋅y
 %% @end group
 %% @end example
 %%
@@ -117,22 +101,30 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'if len(symbols) > 0:'
-            '    d = sp.solve(eqs, symbols, dict=True)'
-            'else:'
-            '    d = sp.solve(eqs, dict=True)'
+            'try:'
+            '    if len(symbols) > 0:'
+            '        d = sp.solve(eqs, symbols, dict=True)'
+            '    else:'
+            '        d = sp.solve(eqs, dict=True)'
+            'except Exception as e:'
+            '    return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
-            '        return d[0].popitem()[1],'
+            '        return (0, d[0].popitem()[1])'
             '    else:'  % one variable, multiple solutions
-            '        return sp.Matrix([r.popitem()[1] for r in d]),'
+            '        return (0, sp.Matrix([r.popitem()[1] for r in d]))'
             '#'
             'if len(d) == 1:'
             '    d = d[0]'
-            'return d,' };
+            'return (0, d)' };
 
-    out = python_cmd (cmd, varargin{:});
+    [flag, out] = python_cmd (cmd, varargin{:});
+
+    if (flag)
+      error(out)
+    end
+
     varargout = {out};
 
   else  % multiple outputs
@@ -143,21 +135,31 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'if len(symbols) > 0:'
-            '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
-            'else:'
-            '    (vars, solns) = sp.solve(eqs, set=True)'
+            'try:'
+            '    if len(symbols) > 0:'
+            '        (vars, solns) = sp.solve(eqs, symbols, set=True)'
+            '    else:'
+            '        (vars, solns) = sp.solve(eqs, set=True)'
+            'except Exception as e:'
+            '    return (1, type(e).__name__ + ": " + str(e))'
             '#'
             'd = []'
             'for (i, var) in enumerate(vars):'
             '    d.append(sp.Matrix([t[i] for t in solns]))'
-            'return d,' };
+            'return (0, d)' };
 
-    out = python_cmd (cmd, varargin{:});
+    [flag, out] = python_cmd (cmd, varargin{:});
+
+    if (flag)
+      error(out)
+    end
+
     varargout = out;
+
     if (length(out) ~= nargout)
       warning('solve: number of outputs did not match solution vars');
     end
+
   end
 
 end
@@ -190,20 +192,11 @@ end
 %! assert (isequal (d, 2*y))
 
 %!test
-%! % now this works because we don't return a dict, see next comments
+%! % Solve for an expression 2*x instead of a variable.  Note only very
+%! % simple examples will work, see "?solve" in SymPy, hence this is no
+%! % longer documented in the help text.
 %! d = solve(e, 2*x);
 %! assert (isequal (d, 4*y))
-
-%%!test
-%%! % solve for 2*x (won't work on Matlab/Octave 3.6)
-%%! % FIXME: design a test with both x and y?  Should we support this?
-%%! if exist('octave_config_info', 'builtin')
-%%!   if (compare_versions (OCTAVE_VERSION (), '3.8.0', '>='))
-%%!     d = solve(e, 2*x);
-%%!     s = d.('2*x');
-%%!     assert (isequal (s, 4*y))
-%%!   end
-%%! end
 
 %!test
 %! d = solve(2*x - 3*y == 0, x + y == 1);
@@ -250,3 +243,11 @@ end
 %! [X, Y] = solve(x*x == 4, x == 2*y, x, y);
 %! assert (isequal (X, [2; -2]))
 %! assert (isequal (Y, [1; -1]))
+
+%!error
+%! syms a b;
+%! solve(a==b, 1==1)
+
+%!error
+%! syms a b;
+%! solve(a==b, 1==2)

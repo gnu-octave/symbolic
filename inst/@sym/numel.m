@@ -17,10 +17,21 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{n} =} numel (@var{x})
 %% Return number of elements in symbolic array.
 %%
-%% @seealso{length,size}
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = [1 2 x; x 3 4];
+%% numel(A)
+%%    @result{} 6
+%% @end group
+%% @end example
+%%
+%% @seealso{length, size}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

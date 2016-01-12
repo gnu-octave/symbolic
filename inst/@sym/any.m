@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,6 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} any (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} any (@var{x}, @var{dim})
 %% Return true if any entries of a symbolic vector are nonzero.
@@ -30,7 +31,7 @@
 %% @example
 %% @group
 %% >> any([0; sym(pi); 0])
-%%  @result{} ans =  1
+%%    @result{} ans = 1
 %% @end group
 %% @end example
 %%

@@ -21,8 +21,9 @@
 
 function z = uniop_helper(x, scalar_fcn)
 
-  % string can either be the name of a function or the definition
-  % of a new function.
+  % String can either be the name of a function or a lambda definition
+  % of a new function.  It can be multiline cell array defining a
+  % a new function called "sf".
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)
     cmd = scalar_fcn;
@@ -30,12 +31,13 @@ function z = uniop_helper(x, scalar_fcn)
     cmd = {['sf = ' scalar_fcn]};
   end
 
-  cmd = { cmd{:} ...
-          '(x,) = _ins' ...
-          'if x.is_Matrix:' ...
-          '    return x.applyfunc(lambda a: sf(a)),' ...
-          'else:' ...
-          '    return sf(x),' };
+  % note: cmd is already cell array, hence [ concatenates with it
+  cmd = [ cmd
+          '(x,) = _ins'
+          'if x.is_Matrix:'
+          '    return x.applyfunc(lambda a: sf(a)),'
+          'else:'
+          '    return sf(x),' ];
 
   z = python_cmd (cmd, sym(x));
 

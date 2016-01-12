@@ -30,7 +30,8 @@ function h = vertcat(varargin)
 
   % special case for 0x0 but other empties should be checked for
   % compatibilty
-  cmd = { '_proc = []'
+  cmd = {
+          '_proc = []'
           'for i in _ins:'
           '    if i.is_Matrix:'
           '        if i.shape == (0, 0):'
@@ -39,19 +40,17 @@ function h = vertcat(varargin)
           '            _proc.append(i)'
           '    else:'
           '        _proc.append(sp.Matrix([[i]]))'
-          'failed = False'
-          'M = "whatev"'
           'try:'
-          '    M = sp.Matrix.vstack(*_proc)'
-          'except ShapeError:'
-          '    failed = True'
-          'return (failed, M)' };
+          '    return (0, sp.Matrix.vstack(*_proc))'
+          'except Exception as e:'
+          '    return (1, type(e).__name__ + ": " + str(e))'
+          };
 
   varargin = sym(varargin);
   [flag, h] = python_cmd (cmd, varargin{:});
 
   if (flag)
-    error('vertcat: ShapeError: incompatible sizes concatenated')
+    error(h)
   end
 
 end

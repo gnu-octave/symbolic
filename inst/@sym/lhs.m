@@ -32,24 +32,19 @@ function L = lhs(f)
 
   cmd = {
     'f, = _ins'
-    'flag = 0'
-    'r = 0'
-    'if f.is_Matrix:'
-    '    try:'
-    '        r = f.applyfunc(lambda a: a.lhs)'
-    '    except:'
-    '        flag = 1'
-    'else:'
-    '    try:'
-    '        r = f.lhs'
-    '    except:'
-    '        flag = 1'
-    'return (flag, r)' };
+    'try:'
+    '    if f.is_Matrix:'
+    '        return (0, f.applyfunc(lambda a: a.lhs))'
+    '    else:'
+    '        return (0, f.lhs)'
+    'except Exception as e:'
+    '    return (1, type(e).__name__ + ": " + str(e))'
+    };
 
   [flag, L] = python_cmd (cmd, f);
 
   if (flag)
-    error('lhs: one or more entries have no ''lhs'' attribute')
+    error(L)
   end
 
 end
@@ -81,18 +76,14 @@ end
 %! assert (isequal( lhs(A), L))
 %! assert (isequal( rhs(A), R))
 
-%!error <lhs:.* entries have no>
+%!error <AttributeError>
 %! syms x
 %! lhs(x)
 
-%!error <rhs:.* entries have no>
-%! syms x
-%! rhs(x)
-
-%!error <lhs:.* entries have no>
+%!error <AttributeError>
 %! lhs(sym(true))
 
-%!error <lhs:.* entries have no>
+%!error <AttributeError>
 %! syms x
 %! A = [1 + x == 2*x  sym(6)];
 %! lhs(A)

@@ -17,10 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{b} =} ismatrix (@var{x})
 %% Return true if this symbolic expression is a matrix.
 %%
-%% That is, a 2D array including scalar and empty matrices.
+%% This returns true for all 2D arrays including matrices, scalars,
+%% vectors and empty matrices.  This function is provided mostly for
+%% compatibility with double arrays: it would return false for 3D
+%% arrays; however 3D symbolic arrays are not currently supported.
+%%
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%% ismatrix(A)
+%%   @result{} 1
+%% ismatrix(sym([1 2 3]))
+%%   @result{} 1
+%% @end group
+%% @end example
 %%
 %% @seealso{isscalar, isvector, size}
 %% @end deftypefn

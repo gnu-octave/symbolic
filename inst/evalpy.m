@@ -27,7 +27,7 @@
 %% @group
 %% >> x = -4;
 %% >> evalpy ('y = 2*x', x)
-%%    @result{} y = -8
+%%    @print{} y = -8
 %% >> y
 %%    @result{} y = -8
 %% @end group
@@ -38,10 +38,9 @@
 %% @group
 %% >> syms x
 %% >> evalpy ('y = 3*x; x = -1.5; z = x**2', x)
-%%    @result{}
-%%      x = -1.5000
-%%      y = (sym) 3⋅x
-%%      z =  2.2500
+%%    @print{} x = -1.5000
+%%    @print{} y = (sym) 3⋅x
+%%    @print{} z =  2.2500
 %% @end group
 %% @end example
 %%
@@ -51,7 +50,7 @@
 %% @group
 %% >> x = 10;
 %% >> evalpy ('y = ", ".join( (str(x),str(i0),str(i1)) )', x, 5)
-%%    @result{} y = 10.0, 10.0, 5.0
+%%    @print{} y = 10.0, 10.0, 5.0
 %% @end group
 %% @end example
 %%
@@ -61,11 +60,11 @@
 %% @group
 %% >> x = 20;
 %% >> evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
-%%    @result{} Variables effected: my
+%%    @print{} Variables effected: my
 %% >> _y
-%%    @result{} ??? '_y' undefined near line 1 column 1
+%%    @print{} ??? '_y' undefined near line 1 column 1
 %% >> z_
-%%    @result{} ??? 'z_' undefined near line 1 column 1
+%%    @print{} ??? 'z_' undefined near line 1 column 1
 %% @end group
 %% @end example
 %%

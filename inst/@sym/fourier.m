@@ -1,5 +1,6 @@
 %% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2014, 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
+%% Copyright (C) 2016 Andrés Prieto, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,10 +20,26 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{k})
+%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{w})
 %% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
-%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{k})
+%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{w})
 %% Symbolic Fourier transform.
+%%
+%% The Fourier transform of a function @var{f} of @var{x}
+%% is a function @var{FF} of @var{w} defined by the integral below.
+%% @example
+%% @group
+%% syms f(x) w
+%% FF(w) = rewrite(fourier(f), 'Integral')
+%%   @result{} FF(w) = (symfun)
+%%       ∞
+%%       ⌠
+%%       ⎮        -ⅈ⋅w⋅x
+%%       ⎮  f(x)⋅ℯ       dx
+%%       ⌡
+%%       -∞
+%% @end group
+%% @end example
 %%
 %% Example:
 %% @example
@@ -39,11 +56,11 @@
 %% @end example
 %%
 %% Note @code{fourier} and @code{ifourier} implement the non-unitary,
-%% angular frequency convention.
+%% angular frequency convention for L^2 functions and distributions.
 %%
 %% *WARNING*: As of SymPy 0.7.6 (June 2015), there are many problems
-%% with fourier transforms, even very simple ones.  Use at your own risk,
-%% or even better: help us fix SymPy.
+%% with (inverse) Fourier transforms of non-smooth functions, even very
+%% simple ones.  Use at your own risk, or even better: help us fix SymPy.
 %%
 %% @seealso{ifourier}
 %% @end deftypefn
@@ -67,7 +84,26 @@ function F = fourier(varargin)
     cmd = { 'f=_ins[0]; x=_ins[1]; k=sp.Symbol("w")'
             'if x==k:'
             '    k=sp.Symbol("v")'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
+            'else:'
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r[a_]'
+            '    phase=r[b_]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
     F = python_cmd(cmd, f, x);
@@ -80,7 +116,26 @@ function F = fourier(varargin)
       x = sym('x');  % FIXME: should be dummy variable in case k was x
     end
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
+            'else:'
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r[a_]'
+            '    phase=r[b_]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
     F = python_cmd(cmd, f, x, k);
@@ -90,7 +145,26 @@ function F = fourier(varargin)
     x = sym(varargin{2});
     k = sym(varargin{3});
     cmd = { 'f=_ins[0]; x=_ins[1]; k=_ins[2]'
-            'F = sp.fourier_transform(f, x, k/(2*sp.pi))'
+            'F=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
+            'fr=f.rewrite(sp.exp)'
+            'if type(fr)==sp.Add:'
+            '    terms=fr.expand().args'
+            'else:'
+            '    terms=(fr,)'
+            'for term in terms:'
+            '    #compute the Fourier transform '
+            '    r=sp.simplify(term*sp.exp(-sp.I*x*k)).match(a_*sp.exp(b_))'
+            '    # if a is constant and b/(I*x) is constant'
+            '    modulus=r[a_]'
+            '    phase=r[b_]/(sp.I*x)'
+            '    if sp.diff(modulus,x)==0 and sp.diff(phase,x)==0:'
+            '        F = F + modulus*2*sp.pi*sp.DiracDelta(-phase)'
+            '    else:'
+            '        Fterm=sp.integrate(sp.simplify(term*sp.exp(-sp.I*x*k)), (x, -sp.oo, sp.oo))'
+            '        if Fterm.is_Piecewise:'
+            '            F=F+sp.simplify(Fterm.args[0][0])'
+            '        else:'
+            '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
     F = python_cmd(cmd, f, x, k);
@@ -106,22 +180,31 @@ end
 %!test
 %! % matlab SMT compatibiliy for arguments
 %! syms r x u w v
-%! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
-%! assert(logical( fourier(exp(-abs(w))) == 2/(v^2 + 1) ))
-%! assert(logical( fourier(exp(-abs(r)),u) == 2/(u^2 + 1) ))
-%! assert(logical( fourier(exp(-abs(r)),r,u) == 2/(u^2 + 1) ))
+%! Pi=sym('pi');
+%! assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
+%! assert(logical( fourier(exp(-w^2)) == sqrt(Pi)/exp(v^2/4) ))
+%! assert(logical( fourier(exp(-r^2),u) == sqrt(Pi)/exp(u^2/4) ))
+%! assert(logical( fourier(exp(-r^2),r,u) == sqrt(Pi)/exp(u^2/4) ))
 
 %!test
 %! % basic tests
 %! syms x w
-%! Pi=sym('pi'); assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))
+%! assert(logical( fourier(exp(-abs(x))) == 2/(w^2 + 1) ))
 %! assert(logical( fourier(x*exp(-abs(x))) == -(w*4*1i)/(w^4 + 2*w^2 + 1) ))
 
-%!xtest
-%! % Issue #251, upstream failure?  TODO: upstream issue?
+%!test
+%! % Dirac delta tests
 %! syms x w
-%! f = fourier(sym(2), x, w);
-%! assert (isequal (f, 4*sym(pi)*dirac(w)))
+%! Pi=sym('pi');
+%! assert(logical( fourier(dirac(x-2)) == exp(-2*1i*w) ))
+%! assert (logical( fourier(sym(2), x, w) == 4*Pi*dirac(w) ))
+
+%!test
+%! % advanced test
+%! syms x w c d
+%! Pi=sym('pi');
+%! F=Pi*(dirac(w-c)+dirac(w+c))+2*Pi*1i*(dirac(w+3*d)-dirac(w-3*d))+2/(w^2+1);
+%! assert(logical( fourier(cos(c*x)+2*sin(3*d*x)+exp(-abs(x))) == expand(F) ))
 
 %!xtest
 %! % Differential operator to algebraic
