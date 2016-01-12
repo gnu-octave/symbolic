@@ -35,7 +35,7 @@ function z = mrdivide(x, y)
   end
 
   if isscalar(x) && ~isscalar(y)
-    error("Scalar/Array not supported by this operator.")
+    error('Scalar/Array not supported by this operator.')
   end
 
   z = rdivide(x, y);
