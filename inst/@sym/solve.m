@@ -230,10 +230,10 @@ end
 %! assert (isequal (X, [2; -2]))
 %! assert (isequal (Y, [1; -1]))
 
-%!error
+%!error <AttributeError>
 %! syms a b;
 %! solve(a==b, 1==1)
 
-%!error
+%!error <AttributeError>
 %! syms a b;
 %! solve(a==b, 1==2)
