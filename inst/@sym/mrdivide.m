@@ -27,6 +27,13 @@
 
 function z = mrdivide(x, y)
 
+  if (isa(x, 'symfun') || isa(y, 'symfun'))
+    warning('OctSymPy:sym:arithmetic:workaround42735', ...
+            'worked around octave bug #42735')
+    z = mrdivide(x, y);
+    return
+  end
+
   z = rdivide(x, y);
 
 end
