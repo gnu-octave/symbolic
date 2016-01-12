@@ -39,7 +39,7 @@ function z = mpower(x, y)
 
     cmd = { 'x, y = _ins'
             'if x.is_Matrix:'
-            '    return sympy.MatPow(x, y) + zeros(x.rows),'
+            '    return sympy.MatPow(x, y).doit(),'
             'else:'
             '    return x**y,'
           };
