@@ -38,7 +38,7 @@ function z = mpower(x, y)
   end
 
     cmd = { 'x, y = _ins'
-            'if x.is_Matrix:'
+            'if x.is_Matrix and not y.is_Matrix:'
             '    return sympy.MatPow(x, y).doit(),'
             'else:'
             '    return x**y,'
