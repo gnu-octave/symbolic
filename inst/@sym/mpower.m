@@ -37,7 +37,14 @@ function z = mpower(x, y)
     return
   end
 
-  z = binop_helper(x, y, 'lambda a,b: a**b');
+    cmd = { 'x, y = _ins'
+            'if x.is_Matrix:'
+            '    return sympy.MatPow(x, y) + zeros(x.rows),'
+            'else:'
+            '    return x**y,'
+          };
+
+    z = python_cmd (cmd, sym(x), sym(y));
 
 
 end
@@ -106,13 +113,8 @@ end
 %! assert (isequal (C, sym(eye(2))))
 %! end
 
-%!error <not implemented>
+%!error <NotImplementedError>
 %! % scalar^array not implemented
 %! syms x
 %! A = [1 2; 3 4];
 %! B = x^A;
-
-%!error <not implemented>
-%! % array^array not implemented
-%! A = sym([1 2; 3 4]);
-%! B = A^A;
