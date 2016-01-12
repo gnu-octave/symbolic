@@ -19,7 +19,6 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} double (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} double (@var{x}, false)
 %% Convert symbolic to doubles.
 %%
 %% Example:
@@ -48,18 +47,6 @@
 %% >> syms x
 %% >> double (x)
 %%    @print{} ??? ... can't convert expression ...
-%% @end group
-%% @end example
-%%
-%% You can pass an optional second argument of @code{false} to
-%% return an empty array if conversion fails on any component.
-%% For example:
-%% @example
-%% @group
-%% >> syms x
-%% >> a = [1 2 x];
-%% >> b = double (a, false)
-%%    @result{} b = [](0x0)
 %% @end group
 %% @end example
 %%
