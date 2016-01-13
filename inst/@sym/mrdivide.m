@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} mrdivide (@var{x}, @var{y})
 %% Forward slash division of symbolic expressions (/).
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = sym([1 pi; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% A / 2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡     π⎤
+%%       ⎢1/2  ─⎥
+%%       ⎢     2⎥
+%%       ⎢      ⎥
+%%       ⎣3/2  2⎦
+%% @end group
+%% @end example
+%%
+%% In principle, this notation can be used to solve systems
+%% but this is not yet implemented---instead @ref{mldivide}.
+%%
+%% @seealso{rdivide, mldivide}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
