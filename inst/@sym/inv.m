@@ -52,20 +52,13 @@ function z = inv(x)
 
   cmd = {
         'x, = _ins'
-        'try:'
-        '    if x.is_Matrix:'
-        '        return (0, x.inv())'
-        '    else:'
-        '        return (0, S.One/x)'
-        'except Exception as e:'
-        '    return (1, type(e).__name__ + ": " + str(e))'
+        'if x.is_Matrix:'
+        '    return x.inv(),'
+        'else:'
+        '    return S.One/x,'
         };
 
-  [flag, z] = python_cmd (cmd, x);
-
-  if (flag)
-    error(z)
-  end
+  z = python_cmd (cmd, x);
 
 end
 

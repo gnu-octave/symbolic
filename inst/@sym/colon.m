@@ -94,4 +94,4 @@ end
 %! assert(isequal(L, [t p/3+t 2*p/3+t]));
 
 %! % should be an error if it doesn't convert to double
-%!error <cannot convert> syms x; a = 1:x;
+%!error <can't convert> syms x; a = 1:x;
