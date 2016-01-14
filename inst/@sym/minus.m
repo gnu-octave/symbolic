@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,9 +35,7 @@ function z = minus(x, y)
     return
   end
 
-
-  % -y + x
-  z = axplusy(-1, y, x);
+  z = binop_helper(x, y, 'lambda x, y: x - y');
 
 end
 
