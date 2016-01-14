@@ -158,19 +158,7 @@ function f = function_handle(varargin)
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
       if (~worked)
-        %% SymPy 0.7.5 has no octave_code command
-        % Use a crude workaround (e.g., Abs, ceiling will fail).
-        if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...
-            && strcmp(codestr, 'global name ''octave_code'' is not defined'))
-          warning('OctSymPy:function_handle:nocodegen', ...
-                  'function_handle: your SymPy has no octave codegen: partial workaround');
-          codestr = expr.flat;
-          % Matlab: ** to ^ substition.  On Octave, vectorize does this
-          codestr = strrep(codestr, '**', '^');
-          codestr = vectorize(codestr);
-        else
-          error('function_handle: python codegen failed: %s', codestr)
-        end
+        error('function_handle: python codegen failed: %s', codestr)
       end
       exprstr{i} = codestr;
     end
