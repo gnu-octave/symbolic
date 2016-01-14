@@ -32,20 +32,13 @@ function R = rhs(f)
 
   cmd = {
     'f, = _ins'
-    'try:'
-    '    if f.is_Matrix:'
-    '        return (0, f.applyfunc(lambda a: a.rhs))'
-    '    else:'
-    '        return (0, f.rhs)'
-    'except Exception as e:'
-    '    return (1, type(e).__name__ + ": " + str(e))'
+    'if f.is_Matrix:'
+    '    return f.applyfunc(lambda a: a.rhs),'
+    'else:'
+    '    return f.rhs,'
     };
 
-  [flag, R] = python_cmd (cmd, f);
-
-  if (flag)
-    error(R)
-  end
+  R = python_cmd (cmd, f);
 
 end
 

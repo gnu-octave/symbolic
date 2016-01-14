@@ -40,18 +40,11 @@ function h = horzcat(varargin)
           '            _proc.append(i)'
           '    else:'
           '        _proc.append(sp.Matrix([[i]]))'
-          'try:'
-          '    return (0, sp.Matrix.hstack(*_proc))'
-          'except Exception as e:'
-          '    return (1, type(e).__name__ + ": " + str(e))'
+          'return sp.Matrix.hstack(*_proc),'
           };
 
   varargin = sym(varargin);
-  [flag, h] = python_cmd (cmd, varargin{:});
-
-  if (flag)
-    error(h)
-  end
+  h = python_cmd (cmd, varargin{:});
 
 end
 
