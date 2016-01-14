@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,19 +34,15 @@ function y = colon(a,step,b)
     b = step;
     step = sym(1);
   end
-  a = sym(a);
-  b = sym(b);
-  step = sym(step);
 
-  B = (b-a)/step;
-  y = (0:double(B))*sym(step) + a;
+  cmd = { '(a, b, step) = _ins'
+          'B = int((b-a)/step)'
+          'y = step*Matrix([range(0, B+1)])'
+          'y = y.applyfunc(lambda c: c + a)'
+          'return y,' };
 
-  % this approach fails to  make 0:sym(pi):10
-  %cmd = {'(a, b, step) = _ins'...
-  %       'y = range(a, b + sign(step)*1, step)'...
-  %       'return y,'};
-  %y = python_cmd (cmd, a, b, step)
-  %y = cell2mat(y);
+  y = python_cmd (cmd, sym(a), sym(b), sym(step));
+
 end
 
 

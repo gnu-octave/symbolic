@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -70,7 +70,7 @@ function r = linspace(a, b, N)
 
   d = (b - a) / (N-1);
 
-  r = a + (0:(N-1))*d;
+  r = a + (sym(0):(N-1))*d;
 
 end
 
