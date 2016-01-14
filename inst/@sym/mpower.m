@@ -37,18 +37,17 @@ function z = mpower(x, y)
     return
   end
 
-    cmd = { 'x, y = _ins'
-            'if x.is_Matrix and not y.is_Matrix:'
-            '    return sympy.MatPow(x, y).doit(),'
-            'else:'
-            '    return x**y,'
-          };
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return sympy.MatPow(x, y).doit(),'
+          'else:'
+          '    return x**y,'
+        };
 
-    z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, sym(x), sym(y));
 
-  % Dear hacker, wait from next release of sympy (actually .7.6.1) and replace with this function:
-  % z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
-
+  % FIXME: with some future SymPy (>0.7.6.1?), we may be able to use:
+  %z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
 
 end
 
@@ -121,3 +120,7 @@ end
 %! syms x
 %! A = [1 2; 3 4];
 %! B = x^A;
+
+%!error
+%! A = sym([1 2; 3 4]);
+%! B = A^A;
