@@ -54,3 +54,51 @@ end
 %! A = sym(D);
 %! assert (isequal ( A/2 , D/2  ))
 %! assert (isequal ( A/sym(2) , D/2  ))
+
+%!test
+%! % 1/A: either invert A or leave unevaluated: not bothered which
+%! A = sym([1 2; 3 4]);
+%! B = 1/A;
+%! assert (isequal (B, inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
+
+%!xtest
+%! % fails, on sympy <= 0.7.7-dev: probably upstream sympy bug
+%! A = sym([1 2; 3 4]);
+%! B = 2/A;
+%! assert (isequal (B, 2*inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
+
+%!test
+%! % A = C/B is C = A*B
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%! else
+%! A = sym([1 2; 3 4]);
+%! B = sym([1 3; 4 8]);
+%! C = A*B;
+%! A2 = C / B;
+%! assert (isequal (A, A2))
+%! end
+
+%!test
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%! else
+%! A = [1 2; 3 4];
+%! B = A / A;
+%! % assert (isequal (B, sym(eye(2))
+%! assert (isequal (B(1,1), 1))
+%! assert (isequal (B(2,2), 1))
+%! assert (isequal (B(2,1), 0))
+%! assert (isequal (B(1,2), 0))
+%! end
+
+%!test
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%! else
+%! A = sym([5 6]);
+%! B = sym([1 2; 3 4]);
+%! C = A*B;
+%! A2 = C / B;
+%! assert (isequal (A, A2))
+%! end
