@@ -77,11 +77,12 @@ function y = double(x)
     return
   end
 
-  cmd = { '(x,) = _ins' ...
-          '# special case for zoo, FIXME: good idea?' ...
-          'if x == zoo:' ...
-          '    return (float(sp.oo), 0.0)' ...
-          'x=complex(x)' ...
+  cmd = { '(x,) = _ins'
+          'if x == zoo:'
+          '    return (float(sp.oo), 0.0)'
+          'if x == nan:'
+          '    return (float(nan), 0.0)'
+          'x = complex(x)'
           'return (x.real, x.imag)'
         };
 
@@ -90,6 +91,7 @@ function y = double(x)
   y = A + B*i;
 
 end
+
 
 %!test
 %! % numeric scalar
@@ -137,6 +139,11 @@ end
 %! % nan
 %! snan = sym(nan);
 %! assert( isnan(double(snan)))
+
+%!test
+%! % don't want NaN+NaNi
+%! snan = sym(nan);
+%! assert (~iscomplex(double(snan)))
 
 %!test
 %! % arrays
