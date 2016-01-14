@@ -104,16 +104,12 @@ end
 %! % output test
 %! f = x*sin(y) + abs(z);
 %! [C, H] = ccode(f, 'file', '', 'show_header', false);
-%! expected_c_code_075 = sprintf('#include \"file.h\"\n#include <math.h>\n\ndouble myfun(double x, double y, double z) {\n\n   return x*sin(y) + fabs(z);\n\n}\n');
-%! % change in behaviour in 0.7.5 -> 0.7.6
 %! expected_c_code = sprintf('#include \"file.h\"\n#include <math.h>\n\ndouble myfun(double x, double y, double z) {\n\n   double myfun_result;\n   myfun_result = x*sin(y) + fabs(z);\n   return myfun_result;\n\n}\n');
 %! expected_h_code = sprintf('\n#ifndef PROJECT__FILE__H\n#define PROJECT__FILE__H\n\ndouble myfun(double x, double y, double z);\n\n#endif\n\n');
 %! assert(strcmp(C.name, 'file.c'))
 %! assert(strcmp(H.name, 'file.h'))
 %! hwin = strrep(expected_h_code, sprintf('\n'), sprintf('\r\n'));
 %! assert (strcmp (H.code, expected_h_code) || strcmp (H.code, hwin))
-%! s1 = expected_c_code_075;
-%! s2 = expected_c_code;
-%! s3 = strrep(expected_c_code_075, sprintf('\n'), sprintf('\r\n'));
-%! s4 = strrep(expected_c_code, sprintf('\n'), sprintf('\r\n'));
-%! assert (strcmp (C.code, s1) || strcmp (C.code, s2) || strcmp(C.code, s3) || strcmp (C.code, s4))
+%! s1 = expected_c_code;
+%! s2 = strrep(expected_c_code, sprintf('\n'), sprintf('\r\n'));
+%! assert (strcmp (C.code, s1) || strcmp (C.code, s2))

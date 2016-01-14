@@ -197,8 +197,7 @@ function [Nin, inputs, inputstr, Nout, param] = codegen_input_parser(varargin)
     inputs = findsymbols(varargin(1:Nout));
   end
   Nin = length(inputs);
-  % FIXME: once Octave 3.6 is ancient history, use strjoin
-  inputstr = mystrjoin(syms2charcells(inputs), ',');
+  inputstr = strjoin(syms2charcells(inputs), ',');
 
 
   %fprintf('debug: %d inputs, %d outputs\n', Nin, Nout);

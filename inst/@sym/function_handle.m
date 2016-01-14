@@ -196,66 +196,53 @@ end
 
 %!test
 %! % basic test
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(2*x);
-%! warning(s)
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3)==6)
 
 %!test
 %! % autodetect inputs
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(2*x*y, x+y);
-%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % specified inputs
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(2*x*y, 'vars', [x y]);
 %! assert(h(3,5)==30)
 %! h = function_handle(2*x*y, x+y, 'vars', [x y]);
-%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % cell arrays for vars list
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(2*x*y, x+y, 'vars', {x y});
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 %! h = function_handle(2*x*y, x+y, 'vars', {'x' 'y'});
-%! warning(s)
 %! [t1, t2] = h(3,5);
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 %! h = function_handle(x*y, 12/y, 'vars', [y x]);
-%! warning(s)
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 
 %!test
 %! % cell arrays specfies order, overriding symvar order
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 %! h = function_handle(x*y, 12/y, 'vars', [y x]);
-%! warning(s)
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
 
-%!xtest
+%!test
 %! % Functions with different names in Sympy.
-%! % (will fail unless Sympy has Octave codegen)
 %! f = abs(x);  % becomes Abs(x)
 %! h = function_handle(f);
 %! assert(h(-10) == 10)
@@ -265,18 +252,15 @@ end
 
 %!test
 %! % 'file' with empty filename returns handle
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = function_handle(2*x*y, 'file', '');
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3,5)==30)
 %! h = function_handle(2*x*y, 'vars', {x y}, 'file', '');
-%! warning(s)
 %! assert(isa(h, 'function_handle'))
 %! assert(h(3,5)==30)
 
-%!xtest
+%!test
 %! % output to disk
-%! % (will fail unless Sympy has Octave codegen)
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output1');
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
@@ -285,9 +269,8 @@ end
 %! assert (b == 1024)
 %! delete('temp_test_output1.m')
 
-%!xtest
+%!test
 %! % output to disk: also works with .m specified
-%! % (will fail unless Sympy has Octave codegen)
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output2.m');
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
@@ -296,9 +279,8 @@ end
 %! assert (b == 1024)
 %! delete('temp_test_output2.m')
 
-%!xtest
+%!test
 %! % non-scalar outputs
-%! % (will fail unless Sympy has Octave codegen)
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
@@ -308,9 +290,8 @@ end
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
 
-%!xtest
+%!test
 %! % non-scalar outputs in .m files
-%! % (will fail unless Sympy has Octave codegen)
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];

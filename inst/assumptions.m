@@ -301,3 +301,15 @@ end
 %! clear x y z w
 %! assert(length(assumptions())==3)
 %! assert(length(assumptions(f))==3)
+
+%!test
+%! % multiple assumptions
+%! n = sym('n', 'negative', 'even');
+%! assert (logical (n < 0))
+%! assert (~(logical (n > 0)))
+%! assert (~(logical (n == -1)))
+
+%!test
+%! % multiple assumptions: eqn neither true nor false
+%! n = sym('n', 'negative', 'even');
+%! assert (~isequal (e, sym(true)) && ~isequal (e, sym(false)))
