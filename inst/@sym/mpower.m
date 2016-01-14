@@ -37,14 +37,14 @@ function z = mpower(x, y)
     return
   end
 
-    cmd = { 'x, y = _ins'
-            'if x.is_Matrix and not y.is_Matrix:'
-            '    return sympy.MatPow(x, y).doit(),'
-            'else:'
-            '    return x**y,'
-          };
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return sympy.MatPow(x, y).doit(),'
+          'else:'
+          '    return x**y,'
+        };
 
-    z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, sym(x), sym(y));
 
   % FIXME: with some future SymPy (>0.7.6.1?), we may be able to use:
   %z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
