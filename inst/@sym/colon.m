@@ -17,18 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x} =} colon (@var{a},@var{b})
-%% @deftypefnx {Function File} {@var{x} =} colon (@var{a},@var{step},@var{b})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{x} =} colon (@var{a}, @var{b})
+%% @deftypefnx {Function File} {@var{x} =} colon (@var{a}, @var{step}, @var{b})
 %% Generate a range of syms.
 %%
-%% FIXME: should this generate intervals?  Check what SMT does?
+%% Examples:
+%% @example
+%% @group
+%% sym(5):10
+%%   @result{} ans = (sym) [5  6  7  8  9  10]  (1×6 matrix)
+%% 0:sym(pi):10
+%%   @result{} ans = (sym) [0  π  2⋅π  3⋅π]  (1×4 matrix)
+%% 6:-3:-sym(pi)
+%%   @result{} ans = (sym) [6  3  0  -3]  (1×4 matrix)
+%% @end group
+%% @end example
 %%
+%% @seealso{linspace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function y = colon(a,step,b)
+function y = colon(a, step, b)
 
   if (nargin == 2)
     b = step;
