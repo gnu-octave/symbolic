@@ -12,8 +12,11 @@ function r = do_highbyte_escapes(s)
 %
 %   TODO: faster (vectorized) implementation is surely possible.
 
+  st = tic();
   [S, E, TE, M, T, NM, SP] = regexp(s, '\\x(..)');
+  t1 = toc(st);
 
+  st = tic;
   i = 1;
   r = '';
   for j=1:length(S)
@@ -22,3 +25,5 @@ function r = do_highbyte_escapes(s)
     i = E(j)+1;
   end
   r = [r s(i:end)];
+  t2 = toc(st);
+  disp(sprintf('time=[%g %g], r=%s', t1, t2, r))
