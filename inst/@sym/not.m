@@ -102,3 +102,9 @@ end
 %! a = [t  f  x == 1  x ~= 2  x < 3   x <= 4  x > 5   x >= 6];
 %! b = [f  t  x ~= 1  x == 2  x >= 3  x > 4   x <= 5  x < 6];
 %! assert (isequal( ~a, b))
+
+%!test
+%! syms x
+%! y = ~x;
+%! s = disp(y, 'flat');
+%! assert (strcmpi(strtrim(s), 'Not(x)'))
