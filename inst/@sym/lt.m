@@ -157,8 +157,8 @@ end
 %! assert (logical (e))
 %! assert (isequal (e, sym(true)))
 
-%!xtest
-%! % positive (known failure w/ sympy 0.7.5)
+%!test
+%! % positive
 %! syms z positive
 %! e = -1 < z;
 %! assert (isequal (e, sym(true)))

@@ -44,8 +44,7 @@ function s = findsym(varargin)
 
   A = symvar(varargin{:});
 
-  % FIXME: once Octave 3.6 is ancient history, use strjoin
-  s = mystrjoin(syms2charcells(A), ',');
+  s = strjoin(syms2charcells(A), ',');
 
 end
 

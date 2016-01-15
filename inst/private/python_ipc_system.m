@@ -41,8 +41,8 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
   %% output, or perhaps a thrown error
   s3 = python_copy_vars_from('_outs');
 
-  % join all the cell arrays with newlined
-  s = mystrjoin([s1 s2 s3], newl);
+  % join all the cell arrays with newlines
+  s = strjoin([s1 s2 s3], newl);
 
   pyexec = sympref('python');
   if (isempty(pyexec))

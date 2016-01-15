@@ -37,44 +37,19 @@ function z = mpower(x, y)
     return
   end
 
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return sympy.MatPow(x, y).doit(),'
+          'else:'
+          '    return x**y,'
+        };
 
-  if isscalar(x) && isscalar(y)
-    cmd = 'return _ins[0]**_ins[1],';
-    z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, sym(x), sym(y));
 
-  elseif isscalar(x) && ~isscalar(y)
-    error('scalar^array not implemented');
-
-  elseif ~isscalar(x) && isscalar(y)
-    % FIXME: sympy can do int and rat, could use MatPow otherwise,
-    % rather than error.  SMT just leaves them unevaluted.
-
-    % FIXME: sin(MatrixExpr) also fails, any easy way in SymPy to express
-    % component-wise operations on a MatrixExpr?
-
-    cmd = { 'x, y = _ins'
-            'try:'
-            '    if not y.is_number:'
-            '        z = sympy.MatPow(x, y)'
-            '    else:'
-            '        z = x**y'
-            '    r = True'
-            'except NotImplementedError as e:'
-            '    z = str(e)'
-            '    r = False'
-            'return (r, z)' };
-
-    [r, z] = python_cmd (cmd, sym(x), sym(y));
-    if ~r
-      error('mpower: not implemented; sympy says: %s', z)
-    end
-
-  else  % two array's case
-    error('array^array not implemented');
-  end
+  % FIXME: with some future SymPy (>0.7.6.1?), we may be able to use:
+  %z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
 
 end
-
 
 %!test
 %! syms x
@@ -114,9 +89,6 @@ end
 
 %!test
 %! % matpow
-%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
-%!   disp('skipping: fails on SymPy 0.7.5')
-%! else
 %! syms n
 %! A = sym([1 2; 3 4]);
 %! B = A^n;
@@ -124,13 +96,9 @@ end
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
 %! assert (isequal (D, E))
-%! end
 
 %!test
 %! % matpow, sub in zero gives identity
-%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
-%!   disp('skipping: fails on SymPy 0.7.5')
-%! else
 %! A = sym([1 2; 0 3]);
 %! syms n;
 %! B = A^n;
@@ -138,15 +106,13 @@ end
 %! assert (isequal (C, A))
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
-%! end
 
-%!error <not implemented>
+%!error <NotImplementedError>
 %! % scalar^array not implemented
 %! syms x
 %! A = [1 2; 3 4];
 %! B = x^A;
 
-%!error <not implemented>
-%! % array^array not implemented
+%!error
 %! A = sym([1 2; 3 4]);
 %! B = A^A;
