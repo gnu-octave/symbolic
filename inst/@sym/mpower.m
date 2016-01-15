@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} mpower (@var{x}, @var{y})
 %% Symbolic expression matrix exponentiation (^).
 %%
-%% We implement scalar ^ scalar and matrix ^ scalar.
+%% Scalar example:
+%% @example
+%% @group
+%% syms x
+%% sym('x')^3
+%%   @result{} ans = (sym)
+%%        3
+%%       x
+%% @end group
+%% @end example
 %%
+%% The @code{^} notation is use to raise a matrix to a scalar power:
+%% @example
+%% @group
+%% A = [sym(pi) 2; 0 x]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡π  2⎤
+%%       ⎢    ⎥
+%%       ⎣0  x⎦
+%% A^2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡ 2           ⎤
+%%       ⎢π   2⋅x + 2⋅π⎥
+%%       ⎢             ⎥
+%%       ⎢        2    ⎥
+%%       ⎣0      x     ⎦
+%% A^2 == A*A
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡True  True⎤
+%%       ⎢          ⎥
+%%       ⎣True  True⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{power}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
