@@ -83,6 +83,11 @@ function z = mrdivide(x, y)
 
   z = python_cmd ('return _ins[0]/_ins[1],', sym(x), sym(y));
 
+  % Note: SymPy also seems to support 1/A for the inverse (although 2/A
+  % not working as of 2016-01).  We don't disallow this but its not a
+  % good thing to encourage for working in Octave (since it won't work
+  % with doubles).
+
 end
 
 
@@ -102,16 +107,10 @@ end
 %! assert (isequal ( A/sym(2) , D/2  ))
 
 %!test
-%! % 1/A: either invert A or leave unevaluated: not bothered which
+%! % I/A: either invert A or leave unevaluated: not bothered which
 %! A = sym([1 2; 3 4]);
-%! B = 1/A;
+%! B = sym(eye(2)) / A;
 %! assert (isequal (B, inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
-
-%!xtest
-%! % fails, on sympy <= 0.7.7-dev: probably upstream sympy bug
-%! A = sym([1 2; 3 4]);
-%! B = 2/A;
-%! assert (isequal (B, 2*inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
 
 %!test
 %! % A = C/B is C = A*B
