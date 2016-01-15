@@ -40,8 +40,30 @@
 %% @end group
 %% @end example
 %%
-%% In principle, this notation can be used to solve systems
-%% but this is not yet implemented---instead @ref{mldivide}.
+%% The forward slash notation can be used to solve systems
+%% of the form A⋅B = C using @code{A = C / B}:
+%% @example
+%% @group
+%% B = sym([1 0; 1 2]);
+%% C = A*B
+%%   @result{} C = (sym 2×2 matrix)
+%%       ⎡1 + π  2⋅π⎤
+%%       ⎢          ⎥
+%%       ⎣  7     8 ⎦
+%% C / B                         % doctest: +SKIP
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% C * inv(B)
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% @end group
+%% @end example
+%% (However, as of 2016-01 this feature requires a development
+%% version of SymPy 0.7.7-dev.)
 %%
 %% @seealso{rdivide, mldivide}
 %% @end deftypefn
