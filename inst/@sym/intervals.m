@@ -58,3 +58,16 @@ function [varargout] = intervals(varargin)
   end
 
 end
+
+
+%!test
+%! [a, b]=intervals(sym(1), 1);
+%! assert (isequal (a, b))
+
+%!test
+%! [a, b]=intervals(sym([1, 2]), [1, 2]);
+%! assert (isequal (a, b))
+
+%!test
+%! [a, b]=intervals(sym([2, 1]), [4, 3]);
+%! assert (isequal (a, b))
