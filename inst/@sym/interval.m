@@ -51,20 +51,13 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function I = interval(a, b, lopen, ropen)
+function I = interval(a, b, varargin)
 
-  if (nargin == 2)
-    lopen = false;
-    ropen = false;
-  elseif (nargin == 3)
-    ropen = false;
-  elseif (nargin == 4)
-    % no-op
-  else
+  if (nargin < 2 || nargin > 4)
     print_usage();
   end
 
-  I = python_cmd ('return Interval(*_ins),', sym(a), sym(b), lopen, ropen);
+  I = python_cmd ('return Interval(*_ins),', sym(a), sym(b), varargin{:});
 
 end
 
