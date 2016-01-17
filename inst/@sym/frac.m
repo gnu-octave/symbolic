@@ -21,11 +21,15 @@
 %% @deftypefn  {Function File} {@var{y} =} fix (@var{x})
 %% Return the fractional part of a symbolic expression.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
 %% y = frac(sym(3)/2)               % doctest: +SKIP
 %%   @result{} y = (sym) 1/2
+%%
+%% syms x
+%% rewrite(frac(x), 'floor')        % doctest: +SKIP
+%%   @result{} ans = (sym) x - ⌊x⌋
 %% @end group
 %% @end example
 %%
