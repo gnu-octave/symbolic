@@ -24,7 +24,6 @@
 %% Example:
 %% @example
 %% @group
-%% syms x
 %% A = sym([1 pi; 3 4])
 %%   @result{} A = (sym 2×2 matrix)
 %%       ⎡1  π⎤
