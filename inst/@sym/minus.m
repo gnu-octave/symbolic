@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,11 +35,18 @@ function z = minus(x, y)
     return
   end
 
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return x - y*sp.ones(*x.shape),'
+          'if not x.is_Matrix and y.is_Matrix:'
+          '    return x*sp.ones(*y.shape) - y,'
+          'else:'
+          '    return x - y,' };
 
-  % -y + x
-  z = axplusy(-1, y, x);
+  z = python_cmd(cmd, sym(x), sym(y));
 
 end
+
 
 %!test
 %! % scalar

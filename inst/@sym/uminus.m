@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,7 +27,7 @@
 
 function z = uminus(x)
 
-  z = axplusy(-1, x, 0);
+  z = python_cmd('return -_ins[0],', x);
 
 end
 
