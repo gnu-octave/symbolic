@@ -43,13 +43,27 @@ function r = intersect(varargin)
 
     varargin(nargin)=[];
 
-    varargin = intervals(varargin);
-
     cmd = {
            'x = _ins'
-           't = x[0]'
+           '#'
+           'if isinstance(x[0], sp.Set):'
+           '    t = x[0]'
+           'elif not isinstance(x[0], sp.MatrixBase):'
+           '    t = Interval(x[0], x[0])'
+           'elif len(x[i]) == 1:'
+           '    t = Interval(x[0], x[0])'
+           'else:'
+           '    t = Interval(*x[0])'
+           '#'
            'for i in range(1, len(x)):'
-           '    t=t.intersect(x[i])'
+           '    if isinstance(x[i], sp.Set):'
+           '        t = t.intersect(x[i])'
+           '    elif not isinstance(x[i], sp.MatrixBase):'
+           '        t = Interval(x[i], x[i]).intersect(t)'
+           '    elif len(x[i]) == 1:'
+           '        t = Interval(x[i], x[i]).intersect(t)'
+           '    else:'
+           '        t = Interval(*x[i]).intersect(t)'
            'return t,'
           };
 
