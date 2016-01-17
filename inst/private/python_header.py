@@ -185,14 +185,11 @@ try:
         elif isinstance(x, (sp.Basic, sp.MatrixBase)):
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
-            elif isinstance(x, (sp.Expr, Boolean)):
-                _d = (1, 1)
             elif isinstance(x, sp.MatrixExpr):
                 # nan for symbolic size
                 _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
             else:
-                dbout("Treating unexpected SymPy obj as scalar: " + str(type(x)))
-                _d = (1,1)
+                _d = (1, 1)
             pretty_ascii = sp.pretty(x, use_unicode=False)
             pretty_unicode = sp.pretty(x, use_unicode=True)
             a = ET.SubElement(et, "item")
