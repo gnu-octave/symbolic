@@ -27,7 +27,7 @@
 
 function z = uminus(x)
 
-  z = uniop_helper(x, 'lambda x: -x')
+  z = python_cmd('return -_ins[0],', x);
 
 end
 

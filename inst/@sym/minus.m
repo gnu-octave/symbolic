@@ -35,9 +35,18 @@ function z = minus(x, y)
     return
   end
 
-  z = binop_helper(x, y, 'lambda x, y: x - y');
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return x - y*sp.ones(*x.shape),'
+          'if not x.is_Matrix and y.is_Matrix:'
+          '    return x*sp.ones(*y.shape) - y,'
+          'else:'
+          '    return x - y,' };
+
+  z = python_cmd(cmd, sym(x), sym(y));
 
 end
+
 
 %!test
 %! % scalar

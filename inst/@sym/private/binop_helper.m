@@ -27,6 +27,10 @@ function z = binop_helper(x, y, scalar_fcn)
 %   It can also be the defn of a function called "_op"
 %     e.g., { 'def _op(a,b):' '    return a % b' }
 %
+%   Caution: Just because you are implementing a binary operation,
+%   does not mean you want to use this helper.  You shoudl use this
+%   helper when you by default want per-component calculations.
+%
 %   FIXME: even faster if move to python_header (load once)?
 
 
