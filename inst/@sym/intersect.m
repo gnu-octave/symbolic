@@ -143,9 +143,14 @@ end
 %! C = intersect(A, []);
 %! assert (isequal (C, sym([])))
 
-
 %!test
 %! % scalar
 %! syms x
 %! assert (isequal (intersect([x 1], x), x))
 %! assert (isequal (intersect(x, x), x))
+
+%!test
+%! A = interval(sym(1), 3);
+%! B = interval(sym(2), 5);
+%! C = intersect(A, B);
+%! assert( isequal( C, interval(sym(2), 3)))

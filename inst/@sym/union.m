@@ -145,3 +145,9 @@ end
 %! syms x
 %! assert (isequal (union([x 1], x), [1 x]))
 %! assert (isequal (union(x, x), x))
+
+%!test
+%! A = interval(sym(1), 3);
+%! B = interval(sym(2), 5);
+%! C = union(A, B);
+%! assert( isequal( C, interval(sym(1), 5)))
