@@ -29,6 +29,7 @@
 %%   @result{} ans = (sym) [5  6  7  8  9  10]  (1×6 matrix)
 %% 0:sym(pi):5*sym(pi)
 %%   @result{} ans = (sym) [0  π  2⋅π  3⋅π  4⋅π  5⋅π]  (1×6 matrix)
+%% syms x
 %% x:2:(x+6)
 %%   @result{} ans = (sym) [x  x + 2  x + 4  x + 6]  (1×4 matrix)
 %% @end group
