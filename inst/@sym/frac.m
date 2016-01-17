@@ -24,10 +24,12 @@
 %% Example:
 %% @example
 %% @group
-%% y = frac(sym(3)/2)
+%% y = frac(sym(3)/2)               % doctest: +SKIP
 %%   @result{} y = (sym) 1/2
 %% @end group
 %% @end example
+%%
+%% *Note*: this function relies on a recent SymPy >= 0.7.7-dev.
 %%
 %% @seealso{ceil, floor, fix, round}
 %% @end deftypefn
@@ -37,16 +39,27 @@ function y = frac(x)
 end
 
 %!test
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%!   disp('skipping: no "frac" in SymPy <= 0.7.6.x')
+%! else
 %! f1 = frac(sym(11)/10);
 %! f2 = sym(1)/10;
 %! assert (isequal (f1, f2))
+%! end
 
 %!test
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! else
+%! % fails on SymPy 0.7.6.1
 %! d = sym(-11)/10;
 %! c = sym(9)/10;
 %! assert (isequal (frac (d), c))
+%! end
 
 %!test
+%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! else
 %! d = sym(-19)/10;
 %! c = sym(1)/10;
 %! assert (isequal (frac (d), c))
+%! end
