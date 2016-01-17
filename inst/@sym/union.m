@@ -17,12 +17,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{r} =} setxor (@var{A}, @var{B})
+%% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
+%% @deftypefnx {Function File}  {@var{r} =} union (@var{A}, @var{B}, @dots{}, 'intervals')
 %% Return the union of elements of two sets.
 %%
 %% @seealso{intersect, setdiff, setxor,function r = intersect(varargin)
 
 function r = union(varargin)
+
 
   if strcmp(varargin{nargin}, 'intervals')
 
@@ -51,6 +53,20 @@ function r = union(varargin)
   
   else
 
+    varargin = sym(varargin);
+
+    cmd = {
+           'for i in _ins:'
+           '    if isinstance(i, sp.Set):'
+           '        return 1,'
+           'return 0,'
+          };
+
+    if python_cmd (cmd, varargin{:});
+      r = union(varargin{:}, 'intervals');
+      return
+    end
+
     % FIXME: is it worth splitting out a "private/set_helper"?
 
     cmd = { 'A, B = _ins'
@@ -70,8 +86,6 @@ function r = union(varargin)
             'C = sympy.Matrix([list(C)])'
             'return C,' };
 
-    varargin = sym(varargin);
-    
     r = python_cmd (cmd, varargin{:});
 
     % reshape to column if both inputs are
