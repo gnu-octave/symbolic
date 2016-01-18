@@ -87,24 +87,14 @@ function r = intersect(varargin)
 
     % FIXME: is it worth splitting out a "private/set_helper"?
 
-    cmd = { 'A, B = _ins'
-            'try:'
-            '    A = iter(A)'
-            'except TypeError:'
-            '    A = set([A])'
-            'else:'
-            '    A = set(A)'
-            'try:'
-            '    B = iter(B)'
-            'except TypeError:'
-            '    B = set([B])'
-            'else:'
-            '    B = set(B)'
-            'C = A.intersection(B)'
-            'C = sympy.Matrix([list(C)])'
-            'return C,' };
+    cmd = { 'a, b = _ins'
+            'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+            'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
+            'C = A.intersect(B)'
+            'return sp.Matrix([[list(C)]]),' };
 
     r = python_cmd (cmd, varargin{:});
+    r = horzcat(r{:});
 
     % reshape to column if both inputs are
     if (iscolumn(varargin{1}) && iscolumn(varargin{2}))
