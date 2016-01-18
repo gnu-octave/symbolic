@@ -51,13 +51,25 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function I = interval(a, b, varargin)
+function I = interval(varargin)
 
-  if (nargin < 2 || nargin > 4)
+  if (nargin < 1 || nargin > 2)
     print_usage();
   end
 
-  I = python_cmd ('return Interval(*_ins),', sym(a), sym(b), varargin{:});
+  varargin = sym(varargin);
+
+  % FIXME: Maybe in the future SymPy support more than 2 dimensions.
+
+  if nargin == 1
+
+    I = python_cmd ('return Interval(_ins[0], _ins[0]),', varargin{:});
+
+  else
+
+    I = python_cmd ('return Interval(*_ins),', varargin{:});
+
+  end
 
 end
 

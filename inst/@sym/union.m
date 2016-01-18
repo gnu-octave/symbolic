@@ -151,3 +151,4 @@ end
 %! B = interval(sym(2), 5);
 %! C = union(A, B);
 %! assert( isequal( C, interval(sym(1), 5)))
+%! assert( isequal( C, union (A, B, "intervals")))
