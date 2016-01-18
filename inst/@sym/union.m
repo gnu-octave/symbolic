@@ -86,7 +86,7 @@ function r = union(varargin)
     cmd = { 'a, b = _ins'
             'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
             'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-            'C = A.union(B)'
+            'C = Union(A, B)'
             'return sp.Matrix([[list(C)]]),' };
 
     r = python_cmd (cmd, varargin{:});

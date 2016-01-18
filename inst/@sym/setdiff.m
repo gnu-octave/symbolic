@@ -30,26 +30,16 @@ function r = setdiff(A, B)
 
   % FIXME: is it worth splitting out a "private/set_helper"?
 
-  cmd = { 'A, B = _ins'
-          'try:'
-          '    A = iter(A)'
-          'except TypeError:'
-          '    A = set([A])'
-          'else:'
-          '    A = set(A)'
-          'try:'
-          '    B = iter(B)'
-          'except TypeError:'
-          '    B = set([B])'
-          'else:'
-          '    B = set(B)'
-          'C = A.difference(B)'
-          'C = sympy.Matrix([list(C)])'
-          'return C,' };
+    cmd = { 'a, b = _ins'
+            'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+            'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
+            'C = Complement(A, B)'
+            'return sp.Matrix([[list(C)]]),' };
 
   A = sym(A);
   B = sym(B);
   r = python_cmd (cmd, A, B);
+  r = horzcat(r{:});
 
   % reshape to column if both inputs are
   if (iscolumn(A) && iscolumn(B))
