@@ -190,7 +190,11 @@ try:
                 _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
             else:
                 _d = (1, 1)
-            pretty_ascii = sp.pretty(x, use_unicode=False)
+            try:
+                pretty_ascii = sp.pretty(x, use_unicode=False)
+            except:
+                # e.g., for union, intersection
+                pretty_ascii = str(x)
             pretty_unicode = sp.pretty(x, use_unicode=True)
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
