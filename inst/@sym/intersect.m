@@ -29,79 +29,47 @@
 
 function r = intersect(varargin)
 
+  varargin = sym(varargin);
 
-  if strcmp(varargin{nargin}, 'intervals')
-
-    if nargin < 3
-      r = varargin;
-      return
-    end
-    
-    while (iscell(varargin{1}))
-      varargin = varargin{:};
-    end
-
-    varargin(nargin)=[];
-
-    cmd = {
-           'x = _ins'
-           '#'
-           'if isinstance(x[0], sp.Set):'
-           '    t = x[0]'
-           'elif not isinstance(x[0], sp.MatrixBase):'
-           '    t = Interval(x[0], x[0])'
-           'elif len(x[i]) == 1:'
-           '    t = Interval(x[0], x[0])'
-           'else:'
-           '    t = Interval(*x[0])'
-           '#'
-           'for i in range(1, len(x)):'
-           '    if isinstance(x[i], sp.Set):'
-           '        t = t.intersect(x[i])'
-           '    elif not isinstance(x[i], sp.MatrixBase):'
-           '        t = Interval(x[i], x[i]).intersect(t)'
-           '    elif len(x[i]) == 1:'
-           '        t = Interval(x[i], x[i]).intersect(t)'
-           '    else:'
-           '        t = Interval(*x[i]).intersect(t)'
-           'return t,'
-          };
-
-    r = python_cmd (cmd, varargin{:});
-  
-  else
-
-    varargin = sym(varargin);
-
-    cmd = {
-           'for i in _ins:'
-           '    if isinstance(i, sp.Set):'
-           '        return 1,'
-           'return 0,'
-          };
-
-    if python_cmd (cmd, varargin{:});
-      r = intersect(varargin{:}, 'intervals');
-      return
-    end
-
-    % FIXME: is it worth splitting out a "private/set_helper"?
-
-    cmd = { 'a, b = _ins'
-            'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
-            'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-            'C = Intersection(A, B)'
-            'return sp.Matrix([[list(C)]]),' };
+  cmd = {
+         'def inter(x):'
+         '    if isinstance(x[0], sp.Set):'
+         '        t = x[0]'
+         '    elif not isinstance(x[0], sp.MatrixBase):'
+         '        t = Interval(x[0], x[0])'
+         '    elif len(x[0]) == 1:'
+         '        t = Interval(x[0], x[0])'
+         '    else:'
+         '        t = Interval(*x[0])'
+         ''
+         '    for i in range(1, len(x)):'
+         '        if isinstance(x[i], sp.Set):'
+         '            t = t.intersect(x[i])'
+         '        elif not isinstance(x[i], sp.MatrixBase):'
+         '            t = Interval(x[i], x[i]).intersect(t)'
+         '        elif len(x[i]) == 1:'
+         '            t = Interval(x[i], x[i]).intersect(t)'
+         '        else:'
+         '            t = Interval(*x[i]).intersect(t)'
+         '    return t,'
+         '#'
+         'x = _ins'
+         'if str(x[-1]) == "intervals":'
+         '    del x[-1]'
+         '    return inter(x),'
+         ''
+         'for i in _ins:'
+         '    if isinstance(i, sp.Set):'
+         '        return inter(x),'
+         ''
+         'A = sp.FiniteSet(*(list(x[0]) if isinstance(x[0], sp.MatrixBase) else [x[0]]))'
+         'B = sp.FiniteSet(*(list(x[1]) if isinstance(x[1], sp.MatrixBase) else [x[1]]))'
+         'C = Intersection(A, B)'
+         'return sp.Matrix([[list(C)]]),'
+        };
 
     r = python_cmd (cmd, varargin{:});
     r = horzcat(r{:});
-
-    % reshape to column if both inputs are
-    if (iscolumn(varargin{1}) && iscolumn(varargin{2}))
-      r = reshape(r, length(r), 1);
-    end
-
-  end
 
 end
 
