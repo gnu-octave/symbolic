@@ -88,7 +88,7 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
         'ipc_popen2: something wrong? timed out starting python')
     end
     A = extractblock(out);
-    fprintf('\n')
+    fprintf('\n');  % needed even if not verbose
     if (isempty(strfind(A{1}, 'established')))
       A
       out

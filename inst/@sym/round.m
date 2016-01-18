@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,41 +18,44 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{L} =} rhs (@var{f})
-%% Right-hand side of symbolic expression.
+%% @deftypefn  {Function File} {@var{y} =} round (@var{x})
+%% Symbolic round function.
 %%
 %% Example:
 %% @example
 %% @group
-%% syms x
-%% eqn = 5*x <= 3*x + 6
-%%   @result{} eqn = (sym) 5⋅x ≤ 3⋅x + 6
-%% rhs(eqn)
-%%   @result{} ans = (sym) 3⋅x + 6
+%% y = round(sym(-27)/10)
+%%   @result{} y = -3
 %% @end group
 %% @end example
 %%
-%% Gives an error if any of the symbolic objects have no right-hand side.
-%%
-%% @seealso{lhs, children, formula, argnames}
+%% @seealso{ceil, floor, fix, frac}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-function R = rhs(f)
-
-  R = uniop_helper(f, 'lambda a: a.rhs');
-
+function y = round(x)
+  y = uniop_helper (x, 'round');
 end
 
-
-%% most tests are in lhs
 %!test
-%! syms x
-%! f = x + 1 == 2*x;
-%! assert (isequal (rhs(f), 2*x))
+%! d = 3/2;
+%! x = sym('3/2');
+%! f1 = round(x);
+%! f2 = round(d);
+%! assert (isequal (f1, f2))
 
-%!error <AttributeError>
-%! syms x
-%! rhs(x)
+%!test
+%! D = [1.1 4.6; -3.4 -8.9];
+%! A = [sym(11)/10 sym(46)/10; sym(-34)/10 sym(-89)/10];
+%! f1 = round(A);
+%! f2 = round(D);
+%! assert( isequal (f1, f2))
+
+%!test
+%! d = sym(-11)/10;
+%! c = -1;
+%! assert (isequal (round (d), c))
+
+%!test
+%! d = sym(-19)/10;
+%! c = -2;
+%! assert (isequal (round (d), c))

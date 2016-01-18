@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,12 +17,34 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{L} =} lhs (@var{f})
 %% Left-hand side of symbolic expression.
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% eqn = 5*x <= 3*x + 6
+%%   @result{} eqn = (sym) 5⋅x ≤ 3⋅x + 6
+%% lhs(eqn)
+%%   @result{} ans = (sym) 5⋅x
+%% @end group
+%% @end example
+%%
+%% Input @var{f} can also be a matrix:
+%% @example
+%% @group
+%% A = [eqn  8*x==6]
+%%   @result{} A = (sym) [5⋅x ≤ 3⋅x + 6  8⋅x = 6]  (1×2 matrix)
+%% lhs(A)
+%%   @result{} ans = (sym) [5⋅x  8⋅x]  (1×2 matrix)
+%% @end group
+%% @end example
+%%
 %% Gives an error if any of the symbolic objects have no left-hand side.
 %%
-%% @seealso{rhs, children}
+%% @seealso{rhs, children, formula, argnames}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -30,15 +52,7 @@
 
 function L = lhs(f)
 
-  cmd = {
-    'f, = _ins'
-    'if f.is_Matrix:'
-    '    return f.applyfunc(lambda a: a.lhs),'
-    'else:'
-    '    return f.lhs,'
-    };
-
-  L = python_cmd (cmd, f);
+  L = uniop_helper(f, 'lambda a: a.lhs');
 
 end
 

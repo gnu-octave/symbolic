@@ -275,26 +275,34 @@ function varargout = sympref(cmd, arg)
       if (nargin == 1)
         varargout{1} = settings.ipc;
       else
+        verbose = ~sympref('quiet');
         sympref('reset')
         settings.ipc = arg;
         switch arg
           case 'default'
-            disp('Choosing the default [autodetect] octsympy communication mechanism')
+            msg = 'Choosing the default [autodetect] octsympy communication mechanism';
           case 'system'
-            disp('Forcing the system() octsympy communication mechanism')
+            msg = 'Forcing the system() octsympy communication mechanism';
           case 'popen2'
-            disp('Forcing the popen2() octsympy communication mechanism')
+            msg = 'Forcing the popen2() octsympy communication mechanism';
           case 'systmpfile'
-            disp('Forcing systmpfile ipc: warning: this is for debugging')
+            msg = 'Forcing systmpfile ipc: warning: this is for debugging';
           case 'sysoneline'
-            disp('Forcing sysoneline ipc: warning: this is for debugging')
+            msg = 'Forcing sysoneline ipc: warning: this is for debugging';
           otherwise
+            msg = '';
             warning('Unsupported IPC mechanism: hope you know what you''re doing')
+        end
+        if (verbose)
+          disp(msg)
         end
       end
 
     case 'reset'
-      disp('Resetting the octsympy communication mechanism');
+      verbose = ~sympref('quiet');
+      if (verbose)
+        disp('Resetting the octsympy communication mechanism');
+      end
       r = python_ipc_driver('reset', []);
 
       if (nargout == 0)
@@ -353,27 +361,22 @@ end
 %! % system should work on all system, but just runs sysoneline on windows
 %! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
-%! pause(1);
 %! syms x
-%! pause(2);
 
 %!test
 %! % sysoneline should work on all systems
-%! fprintf('\n');
 %! sympref('ipc', 'sysoneline');
-%! pause(1);
 %! syms x
-%! pause(2);
 
 %!test
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
+%! sympref('quiet', 'on')
 
 %!test
-%! fprintf('\n');
 %! syms x
 %! r = sympref('reset');
-%! pause(1);
 %! syms x
-%! pause(2);
 %! assert(r)
+%! % ok, can be noisy again
+%! sympref('quiet', 'default')
