@@ -29,6 +29,10 @@ function r = ismember(x, y)
 
   cmd = {
          'x, y = _ins'
+         'if not isinstance(x, sp.MatrixBase):'
+         '    return x in y,'
+         'elif len(x) == 1:'
+         '    return x in y,'
          'for a, b in enumerate(x):'
          '    if x[a] in y:'
          '        x[a] = 1'
