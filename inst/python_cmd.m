@@ -128,6 +128,14 @@ function varargout = python_cmd(cmd, varargin)
   % '_ins' and it will return to us whatever we put in the tuple
   % '_outs'.  There is no particular reason this needs to define
   % a function, I just thought it isolates local variables a bit.
+
+  %% Handle errors
+  % be careful, the number of line of cmd most be fixed if you
+  % change cmd, the number line is from here: 
+  % sys.exc_info()[-1].tb_lineno - 4
+  % to know the rest write python_cmd('raise'), it should return
+  % "some error" (line 1). If not fix it.
+
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
           '    _outs = []' ...
