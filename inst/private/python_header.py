@@ -36,6 +36,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
+    import sys
 except:
     myerr(sys.exc_info())
     raise
