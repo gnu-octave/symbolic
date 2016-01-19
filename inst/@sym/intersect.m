@@ -45,7 +45,7 @@ function r = intersect(varargin)
          'def inter(x):'
          '    t = to_inter(x[0])'
          '    for i in range(1, len(x)):'
-         '        t = Intersection(t, to_inter(x[i]))'
+         '        t &= to_inter(x[i])'
          '    return t,'
          '#'
          'x = _ins'
@@ -59,7 +59,7 @@ function r = intersect(varargin)
          ''
          'A = sp.FiniteSet(*(list(x[0]) if isinstance(x[0], sp.MatrixBase) else [x[0]]))'
          'B = sp.FiniteSet(*(list(x[1]) if isinstance(x[1], sp.MatrixBase) else [x[1]]))'
-         'C = Intersection(A, B)'
+         'C = A & B'
          'return sp.Matrix([[list(C)]]),'
         };
 

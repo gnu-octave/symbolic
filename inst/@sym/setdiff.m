@@ -26,27 +26,47 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = setdiff(A, B)
+function r = setdiff(varargin)
 
-  % FIXME: is it worth splitting out a "private/set_helper"?
+  varargin = sym(varargin);
 
-    cmd = { 'a, b = _ins'
-            'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
-            'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-            'C = Complement(A, B)'
-            'return sp.Matrix([[list(C)]]),' };
+  cmd = {
+         'def to_inter(a):'
+         '    if isinstance(a, sp.Set):'
+         '        return a'
+         '    elif not isinstance(a, sp.MatrixBase):'
+         '        return Interval(a, a)'
+         '    elif len(a) == 1:'
+         '        return Interval(a, a)'
+         '    else:'
+         '        return Interval(*a)'
+         ''
+         'def inter(x):'
+         '    t = to_inter(x[0])'
+         '    for i in range(1, len(x)):'
+         '        t -= to_inter(x[i])'
+         '    return t,'
+         '#'
+         'x = _ins'
+         'if str(x[-1]) == "intervals":'
+         '    del x[-1]'
+         '    return inter(x),'
+         ''
+         'for i in _ins:'
+         '    if isinstance(i, sp.Set):'
+         '        return inter(x),'
+         ''
+         'A = sp.FiniteSet(*(list(x[0]) if isinstance(x[0], sp.MatrixBase) else [x[0]]))'
+         'B = sp.FiniteSet(*(list(x[1]) if isinstance(x[1], sp.MatrixBase) else [x[1]]))'
+         'C = A - B'
+         'return sp.Matrix([[list(C)]]),'
+        };
 
-  A = sym(A);
-  B = sym(B);
-  r = python_cmd (cmd, A, B);
-  r = horzcat(r{:});
-
-  % reshape to column if both inputs are
-  if (iscolumn(A) && iscolumn(B))
-    r = reshape(r, length(r), 1);
-  end
+    r = python_cmd (cmd, varargin{:});
+    r = horzcat(r{:});
 
 end
+
 
 
 %!test
