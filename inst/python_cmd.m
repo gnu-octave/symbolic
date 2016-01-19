@@ -133,7 +133,8 @@ function varargout = python_cmd(cmd, varargin)
   % be careful, the number of line of cmd most be fixed if you
   % change cmd, the number line is from here: 
   % sys.exc_info()[-1].tb_lineno - 4
-  % to know the rest write python_cmd('raise'), it should return
+  % 4 is the number of lines before cmd counting it self
+  % python_cmd('raise'), should return
   % "some error" (line 1). If not fix it.
 
   cmd = indent_lines(cmd, 8);
