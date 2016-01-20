@@ -8,4 +8,5 @@
   <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
+  <update_contact>octave-maintainers_AT_gnu.org</update_contact>
 </component>

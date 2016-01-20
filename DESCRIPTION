@@ -14,3 +14,4 @@ Categories: symbolic
 Url: http://github.com/cbm755/octsympy
 SystemRequirements: python, sympy (>= 0.7.5)
 BuildRequires: python, sympy (>= 0.7.5)
+License: GPLv3+
