@@ -54,7 +54,7 @@ function [A, err] = readblock(fout, timeout)
       %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
-      sleep (waitdelta);
+      pause (waitdelta);
       nwaits = nwaits + 1;
     elseif (errno() == 0)
       waitdelta = exp(nwaits/10)/1e4;
@@ -70,12 +70,12 @@ function [A, err] = readblock(fout, timeout)
       %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
-      sleep (waitdelta);
+      pause (waitdelta);
       nwaits = nwaits + 1;
     else
       warning ('OctSymPy:readblock:invaliderrno', ...
         sprintf('readblock: s=%d, errno=%d, perhaps error in the command?', s, errno()))
-      sleep(0.1)  % FIXME; replace with waitdelta etc
+      pause(0.1)  % FIXME; replace with waitdelta etc
     end
     %disp('paused'); pause
 
