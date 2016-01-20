@@ -47,7 +47,6 @@ function r = setxor(a, b)
 end
 
 
-
 %!test
 %! A = sym([1 2 3]);
 %! B = sym([1 2 4]);
