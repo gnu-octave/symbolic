@@ -27,47 +27,26 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = intersect(varargin)
-
-  varargin = sym(varargin);
+function r = intersect(a, b)
 
   cmd = {
-         'def to_inter(a):'
-         '    if isinstance(a, sp.Set):'
-         '        return a'
-         '    elif not isinstance(a, sp.MatrixBase):'
-         '        return Interval(a, a)'
-         '    elif len(a) == 1:'
-         '        return Interval(a, a)'
-         '    else:'
-         '        return Interval(*a)'
+         'a, b = _ins'
+         'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
+         '    return a & b, 1'
          ''
-         'def inter(x):'
-         '    t = S.UniversalSet'
-         '    for i in x:'
-         '        t &= to_inter(i)'
-         '    return t,'
-         '#'
-         'x = _ins'
-         'if str(x[-1]) == "intervals":'
-         '    del x[-1]'
-         '    return inter(x),'
-         ''
-         'for i in _ins:'
-         '    if isinstance(i, sp.Set):'
-         '        return inter(x),'
-         ''
-         'A = sp.FiniteSet(*(list(x[0]) if isinstance(x[0], sp.MatrixBase) else [x[0]]))'
-         'B = sp.FiniteSet(*(list(x[1]) if isinstance(x[1], sp.MatrixBase) else [x[1]]))'
+         'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+         'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
          'C = A & B'
-         'return sp.Matrix([[list(C)]]),'
+         'return sp.Matrix([[list(C)]]), 0'
         };
 
-    r = python_cmd (cmd, varargin{:});
-    r = horzcat(r{:});
+    [r, out] = python_cmd (cmd, sym(a), sym(b));
+
+    if !out
+      r = horzcat(r{:});
+    end
 
 end
-
 
 %!test
 %! A = sym([1 2 3]);
