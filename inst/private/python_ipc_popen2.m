@@ -70,13 +70,11 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     % repeated from python_header.py: kill prompt ASAP
     fprintf (fin, 'import sys\nsys.ps1 = ""; sys.ps2 = ""\n\n')
     fflush(fin);
-    %sleep(0.05); %disp('')
 
     headers = python_header();
     fputs (fin, headers);
     fprintf (fin, '\n\n');
     %fflush(fin);
-    %sleep(0.05); disp('');
 
     % print a block then read it to make sure we're live
     fprintf (fin, 'octoutput_drv(("Communication established.", sympy.__version__, sys.version))\n\n');
