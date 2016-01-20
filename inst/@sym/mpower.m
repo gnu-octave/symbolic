@@ -112,7 +112,7 @@ end
 
 %!test
 %! % non-integer power
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
+%! if (python_cmd ('return Version(sv) < Version("0.7.7.dev"),'))
 %!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
 %! else
 %! A = sym([1 2; 0 3]);
