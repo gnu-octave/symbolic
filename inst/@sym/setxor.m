@@ -30,6 +30,8 @@ function r = setxor(varargin)
 
   varargin = sym(varargin);
 
+  %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
+
   cmd = {
          'def to_inter(a):'
          '    if isinstance(a, sp.Set):'
@@ -44,7 +46,7 @@ function r = setxor(varargin)
          'def inter(x):'
          '    t = S.EmptySet'
          '    for i in x:'
-         '        t ^= to_inter(i)'
+         '        t = (t - to_inter(i)) | (to_inter(i) - t)'
          '    return t,'
          '#'
          'x = _ins'
@@ -58,7 +60,7 @@ function r = setxor(varargin)
          ''
          'A = sp.FiniteSet(*(list(x[0]) if isinstance(x[0], sp.MatrixBase) else [x[0]]))'
          'B = sp.FiniteSet(*(list(x[1]) if isinstance(x[1], sp.MatrixBase) else [x[1]]))'
-         'C = A ^ B'
+         'C = (A - B) | (B - A)'
          'return sp.Matrix([[list(C)]]),'
         };
 
