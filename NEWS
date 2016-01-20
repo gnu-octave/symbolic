@@ -6,6 +6,7 @@ octsympy 2.3.0-dev
           cbrt
           fix
           frac
+          interval
           linspace
           logspace
           max
