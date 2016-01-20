@@ -23,6 +23,7 @@ def myerr(e):
 try:
     import sympy
     import sympy as sp
+    from sympy import __version__ as sv
     # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
@@ -66,7 +67,7 @@ except:
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
-if not (sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6")):
+if Version(sv) >= Version("0.7.7.dev"):
     my_srepr = sympy.srepr
 else:
     def _monkey_patch_matpow_doit(self, **kwargs):

@@ -119,7 +119,7 @@ function [A, B] = assumptions(F, outp)
   % FIXME: Deprecate 0.7.6.x.  But on older SymPy we do some foolishness.
   % Abbreviate certain assumption dicts to shorter equivalent forms.
   % I look forward to deleting all this.
-  oldsympy = python_cmd('return sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6"),');
+  oldsympy = python_cmd('return Version(sv) < Version("0.7.7.dev"),');
   if (oldsympy)
     cmd = {
     'x = _ins[0]'
@@ -134,7 +134,7 @@ function [A, B] = assumptions(F, outp)
     'adict_even_076 = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}'
     'adict_integer = {"real":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "irrational":False}'
     'adict_rational = {"real":True, "commutative":True, "hermitian":True, "complex":True, "rational":True, "imaginary":False, "irrational":False}'
-    'if sympy.__version__.startswith("0.7.6"):'
+    'if Version(sv) >= Version("0.7.6"):'
     '    new076 = {"algebraic":True,  "transcendental":False}'
     '    adict_integer.update(new076)'
     '    adict_even.update(new076)'
@@ -243,7 +243,7 @@ end
 %! end
 
 %!test
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! if (python_cmd ('return Version(sv) < Version("0.7.7.dev"),'))
 %!   disp('skipping: char(x) of assumptions suboptimal in <= 0.7.6.x')
 %! else
 %!   A = assumptions('possible');
