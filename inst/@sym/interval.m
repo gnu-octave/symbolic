@@ -67,9 +67,3 @@ end
 %!test
 %! a = interval(sym(1), 2);
 %! assert (isa (a, 'sym'))
-
-%!test
-%! a = interval(sym(3))
-%! b = interval(sym(1), 3)
-%! c = interval(sym(3), 5)
-%! assert (isequal (a, intersect (b, c)))
