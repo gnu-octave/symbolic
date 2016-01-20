@@ -133,7 +133,7 @@ end
 %! % (1 on sympy 0.7.4--0.7.6, but nan in git (2014-12-12, a210908d4))
 %! % FIXME: xtest can be removed when 0.7.6.x support deprecated.
 %! zoo = sym('zoo');
-%! if (python_cmd ('return Version(sv) < Version("0.7.7.dev"),'))
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
 %! else
 %!   assert (isnan (1^zoo))

@@ -72,7 +72,7 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
-          'if Version(sv) >= Version("0.7.7.dev"):'
+          'if Version(spver) >= Version("0.7.7.dev"):'
           '    return x**y,'
           'if x.is_Matrix and not y.is_Matrix:'
           '    return sympy.MatPow(x, y).doit(),'
@@ -114,7 +114,7 @@ end
 
 %!test
 %! % non-integer power
-%! if (python_cmd ('return Version(sv) < Version("0.7.7.dev"),'))
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
 %! else
 %! A = sym([1 2; 0 3]);

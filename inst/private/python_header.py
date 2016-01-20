@@ -23,7 +23,7 @@ def myerr(e):
 try:
     import sympy
     import sympy as sp
-    from sympy import __version__ as sv
+    from sympy import __version__ as spver
     # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
@@ -37,6 +37,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
+    from packaging.version import Version
 except:
     myerr(sys.exc_info())
     raise
@@ -67,7 +68,7 @@ except:
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
-if Version(sv) >= Version("0.7.7.dev"):
+if Version(spver) >= Version("0.7.7.dev"):
     my_srepr = sympy.srepr
 else:
     def _monkey_patch_matpow_doit(self, **kwargs):
