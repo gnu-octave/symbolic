@@ -193,7 +193,7 @@ try:
             try:
                 pretty_ascii = sp.pretty(x, use_unicode=False)
             except:
-                # e.g., for union, intersection
+                # e.g., SymPy issue #10414
                 pretty_ascii = str(x)
             pretty_unicode = sp.pretty(x, use_unicode=True)
             a = ET.SubElement(et, "item")
