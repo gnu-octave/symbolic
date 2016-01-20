@@ -146,15 +146,29 @@ function varargout = python_cmd(cmd, varargin)
           '    except Exception as e:' ...
           '        exc_type, exc_obj, tb = sys.exc_info()' ...
           '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
-          '        return ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno - 4)' ...
+          '        return ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
           '_outs = _fcn(_ins)'
          };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    fprintf('python_cmd: error possibly near line %d of the python command\n', A{3});
+
+    switch (sympref('ipc'))
+      case 'default'
+        fprintf('python_cmd: Error might be near line %d (assuming you are using popen2 communication).\n', A{3} - 4);
+      case 'system'
+        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 275);
+      case 'popen2'
+        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 4);
+      case 'systmpfile'
+        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 277);
+      case 'sysoneline'
+        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 4);
+    end
+
     error(A{2});
+
   end
 
   if (~iscell(A))
