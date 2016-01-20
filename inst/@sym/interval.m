@@ -53,21 +53,13 @@
 
 function I = interval(varargin)
 
-  if (nargin < 1 || nargin > 4)
+  if (nargin < 2 || nargin > 4)
     print_usage();
   end
 
   varargin = sym(varargin);
 
-  if nargin == 1
-
-    I = python_cmd ('return Interval(*_ins),', varargin{1}, varargin{1}, varargin{2:nargin});
-
-  else
-
-    I = python_cmd ('return Interval(*_ins),', varargin{:});
-
-  end
+  I = python_cmd ('return Interval(*_ins),', varargin{:});
 
 end
 
