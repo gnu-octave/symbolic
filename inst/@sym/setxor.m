@@ -34,19 +34,15 @@ function r = setxor(a, b)
   cmd = {
          'a, b = _ins'
          'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
-         '    return (a - b) | (b - a), 1'
+         '    return (a - b) | (b - a),'
          ''
          'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
          'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
          'C = (A - B) | (B - A)'
-         'return sp.Matrix([[list(C)]]), 0'
+         'return sp.Matrix([list(C)]),'
         };
 
-    [r, out] = python_cmd (cmd, sym(a), sym(b));
-
-    if !out
-      r = horzcat(r{:});
-    end
+  r = python_cmd (cmd, sym(a), sym(b));
 
 end
 
