@@ -67,3 +67,11 @@ end
 %!test
 %! a = interval(sym(1), 2);
 %! assert (isa (a, 'sym'))
+
+%!test
+%! % some set subtraction
+%! a = interval(sym(0), 4);
+%! b = interval(sym(0), 1);
+%! c = interval(sym(1), 4, true);
+%! q = a - b;
+%! assert (isequal( q, c))
