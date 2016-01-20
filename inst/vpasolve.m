@@ -60,7 +60,7 @@ function r = vpasolve(e, x, x0)
   % the try, except bit.
   cmd = {
     '(e, x, x0, n) = _ins'
-    'if sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6"):'
+    'if Version(spver) < Version("0.7.7.dev"):'
     '    try:'
     '        sympy.mpmath.mp.dps = n'
     '        findroot = sympy.mpmath.findroot'
