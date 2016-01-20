@@ -39,7 +39,7 @@
 %% @example
 %% @group
 %% interval(sym(1), 1)
-%%   @result{} (sym) {1}
+%%   @result{} (sym) @{1@}
 %% interval(sym(2), 1)
 %%   @result{} (sym) ∅
 %% @end group
