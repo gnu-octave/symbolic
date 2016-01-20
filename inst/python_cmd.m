@@ -141,15 +141,17 @@ function varargout = python_cmd(cmd, varargin)
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
-  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    error(A{2});
-  end
-
   if (~iscell(A))
+    disp('python_cmd: The return value was:');
     disp(A)
+    disp('python_cmd: did you mean to return a tuple from Python?')
     % Python state undefined, so reset it (overkill for nostateful ipc)
     sympref reset
     error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
+  end
+
+  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+    error(A{2});
   end
 
   M = length(A);
