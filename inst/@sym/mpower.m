@@ -72,6 +72,8 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
+          'if Version(sv) >= Version("0.7.7.dev"):'
+          '    return x**y,'
           'if x.is_Matrix and not y.is_Matrix:'
           '    return sympy.MatPow(x, y).doit(),'
           'else:'
