@@ -142,9 +142,13 @@ function varargout = python_cmd(cmd, varargin)
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
   if (~iscell(A))
-    disp('python_cmd: The return value was:');
+    disp('')
+    disp('The python_cmd function received something unexpected (not a cell array)');
+    disp('from the communication layer.  This can happen if the block of python code');
+    disp('failed to return a tuple (you should use "return x," not "return x").  But');
+    disp('it can also indicate a communication problem so we will do "sympref reset".');
+    disp('For debugging, the returned value was:');
     disp(A)
-    disp('python_cmd: did you mean to return a tuple from Python?')
     % Python state undefined, so reset it (overkill for nostateful ipc)
     sympref reset
     error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
