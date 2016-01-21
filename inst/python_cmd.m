@@ -129,13 +129,9 @@ function varargout = python_cmd(cmd, varargin)
   % '_outs'.  There is no particular reason this needs to define
   % a function, I just thought it isolates local variables a bit.
 
-  %% Handle errors
-  % be careful, the number of line of cmd most be fixed if you
-  % change cmd, the number line is from here: 
-  % sys.exc_info()[-1].tb_lineno - 4
-  % 4 is the number of lines before cmd counting it self
-  % python_cmd('raise'), should return
-  % "some error" (line 1). If not fix it.
+  % Careful: fix this constant if you change the code below.
+  % Test with "python_cmd('raise')" which should say "line 1".
+  LinesBeforeCmdBlock = 3;
 
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
@@ -154,19 +150,8 @@ function varargout = python_cmd(cmd, varargin)
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
 
-    switch (sympref('ipc'))
-      case 'default'
-        fprintf('python_cmd: Error might be near line %d (assuming you are using popen2 communication).\n', A{3} - 4);
-      case 'system'
-        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 275);
-      case 'popen2'
-        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 4);
-      case 'systmpfile'
-        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 277);
-      case 'sysoneline'
-        fprintf('python_cmd: Error might be near line  %d of the python command\n', A{3} - 4);
-    end
-
+    fprintf('Python has raised an error. It may have occurred near line %d', A{3} - LinesBeforeCmdBlock - 1);
+    fprintf(' of the python code block (assuming popen2 ipc).\n');
     error(A{2});
 
   end
