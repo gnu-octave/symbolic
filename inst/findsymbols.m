@@ -62,7 +62,7 @@ function L = findsymbols(obj, dosort)
 
   if isa(obj, 'sym')
     cmd = { 'x = _ins[0]'
-            'if Version(spver) <= Version("0.7.6"):'   % deprecate with Issue #164
+            'if Version(spver) < Version("0.7.6"):'   % deprecate with Issue #164
             '    if not x.is_Matrix:'
             '        s = x.free_symbols'
             '    else:'
