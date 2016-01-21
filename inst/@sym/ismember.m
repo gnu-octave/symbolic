@@ -22,6 +22,37 @@
 %% @deftypefnx {Function File} {@var{Z} =}  ismember (@var{x}, @var{M})
 %% Test if an object is contained within a set or a matrix.
 %%
+%% This function can be used in two ways, the first is to check
+%% if @var{x} is contained in a set @var{S}:
+%% @example
+%% @group
+%% I = interval(sym(0), sym(pi));
+%% ismember(2, I)
+%%   @result{} ans = 1
+%% @end group
+%% @end example
+%%
+%% It can also be used to check if @var{x} is contained in a
+%% matrix @var{M}:
+%% @example
+%% @group
+%% B = [sym(1) 2; 2*sym(pi) 4];
+%% ismember(sym(pi), B)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%%
+%% In either case, the first argument @var{x} can also be a matrix:
+%% @example
+%% @group
+%% A = [sym(3), 4 2; sym(1) 0 1];
+%% ismember(A, B)                       % doctest: +XFAIL
+%%   @result{} ans =
+%%        0   1   1
+%%        1   0   1
+%% @end group
+%% @end example
+%%
 %% @seealso{lookup, unique, union, intersect, setdiff, setxor}
 %% @end deftypefn
 
