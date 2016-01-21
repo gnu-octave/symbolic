@@ -37,7 +37,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
-    from packaging.version import Version
+    from pkg_resources import parse_version as Version
 except:
     myerr(sys.exc_info())
     raise
