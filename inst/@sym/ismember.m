@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{z} =} ismember (@var{x}, @var{y})
-%% Return a logical matrix of the same size of A, which is true (1) 
-%% if the element of A is found in B and false (0) if not.
+%% @deftypefn  {Function File} {@var{tf} =} ismember (@var{x}, @var{S})
+%% @deftypefnx {Function File} {@var{Z} =}  ismember (@var{x}, @var{M})
+%% Test if an object is contained within a set or a matrix.
 %%
 %% @seealso{lookup, unique, union, intersect, setdiff, setxor}
 %% @end deftypefn

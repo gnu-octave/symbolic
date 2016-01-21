@@ -18,13 +18,10 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{r} =} unique (@var{A})
-%% Return the unique elements of A.
+%% Return the unique elements of a symbolic matrix.
 %%
 %% @seealso{union, intersect, setdiff, setxor, ismember}
 %% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = unique(A)
 
