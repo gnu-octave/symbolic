@@ -25,9 +25,7 @@
 
 function r = unique(A)
 
-  S = python_cmd ('return list(uniq(*_ins)),', A);
-
-  r = horzcat(S{:});
+  r = python_cmd ('return sp.Matrix([list(uniq(*_ins))]),', A);
 
 end
 
