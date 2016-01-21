@@ -88,7 +88,7 @@ end
 
 %!test
 %! % set
-%! syms x
+%! syms x real
 %! %FIXME: replace with finiteset later
 %! %S = finiteset(2, sym(pi), x)
 %! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
@@ -97,11 +97,5 @@ end
 %!test
 %! % set with positive symbol
 %! syms x positive
-%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
-%! assert (~ismember (-1, S))
-
-%!error
-%! % set with symbol can be indeterminant
-%! syms x
 %! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
 %! assert (~ismember (-1, S))
