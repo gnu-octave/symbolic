@@ -18,19 +18,14 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{r} =} unique (@var{A})
-%% Return the unique elements of A.
+%% Return the unique elements of a symbolic matrix.
 %%
 %% @seealso{union, intersect, setdiff, setxor, ismember}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
 function r = unique(A)
 
-  S = python_cmd ('return list(uniq(*_ins)),', A);
-
-  r = horzcat(S{:});
+  r = python_cmd ('return sp.Matrix([list(uniq(*_ins))]),', A);
 
 end
 

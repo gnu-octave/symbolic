@@ -18,7 +18,6 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{r} =} intersect (@var{A}, @var{B})
-%% @deftypefnx {Function File}  {@var{r} =} intersect (@var{A}, @var{B}, @dots{}, 'intervals')
 %% Return the common elements of two sets.
 %%
 %% @seealso{union, setdiff, setxor, unique, ismember}
@@ -43,6 +42,7 @@ function r = intersect(a, b)
     r = python_cmd (cmd, sym(a), sym(b));
 
 end
+
 
 %!test
 %! A = sym([1 2 3]);

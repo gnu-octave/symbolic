@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
-%% @deftypefnx {Function File}  {@var{r} =} union (@var{A}, @var{B}, @dots{}, 'intervals')
 %% Return the union of elements of two sets.
 %%
-%% @seealso{intersect, setdiff, setxor,function r = intersect(varargin)
+%% @seealso{intersect, setdiff, setxor, unique, ismember}
+%% @end deftypefn
 
 function r = union(a, b)
 

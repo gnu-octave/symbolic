@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Lagu, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,40 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{z} =} ismember (@var{x}, @var{y})
-%% Return a logical matrix of the same size of A, which is true (1) 
-%% if the element of A is found in B and false (0) if not.
+%% @deftypefn  {Function File} {@var{tf} =} ismember (@var{x}, @var{S})
+%% @deftypefnx {Function File} {@var{Z} =}  ismember (@var{x}, @var{M})
+%% Test if an object is contained within a set or a matrix.
+%%
+%% This function can be used in two ways, the first is to check
+%% if @var{x} is contained in a set @var{S}:
+%% @example
+%% @group
+%% I = interval(sym(0), sym(pi));
+%% ismember(2, I)
+%%   @result{} ans = 1
+%% @end group
+%% @end example
+%%
+%% It can also be used to check if @var{x} is contained in a
+%% matrix @var{M}:
+%% @example
+%% @group
+%% B = [sym(1) 2; 2*sym(pi) 4];
+%% ismember(sym(pi), B)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%%
+%% In either case, the first argument @var{x} can also be a matrix:
+%% @example
+%% @group
+%% A = [sym(3), 4 2; sym(1) 0 1];
+%% ismember(A, B)                       % doctest: +XFAIL
+%%   @result{} ans =
+%%        0   1   1
+%%        1   0   1
+%% @end group
+%% @end example
 %%
 %% @seealso{lookup, unique, union, intersect, setdiff, setxor}
 %% @end deftypefn
@@ -33,14 +64,44 @@ function r = ismember(x, y)
          '    return x in y,'
          'elif len(x) == 1:'
          '    return x in y,'
-         'for a, b in enumerate(x):'
-         '    if x[a] in y:'
-         '        x[a] = 1'
-         '    else:'
-         '        x[a] = 0'
+         'for i, b in enumerate(x):'
+         '    x[i] = b in y'
          'return x,'
         };
 
   r = python_cmd (cmd, sym(x), sym(y));
+  %r = logical(r);
 
 end
+
+
+%!assert (ismember (2, interval(sym(0),2)))
+%!assert (~ismember (3, interval(sym(0),2)))
+
+%!test
+%! % something in a matrix
+%! syms x
+%! A = [1 x; sym(pi) 4];
+%! assert (ismember (sym(pi), A))
+%! assert (ismember (x, A))
+%! assert (~ismember (2, A))
+
+%!test
+%! % set
+%! syms x
+%! %FIXME: replace with finiteset later
+%! %S = finiteset(2, sym(pi), x)
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (ismember (x, S))
+
+%!test
+%! % set with positive symbol
+%! syms x positive
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (~ismember (-1, S))
+
+%!error
+%! % set with symbol can be indeterminant
+%! syms x
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (~ismember (-1, S))
