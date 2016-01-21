@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Lagu, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
