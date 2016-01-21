@@ -128,6 +128,11 @@ function varargout = python_cmd(cmd, varargin)
   % '_ins' and it will return to us whatever we put in the tuple
   % '_outs'.  There is no particular reason this needs to define
   % a function, I just thought it isolates local variables a bit.
+
+  % Careful: fix this constant if you change the code below.
+  % Test with "python_cmd('raise')" which should say "line 1".
+  LinesBeforeCmdBlock = 3;
+
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
           '    _outs = []' ...
@@ -135,7 +140,9 @@ function varargout = python_cmd(cmd, varargin)
           cmd{:} ...
           '        return _outs' ...
           '    except Exception as e:' ...
-          '        return ("COMMAND_ERROR_PYTHON", type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__)' ...
+          '        exc_type, exc_obj, tb = sys.exc_info()' ...
+          '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
+          '        return ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
           '_outs = _fcn(_ins)'
          };
 
@@ -155,6 +162,8 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+    fprintf('Python has raised an error. It may have occurred near line %d', A{3} - LinesBeforeCmdBlock - 1);
+    fprintf(' of the python code block (assuming popen2 ipc).\n');
     error(A{2});
   end
 
