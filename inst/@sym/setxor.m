@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,35 +27,23 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = setxor(A, B)
+function r = setxor(a, b)
 
-  % FIXME: is it worth splitting out a "private/set_helper"?
+  %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
+  % Version(spver) >= Version("0.7.7.dev")
 
-  cmd = { 'A, B = _ins'
-          'try:'
-          '    A = iter(A)'
-          'except TypeError:'
-          '    A = set([A])'
-          'else:'
-          '    A = set(A)'
-          'try:'
-          '    B = iter(B)'
-          'except TypeError:'
-          '    B = set([B])'
-          'else:'
-          '    B = set(B)'
-          'C = A.symmetric_difference(B)'
-          'C = sympy.Matrix([list(C)])'
-          'return C,' };
+  cmd = {
+         'a, b = _ins'
+         'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
+         '    return (a - b) | (b - a),'
+         ''
+         'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+         'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
+         'C = (A - B) | (B - A)'
+         'return sp.Matrix([list(C)]),'
+        };
 
-  A = sym(A);
-  B = sym(B);
-  r = python_cmd (cmd, A, B);
-
-  % reshape to column if both inputs are
-  if (iscolumn(A) && iscolumn(B))
-    r = reshape(r, length(r), 1);
-  end
+  r = python_cmd (cmd, sym(a), sym(b));
 
 end
 
@@ -94,3 +83,10 @@ end
 %! syms x
 %! assert (isequal (setxor([x 1], x), sym(1)))
 %! assert (isempty (setxor(x, x)))
+
+%!test
+%! A = interval(sym(1), 3);
+%! B = interval(sym(2), 5);
+%! C = setxor(A, B);
+%! D = union (interval (sym(1), 2, false, true), interval (sym(3), 5, true, false));
+%! assert( isequal( C, D))

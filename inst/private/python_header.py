@@ -32,6 +32,7 @@ try:
     from sympy.functions.elementary.piecewise import ExprCondPair
     from sympy.integrals.risch import NonElementaryIntegral
     from sympy.matrices.expressions.matexpr import MatrixElement
+    from sympy.utilities.iterables import uniq
     import copy
     import binascii
     import struct

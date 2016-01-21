@@ -1,5 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald and Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,25 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{r} =} setdiff (@var{A}, @var{B})
-%% Set subtraction.
+%% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
+%% Return the union of elements of two sets.
 %%
-%% @seealso{union, intersect, setxor, unique, ismember}
+%% @seealso{intersect, setdiff, setxor, unique, ismember}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-function r = setdiff(a, b)
+function r = union(a, b)
 
   cmd = {
          'a, b = _ins'
          'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
-         '    return a - b,'
+         '    return a | b,'
          ''
          'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
          'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-         'C = A - B'
+         'C = A | B'
          'return sp.Matrix([list(C)]),'
         };
 
@@ -44,42 +40,42 @@ function r = setdiff(a, b)
 
 end
 
-
 %!test
 %! A = sym([1 2 3]);
 %! B = sym([1 2 4]);
-%! C = setdiff(A, B);
-%! D = sym([3]);
+%! C = union(A, B);
+%! D = sym([1 2 3 4]);
 %! assert (isequal (C, D))
 
 %!test
 %! % one nonsym
 %! A = sym([1 2 3]);
 %! B = [1 2 4];
-%! C = setdiff(A, B);
-%! D = sym([3]);
+%! C = union(A, B);
+%! D = sym([1 2 3 4]);
 %! assert (isequal (C, D))
 
 %!test
 %! % empty
 %! A = sym([1 2 3]);
-%! C = setdiff(A, A);
-%! assert (isempty (C))
+%! C = union(A, A);
+%! assert (isequal(C, A))
 
 %!test
 %! % empty input
 %! A = sym([1 2]);
-%! C = setdiff(A, []);
-%! assert (isequal (C, A) || isequal (C, sym([2 1])))
+%! C = union(A, []);
+%! assert (isequal (C, sym([1 2])))
+
 
 %!test
 %! % scalar
 %! syms x
-%! assert (isequal (setdiff([x 1], x), sym(1)))
-%! assert (isempty (setdiff(x, x)))
+%! assert (isequal (union([x 1], x), [1 x]))
+%! assert (isequal (union(x, x), x))
 
 %!test
 %! A = interval(sym(1), 3);
 %! B = interval(sym(2), 5);
-%! C = setdiff(A, B);
-%! assert( isequal( C, interval(sym(1), 2, false, true)))
+%! C = union(A, B);
+%! assert( isequal( C, interval(sym(1), 5)))
