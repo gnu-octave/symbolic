@@ -33,14 +33,44 @@ function r = ismember(x, y)
          '    return x in y,'
          'elif len(x) == 1:'
          '    return x in y,'
-         'for a, b in enumerate(x):'
-         '    if x[a] in y:'
-         '        x[a] = 1'
-         '    else:'
-         '        x[a] = 0'
+         'for i, b in enumerate(x):'
+         '    x[i] = b in y'
          'return x,'
         };
 
   r = python_cmd (cmd, sym(x), sym(y));
+  %r = logical(r);
 
 end
+
+
+%!assert (ismember (2, interval(sym(0),2)))
+%!assert (~ismember (3, interval(sym(0),2)))
+
+%!test
+%! % something in a matrix
+%! syms x
+%! A = [1 x; sym(pi) 4];
+%! assert (ismember (sym(pi), A))
+%! assert (ismember (x, A))
+%! assert (~ismember (2, A))
+
+%!test
+%! % set
+%! syms x
+%! %FIXME: replace with finiteset later
+%! %S = finiteset(2, sym(pi), x)
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (ismember (x, S))
+
+%!test
+%! % set with positive symbol
+%! syms x positive
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (~ismember (-1, S))
+
+%!error
+%! % set with symbol can be indeterminant
+%! syms x
+%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! assert (~ismember (-1, S))
