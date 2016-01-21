@@ -134,7 +134,7 @@ function [A, B] = assumptions(F, outp)
     'adict_even_076 = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}'
     'adict_integer = {"real":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "irrational":False}'
     'adict_rational = {"real":True, "commutative":True, "hermitian":True, "complex":True, "rational":True, "imaginary":False, "irrational":False}'
-    'if Version(spver) >= Version("0.7.6"):'
+    'if (Version(spver) >= Version("0.7.6")) and (Version(spver) < Version("0.7.7.dev")):'
     '    new076 = {"algebraic":True,  "transcendental":False}'
     '    adict_integer.update(new076)'
     '    adict_even.update(new076)'
