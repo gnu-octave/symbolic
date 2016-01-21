@@ -37,7 +37,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
-    from pkg_resources import parse_version as Version
+    from distutils.version import LooseVersion
 except:
     myerr(sys.exc_info())
     raise
@@ -62,6 +62,9 @@ try:
             if not k in b:
                 n[k] = a[k]
         return n
+    def Version(v):
+        v = v.replace(".dev", "")
+        return LooseVersion(v)
 except:
     myerr(sys.exc_info())
     raise
