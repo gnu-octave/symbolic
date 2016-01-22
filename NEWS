@@ -9,6 +9,7 @@ octsympy 2.3.0-dev
           intersect
           interval
           ismember
+          finiteset
           linspace
           logspace
           max
