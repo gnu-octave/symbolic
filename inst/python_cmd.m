@@ -148,19 +148,23 @@ function varargout = python_cmd(cmd, varargin)
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
-  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-
-    fprintf('Python has raised an error. It may have occurred near line %d', A{3} - LinesBeforeCmdBlock - 1);
-    fprintf(' of the python code block (assuming popen2 ipc).\n');
-    error(A{2});
-
-  end
-
   if (~iscell(A))
+    disp('')
+    disp('The python_cmd function received something unexpected (not a cell array)');
+    disp('from the communication layer.  This can happen if the block of python code');
+    disp('failed to return a tuple (you should use "return x," not "return x").  But');
+    disp('it can also indicate a communication problem so we will do "sympref reset".');
+    disp('For debugging, the returned value was:');
     disp(A)
     % Python state undefined, so reset it (overkill for nostateful ipc)
     sympref reset
     error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
+  end
+
+  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+    fprintf('Python has raised an error. It may have occurred near line %d', A{3} - LinesBeforeCmdBlock - 1);
+    fprintf(' of the python code block (assuming popen2 ipc).\n');
+    error(A{2});
   end
 
   M = length(A);
