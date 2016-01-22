@@ -37,6 +37,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
+    import re
 except:
     myerr(sys.exc_info())
     raise
@@ -61,15 +62,28 @@ try:
             if not k in b:
                 n[k] = a[k]
         return n
-    def Version(v):
-        v = v.replace("-", ".").replace(",", ".").split(".")
-        v = list(v)
-        v.insert(0, '1')
-        for i, x in enumerate(v):
-            if ("dev" in str(v[i])) or ("post" in str(v[i])):
-                v[i-1] = str(int(v[i-1]) - 1)
-                v[i] = str(v[i]).replace("dev", "9999").replace("post", "9999")
-        return tuple(v)
+    def Version(s):
+        component_re = re.compile(r'(\d+ | [a-z]+ | \.| -)', re.VERBOSE)
+        replace = {'pre':'c', 'preview':'c','-':'final-','rc':'c','dev':'@'}.get
+        def _parse_version_parts(s):
+            for part in component_re.split(s):
+                part = replace(part,part)
+                if not part or part=='.':
+                    continue
+                if part[:1] in '0123456789':
+                    yield part.zfill(8)
+                else:
+                    yield '*'+part
+            yield '*final'
+        parts = []
+        for part in _parse_version_parts(s.lower()):
+            if part.startswith('*'):
+                if part<'*final':
+                    while parts and parts[-1]=='*final-': parts.pop()
+                while parts and parts[-1]=='00000000':
+                    parts.pop()
+            parts.append(part)
+        return tuple(parts)
 except:
     myerr(sys.exc_info())
     raise
