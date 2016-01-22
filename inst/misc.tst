@@ -89,6 +89,7 @@
 %! assert (isequal (r, true))
 
 %!xtest
+%! % see: https://github.com/cbm755/octsympy/pull/320
 %! r = python_cmd ('return Version("0.7.6") > Version("0.7.6.dev"),');
 %! assert (isequal (r, true))
 

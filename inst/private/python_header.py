@@ -63,6 +63,7 @@ try:
                 n[k] = a[k]
         return n
     def Version(v):
+        # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
 except:
     myerr(sys.exc_info())
