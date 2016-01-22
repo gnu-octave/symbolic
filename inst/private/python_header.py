@@ -189,12 +189,15 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif isinstance(x, (sp.Basic, sp.MatrixBase)):
+        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase)):
+            # FIXME: is it weird to pretend None is a SymPy object?
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
             elif isinstance(x, sp.MatrixExpr):
                 # nan for symbolic size
                 _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
+            elif x is None:
+                _d = (1,1)
             else:
                 _d = (1, 1)
             try:
