@@ -129,7 +129,7 @@ end
 %! C = 10 + B + B^2;
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
-%! assert (isequal (simplify(D), simplify(E)))
+%! assert (isequal (D, E))
 
 %!test
 %! % matpow, sub in zero gives identity

@@ -2,7 +2,7 @@
 
 
 %!shared x
-%! syms x;
+%! syms x
 
 %!assert (isequal (x(1), x));
 %!assert (isequal (x(end), x));
@@ -25,7 +25,7 @@
 
 
 %!shared a
-%! syms x;
+%! syms x
 %! a = [1 2 x];
 
 %!error <index out of range> a(42, 42)
@@ -33,7 +33,7 @@
 %!error <index out of range> a(1, 0)
 
 %!shared x
-%! syms x;
+%! syms x
 
 %!error x([1 2; 1 1])
 %!error <index out of range> x([1 2])
