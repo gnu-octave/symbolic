@@ -78,6 +78,8 @@
 %! assert (isequal (size(m(:,[])), [2 0]))
 %! assert (isequal (size(m([],:)), [0 3]))
 
+%!shared
+
 %!test
 %! r = python_cmd ('return Version("0.7.6") > Version("0.7.6"),');
 %! assert (isequal (r, false))
