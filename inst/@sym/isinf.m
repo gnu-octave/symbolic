@@ -37,7 +37,7 @@ function r = isinf(x)
   if isscalar(x)
 
     cmd = { 'd = _ins[0]'
-            'if sympy.__version__ == "0.7.5":'
+            'if Version(spver) < Version("0.7.6"):'
             '    d = d.is_unbounded'
             'else:'
             '    d = d.is_infinite'

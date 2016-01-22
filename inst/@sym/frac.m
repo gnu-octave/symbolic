@@ -43,7 +43,7 @@ function y = frac(x)
 end
 
 %!test
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %!   disp('skipping: no "frac" in SymPy <= 0.7.6.x')
 %! else
 %! f1 = frac(sym(11)/10);
@@ -52,7 +52,7 @@ end
 %! end
 
 %!test
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %! else
 %! % fails on SymPy 0.7.6.1
 %! d = sym(-11)/10;
@@ -61,7 +61,7 @@ end
 %! end
 
 %!test
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=761)
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %! else
 %! d = sym(-19)/10;
 %! c = sym(1)/10;
