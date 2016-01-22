@@ -42,7 +42,7 @@
 function r = isempty(x)
 
   % special case
-  if (strcmp(char(e), 'EmptySet()'))
+  if (strcmp(char(x), 'EmptySet()'))
     r = true;
     return;
   end
