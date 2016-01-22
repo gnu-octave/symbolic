@@ -41,6 +41,12 @@
 
 function r = isempty(x)
 
+  % special case
+  if (strcmp(char(e), 'EmptySet()'))
+    r = true;
+    return;
+  end
+
   d = size(x);
 
   % Octave can have n x 0 and 0 x m empty arrays
@@ -92,3 +98,8 @@ end
 %! assert (isempty (A))
 %! A = sym('A', [n 0]);
 %! assert (isempty (A))
+
+%!test
+%! % special case for empty set
+%! e = finiteset();
+%! assert (isempty (e))
