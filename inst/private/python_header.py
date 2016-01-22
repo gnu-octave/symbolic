@@ -23,6 +23,7 @@ def myerr(e):
 try:
     import sympy
     import sympy as sp
+    from sympy import __version__ as spver
     # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
@@ -37,6 +38,7 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
+    import re
 except:
     myerr(sys.exc_info())
     raise
@@ -61,13 +63,35 @@ try:
             if not k in b:
                 n[k] = a[k]
         return n
+    def Version(s):
+        component_re = re.compile(r'(\d+ | [a-z]+ | \.| -)', re.VERBOSE)
+        replace = {'pre':'c', 'preview':'c','-':'final-','rc':'c','dev':'@'}.get
+        def _parse_version_parts(s):
+            for part in component_re.split(s):
+                part = replace(part,part)
+                if not part or part=='.':
+                    continue
+                if part[:1] in '0123456789':
+                    yield part.zfill(8)
+                else:
+                    yield '*'+part
+            yield '*final'
+        parts = []
+        for part in _parse_version_parts(s.lower()):
+            if part.startswith('*'):
+                if part<'*final':
+                    while parts and parts[-1]=='*final-': parts.pop()
+                while parts and parts[-1]=='00000000':
+                    parts.pop()
+            parts.append(part)
+        return tuple(parts)
 except:
     myerr(sys.exc_info())
     raise
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
-if not (sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6")):
+if Version(spver) >= Version("0.7.7.dev"):
     my_srepr = sympy.srepr
 else:
     def _monkey_patch_matpow_doit(self, **kwargs):

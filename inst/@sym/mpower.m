@@ -112,7 +112,7 @@ end
 
 %!test
 %! % non-integer power
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
 %!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
 %! else
 %! A = sym([1 2; 0 3]);
@@ -129,7 +129,7 @@ end
 %! C = 10 + B + B^2;
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
-%! assert (isequal (D, E))
+%! assert (isequal (simplify(D), simplify(E)))
 
 %!test
 %! % matpow, sub in zero gives identity
