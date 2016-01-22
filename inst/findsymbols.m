@@ -141,7 +141,7 @@ end
 %!test
 %! % empty sym for findsymbols, findsym, and symvar
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping: findsymbols of empty sym broken before SymPy 0.7.7')
+%!   fprintf('\n  skipping: findsymbols of empty sym broken before SymPy 0.7.7\n')
 %! else
 %!   assert (isempty (findsymbols (sym([]))))
 %!   assert (isempty (findsym (sym([]))))

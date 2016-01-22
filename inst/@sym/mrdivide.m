@@ -114,7 +114,7 @@ end
 %!test
 %! % A = C/B is C = A*B
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%!   fprintf('\n  skipping a test b/c SymPy <= 0.7.6.x\n')
 %! else
 %! A = sym([1 2; 3 4]);
 %! B = sym([1 3; 4 8]);
@@ -125,7 +125,7 @@ end
 
 %!test
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%!   disp('  skipping a test b/c SymPy <= 0.7.6.x')
 %! else
 %! A = [1 2; 3 4];
 %! B = A / A;
@@ -138,7 +138,7 @@ end
 
 %!test
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping a test b/c SymPy <= 0.7.6.x')
+%!   disp('  skipping a test b/c SymPy <= 0.7.6.x')
 %! else
 %! A = sym([5 6]);
 %! B = sym([1 2; 3 4]);

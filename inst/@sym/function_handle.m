@@ -261,6 +261,7 @@ end
 
 %!test
 %! % output to disk
+%! fprintf('\n')
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output1');
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);

@@ -134,7 +134,7 @@ end
 %! % FIXME: xtest can be removed when 0.7.6.x support deprecated.
 %! zoo = sym('zoo');
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
 %! else
 %!   assert (isnan (1^zoo))
 %! end

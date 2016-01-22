@@ -113,7 +113,7 @@ end
 %!test
 %! % non-integer power
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
 %! else
 %! A = sym([1 2; 0 3]);
 %! B = A^pi;
