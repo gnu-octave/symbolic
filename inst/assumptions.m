@@ -244,7 +244,7 @@ end
 
 %!test
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping: char(x) of assumptions suboptimal in <= 0.7.6.x')
+%!   fprintf('\n  skipping: char(x) of assumptions suboptimal in <= 0.7.6.x\n')
 %! else
 %!   A = assumptions('possible');
 %!   for i = 1:length(A)

@@ -44,7 +44,7 @@ end
 
 %!test
 %! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   disp('skipping: no "frac" in SymPy <= 0.7.6.x')
+%!   fprintf('\n  skipping: no "frac" in SymPy <= 0.7.6.x\n')
 %! else
 %! f1 = frac(sym(11)/10);
 %! f2 = sym(1)/10;
