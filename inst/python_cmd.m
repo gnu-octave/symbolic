@@ -162,9 +162,11 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    fprintf('Python has raised an error. It may have occurred near line %d', A{3} - LinesBeforeCmdBlock - 1);
-    fprintf(' of the python code block (assuming popen2 ipc).\n');
-    error(A{2});
+    errlineno = A{3} - LinesBeforeCmdBlock - 1;
+    errstr = sprintf(['Python raised exception, maybe at line %d of code ' ...
+                      'block (assuming popen2)\n' ...
+                      '%s'], errlineno, A{2});
+    error('OctSymPy:python_cmd:exception', errstr);
   end
 
   M = length(A);
