@@ -37,7 +37,6 @@ try:
     import binascii
     import struct
     import xml.etree.ElementTree as ET
-    from distutils.version import LooseVersion
 except:
     myerr(sys.exc_info())
     raise
@@ -63,8 +62,14 @@ try:
                 n[k] = a[k]
         return n
     def Version(v):
-        v = v.replace(".dev", "")
-        return LooseVersion(v)
+        v = v.replace("-", ".").replace(",", ".").split(".")
+        v = list(v)
+        v.insert(0, '1')
+        for i, x in enumerate(v):
+            if ("dev" in str(v[i])) or ("post" in str(v[i])):
+                v[i-1] = str(int(v[i-1]) - 1)
+                v[i] = str(v[i]).replace("dev", "9999").replace("post", "9999")
+        return tuple(v)
 except:
     myerr(sys.exc_info())
     raise
