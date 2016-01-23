@@ -91,8 +91,16 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
 
     else
-      i, x
-      error('don''t know how to move that variable to python');
+
+      x = sym(x);
+      c=c+1; a{c} = [sp '# sym'];
+      % need to be careful here: pickle might have escape codes
+      % .append(pickle.loads("""%s"""))', x.pickle)
+      % The extra printf around the pickle helps if it still has
+      % escape codes (and seems harmless if it does not)
+      % Issue #107: x.pickle fails for matrices, use char() as workaround
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
+
     end
   end
   c=c+1; a{c} = [sp '# end of a list'];
