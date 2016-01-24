@@ -340,3 +340,11 @@ end
 %! cmd = 'd = dict(); d["a"] = 6; d["b"] = 10; return d,';
 %! d = python_cmd (cmd);
 %! assert (d.a == 6 && d.b == 10)
+
+%!test
+%! r = python_cmd ("return 6");
+%! assert (isequal (r, 6))
+
+%!test
+%! r = python_cmd ('return "Hi"');
+%! assert (strcmp (r, 'Hi'))
