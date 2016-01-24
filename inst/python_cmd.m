@@ -38,22 +38,7 @@
 %% @end group
 %% @end example
 %%
-%% The inputs will be in a list called '_ins'.  The command should
-%% end by outputing a tuple of return arguments.
-%% If you have just one return value, you probably want to append
-%% an extra comma.  Either of these approaches will work:
-%% @example
-%% @group
-%% >> cmd = '(x,y) = _ins; return (x+y,)';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%% >> cmd = '(x,y) = _ins; return x+y,';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%% @end group
-%% @end example
-%% (Python gurus will know why).
-%%
+%% The inputs will be in a list called '_ins'.
 %% Instead of @code{return}, you can append to the Python list
 %% @code{_outs}:
 %% @example
