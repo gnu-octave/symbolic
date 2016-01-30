@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2016 Colin B. Macdonald
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+
+This file is also available, at your option, under the CC0 license.
+-->
 <component type="addon">
   <id>octave-symbolic</id>
   <extends>www.octave.org-octave.desktop</extends>
@@ -7,6 +17,7 @@
   <url type="homepage">http://octave.sourceforge.net/symbolic</url>
   <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
   <metadata_license>CC0-1.0</metadata_license>
+  <!-- Later: <metadata_license>All-Permissive</metadata_license>-->
   <project_license>GPL-3.0+</project_license>
   <update_contact>octave-maintainers_AT_gnu.org</update_contact>
 </component>
