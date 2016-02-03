@@ -196,10 +196,13 @@ function varargout = sympref(cmd, arg)
       settings = [];
       settings.ipc = 'default';
       settings.whichpython = '';
+
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('snippet', 'default')
       sympref ('quiet', 'default')
+
+      settings.ipc_error = line_error_python;
 
     case 'version'
       assert (nargin == 1)
@@ -278,6 +281,8 @@ function varargout = sympref(cmd, arg)
         verbose = ~sympref('quiet');
         sympref('reset')
         settings.ipc = arg;
+        settings.ipc_error = line_error_python;
+
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] octsympy communication mechanism';
@@ -297,6 +302,10 @@ function varargout = sympref(cmd, arg)
           disp(msg)
         end
       end
+    
+    case 'linerror'
+      varargout{1} = settings.ipc_error;
+      return;
 
     case 'reset'
       verbose = ~sympref('quiet');
