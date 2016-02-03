@@ -72,10 +72,10 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
-          'if x.is_Matrix and not y.is_Matrix:'
-          '    return sympy.MatPow(x, y).doit(),'
+          'if not(x.is_Matrix and not y.is_Matrix) or Version(spver) >= Version("0.7.7.dev"):'
+          '    return x**y'
           'else:'
-          '    return x**y,'
+          '    return sympy.MatPow(x, y).doit()'
         };
 
   z = python_cmd (cmd, sym(x), sym(y));
@@ -129,7 +129,7 @@ end
 %! C = 10 + B + B^2;
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
-%! assert (isequal (D, E))
+%! assert (isequal (simplify(D), simplify(E)))
 
 %!test
 %! % matpow, sub in zero gives identity
