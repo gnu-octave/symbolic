@@ -25,11 +25,11 @@ function r = octave_array_to_python(a)
 
   elseif rows(a) > 1
     t = strcat('[', t);
-    t = strcat(t, m(a(1, :)));
+    t = strcat(t, octave_array_to_python(a(1, :)));
 
     for i = 2:rows(a)
       t = strcat(t, ', ');
-      t = strcat(t, m(a(i, :)));
+      t = strcat(t, octave_array_to_python(a(i, :)));
     end
 
     t = strcat(t, ']');
