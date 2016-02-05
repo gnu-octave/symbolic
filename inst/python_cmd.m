@@ -162,7 +162,20 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - line_error_python('get');
+
+    switch sympref('ipc')
+      case 'default'
+        if (exist('popen2') > 1)
+          errlineno = A{3} - line_error_python('get');
+        else
+          errlineno = A{3} - line_error_python('get') - (nargin - 1)*2;
+        end
+      case {'popen2', 'sysoneline'}
+        errlineno = A{3} - line_error_python('get');
+      case {'system', 'systmpfile'}
+        errlineno = A{3} - line_error_python('get') - (nargin - 1)*2;
+    end
+
     error(strcat(A{2}, ' (line: ', mat2str(errlineno), ')'));
   end
 
