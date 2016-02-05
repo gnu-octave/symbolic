@@ -202,7 +202,7 @@ function varargout = sympref(cmd, arg)
       sympref ('snippet', 'default')
       sympref ('quiet', 'default')
 
-      settings.ipc_error = line_error_python;
+      line_error_python;
 
     case 'version'
       assert (nargin == 1)
@@ -281,7 +281,7 @@ function varargout = sympref(cmd, arg)
         verbose = ~sympref('quiet');
         sympref('reset')
         settings.ipc = arg;
-        settings.ipc_error = line_error_python;
+        line_error_python;
 
         switch arg
           case 'default'
@@ -302,10 +302,6 @@ function varargout = sympref(cmd, arg)
           disp(msg)
         end
       end
-    
-    case 'linerror'
-      varargout{1} = settings.ipc_error;
-      return;
 
     case 'reset'
       verbose = ~sympref('quiet');

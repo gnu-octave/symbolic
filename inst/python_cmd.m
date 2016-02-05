@@ -162,7 +162,7 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - sympref('linerror');
+    errlineno = A{3} - line_error_python('get');
     error(strcat(A{2}, ' (line: ', mat2str(errlineno), ')'));
   end
 
