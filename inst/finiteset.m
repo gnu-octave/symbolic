@@ -26,8 +26,10 @@
 %% @example
 %% @group
 %% syms x
-%% finiteset(1, pi, x, 1, 1)
-%%   @result{} ans = (sym) @{1, π, x@}
+%% S = finiteset(1, pi, x, 1, 1, x)
+%%   @result{} S = (sym) @{1, π, x@}
+%% subs(S, x, pi)
+%%   @result{} ans = (sym) @{1, π@}
 %% @end group
 %% @end example
 %%
@@ -36,6 +38,17 @@
 %% @group
 %% finiteset()
 %%   @result{} ans = (sym) ∅
+%% @end group
+%% @end example
+%%
+%% Careful, passing a matrix created a set of matrices (rather than a
+%% set from the elements of the matrix):
+%% @example
+%% @group
+%% finiteset([1 x 1 1])
+%%   @result{} ans = (sym) @{[1  x  1  1]@}
+%% finiteset([1 pi], [1 x 1 1], [1 pi])
+%%   @result{} ans = (sym) @{[1  π], [1  x  1  1]@}
 %% @end group
 %% @end example
 %%
