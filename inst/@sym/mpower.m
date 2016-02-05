@@ -72,10 +72,10 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
-          'if not(x.is_Matrix and not y.is_Matrix) or Version(spver) >= Version("0.7.7.dev"):'
-          '    return x**y'
-          'else:'
+          'if x.is_Matrix and not y.is_Matrix and Version(spver) < Version("0.7.7.dev"):'
           '    return sympy.MatPow(x, y).doit()'
+          'else:'
+          '    return x**y'
         };
 
   z = python_cmd (cmd, sym(x), sym(y));
