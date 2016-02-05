@@ -18,16 +18,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} setdiff (@var{A}, @var{B})
 %% Set subtraction.
 %%
-%% @seealso{union, intersect, setxor, unique, ismember}
+%% Example:
+%% @example
+%% @group
+%% A = interval(1, sym(pi));
+%% B = interval(sym(2), 3);
+%% setdiff(A, B)
+%%   @result{} ans = (sym) [1, 2) ∪ (3, π]
+%% @end group
+%% @end example
+%%
+%% You can mix finite sets and intervals:
+%% @example
+%% @group
+%% setdiff(A, finiteset(3))
+%%   @result{} ans = (sym) [1, 3) ∪ (3, π]
+%%
+%% setdiff(A, finiteset(sym(pi)))
+%%   @result{} ans = (sym) [1, π)
+%%
+%% setdiff(finiteset(1, 2, sym(pi)), B)
+%%   @result{} ans = (sym) @{1, π@}
+%% @end group
+%% @end example
+%%
+%% @seealso{union, intersect, setxor, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function r = setdiff(a, b)
+
+  if (nargin != 2)
+    print_usage ();
+  end
 
   cmd = {
          'a, b = _ins'

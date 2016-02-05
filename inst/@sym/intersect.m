@@ -17,16 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} intersect (@var{A}, @var{B})
 %% Return the common elements of two sets.
 %%
-%% @seealso{union, setdiff, setxor, unique, ismember}
+%% Example:
+%% @example
+%% @group
+%% A = finiteset(sym(1), 2, 3);
+%% B = finiteset(sym(pi), 2);
+%% intersect(A, B)
+%%   @result{} ans = (sym) @{2@}
+%% @end group
+%% @end example
+%%
+%% The sets can also be intervals or a mixture of finite sets
+%% and intervals:
+%% @example
+%% @group
+%% C = interval(sym(2), 10);
+%% intersect(A, C)
+%%   @result{} ans = (sym) @{2, 3@}
+%%
+%% D = interval(0, sym(pi));
+%% intersect(C, D)
+%%   @result{} ans = (sym) [2, π]
+%% @end group
+%% @end example
+%%
+%% @seealso{union, setdiff, setxor, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function r = intersect(a, b)
+
+  if (nargin != 2)
+    print_usage ();
+  end
 
   cmd = {
          'a, b = _ins'

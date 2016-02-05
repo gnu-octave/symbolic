@@ -17,13 +17,32 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
 %% Return the union of elements of two sets.
 %%
-%% @seealso{intersect, setdiff, setxor, unique, ismember}
+%% Examples:
+%% @example
+%% @group
+%% A = finiteset(sym(1), sym(2));
+%% B = finiteset(sym(pi), 2);
+%% C = union(A, B)
+%%   @result{} C = (sym) @{1, 2, π@}
+%%
+%% D = interval(sym(3), 4);
+%% union(C, D)
+%%   @result{} ans = (sym) @{1, 2@} ∪ [3, 4]
+%% @end group
+%% @end example
+%%
+%% @seealso{intersect, setdiff, setxor, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 function r = union(a, b)
+
+  if (nargin != 2)
+    print_usage ();
+  end
 
   cmd = {
          'a, b = _ins'
