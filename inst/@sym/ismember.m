@@ -58,7 +58,7 @@
 
 function r = ismember(x, y)
 
-  if (nargin != 2)
+  if (nargin ~= 2)
     print_usage ();
   end
 

@@ -53,7 +53,7 @@
 
 function r = intersect(a, b)
 
-  if (nargin != 2)
+  if (nargin ~= 2)
     print_usage ();
   end
 
