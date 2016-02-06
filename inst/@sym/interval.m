@@ -45,7 +45,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{union, intersect, setdiff, unique, ismember}
+%% @seealso{finiteset, union, intersect, setdiff, unique, ismember}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
