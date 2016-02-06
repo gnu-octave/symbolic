@@ -25,12 +25,22 @@
 %% @example
 %% @group
 %% syms x
-%% unique([sym(1) 2 pi x x pi 2*sym(pi)])
+%% A = [sym(1) 2 pi x x pi 2*sym(pi)];
+%% unique(A)
 %%   @result{} ans = (sym) [1  2  π  x  2⋅π]  (1×5 matrix)
 %% @end group
 %% @end example
 %%
-%% @seealso{union, intersect, setdiff, setxor, ismember}
+%% Note the @emph{output will be a matrix}.  If instead you want a
+%% @emph{set}, try:
+%% @example
+%% @group
+%% finiteset(num2cell(A))
+%%   @result{} ans = (sym) @{1, 2, π, 2⋅π, x@}
+%% @end group
+%% @end example
+%%
+%% @seealso{union, intersect, setdiff, setxor, ismember, finiteset}
 %% @end deftypefn
 
 function r = unique(A)
