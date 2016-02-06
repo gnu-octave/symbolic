@@ -160,7 +160,7 @@ function f = function_handle(varargin)
       if (~worked)
         %% SymPy 0.7.5 has no octave_code command
         % Use a crude workaround (e.g., Abs, ceiling will fail).
-        if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75 ...
+        if ((python_cmd ('return Version(spver) <= Version("0.7.5"),')) ...
             && strcmp(codestr, 'global name ''octave_code'' is not defined'))
           warning('OctSymPy:function_handle:nocodegen', ...
                   'function_handle: your SymPy has no octave codegen: partial workaround');
@@ -261,6 +261,7 @@ end
 
 %!test
 %! % output to disk
+%! fprintf('\n')
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output1');
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);

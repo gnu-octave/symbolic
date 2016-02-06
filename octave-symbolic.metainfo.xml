@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2016 Colin B. Macdonald
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+-->
 <component type="addon">
   <id>octave-symbolic</id>
   <extends>www.octave.org-octave.desktop</extends>
   <name>Symbolic</name>
   <summary>Symbolic manipulation, calculus, variable precision arithmetic, and other computer algebra features</summary>
+  <description>
+    <p>Adds symbolic calculation features to GNU Octave.  These
+    include common Computer Algebra System tools such as algebraic
+    operations, calculus, equation solving, Fourier and Laplace
+    transforms, variable precision arithmetic and other features.
+    Compatibility with other symbolic toolboxes is intended.</p>
+  </description>
+  <keywords>
+    <keyword>symbolic computing</keyword>
+    <keyword>computer algebra system</keyword>
+    <keyword>CAS</keyword>
+    <keyword>algebraic manipulation</keyword>
+    <keyword>algebraic equation</keyword>
+    <keyword>calculus</keyword>
+    <keyword>transform</keyword>
+    <keyword>solve</keyword>
+    <keyword>variable precision arithmetic</keyword>
+    <keyword>vpa</keyword>
+    <keyword>sym</keyword>
+    <keyword>Symbolic Math Toolbox</keyword>
+  </keywords>
   <url type="homepage">http://octave.sourceforge.net/symbolic</url>
   <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
-  <metadata_license>CC0-1.0</metadata_license>
+  <translation/>
+  <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-3.0+</project_license>
-  <update_contact>octave-maintainers_AT_gnu.org</update_contact>
+  <developer_name>Octave-Forge Community</developer_name>
+  <update_contact>octave-maintainers@gnu.org</update_contact>
 </component>

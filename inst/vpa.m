@@ -71,8 +71,7 @@ function r = vpa(x, n)
         'try:'
         '    return sympy.Float(x, n),'
         'except ValueError:'
-        '    pass'
-        'return sympy.N(x, n),' };
+        '    return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (isfloat(x) && ~isreal (x))
     r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);

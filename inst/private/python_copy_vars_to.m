@@ -90,6 +90,9 @@ function a = do_list(indent, in, varlist)
       c = length(a);
       c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
 
+    elseif (ismatrix(x) && (isnumeric(x) || islogical(x)))
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(octave_array_to_python(x)));
+
     else
       i, x
       error('don''t know how to move that variable to python');
