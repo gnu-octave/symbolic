@@ -139,17 +139,16 @@ function varargout = python_cmd(cmd, varargin)
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
 
-    switch sympref('ipc')
-      case 'default'
-        if (exist('popen2') > 1)
-          errlineno = A{3} - line_error_python('get');
-        else
-          errlineno = A{3} - line_error_python('get') - (nargin - 1)*2;
-        end
-      case {'popen2', 'sysoneline'}
-        errlineno = A{3} - line_error_python('get');
-      case {'system', 'systmpfile'}
-        errlineno = A{3} - line_error_python('get') - (nargin - 1)*2;
+    ex_popen2 = exist('popen2') > 1;
+    ipc_s = sympref('ipc'); 
+    lerror = line_error_python('get');
+
+    if strcmp(ipc_s, 'popen2') || strcmp(ipc_s, 'sysoneline') || (strcmp(ipc_s, 'default') && ex_popen2)
+      errlineno = A{3} - lerror;
+    elseif strcmp(ipc_s, 'system') || strcmp(ipc_s, 'systmpfile') || (strcmp(ipc_s, 'default') && !ex_popen2)
+      errlineno = A{3} - lerror - (nargin - 1)*2;
+    else
+      error("IPC system not supported yet.");
     end
 
     error(strcat(A{2}, ' (line: ', mat2str(errlineno), ')'));
