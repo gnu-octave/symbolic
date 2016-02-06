@@ -58,6 +58,10 @@
 
 function r = ismember(x, y)
 
+  if (nargin != 2)
+    print_usage ();
+  end
+
   cmd = {
          'x, y = _ins'
          'if not isinstance(x, sp.MatrixBase):'

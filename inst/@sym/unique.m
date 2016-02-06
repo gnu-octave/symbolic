@@ -17,13 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} unique (@var{A})
 %% Return the unique elements of a symbolic matrix.
+%%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% unique([sym(1) 2 pi x x pi 2*sym(pi)])
+%%   @result{} ans = (sym) [1  2  π  x  2⋅π]  (1×5 matrix)
+%% @end group
+%% @end example
 %%
 %% @seealso{union, intersect, setdiff, setxor, ismember}
 %% @end deftypefn
 
 function r = unique(A)
+
+  if (nargin != 1)
+    print_usage ();
+  end
 
   r = python_cmd ('return sp.Matrix([list(uniq(*_ins))]),', A);
 
