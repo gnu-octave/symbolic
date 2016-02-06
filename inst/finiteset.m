@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{s} =} finiteset (@var{a}, @var{b}, @dots{})
+%% @deftypefn  {Function File}  {@var{S} =} finiteset (@var{a}, @var{b}, @dots{})
+%% @deftypefnx {Function File}  {@var{S} =} finiteset (@var{cellarray})
 %% @deftypefnx {Function File}  {@var{e} =} finiteset ()
 %% Return a set containing the inputs without duplicates.
 %%
@@ -52,12 +53,54 @@
 %% @end group
 %% @end example
 %%
+%% On the other hand, if you @emph{want} to make a set from the
+%% elements of a matrix, first convert it to a cell array:
+%% @example
+%% @group
+%% A = [1 x 1; 2 1 x];
+%% finiteset(num2cell(A))
+%%   @result{} ans = (sym) @{1, 2, x@}
+%% @end group
+%% @end example
+%%
+%% Sets can be nested:
+%% @example
+%% @group
+%% finiteset(finiteset(), finiteset(finiteset()))
+%%   @result{} (sym) @{∅, @{∅@}@}
+%% @end group
+%% @end example
+%%
+%% @strong{Note} that cell arrays are @emph{not} the same thing as
+%% sets (despite the similar rendering using @code{@{} and @code{@}}).
+%% For example, this creates a set containing a set:
+%% @example
+%% @group
+%% finiteset(finiteset(1, 2, 3, 3))
+%%   @result{} ans = (sym) @{@{1, 2, 3@}@}
+%% @end group
+%% @end example
+%% whereas passing a single cell array @var{cellarray} creates a set
+%% containing each element of @var{cellarray}:
+%% @example
+%% @group
+%% finiteset(@{1, 2, 3, 3@})
+%%   @result{} ans = (sym) @{1, 2, 3@}
+%% @end group
+%% @end example
+%% (This is implemented mainly to enable the @code{num2cell} example
+%% above.)
+%%
 %% @seealso{interval, ismember, union, intersect, setdiff, setxor}
 %% @end deftypefn
 
 function S = finiteset(varargin)
 
-  varargin = sym(varargin);
+  if (nargin == 1 && iscell(varargin{1}))
+    varargin = sym(varargin{1});
+  else
+    varargin = sym(varargin);
+  end
 
   S = python_cmd ('return FiniteSet(*_ins),', varargin{:});
 
