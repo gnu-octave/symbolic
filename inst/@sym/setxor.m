@@ -1,5 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Lagu and Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +18,41 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} setxor (@var{A}, @var{B})
 %% Return the symmetric difference of two sets.
 %%
-%% @seealso{union, intersect, setdiff, unique, ismember}
+%% Example:
+%% @example
+%% @group
+%% A = interval(2, sym(10));
+%% B = interval(0, sym(pi));
+%% setxor(A, B)
+%%   @result{} ans = (sym) [0, 2) ∪ (π, 10]
+%% @end group
+%% @end example
+%%
+%% And we note this is the same as the union of:
+%% @example
+%% @group
+%% setdiff(A, B)
+%%   @result{} ans = (sym) (π, 10]
+%% setdiff(B, A)
+%%   @result{} ans = (sym) [0, 2)
+%% @end group
+%% @end example
+%%
+%% @seealso{union, intersect, setdiff, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function r = setxor(a, b)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
   % Version(spver) >= Version("0.7.7.dev")
@@ -76,7 +101,6 @@ end
 %! A = sym([1 2]);
 %! C = setxor(A, []);
 %! assert (isequal (C, A) || isequal (C, sym([2 1])))
-
 
 %!test
 %! % scalar
