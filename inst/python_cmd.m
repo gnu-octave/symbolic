@@ -342,3 +342,12 @@ end
 %!test
 %! r = python_cmd ('return "Hi"');
 %! assert (strcmp (r, 'Hi'))
+
+%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%! python_cmd('raise NameValue', sym('x'))
+
+%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
+
+%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%! python_cmd('raise NameValue', sym({1;1;1}))
