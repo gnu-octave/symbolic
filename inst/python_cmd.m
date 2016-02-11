@@ -145,7 +145,18 @@ function varargout = python_cmd(cmd, varargin)
     if strcmp(ipc_s, 'popen2') || strcmp(ipc_s, 'sysoneline') || (strcmp(ipc_s, 'default') && ex_popen2)
       errlineno = A{3} - line_error_python('get');
     elseif strcmp(ipc_s, 'system') || strcmp(ipc_s, 'systmpfile') || (strcmp(ipc_s, 'default') && !ex_popen2)
-      errlineno = A{3} - line_error_python('get') - (nargin - 1)*2;
+
+      ex = 0;
+      for i = 1:(nargin - 1)
+        if isstruct(varargin{i})
+          ex = ex + 2*size(fieldnames(varargin{i}))(1) + 6;
+        else
+          ex = ex + 2;
+        end
+      end
+
+      errlineno = A{3} - line_error_python('get') - ex;
+
     else
       warning('IPC system not supported yet to handle the line error.');
       error(A{2});
