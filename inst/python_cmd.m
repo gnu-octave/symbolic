@@ -150,6 +150,8 @@ function varargout = python_cmd(cmd, varargin)
       for i = 1:(nargin - 1)
         if isstruct(varargin{i})
           ex = ex + 2*size(fieldnames(varargin{i}))(1) + 6;
+        elseif iscell(varargin{i})
+          ex = ex + 2*size(varargin{i})(1) + 4;
         else
           ex = ex + 2;
         end
@@ -354,11 +356,45 @@ end
 %! r = python_cmd ('return "Hi"');
 %! assert (strcmp (r, 'Hi'))
 
-%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%!shared
+%! sympref ipc popen2
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue')
+
+%!error <\(line:1\)>
 %! python_cmd('raise NameValue', sym('x'))
 
-%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%!error <\(line:1\)>
 %! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
 
-%!error <NameError: global name 'NameValue' is not defined \(line:1\)>
+%!error <\(line:1\)>
 %! python_cmd('raise NameValue', sym({1;1;1}))
+
+%!error <\(line:1\)>
+%! s.a = 1; s.b = 42; s.c = 'word';
+%! python_cmd('raise NameValue', s)
+
+%!shared
+%! assert (strcmp (sympref('ipc'), 'popen2'))
+%! sympref ipc system
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue')
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym('x'))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
+
+%!error <\(line:1\)>
+%! s.a = 1; s.b = 42; s.c = 'word';
+%! python_cmd('raise NameValue', s)
+
+%!shared
+%! assert (strcmp (sympref('ipc'), 'system'))
+%! sympref ipc default
