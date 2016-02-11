@@ -1,12 +1,17 @@
-function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
-% "out" is provided for debugging
+function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
+% Outputs:
+%   A: the resulting object.
+%   info: diagnostics to help with debugging or error reporting.
+%   info.prelines: the number of lines of header code before cmds.
+%   info.raw: the raw output.
+%   info can also be empty.
 
   persistent show_msg
 
   if (strcmp(what, 'reset'))
     show_msg = [];
     A = true;
-    out = [];
+    info = [];
     return
   end
 
@@ -32,6 +37,9 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
   %% load all the inputs into python as pickles
   s1 = python_copy_vars_to('_ins', true, varargin{:});
+
+  % the number of lines of code before the command itself
+  info.prelines = numel(strfind(headers, newl)) + numel(strfind(s1, newl));
 
   %% The actual command
   % cmd will be a snippet of python code that does something
@@ -94,3 +102,4 @@ function [A, out] = python_ipc_system(what, cmd, mktmpfile, varargin)
     error('failed to import variables to python?')
   end
   A = extractblock(out(ind(2):end));
+  info.raw = out;
