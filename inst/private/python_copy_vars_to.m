@@ -91,6 +91,11 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
 
     elseif (ismatrix(x) && (isnumeric(x) || islogical(x)))
+      % What should we do with double arrays?  Perhaps map them to numpy
+      % arrays is the most useful in general.  For now, we map them to a
+      % list-of-lists.  This could change in the future.  See also:
+      % https://github.com/cbm755/octsympy/issues/134
+      % https://github.com/cbm755/octsympy/pull/336
       c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(octave_array_to_python(x)));
 
     else
