@@ -93,9 +93,7 @@ end
 %!test
 %! % set
 %! syms x real
-%! %FIXME: replace with finiteset later
-%! %S = finiteset(2, sym(pi), x)
-%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! S = finiteset(2, sym(pi), x)
 %! assert (ismember (x, S))
 
 %!test
