@@ -155,3 +155,6 @@ end
 %! A = factor(sym(124));
 %! B = strtrim(disp(A, 'flat'));
 %! assert (strcmp (B, '2**2*31**1'))
+
+%!error [p, m] = factor(sym('x'));
+%!error [p, m] = factor(sym(42), sym('x'));
