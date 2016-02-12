@@ -372,4 +372,44 @@ end
 
 %!shared
 %! assert (strcmp (sympref('ipc'), 'system'))
+%! sympref ipc systmpfile
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue')
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym('x'))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
+
+%!error <\(line:1\)>
+%! s.a = 1; s.b = 42; s.c = 'word';
+%! python_cmd('raise NameValue', s)
+
+%!shared
+%! assert (strcmp (sympref('ipc'), 'systmpfile'))
+%! sympref ipc sysoneline
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue')
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym('x'))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
+
+%!error <\(line:1\)>
+%! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
+
+%!error <\(line:1\)>
+%! s.a = 1; s.b = 42; s.c = 'word';
+%! python_cmd('raise NameValue', s)
+
+%!shared
+%! assert (strcmp (sympref('ipc'), 'sysoneline'))
 %! sympref ipc default
