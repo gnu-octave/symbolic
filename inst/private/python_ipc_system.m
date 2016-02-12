@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_system (@dots)
+%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_system (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
