@@ -1,4 +1,6 @@
-# Part of OctSymPy.
+# Copyright (C) 2014-2016 Colin B. Macdonald
+# Free Software without warranty, GPL-3.0+: see python_header.m
+
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
 
