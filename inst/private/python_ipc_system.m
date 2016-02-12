@@ -35,10 +35,11 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
   persistent show_msg
 
+  info = [];
+
   if (strcmp(what, 'reset'))
     show_msg = [];
     A = true;
-    info = [];
     return
   end
 
