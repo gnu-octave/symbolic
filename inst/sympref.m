@@ -196,13 +196,10 @@ function varargout = sympref(cmd, arg)
       settings = [];
       settings.ipc = 'default';
       settings.whichpython = '';
-
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('snippet', 'default')
       sympref ('quiet', 'default')
-
-      line_error_python;
 
     case 'version'
       assert (nargin == 1)
@@ -281,7 +278,6 @@ function varargout = sympref(cmd, arg)
         verbose = ~sympref('quiet');
         sympref('reset')
         settings.ipc = arg;
-        line_error_python;
 
         switch arg
           case 'default'
