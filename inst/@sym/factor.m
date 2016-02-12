@@ -77,6 +77,20 @@
 %% @end group
 %% @end example
 %%
+%% Passing input @var{x} can be useful if your expression @var{f} might
+%% be a constant and you wish to avoid factoring it as an integer:
+%% @example
+%% @group
+%% f = sym(42);    % i.e., a degree-zero polynomial
+%% factor(f)       % no, don't want this
+%%   @result{} (sym)
+%%        1  1  1
+%%       2 ⋅3 ⋅7
+%% factor(f, x)
+%%   @result{} (sym) 42
+%% @end group
+%% @end example
+%%
 %% @seealso{expand}
 %% @end deftypefn
 
@@ -85,12 +99,19 @@
 
 function [p, m] = factor(f, varargin)
 
-  if (isempty (findsymbols (f)))
-    %% no symbols: we are doing integer factorization
+  if ((nargin > 1) || (~isempty (findsymbols (f))))
+    %% have symbols, do polynomial factorization
 
-    if (nargin ~= 1)
+    if (nargout > 1)
       print_usage ();
     end
+
+    cmd = { 'p = factor(*_ins)'
+            'return p,' };
+    p = python_cmd (cmd, sym(f), varargin{:});
+
+  else
+    %% no symbols: we are doing integer factorization
 
     if (nargout <= 1)
       if (~isscalar(f))
@@ -112,16 +133,6 @@ function [p, m] = factor(f, varargin)
     end
 
 
-  else
-    %% have symbols: do polynomial factorization
-
-    if (nargout > 1)
-      print_usage ();
-    end
-
-    cmd = { 'p = factor(*_ins)'
-            'return p,' };
-    p = python_cmd (cmd, sym(f), varargin{:});
   end
 end
 
@@ -159,3 +170,10 @@ end
 
 %!error [p, m] = factor(sym('x'));
 %!error [p, m] = factor(sym(42), sym('x'));
+
+%!test
+%! # if polynomial happens to be a constant, don't attempt integer
+%! # factorization if a variable is specified
+%! f = sym(42);
+%! q = factor(f, sym('x'));
+%! assert (isequal (f, q));
