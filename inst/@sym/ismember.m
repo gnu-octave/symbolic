@@ -53,7 +53,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{lookup, unique, union, intersect, setdiff, setxor}
+%% @seealso{unique, union, intersect, setdiff, setxor}
 %% @end deftypefn
 
 function r = ismember(x, y)
