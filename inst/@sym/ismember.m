@@ -92,12 +92,12 @@ end
 
 %!test
 %! % set
-%! syms x real
-%! S = finiteset(2, sym(pi), x)
+%! syms x
+%! S = finiteset(2, sym(pi), x);
 %! assert (ismember (x, S))
 
 %!test
 %! % set with positive symbol
-%! syms x positive
-%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! syms p positive
+%! S = finiteset(2, sym(pi), p);
 %! assert (~ismember (-1, S))
