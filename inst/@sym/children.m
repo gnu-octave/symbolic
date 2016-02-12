@@ -68,18 +68,9 @@
 %% @end example
 %%
 %%
-%% For sets (@pxref{finiteset}), @code{children} can be used to extract
-%% a matrix (array) containing the set elements which can then be accessed
-%% with indexing:
-%% @example
-%% @group
-%% S = finiteset(1, x+y, x-y, 2);
-%% elements = children(S)
-%%   @result{} elements = (sym) [1  2  x + y  x - y]  (1×4 matrix)
-%% elements(end)
-%%   @result{} ans = (sym) x - y
-%% @end group
-%% @end example
+%% For sets, @code{children} can be used to extract
+%% an matrix (array) containing the set elements, @pxref{finiteset}.
+%% This is useful for accessing the elements of a set.
 %%
 %% @seealso{lhs, rhs, eq, lt, finiteset}
 %% @end deftypefn
