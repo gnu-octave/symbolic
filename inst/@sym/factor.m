@@ -18,17 +18,18 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{g} =} factor (@var{f})
-%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{f})
-%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{f}, @var{x})
-%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{f}, @var{x}, @var{y}, @dots{})
+%% @deftypefn  {Function File}  {@var{e} =} factor (@var{n})
+%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{n})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x}, @var{y}, @dots{})
 %% Factor a symbolic polynomial or integer.
 %%
-%% Integers can be factored:
+%% A symbolic integer @var{n} can be factored:
 %% @example
 %% @group
-%% factor(sym(28152))
-%%   @result{} ans = (sym)
+%% e = factor(sym(28152))
+%%   @result{} e = (sym)
 %%         1  3   1  2
 %%       17 ⋅2 ⋅23 ⋅3
 %% @end group
