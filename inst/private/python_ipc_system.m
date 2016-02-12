@@ -1,4 +1,4 @@
-%% Copyright (C) 2014--2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,10 +35,11 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
   persistent show_msg
 
+  info = [];
+
   if (strcmp(what, 'reset'))
     show_msg = [];
     A = true;
-    info = [];
     return
   end
 

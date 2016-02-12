@@ -1,11 +1,45 @@
-function [A, out] = python_ipc_popen2(what, cmd, varargin)
-% "out" provided for debugging
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_popen2 (@dots{})
+%% Private helper function for Python IPC.
+%%
+%% @var{A} is the resulting object, which might be an error code.
+%%
+%% @var{info} usually contains diagnostics to help with debugging
+%% or error reporting.
+%%
+%% @code{@var{info}.prelines}: the number of lines of header code
+%% before the command starts.
+%%
+%% @code{@var{info}.raw}: the raw output, for debugging.
+%% @end deftypefn
+
+function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
   persistent fin fout pid
 
   py_startup_timeout = 30;  % seconds
 
   verbose = ~sympref('quiet');
+
+  info = [];
 
   if (strcmp(what, 'reset'))
     if (~isempty(pid))
@@ -25,7 +59,6 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       t = fclose(fout); fout = [];
       A = A && (t == 0);
     end
-    out = [];
     return
   end
 
@@ -123,6 +156,10 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
     error('ipc_popen2: failed to send variables to python?')
   end
 
+  % The number of lines of code before the command itself: because
+  % we send variables before, this is always zero.
+  info.prelines = 0;
+
   %% The actual command
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
@@ -142,3 +179,4 @@ function [A, out] = python_ipc_popen2(what, cmd, varargin)
       'ipc_popen2: cmd error? read block returned error');
   end
   A = extractblock(out);
+  info.raw = out;
