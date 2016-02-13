@@ -17,11 +17,44 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} isinf (@var{x})
 %% Return true if a symbolic expression is infinite.
 %%
-%% FIXME: Sympy returns "none" for isinf(x + oo), perhaps we should
-%% say "I don't know" in some cases too.  SMT seems to always decide...
+%% Example:
+%% @example
+%% @group
+%% syms x finite
+%% A = [sym(inf) sym(1)/0 1; x 1 sym(inf)]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡∞  zoo  1⎤
+%%       ⎢         ⎥
+%%       ⎣x   1   ∞⎦
+%% isinf(A)
+%%   @result{} ans =
+%%        1   1   0
+%%        0   0   1
+%% @end group
+%% @end example
+%%
+%% Note that the return is of type logical and thus either true or false.
+%% However, the underlying SymPy software supports @code{True/False/None}
+%% answers, where @code{None} indicates an unknown or indeterminate result.
+%% Consider the example:
+%% @example
+%% @group
+%% syms x
+%% isinf(x)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%% Here SymPy would have said @code{None} as it does not know whether
+%% x is finite or not.  However, currently @code{isinf} returns
+%% false, which perhaps should be interpreted as "x cannot be shown to
+%% be infinite" (as opposed to "x is not infinite").
+%%
+%% FIXME: this is behaviour might change in a future version; come
+%% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.
 %%
 %% @seealso{isnan, double}
 %% @end deftypefn
