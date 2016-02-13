@@ -70,7 +70,7 @@ function r = has(f, x)
     print_usage ();
   end
 
-  r = uniop_bool_helper(f, 'lambda f,x: f.has(x)', [], x);
+  r = uniop_bool_helper(sym(f), 'lambda f,x: f.has(x)', [], sym(x));
 
 end
 
