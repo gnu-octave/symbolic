@@ -116,7 +116,7 @@ function varargout = python_cmd(cmd, varargin)
 
   % Careful: fix this constant if you change the code below.
   % Test with "python_cmd('raise')" which should say "line 1".
-  LinesBeforeCmdBlock = 4;
+  LinesBeforeCmdBlock = 3;
 
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
@@ -138,7 +138,7 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
+    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock - 1;
     error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
   end
 
