@@ -278,6 +278,7 @@ function varargout = sympref(cmd, arg)
         verbose = ~sympref('quiet');
         sympref('reset')
         settings.ipc = arg;
+
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] octsympy communication mechanism';
