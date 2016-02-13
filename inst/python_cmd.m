@@ -139,7 +139,7 @@ function varargout = python_cmd(cmd, varargin)
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-    error(strcat(A{2}, ' (line: ', mat2str(errlineno), ')'));
+    error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
   end
 
   M = length(A);
@@ -334,19 +334,19 @@ end
 %!shared
 %! sympref ipc popen2
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue')
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym('x'))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym({1;1;1}))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! s.a = 1; s.b = 42; s.c = 'word';
 %! python_cmd('raise NameValue', s)
 
@@ -354,19 +354,19 @@ end
 %! assert (strcmp (sympref('ipc'), 'popen2'))
 %! sympref ipc system
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue')
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym('x'))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! s.a = 1; s.b = 42; s.c = 'word';
 %! python_cmd('raise NameValue', s)
 
@@ -374,19 +374,19 @@ end
 %! assert (strcmp (sympref('ipc'), 'system'))
 %! sympref ipc systmpfile
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue')
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym('x'))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! s.a = 1; s.b = 42; s.c = 'word';
 %! python_cmd('raise NameValue', s)
 
@@ -394,19 +394,19 @@ end
 %! assert (strcmp (sympref('ipc'), 'systmpfile'))
 %! sympref ipc sysoneline
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue')
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym('x'))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym([1 2 3;4 5 6;7 8 9]))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! python_cmd('raise NameValue', sym({1;1;1}), sym({1;1;1}))
 
-%!error <\(line:1\)>
+%!error <line 1>
 %! s.a = 1; s.b = 42; s.c = 'word';
 %! python_cmd('raise NameValue', s)
 
