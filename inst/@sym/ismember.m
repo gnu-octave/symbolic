@@ -46,7 +46,7 @@
 %% @example
 %% @group
 %% A = [sym(3), 4 2; sym(1) 0 1];
-%% ismember(A, B)                       % doctest: +XFAIL
+%% ismember(A, B)
 %%   @result{} ans =
 %%        0   1   1
 %%        1   0   1
@@ -62,19 +62,7 @@ function r = ismember(x, y)
     print_usage ();
   end
 
-  cmd = {
-         'x, y = _ins'
-         'if not isinstance(x, sp.MatrixBase):'
-         '    return x in y,'
-         'elif len(x) == 1:'
-         '    return x in y,'
-         'for i, b in enumerate(x):'
-         '    x[i] = b in y'
-         'return x,'
-        };
-
-  r = python_cmd (cmd, sym(x), sym(y));
-  %r = logical(r);
+  r = uniop_bool_helper(sym(x), 'lambda x,y: x in y', [], sym(y));
 
 end
 

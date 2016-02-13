@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,40 +29,22 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-
 function r = isinf(x)
 
-  % FIXME: port to uniop_helper, how to return bools then?
-
-  if isscalar(x)
-
-    cmd = { 'd = _ins[0]'
-            'if Version(spver) < Version("0.7.6"):'
-            '    d = d.is_unbounded'
-            'else:'
-            '    d = d.is_infinite'
-            'if d == True:'
-            '    return True,'
-            'elif d == False:'
-            '    return False,'
-            'else:'
-            '    return False,' };
-
-    r = python_cmd (cmd, x);
-
-    if (~ islogical(r))
-      error('nonboolean return from python');
-    end
-
-  else  % array
-    r = logical(zeros(size(x)));
-    for j = 1:numel(x)
-      % Bug #17
-      idx.type = '()';
-      idx.subs = {j};
-      r(j) = isinf(subsref(x, idx));
-    end
+  if (nargin ~= 1)
+    print_usage ();
   end
+
+  % When we drop 0.7.5 support:
+  %r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
+
+  sf = { 'def sf(x):'
+         '    if Version(spver) < Version("0.7.6"):'
+         '        return x.is_unbounded'
+         '    else:'
+         '        return x.is_infinite' };
+
+  r = uniop_bool_helper(x, sf);
 
 end
 
