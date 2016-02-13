@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,45 +24,55 @@
 %% For a scalar expression, return a row vector of sym expressions:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = 2*x*y + sin(x);
-%% >> C = children(f)
-%%    @result{} C = (sym) [2⋅x⋅y  sin(x)]  (1×2 matrix)
+%% syms x y
+%% f = 2*x*y + sin(x);
+%% C = children(f)
+%%   @result{} C = (sym) [2⋅x⋅y  sin(x)]  (1×2 matrix)
 %%
-%% >> children(C(1))
-%%    @result{} ans = (sym) [2  x  y]  (1×3 matrix)
-%% >> children(C(2))
-%%    @result{} ans = (sym) x
+%% children(C(1))
+%%   @result{} ans = (sym) [2  x  y]  (1×3 matrix)
+%% children(C(2))
+%%   @result{} ans = (sym) x
 %% @end group
 %% @end example
 %%
+%% A symbol/number/boolean has itself as children:
+%% @example
+%% @group
+%% children(x)
+%%   @result{} ans = (sym) x
+%% @end group
+%% @end example
 %%
 %% For matrices/vectors, return a cell array where each entry is
 %% a row vector.  The cell array is the same shape as the input.
 %% @example
 %% @group
-%% >> A = [x*y 2; 3 x]
-%%    @result{} A = (sym 2×2 matrix)
-%%        ⎡x⋅y  2⎤
-%%        ⎢      ⎥
-%%        ⎣ 3   x⎦
-%% >> children(A)
-%%    @result{} ans =
-%%      @{
-%%      (sym) [x  y]  (1×2 matrix)
-%%      (sym) 3
-%%      (sym) 2
-%%      (sym) x
-%%      @}
-%% >> size(children(A))
-%%    @result{} ans =
-%%         2   2
+%% A = [x*y 2; 3 x]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡x⋅y  2⎤
+%%       ⎢      ⎥
+%%       ⎣ 3   x⎦
+%% children(A)
+%%   @result{} ans =
+%%     @{
+%%     (sym) [x  y]  (1×2 matrix)
+%%     (sym) 3
+%%     (sym) 2
+%%     (sym) x
+%%     @}
+%% size(children(A))
+%%   @result{} ans =
+%%        2   2
 %% @end group
 %% @end example
 %%
-%% A symbol/number/boolean has itself as children.
 %%
-%% @seealso{lhs, rhs}
+%% For sets, @code{children} can be used to extract
+%% an matrix (array) containing the set elements, @pxref{finiteset}.
+%% This is useful for accessing the elements of a set.
+%%
+%% @seealso{lhs, rhs, eq, lt, finiteset}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

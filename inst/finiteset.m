@@ -26,11 +26,11 @@
 %% Example:
 %% @example
 %% @group
-%% syms x
-%% S = finiteset(1, pi, x, 1, 1, x)
-%%   @result{} S = (sym) @{1, π, x@}
+%% syms x y
+%% S = finiteset(1, pi, x, 1, 1, x, x + y)
+%%   @result{} S = (sym) @{1, π, x, x + y@}
 %% subs(S, x, pi)
-%%   @result{} ans = (sym) @{1, π@}
+%%   @result{} ans = (sym) @{1, π, y + π@}
 %% @end group
 %% @end example
 %%
@@ -39,6 +39,23 @@
 %% @group
 %% finiteset()
 %%   @result{} ans = (sym) ∅
+%% @end group
+%% @end example
+%%
+%% You cannot directly access elements of a set using indexing:
+%% @example
+%% @group
+%% S(2)
+%%   @print{} ??? ind2sub: index out of range
+%% @end group
+%% @end example
+%% Instead you can first convert it to a cell (@pxref{children}):
+%% @example
+%% @group
+%% elements = children(S)
+%%   @result{} elements = (sym) [1  π  x  x + y]  (1×4 matrix)
+%% elements(end)
+%%   @result{} ans = (sym) x + y
 %% @end group
 %% @end example
 %%
@@ -91,7 +108,7 @@
 %% (This is implemented mainly to enable the @code{num2cell} example
 %% above.)
 %%
-%% @seealso{interval, ismember, union, intersect, setdiff, setxor}
+%% @seealso{interval, ismember, children, union, intersect, setdiff, setxor}
 %% @end deftypefn
 
 function S = finiteset(varargin)

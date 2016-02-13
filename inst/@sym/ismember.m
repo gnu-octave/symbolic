@@ -53,7 +53,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{lookup, unique, union, intersect, setdiff, setxor}
+%% @seealso{unique, union, intersect, setdiff, setxor}
 %% @end deftypefn
 
 function r = ismember(x, y)
@@ -92,14 +92,12 @@ end
 
 %!test
 %! % set
-%! syms x real
-%! %FIXME: replace with finiteset later
-%! %S = finiteset(2, sym(pi), x)
-%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! syms x
+%! S = finiteset(2, sym(pi), x);
 %! assert (ismember (x, S))
 
 %!test
 %! % set with positive symbol
-%! syms x positive
-%! S = interval(sym(2),2) + interval(sym(pi),pi) + interval(x,x);
+%! syms p positive
+%! S = finiteset(2, sym(pi), p);
 %! assert (~ismember (-1, S))

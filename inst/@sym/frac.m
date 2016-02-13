@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} fix (@var{x})
+%% @deftypefn  {Function File} {@var{y} =} frac (@var{x})
 %% Return the fractional part of a symbolic expression.
 %%
 %% Examples:
