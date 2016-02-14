@@ -33,13 +33,13 @@ function h = vertcat(varargin)
   cmd = {
           '_proc = []'
           'for i in _ins:'
-          '    if i.is_Matrix:'
+          '    if i is None or not i.is_Matrix:'
+          '        _proc.append(sp.Matrix([[i]]))'
+          '    else:'
           '        if i.shape == (0, 0):'
           '            pass'
           '        else:'
           '            _proc.append(i)'
-          '    else:'
-          '        _proc.append(sp.Matrix([[i]]))'
           'return sp.Matrix.vstack(*_proc),'
           };
 
