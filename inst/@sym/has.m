@@ -70,13 +70,7 @@ function r = has(f, x)
     print_usage ();
   end
 
-  r = binop_helper(f, x, 'lambda f, x: f.has(x)');
-
-  % A misguided attempt to make has smarter for Sets:
-  %r = binop_helper(f, x, 'lambda f, x: x in f if isinstance(f, sp.Set) else f.has(x)');
-
-  % FIXME: See #326
-  r = logical(r);
+  r = uniop_bool_helper(sym(f), 'lambda f,x: f.has(x)', [], sym(x));
 
 end
 

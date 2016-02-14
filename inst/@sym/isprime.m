@@ -49,7 +49,9 @@
 
 function z = isprime(x)
 
+  % this will give True/False/None
   %z = uniop_helper(x, 'lambda x: x.is_prime');
+  %z = uniop_bool_helper(x, 'lambda x: x.is_prime', 'sym');
 
   sf = { 'def sf(x):'
          '    r = x.is_prime'
@@ -57,9 +59,7 @@ function z = isprime(x)
          '        raise AttributeError("isprime: cannot determine if input is prime")'
          '    return r' };
 
-  z = uniop_helper(x, sf);
-
-  z = logical(z);
+  z = uniop_bool_helper(x, sf);
 
 end
 
