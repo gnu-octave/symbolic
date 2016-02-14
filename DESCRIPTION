@@ -15,4 +15,4 @@ Url: http://github.com/cbm755/octsympy
 Depends: octave (>= 3.8)
 SystemRequirements: python, sympy (>= 0.7.5)
 BuildRequires: python, sympy (>= 0.7.5)
-License: GPLv3+
+License: GPL-3.0+
