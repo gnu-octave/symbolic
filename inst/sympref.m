@@ -357,16 +357,45 @@ end
 %! a = sympref('quiet');
 %! assert(a == 1)
 
+%% Test for correct line numbers in Python exceptions.  These first tests
+%% happen with the default ipc---usually popen2.  We don't explicitly test
+%% popen2 because test suite should be portable.
+%!error <line 1> python_cmd('raise ValueError');
+%!error <line 1> python_cmd('raise ValueError', sym('x'));
+%!error <line 1> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <line 1> python_cmd('raise ValueError', {1; 1; 1});
+%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <line 2> python_cmd( {'x = 1' 'raise ValueError'} );
+%!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
+
+
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
 %! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
 %! syms x
 
+%!error <line 1> python_cmd('raise ValueError')
+%!error <line 1> python_cmd('raise ValueError', sym('x'))
+%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+
+
 %!test
 %! % sysoneline should work on all systems
 %! sympref('ipc', 'sysoneline');
 %! syms x
+
+%!error <line 1> python_cmd('raise ValueError')
+%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+
+
+%!test
+%! sympref('ipc', 'systmpfile');
+%! syms x
+
+%!error <line 1> python_cmd('raise ValueError')
+%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+
 
 %!test
 %! sympref('defaults')
