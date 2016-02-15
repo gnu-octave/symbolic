@@ -12,6 +12,7 @@ import sympy as sp
 input_list = """exp
 log
 sqrt|||exp(x)
+cbrt
 abs|Abs|-1
 floor
 ceil|ceiling|3/2
