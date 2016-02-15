@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,11 +30,11 @@
 %% Example:
 %% @example
 %% @group
-%% >> x = 10; y = 2;
-%% >> cmd = '(x,y) = _ins; return (x+y,x-y)';
-%% >> [a, b] = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%%    @result{} b =  8
+%% x = 10; y = 2;
+%% cmd = '(x, y) = _ins; return (x+y, x-y)';
+%% [a, b] = python_cmd (cmd, x, y)
+%%   @result{} a =  12
+%%   @result{} b =  8
 %% @end group
 %% @end example
 %%
@@ -43,9 +43,27 @@
 %% @code{_outs}:
 %% @example
 %% @group
-%% >> cmd = '(x,y) = _ins; _outs.append(x**y)';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  100
+%% cmd = '(x, y) = _ins; _outs.append(x**y)';
+%% a = python_cmd (cmd, x, y)
+%%   @result{} a =  100
+%% @end group
+%% @end example
+%%
+%% If you want to return a list, one way to to append a comma
+%% to the return command.  Compare these two examples:
+%% @example
+%% @group
+%% L = python_cmd ('return [1, -3.4, "python"],')
+%%   @result{} L =
+%%     @{
+%%       [1,1] =  1
+%%       [1,2] = -3.4000
+%%       [1,3] = python
+%%     @}
+%% [a, b, c] = python_cmd ('return [1, -3.4, "python"]')
+%%   @result{} a =  1
+%%   @result{} b = -3.4000
+%%   @result{} c = python
 %% @end group
 %% @end example
 %%
@@ -53,11 +71,11 @@
 %% with whitespace: its Python!
 %% @example
 %% @group
-%% >> cmd = @{ '(x,) = _ins'
-%% ..         'if x.is_Matrix:'
-%% ..         '    return (x.T,)'
-%% ..         'else:'
-%% ..         '    return (x,)' @};
+%% cmd = @{ '(x,) = _ins'
+%%         'if x.is_Matrix:'
+%%         '    return x.T'
+%%         'else:'
+%%         '    return x' @};
 %% @end group
 %% @end example
 %% The cell array can be either a row or a column vector.
@@ -73,13 +91,14 @@
 %% @item sym objects
 %% @item strings (char)
 %% @item scalar doubles
+%% @item structs
 %% @end itemize
 %% They can also be cell arrays of these items.  Multi-D cell
 %% arrays may not work properly.
 %%
 %% Possible output types:
 %% @itemize
-%% @item SymPy objects (Matrix and Expr at least)
+%% @item SymPy objects
 %% @item int
 %% @item float
 %% @item string
