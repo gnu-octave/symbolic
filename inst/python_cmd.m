@@ -355,8 +355,8 @@ end
 %! assert (strcmp (r, 'Hi'))
 
 %!test
-%! % blank lines
-%! a = python_cmd({ '', '#', '', '#   ', '     #', '  #', 'return 6'});
+%! % blank lines, lines with spaces
+%! a = python_cmd({ '', '', '     ', 'return 6', '   ', ''});
 %! assert (isequal (a, 6))
 
 %!test
