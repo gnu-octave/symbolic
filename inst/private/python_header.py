@@ -11,16 +11,12 @@ import sys
 sys.ps1 = ""; sys.ps2 = ""
 
 
-def myerr(e):
-    # hardcoded in case no xml
-    print("<output_block>")
-    print("<item>\n<f>9999</f>\n<f>")
-    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f><f>")
-    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f>\n</item>")
-    print("</output_block>\n")
-
+def myerr(error, vital=0):
+    if vital:
+        raise
+    else:
+        octoutput_drv(("INTERNAL_PYTHON_ERROR", error))
+        raise
 
 try:
     import sympy
@@ -42,8 +38,7 @@ try:
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
 except:
-    myerr(sys.exc_info())
-    raise
+    myerr("Python Header: Error doing imports (perhaps no SymPy?)", 1)
 
 
 try:
@@ -69,8 +64,7 @@ try:
         # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
 except:
-    myerr(sys.exc_info())
-    raise
+    myerr("Python Header: Error setting functions, block 1", 1)
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
@@ -141,9 +135,7 @@ else:
             """return expr in repr form w/ assumptions listed"""
             return _ReprPrinter_w_asm(settings).doprint(expr)
     except:
-        myerr(sys.exc_info())
-        raise
-
+        myerr("Python Header: Error setting functions, block 2", 1)
 
 
 try:
@@ -169,8 +161,7 @@ try:
         else:
             print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
-    myerr(sys.exc_info())
-    raise
+    myerr("Python Header: Error setting functions, block 3", 1)
 
 
 try:
@@ -264,8 +255,8 @@ try:
             dbout("type: " + str(type(x)))
             octoutput("python does not know how to export type " + str(type(x)), et)
 except:
-    myerr(sys.exc_info())
-    raise
+    myerr("Python Header: Error setting functions, block 4", 1)
+
 # end of python header, now couple blank lines
 
 
