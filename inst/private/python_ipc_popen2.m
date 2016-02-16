@@ -161,14 +161,14 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   info.prelines = 0;
 
   % code for output, or perhaps a thrown error
-  s2 = python_copy_vars_from('_outs')
+  output_code = python_copy_vars_from('_outs');
 
   % cmd is a snippet of python code, does something with _ins and
   % produce _outs.  If an exception occurs, it should be caught and
   % stored in _outs.
   write_lines(fin, cmd, true)
 
-  write_lines(fin, s2, true)
+  write_lines(fin, output_code, true)
 
   fflush(fin);
   [out, err] = readblock(fout, inf);
