@@ -160,7 +160,7 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock - 1;
+    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock - 2;
     error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
   end
 
