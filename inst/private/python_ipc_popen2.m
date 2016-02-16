@@ -160,17 +160,15 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   % we send variables before, this is always zero.
   info.prelines = 0;
 
-  %% The actual command
-  % cmd will be a snippet of python code that does something
-  % with _ins and produce _outs.
-  s = python_format_cmd(cmd);
+  % code for output, or perhaps a thrown error
+  output_code = python_copy_vars_from('_outs');
 
+  % cmd is a snippet of python code, does something with _ins and
+  % produce _outs.  If an exception occurs, it should be caught and
+  % stored in _outs.
+  write_lines(fin, cmd, true)
 
-  %% output, or perhaps a thrown error
-  s2 = python_copy_vars_from('_outs');
-
-  write_lines(fin, s, true)
-  write_lines(fin, s2, true)
+  write_lines(fin, output_code, true)
 
   fflush(fin);
   [out, err] = readblock(fout, inf);

@@ -88,8 +88,7 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   %% The actual command
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
-  s = python_format_cmd(cmd);
-  s = myesc(s);
+  s = myesc(cmd);
   s = strjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];
 

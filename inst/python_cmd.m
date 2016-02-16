@@ -137,18 +137,22 @@ function varargout = python_cmd(cmd, varargin)
   % Test with "python_cmd('raise')" which should say "line 1".
   LinesBeforeCmdBlock = 3;
 
+  % replace blank lines w/ empty comments (unnec. b/c of try:?)
+  %I = cellfun(@isempty, cmd);
+  %cmd(I) = repmat({'#'}, 1, nnz(I));
+
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
           '    _outs = []' ...
           '    try:' ...
           cmd{:} ...
-          '        return _outs' ...
           '    except Exception as e:' ...
-          '        exc_type, exc_obj, tb = sys.exc_info()' ...
           '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
-          '        return ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
+          '        _outs = ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
+          '    return _outs' ...
+          '' ...
           '_outs = _fcn(_ins)'
-         };
+        };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
@@ -157,7 +161,7 @@ function varargout = python_cmd(cmd, varargin)
   end
 
   if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock - 1;
+    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
     error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
   end
 
@@ -349,3 +353,14 @@ end
 %!test
 %! r = python_cmd ('return "Hi"');
 %! assert (strcmp (r, 'Hi'))
+
+%!test
+%! % blank lines, lines with spaces
+%! a = python_cmd({ '', '', '     ', 'return 6', '   ', ''});
+%! assert (isequal (a, 6))
+
+%!test
+%! % blank lines, strange comment lines
+%! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
+%! a = python_cmd(cmd);
+%! assert (isequal (a, 3))

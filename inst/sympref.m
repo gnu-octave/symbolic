@@ -367,6 +367,7 @@ end
 %!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
 %!error <line 2> python_cmd( {'x = 1' 'raise ValueError'} );
 %!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
+%!error <line 3> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 
 %!test
