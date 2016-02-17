@@ -162,7 +162,7 @@ function varargout = python_cmd(cmd, varargin)
 
   switch A{1}
     case 'COMMAND_ERROR_PYTHON'
-      errlineno = A{3} - db.prelines - LinesBeforeCmdBlock - 1;
+      errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
       error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
     case 'INTERNAL_PYTHON_ERROR'
       error(sprintf('Internal problem in Octsympy.\n%s', A{2}));
