@@ -367,3 +367,14 @@ end
 %! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
+
+%!error <failed to>
+%! % python exception while passing variables to python
+%! % FIXME: this is a very specialized test, relies on internal octsympy
+%! % implementation details, and may need to be adjusted for changes.
+%! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
+%! c = b + 1;
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))
