@@ -160,12 +160,13 @@ function varargout = python_cmd(cmd, varargin)
     A={A};
   end
 
-  switch A{1}
-    case 'COMMAND_ERROR_PYTHON'
-      errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-      error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
-    case 'INTERNAL_PYTHON_ERROR'
-      error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
+  %% Error reporting
+  % ipc drivers are supposed to give back these specially formatting error strings
+  if (ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
+    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
+  elseif (ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
   M = length(A);
