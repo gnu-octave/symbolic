@@ -264,6 +264,6 @@ except:
     raise
 
 
-# end of python header, now couple blank lines, remember enumerate the try blocks for myerr.
+# end of python header, now couple blank lines
 
 
