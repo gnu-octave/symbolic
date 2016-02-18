@@ -11,12 +11,16 @@ import sys
 sys.ps1 = ""; sys.ps2 = ""
 
 
-def myerr(error):
-    try:
-        octoutput_drv(("INTERNAL_PYTHON_ERROR", error))
-    except:
-        pass
-    raise
+def echo_exception_stdout(mystr):
+    exception_str = sys.exc_info()[0].__name__ + ": " + str(sys.exc_info()[1])
+    # hardcode xml, we may not have imports yet.  1003 is code for string.
+    print("<output_block>\n<list>")
+    print("<item>\n<f>1003</f>\n<f>INTERNAL_PYTHON_ERROR</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + mystr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + exception_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("</list>\n</output_block>\n")
 
 try:
     import sympy
@@ -38,7 +42,8 @@ try:
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
 except:
-    myerr("Python Header: Error doing imports (perhaps no SymPy?)")
+    echo_exception_stdout("in python_header import block")
+    raise
 
 
 try:
@@ -64,7 +69,8 @@ try:
         # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
 except:
-    myerr("Python Header: Error setting functions, block 1")
+    echo_exception_stdout("in python_header defining fcns block 1")
+    raise
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
@@ -135,7 +141,8 @@ else:
             """return expr in repr form w/ assumptions listed"""
             return _ReprPrinter_w_asm(settings).doprint(expr)
     except:
-        myerr("Python Header: Error setting functions, block 2")
+        echo_exception_stdout("in python_header defining fcns block 2")
+        raise
 
 
 try:
@@ -161,7 +168,8 @@ try:
         else:
             print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
-    myerr("Python Header: Error setting functions, block 3")
+    echo_exception_stdout("in python_header defining fcns block 3")
+    raise
 
 
 try:
@@ -252,7 +260,9 @@ try:
         else:
             raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
-    myerr("Python Header: Error setting functions, block 4")
+    echo_exception_stdout("in python_header defining fcns block 4")
+    raise
+
 
 # end of python header, now couple blank lines, remember enumerate the try blocks for myerr.
 
