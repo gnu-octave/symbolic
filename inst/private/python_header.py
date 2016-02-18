@@ -250,10 +250,7 @@ try:
             else:
                 octoutput(x.values(), c)
         else:
-            dbout("error exporting variable:")
-            dbout("x: " + str(x))
-            dbout("type: " + str(type(x)))
-            octoutput("python does not know how to export type " + str(type(x)), et)
+            raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
     myerr("Python Header: Error setting functions, block 4")
 
