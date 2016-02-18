@@ -163,7 +163,7 @@ function varargout = python_cmd(cmd, varargin)
   switch A{1}
     case 'COMMAND_ERROR_PYTHON'
       errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-      error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
+      error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
     case 'INTERNAL_PYTHON_ERROR'
       error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
