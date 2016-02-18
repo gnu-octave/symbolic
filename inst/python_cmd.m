@@ -368,7 +368,7 @@ end
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
 
-%!error <failed to>
+%!error <AttributeError>
 %! % python exception while passing variables to python
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
