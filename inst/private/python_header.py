@@ -262,8 +262,6 @@ try:
 except:
     echo_exception_stdout("in python_header defining fcns block 4")
     raise
-
-
 # end of python header, now couple blank lines
 
 
