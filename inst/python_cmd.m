@@ -379,3 +379,10 @@ end
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
+
+%!error <octoutput does not know how to export type>
+%! python_cmd({'return type(int)'});
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))
