@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,44 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} isinf (@var{x})
 %% Return true if a symbolic expression is infinite.
 %%
-%% FIXME: Sympy returns "none" for isinf(x + oo), perhaps we should
-%% say "I don't know" in some cases too.  SMT seems to always decide...
+%% Example:
+%% @example
+%% @group
+%% syms x finite
+%% A = [sym(inf) sym(1)/0 1; x 1 sym(inf)]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡∞  zoo  1⎤
+%%       ⎢         ⎥
+%%       ⎣x   1   ∞⎦
+%% isinf(A)
+%%   @result{} ans =
+%%        1   1   0
+%%        0   0   1
+%% @end group
+%% @end example
+%%
+%% Note that the return is of type logical and thus either true or false.
+%% However, the underlying SymPy software supports @code{True/False/None}
+%% answers, where @code{None} indicates an unknown or indeterminate result.
+%% Consider the example:
+%% @example
+%% @group
+%% syms x
+%% isinf(x)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%% Here SymPy would have said @code{None} as it does not know whether
+%% x is finite or not.  However, currently @code{isinf} returns
+%% false, which perhaps should be interpreted as "x cannot be shown to
+%% be infinite" (as opposed to "x is not infinite").
+%%
+%% FIXME: this is behaviour might change in a future version; come
+%% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.
 %%
 %% @seealso{isnan, double}
 %% @end deftypefn
@@ -29,37 +62,13 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-
 function r = isinf(x)
 
-  % FIXME: port to uniop_helper, how to return bools then?
-
-  if isscalar(x)
-
-    cmd = { 'd = _ins[0]'
-            'd = d.is_infinite'
-            'if d == True:'
-            '    return True,'
-            'elif d == False:'
-            '    return False,'
-            'else:'
-            '    return False,' };
-
-    r = python_cmd (cmd, x);
-
-    if (~ islogical(r))
-      error('nonboolean return from python');
-    end
-
-  else  % array
-    r = logical(zeros(size(x)));
-    for j = 1:numel(x)
-      % Bug #17
-      idx.type = '()';
-      idx.subs = {j};
-      r(j) = isinf(subsref(x, idx));
-    end
+  if (nargin ~= 1)
+    print_usage ();
   end
+
+  r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
 
 end
 

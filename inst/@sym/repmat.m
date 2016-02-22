@@ -17,8 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{B} =} repmat (@var{A}, @var{n}, @var{m})
 %% Build symbolic block matrices.
+%%
+%% Example:
+%% @example
+%% @group
+%% repmat([1 2 sym(pi)], 2, 3)
+%%   @result{} (sym 2×9 matrix)
+%%       ⎡1  2  π  1  2  π  1  2  π⎤
+%%       ⎢                         ⎥
+%%       ⎣1  2  π  1  2  π  1  2  π⎦
+%% @end group
+%% @end example
 %%
 %% @seealso{vertcat, horzcat}
 %% @end deftypefn
@@ -28,6 +40,10 @@
 
 
 function B = repmat(A, n, m)
+
+  if (nargin ~= 3)
+    print_usage ();
+  end
 
   cmd = { '(A,n,m) = _ins' ...
           'if not A.is_Matrix:' ...

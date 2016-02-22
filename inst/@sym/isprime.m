@@ -32,6 +32,15 @@
 %% @end group
 %% @end example
 %%
+%% Example:
+%% @example
+%% @group
+%% syms q negative
+%% isprime(q)
+%%   @result{} ans =  0
+%% @end group
+%% @end example
+%%
 %% @seealso{nextprime}
 %% @end deftypefn
 
@@ -40,29 +49,17 @@
 
 function z = isprime(x)
 
-  %sf = { 'def sf(x):' '    return x.is_prime' };
-
-  % could just call uniop_helper but this way we can catch the errors
+  % this will give True/False/None
+  %z = uniop_helper(x, 'lambda x: x.is_prime');
+  %z = uniop_bool_helper(x, 'lambda x: x.is_prime', 'sym');
 
   sf = { 'def sf(x):'
-         '    if not x.is_integer or not x.is_nonnegative:'
-         '        raise NameError("isprime: input must be nonnegative integer")'
          '    r = x.is_prime'
          '    if r is None:'
-         '        raise NameError("isprime: cannot determine if input is prime")'
+         '        raise AttributeError("isprime: cannot determine if input is prime")'
          '    return r' };
 
-  cmd = { sf{:} ...
-          '(x,) = _ins' ...
-          'if x.is_Matrix:' ...
-          '    return x.applyfunc(lambda a: sf(a)),' ...
-          'else:' ...
-          '    return sf(x),'
-        };
-
-  z = python_cmd (cmd, x);
-
-  z = logical(z);
+  z = uniop_bool_helper(x, sf);
 
 end
 
@@ -76,11 +73,9 @@ end
 %! a = [5 7 6; 1 2 337];
 %! assert (isequal (isprime (a), [true true false; false true true]))
 
-%!error <must be nonnegative> isprime(sym(-4))
-%!error <must be nonnegative> isprime(sym(4i))
-%!error <must be nonnegative> isprime(sym(3)/5)
-%!error <must be nonnegative> isprime(sym('x'))
+%!assert (~isprime(sym(-4)))
+%!assert (~isprime(sym(4i)))
+%!assert (~isprime(sym(3)/5))
+
 %!error <cannot determine>
-%! syms x positive
-%! x = assumeAlso(x, 'integer');
-%! isprime(x)
+%! isprime(sym('x'));

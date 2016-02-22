@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{a} =} atan2 (@var{x}, @var{y})
 %% Symbolic atan2 function, return angle from a point.
+%%
+%% Examples:
+%% @example
+%% @group
+%% atan2(sym(1),1)
+%%   @result{} (sym)
+%%       π
+%%       ─
+%%       4
+%% atan2(0, sym(-1))
+%%   @result{} (sym) π
+%% @end group
+%% @end example
 %%
 %% @end deftypefn
 

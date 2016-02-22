@@ -134,7 +134,7 @@ end
 %!test
 %! % mismatch
 %! syms x y
-%! fprintf('\n*** One warning expected ***\n')  % how to quiet this one?
+%! fprintf('\n  one warning expected\n')  % how to quiet this one?
 %! A = toeplitz([10 2], [1 3 5]);
 %! s = warning ('off', 'OctSymPy:toeplitz:diagconflict');
 %! B = toeplitz([10 x], [1 3 y]);

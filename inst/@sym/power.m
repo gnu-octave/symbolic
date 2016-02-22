@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,43 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} power (@var{x}, @var{y})
 %% Symbolic expression componentwise exponentiation (dot carat).
 %%
+%% The @code{.^} notation can be used to raise each @emph{element}
+%% of a matrix to a power:
+%% @example
+%% @group
+%% syms x
+%% A = [sym(pi) 2; 3 x]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡π  2⎤
+%%       ⎢    ⎥
+%%       ⎣3  x⎦
+%% A.^2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡ 2    ⎤
+%%       ⎢π   4 ⎥
+%%       ⎢      ⎥
+%%       ⎢     2⎥
+%%       ⎣9   x ⎦
+%% @end group
+%% @end example
+%%
+%% It can also be used on two matrices:
+%% @example
+%% @group
+%% A.^[1 2; 3 4]
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡π   4 ⎤
+%%       ⎢      ⎥
+%%       ⎢     4⎥
+%%       ⎣27  x ⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{mpower}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -99,8 +133,8 @@ end
 %! % (1 on sympy 0.7.4--0.7.6, but nan in git (2014-12-12, a210908d4))
 %! % FIXME: xtest can be removed when 0.7.6.x support deprecated.
 %! zoo = sym('zoo');
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
-%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
 %! else
 %!   assert (isnan (1^zoo))
 %! end

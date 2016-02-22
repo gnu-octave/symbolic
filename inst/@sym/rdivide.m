@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,68 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} rdivide (@var{x}, @var{y})
-%% Elementwise forward slash division of sym expressions (dot slash).
+%% Element-wise forward slash division of sym expressions (dot slash).
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = sym([1 137; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡1  137⎤
+%%       ⎢      ⎥
+%%       ⎣3   4 ⎦
+%% B = [x pi; 2*x 8]
+%%   @result{} B = (sym 2×2 matrix)
+%%       ⎡ x   π⎤
+%%       ⎢      ⎥
+%%       ⎣2⋅x  8⎦
+%% A ./ B
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡ 1   137⎤
+%%       ⎢ ─   ───⎥
+%%       ⎢ x    π ⎥
+%%       ⎢        ⎥
+%%       ⎢ 3      ⎥
+%%       ⎢───  1/2⎥
+%%       ⎣2⋅x     ⎦
+%% @end group
+%% @end example
+%%
+%% Either @var{x} or @var{y} can be scalar:
+%% @example
+%% @group
+%% A ./ 2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡1/2  137/2⎤
+%%       ⎢          ⎥
+%%       ⎣3/2    2  ⎦
+%% 2 ./ B
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡2   2 ⎤
+%%       ⎢─   ─ ⎥
+%%       ⎢x   π ⎥
+%%       ⎢      ⎥
+%%       ⎢1     ⎥
+%%       ⎢─  1/4⎥
+%%       ⎣x     ⎦
+%% @end group
+%% @end example
+%%
+%% Finally, the can both be scalar:
+%% @example
+%% @group
+%% 2 ./ x
+%%   @result{} ans = (sym)
+%%       2
+%%       ─
+%%       x
+%% @end group
+%% @end example
+%%
+%% @seealso{ldivide, mrdivide}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

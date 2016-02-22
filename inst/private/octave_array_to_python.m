@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,14 +16,35 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function t = is_same_shape(x,y)
-%IS_SAME_SHAPE  Inputs have same shape
-%   Note does not say same type
+function r = octave_array_to_python(a)
+  t='';
 
-  d1 = size(x);
-  d2 = size(y);
-  t = ( ...
-      (length(d1) == length(d2)) && ...
-      (all(d1 == d2)) ...
-      );
+  if rows(a) == 0
+    r = mat2str([]);
+    return;
 
+  elseif rows(a) > 1
+    t = strcat('[', t);
+    t = strcat(t, octave_array_to_python(a(1, :)));
+
+    for i = 2:rows(a)
+      t = strcat(t, ', ');
+      t = strcat(t, octave_array_to_python(a(i, :)));
+    end
+
+    t = strcat(t, ']');
+
+  else
+    t = strcat('[', t);
+    t = strcat(t, mat2str(a(1, 1)));
+
+    for i = 2:columns(a)
+      t = strcat(t, ', ');
+      t = strcat(t, mat2str(a(1, i)));
+    end
+
+    t = strcat(t, ']');
+
+  end
+
+  r = t;

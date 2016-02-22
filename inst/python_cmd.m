@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,37 +30,40 @@
 %% Example:
 %% @example
 %% @group
-%% >> x = 10; y = 2;
-%% >> cmd = '(x,y) = _ins; return (x+y,x-y)';
-%% >> [a, b] = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%%    @result{} b =  8
+%% x = 10; y = 2;
+%% cmd = '(x, y) = _ins; return (x+y, x-y)';
+%% [a, b] = python_cmd (cmd, x, y)
+%%   @result{} a =  12
+%%   @result{} b =  8
 %% @end group
 %% @end example
 %%
-%% The inputs will be in a list called '_ins'.  The command should
-%% end by outputing a tuple of return arguments.
-%% If you have just one return value, you probably want to append
-%% an extra comma.  Either of these approaches will work:
-%% @example
-%% @group
-%% >> cmd = '(x,y) = _ins; return (x+y,)';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%% >> cmd = '(x,y) = _ins; return x+y,';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  12
-%% @end group
-%% @end example
-%% (Python gurus will know why).
-%%
+%% The inputs will be in a list called '_ins'.
 %% Instead of @code{return}, you can append to the Python list
 %% @code{_outs}:
 %% @example
 %% @group
-%% >> cmd = '(x,y) = _ins; _outs.append(x**y)';
-%% >> a = python_cmd (cmd, x, y)
-%%    @result{} a =  100
+%% cmd = '(x, y) = _ins; _outs.append(x**y)';
+%% a = python_cmd (cmd, x, y)
+%%   @result{} a =  100
+%% @end group
+%% @end example
+%%
+%% If you want to return a list, one way to to append a comma
+%% to the return command.  Compare these two examples:
+%% @example
+%% @group
+%% L = python_cmd ('return [1, -3.4, "python"],')
+%%   @result{} L =
+%%     @{
+%%       [1,1] =  1
+%%       [1,2] = -3.4000
+%%       [1,3] = python
+%%     @}
+%% [a, b, c] = python_cmd ('return [1, -3.4, "python"]')
+%%   @result{} a =  1
+%%   @result{} b = -3.4000
+%%   @result{} c = python
 %% @end group
 %% @end example
 %%
@@ -68,11 +71,11 @@
 %% with whitespace: its Python!
 %% @example
 %% @group
-%% >> cmd = @{ '(x,) = _ins'
-%% ..         'if x.is_Matrix:'
-%% ..         '    return (x.T,)'
-%% ..         'else:'
-%% ..         '    return (x,)' @};
+%% cmd = @{ '(x,) = _ins'
+%%         'if x.is_Matrix:'
+%%         '    return x.T'
+%%         'else:'
+%%         '    return x' @};
 %% @end group
 %% @end example
 %% The cell array can be either a row or a column vector.
@@ -88,13 +91,14 @@
 %% @item sym objects
 %% @item strings (char)
 %% @item scalar doubles
+%% @item structs
 %% @end itemize
 %% They can also be cell arrays of these items.  Multi-D cell
 %% arrays may not work properly.
 %%
 %% Possible output types:
 %% @itemize
-%% @item SymPy objects (Matrix and Expr at least)
+%% @item SymPy objects
 %% @item int
 %% @item float
 %% @item string
@@ -128,28 +132,41 @@ function varargout = python_cmd(cmd, varargin)
   % '_ins' and it will return to us whatever we put in the tuple
   % '_outs'.  There is no particular reason this needs to define
   % a function, I just thought it isolates local variables a bit.
+
+  % Careful: fix this constant if you change the code below.
+  % Test with "python_cmd('raise')" which should say "line 1".
+  LinesBeforeCmdBlock = 3;
+
+  % replace blank lines w/ empty comments (unnec. b/c of try:?)
+  %I = cellfun(@isempty, cmd);
+  %cmd(I) = repmat({'#'}, 1, nnz(I));
+
   cmd = indent_lines(cmd, 8);
   cmd = { 'def _fcn(_ins):' ...
           '    _outs = []' ...
           '    try:' ...
           cmd{:} ...
-          '        return _outs' ...
           '    except Exception as e:' ...
-          '        return ("COMMAND_ERROR_PYTHON", type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__)' ...
+          '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
+          '        _outs = ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
+          '    return _outs' ...
+          '' ...
           '_outs = _fcn(_ins)'
-         };
+        };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
 
-  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    error(A{2});
+  if (~iscell(A))
+    A={A};
   end
 
-  if (~iscell(A))
-    disp(A)
-    % Python state undefined, so reset it (overkill for nostateful ipc)
-    sympref reset
-    error('OctSymPy:python_cmd:unexpected', 'python_cmd: unexpected return')
+  %% Error reporting
+  % ipc drivers are supposed to give back these specially formatting error strings
+  if (ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
+    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
+  elseif (ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
   M = length(A);
@@ -332,3 +349,40 @@ end
 %! cmd = 'd = dict(); d["a"] = 6; d["b"] = 10; return d,';
 %! d = python_cmd (cmd);
 %! assert (d.a == 6 && d.b == 10)
+
+%!test
+%! r = python_cmd ("return 6");
+%! assert (isequal (r, 6))
+
+%!test
+%! r = python_cmd ('return "Hi"');
+%! assert (strcmp (r, 'Hi'))
+
+%!test
+%! % blank lines, lines with spaces
+%! a = python_cmd({ '', '', '     ', 'return 6', '   ', ''});
+%! assert (isequal (a, 6))
+
+%!test
+%! % blank lines, strange comment lines
+%! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
+%! a = python_cmd(cmd);
+%! assert (isequal (a, 3))
+
+%!error <AttributeError>
+%! % python exception while passing variables to python
+%! % FIXME: this is a very specialized test, relies on internal octsympy
+%! % implementation details, and may need to be adjusted for changes.
+%! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
+%! c = b + 1;
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))
+
+%!error <octoutput does not know how to export type>
+%! python_cmd({'return type(int)'});
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))

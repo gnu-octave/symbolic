@@ -1,5 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2016 Lagu and Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald and Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,98 +18,83 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} setxor (@var{A}, @var{B})
-%% Return the symmetric difference of two sets.
+%% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
+%% Return the union of elements of two sets.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
-%% A = interval(2, sym(10));
-%% B = interval(0, sym(pi));
-%% setxor(A, B)
-%%   @result{} ans = (sym) [0, 2) ∪ (π, 10]
+%% A = finiteset(sym(1), sym(2));
+%% B = finiteset(sym(pi), 2);
+%% C = union(A, B)
+%%   @result{} C = (sym) @{1, 2, π@}
+%%
+%% D = interval(sym(3), 4);
+%% union(C, D)
+%%   @result{} ans = (sym) @{1, 2@} ∪ [3, 4]
 %% @end group
 %% @end example
 %%
-%% And we note this is the same as the union of:
-%% @example
-%% @group
-%% setdiff(A, B)
-%%   @result{} ans = (sym) (π, 10]
-%% setdiff(B, A)
-%%   @result{} ans = (sym) [0, 2)
-%% @end group
-%% @end example
-%%
-%% @seealso{union, intersect, setdiff, unique, ismember, finiteset, interval}
+%% @seealso{intersect, setdiff, setxor, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-function r = setxor(a, b)
+function r = union(a, b)
 
   if (nargin ~= 2)
     print_usage ();
   end
 
-  %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
-  % Version(spver) >= Version("0.7.7.dev")
-
   cmd = {
          'a, b = _ins'
          'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
-         '    return (a - b) | (b - a),'
+         '    return a | b,'
          ''
          'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
          'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-         'C = (A - B) | (B - A)'
+         'C = A | B'
          'return sp.Matrix([list(C)]),'
         };
 
-  r = python_cmd (cmd, sym(a), sym(b));
+    r = python_cmd (cmd, sym(a), sym(b));
 
 end
-
 
 %!test
 %! A = sym([1 2 3]);
 %! B = sym([1 2 4]);
-%! C = setxor(A, B);
-%! D1 = sym([3 4]);
-%! D2 = sym([4 3]);
-%! assert (isequal (C, D1) || isequal (C, D2))
+%! C = union(A, B);
+%! D = sym([1 2 3 4]);
+%! assert (isequal (C, D))
 
 %!test
 %! % one nonsym
 %! A = sym([1 2 3]);
 %! B = [1 2 4];
-%! C = setxor(A, B);
-%! D1 = sym([3 4]);
-%! D2 = sym([4 3]);
-%! assert (isequal (C, D1) || isequal (C, D2))
+%! C = union(A, B);
+%! D = sym([1 2 3 4]);
+%! assert (isequal (C, D))
 
 %!test
 %! % empty
 %! A = sym([1 2 3]);
-%! C = setxor(A, A);
-%! assert (isempty (C))
+%! C = union(A, A);
+%! assert (isequal(C, A))
 
 %!test
 %! % empty input
 %! A = sym([1 2]);
-%! C = setxor(A, []);
-%! assert (isequal (C, A) || isequal (C, sym([2 1])))
+%! C = union(A, []);
+%! assert (isequal (C, sym([1 2])))
+
 
 %!test
 %! % scalar
 %! syms x
-%! assert (isequal (setxor([x 1], x), sym(1)))
-%! assert (isempty (setxor(x, x)))
+%! assert (isequal (union([x 1], x), [1 x]))
+%! assert (isequal (union(x, x), x))
 
 %!test
 %! A = interval(sym(1), 3);
 %! B = interval(sym(2), 5);
-%! C = setxor(A, B);
-%! D = union (interval (sym(1), 2, false, true), interval (sym(3), 5, true, false));
-%! assert( isequal( C, D))
+%! C = union(A, B);
+%! assert( isequal( C, interval(sym(1), 5)))

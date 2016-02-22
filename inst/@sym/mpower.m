@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} mpower (@var{x}, @var{y})
 %% Symbolic expression matrix exponentiation (^).
 %%
-%% We implement scalar ^ scalar and matrix ^ scalar.
+%% Scalar example:
+%% @example
+%% @group
+%% syms x
+%% sym('x')^3
+%%   @result{} ans = (sym)
+%%        3
+%%       x
+%% @end group
+%% @end example
 %%
+%% The @code{^} notation is use to raise a matrix to a scalar power:
+%% @example
+%% @group
+%% A = [sym(pi) 2; 0 x]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡π  2⎤
+%%       ⎢    ⎥
+%%       ⎣0  x⎦
+%% A^2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡ 2           ⎤
+%%       ⎢π   2⋅x + 2⋅π⎥
+%%       ⎢             ⎥
+%%       ⎢        2    ⎥
+%%       ⎣0      x     ⎦
+%% A^2 == A*A
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡True  True⎤
+%%       ⎢          ⎥
+%%       ⎣True  True⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{power}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -38,10 +72,10 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
-          'if x.is_Matrix and not y.is_Matrix:'
-          '    return sympy.MatPow(x, y).doit(),'
+          'if x.is_Matrix and not y.is_Matrix and Version(spver) < Version("0.7.7.dev"):'
+          '    return sympy.MatPow(x, y).doit()'
           'else:'
-          '    return x**y,'
+          '    return x**y'
         };
 
   z = python_cmd (cmd, sym(x), sym(y));
@@ -78,8 +112,8 @@ end
 
 %!test
 %! % non-integer power
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
-%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
 %! else
 %! A = sym([1 2; 0 3]);
 %! B = A^pi;
@@ -95,7 +129,7 @@ end
 %! C = 10 + B + B^2;
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
-%! assert (isequal (D, E))
+%! assert (isequal (simplify(D), simplify(E)))
 
 %!test
 %! % matpow, sub in zero gives identity

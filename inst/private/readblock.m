@@ -1,3 +1,21 @@
+%% Copyright (C) 2014-2015 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
 function [A, err] = readblock(fout, timeout)
 %private function: read one block
 
@@ -54,7 +72,7 @@ function [A, err] = readblock(fout, timeout)
       %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
-      sleep (waitdelta);
+      pause (waitdelta);
       nwaits = nwaits + 1;
     elseif (errno() == 0)
       waitdelta = exp(nwaits/10)/1e4;
@@ -70,12 +88,12 @@ function [A, err] = readblock(fout, timeout)
       %if (ispc () && (~isunix ()))
       %errno (0);   % maybe can do this on win32?
       %end
-      sleep (waitdelta);
+      pause (waitdelta);
       nwaits = nwaits + 1;
     else
       warning ('OctSymPy:readblock:invaliderrno', ...
         sprintf('readblock: s=%d, errno=%d, perhaps error in the command?', s, errno()))
-      sleep(0.1)  % FIXME; replace with waitdelta etc
+      pause(0.1)  % FIXME; replace with waitdelta etc
     end
     %disp('paused'); pause
 

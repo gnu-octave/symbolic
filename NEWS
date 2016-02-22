@@ -4,19 +4,37 @@ octsympy 2.3.0-dev
   * New commands:
 
           cbrt
+          fix
+          frac
+          intersect
+          interval
+          ismember
+          finiteset
+          has
           linspace
           logspace
           max
           min
           rewrite
+          round
+          union
+          unique
 
   * Bug fix for working with certain unevaluated integrals.
 
   * Bug fixes for function_handle, fortran and ccode.
 
-  * Some functions now use a more flexible system for reporting errors
-    raised in Python code.  Note some error messages may have changed
-    slightly.  Thanks to @latot.
+  * Errors raised in Python code are now caught and passed back to Octave
+    in most cases.  This simplies implementation.
+      - Note some error messages have changed slightly.
+      - Windows users now see previously hidden error messages.
+      - Stack traces from Python are now hidden: could change in future.
+    Thanks to @latot.
+
+  * New functions for converting sym to integers.  Thanks to @latot.
+
+  * New functions for dealing with sets and intervals and operations
+    on them, thanks to @latot.
 
   * Fourier and Laplace transforms (and their inverses) use a
     different implementation which improves handling of delta
