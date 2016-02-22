@@ -123,7 +123,6 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
     out
     ind
     error('system ipc: system() call failed!');
-    end
   end
 
   A = extractblock(out(ind(1):end));
