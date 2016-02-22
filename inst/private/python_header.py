@@ -11,16 +11,16 @@ import sys
 sys.ps1 = ""; sys.ps2 = ""
 
 
-def myerr(e):
-    # hardcoded in case no xml
-    print("<output_block>")
-    print("<item>\n<f>9999</f>\n<f>")
-    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f><f>")
-    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f>\n</item>")
-    print("</output_block>\n")
-
+def echo_exception_stdout(mystr):
+    exception_str = sys.exc_info()[0].__name__ + ": " + str(sys.exc_info()[1])
+    # hardcode xml, we may not have imports yet.  1003 is code for string.
+    print("<output_block>\n<list>")
+    print("<item>\n<f>1003</f>\n<f>INTERNAL_PYTHON_ERROR</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + mystr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + exception_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("</list>\n</output_block>\n")
 
 try:
     import sympy
@@ -42,7 +42,7 @@ try:
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header import block")
     raise
 
 
@@ -69,7 +69,7 @@ try:
         # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 1")
     raise
 
 
@@ -141,9 +141,8 @@ else:
             """return expr in repr form w/ assumptions listed"""
             return _ReprPrinter_w_asm(settings).doprint(expr)
     except:
-        myerr(sys.exc_info())
+        echo_exception_stdout("in python_header defining fcns block 2")
         raise
-
 
 
 try:
@@ -169,7 +168,7 @@ try:
         else:
             print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 3")
     raise
 
 
@@ -259,12 +258,9 @@ try:
             else:
                 octoutput(x.values(), c)
         else:
-            dbout("error exporting variable:")
-            dbout("x: " + str(x))
-            dbout("type: " + str(type(x)))
-            octoutput("python does not know how to export type " + str(type(x)), et)
+            raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 4")
     raise
 # end of python header, now couple blank lines
 

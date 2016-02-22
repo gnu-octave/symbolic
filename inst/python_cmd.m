@@ -160,9 +160,13 @@ function varargout = python_cmd(cmd, varargin)
     A={A};
   end
 
-  if (strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+  %% Error reporting
+  % ipc drivers are supposed to give back these specially formatting error strings
+  if (ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-    error(sprintf(['error: Python exception near line %d of the code block\n%s'], errlineno, A{2}));
+    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
+  elseif (ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
   M = length(A);
@@ -364,3 +368,21 @@ end
 %! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
+
+%!error <AttributeError>
+%! % python exception while passing variables to python
+%! % FIXME: this is a very specialized test, relies on internal octsympy
+%! % implementation details, and may need to be adjusted for changes.
+%! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
+%! c = b + 1;
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))
+
+%!error <octoutput does not know how to export type>
+%! python_cmd({'return type(int)'});
+%!test
+%! % ...and after the above test, the pipe should still work
+%! a = python_cmd('return _ins[0]*2', 3);
+%! assert (isequal (a, 6))

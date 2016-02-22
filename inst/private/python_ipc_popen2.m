@@ -120,11 +120,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     end
     A = extractblock(out);
     fprintf('\n');  % needed even if not verbose
-    if (isempty(strfind(A{1}, 'established')))
-      A
-      out
-      error('ipc_popen2: something has gone wrong in starting python')
-    else
+    if (iscell(A) && strcmp(A{1}, 'Communication established.'))
       if (verbose)
         disp(['OctSymPy: ' A{1} '  SymPy v' A{2} '.']);
         % on unix we're seen this on stderr
@@ -132,6 +128,18 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
           disp(['Python ' strrep(A{3}, newl, '')])
         end
       end
+    elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+      info.raw = out;
+      % We want to return so that python_cmd can report the error instead of us.
+      % But if cannot load python_header correctly, we cannot assume the pipe is
+      % ok (e.g., probably have other errors sitting on the stdout).  So reset.
+      python_ipc_popen2('reset');
+      return
+    else
+      A
+      out
+      python_ipc_popen2('reset');
+      error('ipc_popen2: something unexpected has gone wrong in starting python')
     end
   end
 
@@ -149,11 +157,18 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       'ipc_popen2: xfer vars: something wrong? timed out?')
   end
 
-  % could extractblock here, but just search for keyword instead
-  if (isempty(strfind(out, 'successful')))
+  %% did we succeed in copying all the inputs?
+  A = extractblock(out);
+  if (ischar(A) && strcmp(A, 'PYTHON: successful variable import'))
+    % pass
+  elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    info.raw = out;
+    % the pipe should still be in working order, no need to reset
+    return
+  else
+    A
     out
-    A = extractblock(out)
-    error('ipc_popen2: failed to send variables to python?')
+    error('ipc_popen2: something unexpected happened sending variables to python')
   end
 
   % The number of lines of code before the command itself: because
