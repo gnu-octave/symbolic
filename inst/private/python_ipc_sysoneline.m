@@ -124,22 +124,34 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     [status,out] = system(['sh ' fname]);
   end
 
-  if status ~= 0
+  info.raw = out;
+
+  % two blocks if everything worked, one on variable import fail
+  ind = strfind(out, '<output_block>');
+
+  if (status ~= 0) && isempty(ind)
     status
     out
-    error('system() call failed!');
+    ind
+    error('sysoneline ipc: system() call failed!');
   end
 
-  % there should be two blocks
-  ind = strfind(out, '<output_block>');
-  assert(length(ind) == 2)
-  out1 = out(ind(1):(ind(2)-1));
-  % could extractblock here, but just search for keyword instead
-  if (isempty(strfind(out1, 'successful')))
-    error('failed to import variables to python?')
-  end
-  A = extractblock(out(ind(2):end));
   info.raw = out;
+
+  A = extractblock(out(ind(1):end));
+  if (ischar(A) && strcmp(A, 'PYTHON: successful variable import'))
+    % pass
+  elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    return
+  else
+    A
+    out
+    error('sysoneline ipc: something unexpected happened sending variables to python')
+  end
+
+  assert(length(ind) == 2)
+  A = extractblock(out(ind(2):end));
+
 end
 
 
