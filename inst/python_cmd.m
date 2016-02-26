@@ -124,7 +124,16 @@
 function varargout = python_cmd(cmd, varargin)
 
   if (~iscell(cmd))
-    cmd = {cmd};
+    if (isempty(cmd))
+      cmd = {};
+    else
+      cmd = {cmd};
+    end
+  end
+
+  % empty command will cause empty try: except: block
+  if isempty(cmd)
+    cmd = {'pass'};
   end
 
   %% IPC interface
@@ -368,6 +377,14 @@ end
 %! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
+
+%!test
+%! % return nothing (because no command)
+%! python_cmd('')
+
+%!test
+%! % return nothing (because no command)
+%! python_cmd({})
 
 %!error <AttributeError>
 %! % python exception while passing variables to python
