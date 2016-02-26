@@ -171,10 +171,10 @@ function varargout = python_cmd(cmd, varargin)
 
   %% Error reporting
   % ipc drivers are supposed to give back these specially formatting error strings
-  if (ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
+  if (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
     error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
-  elseif (ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+  elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
     error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
@@ -377,6 +377,15 @@ end
 %! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
+
+%!test
+%! % return nothing (via an empty list)
+%! % note distinct from 'return [],'
+%! python_cmd('return []')
+
+%!test
+%! % return nothing (because no return command)
+%! python_cmd('dummy = 1')
 
 %!test
 %! % return nothing (because no command)
