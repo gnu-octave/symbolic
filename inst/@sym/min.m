@@ -20,6 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{r} =} min (@var{a})
 %% @deftypefnx {Function File} {@var{r} =} min (@var{a}, @var{b})
+%% @deftypefnx {Function File} {[@var{r}, @var{I}] =} min (@var{a})
 %% @deftypefnx {Function File} {@var{r} =} min (@var{a}, [], @var{dim})
 %% Return minimum value of a symbolic vector or vectors.
 %%

@@ -20,6 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{r} =} max (@var{a})
 %% @deftypefnx {Function File} {@var{r} =} max (@var{a}, @var{b})
+%% @deftypefnx {Function File} {[@var{r}, @var{I}] =} max (@var{a})
 %% @deftypefnx {Function File} {@var{r} =} max (@var{a}, [], @var{dim})
 %% Return maximum value of a symbolic vector or vectors.
 %%
@@ -36,7 +37,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{max}
+%% @seealso{min}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
