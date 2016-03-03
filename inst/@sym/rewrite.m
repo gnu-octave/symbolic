@@ -98,7 +98,8 @@
 function F = rewrite(f, how)
 
   cmd = { '(f, how) = _ins'
-          'if f.is_Matrix:'
+          '# note, not for MatrixExpr'
+          'if isinstance(f, sp.MatrixBase):'
           '    return f.applyfunc(lambda a: a.rewrite(how)),'
           'else:'
           '    return f.rewrite(how),' };
