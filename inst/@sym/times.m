@@ -17,9 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} times (@var{x}, @var{y})
-%% Return elementwise multiplication of two syms (dot star).
+%% Return elementwise multiplication (dot star, Hadamard product).
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = [2 x];
+%% B = [3 4];
+%% A.*B
+%%   @result{} ans = (sym) [6  4⋅x]  (1×2 matrix)
+%% @end group
+%% @end example
+%%
+%% For "matrix expressions" such as matrices with symbolic size,
+%% the product may not be evaluated:
+%% @example
+%% @group
+%% syms n m integer
+%% A = sym('A', [n m]);
+%% A.*A
+%%   @result{} ans = (sym) A∘A
+%% @end group
+%% @end example
+%%
+%% @seealso{power}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -35,12 +59,17 @@ function z = times(x, y)
     return
   end
 
+  % 2016-03: cannot simply call hadamard_product, see upstream:
+  % https://github.com/sympy/sympy/issues/8557
 
   cmd = { '(x,y) = _ins'
           'if x is None or y is None:'
           '    return x*y'
           'if x.is_Matrix and y.is_Matrix:'
-          '    return x.multiply_elementwise(y),'
+          '    if isinstance(x, sp.MatrixExpr) or isinstance(y, sp.MatrixExpr):'
+          '        return hadamard_product(x, y)'
+          '    else:'
+          '        return x.multiply_elementwise(y)'
           'return x*y' };
 
   z = python_cmd (cmd, sym(x), sym(y));
