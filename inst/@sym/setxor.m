@@ -60,11 +60,16 @@ function r = setxor(a, b)
   cmd = {
          'a, b = _ins'
          'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
-         '    return (a - b) | (b - a),'
+         '    if Version(spver) < Version("0.7.7"):'
+         '        return (a - b) | (b - a)'
+         '    return a ^ b'
          ''
          'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
          'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-         'C = (A - B) | (B - A)'
+         'if Version(spver) < Version("0.7.7"):'
+         '    C = (A - B) | (B - A)'
+         'else:'
+         '    C = A ^ B'
          'return sp.Matrix([list(C)]),'
         };
 
