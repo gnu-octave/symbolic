@@ -63,12 +63,12 @@
 function s = mtaylor(f, varargin)
 
   if (nargin == 1)  % taylor(f)
-    x = symvar(f,2);
-    a = sym(0);
+    x = symvar(f);
+    a = zeros(1,columns(x));
     i = nargin;
   elseif (nargin == 2)  % taylor(f,[x,y])
     x = varargin{1};  
-    a = sym(0);
+    a = zeros(1,columns(x));
     i = nargin;
   elseif (~ischar(varargin{1}) && ~ischar(varargin{2}))
     % taylor(f,[x,y],[a,b],...)
@@ -78,20 +78,24 @@ function s = mtaylor(f, varargin)
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
     % taylor(f,[x,y],'param')
     x = varargin{1};
-    a = sym(0);
+    a = zeros(1,columns(x));
     i = nargin;
   else  % taylor(f,'param')
     assert (ischar(varargin{1}))
     x = symvar(f,2);
-    a = sym(0);
+    a = zeros(1,columns(x));
     i = 1;
   end
 
-  n = 4;  %default order
 
-  if ~( rows(x)==1 && columns(x)==2)
-    error('invalid input variables .Function Only for 2D expansion') %%chage this afterwards
-  end 
+  n=10 ; %default order
+  %sym(x)
+  %n = 6;  %default order
+
+
+  % if ~( rows(x)==1 && columns(x)==2)
+  %   error('invalid input variables .Function Only for 2D expansion') %%chage this afterwards
+  % end 
 
   while (i <= (nargin-1))
     if (strcmpi(varargin{i}, 'order'))
@@ -109,33 +113,17 @@ function s = mtaylor(f, varargin)
     n = int32(n);
   end
 
-  if (numel(x) == 1)
-    warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
-  end
+  % if (numel(x) == 1)
+  %   warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
+  % end
 
-  cmd = { '(f, x, a, n) = _ins'
-          '#s = f.series(x, a, n).removeO()'
-          'import math as ms' 
-          'from sympy import *'
-          'expr=f'
-          'var=x'
-          'i=a'
-          'expn=expr.subs([(var[x],i[x]) for x in range(len(var))]) # first constant term'
-          'for x in range(1,n,1) :'
-          '  bin=[binomial(x,m) for m in range(x+1)] #binomila constands'
-          '  x1=x'
-          '  x2=0'  
-          '  fact=ms.factorial(x)'
-          '  for y in bin:'
-          '    fterm=diff(diff(expr,var[0],x1),var[1],x2).subs([(var[x],i[x]) for x in range(len(var))]).evalf()'
-          '    expn=expn + y*(1.0/fact)*fterm*((var[0]-i[0])**x1)*((var[1]-i[1])**x2)'
-          '    x1=x1-1'
-          '    x2=x2+1'
-          'return (nsimplify(expn))'
-              
-          's=mtaylor(f,x,n,a)'  
-          'return s,'         
-          };
+  cmd ={'(f, x, a, n) = _ins'
+        'z=f'
+        'var=list(x)'
+        'for m in range(len(var)):'
+        '    z=z.series(var[m],a[m],int(n/len(var))).removeO()'
+        'return nsimplify(z)'      
+  };
   s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
 
 end
