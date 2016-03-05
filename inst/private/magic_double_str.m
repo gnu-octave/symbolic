@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +48,8 @@ function [s, flag] = magic_double_str(x)
     s = '-inf';
   elseif (isnan(x))
     s = 'nan';
-  elseif (isreal(x) && (mod(x,1) == 0))   % is integer
+  elseif (isreal(x) && (abs(x) < 1e15) && (mod(x,1) == 0))
+    % special treatment for "small" integers
     s = num2str(x);  % better than sprintf('%d', large)
   else
     s = '';
