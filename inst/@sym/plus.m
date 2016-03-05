@@ -42,12 +42,13 @@ function z = plus(x, y)
   % Instead, we do broadcasting only in special cases (to match
   % Octave behaviour) and otherwise leave it up to SymPy.
   cmd = { 'x, y = _ins'
+          'if x is None or y is None:'
+          '    return x + y'
           'if x.is_Matrix and not y.is_Matrix:'
           '    return x + y*sp.ones(*x.shape),'
           'if not x.is_Matrix and y.is_Matrix:'
           '    return x*sp.ones(*y.shape) + y,'
-          'else:'
-          '    return x + y,' };
+          'return x + y' };
 
   z = python_cmd(cmd, sym(x), sym(y));
 

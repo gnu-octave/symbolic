@@ -79,8 +79,7 @@ function z = power(x, y)
           '    return x.applyfunc(lambda a: a**y),'
           'if not x.is_Matrix and y.is_Matrix:'
           '    return y.applyfunc(lambda a: x**a),'
-          'else:'
-          '    return x**y,' };
+          'return x**y' };
 
   z = python_cmd (cmd, sym(x), sym(y));
 

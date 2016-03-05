@@ -29,8 +29,8 @@
 
 function B = flipud(A)
 
-  cmd = { '(A,) = _ins'
-          'if not A.is_Matrix:'
+  cmd = { 'A, = _ins'
+          'if A is None or not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'return A[::-1, :]' };
 

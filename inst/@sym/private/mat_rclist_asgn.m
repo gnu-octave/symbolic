@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -65,8 +65,7 @@ function z = mat_rclist_asgn(A, r, c, B)
 
   cmd = { '(A, r, c, B) = _ins'
           '# B linear access fix, transpose for sympy row-based'
-          '#if not isinstance(B, sp.MatrixBase):'
-          'if not B.is_Matrix:'
+          'if B is None or not B.is_Matrix:'
           '    B = sp.Matrix([[B]])'
           'BT = B.T'
           '# copy of A, expanded and padded with zeros'

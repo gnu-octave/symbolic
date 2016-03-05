@@ -84,10 +84,11 @@ function r = children(f)
     'f, = _ins'
     'f = sympify(f)'  % mutable -> immutable
     'def scalarfcn(a):'
-    '    if len(a.args) == 0:'
+    '    if not hasattr(a, "args") or len(a.args) == 0:'
     '        return sympy.Matrix([a])'  % children(x) is [x]
     '    return sympy.Matrix([a.args])'
-    'if f.is_Matrix:'
+    '# note, not for MatrixExpr'
+    'if isinstance(f, sp.MatrixBase):'
     '    r = [scalarfcn(a) for a in f.T]'  % note transpose
     'else:'
     '    r = scalarfcn(f)'
@@ -159,3 +160,9 @@ end
 %! % scalar number
 %! x = sym(6);
 %! assert (isequal (children(x), x))
+
+%!test
+%! % symbolic size matrix
+%! syms n m integer
+%! A = sym('a', [n m]);
+%! assert (isequal (children(A), [sym('a') n m]))
