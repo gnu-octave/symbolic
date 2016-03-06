@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -362,6 +362,7 @@ function s = sym(x, varargin)
 
 end
 
+
 %!test
 %! % integers
 %! x = sym('2');
@@ -645,6 +646,11 @@ end
 %! % E can be a sym not just exp(sym(1))
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
+
+%!warning <heuristics for double-precision> sym(1e16);
+%!warning <heuristics for double-precision> sym(-1e16);
+%!warning <heuristics for double-precision> sym(10.33);
+%!warning <heuristics for double-precision> sym(-5.23);
 
 %!error <assumption is not supported>
 %! x = sym('x', 'positive2');
