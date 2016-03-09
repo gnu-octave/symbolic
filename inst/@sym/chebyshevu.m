@@ -49,8 +49,8 @@ function sympoly = chebyshevU(x, n)
           'for i in range(n):'
           '    y = 2*x*y1 - y0;'
           'return y,' };
-
-  sympoly = python_cmd (cmd, x, n)
+  sympoly = python_cmd (cmd, x, n);
+  sympoly
 end
 
 %!test
