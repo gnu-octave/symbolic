@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014, 2015 Utkarsh Gautam
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} sort (@var{f})
-%% Symbolic Two Variable Taylor series.
+%% Sorting symbols .
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
 %% defaults to zero.
@@ -39,34 +39,44 @@
 %% Keywords: symbolic, sort
 
 function s = sort(f)
-  if isallconstant(f) 
-    s=sym(sort(double(f)));
-  else
-    error('Invalid Input')
-  end  
+	if isempty(f)
+		s=[]
+	else 
+	  if isallconstant(f) 
+	    s=sym(sort(double(f)));
+	  else
+	    error('Invalid Input')
+	  end
+	end    
 end
 
 
 %!test 
-%! f = [sym(1),sym(0)]
-%! sort(f)	
-%! expected = [0 ,1]
-%! assert (isequal (sort(f), expected))
-
-
-%!test
-%! syms x
-%! f = [sym(3),sym(2),sym(6)]
-%! sort(f)	
-%! expected = [2  3  6]
+%! f = [sym(1),sym(0)] ;
+%! sort(f)	;
+%! expected = sym([0 , 1]) ;
 %! assert (isequal (sort(f), expected))
 
 %!test 
-%! f = [sym(1),sym(0.5)]
-%! sort(f)	
-%! expected = [1/2 ,1]
+%! f = [sym(1)] ;
+%! sort(f)	;
+%! expected = sym(f) ;
 %! assert (isequal (sort(f), expected))
 
-%! sym x
-%! f=[sym(1) x]
-%!	error <Invalid Input> sort (f)  # test that throws specific error
+%!test
+%! syms x ;
+%! f = [sym(3),sym(2),sym(6)] ;
+%! sort(f)	; 
+%! expected = sym([2  3  6]) ;
+%! assert (isequal (sort(f), expected))
+
+%!test 
+%! f = [sym(1),sym(0.5)] ;
+%! sort(f)	;
+%! expected = sym([sym(1/2) ,sym(1)]) ;
+%! assert (isequal (sort(f), expected))
+
+%! test 
+%! sym x ;
+%! f=[ sym(1) x];
+%! error <Invalid Input> sort (f)  # test that throws specific error
