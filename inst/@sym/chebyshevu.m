@@ -50,23 +50,23 @@ function sympoly = chebyshevU(x, n)
           '    y = 2*x*y1 - y0;'
           'return y,' };
 
-  sympoly = python_cmd (cmd, x, n);
+  sympoly = python_cmd (cmd, x, n)
 end
 
 %!test
 %! syms x
 %! n0 = 0;
-%! poly0 = chebyshevU(x, n0)
+%! poly0 = chebyshevU(x, n0);
 %! assert(poly0 == sym(1))
 
 %!test
 %! syms x
 %! n1 = 1;
-%! poly1 = chebyshevU(x, n1)
+%! poly1 = chebyshevU(x, n1);
 %! assert(poly1 == (2*x))
 
 %!test
 %! syms x
 %! n2 = 2;
-%! poly2 = chebyshevU(x, n2)
+%! poly2 = chebyshevU(x, n2);
 %! assert(poly2 == (4*x*x - 1))
