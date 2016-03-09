@@ -154,7 +154,7 @@ try:
         #    return x.doit()
         return x
     #
-    def octoutput_drv(x):
+    def octoutput_drv(x, tostdout=True):
         xroot = ET.Element("output_block")
         octoutput(x, xroot)
         # simple, but no newlines and escapes unicode
@@ -164,9 +164,13 @@ try:
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
         if sys.version_info >= (3, 0):
-            print(DOM.toprettyxml(indent="", newl="\n"))
+            s = DOM.toprettyxml(indent="", newl="\n")
         else:
-            print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
+            s = DOM.toprettyxml(indent="", newl="\n", encoding="utf-8")
+        if tostdout:
+            print(s)
+        else:
+            return s
 except:
     echo_exception_stdout("in python_header defining fcns block 3")
     raise
