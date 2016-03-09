@@ -281,6 +281,8 @@ function varargout = sympref(cmd, arg)
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] octsympy communication mechanism';
+          case 'pytave'
+            msg = 'Forcing the pytave octsympy communication mechanism';
           case 'system'
             msg = 'Forcing the system() octsympy communication mechanism';
           case 'popen2'

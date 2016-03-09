@@ -53,6 +53,9 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   switch lower(which_ipc)
+    case 'pytave'
+      [A, db] = python_ipc_pytave(what, cmd, varargin{:});
+
     case 'popen2'
       [A, db] = python_ipc_popen2(what, cmd, varargin{:});
 
