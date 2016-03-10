@@ -24,16 +24,16 @@
 %% Examples:
 %% @example
 %% @group
-%% y = frac(sym(3)/2)               % doctest: +SKIP
+%% y = frac(sym(3)/2)
 %%   @result{} y = (sym) 1/2
 %%
 %% syms x
-%% rewrite(frac(x), 'floor')        % doctest: +SKIP
+%% rewrite(frac(x), 'floor')
 %%   @result{} ans = (sym) x - ⌊x⌋
 %% @end group
 %% @end example
 %%
-%% *Note*: this function relies on a recent SymPy >= 0.7.7-dev.
+%% *Note*: this function relies on SymPy >= 1.0.
 %%
 %% @seealso{ceil, floor, fix, round}
 %% @end deftypefn
