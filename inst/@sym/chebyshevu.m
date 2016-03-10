@@ -41,10 +41,10 @@
 function sympoly = chebyshevu(x, n)
   cmd = { 'x, n = _ins'
           'if n == 0:'
-          '    return symbols(1);'
+          '    return symbols(\'1\');'
           'if n == 1:'
           '    return 2*x;'
-          'y0 = symbols(1);'
+          'y0 = symbols(\'1\');'
           'y1 = 2*x;'
           'for i in range(n):'
           '    y = 2*x*y1 - y0;'
