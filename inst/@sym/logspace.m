@@ -50,7 +50,7 @@
 %% @code{logspace} can be combined with @code{vpa}:
 %% @example
 %% @group
-%% logspace(vpa(-1), vpa(2), 5)'              % doctest: +XFAIL
+%% logspace(vpa(-1), vpa(2), 5)'
 %%   @result{} ans = (sym 5×1 matrix)
 %%       ⎡               0.1                ⎤
 %%       ⎢                                  ⎥
@@ -63,7 +63,7 @@
 %%       ⎣              100.0               ⎦
 %% @end group
 %% @end example
-%% (As of 2015-11, this example needs an unreleased SymPy.)
+%% (This example may fail if using SymPy older than 1.0.)
 %%
 %% @seealso{linspace, colon}
 %% @end deftypefn
