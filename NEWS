@@ -24,16 +24,21 @@ octsympy 2.3.0-dev
 
   * Bug fixes for function_handle, fortran and ccode.
 
-  * Bug fixes or improvements to repmat.
+  * Bug fixes or improvements to repmat, reshape, python_cmd, factor,
+    dot star, children.
+
+  * Support for SymPy 1.0.
 
   * Errors raised in Python code are now caught and passed back to Octave
-    in most cases.  This simplies implementation.
+    in most cases.  This simplifies implementation.
       - Note some error messages have changed slightly.
       - Windows users now see previously hidden error messages.
-      - Stack traces from Python are now hidden: could change in future.
     Thanks to @latot.
 
   * New functions for converting sym to integers.  Thanks to @latot.
+
+  * Making a sym of a large integer like `sym(10^16)` gives a warning.
+    Please use `sym(10)^16` or `sym('1000000000000123456789').
 
   * New functions for dealing with sets and intervals and operations
     on them, thanks to @latot.
@@ -42,6 +47,8 @@ octsympy 2.3.0-dev
     different implementation which improves handling of delta
     functions.  Ideally, a later version will consolidate this with
     SymPy's original implementations.
+
+  * Python `None` can be returned and manipulated.
 
   * Documentation improvements.
 
