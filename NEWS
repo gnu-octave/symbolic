@@ -24,6 +24,8 @@ octsympy 2.3.0-dev
 
   * Bug fixes for function_handle, fortran and ccode.
 
+  * Bug fixes or improvements to repmat.
+
   * Errors raised in Python code are now caught and passed back to Octave
     in most cases.  This simplies implementation.
       - Note some error messages have changed slightly.

@@ -54,14 +54,16 @@ function B = repmat(A, n, m)
     print_usage ();
   end
 
-  cmd = { '(A,n,m) = _ins' ...
-          'if A is None or not A.is_Matrix:' ...
-          '    A = sp.Matrix([A])' ...
-          'L = [A]*m' ...
-          'B = sp.Matrix.hstack(*L)' ...
-          'L = [B]*n' ...
-          'B = sp.Matrix.vstack(*L)' ...
-          'return B,' };
+  cmd = { '(A, n, m) = _ins'
+	  'if n == 0 or m == 0:'
+	  '    return sp.Matrix(n, m, [])'
+          'if A is None or not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'L = [A]*m'
+          'B = sp.Matrix.hstack(*L)'
+          'L = [B]*n'
+          'B = sp.Matrix.vstack(*L)'
+          'return B' };
 
   B = python_cmd (cmd, sym(A), int32(n), int32(m));
 
@@ -87,3 +89,12 @@ end
 %! A = repmat(sym([]), 2, 3);
 %! assert (isempty(A));
 %! assert (isequal (size(A), [0 0]))
+
+%!test
+%! % more empties
+%! A = repmat(sym(pi), [0 0]);
+%! assert (isequal (size(A), [0 0]))
+%! A = repmat(sym(pi), [0 3]);
+%! assert (isequal (size(A), [0 3]))
+%! A = repmat(sym(pi), [2 0]);
+%! assert (isequal (size(A), [2 0]))
