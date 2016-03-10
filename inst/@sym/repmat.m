@@ -19,9 +19,10 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{B} =} repmat (@var{A}, @var{n}, @var{m})
+%% @deftypefnx {Function File} {@var{B} =} repmat (@var{A}, [@var{n} @var{m}])
 %% Build symbolic block matrices.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
 %% repmat([1 2 sym(pi)], 2, 3)
@@ -29,6 +30,9 @@
 %%       ⎡1  2  π  1  2  π  1  2  π⎤
 %%       ⎢                         ⎥
 %%       ⎣1  2  π  1  2  π  1  2  π⎦
+%%
+%% repmat(sym(pi), [1 3])
+%%   @result{} (sym) [π  π  π]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
@@ -41,7 +45,12 @@
 
 function B = repmat(A, n, m)
 
-  if (nargin ~= 3)
+  if (nargin == 2)
+    m = n(2);
+    n = n(1);
+  elseif (nargin == 3)
+    % no-op
+  else
     print_usage ();
   end
 
@@ -73,3 +82,8 @@ end
 %! D = repmat(B, 2, 3);
 %! assert (isequal (C, D))
 
+%!test
+%! % empty
+%! A = repmat(sym([]), 2, 3);
+%! assert (isempty(A));
+%! assert (isequal (size(A), [0 0]))
