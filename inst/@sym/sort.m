@@ -20,30 +20,16 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} sort (@var{f})
 %% Sorting symbols .
-%%
-%% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
-%% defaults to zero.
-%%
-%% Key/value pairs can be used to set the order:
-%% @example
-%%change them
-%% @group
-%% >> f = [sym(1),sym(0)]
-%% >> sort(f)
-%% 	  ans = (sym) [0  1]  (1×2 matrix)
-%% @end group
-%% @end example
-%%
-
 %% Author: Utkarsh Gautam
 %% Keywords: symbolic, sort
 
-function s = sort(f)
+function [s,i] = sort(f)
 	if isempty(f)
-		s=[]
+		[s,i]=sort(f)
 	else 
 	  if isallconstant(f) 
-	    s=sym(sort(double(f)));
+	    [s,i]=sort(double(f));
+	    s=sym(s);
 	  else
 	    error('Invalid Input')
 	  end
@@ -55,28 +41,42 @@ end
 %! f = [sym(1),sym(0)] ;
 %! sort(f)	;
 %! expected = sym([0 , 1]) ;
-%! assert (isequal (sort(f), expected))
+%! assert (isequal(sort(f), expected));
 
 %!test 
 %! f = [sym(1)] ;
 %! sort(f)	;
 %! expected = sym(f) ;
-%! assert (isequal (sort(f), expected))
+%! assert (isequal(sort(f), expected));
 
 %!test
-%! syms x ;
 %! f = [sym(3),sym(2),sym(6)] ;
-%! sort(f)	; 
-%! expected = sym([2  3  6]) ;
-%! assert (isequal (sort(f), expected))
+%! [s,i]=sort(f)	; 
+%! expected_s = sym([2  3  6]) ;
+%! expected_i = [2 1 3] ;
+%! assert (isequal(s,expected_s) && isequal(i,expected_i));
 
 %!test 
-%! f = [sym(1),sym(0.5)] ;
-%! sort(f)	;
-%! expected = sym([sym(1/2) ,sym(1)]) ;
-%! assert (isequal (sort(f), expected))
+%! f = [sym(1), sym(2);sym(2), sym(3); sym(3), sym(1)];
+%! [s,i]=sort(f)	;
+%! expected_s = ([sym(1) ,sym(1);sym(2) ,sym(2);sym(3) ,sym(3)]) ;
+%! expected_i = ([1,3;2,1;3,2]) ;
+%! assert (isequal(s,expected_s) && isequal(i,expected_i));
 
-%! test 
+%!test 
+%! f = [] ;
+%! sort(f)	;
+%! expected = sym([]) ;
+%! assert (isequal(sort(f), expected));
+
+%!test 
+%! f = [sym(1)] ;
+%! sort(f)	;
+%! expected = sym([1]) ;
+%! assert (isequal(sort(f), expected));
+
+%!xtest
+%! error<'Invalid Input'> 
 %! sym x ;
 %! f=[ sym(1) x];
-%! error <Invalid Input> sort (f)  # test that throws specific error
+%! sort(f) ;
