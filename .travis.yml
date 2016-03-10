@@ -9,9 +9,9 @@ matrix:
     - python: "2.7"
       env: SYMPY_VER=0.7.6 OCT_PPA=no DOCTEST=no
     - python: "2.7"
-      env: SYMPY_VER=0.7.6 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: SYMPY_VER=0.7.6 OCT_PPA=yes DOCTEST=no
     - python: "3.4"
-      env: SYMPY_VER=0.7.6.1 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: SYMPY_VER=0.7.6.1 OCT_PPA=yes DOCTEST=no
     - python: "2.7"
       env: SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "3.5"
