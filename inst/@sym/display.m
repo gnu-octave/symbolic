@@ -24,22 +24,21 @@
 %% Examples:
 %% @example
 %% @group
-%% >> x = sym('x')
-%%    @result{} x = (sym) x
+%% x = sym('x')
+%%   @result{} x = (sym) x
 %%
-%% >> display(x)
-%%    @result{} x = (sym) x
+%% display(x)
+%%   @result{} x = (sym) x
 %%
-%% >> display([x 2 pi])
-%%    @result{} (sym) [x  2  π]  (1×3 matrix)
+%% display([x 2 pi])
+%%   @result{} (sym) [x  2  π]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% @group
-%% >> A = sym([1 2; 3 4])
-%%    @result{} A = (sym 2×2 matrix)
+%% A = sym([1 2; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
 %%        ⎡1  2⎤
 %%        ⎢    ⎥
 %%        ⎣3  4⎦
