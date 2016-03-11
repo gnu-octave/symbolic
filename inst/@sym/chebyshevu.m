@@ -46,7 +46,7 @@ function sympoly = chebyshevu(x, n)
           "    return 2*x;"
           "y0 = symbols('1');"
           "y1 = 2*x;"
-          "for i in range(n):"
+          "for i in range(int(n)):"
           "    y = 2*x*y1 - y0;"
           "    y = y1;"
           "    y1 = y;"
@@ -57,17 +57,17 @@ end
 %!test
 %! syms x
 %! n0 = 0;
-%! poly0 = chebyshevu(x, n0);
+%! poly0 = chebyshevu(x, n0)
 %! assert(poly0 == sym(1))
 
 %!test
 %! syms x
 %! n1 = 1;
-%! poly1 = chebyshevu(x, n1);
+%! poly1 = chebyshevu(x, n1)
 %! assert(poly1 == (2*x))
 
 %!test
 %! syms x
 %! n2 = 2;
-%! poly2 = chebyshevu(x, n2);
+%! poly2 = chebyshevu(x, n2)
 %! assert(poly2 == (4*x*x - 1))
