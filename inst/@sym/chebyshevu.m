@@ -58,16 +58,16 @@ end
 %! syms x
 %! n0 = 0;
 %! poly0 = chebyshevu(x, n0)
-%! assert(poly0 == sym(1))
+%! assert(isequal(poly0, sym(1)))
 
 %!test
 %! syms x
 %! n1 = 1;
 %! poly1 = chebyshevu(x, n1)
-%! assert(poly1 == (2*x))
+%! assert(isequal(poly1, (2*x)))
 
 %!test
 %! syms x
 %! n2 = 2;
 %! poly2 = chebyshevu(x, n2)
-%! assert(poly2 == (4*x*x - 1))
+%! assert(isequal(poly2, (4*x*x - 1)))
