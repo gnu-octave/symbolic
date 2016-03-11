@@ -45,7 +45,7 @@ function y = chebyshevu(x, n)
  y = python_cmd (cmd, x, n);
 end
 
-%! shared x
+%!shared x
 %! syms x
 
 %!test
