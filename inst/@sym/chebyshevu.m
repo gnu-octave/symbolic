@@ -48,7 +48,7 @@ function sympoly = chebyshevu(x, n)
           "y1 = 2*x;"
           "for i in range(int(n)):"
           "    y = 2*x*y1 - y0;"
-          "    y = y1;"
+          "    y0 = y1;"
           "    y1 = y;"
           "return y," };
   sympoly = python_cmd (cmd, x, n);
@@ -64,7 +64,7 @@ end
 %! syms x
 %! n1 = 1;
 %! poly1 = chebyshevu(x, n1)
-%! assert(isequal(poly1, (2*x)))
+%! assert(isequal(poly1, sym(2*x)))
 
 %!test
 %! syms x
