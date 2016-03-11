@@ -38,36 +38,37 @@
 %% Author: Abhinav Tripathi
 %% Keywords: symbolic
 
-function sympoly = chebyshevu(x, n)
-  cmd = { "x, n = _ins"
-          "if n == 0:"
-          "    return symbols('1');"
-          "if n == 1:"
-          "    return 2*x;"
-          "y0 = symbols('1');"
-          "y1 = 2*x;"
-          "for i in range(int(n)):"
-          "    y = 2*x*y1 - y0;"
-          "    y0 = y1;"
-          "    y1 = y;"
-          "return y," };
-  sympoly = python_cmd (cmd, x, n);
+function y = chebyshevu(x, n)
+  if n==0
+    y = sym(1);
+  elseif n==1
+    y = 2*x;
+  else
+    y0 = sym(1);
+    y1 = 2*x;
+    for i= 2:n
+      y = 2*x*y1 - y0;
+      y0 = y1;
+      y1 = y;
+    endfor
+    y = simplify(y);
+  endif
 end
 
 %!test
 %! syms x
 %! n0 = 0;
-%! poly0 = chebyshevu(x, n0)
+%! poly0 = chebyshevu(x, n0);
 %! assert(isequal(poly0, sym(1)))
 
 %!test
 %! syms x
 %! n1 = 1;
-%! poly1 = chebyshevu(x, n1)
+%! poly1 = chebyshevu(x, n1);
 %! assert(isequal(poly1, sym(2*x)))
 
 %!test
 %! syms x
 %! n2 = 2;
-%! poly2 = chebyshevu(x, n2)
-%! assert(isequal(poly2, (4*x*x - 1)))
+%! poly2 = chebyshevu(x, n2);
+%! assert(isequal(poly2, sym(4*x*x - 1)))
