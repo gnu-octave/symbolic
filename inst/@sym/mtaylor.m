@@ -22,25 +22,22 @@
 %% @deftypefnx {Function File} {@var{g} =} mtaylor (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} mtaylor (@var{f}, @var{x}, @var{a})
 %% @deftypefnx {Function File} {@var{g} =} mtaylor (@dots{}, @var{key}, @var{value})
-%% Symbolic Two Variable mTaylor series.
+%% Symbolic Two dimesional  Taylor series.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
 %% defaults to zero.
 %%
 %% Key/value pairs can be used to set the order:
 %% @example
-%%change them
 %% @group
-%% >> syms x,y
+%% >> syms x y 
 %% >> f = exp(x*y);
 %% >> mtaylor(f, [x,y] , [0,0], 'order', 6)
-%%    @result{} (sym)
-%%ans = (sym)
-%%
-%%     2  2          
-%%    x ⋅y           
-%%    ───── + x⋅y + 1
-%%      2            
+%%    @result{}  (sym)
+%%                   2  2          
+%%                  x ⋅y           
+%%                  ───── + x⋅y + 1
+%%                    2            
 %% @end group
 %% @end example
 %%
@@ -48,6 +45,8 @@
 %% expansion point using a key/value notation:
 %% @example
 %% @group
+%% >> syms x
+%% >> f = exp(x);
 %% >> mtaylor(f, 'expansionPoint', 1, 'order', 4)
 %%    @result{} (sym)
 %%                   3            2
@@ -175,10 +174,34 @@ end
 %!test
 %! syms x y
 %! f = exp(x)+exp(y);
-%! expected = 2 + x + x^2/2 + x^3/6 + x^4/24 + y + y^2/2 + y^3/6 + y^4/24 ;
+%! expected = 2 + x + x^2/2 + x^3/6 + x^4/24 + y + y^2/2 + y^3/6 + y^4/24;
 %! assert (isAlways(mtaylor(f,'order',5)== expected))
 %! assert (isAlways(mtaylor(f,[x,y],'order',5)== expected))
 %! assert (isAlways(mtaylor(f,[x,y],[0,0],'order',5) == expected))
+
+%!test
+%! syms x y
+%! f = exp(x**2+y**2);
+%! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
+%! assert (isAlways(mtaylor(f,'order',5)== expected))
+%! assert (isAlways(mtaylor(f,[x,y],'order',5)== expected))
+%! assert (isAlways(mtaylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
+
+
+%!test
+%! syms x y
+%! f = sqrt(1+x^2+y^2);
+%! expected = 1+ x^2/2 +y^2/2 - x^4/8 - x^2*y^2/4 - y^4/8;
+%! assert (isAlways(mtaylor(f,'order',6)== expected))
+%! assert (isAlways(mtaylor(f,[x,y],'order',6)== expected))
+%! assert (isAlways(mtaylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
+
+
+%!test
+%! syms x y
+%! f = sin(x**2+y**2);
+%! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
+%! assert (isAlways(mtaylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
 
 %!test
 %! % key/value ordering doesn't matter
@@ -190,7 +213,7 @@ end
 
 %!test
 %! syms x y
-%! f = x**2 +y**2 ;
+%! f = x**2 +y**2;
 %! assert (isAlways(mtaylor(f,[x,y],[0,0],'order',0)== sym(0) ))
 %! assert (isAlways(mtaylor(f,[x,y],[0,0],'order',1)== sym(0) ))
 %! assert (isAlways(mtaylor(f,[x,y],[0,0],'order',2)== sym(0) ))
