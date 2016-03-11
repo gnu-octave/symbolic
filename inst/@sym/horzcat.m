@@ -112,4 +112,4 @@ end
 %!error <ShapeError>
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(3, 0));
-%! w = [v q];
+%! w = horzcat(v, q);

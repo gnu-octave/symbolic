@@ -119,7 +119,7 @@ end
 %!error <ShapeError>
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(0, 3));
-%! w = [v; q];
+%! w = vertcat(v, q);
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab

@@ -7,8 +7,8 @@
 %!assert (isequal (x(1), x));
 %!assert (isequal (x(end), x));
 
-%!error <subscript indices must be either positive> x(0)
-%!error <subscript indices must be either positive> x(-1)
+%!error <subscript.*either.*integers> x(0)
+%!error <subscript.*either.*integers> x(-1)
 
 %!error <index out of range> x(end+1)
 
