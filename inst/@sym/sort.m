@@ -19,13 +19,39 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} sort (@var{f})
-%% Sorting symbols .
+%% sort orders the elements in increasing order.
+%% @example
+%% @group
+%% >> sort([sym(2),sym(1)])
+%%   @result{} ans = (sym) [1  2]  (1×2 matrix)
+%%
+%% @end group
+%% @end example
+%% For matrices, sort orders the elements within columns
+%% @example
+%% @group
+%% >> [s,i]=sort([sym(2),sym(1);sym(3),sym(0)])
+%%   @result{} s = (sym 2×2 matrix)
+%%
+%%               ⎡2  0⎤
+%%               ⎢    ⎥
+%%               ⎣3  1⎦
+%%
+%%             i = 
+%%
+%%                1  2
+%%                2  1
+%%
+%% @end group
+%% @end example
+%% @end deftypefn
 %% Author: Utkarsh Gautam
 %% Keywords: symbolic, sort
 
 function [s,i] = sort(f)
 	if isempty(f)
-		[s,i]=sort(f)
+		s=f;
+		i=f;
 	else 
 	  if isallconstant(f) 
 	    [s,i]=sort(double(f));
@@ -38,45 +64,42 @@ end
 
 
 %!test 
-%! f = [sym(1),sym(0)] ;
-%! sort(f)	;
-%! expected = sym([0 , 1]) ;
+%! f = [sym(1),sym(0)];
+%! sort(f);
+%! expected = sym([0 , 1]);
 %! assert (isequal(sort(f), expected));
 
 %!test 
-%! f = [sym(1)] ;
-%! sort(f)	;
-%! expected = sym(f) ;
+%! f = [sym(1)];
+%! sort(f);
+%! expected = sym(f);
 %! assert (isequal(sort(f), expected));
 
 %!test
-%! f = [sym(3),sym(2),sym(6)] ;
-%! [s,i]=sort(f)	; 
-%! expected_s = sym([2  3  6]) ;
-%! expected_i = [2 1 3] ;
+%! f = [sym(3),sym(2),sym(6)];
+%! [s,i] = sort(f); 
+%! expected_s = sym([2  3  6]);
+%! expected_i = [2 1 3];
 %! assert (isequal(s,expected_s) && isequal(i,expected_i));
 
 %!test 
 %! f = [sym(1), sym(2);sym(2), sym(3); sym(3), sym(1)];
-%! [s,i]=sort(f)	;
-%! expected_s = ([sym(1) ,sym(1);sym(2) ,sym(2);sym(3) ,sym(3)]) ;
-%! expected_i = ([1,3;2,1;3,2]) ;
+%! [s,i] = sort(f);
+%! expected_s = ([sym(1) ,sym(1);sym(2) ,sym(2);sym(3) ,sym(3)]);
+%! expected_i = ([1,3;2,1;3,2]);
 %! assert (isequal(s,expected_s) && isequal(i,expected_i));
 
 %!test 
-%! f = [] ;
-%! sort(f)	;
-%! expected = sym([]) ;
-%! assert (isequal(sort(f), expected));
+%!assert (isequal (sort(sym([])), sym([])))
 
 %!test 
-%! f = [sym(1)] ;
-%! sort(f)	;
-%! expected = sym([1]) ;
+%! f = [sym(1)];
+%! sort(f);
+%! expected = sym([1]);
 %! assert (isequal(sort(f), expected));
 
 %!xtest
 %! error<'Invalid Input'> 
-%! sym x ;
+%! sym x;
 %! f=[ sym(1) x];
-%! sort(f) ;
+%! sort(f);
