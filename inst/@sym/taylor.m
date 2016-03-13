@@ -22,7 +22,7 @@
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@dots{}, @var{key}, @var{value})
-%% Symbolic Taylor series.
+%% Symbolic Two dimesional  Taylor series.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
 %% defaults to zero.
@@ -30,14 +30,14 @@
 %% Key/value pairs can be used to set the order:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = exp(x);
-%% >> taylor(f, x, 0, 'order', 6)
-%%    @result{} (sym)
-%%            5    4    3    2
-%%           x    x    x    x
-%%          ─── + ── + ── + ── + x + 1
-%%          120   24   6    2
+%% >> syms x y 
+%% >> f = exp(x*y);
+%% >> taylor(f, [x,y] , [0,0], 'order', 6)
+%%    @result{}  (sym)
+%%                   2  2          
+%%                  x ⋅y           
+%%                  ───── + x⋅y + 1
+%%                    2            
 %% @end group
 %% @end example
 %%
@@ -45,6 +45,8 @@
 %% expansion point using a key/value notation:
 %% @example
 %% @group
+%% >> syms x
+%% >> f = exp(x);
 %% >> taylor(f, 'expansionPoint', 1, 'order', 4)
 %%    @result{} (sym)
 %%                   3            2
@@ -56,37 +58,50 @@
 %% @seealso{diff}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, differentiation
+%% Author: Utkarsh Gautam ,Colin B. Macdonald
+%% Keywords: symbolic, differentiation , multivar
 
 function s = taylor(f, varargin)
 
   if (nargin == 1)  % taylor(f)
-    x = symvar(f,1);
-    a = sym(0);
-    i = 1;
-  elseif (nargin == 2)  % taylor(f,x)
-    x = varargin{1};
-    a = sym(0);
-    i = 2;
-  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}))
-    % taylor(f,x,a,...)
+    x = symvar(f);
+    a = zeros(1,columns(x));
+    i = nargin;
+  elseif (nargin == 2)  % taylor(f,[x,y])
+    x = varargin{1};  
+    a = zeros(1,columns(x));
+    i = nargin;
+  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}) && (nargin<=3) )
+    % taylor(f,[x,y],[a,b],...)
     x = varargin{1};
     a = varargin{2};
-    i = 3;
+    i = nargin;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
-    % taylor(f,x,'param')
+    % taylor(f,[x,y],'param')
     x = varargin{1};
-    a = sym(0);
+    a = zeros(1,columns(x));
     i = 2;
+  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}) && ischar(varargin{3}) )
+    % taylor(f,[x,y],[a,b],'param')
+    x = varargin{1};
+    a = varargin{2};
+    i = 3;  
   else  % taylor(f,'param')
     assert (ischar(varargin{1}))
-    x = symvar(f,1);
-    a = sym(0);
+    x = symvar(f);
+    a = zeros(1,columns(x));
     i = 1;
   end
+  %x
 
-  n = 6;  %default order
+  n=6; %default order
+  %sym(x)
+  %n = 6;  %default order
+
+
+  % if ~( rows(x)==1 && columns(x)==2)
+  %   error('invalid input variables .Function Only for 2D expansion') %%chage this afterwards
+  % end 
 
   while (i <= (nargin-1))
     if (strcmpi(varargin{i}, 'order'))
@@ -99,18 +114,50 @@ function s = taylor(f, varargin)
       error('invalid key/value pair')
     end
   end
-
   if (isfloat(n))
     n = int32(n);
   end
-
-  if (numel(x) > 1)
-    warning('FIXME: Issue #31 multivar Taylor expansions not implemented')
+  %n
+  %a
+  if (numel(x) == 2)
+    %error('Only two dimensional variables are supported')  
+    cmd ={'(f, x, a, n) = _ins'
+      'import math as ms'
+      'expr=f'
+      'var=x'
+      'i=a'
+      'expn=expr.subs([(var[x],i[x]) for x in range(len(var))]) # first constant term'
+      'for x in range(1,n,1) :'
+      '    bin=[binomial(x,m) for m in range(x+1)] #binomila constands'
+      '    x1=x'
+      '    x2=0'
+      '    fact=ms.factorial(x)'
+      '    for y in bin:'
+      '        fterm=diff(diff(expr,var[0],x1),var[1],x2).subs([(var[x],i[x]) for x in range(len(var))])'
+      '        expn=expn + y*(1.0/fact)*fterm*((var[0]-i[0])**x1)*((var[1]-i[1])**x2)'
+      '        x1=x1-1'
+      '        x2=x2+1'
+      'return nsimplify((expn))'     
+  };
+  elseif (numel(x)==1 )
+    cmd = { '(f, x, a, n) = _ins'
+        's = f.series(x, a, n).removeO()'
+        'return s,' }; 
+  else
+    cmd={
+      '(f, x, a, n) = _ins'
+      'import math as ms'
+      'var=x'
+      's=f'
+      'for m in range(len(var)):'
+      '    s=s.series(var[m],a[m],int(n)).removeO()'
+      
+      'return s'
+    };
+           
   end
 
-  cmd = { '(f, x, a, n) = _ins'
-          's = f.series(x, a, n).removeO()'
-          'return s,' };
+
   s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
 
 end
@@ -120,9 +167,10 @@ end
 %! syms x
 %! f = exp(x);
 %! expected = 1 + x + x^2/2 + x^3/6 + x^4/24 + x^5/120;
-%! assert (isequal (taylor(f), expected))
-%! assert (isequal (taylor(f,x), expected))
-%! assert (isequal (taylor(f,x,0), expected))
+%! assert (isAlways(taylor(f)== expected))
+%! assert (isAlways(taylor(f,x)== expected))
+%! assert (isAlways(taylor(f,x,0)== expected))
+
 
 %!test
 %! syms x
@@ -132,13 +180,6 @@ end
 %! assert (isequal (taylor(f,x,'order',5), expected))
 %! assert (isequal (taylor(f,x,0,'order',5), expected))
 
-%!test
-%! % key/value ordering doesn't matter
-%! syms x
-%! f = exp(x);
-%! g1 = taylor(f, 'expansionPoint', 1, 'order', 3);
-%! g2 = taylor(f, 'order', 3, 'expansionPoint', 1);
-%! assert (isequal (g1, g2))
 
 %!test
 %! syms x
@@ -150,21 +191,71 @@ end
 %! assert (isequal (taylor(f,x,0,'order',4), x^2))
 
 %!test
+%! syms x y
+%! f = exp(x)+exp(y);
+%! expected = 2 + x + x^2/2 + x^3/6 + x^4/24 + y + y^2/2 + y^3/6 + y^4/24;
+%! assert (isAlways(taylor(f,'order',5)== expected))
+%! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',5) == expected))
+
+%!test
+%! syms x y
+%! f = exp(x**2+y**2);
+%! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
+%! assert (isAlways(taylor(f,'order',5)== expected))
+%! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
+%! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
+
+
+%!test
+%! syms x y
+%! f = sqrt(1+x^2+y^2);
+%! expected = 1+ x^2/2 +y^2/2 - x^4/8 - x^2*y^2/4 - y^4/8;
+%! assert (isAlways(taylor(f,'order',6)== expected))
+%! assert (isAlways(taylor(f,[x,y],'order',6)== expected))
+%! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
+
+
+%!test
+%! syms x y
+%! f = sin(x**2+y**2);
+%! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
+%! assert (isAlways(taylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
+
+%!test
+%! % key/value ordering doesn't matter
+%! syms x y
+%! f = exp(x+y);
+%! g1 = taylor(f, 'expansionPoint', [1,1], 'order', 3);
+%! g2 = taylor(f, 'order', 3, 'expansionPoint', [1,1]);
+%! assert (isAlways(g1== g2))
+
+%!test
+%! syms x y
+%! f = x**2 +y**2;
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',0)== sym(0) ))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',1)== sym(0) ))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',2)== sym(0) ))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x**2+y**2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x**2+y**2)))
+
+%!test
 %! % syms for a and order
-%! syms x
+%! syms x 
 %! f = x^2;
-%! assert (isequal (taylor(f,x,sym(0),'order',sym(2)), 0))
-%! assert (isequal (taylor(f,x,sym(0),'order',sym(4)), x^2))
+%! assert (isAlways(taylor(f,x,sym(0),'order',sym(2))== 0))
+%! assert (isAlways(taylor(f,x,sym(0),'order',sym(4))== x^2))
+
 
 %!test
 %! % expansion point
 %! syms x a
 %! f = x^2;
 %! g = taylor(f,x,2);
-%! assert (isequal (simplify(g), f))
-%! assert (isequal (g, 4*x+(x-2)^2-4))
+%! assert (isAlways(simplify(g)== f))
+%! assert (isAlways(g== 4*x+(x-2)^2-4))
 %! g = taylor(f,x,a);
-%! assert (isequal (simplify(g), f))
+%! assert (isAlways(simplify(g)== f))
 
 %!xtest
 %! % wrong order-1 series with nonzero expansion pt:
@@ -172,4 +263,4 @@ end
 %! syms x
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
-%! assert (isequal (h, 27))
+%! assert (isAlways(h== 27)) ;
