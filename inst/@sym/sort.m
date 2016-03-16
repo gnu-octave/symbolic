@@ -126,7 +126,7 @@ end
 %!assert (isequal (sort(sym([])), sym([])))
 
 %!xtest
-%! error<'Invalid Input'> 
-%! sym x;
-%! f=[ sym(1) x];
+%!error <Invalid Input>
+%! syms x;
+%! f=[sym(1), x];
 %! sort(f);
