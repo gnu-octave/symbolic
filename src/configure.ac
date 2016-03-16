@@ -15,7 +15,7 @@ else
 fi
 
 AC_PATH_PROG(PYTHON, python)
-if test -z $PYTHON; then
+if test -z "$PYTHON"; then
   AC_MSG_ERROR(Failed to find Python)
 fi
 

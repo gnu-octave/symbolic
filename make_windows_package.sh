@@ -22,18 +22,18 @@ WINDIRTMP=${WINDIR}-TMP
 
 echo "Making packages for octsympy-$VER."
 
-read -p "Press [Enter] to git clone and make packages..."
+printf "Press [Enter] to git clone and make packages..."
+read dummy
 
 # checkout a clean copy
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
-pushd octsympy
-if [ -z $TAG]; then
-  git checkout master
-else
-  git checkout tags/${TAG}
-fi
-popd
+( cd octsympy
+  if [ -z $TAG]; then
+    git checkout master
+  else
+    git checkout tags/${TAG}
+  fi )
 
 
 # clean up
@@ -41,24 +41,23 @@ rm -rf ${WINDIR}
 rm -rf ${WINDIRTMP}
 
 
-cp -r octsympy ${WINDIRTMP}
-pushd ${WINDIRTMP}/src/
-make distclean
-./bootstrap
-./configure
-make
-popd
+cp -R octsympy ${WINDIRTMP}
+( cd ${WINDIRTMP}/src/
+  make distclean
+  ./bootstrap
+  ./configure
+  make )
 
 # copy things to the package
 mkdir ${WINDIR}
-cp -ra ${WINDIRTMP}/inst ${WINDIR}/
-cp -ra ${WINDIRTMP}/bin ${WINDIR}/
-cp -ra ${WINDIRTMP}/NEWS ${WINDIR}/
-cp -ra ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
-cp -ra ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
-cp -ra ${WINDIRTMP}/COPYING ${WINDIR}/
-cp -ra ${WINDIRTMP}/README.bundled.md ${WINDIR}/
-cp -ra ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
+cp -pR ${WINDIRTMP}/inst ${WINDIR}/
+cp -pR ${WINDIRTMP}/bin ${WINDIR}/
+cp -pR ${WINDIRTMP}/NEWS ${WINDIR}/
+cp -pR ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
+cp -pR ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
+cp -pR ${WINDIRTMP}/COPYING ${WINDIR}/
+cp -pR ${WINDIRTMP}/README.bundled.md ${WINDIR}/
+cp -pR ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
 # py.exe
 cp ${PYEXE} ${WINDIR}/bin/py.exe
@@ -70,8 +69,8 @@ sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ip
 sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
 
 # sympy
-cp -ra ${SYMPY}/sympy ${WINDIR}/bin/ || exit -6
-cp -ra ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit -6
+cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
+cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
 
 zip -r ${WINPKG}.zip ${WINDIR}
 
