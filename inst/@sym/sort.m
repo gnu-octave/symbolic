@@ -22,6 +22,7 @@
 %% sort orders the elements in increasing order.
 %% @example
 %% @group
+%% >> warning('off','all')
 %% >> sort([sym(2),sym(1)])
 %%   @result{} ans = (sym) [1  2]  (1×2 matrix)
 %%
@@ -30,6 +31,7 @@
 %% For matrices, sort orders the elements within columns
 %% @example
 %% @group
+%% >> warning('off','all')
 %% >> [s,i]=sort([sym(2),sym(1);sym(3),sym(0)])
 %%   @result{} s = (sym 2×2 matrix)
 %%
@@ -49,54 +51,79 @@
 %% Keywords: symbolic, sort
 
 function [s,i] = sort(f)
-	if isempty(f)
+	if (rows(f)<=1 && columns(f)<=1)
 		s=f;
-		i=f;
+		if(rows(f)==0)	
+			i=[];
+		else
+			i=[1];	
+		end	
 	else 
 	  if isallconstant(f) 
 	    [s,i]=sort(double(f));
-	    s=sym(s);
+	    s=sym(zeros( rows(f),columns(f) ) );
+	    if (rows(f) > 1)
+			  cmd = { 
+					'(f, s, i) = _ins'
+					'f=f.tolist()'
+					'i=Matrix(i).tolist()'
+					's=s.tolist()'
+					'for c in range(len(f[0])):'
+					'    for r in range(len(f)):'
+					'        s[r][c]=f[i[r][c]-1][c]'
+					'return [Matrix(s),Matrix(i)]'
+			       };
+			else
+			   	cmd={
+			   			'(f, s, i) = _ins'
+			   			'f=Matrix(f).tolist()'
+			   			'i=transpose(Matrix(i)).tolist()'
+			   			's=s.tolist()'
+							'for c in range(len(f[0])):'
+							'    s[0][c]=f[0][i[0][c]-1]'
+							'return [Matrix(s),Matrix(i)]'
+			   			};   	
+			end         	         
+		  s = python_cmd (cmd, sym(f), s, i );
 	  else
 	    error('Invalid Input')
 	  end
 	end    
 end
 
-
 %!test 
-%! f = [sym(1),sym(0)];
-%! sort(f);
-%! expected = sym([0 , 1]);
+%! f = [sym(1), sym(0)];
+%! expected = sym([0, 1]);
 %! assert (isequal(sort(f), expected));
 
 %!test 
 %! f = [sym(1)];
-%! sort(f);
-%! expected = sym(f);
+%! expected = sym(1);
 %! assert (isequal(sort(f), expected));
 
 %!test
-%! f = [sym(3),sym(2),sym(6)];
+%! f = [sym(3), sym(2), sym(6)];
 %! [s,i] = sort(f); 
-%! expected_s = sym([2  3  6]);
-%! expected_i = [2 1 3];
-%! assert (isequal(s,expected_s) && isequal(i,expected_i));
+%! expected_s = sym([2, 3, 6]);
+%! expected_i = [2, 1, 3];
+%! assert (isequal(s,expected_s) && isequal(i,expected_i) );
+
+%!test
+%! f = [sym(pi),sin(sym(2)),sqrt(sym(6))];
+%! [s,i] = sort(f); 
+%! expected_s = sym([sin(sym(2)), sqrt(sym(6)), sym(pi)]);
+%! expected_i = [2, 3, 1];
+%! assert (isequal(s,expected_s) && isequal(i,expected_i) );
 
 %!test 
-%! f = [sym(1), sym(2);sym(2), sym(3); sym(3), sym(1)];
+%! f = [sym(1), sym(2);sym(2), sym(pi); sym(pi), sym(1)];
 %! [s,i] = sort(f);
-%! expected_s = ([sym(1) ,sym(1);sym(2) ,sym(2);sym(3) ,sym(3)]);
+%! expected_s = ([sym(1) ,sym(1);sym(2) ,sym(2);sym(pi) ,sym(pi)]);
 %! expected_i = ([1,3;2,1;3,2]);
-%! assert (isequal(s,expected_s) && isequal(i,expected_i));
+%! assert ( isequal(s,expected_s) && isequal(i, expected_i) );
 
 %!test 
 %!assert (isequal (sort(sym([])), sym([])))
-
-%!test 
-%! f = [sym(1)];
-%! sort(f);
-%! expected = sym([1]);
-%! assert (isequal(sort(f), expected));
 
 %!xtest
 %! error<'Invalid Input'> 
