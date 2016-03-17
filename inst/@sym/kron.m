@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2016 Utkarsh Gautam
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,18 +19,23 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{c} =} kron (@var{a}, @var{b})
-%% Kronecker tensor product of two matrices .
+%% Kronecker tensor product of two matrices.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> kron(eye(2),[1,-1;-1,1])
-%%		@result{}	ans =
-%%
-%%			 1  -1   0   0
-%%			-1   1   0   0
-%%			 0   0   1  -1
-%%			 0   0  -1   1
+%% >> syms x
+%% >> kron(eye(2)*x,[1,-1;-1,1])
+%% @result{} ans = (sym 4×4 matrix)
+%% 	
+%%     ⎡x   -x  0   0 ⎤
+%%     ⎢              ⎥
+%%     ⎢-x  x   0   0 ⎥
+%%     ⎢              ⎥
+%%     ⎢0   0   x   -x⎥
+%%     ⎢              ⎥
+%%     ⎣0   0   -x  x ⎦
+%%			
 %%
 %% @end group
 %% @end example
@@ -39,11 +44,11 @@
 %% @group
 %% >> syms x y
 %% >> kron([1,2],[x,y;y,x])
-%%		@result{}	ans = (sym 2×4 matrix)
+%% @result{} ans = (sym 2×4 matrix)
 %%
-%%	  		⎡x  y  2⋅x  2⋅y⎤
-%%	  		⎢              ⎥
-%%	  		⎣y  x  2⋅y  2⋅x⎦
+%%     ⎡x  y  2⋅x  2⋅y⎤
+%%     ⎢              ⎥
+%%     ⎣y  x  2⋅y  2⋅x⎦
 %%						
 %% @end group
 %% @end example
@@ -56,8 +61,7 @@ function c = kron(a, b)
 		error('Invalid Input');
 	end	
   cmd = { 'a, b = _ins'
-  				'from sympy.physics.quantum import TensorProduct'
-  				'from sympy import I, Matrix, symbols'
+  		    'from sympy.physics.quantum import TensorProduct'
           'return TensorProduct(Matrix(a),Matrix(b)),'
         };
 
@@ -67,24 +71,20 @@ end
 
 
 %!test
-%! A = [1, 2; 4, 5];
+%! syms x y
+%! A = [sin(x), sin(y); x, y];
 %! B = ones(2);
-%! expected =[1, 1, 2, 2; 1, 1, 2, 2; 4, 4, 5, 5; 4, 4, 5, 5];
+%! expected = sym([sin(x), sin(x), sin(y), sin(y); sin(x), sin(x), sin(y), sin(y); x, x, y, y; x, x, y, y]);
 %! assert (isequal(kron(A,B),expected))
 
 
-%!test
-%! A = [1, 2; 4,5];
-%! B = 2;
-%! expected= 2*[1, 2; 4, 5];
-%! assert (isequal(kron(A,B),expected))
 
 %!test
 %! syms x y;
-%! X = [x, x];
-%! Y = [y; y];
-%! expected = ones(2)*(x*y);
-%! assert (isequal(kron(X,Y), expected))
+%! X = [tan(x), tan(x)];
+%! Y = [cot(x); cot(x)];
+%! expected = sym(ones(2));
+%! assert (isequal(simplify(kron(X,Y)), expected))
 
 
 %!test
