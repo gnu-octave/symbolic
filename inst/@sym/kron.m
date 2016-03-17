@@ -57,16 +57,15 @@
 %% Keywords:  kron product
 function c = kron(a, b)
 
-	if ~(ismatrix(a) && ismatrix(b))
-		error('Invalid Input');
-	end	
+	if (isscalar(a) || isscalar(b))
+		c=a*b;
+	else	
   cmd = { 'a, b = _ins'
   		    'from sympy.physics.quantum import TensorProduct'
           'return TensorProduct(Matrix(a),Matrix(b)),'
         };
-
   c = python_cmd (cmd, sym(a), sym(b));
-
+	end
 end
 
 
@@ -77,6 +76,19 @@ end
 %! expected = sym([sin(x), sin(x), sin(y), sin(y); sin(x), sin(x), sin(y), sin(y); x, x, y, y; x, x, y, y]);
 %! assert (isequal(kron(A,B),expected))
 
+
+%!test
+%! syms x y
+%! A = [sin(x), sin(y); x, y];
+%! B = 2;
+%! assert (isequal(kron(A,B),2*A))
+
+
+%!test
+%! syms x y
+%! A = [sin(x), sin(y)];
+%! B = 2;
+%! assert (isequal(kron(B,A),2*A))
 
 
 %!test
@@ -91,12 +103,12 @@ end
 %! syms x y z
 %! X = [x, y, z];
 %! Y = [y, y; x, x];
-%! expected =[x*y, x*y, y**2, y**2, y*z, y*z; x**2, x**2, x*y, x*y, x*z, x*z];
+%! expected = [x*y, x*y, y**2, y**2, y*z, y*z; x**2, x**2, x*y, x*y, x*z, x*z];
 %! assert (isequal(kron(X,Y), expected))
 
 %!test
 %! syms x y
 %! X = [x, x**2; y, y**2];
 %! Y = [1, 0; 0, 1];
-%! expected =[x, x**2, 0, 0; y, y**2, 0, 0; 0, 0, x, x**2; 0, 0, y, y**2];
+%! expected = [x, x**2, 0, 0; y, y**2, 0, 0; 0, 0, x, x**2; 0, 0, y, y**2];
 %! assert (isequal(kron(Y,X), expected))
