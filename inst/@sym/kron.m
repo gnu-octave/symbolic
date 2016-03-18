@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% kron(eye(2)*x,[1,-1;-1,1])
+%% kron(eye(2)*x, [1, -1; -1, 1])
 %%   @result{} ans = (sym 4×4 matrix)
 %%
 %%       ⎡x   -x  0   0 ⎤
