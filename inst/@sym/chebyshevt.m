@@ -19,16 +19,18 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{s} =} chebyshevt (@var{x}, @var{n})
-%% Find the chebyshev's first type nth polynomial in the variable x.
+%% Find the nth Symbolic Chebyshev polynomial of the first kind.
 %%
 %% Example:
 %% @example
 %% @group
 %% >> syms x
-%% >> g = chebyshevt(x, 1)
-%%    @result{} g = x
-%% >> g = chebyshevt(x, 2)
-%%    @result{} g = 2x^2 - 1
+%% >> chebyshevt(x, 1)
+%%    @result{} (sym) x
+%% >> chebyshevt(x, 2)
+%%    @result{} (sym)
+%%             2
+%%        - 2⋅x  - 1
 %% @end group
 %% @end example
 %%
@@ -40,7 +42,7 @@
 
 function y = chebyshevt(x, n)
   cmd = { 'x, n = _ins'
-          'return chebyshevt(int(n),x),' };
+          'return chebyshevt(n,x),' };
  
  y = python_cmd (cmd, x, n);
 end
@@ -49,13 +51,6 @@ end
 %! syms x
 
 %!test
-%! poly0 = chebyshevt(x, 0);
-%! assert(isequal(poly0, sym(1)))
-
-%!test
-%! poly1 = chebyshevt(x, 1);
-%! assert(isequal(poly1, x))
-
-%!test
-%! poly2 = chebyshevt(x, 2);
-%! assert(isequal(poly2, 2*x*x - 1))
+%! assert(isequal(chebyshevt(x, 0), sym(1)))
+%! assert(isequal(chebyshevt(x, 1), x))
+%! assert(isequal(chebyshevt(x, 2), 2*x*x - 1))

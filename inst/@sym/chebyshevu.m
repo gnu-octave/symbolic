@@ -19,16 +19,18 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{s} =} chebyshevu (@var{x}, @var{n})
-%% Find the chebyshev's seconf type nth polynomial in the variable x.
+%% Find the nth Symbolic Chebyshev polynomial of the second kind.
 %%
 %% Example:
 %% @example
 %% @group
 %% >> syms x
-%% >> g = chebyshevu(x, 1)
-%%    @result{} g = 2x
-%% >> g = chebyshevu(x, 2)
-%%    @result{} g = 4x^2 - 1
+%% >> chebyshevu(x, 1)
+%%    @result{} (sym) 2⋅x
+%% >> chebyshevu(x, 2)
+%%    @result{} (sym)
+%%             2
+%%        - 4⋅x  - 1
 %% @end group
 %% @end example
 %%
@@ -40,7 +42,7 @@
 
 function y = chebyshevu(x, n)
   cmd = { 'x, n = _ins'
-          'return chebyshevu(int(n),x),' };
+          'return chebyshevu(n,x),' };
  
  y = python_cmd (cmd, x, n);
 end
@@ -49,13 +51,6 @@ end
 %! syms x
 
 %!test
-%! poly0 = chebyshevu(x, 0);
-%! assert(isequal(poly0, sym(1)))
-
-%!test
-%! poly1 = chebyshevu(x, 1);
-%! assert(isequal(poly1, 2*x))
-
-%!test
-%! poly2 = chebyshevu(x, 2);
-%! assert(isequal(poly2, 4*x*x - 1))
+%! assert(isequal(chebyshevu(x, 0), sym(1)))
+%! assert(isequal(chebyshevu(x, 1), 2*x))
+%! assert(isequal(chebyshevu(x, 2), 4*x*x - 1))
