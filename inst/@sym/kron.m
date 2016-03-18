@@ -100,12 +100,12 @@ end
 %! syms x y z
 %! X = [x, y, z];
 %! Y = [y, y; x, x];
-%! expected = [x*y, x*y, y**2, y**2, y*z, y*z; x**2, x**2, x*y, x*y, x*z, x*z];
+%! expected = [x*y, x*y, y^2, y^2, y*z, y*z; x^2, x^2, x*y, x*y, x*z, x*z];
 %! assert (isequal (kron(X, Y), expected))
 
 %!test
 %! syms x y
-%! X = [x, x**2; y, y**2];
+%! X = [x, x^2; y, y^2];
 %! Y = [1, 0; 0, 1];
-%! expected = [x, x**2, 0, 0; y, y**2, 0, 0; 0, 0, x, x**2; 0, 0, y, y**2];
+%! expected = [x, x^2, 0, 0; y, y^2, 0, 0; 0, 0, x, x^2; 0, 0, y, y^2];
 %! assert (isequal (kron(Y, X), expected))
