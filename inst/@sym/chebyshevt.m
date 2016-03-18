@@ -29,8 +29,8 @@
 %%    @result{} (sym) x
 %% >> chebyshevt(x, 2)
 %%    @result{} (sym)
-%%             2
-%%        - 2⋅x  - 1
+%%           2
+%%        2⋅x  - 1
 %% @end group
 %% @end example
 %%
