@@ -39,7 +39,7 @@
 %%
 %% @end group
 %% @end example
-%
+%%
 %% @example
 %% @group
 %% >> syms x y
@@ -53,8 +53,10 @@
 %% @end group
 %% @end example
 %% @end deftypefn
+
 %% Author: Utkarsh Gautam
 %% Keywords:  kron product
+
 function c = kron(a, b)
 
 	if (isscalar(a) || isscalar(b))
