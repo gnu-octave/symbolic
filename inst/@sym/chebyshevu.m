@@ -42,7 +42,7 @@
 
 function y = chebyshevu(x, n)
   cmd = { 'x, n = _ins'
-          'return chebyshevu(n,x),' };
+          'return chebyshevu(int(n),x),' };
  
  y = python_cmd (cmd, x, n);
 end
