@@ -18,39 +18,38 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} chebyshevt (@var{x}, @var{n})
-%% Find the nth Symbolic Chebyshev polynomial of the first kind.
+%% @deftypefn  {Function File} {@var{s} =} chebyshevU (@var{x}, @var{n})
+%% Find the nth Symbolic Chebyshev polynomial of the second kind.
 %%
 %% Example:
 %% @example
 %% @group
 %% >> syms x
-%% >> chebyshevt(x, 1)
-%%    @result{} (sym) x
-%% >> chebyshevt(x, 2)
+%% >> chebyshevU(x, 1)
+%%    @result{} (sym) 2⋅x
+%% >> chebyshevU(x, 2)
 %%    @result{} (sym)
 %%           2
-%%        2⋅x  - 1
+%%        4⋅x  - 1
 %% @end group
 %% @end example
 %%
-%% @seealso{chebyshevu}
+%% @seealso{chebyshevT}
 %% @end deftypefn
 
 %% Author: Abhinav Tripathi
 %% Keywords: symbolic
 
-function y = chebyshevt(x, n)
-  cmd = { 'x, n = _ins'
-          'return chebyshevt(int(n),x),' };
+function y = chebyshevU(n, x)
+  cmd = { 'n, x = _ins'
+          'return chebyshevu(n,x),' };
  
- y = python_cmd (cmd, x, n);
+ y = python_cmd (cmd, sym(n), sym(x));
 end
 
 %!shared x
 %! syms x
 
-%!test
-%! assert(isequal(chebyshevt(x, 0), sym(1)))
-%! assert(isequal(chebyshevt(x, 1), x))
-%! assert(isequal(chebyshevt(x, 2), 2*x*x - 1))
+%! assert(isequal(chebyshevU(0, x), sym(1)))
+%! assert(isequal(chebyshevU(1, x), 2*x))
+%! assert(isequal(chebyshevU(2, x), 4*x*x - 1))
