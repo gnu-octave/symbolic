@@ -18,19 +18,22 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} chebyshevU (@var{x}, @var{n})
-%% Find the nth Symbolic Chebyshev polynomial of the second kind.
+%% @deftypefn  {Function File} {@var{s} =} chebyshevU (@var{n}, @var{x})
+%% Find the nth symbolic Chebyshev polynomial of the second kind.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
 %% syms x
-%% chebyshevU(x, 1)
+%% chebyshevU(1, x)
 %%   @result{} (sym) 2⋅x
-%% chebyshevU(x, 2)
+%% chebyshevU(2, x)
 %%   @result{} (sym)
 %%          2
 %%       4⋅x  - 1
+%% syms n
+%% chebyshevU(n, x)
+%%   @result{} (sym) chebyshevu(n, x)
 %% @end group
 %% @end example
 %%

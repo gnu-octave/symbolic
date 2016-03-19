@@ -18,19 +18,22 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} chebyshevT (@var{x}, @var{n})
-%% Find the nth Symbolic Chebyshev polynomial of the first kind.
+%% @deftypefn  {Function File} {@var{s} =} chebyshevT (@var{n}, @var{x})
+%% Find the nth symbolic Chebyshev polynomial of the first kind.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
 %% syms x
-%% chebyshevT(x, 1)
+%% chebyshevT(1, x)
 %%   @result{} (sym) x
-%% chebyshevT(x, 2)
+%% chebyshevT(2, x)
 %%   @result{} (sym)
 %%          2
 %%       2⋅x  - 1
+%% syms n
+%% chebyshevT(n, x)
+%%   @result{} (sym) chebyshevt(n, x)
 %% @end group
 %% @end example
 %%
