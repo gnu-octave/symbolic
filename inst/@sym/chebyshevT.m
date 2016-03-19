@@ -50,7 +50,6 @@ end
 %!shared x
 %! syms x
 
-%!test
-%! assert(isequal(chebyshevT(0, x), sym(1)))
-%! assert(isequal(chebyshevT(1, x), x))
-%! assert(isequal(chebyshevT(2, x), 2*x*x - 1))
+%!assert(isequal(chebyshevT(0, x), sym(1)))
+%!assert(isequal(chebyshevT(1, x), x))
+%!assert(isequal(chebyshevT(2, x), 2*x*x - 1))
