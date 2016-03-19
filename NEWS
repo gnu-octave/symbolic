@@ -4,6 +4,8 @@ octsympy 2.3.0-dev
   * New commands:
 
           cbrt
+          chebyshevU
+          chebyshevT
           fix
           frac
           intersect
