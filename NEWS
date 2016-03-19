@@ -11,6 +11,7 @@ octsympy 2.3.0-dev
           ismember
           finiteset
           has
+          kron
           linspace
           logspace
           max
