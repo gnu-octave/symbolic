@@ -42,9 +42,9 @@
 
 function y = chebyshevT(n,x)
   cmd = { 'n, x = _ins'
-          'return chebyshevt(n,x),' };
+          'return chebyshevt(int(n), x),' };
  
- y = python_cmd (cmd, sym(n), sym(x));
+ y = python_cmd (cmd, n, x);
 end
 
 %!shared x
