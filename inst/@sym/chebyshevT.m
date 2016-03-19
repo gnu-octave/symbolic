@@ -24,13 +24,13 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> chebyshevT(x, 1)
-%%    @result{} (sym) x
-%% >> chebyshevT(x, 2)
-%%    @result{} (sym)
-%%           2
-%%        2⋅x  - 1
+%% syms x
+%% chebyshevT(x, 1)
+%%   @result{} (sym) x
+%% chebyshevT(x, 2)
+%%   @result{} (sym)
+%%          2
+%%       2⋅x  - 1
 %% @end group
 %% @end example
 %%

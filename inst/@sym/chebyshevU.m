@@ -24,13 +24,13 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> chebyshevU(x, 1)
-%%    @result{} (sym) 2⋅x
-%% >> chebyshevU(x, 2)
-%%    @result{} (sym)
-%%           2
-%%        4⋅x  - 1
+%% syms x
+%% chebyshevU(x, 1)
+%%   @result{} (sym) 2⋅x
+%% chebyshevU(x, 2)
+%%   @result{} (sym)
+%%          2
+%%       4⋅x  - 1
 %% @end group
 %% @end example
 %%
@@ -50,6 +50,7 @@ end
 %!shared x
 %! syms x
 
+%!test
 %! assert(isequal(chebyshevU(0, x), sym(1)))
 %! assert(isequal(chebyshevU(1, x), 2*x))
 %! assert(isequal(chebyshevU(2, x), 4*x*x - 1))
