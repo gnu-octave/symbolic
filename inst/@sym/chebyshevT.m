@@ -44,9 +44,9 @@
 %% @group
 %% syms x
 %% chebyshevT([0 1 2], x)
-%%   @result{} 
-%%                                2
-%%       [(sym)1  (sym)x (sym)(2⋅x - 1)]
+%%   @result{} (sym 1×3 matrix)
+%%       ⎡         2    ⎤
+%%       ⎣1  x  2⋅x  - 1⎦
 %% @end group
 %% @end example
 %%
@@ -69,4 +69,4 @@ end
 %!assert(isequal(chebyshevT(0, x), sym(1)))
 %!assert(isequal(chebyshevT(1, x), x))
 %!assert(isequal(chebyshevT(2, x), 2*x*x - 1))
-%!assert(isequal(chebyshevU([0 1 2], x), [sym(1) x (2*x*x-1)]))
+%!assert(isequal(chebyshevT([0 1 2], x), [sym(1) x (2*x*x-1)]))

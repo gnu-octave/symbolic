@@ -20,6 +20,8 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{s} =} chebyshevU (@var{n}, @var{x})
 %% Find the nth symbolic Chebyshev polynomial of the second kind.
+%% If n is a vector then it returns a vector with Chebyshev polynomials
+%% of the second kind for each element of 'n'.
 %%
 %% Examples:
 %% @example
@@ -42,9 +44,9 @@
 %% @group
 %% syms x
 %% chebyshevU([0 1 2], x)
-%%   @result{}
-%%                                  2
-%%       [(sym)1  (sym)2⋅x (sym)(4⋅x - 1)]
+%%   @result{} (sym 1×3 matrix)
+%%       ⎡           2    ⎤
+%%       ⎣1  2⋅x  4⋅x  - 1⎦
 %% @end group
 %% @end example
 %%
