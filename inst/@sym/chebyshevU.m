@@ -37,6 +37,17 @@
 %% @end group
 %% @end example
 %%
+%% Example with input as vector:
+%% @example
+%% @group
+%% syms x
+%% chebyshevU([0 1 2], x)
+%%   @result{}
+%%                                  2
+%%       [(sym)1  (sym)2⋅x (sym)(4⋅x - 1)]
+%% @end group
+%% @end example
+%%
 %% @seealso{chebyshevT}
 %% @end deftypefn
 
@@ -45,7 +56,7 @@
 
 function y = chebyshevU(n, x)
   op = { 'def _op(n, x):'
-        ['    return chebyshevu(int(n), x)'] };
+        ['    return chebyshevu(n, x)'] };
 
   y = binop_helper(n, x, op);
 end
@@ -57,4 +68,3 @@ end
 %!assert(isequal(chebyshevU(1, x), 2*x))
 %!assert(isequal(chebyshevU(2, x), 4*x*x - 1))
 %!assert(isequal(chebyshevU([0 1 2], x), [sym(1) 2*x (4*x*x-1)]))
-

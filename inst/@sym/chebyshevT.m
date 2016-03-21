@@ -20,6 +20,8 @@
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{s} =} chebyshevT (@var{n}, @var{x})
 %% Find the nth symbolic Chebyshev polynomial of the first kind.
+%% If n is a vector then it returns a vector with Chebyshev polynomials
+%% of the first kind for each element of 'n'.
 %%
 %% Examples:
 %% @example
@@ -37,6 +39,17 @@
 %% @end group
 %% @end example
 %%
+%% Example with input as vector:
+%% @example
+%% @group
+%% syms x
+%% chebyshevT([0 1 2], x)
+%%   @result{} 
+%%                                2
+%%       [(sym)1  (sym)x (sym)(2⋅x - 1)]
+%% @end group
+%% @end example
+%%
 %% @seealso{chebyshevU}
 %% @end deftypefn
 
@@ -45,7 +58,7 @@
 
 function y = chebyshevT(n,x)
   op = { 'def _op(n, x):'
-        ['    return chebyshevt(int(n), x)'] };
+        ['    return chebyshevt(n, x)'] };
 
   y = binop_helper(n, x, op);
 end
@@ -56,5 +69,4 @@ end
 %!assert(isequal(chebyshevT(0, x), sym(1)))
 %!assert(isequal(chebyshevT(1, x), x))
 %!assert(isequal(chebyshevT(2, x), 2*x*x - 1))
-%!assert(isequal(chebyshevU([0 1 2], x), [sym(1) 2*x (4*x*x-1)]))
-
+%!assert(isequal(chebyshevU([0 1 2], x), [sym(1) x (2*x*x-1)]))
