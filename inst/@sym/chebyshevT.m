@@ -44,10 +44,10 @@
 %% Keywords: symbolic
 
 function y = chebyshevT(n,x)
-  cmd = { 'n, x = _ins'
-          'return chebyshevt(n, x)' };
+  op = { 'def _op(n, x):'
+        ['    return chebyshevt(int(n), x)'] };
 
-  y = python_cmd (cmd, sym(n), sym(x));
+  y = binop_helper(n, x, op);
 end
 
 %!shared x
@@ -56,3 +56,5 @@ end
 %!assert(isequal(chebyshevT(0, x), sym(1)))
 %!assert(isequal(chebyshevT(1, x), x))
 %!assert(isequal(chebyshevT(2, x), 2*x*x - 1))
+%!assert(isequal(chebyshevU([0 1 2], x), [sym(1) 2*x (4*x*x-1)]))
+
