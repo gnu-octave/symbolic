@@ -58,7 +58,7 @@
 %% Keywords: symbolic
 
 function y = chebyshevT(n,x)
-  y = binop_helper(n, x, 'chebyshevt')
+  y = binop_helper(sym(n), sym(x), 'chebyshevt');
 end
 
 %!shared x
