@@ -74,31 +74,29 @@ function s = taylor(f, varargin)
 
   if (nargin == 1)  % taylor(f)
     x = symvar(f,1);
-    a = zeros(1,columns(x));
+    a = sym(0);
     i = nargin;
   elseif (nargin == 2)  % taylor(f,[x,y])
-    x = varargin{1};  
-    a = zeros(1,columns(x));
+    x = varargin{1};
+    a = zeros(1, length(x));
     i = nargin;
-  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}) && (nargin<=3) )
-    % taylor(f,[x,y],[a,b],...)
+  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}))
+    % taylor(f, x, a)
+    % taylor(f, [x,y], [a,b])
+    % taylor(f, [x,y], [a,b], 'param', ...)
     x = varargin{1};
     a = varargin{2};
-    i = nargin;
+    i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
-    % taylor(f,[x,y],'param')
+    % taylor(f, x, 'param', ...)
+    % taylor(f, [x,y], 'param', ...)
     x = varargin{1};
-    a = zeros(1,columns(x));
+    a = zeros(1, length(x));
     i = 2;
-  elseif (~ischar(varargin{1}) && ~ischar(varargin{2}) && ischar(varargin{3}) )
-    % taylor(f,[x,y],[a,b],'param')
-    x = varargin{1};
-    a = varargin{2};
-    i = 3;  
   else  % taylor(f,'param')
     assert (ischar(varargin{1}))
     x = symvar(f,1);
-    a = zeros(1,columns(x));
+    a = zeros(1, length(x));
     i = 1;
   end
 
