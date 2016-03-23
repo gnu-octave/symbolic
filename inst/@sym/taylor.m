@@ -39,14 +39,14 @@
 %%    120   24   6    2
 %% @example
 %% @group
-%% syms x y 
+%% syms x y
 %% f = exp(x*y);
 %% taylor(f, [x,y] , [0,0], 'order', 6)
 %%   @result{}  (sym)
-%%        2  2          
-%%       x ⋅y           
+%%        2  2
+%%       x ⋅y
 %%       ───── + x⋅y + 1
-%%         2            
+%%         2
 %% @end group
 %% @end example
 %%
@@ -67,8 +67,8 @@
 %% @seealso{diff}
 %% @end deftypefn
 
-%% Author: Utkarsh Gautam ,Colin B. Macdonald
-%% Keywords: symbolic, differentiation , multivar
+%% Author: Utkarsh Gautam, Colin B. Macdonald
+%% Keywords: symbolic, differentiation, multivariable
 
 function s = taylor(f, varargin)
 
@@ -104,11 +104,6 @@ function s = taylor(f, varargin)
 
   n = 6;  %default order
 
-
-  % if ~( rows(x)==1 && columns(x)==2)
-  %   error('invalid input variables .Function Only for 2D expansion') %%chage this afterwards
-  % end 
-
   while (i <= (nargin-1))
     if (strcmpi(varargin{i}, 'order'))
       n = varargin{i+1};
@@ -120,13 +115,16 @@ function s = taylor(f, varargin)
       error('invalid key/value pair')
     end
   end
+
   if (isfloat(n))
     n = int32(n);
   end
-  %n
-  %a
-  if (numel(x) == 2)
-    %error('Only two dimensional variables are supported')  
+
+  if (numel(x) == 1)
+    cmd = { '(f, x, a, n) = _ins'
+        's = f.series(x, a, n).removeO()'
+        'return s,' };
+  elseif (numel(x) == 2)
     cmd ={'(f, x, a, n) = _ins'
       'expr=f'
       'var=x'
@@ -142,16 +140,11 @@ function s = taylor(f, varargin)
       '        expn=expn + y*(S.One/fact)*fterm*((var[0]-i[0])**x1)*((var[1]-i[1])**x2)'
       '        x1=x1-1'
       '        x2=x2+1'
-      'return simplify((expn))'     
+      'return simplify((expn))'
   };
-  elseif (numel(x)==1 )
-    cmd = { '(f, x, a, n) = _ins'
-        's = f.series(x, a, n).removeO()'
-        'return s,' }; 
   else
-    error('Only 2d expansions supported.');     
+    error('Only 2d expansions supported.');
   end
-
 
   s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
 
@@ -280,7 +273,7 @@ end
 %! assert (isequal (h, 27))
 
 %!error<Only 2d expansions supported.>
-%! syms x y z 
+%! syms x y z
 %! g = x^2 + 2*y + 3*z;
 %! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == 27)) ;
