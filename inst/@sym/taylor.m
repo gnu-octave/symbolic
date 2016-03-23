@@ -1,3 +1,4 @@
+%% Copyright (C) 2014, 2015 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %%
 %% This file is part of OctSymPy.
@@ -100,11 +101,8 @@ function s = taylor(f, varargin)
     a = zeros(1,columns(x));
     i = 1;
   end
-  %x
 
-  n=6; %default order
-  %sym(x)
-  %n = 6;  %default order
+  n = 6;  %default order
 
 
   % if ~( rows(x)==1 && columns(x)==2)
@@ -164,10 +162,9 @@ end
 %! syms x
 %! f = exp(x);
 %! expected = 1 + x + x^2/2 + x^3/6 + x^4/24 + x^5/120;
-%! assert (isAlways(taylor(f)== expected))
-%! assert (isAlways(taylor(f,x)== expected))
-%! assert (isAlways(taylor(f,x,0)== expected))
-
+%! assert (isequal (taylor(f), expected))
+%! assert (isequal (taylor(f,x), expected))
+%! assert (isequal (taylor(f,x,0), expected))
 
 %!test
 %! syms x
@@ -184,7 +181,6 @@ end
 %! g1 = taylor(f, 'expansionPoint', 1, 'order', 3);
 %! g2 = taylor(f, 'order', 3, 'expansionPoint', 1);
 %! assert (isequal (g1, g2))
-
 
 %!test
 %! syms x
@@ -221,10 +217,10 @@ end
 
 %!test
 %! % syms for a and order
-%! syms x 
+%! syms x
 %! f = x^2;
-%! assert (isAlways(taylor(f,x,sym(0),'order',sym(2))== 0))
-%! assert (isAlways(taylor(f,x,sym(0),'order',sym(4))== x^2))
+%! assert (isequal (taylor(f,x,sym(0),'order',sym(2)), 0))
+%! assert (isequal (taylor(f,x,sym(0),'order',sym(4)), x^2))
 
 %!test
 %! syms x y
@@ -270,18 +266,18 @@ end
 %! syms x a
 %! f = x^2;
 %! g = taylor(f,x,2);
-%! assert (isAlways(simplify(g)== f))
-%! assert (isAlways(g== 4*x+(x-2)^2-4))
+%! assert (isequal (simplify(g), f))
+%! assert (isequal (g, 4*x+(x-2)^2-4))
 %! g = taylor(f,x,a);
-%! assert (isAlways(simplify(g)== f))
+%! assert (isequal (simplify(g), f))
 
 %!xtest
-%! % wrong order-1 series with nonzero expansion pt: ;
-%! % upstream bug https://github.com/sympy/sympy/issues/9351 ;
-%! syms x ;
+%! % wrong order-1 series with nonzero expansion pt:
+%! % upstream bug https://github.com/sympy/sympy/issues/9351
+%! syms x
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
-%! assert (isAlways(h== 27)) ;
+%! assert (isequal (h, 27))
 
 %!error<Only 2d expansions supported.>
 %! syms x y z 
