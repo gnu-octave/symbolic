@@ -21,6 +21,9 @@
 %% @deftypefn  {Function File} {@var{s} =} chebyshevU (@var{n}, @var{x})
 %% Find the nth symbolic Chebyshev polynomial of the second kind.
 %%
+%% If @var{n} is a vector then it returns a vector with Chebyshev polynomials
+%% of the second kind for each element of @var{n}.
+%%
 %% Examples:
 %% @example
 %% @group
@@ -37,6 +40,17 @@
 %% @end group
 %% @end example
 %%
+%% The inputs can be vectors, for example:
+%% @example
+%% @group
+%% syms x
+%% chebyshevU([0 1 2], x)
+%%   @result{} (sym 1×3 matrix)
+%%       ⎡           2    ⎤
+%%       ⎣1  2⋅x  4⋅x  - 1⎦
+%% @end group
+%% @end example
+%%
 %% @seealso{chebyshevT}
 %% @end deftypefn
 
@@ -44,10 +58,7 @@
 %% Keywords: symbolic
 
 function y = chebyshevU(n, x)
-  cmd = { 'n, x = _ins'
-          'return chebyshevu(n, x)' };
-
-  y = python_cmd (cmd, sym(n), sym(x));
+  y = binop_helper(sym(n), sym(x), 'chebyshevu');
 end
 
 %!shared x
@@ -56,3 +67,4 @@ end
 %!assert(isequal(chebyshevU(0, x), sym(1)))
 %!assert(isequal(chebyshevU(1, x), 2*x))
 %!assert(isequal(chebyshevU(2, x), 4*x*x - 1))
+%!assert(isequal(chebyshevU([0 1 2], x), [sym(1) 2*x (4*x*x-1)]))
