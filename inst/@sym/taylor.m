@@ -1,5 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald
-%% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2016 Utkarsh Gautam, Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -125,23 +125,17 @@ function s = taylor(f, varargin)
         's = f.series(x, a, n).removeO()'
         'return s,' };
   elseif (numel(x) == 2)
-    cmd ={'(f, x, a, n) = _ins'
-      'expr=f'
-      'var=x'
-      'i=a'
-      'expn=expr.subs([(var[x],i[x]) for x in range(len(var))]) # first constant term'
-      'for x in range(1,n,1) :'
-      '    bin=[binomial(x,m) for m in range(x+1)] #binomial constants'
-      '    x1=x'
-      '    x2=0'
-      '    fact=sp.factorial(x)'
-      '    for y in bin:'
-      '        fterm=diff(diff(expr,var[0],x1),var[1],x2).subs([(var[x],i[x]) for x in range(len(var))])'
-      '        expn=expn + y*(S.One/fact)*fterm*((var[0]-i[0])**x1)*((var[1]-i[1])**x2)'
-      '        x1=x1-1'
-      '        x2=x2+1'
-      'return simplify((expn))'
-  };
+    cmd = {'(f, x, a, n) = _ins'
+      'expn = f.subs(zip(x, a))  # first constant term'
+      'for k in range(1, n):'
+      '    bin = [binomial(k, m) for m in range(k+1)]  # binomial constants'
+      '    fact = sp.factorial(k)'
+      '    for (i, y) in enumerate(bin):'
+      '        j = k - i'
+      '        fterm = f.diff(x[0], i, x[1], j).subs(zip(x, a))'
+      '        expn = expn + y*(S.One/fact)*fterm*((x[0]-a[0])**i)*((x[1]-a[1])**j)'
+      'return simplify(expn)'
+    };
   else
     error('Only 2d expansions supported.');
   end
