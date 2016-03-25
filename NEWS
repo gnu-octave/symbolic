@@ -3,6 +3,8 @@ octsympy 2.3.0-dev
 
   * New commands:
 
+          besselj
+          bessely
           cbrt
           chebyshevU
           chebyshevT
