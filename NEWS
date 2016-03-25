@@ -46,6 +46,8 @@ octsympy 2.3.0-dev
   * New functions for dealing with sets and intervals and operations
     on them, thanks to @latot.
 
+  * 2D Taylor expansions are implemented, thanks to Utkarsh Gautam.
+
   * Fourier and Laplace transforms (and their inverses) use a
     different implementation which improves handling of delta
     functions.  Ideally, a later version will consolidate this with
