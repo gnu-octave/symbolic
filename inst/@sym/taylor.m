@@ -22,6 +22,8 @@
 %% @deftypefn  {Function File} {@var{g} =} taylor (@var{f})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
 %% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
+%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}])
+%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
 %% @deftypefnx {Function File} {@var{g} =} taylor (@dots{}, @var{key}, @var{value})
 %% Symbolic Taylor series.
 %%
