@@ -18,8 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} = } sort (@var{f})
-%% sort orders the elements in increasing order.
+%% @deftypefn  {Function File} {@var{g} =} sort (@var{f})
+%% Order the elements in increasing order.
+%%
+%% Example:
 %% @example
 %% @group
 %% sort([sym(2), sym(1)])
