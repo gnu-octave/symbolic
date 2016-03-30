@@ -27,11 +27,11 @@
 %% Example:
 %% @example
 %% @group
-%% syms z alpha
-%% H1 = besselh(alpha, 1, z)
+%% syms x alpha
+%% H1 = besselh(alpha, 1, x)
 %%   @result{} H1 = (sym) hankel₁(α, x)
 %%
-%% H2 = besselh(alpha, 2, z)
+%% H2 = besselh(alpha, 2, x)
 %%   @result{} H2 = (sym) hankel₂(α, x)
 %% @end group
 %% @end example
@@ -83,6 +83,7 @@ end
 
 %!test
 %! % round-trip
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
 %! for k = 1:2
 %!   A = besselh(4, k, 10);
@@ -90,17 +91,5 @@ end
 %!   h = function_handle(q);
 %!   B = h(10);
 %!   assert (abs(A - B) <= eps*abs(A))
-%! end
-
-%!test
-%! % round-trip
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
-%! syms x
-%! for k = 0:1
-%!   A = besselh(k, 10);
-%!   q = besselh(k, x);
-%!   h = function_handle(q);
-%!   B = h(10);
-%!   assert (abs (A - B) <= eps*abs(A))
 %! end
 %! end
