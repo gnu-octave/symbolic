@@ -7,6 +7,7 @@ octsympy 2.3.0-dev
           bessely
           besseli
           besselk
+          besselh
           cbrt
           chebyshevU
           chebyshevT
