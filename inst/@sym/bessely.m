@@ -52,7 +52,7 @@ end
 
 %!test
 %! % roundtrip
-%! if (python_cmd ('return Version(spver) < Version("1.0"),'))
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
 %! A = bessely(2, 10);
 %! q = bessely(2, x);
