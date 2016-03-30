@@ -18,26 +18,26 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{Y} =} bessely (@var{alpha}, @var{x})
-%% Symbolic Bessel function of the second kind.
+%% @deftypefn  {Function File} {@var{I} =} besseli (@var{alpha}, @var{x})
+%% Symbolic modified Bessel function of the first kind.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms n x
-%% A = 2*bessely(n, x)
-%%   @result{} A = (sym) 2⋅bessely(n, x)
+%% A = 2*besseli(n,x)
+%%   @result{} A = (sym) 2⋅besseli(n, x)
 %% diff(A)
-%%   @result{} (sym) bessely(n - 1, x) - bessely(n + 1, x)
+%%   @result{} (sym) besseli(n - 1, x) + besseli(n + 1, x)
 %% @end group
 %% @end example
 %%
-%% @seealso{besselj, besseli, besselk}
+%% @seealso{besselk, besselj, bessely}
 %% @end deftypefn
 
-function Y = bessely(n, x)
+function I = besseli(n, x)
 
-  Y = binop_helper(n, x, 'bessely');
+  I = binop_helper(n, x, 'besseli');
 
 end
 
@@ -46,16 +46,16 @@ end
 %! X = [1 2 3; 4 5 6];
 %! ns = [sym(0) 1 -2; sym(1)/2 -sym(3)/2 pi];
 %! n = double(ns);
-%! A = double(bessely(ns, X));
-%! B = bessely(n, X);
-%! assert (all (all (abs (A - B) < 50*eps*abs(A))))
+%! A = double(besseli(ns, X));
+%! B = besseli(n, X);
+%! assert (all (all (abs (A - B) < 100*eps*abs(A))))
 
 %!test
 %! % roundtrip
 %! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
-%! A = bessely(2, 10);
-%! q = bessely(2, x);
+%! A = besseli(2, 10);
+%! q = besseli(2, x);
 %! h = function_handle(q);
 %! B = h(10);
 %! assert (abs (A - B) <= eps*abs(A))

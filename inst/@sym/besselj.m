@@ -48,7 +48,7 @@ end
 %! n = double(ns);
 %! A = double(besselj(ns, X));
 %! B = besselj(n, X);
-%! assert (max (max (abs (A - B))) < 10*eps)
+%! assert (all (all (abs (A - B) < 50*eps*abs(A))))
 
 %!test
 %! % roundtrip
@@ -58,5 +58,5 @@ end
 %! q = besselj(2, x);
 %! h = function_handle(q);
 %! B = h(10);
-%! assert (abs(A-B) < 100*eps*abs(A))
+%! assert (abs (A - B) <= eps*abs(A))
 %! end
