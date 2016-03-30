@@ -96,5 +96,14 @@ end
 %! expected_s = ([sym(1), sym(1); sym(2), sym(2); sym(pi), sym(pi)]);
 %! assert (isequal (s, expected_s))
 
-%!test 
-%! assert (isequal (sort(sym([])), sym([])))
+%!assert (isequal (sort(sym([])), sym([])))
+
+%!error <cannot determine truth value> sort([sym('x') 1])
+
+%!test
+%! % but with assumptions, symbols can be sorted
+%! p = sym('p', 'positive');
+%! n = sym('n', 'negative');
+%! expected_s = [n p];
+%! s = sort ([p n]);
+%! assert (isequal (s, expected_s))
