@@ -66,6 +66,8 @@ octsympy 2.3.0-dev
 
   * Documentation improvements.
 
+  * Saving/Loading sym objects is now supported (it previously worked, by accident).
+
 
 
 octsympy 2.2.4 (2015-12-14)
