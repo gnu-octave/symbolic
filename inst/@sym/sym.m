@@ -683,7 +683,7 @@ end
 %! y = 2*x;
 %! a = 42;
 %! myfile = tempname();
-%! save(myfile, "x", "y", "a")
+%! save(myfile, 'x', 'y', 'a')
 %! clear x y a
 %! load(myfile)
 %! assert(isequal(y, 2*x))
