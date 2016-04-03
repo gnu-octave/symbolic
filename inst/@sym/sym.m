@@ -145,6 +145,9 @@
 %% @end group
 %% @end example
 %%
+%% It is also possible to save sym objects to file and then load them when
+%% needed in the usual way with the @code{save} and @code{load} commands.
+%%
 %% The underlying SymPy “srepr” can also be passed directly to
 %% @code{sym}: @pxref{char} for details.
 %%
@@ -673,3 +676,16 @@ end
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+
+%!test
+%! % save/load sym objects
+%! syms x
+%! y = 2*x;
+%! a = 42;
+%! myfile = tempname();
+%! save(myfile, "x", "y", "a")
+%! clear x y a
+%! load(myfile)
+%! assert(isequal(y, 2*x))
+%! assert(a == 42)
+%! assert(unlink(myfile) == 0)
