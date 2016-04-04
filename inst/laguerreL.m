@@ -16,14 +16,15 @@
 %% this program; if not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{y} = } laguerre (@var{x},@var{n})
-%% @deftypefnx {Function File} {[@var{y} @var{p}]= } laguerre (@var{x},@var{n})
+%% @deftypefn {Function File} {@var{y} = } laguerreL (@var{n}, @var{x})
+%% @deftypefnx {Function File} {[@var{y}, @var{p}] = } laguerreL (@var{n}, @var{x})
 %%
-%% Compute the value of the Laguerre polynomial of order @var{n} for each element of @var{x}
+%% Compute the value of the Laguerre polynomial of order @var{n}
+%% for each element of @var{x}.
 %%
 %% @end deftypefn
 
-function [y,p]=laguerre(x,n)
+function [y, p] = laguerreL(n, x)
 
   if (nargin ~= 2)
     print_usage ();
@@ -59,35 +60,35 @@ end
 
 %!test
 %! x=rand;
-%! y1=laguerre(x,0); 
+%! y1=laguerreL(0, x);
 %! p0=[1]; 
 %! y2=polyval(p0,x);
 %! assert(y1-y2,0,eps);
 
 %!test
 %! x=rand;
-%! y1=laguerre(x,1); 
+%! y1=laguerreL(1, x);
 %! p1=[-1 1]; 
 %! y2=polyval(p1,x);
 %! assert(y1-y2,0,eps);
 
 %!test
 %! x=rand;
-%! y1=laguerre(x,2); 
+%! y1=laguerreL(2, x);
 %! p2=[.5 -2 1];
 %! y2=polyval(p2,x);
 %! assert(y1-y2,0,eps);
 
 %!test
 %! x=rand;
-%! y1=laguerre(x,3); 
+%! y1=laguerreL(3, x);
 %! p3=[-1/6 9/6 -18/6 1];
 %! y2=polyval(p3,x);
 %! assert(y1-y2,0,eps);
 
 %!test
 %! x=rand;
-%! y1=laguerre(x,4); 
+%! y1=laguerreL(4, x);
 %! p4=[1/24 -16/24 72/24 -96/24 1];
 %! y2=polyval(p4,x);
 %! assert(y1-y2,0,eps);
