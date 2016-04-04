@@ -19,6 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{L} =} laguerre (@var{n}, @var{x})
+%% @deftypefnx {Function File} {@var{L} =} laguerre (@var{n}, @var{alpha}, @var{x})
 %% Symbolic Laguerre polynomials and associated Laguerre polynomials.
 %%
 %% Example:
@@ -36,6 +37,15 @@
 %% @end group
 %% @end example
 %%
+%% When @var{alpha} is nonzero, we get generalized (associated) Laguerre
+%% polynomials:
+%% @example
+%% @group
+%% laguerreL(n, 1, x)
+%%   @result{} ans = (sym) assoc_laguerre(n, 1, x)
+%% @end group
+%% @end example
+%%
 %% The polynomials can be manipulated symbolically, for example:
 %% @example
 %% @group
@@ -48,13 +58,18 @@
 %% @seealso{chebychevT, chebychevU}
 %% @end deftypefn
 
-function L = laguerreL(n, x)
+function L = laguerreL(n, alpha, x)
 
-  if (nargin ~= 2)
+  if (nargin == 2)
+    x = alpha;
+    L = binop_helper(n, x, 'laguerre');
+  elseif (nargin == 3)
+    cmd = { 'n, a, x = _ins'
+            'return assoc_laguerre(n, a, x)' };
+    L = python_cmd(cmd, sym(n), sym(alpha), sym(x));
+  else
     print_usage ();
   end
-
-  L = binop_helper(n, x, 'laguerre');
 
 end
 
@@ -68,6 +83,7 @@ end
 
 %!error laguerreL(-1, x)
 %!error laguerreL(x)
+%!error laguerreL(1, 2, x, 3)
 
 %!shared
 
@@ -81,4 +97,20 @@ end
 %! syms x y
 %! L = laguerreL([1; 2], [x; y]);
 %! expected = [laguerreL(1, x);  laguerreL(2, y)];
+%! assert (isequal (L, expected))
+
+%!test
+%! syms x n
+%! assert (isequal (laguerreL(n, 0, x), laguerreL(n, x)))
+
+%!xtest
+%! % TODO: vectorized
+%! syms x n
+%! assert (isequal (laguerreL([1 n], 0, x), laguerreL([1 n], x)))
+
+%!xtest
+%! % TODO: vectorized
+%! syms x y n
+%! L = laguerreL([1; n], [pi; 0], [x; y]);
+%! expected = [laguerreL(1, pi, x);  laguerreL(n, 0, y)];
 %! assert (isequal (L, expected))
