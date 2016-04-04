@@ -1,33 +1,33 @@
-## Copyright (C) 2008 Eric Chassande-Mottin
-##
-## This program is free software; you can redistribute it and/or modify it under
-## the terms of the GNU General Public License as published by the Free Software
-## Foundation; either version 3 of the License, or (at your option) any later
-## version.
-##
-## This program is distributed in the hope that it will be useful, but WITHOUT
-## ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-## FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-## details.
-##
-## You should have received a copy of the GNU General Public License along with
-## this program; if not, see <http://www.gnu.org/licenses/>.
+%% Copyright (C) 2008 Eric Chassande-Mottin
+%%
+%% This program is free software; you can redistribute it and/or modify it under
+%% the terms of the GNU General Public License as published by the Free Software
+%% Foundation; either version 3 of the License, or (at your option) any later
+%% version.
+%%
+%% This program is distributed in the hope that it will be useful, but WITHOUT
+%% ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+%% details.
+%%
+%% You should have received a copy of the GNU General Public License along with
+%% this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -*- texinfo -*-
-## @deftypefn {Function File} {@var{y} = } laguerre (@var{x},@var{n})
-## @deftypefnx {Function File} {[@var{y} @var{p}]= } laguerre (@var{x},@var{n})
-##
-## Compute the value of the Laguerre polynomial of order @var{n} for each element of @var{x}
-##
-## @end deftypefn
+%% -*- texinfo -*-
+%% @deftypefn {Function File} {@var{y} = } laguerre (@var{x},@var{n})
+%% @deftypefnx {Function File} {[@var{y} @var{p}]= } laguerre (@var{x},@var{n})
+%%
+%% Compute the value of the Laguerre polynomial of order @var{n} for each element of @var{x}
+%%
+%% @end deftypefn
 
 function [y,p]=laguerre(x,n)
 
-  if (nargin != 2)
-    print_usage;
-  elseif (n < 0 || !isscalar (n))
-    error("second argument 'n' must be a positive integer");
-  endif
+  if (nargin ~= 2)
+    print_usage ();
+  elseif (n < 0 || ~isscalar (n))
+    error('second argument "n" must be a positive integer');
+  end
 
   p0=1;
   p1=[-1 1];
@@ -44,16 +44,16 @@ function [y,p]=laguerre(x,n)
       p(2) = ((2*k-1)*p1(1)-p1(2))/k;
       if (k > 2)
         p(3:k) = ((2*k-1)*p1(2:k-1)-p1(3:k)-(k-1)*p0(1:k-2))/k;
-      endif
+      end
       p(k+1) = ((2*k-1)*p1(k)-(k-1)*p0(k-1))/k;
       p0=p1;
       p1=p;
-    endfor
-  endif
+    end
+  end
 
   y=polyval(p,x);
 
-endfunction
+end
 
 %!test
 %! x=rand;
