@@ -28,7 +28,7 @@ function [y, p] = laguerreL(n, x)
 
   if (nargin ~= 2)
     print_usage ();
-  elseif (n < 0 || ~isscalar (n))
+  elseif (n < 0 || ~isscalar (n) || (mod(n, 1) ~= 0))
     error('second argument "n" must be a positive integer');
   end
 
@@ -92,3 +92,6 @@ end
 %! p4=[1/24 -16/24 72/24 -96/24 1];
 %! y2=polyval(p4,x);
 %! assert(y1-y2,0,eps);
+
+%!error <positive integer> laguerreL(1.5, 10)
+%!error <Invalid call> laguerreL(10)
