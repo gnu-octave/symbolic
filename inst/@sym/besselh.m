@@ -41,9 +41,13 @@
 
 function A = besselh(alpha, k, x)
 
-  if (nargin == 2)
+  if (nargin == 3)
+    % no-op
+  elseif (nargin == 2)
     x = k;
     k = 1;
+  else
+    print_usage ();
   end
 
   assert(isscalar(k))
@@ -66,6 +70,7 @@ end
 %! a1 = besselh(alpha, 1, z);
 %! assert (isequal (a, a1))
 
+%!error besselh(sym('z'))
 %!error <expecting k = 1 or 2> besselh(2, 0, sym('z'))
 %!error <expecting k = 1 or 2> besselh(2, 3, sym('z'))
 

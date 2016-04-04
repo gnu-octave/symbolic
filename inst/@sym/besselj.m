@@ -37,6 +37,10 @@
 
 function J = besselj(n, x)
 
+  if (nargin ~= 2)
+    print_usage ();
+  end
+
   J = binop_helper(n, x, 'besselj');
 
 end
@@ -60,3 +64,5 @@ end
 %! B = h(10);
 %! assert (abs (A - B) <= eps*abs(A))
 %! end
+
+%!error besselj(sym('x'))

@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{J} =} airy (@var{k}, @var{x})
-%% Symbolic Airy functions of first/second kind and derivatives.
+%% @deftypefn  {Function File} {@var{A} =} airy (@var{k}, @var{x})
+%% @deftypefnx {Function File} {@var{A} =} airy (@var{x})
+%% Symbolic Airy functions of first/second kind and their derivatives.
 %%
 %% @var{k} can be 0, 1, 2, or 3, @ref{airy}.
 %%
@@ -49,9 +50,13 @@
 
 function A = airy(k, x)
 
-  if (nargin == 1)
+  if (nargin == 2)
+    % no-op
+  elseif (nargin == 1)
     x = k;
     k = 0;
+  else
+    print_usage ();
   end
 
   assert(isscalar(k))
@@ -92,6 +97,7 @@ end
 %! a2 = airy(z);
 %! assert (isequal (a, a2))
 
+%!error airy(0, sym('x'), 2)
 %!error <expecting K = 0, 1, 2, or 3> airy(4, sym('z'))
 %!error <expecting K = 0, 1, 2, or 3> airy(-1, sym('z'))
 
