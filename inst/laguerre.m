@@ -1,4 +1,6 @@
 %% Copyright (C) 2008 Eric Chassande-Mottin
+%% Copyright (C) 2011 Carnë Draug
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
