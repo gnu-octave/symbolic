@@ -47,6 +47,7 @@ cp -R octsympy ${WINDIRTMP}
   ./bootstrap
   ./configure
   make )
+cp bin/winwrapy.bat ${WINDIRTMP}/bin/
 
 # copy things to the package
 mkdir ${WINDIR}
@@ -59,14 +60,15 @@ cp -pR ${WINDIRTMP}/COPYING ${WINDIR}/
 cp -pR ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -pR ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
-# py.exe
-cp ${PYEXE} ${WINDIR}/bin/py.exe
+# octpy.exe(renamed to avoid any conflicts)
+cp ${PYEXE} ${WINDIR}/bin/octpy.exe
 cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
 
-# change default python to py.exe
-echo "making default python py.exe"
-sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_sysoneline.m
-sed -i "s/pyexec = 'python'/pyexec = 'py.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
+# change default python to octpy.exe
+echo "making default python octpy.exe"
+sed -i "s/pyexec = 'python'/pyexec = 'octpy.exe'/" ${WINDIR}/inst/private/python_ipc_sysoneline.m
+sed -i "s/pyexec = 'python'/pyexec = 'octpy.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
+sed -i 's/python.exe/octpy.exe/g' ${WINDIR}/bin/winwrapy.bat
 
 # sympy
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
