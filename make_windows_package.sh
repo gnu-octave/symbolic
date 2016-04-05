@@ -47,7 +47,6 @@ cp -R octsympy ${WINDIRTMP}
   ./bootstrap
   ./configure
   make )
-cp bin/winwrapy.bat ${WINDIRTMP}/bin/
 
 # copy things to the package
 mkdir ${WINDIR}
