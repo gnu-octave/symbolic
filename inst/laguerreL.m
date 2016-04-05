@@ -17,46 +17,62 @@
 
 %% -*- texinfo -*-
 %% @deftypefn {Function File} {@var{y} = } laguerreL (@var{n}, @var{x})
-%% @deftypefnx {Function File} {[@var{y}, @var{p}] = } laguerreL (@var{n}, @var{x})
 %%
 %% Compute the value of the Laguerre polynomial of order @var{n}
 %% for each element of @var{x}.
 %%
+%% This implementation uses a three-term recurrence directly on the values
+%% of @var{x}.  The result is numerically stable, as opposed to evaluating
+%% the polynomial using the monomial coefficients.
+%%
+%% @seealso{@@sym/laguerreL}
 %% @end deftypefn
 
-function [y, p] = laguerreL(n, x)
+function L = laguerreL(n, x)
 
   if (nargin ~= 2)
     print_usage ();
-  elseif (n < 0 || ~isscalar (n) || (mod(n, 1) ~= 0))
-    error('second argument "n" must be a positive integer');
   end
 
-  p0=1;
-  p1=[-1 1];
+  if (any (n < 0) || any (mod (n, 1) ~= 0))
+    error('second argument "n" must consist of positive integers');
+  end
 
-  if (n==0)
-    p=p0;
-  elseif (n==1)
-    p=p1;
-  elseif (n > 1)
-    % recursive calculation of the polynomial coefficients
-    for k=2:n
-      p=zeros(1,k+1);
-      p(1) = -p1(1)/k;
-      p(2) = ((2*k-1)*p1(1)-p1(2))/k;
-      if (k > 2)
-        p(3:k) = ((2*k-1)*p1(2:k-1)-p1(3:k)-(k-1)*p0(1:k-2))/k;
+  if (~isscalar (n) && isscalar (x))
+    x = x*ones (size (n));
+  elseif (~isscalar (n) && ~isscalar (x) && ~isequal (size (n), size (x)))
+    error ('inputs must be same size or scalar')
+  end
+
+  L0 = ones (size (x), class(x));
+  L1 = 1 - x;
+
+  if (isscalar (n))
+    if (n == 0)
+      L = L0;
+    elseif (n == 1)
+      L = L1;
+    else
+      for k = 2:n
+        L = (2*k-1-x)/k .* L1 - (k-1)/k * L0;
+        L0 = L1;
+        L1 = L;
       end
-      p(k+1) = ((2*k-1)*p1(k)-(k-1)*p0(k-1))/k;
-      p0=p1;
-      p1=p;
+    end
+  else
+    L = L0;
+    L(n >= 1) = L1(n >= 1);
+    maxn = max (n(:));
+    for k = 2:maxn
+      I = (n >= k);  % mask for entries still to be updated
+      L(I) = (2*k - 1 - x(I))/k .* L1(I) - (k - 1)/k * L0(I);
+      L0 = L1;
+      L1 = L;
     end
   end
 
-  y=polyval(p,x);
-
 end
+
 
 %!test
 %! x=rand;
@@ -95,3 +111,38 @@ end
 
 %!error <positive integer> laguerreL(1.5, 10)
 %!error <Invalid call> laguerreL(10)
+%!error <same size or scalar> laguerreL([0 1], [1 2 3])
+%!error <same size or scalar> laguerreL([0 1], [1; 2])
+
+%!test
+%! % numerically stable implementation (in n)
+%! L = laguerreL (10, 10);
+%! Lex = 1763/63;
+%! assert (L, Lex, -eps)
+%! L = laguerreL (20, 10);
+%! Lex = -177616901779/14849255421;  % e.g., laguerreL(sym(20),10)
+%! assert (L, Lex, -eps)
+
+%!test
+%! % vectorized x
+%! L = laguerreL (2, [5 6 7]);
+%! Lex = [3.5 7 11.5];
+%! assert (L, Lex, eps)
+
+%!test
+%! L = laguerreL (0, [4 5]);
+%! assert (L, [1 1], eps)
+
+%!test
+%! % vector n
+%! L = laguerreL ([0 1 2 3], [4 5 6 9]);
+%! assert (L, [1 -4 7 -26], eps)
+
+%!test
+%! % vector n, scalar x
+%! L = laguerreL ([0 1 2 3], 6);
+%! assert (L, [1 -5 7 1], eps)
+
+%! assert (isa (laguerreL (0, single (1)), 'single'))
+%! assert (isa (laguerreL (1, single ([1 2])), 'single'))
+%! assert (isa (laguerreL ([1 2], single ([1 2])), 'single'))
