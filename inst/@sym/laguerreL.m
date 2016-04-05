@@ -64,9 +64,7 @@ function L = laguerreL(n, alpha, x)
     x = alpha;
     L = binop_helper(n, x, 'laguerre');
   elseif (nargin == 3)
-    cmd = { 'n, a, x = _ins'
-            'return assoc_laguerre(n, a, x)' };
-    L = python_cmd(cmd, sym(n), sym(alpha), sym(x));
+    L = triop_helper(n, alpha, x, 'assoc_laguerre');
   else
     print_usage ();
   end
@@ -103,14 +101,42 @@ end
 %! syms x n
 %! assert (isequal (laguerreL(n, 0, x), laguerreL(n, x)))
 
-%!xtest
-%! % TODO: vectorized
-%! syms x n
-%! assert (isequal (laguerreL([1 n], 0, x), laguerreL([1 n], x)))
-
-%!xtest
-%! % TODO: vectorized
+%!shared x, y, n
 %! syms x y n
+
+%!assert (isequal (laguerreL([1 n], 0, x), laguerreL([1 n], x)))
+
+%!test
 %! L = laguerreL([1; n], [pi; 0], [x; y]);
 %! expected = [laguerreL(1, pi, x);  laguerreL(n, 0, y)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL([1 n], [pi 0], x);
+%! expected = [laguerreL(1, pi, x)  laguerreL(n, 0, x)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL([1 n], pi, [x y]);
+%! expected = [laguerreL(1, pi, x)  laguerreL(n, pi, y)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL(1, [pi 0], [x y]);
+%! expected = [laguerreL(1, pi, x)  laguerreL(1, 0, y)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL([1 n], pi, x);
+%! expected = [laguerreL(1, pi, x)  laguerreL(n, pi, x)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL(1, [pi 0], x);
+%! expected = [laguerreL(1, pi, x)  laguerreL(1, 0, x)];
+%! assert (isequal (L, expected))
+
+%!test
+%! L = laguerreL(1, pi, [x y]);
+%! expected = [laguerreL(1, pi, x)  laguerreL(1, pi, y)];
 %! assert (isequal (L, expected))
