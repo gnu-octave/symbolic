@@ -1,3 +1,18 @@
+octsympy 2.4.0-dev
+==================
+
+  * New commands:
+
+          laguerreL
+          @sym/laguerreL
+
+  * Move some functions from the old specfun package: so now the Symbolic
+    package hosts some numerical implementations as well.
+
+  * Implement numerically stable @double/laguerreL.
+
+
+
 octsympy 2.3.0-dev
 ==================
 
