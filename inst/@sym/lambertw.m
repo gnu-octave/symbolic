@@ -87,3 +87,8 @@ end
 %! syms x
 %! T = simplify(lambertw(x)*exp(lambertw(x)));
 %! assert (isequal (T, x))
+
+% should match @double/lambertw
+%!assert (abs (lambertw(pi) - double(lambertw(sym(pi)))) < 5*eps)
+%!assert (abs (lambertw(-1, 5) - double(lambertw(-1, sym(5)))) < 5*eps)
+%!assert (abs (lambertw(2, 2) - double(lambertw(2, sym(2)))) < 5*eps)
