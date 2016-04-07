@@ -107,40 +107,32 @@ function L = laguerreL(n, x)
 end
 
 
-%!test
-%! x=rand;
-%! y1=laguerreL(0, x);
-%! p0=[1]; 
-%! y2=polyval(p0,x);
-%! assert(y1-y2,0,eps);
+%!assert (isequal (laguerreL (0, rand), 1))
 
 %!test
-%! x=rand;
-%! y1=laguerreL(1, x);
-%! p1=[-1 1]; 
-%! y2=polyval(p1,x);
-%! assert(y1-y2,0,eps);
+%! x = rand;
+%! assert (isequal (laguerreL (1, x), 1 - x))
 
 %!test
 %! x=rand;
 %! y1=laguerreL(2, x);
 %! p2=[.5 -2 1];
 %! y2=polyval(p2,x);
-%! assert(y1-y2,0,eps);
+%! assert(y1 - y2, 0, 10*eps);
 
 %!test
 %! x=rand;
 %! y1=laguerreL(3, x);
 %! p3=[-1/6 9/6 -18/6 1];
 %! y2=polyval(p3,x);
-%! assert(y1-y2,0,eps);
+%! assert(y1 - y2, 0, 20*eps);
 
 %!test
 %! x=rand;
 %! y1=laguerreL(4, x);
 %! p4=[1/24 -16/24 72/24 -96/24 1];
 %! y2=polyval(p4,x);
-%! assert(y1-y2,0,eps);
+%! assert(y1 - y2, 0, 30*eps)
 
 %!error <positive integer> laguerreL(1.5, 10)
 %!error <Invalid call> laguerreL(10)
