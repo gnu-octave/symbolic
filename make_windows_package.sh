@@ -4,8 +4,9 @@
 PYEXE=py27910.exe
 PYEXEREADME=py27910.readme.txt   # from the src package
 
-# download sympy release, unpack in the directory with this script
+# download dependencies, unpack in the same directory where this script lives
 SYMPY=sympy-1.0
+MPMATH=mpmath-0.19
 
 # for day-to-day testing
 VER=2.3.0-dev
@@ -69,9 +70,10 @@ sed -i "s/pyexec = 'python'/pyexec = 'octpy.exe'/" ${WINDIR}/inst/private/python
 sed -i "s/pyexec = 'python'/pyexec = 'octpy.exe'/" ${WINDIR}/inst/private/python_ipc_system.m
 sed -i 's/python.exe/octpy.exe/g' ${WINDIR}/bin/winwrapy.bat
 
-# sympy
+# sympy and mpmath
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
 cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
+cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
 
 zip -r ${WINPKG}.zip ${WINDIR}
 
