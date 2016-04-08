@@ -46,11 +46,11 @@ function w = lambertw(b,z)
         b = 0;
     else
         %% some error checking
-        if (nargin != 2)
-            print_usage;
+        if (nargin ~= 2)
+            print_usage ();
         else
-            if (any(round(real(b)) != b))
-                usage('branch number for lambertw must be integer')
+            if (any(round(real(b)) ~= b))
+                error('branch number for lambertw must be integer')
             end
         end
     end
@@ -64,16 +64,16 @@ function w = lambertw(b,z)
     %
     % first-order version suffices:
     %
-    w = (1 - 2*abs(b)).*sqrt(2*e*z + 2) - 1;
+    w = (1 - 2*abs(b)).*sqrt(2*exp(1)*z + 2) - 1;
 
     %% asymptotic expansion at 0 and Inf
     %
-    v = log(z + ~(z | b)) + 2*pi*I*b;
-    v = v - log(v + ~v);
+    v = log(z + (z == 0 | b == 0)) + 2*pi*1i*b;
+    v = v - log(v + (v == 0));
 
     %% choose strategy for initial guess
     %
-    c = abs(z + 1/e);
+    c = abs(z + 1/exp(1));
     c = (c > 1.45 - 1.1*abs(b));
     c = c | (b.*imag(z) > 0) | (~imag(z) & (b == 1));
     w = (1 - c).*w + c.*v;
@@ -83,12 +83,12 @@ function w = lambertw(b,z)
     for n = 1:10
         p = exp(w);
         t = w.*p - z;
-        f = (w != -1);
+        f = (w ~= -1);
         t = f.*t./(p.*(w + f) - 0.5*(w + 2.0).*t./(w + f));
         w = w - t;
-        if (abs(real(t)) < (2.48*eps)*(1.0 + abs(real(w)))
-            && abs(imag(t)) < (2.48*eps)*(1.0 + abs(imag(w))))
-            return
+        if (abs(real(t)) < (2.48*eps)*(1.0 + abs(real(w))) && ...
+            abs(imag(t)) < (2.48*eps)*(1.0 + abs(imag(w))))
+          return
         end
     end
     warning('iteration limit reached, result of lambertw may be inaccurate');
