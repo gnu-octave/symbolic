@@ -15,6 +15,7 @@
 %% this program; if not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} heaviside (@var{x})
 %% @deftypefnx {Function File} {@var{y} =} heaviside (@var{x}, @var{zero_value})
 %% Compute the Heaviside unit-step function.
@@ -26,7 +27,7 @@
 %% @example
 %% @group
 %% heaviside([-inf -3 -1 1 3 inf])
-%% @result{} 0     0     0     1     1     1
+%%   @result{} 0     0     0     1     1     1
 %% @end group
 %% @end example
 %%
@@ -35,7 +36,7 @@
 %% @example
 %% @group
 %% heaviside(0)
-%% @result{} 0.50000
+%%   @result{} 0.50000
 %% @end group
 %% @end example
 %% However, this can be changed via the optional second input
@@ -43,7 +44,7 @@
 %% @example
 %% @group
 %% heaviside(0, 1)
-%% @result{} 1
+%%   @result{} 1
 %% @end group
 %% @end example
 %% @seealso{dirac}

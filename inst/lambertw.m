@@ -14,6 +14,7 @@
 %% this program; if not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{x} = } lambertw (@var{z})
 %% @deftypefnx {Function File} {@var{x} = } lambertw (@var{n}, @var{z})
 %% Compute the Lambert W function of @var{z}.

@@ -15,6 +15,7 @@
 %% this program; if not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} dirac (@var{x})
 %% Compute the Dirac delta (generalized) function.
 %%
@@ -26,11 +27,11 @@
 %% @example
 %% @group
 %% dirac (0)
-%% @result{} Inf
+%%   @result{} Inf
 %% dirac (1)
-%% @result{} 0
+%%   @result{} 0
 %% dirac ([-10 -1 0 1 inf])
-%% @result{} 0     0   Inf     0     0
+%%   @result{} 0     0   Inf     0     0
 %% @end group
 %% @end example
 %% @seealso{heaviside}
