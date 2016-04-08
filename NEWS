@@ -4,8 +4,6 @@ octsympy 2.4.0-dev
   * New commands:
 
           laguerreL
-          @double/laguerreL
-          @double/lambertw
 
   * Move some functions from the specfun package.  So now the Symbolic
     package hosts some numerical implementations as well:
