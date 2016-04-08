@@ -94,3 +94,15 @@ function w = lambertw(b,z)
     warning('iteration limit reached, result of lambertw may be inaccurate');
 end
 
+
+%!assert (isequal (lambertw (0), 0))
+%!assert (isequal (lambertw (0, 0), 0))
+
+%!assert (lambertw (-1/exp(1)), -1, 2*eps)
+%!assert (lambertw (0, -1/exp(1)), -1, 2*eps)
+%!assert (lambertw (-1, -1/exp(1)), -1, 2*eps)
+
+%!test
+%! x = [1 2 3 pi 10 100 1000 12345];
+%! W = lambertw (x);
+%! assert (W.*exp (W), x, -3*eps)

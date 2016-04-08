@@ -82,6 +82,10 @@ end
 
 %!assert (isequal (lambertw(sym(0)), sym(0)))
 
+%!assert ( isequal (lambertw (-1/exp(sym(1))), -sym(1)))
+%!assert ( isequal (lambertw (0, -1/exp(sym(1))), -sym(1)))
+%!assert ( isequal (lambertw (-1, -1/exp(sym(1))), -sym(1)))
+
 %!xtest
 %! % W(x)*exp(W(x)) == x;  FIXME: a failure in SymPy?
 %! syms x
