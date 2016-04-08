@@ -107,3 +107,60 @@ end
 %! x = [1 2 3 pi 10 100 1000 12345];
 %! W = lambertw (x);
 %! assert (W.*exp (W), x, -3*eps)
+
+%!test
+%! x = [1 2 3 pi 10 100 1000 12345];
+%! k = [-3 -2 -1 0 1 2 3 4];
+%! W = lambertw (k, x);
+%! assert (W.*exp (W), x, -10*eps)
+
+%!test
+%! % input shape preserved
+%! x = [0 1; 2 3];
+%! b = x;
+%! W = lambertw (x, x);
+%! assert (W.*exp (W), x, -10*eps)
+
+%!test
+%! % input shape preserved
+%! x = [0 1; 2 3];
+%! b = 0;
+%! W = lambertw (b, x);
+%! assert (W.*exp (W), x, -10*eps)
+
+%!test
+%! % input shape preserved
+%! x = 10;
+%! b = [0 1; 2 3];
+%! W = lambertw (b, x);
+%! assert (W.*exp (W), x*ones (size (b)), -10*eps)
+
+%!assert (isnan (lambertw (nan)))
+
+%!test
+%! % limiting behaviour as z large
+%! k = 3;
+%! A = lambertw(k, 1e100);
+%! assert (abs (imag (A) - 2*pi*k) < 0.1)
+
+%!test
+%! % limiting behaviour as z large, up imag axis
+%! k = 1;
+%! A = lambertw(k, 1e100*1i);
+%! assert (abs (imag (A) - (2*k+0.5)*pi) < 0.1)
+
+%!test
+%! % limiting behaviour as z large, down imag axis
+%! k = -2;
+%! A = lambertw(k, -1e100*1i);
+%! assert (abs (imag (A) - (2*k-0.5)*pi) < 0.1)
+
+%!test
+%! % limiting behaviour as z large, near branch
+%! k = 3;
+%! A = lambertw(k, -1e100);
+%! B = lambertw(k, -1e100 + 1i);
+%! C = lambertw(k, -1e100 - 1i);
+%! assert (abs (imag (A) - (2*k+1)*pi) < 0.1)
+%! assert (abs (imag (B) - (2*k+1)*pi) < 0.1)
+%! assert (abs (imag (C) - (2*k-1)*pi) < 0.1)
