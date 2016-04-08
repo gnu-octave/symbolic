@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=2.3.0-dev
+#VER=2.3.0-dev
 # for release
-#VER=2.3.0
-#TAG=v${VER}
+VER=2.3.0
+TAG=v${VER}
 
 #----------------------------------------------------------------
 PKG=symbolic-$VER
