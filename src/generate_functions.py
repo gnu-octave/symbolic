@@ -44,6 +44,8 @@ erfcinv
 erfi||0,0|
 heaviside|Heaviside
 dirac|DiracDelta
+cosint|Ci
+sinint|Si
 """
 # todo:
 #psi(x)|polygamma(0,x)
