@@ -200,7 +200,7 @@ end
 %!test
 %! % infinities and nan
 %! A = lambertw (3, [inf 1 -inf nan]);
-%! B = [inf + 2*3*pi*1i  lambertw (3,1)  inf + (2*3+1)*pi*1i  nan];
+%! B = [inf + 2*3*pi*1i  lambertw(3,1)  inf + (2*3+1)*pi*1i  nan];
 %! assert (isequaln (A, B))
 
 %!test
@@ -212,13 +212,13 @@ end
 %!test
 %! % scalar infinity z, vector b
 %! A = lambertw ([1 2 -3], inf);
-%! B = [lambertw (1, inf)  lambertw (2, inf)  lambertw (-3, inf)];
+%! B = [lambertw(1, inf)  lambertw(2, inf)  lambertw(-3, inf)];
 %! assert (isequal (A, B))
 
 %!test
 %! % scalar -infinity z, vector b
 %! A = lambertw ([1 2 -3], -inf);
-%! B = [lambertw (1, -inf)  lambertw (2, -inf)  lambertw (-3, -inf)];
+%! B = [lambertw(1, -inf)  lambertw(2, -inf)  lambertw(-3, -inf)];
 %! assert (isequal (A, B))
 
 %!test
