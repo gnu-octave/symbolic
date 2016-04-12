@@ -85,10 +85,6 @@
 %% FIXME: does not ``optimize'' code, for example, using common
 %% subexpression elimination.
 %%
-%% The routine relies on code generation features added to SymPy
-%% 0.7.6.  On earlier versions, the workaround only works for
-%% very simple expressions such as polynomials and trig functions.
-%%
 %% @seealso{ccode, fortran, latex, matlabFunction}
 %% @end deftypefn
 
@@ -125,7 +121,7 @@ function f = function_handle(varargin)
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
-        error('function_handle: your SymPy has no octave codegen, cannot workaround');
+        error('function_handle: your SymPy has no octave codegen');
       else
         out
         error('function_handle: Some other error from SymPy code gen?  file a bug!');
@@ -158,19 +154,7 @@ function f = function_handle(varargin)
               'return (True, s)' };
       [worked, codestr] = python_cmd (cmd, expr);
       if (~worked)
-        %% SymPy 0.7.5 has no octave_code command
-        % Use a crude workaround (e.g., Abs, ceiling will fail).
-        if ((python_cmd ('return Version(spver) <= Version("0.7.5"),')) ...
-            && strcmp(codestr, 'global name ''octave_code'' is not defined'))
-          warning('OctSymPy:function_handle:nocodegen', ...
-                  'function_handle: your SymPy has no octave codegen: partial workaround');
-          codestr = expr.flat;
-          % Matlab: ** to ^ substition.  On Octave, vectorize does this
-          codestr = strrep(codestr, '**', '^');
-          codestr = vectorize(codestr);
-        else
-          error('function_handle: python codegen failed: %s', codestr)
-        end
+        error('function_handle: python codegen failed: %s', codestr)
       end
       exprstr{i} = codestr;
     end

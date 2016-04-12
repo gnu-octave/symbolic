@@ -13,6 +13,6 @@ Description: The Octave-Forge Symbolic package adds symbolic calculation
 Categories: symbolic
 Url: http://github.com/cbm755/octsympy
 Depends: octave (>= 3.8)
-SystemRequirements: python, sympy (>= 0.7.5)
-BuildRequires: python, sympy (>= 0.7.5)
+SystemRequirements: python, sympy (>= 0.7.6)
+BuildRequires: python, sympy (>= 0.7.6)
 License: GPL-3.0+

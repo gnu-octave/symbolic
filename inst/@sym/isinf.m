@@ -68,16 +68,7 @@ function r = isinf(x)
     print_usage ();
   end
 
-  % When we drop 0.7.5 support:
-  %r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
-
-  sf = { 'def sf(x):'
-         '    if Version(spver) < Version("0.7.6"):'
-         '        return x.is_unbounded'
-         '    else:'
-         '        return x.is_infinite' };
-
-  r = uniop_bool_helper(x, sf);
+  r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
 
 end
 
