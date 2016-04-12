@@ -22,32 +22,13 @@ octsympy 2.3.0 (2016-04-08)
 
   * New commands:
 
-          airy
-          besselj
-          bessely
-          besseli
-          besselk
-          besselh
-          cbrt
-          chebyshevU
-          chebyshevT
-          fix
-          frac
-          intersect
-          interval
-          ismember
-          finiteset
-          has
-          kron
-          linspace
-          logspace
-          max
-          min
-          rewrite
-          round
-          sort
-          union
-          unique
+          airy          chebyshevU      finiteset     rewrite
+          besselj       chebyshevT      has           round
+          bessely       fix             kron          sort
+          besseli       frac            linspace      union
+          besselk       intersect       logspace      unique
+          besselh       interval        max
+          cbrt          ismember        min
 
   * Bug fix for working with certain unevaluated integrals.
 
