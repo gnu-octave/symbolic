@@ -28,11 +28,11 @@
 %% Examples:
 %% @example
 %% @group
-%% >> syms x
-%% >> lambertw(x)
-%%    @result{} (sym) LambertW(x)
-%% >> lambertw(2, x)
-%%    @result{} (sym) LambertW(x, 2)
+%% syms x
+%% lambertw(x)
+%%   @result{} (sym) LambertW(x)
+%% lambertw(2, x)
+%%   @result{} (sym) LambertW(x, 2)
 %% @end group
 %% @end example
 %% (@strong{Note} that the branch @var{k} must come first in the
@@ -41,9 +41,9 @@
 %% Also supports vector/matrix input:
 %% @example
 %% @group
-%% >> syms x y
-%% >> lambertw([0 1], [x y])
-%%    @result{} (sym) [LambertW(x)  LambertW(y, 1)]  (1×2 matrix)
+%% syms x y
+%% lambertw([0 1], [x y])
+%%   @result{} (sym) [LambertW(x)  LambertW(y, 1)]  (1×2 matrix)
 %% @end group
 %% @end example
 %%
@@ -56,10 +56,12 @@ function W = lambertw(k, x)
   if (nargin == 1)
     x = sym(k);
     W = uniop_helper (x, 'LambertW');
-  else
+  elseif (nargin == 2)
     x = sym(x);
     k = sym(k);
     W = binop_helper (x, k, 'LambertW');
+  else
+    print_usage ();
   end
 end
 
@@ -78,8 +80,19 @@ end
 %! T = double (subs (T, x, 10));
 %! assert (abs(T - 10) < 1e-15)
 
+%!assert (isequal (lambertw(sym(0)), sym(0)))
+
+%!assert ( isequal (lambertw (-1/exp(sym(1))), -sym(1)))
+%!assert ( isequal (lambertw (0, -1/exp(sym(1))), -sym(1)))
+%!assert ( isequal (lambertw (-1, -1/exp(sym(1))), -sym(1)))
+
 %!xtest
 %! % W(x)*exp(W(x)) == x;  FIXME: a failure in SymPy?
 %! syms x
 %! T = simplify(lambertw(x)*exp(lambertw(x)));
 %! assert (isequal (T, x))
+
+% should match @double/lambertw
+%!assert (abs (lambertw(pi) - double(lambertw(sym(pi)))) < 5*eps)
+%!assert (abs (lambertw(-1, 5) - double(lambertw(-1, sym(5)))) < 5*eps)
+%!assert (abs (lambertw(2, 2) - double(lambertw(2, sym(2)))) < 5*eps)
