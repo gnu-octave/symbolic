@@ -165,7 +165,7 @@
 %! assert (strcmp (strtrim(disp(e, 'flat')), 'x == x'))
 
 %!xtest
-%! % "fails" on SymPy 0.7.5 (well goes to false, which is reasonable enough)
+%! % "fails" (well goes to false, which is reasonable enough)
 %! syms x
 %! e = x - 5 == x - 3;
 %! assert (strcmp (strtrim(disp(e, 'flat')), 'x - 5 == x - 3'))
