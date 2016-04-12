@@ -52,7 +52,7 @@ end
 %! n = double(ns);
 %! A = double(besselk(ns, X));
 %! B = besselk(n, X);
-%! assert (all (all (abs (A - B) < eps*abs(A))))
+%! assert (all (all (abs (A - B) < 2*eps*abs(A))))
 
 %!test
 %! % roundtrip

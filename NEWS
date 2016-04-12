@@ -17,8 +17,8 @@ octsympy 2.4.0-dev
 
 
 
-octsympy 2.3.0-dev
-==================
+octsympy 2.3.0 (2016-04-08)
+===========================
 
   * New commands:
 
@@ -64,6 +64,11 @@ octsympy 2.3.0-dev
       - Windows users now see previously hidden error messages.
     Thanks to @latot.
 
+  * Windows "bundle" package should work even if the system has another
+    Python installed.  Thanks to Abhinav Tripathi.
+
+  * Installation bug fixes.  Thanks to Abhinav Tripathi and Mike Miller.
+
   * New functions for converting sym to integers.  Thanks to @latot.
 
   * Making a sym of a large integer like `sym(10^16)` gives a warning.
@@ -83,9 +88,10 @@ octsympy 2.3.0-dev
 
   * Python `None` can be returned and manipulated.
 
-  * Documentation improvements.
+  * Saving/Loading sym objects is now fully-supported (thanks to Abhinav
+    Tripathi).
 
-  * Saving/Loading sym objects is now supported (it previously worked, by accident).
+  * Documentation improvements.
 
 
 

@@ -65,10 +65,10 @@ end
 
 %!test
 %! % default to k=1
-%! syms z alpha
-%! a = besselh(alpha, z);
-%! a1 = besselh(alpha, 1, z);
-%! assert (isequal (a, a1))
+%! syms z a
+%! A = besselh(a, z);
+%! B = besselh(a, 1, z);
+%! assert (isequal (A, B))
 
 %!error besselh(sym('z'))
 %!error <expecting k = 1 or 2> besselh(2, 0, sym('z'))

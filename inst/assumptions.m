@@ -312,4 +312,4 @@ end
 %!test
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
-%! assert (~isequal (e, sym(true)) && ~isequal (e, sym(false)))
+%! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))

@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=2.3.0-dev
+VER=2.4.0-dev
 # for release
-#VER=2.3.0
+#VER=2.4.0
 #TAG=v${VER}
 
 #----------------------------------------------------------------
@@ -23,9 +23,10 @@ read dummy
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 ( cd octsympy
-  if [ -z $TAG]; then
+  if [ -z $TAG ]; then
     git checkout master
   else
+    # note: its ok that this gives the "detached state" warning
     git checkout tags/${TAG}
   fi
   )
