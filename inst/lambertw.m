@@ -87,12 +87,38 @@ function w = lambertw(b,z)
         f = (w ~= -1);
         t = f.*t./(p.*(w + f) - 0.5*(w + 2.0).*t./(w + f));
         w = w - t;
-        if (abs(real(t)) < (2.48*eps)*(1.0 + abs(real(w))) && ...
-            abs(imag(t)) < (2.48*eps)*(1.0 + abs(imag(w))))
-          return
+        done = (abs (real (t)) < (2.48*eps)*(1.0 + abs (real (w))) & ...
+                abs (imag (t)) < (2.48*eps)*(1.0 + abs (imag (w))));
+        if (all (done))
+          break
         end
     end
-    warning('iteration limit reached, result of lambertw may be inaccurate');
+
+    % special treatment for infinity and nan
+    isnaninf = (isinf (z) & isreal (z)) | isnan (z);
+
+    % don't show the warning if we're going to overwrite that entry
+    if (~ all (done | isnaninf))
+      warning ('iteration limit reached, result of lambertw may be inaccurate');
+    end
+
+    if (any (isnaninf))
+      % broadcast z and b to same size
+      if (isscalar (z) && ~isscalar (b))
+        z = repmat (z, size (b));
+      elseif (~isscalar (z) && isscalar (b))
+        b = repmat (b, size (z));
+      end
+
+      w(isnan (z)) = nan;
+
+      I = isinf (z) & isreal (z) & (z > 0);
+      w(I) = inf + 2*b(I)*pi*1i;
+
+      I = isinf (z) & isreal (z) & (z < 0);
+      w(I) = inf + (2*b(I) + 1)*pi*1i;
+
+    end
 end
 
 
@@ -140,27 +166,63 @@ end
 %!test
 %! % limiting behaviour as z large
 %! k = 3;
-%! A = lambertw(k, 1e100);
+%! A = lambertw (k, 1e100);
 %! assert (abs (imag (A) - 2*pi*k) < 0.1)
 
 %!test
 %! % limiting behaviour as z large, up imag axis
 %! k = 1;
-%! A = lambertw(k, 1e100*1i);
+%! A = lambertw (k, 1e100*1i);
 %! assert (abs (imag (A) - (2*k+0.5)*pi) < 0.1)
 
 %!test
 %! % limiting behaviour as z large, down imag axis
 %! k = -2;
-%! A = lambertw(k, -1e100*1i);
+%! A = lambertw (k, -1e100*1i);
 %! assert (abs (imag (A) - (2*k-0.5)*pi) < 0.1)
 
 %!test
 %! % limiting behaviour as z large, near branch
 %! k = 3;
-%! A = lambertw(k, -1e100);
-%! B = lambertw(k, -1e100 + 1i);
-%! C = lambertw(k, -1e100 - 1i);
+%! A = lambertw (k, -1e100);
+%! B = lambertw (k, -1e100 + 1i);
+%! C = lambertw (k, -1e100 - 1i);
 %! assert (abs (imag (A) - (2*k+1)*pi) < 0.1)
 %! assert (abs (imag (B) - (2*k+1)*pi) < 0.1)
 %! assert (abs (imag (C) - (2*k-1)*pi) < 0.1)
+
+%!test
+%! % infinities and nan
+%! A = lambertw ([inf exp(1) -inf nan]);
+%! B = [inf  1  inf + pi*1i nan];
+%! assert (isequaln (A, B))
+
+%!test
+%! % infinities and nan
+%! A = lambertw (3, [inf 1 -inf nan]);
+%! B = [inf + 2*3*pi*1i  lambertw (3,1)  inf + (2*3+1)*pi*1i  nan];
+%! assert (isequaln (A, B))
+
+%!test
+%! % infinities and nan
+%! A = lambertw ([0 1 2 0], [inf -inf nan exp(1)]);
+%! B = [inf  inf+3*pi*1i  nan  1];
+%! assert (isequaln (A, B))
+
+%!test
+%! % scalar infinity z, vector b
+%! A = lambertw ([1 2 -3], inf);
+%! B = [lambertw (1, inf)  lambertw (2, inf)  lambertw (-3, inf)];
+%! assert (isequal (A, B))
+
+%!test
+%! % scalar -infinity z, vector b
+%! A = lambertw ([1 2 -3], -inf);
+%! B = [lambertw (1, -inf)  lambertw (2, -inf)  lambertw (-3, -inf)];
+%! assert (isequal (A, B))
+
+%!test
+%! % scalar z nan, vector b
+%! A = lambertw ([1 2 -3], nan);
+%! B = [nan nan nan];
+%! assert (isequaln (A, B))
