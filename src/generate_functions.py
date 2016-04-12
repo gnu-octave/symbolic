@@ -46,6 +46,8 @@ heaviside|Heaviside
 dirac|DiracDelta
 cosint|Ci
 sinint|Si
+coshint|Chi
+sinhint|Shi
 """
 # todo:
 #psi(x)|polygamma(0,x)
