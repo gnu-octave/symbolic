@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -144,6 +144,9 @@
 %%    @result{} B = (sym) B  (m×n matrix expression)
 %% @end group
 %% @end example
+%%
+%% It is also possible to save sym objects to file and then load them when
+%% needed in the usual way with the @code{save} and @code{load} commands.
 %%
 %% The underlying SymPy “srepr” can also be passed directly to
 %% @code{sym}: @pxref{char} for details.
@@ -361,6 +364,7 @@ function s = sym(x, varargin)
   s = python_cmd ({cmd 'return z,'});
 
 end
+
 
 %!test
 %! % integers
@@ -646,6 +650,11 @@ end
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
+%!warning <heuristics for double-precision> sym(1e16);
+%!warning <heuristics for double-precision> sym(-1e16);
+%!warning <heuristics for double-precision> sym(10.33);
+%!warning <heuristics for double-precision> sym(-5.23);
+
 %!error <assumption is not supported>
 %! x = sym('x', 'positive2');
 
@@ -667,6 +676,16 @@ end
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
-%! % FIXME: slightly obtuse testing b/c 0.7.6 but still fails on 0.7.5
-%! assert (isequal (n > 0, sym(false)))
-%! assert (isequal (n == -1, sym(false)))
+
+%!test
+%! % save/load sym objects
+%! syms x
+%! y = 2*x;
+%! a = 42;
+%! myfile = tempname();
+%! save(myfile, 'x', 'y', 'a')
+%! clear x y a
+%! load(myfile)
+%! assert(isequal(y, 2*x))
+%! assert(a == 42)
+%! assert(unlink(myfile) == 0)

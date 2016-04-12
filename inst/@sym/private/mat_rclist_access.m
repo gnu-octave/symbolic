@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,7 +35,7 @@ function z = mat_rclist_access(A, r, c)
   end
 
   cmd = { '(A, rr, cc) = _ins'
-          'if not A.is_Matrix:'
+          'if A is None or not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'n = len(rr)'
           'M = sp.Matrix.zeros(n, 1)'

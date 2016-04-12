@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,36 +17,61 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x} =} colon (@var{a},@var{b})
-%% @deftypefnx {Function File} {@var{x} =} colon (@var{a},@var{step},@var{b})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File} {@var{x} =} colon (@var{a}, @var{b})
+%% @deftypefnx {Function File} {@var{x} =} colon (@var{a}, @var{step}, @var{b})
 %% Generate a range of syms.
 %%
-%% FIXME: should this generate intervals?  Check what SMT does?
+%% Examples:
+%% @example
+%% @group
+%% sym(5):10
+%%   @result{} ans = (sym) [5  6  7  8  9  10]  (1×6 matrix)
+%% 0:sym(pi):5*sym(pi)
+%%   @result{} ans = (sym) [0  π  2⋅π  3⋅π  4⋅π  5⋅π]  (1×6 matrix)
+%% syms x
+%% x:2:(x+6)
+%%   @result{} ans = (sym) [x  x + 2  x + 4  x + 6]  (1×4 matrix)
+%% @end group
+%% @end example
 %%
+%% The end point @var{b} might not be included:
+%% @example
+%% @group
+%% 0:sym(pi):10
+%%   @result{} ans = (sym) [0  π  2⋅π  3⋅π]  (1×4 matrix)
+%% @end group
+%% @end example
+%%
+%% The @var{step} can be negative:
+%% @example
+%% @group
+%% sym(6):-3:-3
+%%   @result{} ans = (sym) [6  3  0  -3]  (1×4 matrix)
+%% @end group
+%% @end example
+%%
+%% @seealso{linspace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function y = colon(a,step,b)
+function y = colon(a, step, b)
 
   if (nargin == 2)
     b = step;
     step = sym(1);
   end
-  a = sym(a);
-  b = sym(b);
-  step = sym(step);
 
-  B = (b-a)/step;
-  y = (0:double(B))*sym(step) + a;
+  cmd = { '(a, b, step) = _ins'
+          'B = floor((b-a)/step)'
+          'y = Matrix([range(0, B+1)])'
+          'y = y*step + Matrix([[a]*y.cols])'
+          'return y,' };
 
-  % this approach fails to  make 0:sym(pi):10
-  %cmd = {'(a, b, step) = _ins'...
-  %       'y = range(a, b + sign(step)*1, step)'...
-  %       'return y,'};
-  %y = python_cmd (cmd, a, b, step)
-  %y = cell2mat(y);
+  y = python_cmd (cmd, sym(a), sym(b), sym(step));
+
 end
 
 
@@ -85,5 +110,5 @@ end
 %! t = sym(1)/10;
 %! assert(isequal(L, [t p/3+t 2*p/3+t]));
 
-%! % should be an error if it doesn't convert to double
-%!error <cannot convert> syms x; a = 1:x;
+%!error syms x; a = 0:x;
+%!error syms x; a = 1:x;

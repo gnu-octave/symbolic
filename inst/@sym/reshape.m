@@ -40,17 +40,24 @@ function z = reshape(a, n, m)
     return
   end
 
-  if (nargin == 2)
+  if (nargin == 2) && (length(n) == 2)
     m = n(2);
     n = n(1);
+  elseif (nargin == 3)
+    % nop
+  else
+    print_usage ();
   end
 
-  cmd = { '(A, n, m) = _ins' ...
-          'if A.is_Matrix:' ...
-          '    #sympy is row-based' ...
-          '    return A.T.reshape(m,n).T,' ...
-          'else:' ...
-          '    return A,' };
+  cmd = {
+      '(A, n, m) = _ins'
+      'if A is not None and A.is_Matrix:'
+      '    #sympy is row-based'
+      '    return A.T.reshape(m,n).T'
+      'else:'
+      '    if n != 1 or m != 1:'
+      '        raise ValueError("cannot reshape scalar to non-1x1 size")'
+      '    return A' };
 
   z = python_cmd (cmd, sym(a), int32(n), int32(m));
 
@@ -93,3 +100,11 @@ end
 %! % reshape scalar
 %! assert (logical( reshape(x, 1, 1) == x ))
 %! assert (logical( reshape(x, [1 1]) == x ))
+
+%!shared a
+%! syms a
+
+%!error reshape(a, 2, 1)
+%!error reshape(a, 1, 2)
+%!error reshape(a, 1, 1, 1)
+%!error reshape(a, [1, 1, 1])

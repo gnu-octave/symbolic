@@ -101,29 +101,22 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'try:'
-            '    if len(symbols) > 0:'
-            '        d = sp.solve(eqs, symbols, dict=True)'
-            '    else:'
-            '        d = sp.solve(eqs, dict=True)'
-            'except Exception as e:'
-            '    return (1, type(e).__name__ + ": " + str(e))'
+            'if len(symbols) > 0:'
+            '    d = sp.solve(eqs, symbols, dict=True)'
+            'else:'
+            '    d = sp.solve(eqs, dict=True)'
             '#'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
-            '        return (0, d[0].popitem()[1])'
+            '        return d[0].popitem()[1],'
             '    else:'  % one variable, multiple solutions
-            '        return (0, sp.Matrix([r.popitem()[1] for r in d]))'
+            '        return sp.Matrix([r.popitem()[1] for r in d]),'
             '#'
             'if len(d) == 1:'
             '    d = d[0]'
-            'return (0, d)' };
+            'return d,' };
 
-    [flag, out] = python_cmd (cmd, varargin{:});
-
-    if (flag)
-      error(out)
-    end
+    out = python_cmd (cmd, varargin{:});
 
     varargout = {out};
 
@@ -135,24 +128,17 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'try:'
-            '    if len(symbols) > 0:'
-            '        (vars, solns) = sp.solve(eqs, symbols, set=True)'
-            '    else:'
-            '        (vars, solns) = sp.solve(eqs, set=True)'
-            'except Exception as e:'
-            '    return (1, type(e).__name__ + ": " + str(e))'
+            'if len(symbols) > 0:'
+            '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
+            'else:'
+            '    (vars, solns) = sp.solve(eqs, set=True)'
             '#'
             'd = []'
             'for (i, var) in enumerate(vars):'
             '    d.append(sp.Matrix([t[i] for t in solns]))'
-            'return (0, d)' };
+            'return d,' };
 
-    [flag, out] = python_cmd (cmd, varargin{:});
-
-    if (flag)
-      error(out)
-    end
+    out = python_cmd (cmd, varargin{:});
 
     varargout = out;
 
@@ -245,9 +231,9 @@ end
 %! assert (isequal (Y, [1; -1]))
 
 %!error
-%! syms a b;
+%! syms a b
 %! solve(a==b, 1==1)
 
 %!error
-%! syms a b;
+%! syms a b
 %! solve(a==b, 1==2)

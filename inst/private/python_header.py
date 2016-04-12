@@ -1,4 +1,6 @@
-# Part of OctSymPy.
+# Copyright (C) 2014-2016 Colin B. Macdonald
+# Free Software without warranty, GPL-3.0+: see python_header.m
+
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
 
@@ -9,20 +11,21 @@ import sys
 sys.ps1 = ""; sys.ps2 = ""
 
 
-def myerr(e):
-    # hardcoded in case no xml
-    print("<output_block>")
-    print("<item>\n<f>9999</f>\n<f>")
-    print(str(e[0]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f><f>")
-    print(str(e[1]).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
-    print("</f>\n</item>")
-    print("</output_block>\n")
-
+def echo_exception_stdout(mystr):
+    exception_str = sys.exc_info()[0].__name__ + ": " + str(sys.exc_info()[1])
+    # hardcode xml, we may not have imports yet.  1003 is code for string.
+    print("<output_block>\n<list>")
+    print("<item>\n<f>1003</f>\n<f>INTERNAL_PYTHON_ERROR</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + mystr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("<item>\n<f>1003</f>")
+    print("<f>" + exception_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
+    print("</list>\n</output_block>\n")
 
 try:
     import sympy
     import sympy as sp
+    from sympy import __version__ as spver
     # need this to reactivate from srepr
     from sympy import *
     import sympy.printing
@@ -32,12 +35,14 @@ try:
     from sympy.functions.elementary.piecewise import ExprCondPair
     from sympy.integrals.risch import NonElementaryIntegral
     from sympy.matrices.expressions.matexpr import MatrixElement
+    from sympy.utilities.iterables import uniq
     import copy
     import binascii
     import struct
     import xml.etree.ElementTree as ET
+    from distutils.version import LooseVersion
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header import block")
     raise
 
 
@@ -60,13 +65,16 @@ try:
             if not k in b:
                 n[k] = a[k]
         return n
+    def Version(v):
+        # short but not quite right: https://github.com/cbm755/octsympy/pull/320
+        return LooseVersion(v.replace('.dev', ''))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 1")
     raise
 
 
 # FIXME: Remove all this when we deprecate 0.7.6.x support.
-if not (sympy.__version__ == "0.7.5" or sympy.__version__.startswith("0.7.6")):
+if Version(spver) >= Version("0.7.7.dev"):
     my_srepr = sympy.srepr
 else:
     def _monkey_patch_matpow_doit(self, **kwargs):
@@ -133,9 +141,8 @@ else:
             """return expr in repr form w/ assumptions listed"""
             return _ReprPrinter_w_asm(settings).doprint(expr)
     except:
-        myerr(sys.exc_info())
+        echo_exception_stdout("in python_header defining fcns block 2")
         raise
-
 
 
 try:
@@ -161,7 +168,7 @@ try:
         else:
             print(DOM.toprettyxml(indent="", newl="\n", encoding="utf-8"))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 3")
     raise
 
 
@@ -182,18 +189,22 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif isinstance(x, (sp.Basic, sp.MatrixBase)):
+        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase)):
+            # FIXME: is it weird to pretend None is a SymPy object?
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
-            elif isinstance(x, (sp.Expr, Boolean)):
-                _d = (1, 1)
             elif isinstance(x, sp.MatrixExpr):
                 # nan for symbolic size
                 _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
-            else:
-                dbout("Treating unexpected SymPy obj as scalar: " + str(type(x)))
+            elif x is None:
                 _d = (1,1)
-            pretty_ascii = sp.pretty(x, use_unicode=False)
+            else:
+                _d = (1, 1)
+            try:
+                pretty_ascii = sp.pretty(x, use_unicode=False)
+            except:
+                # e.g., SymPy issue #10414
+                pretty_ascii = str(x)
             pretty_unicode = sp.pretty(x, use_unicode=True)
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
@@ -250,12 +261,9 @@ try:
             else:
                 octoutput(x.values(), c)
         else:
-            dbout("error exporting variable:")
-            dbout("x: " + str(x))
-            dbout("type: " + str(type(x)))
-            octoutput("python does not know how to export type " + str(type(x)), et)
+            raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
-    myerr(sys.exc_info())
+    echo_exception_stdout("in python_header defining fcns block 4")
     raise
 # end of python header, now couple blank lines
 

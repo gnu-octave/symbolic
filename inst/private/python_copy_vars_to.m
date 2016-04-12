@@ -1,3 +1,21 @@
+%% Copyright (C) 2014-2015 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
 function L = python_copy_vars_to(in, te, varargin)
 %private function
 
@@ -10,13 +28,13 @@ function L = python_copy_vars_to(in, te, varargin)
     %% put inside try-except
     L = do_list(4, in, varargin);
     L = { 'try:' ...
-      sprintf('    %s = []', in) ...
-      L{:} ...
-      '    octoutput_drv("PYTHON: successful variable import")' ...
-      'except:' ...
-      '    octoutput_drv("PYTHON: Error in variable import")' ...
-      '    myerr(sys.exc_info())' ...
-      '    raise' };
+          sprintf('    %s = []', in) ...
+          L{:} ...
+          '    octoutput_drv("PYTHON: successful variable import")' ...
+          'except:' ...
+          '    echo_exception_stdout("while copying vars to Python")' ...
+          '    raise'
+        };
   end
 end
 
@@ -89,6 +107,14 @@ function a = do_list(indent, in, varlist)
       a = {a{:} b{:}};
       c = length(a);
       c=c+1; a{c} = sprintf('%s%s.append(dict(zip(%s,%s)))', sp, in, inkeys, invalues);
+
+    elseif (ismatrix(x) && (isnumeric(x) || islogical(x)))
+      % What should we do with double arrays?  Perhaps map them to numpy
+      % arrays is the most useful in general.  For now, we map them to a
+      % list-of-lists.  This could change in the future.  See also:
+      % https://github.com/cbm755/octsympy/issues/134
+      % https://github.com/cbm755/octsympy/pull/336
+      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(octave_array_to_python(x)));
 
     else
       i, x

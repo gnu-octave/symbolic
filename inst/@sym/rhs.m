@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,12 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{L} =} rhs (@var{f})
 %% Right-hand side of symbolic expression.
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% eqn = 5*x <= 3*x + 6
+%%   @result{} eqn = (sym) 5⋅x ≤ 3⋅x + 6
+%% rhs(eqn)
+%%   @result{} ans = (sym) 3⋅x + 6
+%% @end group
+%% @end example
+%%
 %% Gives an error if any of the symbolic objects have no right-hand side.
 %%
-%% @seealso{lhs, children}
+%% @seealso{lhs, children, formula, argnames}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -30,22 +42,7 @@
 
 function R = rhs(f)
 
-  cmd = {
-    'f, = _ins'
-    'try:'
-    '    if f.is_Matrix:'
-    '        return (0, f.applyfunc(lambda a: a.rhs))'
-    '    else:'
-    '        return (0, f.rhs)'
-    'except Exception as e:'
-    '    return (1, type(e).__name__ + ": " + str(e))'
-    };
-
-  [flag, R] = python_cmd (cmd, f);
-
-  if (flag)
-    error(R)
-  end
+  R = uniop_helper(f, 'lambda a: a.rhs');
 
 end
 

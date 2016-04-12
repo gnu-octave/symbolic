@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu and Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,44 +18,58 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} setdiff (@var{A}, @var{B})
 %% Set subtraction.
 %%
-%% @seealso{union, intersect, setxor, unique, ismember}
+%% Example:
+%% @example
+%% @group
+%% A = interval(1, sym(pi));
+%% B = interval(sym(2), 3);
+%% setdiff(A, B)
+%%   @result{} ans = (sym) [1, 2) ∪ (3, π]
+%% @end group
+%% @end example
+%%
+%% You can mix finite sets and intervals:
+%% @example
+%% @group
+%% setdiff(A, finiteset(3))
+%%   @result{} ans = (sym) [1, 3) ∪ (3, π]
+%%
+%% setdiff(A, finiteset(sym(pi)))
+%%   @result{} ans = (sym) [1, π)
+%%
+%% setdiff(finiteset(1, 2, sym(pi)), B)
+%%   @result{} ans = (sym) @{1, π@}
+%% @end group
+%% @end example
+%%
+%% @seealso{union, intersect, setxor, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = setdiff(A, B)
+function r = setdiff(a, b)
 
-  % FIXME: is it worth splitting out a "private/set_helper"?
-
-  cmd = { 'A, B = _ins'
-          'try:'
-          '    A = iter(A)'
-          'except TypeError:'
-          '    A = set([A])'
-          'else:'
-          '    A = set(A)'
-          'try:'
-          '    B = iter(B)'
-          'except TypeError:'
-          '    B = set([B])'
-          'else:'
-          '    B = set(B)'
-          'C = A.difference(B)'
-          'C = sympy.Matrix([list(C)])'
-          'return C,' };
-
-  A = sym(A);
-  B = sym(B);
-  r = python_cmd (cmd, A, B);
-
-  % reshape to column if both inputs are
-  if (iscolumn(A) && iscolumn(B))
-    r = reshape(r, length(r), 1);
+  if (nargin ~= 2)
+    print_usage ();
   end
+
+  cmd = {
+         'a, b = _ins'
+         'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
+         '    return a - b,'
+         ''
+         'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+         'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
+         'C = A - B'
+         'return sp.Matrix([list(C)]),'
+        };
+
+    r = python_cmd (cmd, sym(a), sym(b));
 
 end
 
@@ -91,3 +106,9 @@ end
 %! syms x
 %! assert (isequal (setdiff([x 1], x), sym(1)))
 %! assert (isempty (setdiff(x, x)))
+
+%!test
+%! A = interval(sym(1), 3);
+%! B = interval(sym(2), 5);
+%! C = setdiff(A, B);
+%! assert( isequal( C, interval(sym(1), 2, false, true)))

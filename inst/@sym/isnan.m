@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} isnan (@var{x})
 %% Return true if a symbolic expression is Not-a-Number.
+%%
+%% Example:
+%% @example
+%% @group
+%% A = [sym(1) sym(0)/0 sym(1)/0; sym(nan) 1 2]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡ 1   nan  zoo⎤
+%%       ⎢             ⎥
+%%       ⎣nan   1    2 ⎦
+%% isnan(A)
+%%   @result{} ans =
+%%        0   1   0
+%%        1   0   0
+%% @end group
+%% @end example
+%%
+%% Note that the return is of type logical.
 %%
 %% @seealso{isinf, double}
 %% @end deftypefn
@@ -26,31 +44,13 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-
 function r = isnan(x)
 
-  % todo: neat idea but fails for matrices
-  %r = isnan (double (x, false));
-
-  if isscalar(x)
-
-    cmd = 'return (_ins[0] == sp.nan,)';
-
-    r = python_cmd (cmd, x);
-
-    if (~ islogical(r))
-      error('nonboolean return from python');
-    end
-
-  else  % array
-    r = logical(zeros(size(x)));
-    for j = 1:numel(x)
-      % Bug #17
-      idx.type = '()';
-      idx.subs = {j};
-      r(j) = isnan(subsref(x, idx));
-    end
+  if (nargin ~= 1)
+    print_usage ();
   end
+
+  r = uniop_bool_helper(x, 'lambda a: a is sp.nan');
 
 end
 

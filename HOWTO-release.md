@@ -52,7 +52,8 @@ Checklist
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
 
-      - regenerating the html documentation.
+      - regenerate the html documentation.  It will create a directory
+        called "html".  Then "tar -zcvf symbolic-html.tar.gz html".
 
       - create ticket for binaries and doc tarball on sourceforge.
 

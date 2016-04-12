@@ -60,51 +60,8 @@
 
 function r = not(x)
 
-  % not the same as:
-  %y = ~logical(x);
+  r = uniop_helper (x, 'Not');
 
-  % FIXME: simpler version? don't micromanage sympy but gives ~x
-  %  '    try:'
-  %  '        return Not(p)'
-  %  '    except:'
-  %  '        raise TE'
-
-  % cf., logical, isAlways
-
-  cmd = {
-    '(p,) = _ins'
-    'def scalar_case(p,):'
-    '    TE = TypeError("cannot logically negate sym \"%s\"" % str(p))'
-    '    if sympy.__version__ == "0.7.5":' % later Not(p) below ok
-    '        if isinstance(p, Eq): return Ne(p.lhs, p.rhs)'
-    '        elif isinstance(p, Ne): return Eq(p.lhs, p.rhs)'
-    '        elif isinstance(p, Lt): return Ge(p.lts, p.gts)'
-    '        elif isinstance(p, Le): return Gt(p.lts, p.gts)'
-    '        elif isinstance(p, Gt): return Le(p.gts, p.lts)'
-    '        elif isinstance(p, Ge): return Lt(p.gts, p.lts)'
-    '    if p is nan:'
-    '        raise TE'  % FIXME: check SMT
-    '    elif isinstance(p, (BooleanFunction, Relational)):'
-    '        return Not(p)'
-    '    elif p in (S.true, S.false):'
-    '        return Not(p)'
-    '    elif p.is_number:'
-    '        return S(not bool(p))'
-    '    else:'
-    '        raise TE'
-    'try:'
-    '    if p.is_Matrix:'
-    '        return (0, p.applyfunc(lambda a: scalar_case(a)))'
-    '    else:'
-    '        return (0, scalar_case(p))'
-    'except Exception as e:'
-    '    return (1, type(e).__name__ + ": " + str(e))'
-    };
-
-  [flag, r] = python_cmd (cmd, x);
-  if (flag)
-    error(r)
-  end
 end
 
 
@@ -147,16 +104,7 @@ end
 %! assert (isequal( ~a, b))
 
 %!test
-%! % symbol ineq
 %! syms x
-%! try
-%!   y = ~x
-%!   waserr = false;
-%! catch
-%!   waserr = true;
-%! end
-%! assert (waserr)
-
-%!error <TypeError>
-%! syms x
-%! ~x
+%! y = ~x;
+%! s = disp(y, 'flat');
+%! assert (strcmpi(strtrim(s), 'Not(x)'))

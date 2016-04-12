@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -195,29 +196,21 @@ end
 
 %!test
 %! % System of ODEs
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t) C1 C2
-%!   ode_1=diff(x(t),t) == 2*y(t);
-%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!   sol_sodes=dsolve([ode_1,ode_2]);
-%!   g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
-%!   assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
-%! end
+%! syms x(t) y(t) C1 C2
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t);
+%! sol_sodes=dsolve([ode_1,ode_2]);
+%! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
+%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
 
 %!test
 %! % System of ODEs (initial-value problem)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t)
-%!   ode_1=diff(x(t),t) == 2*y(t);
-%!   ode_2=diff(y(t),t) == 2*x(t)-3*t;
-%!   sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
-%!   g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
-%!   assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
-%! end
+%! syms x(t) y(t)
+%! ode_1=diff(x(t),t) == 2*y(t);
+%! ode_2=diff(y(t),t) == 2*x(t);
+%! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
+%! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
+%! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
 
 %!test
 %! syms y(x)
@@ -244,15 +237,11 @@ end
 
 %!xtest
 %! % forcing, Issue #183
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: Solution of ODE systems needs sympy >= 0.7.6, issue #169')
-%! else
-%!   syms x(t) y(t)
-%!   ode1 = diff(x) == x + sin(t) + 2;
-%!   ode2 = diff(y) == y - t - 3;
-%!   soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
-%!   X = rhs(soln{1});
-%!   Y = rhs(soln{2});
-%!   assert (isequal (diff(X) - (X + sin(t) + 2), 0))
-%!   assert (isequal (diff(Y) - (Y - t - 3), 0))
-%! end
+%! syms x(t) y(t)
+%! ode1 = diff(x) == x + sin(t) + 2;
+%! ode2 = diff(y) == y - t - 3;
+%! soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
+%! X = rhs(soln{1});
+%! Y = rhs(soln{2});
+%! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
+%! assert (isequal (diff(Y) - (Y - t - 3), 0))

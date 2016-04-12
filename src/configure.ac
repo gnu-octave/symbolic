@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge symbolic package], [2.3.0-dev])
+AC_INIT([Octave-Forge symbolic package], [2.4.0-dev])
 
 ## Window users seem to often have their path misconfigured (issue #236)
 ## so we check if we really are running GNU sort
@@ -15,7 +15,7 @@ else
 fi
 
 AC_PATH_PROG(PYTHON, python)
-if test -z $PYTHON; then
+if test -z "$PYTHON"; then
   AC_MSG_ERROR(Failed to find Python)
 fi
 

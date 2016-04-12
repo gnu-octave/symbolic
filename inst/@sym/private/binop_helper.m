@@ -27,8 +27,13 @@ function z = binop_helper(x, y, scalar_fcn)
 %   It can also be the defn of a function called "_op"
 %     e.g., { 'def _op(a,b):' '    return a % b' }
 %
+%   Caution: Just because you are implementing a binary operation,
+%   does not mean you want to use this helper.  You shoudl use this
+%   helper when you by default want per-component calculations.
+%
 %   FIXME: even faster if move to python_header (load once)?
 
+  assert (nargin == 3)
 
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)
@@ -37,19 +42,20 @@ function z = binop_helper(x, y, scalar_fcn)
     cmd = {['_op = ' scalar_fcn]};
   end
 
-  cmd = { cmd{:} ...
-          '(x, y) = _ins' ...
-          'if x.is_Matrix and y.is_Matrix:' ...
-          '    assert x.shape == y.shape' ...
-          '    A = sp.Matrix(x.shape[0], y.shape[1],' ...
-          '        lambda i,j: _op(x[i,j], y[i,j]))' ...
-          '    return A,' ...
-          'elif x.is_Matrix:' ...
-          '    return x.applyfunc(lambda a: _op(a, y)),' ...
-          'elif y.is_Matrix:' ...
-          '    return y.applyfunc(lambda a: _op(x, a)),' ...
-          'else:' ...
-          '    return _op(x, y),' };
+  % note: cmd is already cell array, hence [ concatenates with it
+  cmd = [ cmd
+          '(x, y) = _ins'
+          'if x.is_Matrix and y.is_Matrix:'
+          '    assert x.shape == y.shape'
+          '    A = sp.Matrix(x.shape[0], x.shape[1],'
+          '        lambda i,j: _op(x[i,j], y[i,j]))'
+          '    return A,'
+          'elif x.is_Matrix:'
+          '    return x.applyfunc(lambda a: _op(a, y)),'
+          'elif y.is_Matrix:'
+          '    return y.applyfunc(lambda a: _op(x, a)),'
+          'else:'
+          '    return _op(x, y),' ];
 
   z = python_cmd (cmd, sym(x), sym(y));
 

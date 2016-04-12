@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,18 +43,7 @@ function z = mat_rclist_asgn(A, r, c, B)
   end
 
   if ((numel(B) == 1) && (numel(r) > 1))
-    % B should be a sym unless experimenting with various bool
-    % trickery.
-    % FIXME: Issue #71: why does this work even if B is sym w/ bools?
-    B = B*ones(size(r));
-    % If sym, we probably can't use repmat (recursion?).
-    %if isa(B, 'sym')
-    %  B = B*ones(size(r));
-    %else
-    %  warning('activating repmat code: a non-sym snuck in?')
-    %  assert( islogical (B))
-    %  B = repmat(B, size(r));
-    %end
+    B = repmat(B, size(r));
   end
   if (length(r) ~= numel(B))
     error('not enough/too much in B')
@@ -65,8 +54,7 @@ function z = mat_rclist_asgn(A, r, c, B)
 
   cmd = { '(A, r, c, B) = _ins'
           '# B linear access fix, transpose for sympy row-based'
-          '#if not isinstance(B, sp.MatrixBase):'
-          'if not B.is_Matrix:'
+          'if B is None or not B.is_Matrix:'
           '    B = sp.Matrix([[B]])'
           'BT = B.T'
           '# copy of A, expanded and padded with zeros'

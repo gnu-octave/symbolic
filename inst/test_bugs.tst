@@ -223,14 +223,3 @@
 %! % FIXME: not same as an freshly created 5 x 6.
 %! C = sym('B', [5 6]);
 %! assert (isequal(B, C))
-
-%!test
-%! % ensure these kinds of MatrixExpr can be manipulated somewhat
-%! syms n m integer
-%! A = sym('A', [n m]);
-%! B = subs(A, [n m], [5 6]);
-%! B = B + 1;
-%! assert (isa (B, 'sym'))
-%! C = B(1, 1);  % currently makes a MatrixElement
-%! C = C + 1;
-%! assert (isa (C, 'sym'))

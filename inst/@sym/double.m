@@ -19,7 +19,6 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{y} =} double (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} double (@var{x}, false)
 %% Convert symbolic to doubles.
 %%
 %% Example:
@@ -47,19 +46,7 @@
 %% @group
 %% >> syms x
 %% >> double (x)
-%%    @print{} ??? cannot convert to double
-%% @end group
-%% @end example
-%%
-%% You can pass an optional second argument of @code{false} to
-%% return an empty array if conversion fails on any component.
-%% For example:
-%% @example
-%% @group
-%% >> syms x
-%% >> a = [1 2 x];
-%% >> b = double (a, false)
-%%    @result{} b = [](0x0)
+%%    @print{} ??? ... can't convert expression ...
 %% @end group
 %% @end example
 %%
@@ -69,11 +56,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function y = double(x, failerr)
-
-  if (nargin == 1)
-    failerr = true;
-  end
+function y = double(x)
 
   % FIXME: port to uniop?
 
@@ -84,7 +67,7 @@ function y = double(x, failerr)
       % temp = x(j)  (Issue #17)
       idx.type = '()';
       idx.subs = {j};
-      temp = double(subsref(x,idx), failerr);
+      temp = double(subsref(x,idx));
       if (isempty(temp))
         y = [];
         return
@@ -94,48 +77,21 @@ function y = double(x, failerr)
     return
   end
 
-  cmd = { '(x,) = _ins' ...
-          '# special case for zoo, FIXME: good idea?' ...
-          'if x == zoo:' ...
-          '    return (1, float(sp.oo), 0.0)' ...
-          'try:' ...
-          '    z = float(x)'  ...
-          'except TypeError:' ...
-          '    flag = 0' ...
-          'else:' ...
-          '    flag = 1;' ...
-          '    return (flag, z, 0.0)' ...
-          'if flag == 0:' ...
-          '    try:' ...
-          '        z = complex(x)'  ...
-          '    except TypeError:' ...
-          '        flag = 0' ...
-          '    else:' ...
-          '        flag = 2;' ...
-          '        return (flag, z.real, z.imag)' ...
-          'return (0, 0.0, 0.0)' };
+  cmd = { '(x,) = _ins'
+          'if x == zoo:'
+          '    return (float(sp.oo), 0.0)'
+          'if x == nan:'
+          '    return (float(nan), 0.0)'
+          'x = complex(x)'
+          'return (x.real, x.imag)'
+        };
 
-  [flag, A, B] = python_cmd (cmd, x);
+  [A, B] = python_cmd (cmd, x);
 
-  assert(isnumeric(flag))
-  assert(isnumeric(A))
-  assert(isnumeric(B))
-
-  if (flag==0)
-    if (failerr)
-      error('OctSymPy:double:conversion', 'cannot convert to double');
-    else
-      y = [];
-    end
-  elseif (flag==1)
-    y = A;
-  elseif (flag==2)
-    y = A + 1i*B;
-  else
-    error('whut?');
-  end
+  y = A + B*i;
 
 end
+
 
 %!test
 %! % numeric scalar
@@ -148,11 +104,6 @@ end
 %! a = double(sym([10 12]));
 %! assert (isequal (a, [10 12]))
 %! assert (isa (a, 'double'))
-
-%!test
-%! % optional second argument to return empty on failure
-%! assert (isempty (double (sym('x'), false)))
-%! assert (isempty (double (sym([10 12 sym('x')]), false)))
 
 %!test
 %! % complex
@@ -190,11 +141,16 @@ end
 %! assert( isnan(double(snan)))
 
 %!test
+%! % don't want NaN+NaNi
+%! snan = sym(nan);
+%! assert (~iscomplex(double(snan)))
+
+%!test
 %! % arrays
 %! a = [1 2; 3 4];
 %! assert( isequal(  double(sym(a)), a  ))
 %! assert( isequal(  double(sym(a)), a  ))
 
 %! % should fail with error for non-double
-%!error <cannot convert> syms x; double(x)
-%!error <cannot convert> syms x; double([1 2 x])
+%!error <TypeError> syms x; double(x)
+%!error <TypeError> syms x; double([1 2 x])

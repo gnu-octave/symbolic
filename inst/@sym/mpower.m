@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,45 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File}  {@var{z} =} mpower (@var{x}, @var{y})
 %% Symbolic expression matrix exponentiation (^).
 %%
-%% We implement scalar ^ scalar and matrix ^ scalar.
+%% Scalar example:
+%% @example
+%% @group
+%% syms x
+%% sym('x')^3
+%%   @result{} ans = (sym)
+%%        3
+%%       x
+%% @end group
+%% @end example
 %%
+%% The @code{^} notation is use to raise a matrix to a scalar power:
+%% @example
+%% @group
+%% A = [sym(pi) 2; 0 x]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡π  2⎤
+%%       ⎢    ⎥
+%%       ⎣0  x⎦
+%% A^2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡ 2           ⎤
+%%       ⎢π   2⋅x + 2⋅π⎥
+%%       ⎢             ⎥
+%%       ⎢        2    ⎥
+%%       ⎣0      x     ⎦
+%% A^2 == A*A
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡True  True⎤
+%%       ⎢          ⎥
+%%       ⎣True  True⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{power}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -37,44 +71,19 @@ function z = mpower(x, y)
     return
   end
 
+  cmd = { 'x, y = _ins'
+          'if x.is_Matrix and not y.is_Matrix and Version(spver) < Version("0.7.7.dev"):'
+          '    return sympy.MatPow(x, y).doit()'
+          'else:'
+          '    return x**y'
+        };
 
-  if isscalar(x) && isscalar(y)
-    cmd = 'return _ins[0]**_ins[1],';
-    z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, sym(x), sym(y));
 
-  elseif isscalar(x) && ~isscalar(y)
-    error('scalar^array not implemented');
-
-  elseif ~isscalar(x) && isscalar(y)
-    % FIXME: sympy can do int and rat, could use MatPow otherwise,
-    % rather than error.  SMT just leaves them unevaluted.
-
-    % FIXME: sin(MatrixExpr) also fails, any easy way in SymPy to express
-    % component-wise operations on a MatrixExpr?
-
-    cmd = { 'x, y = _ins'
-            'try:'
-            '    if not y.is_number:'
-            '        z = sympy.MatPow(x, y)'
-            '    else:'
-            '        z = x**y'
-            '    r = True'
-            'except NotImplementedError as e:'
-            '    z = str(e)'
-            '    r = False'
-            'return (r, z)' };
-
-    [r, z] = python_cmd (cmd, sym(x), sym(y));
-    if ~r
-      error('mpower: not implemented; sympy says: %s', z)
-    end
-
-  else  % two array's case
-    error('array^array not implemented');
-  end
+  % FIXME: with some future SymPy (>0.7.6.1?), we may be able to use:
+  %z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
 
 end
-
 
 %!test
 %! syms x
@@ -103,8 +112,8 @@ end
 
 %!test
 %! % non-integer power
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'), '.', ''))<=761)
-%!   disp('skipping known failure b/c SymPy <= 0.7.6.x')
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
 %! else
 %! A = sym([1 2; 0 3]);
 %! B = A^pi;
@@ -114,23 +123,16 @@ end
 
 %!test
 %! % matpow
-%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
-%!   disp('skipping: fails on SymPy 0.7.5')
-%! else
 %! syms n
 %! A = sym([1 2; 3 4]);
 %! B = A^n;
 %! C = 10 + B + B^2;
 %! D = subs(C, n, 1);
 %! E = 10 + A + A^2;
-%! assert (isequal (D, E))
-%! end
+%! assert (isequal (simplify(D), simplify(E)))
 
 %!test
 %! % matpow, sub in zero gives identity
-%! if (str2num(strrep(python_cmd ('return sympy.__version__,'),'.',''))<=75)
-%!   disp('skipping: fails on SymPy 0.7.5')
-%! else
 %! A = sym([1 2; 0 3]);
 %! syms n;
 %! B = A^n;
@@ -138,15 +140,13 @@ end
 %! assert (isequal (C, A))
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
-%! end
 
-%!error <not implemented>
+%!error <NotImplementedError>
 %! % scalar^array not implemented
 %! syms x
 %! A = [1 2; 3 4];
 %! B = x^A;
 
-%!error <not implemented>
-%! % array^array not implemented
+%!error
 %! A = sym([1 2; 3 4]);
 %! B = A^A;

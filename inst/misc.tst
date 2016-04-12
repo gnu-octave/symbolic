@@ -7,8 +7,8 @@
 %!assert (isequal (x(1), x));
 %!assert (isequal (x(end), x));
 
-%!error <subscript indices must be either positive> x(0)
-%!error <subscript indices must be either positive> x(-1)
+%!error <subscript.*either.*integers> x(0)
+%!error <subscript.*either.*integers> x(-1)
 
 %!error <index out of range> x(end+1)
 
@@ -77,3 +77,38 @@
 %! assert (isequal (size(m([],[])), [0 0]))
 %! assert (isequal (size(m(:,[])), [2 0]))
 %! assert (isequal (size(m([],:)), [0 3]))
+
+%!shared
+
+%!test
+%! r = python_cmd ('return Version("0.7.6") > Version("0.7.6"),');
+%! assert (isequal (r, false))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6") >= Version("0.7.6"),');
+%! assert (isequal (r, true))
+
+%!xtest
+%! % see: https://github.com/cbm755/octsympy/pull/320
+%! r = python_cmd ('return Version("0.7.6") > Version("0.7.6.dev"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6") >= Version("0.7.6.dev"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6.1") > Version("0.7.6"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6.1") >= Version("0.7.6"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6.1.dev") >= Version("0.7.6"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("0.7.6.dev") >= Version("0.7.5"),');
+%! assert (isequal (r, true))

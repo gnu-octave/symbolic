@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu and Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,44 +18,57 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{r} =} setxor (@var{A}, @var{B})
 %% Return the symmetric difference of two sets.
 %%
-%% @seealso{union, intersect, setdiff, unique, ismember}
+%% Example:
+%% @example
+%% @group
+%% A = interval(2, sym(10));
+%% B = interval(0, sym(pi));
+%% setxor(A, B)
+%%   @result{} ans = (sym) [0, 2) ∪ (π, 10]
+%% @end group
+%% @end example
+%%
+%% And we note this is the same as the union of:
+%% @example
+%% @group
+%% setdiff(A, B)
+%%   @result{} ans = (sym) (π, 10]
+%% setdiff(B, A)
+%%   @result{} ans = (sym) [0, 2)
+%% @end group
+%% @end example
+%%
+%% @seealso{union, intersect, setdiff, unique, ismember, finiteset, interval}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function r = setxor(A, B)
+function r = setxor(a, b)
 
-  % FIXME: is it worth splitting out a "private/set_helper"?
-
-  cmd = { 'A, B = _ins'
-          'try:'
-          '    A = iter(A)'
-          'except TypeError:'
-          '    A = set([A])'
-          'else:'
-          '    A = set(A)'
-          'try:'
-          '    B = iter(B)'
-          'except TypeError:'
-          '    B = set([B])'
-          'else:'
-          '    B = set(B)'
-          'C = A.symmetric_difference(B)'
-          'C = sympy.Matrix([list(C)])'
-          'return C,' };
-
-  A = sym(A);
-  B = sym(B);
-  r = python_cmd (cmd, A, B);
-
-  % reshape to column if both inputs are
-  if (iscolumn(A) && iscolumn(B))
-    r = reshape(r, length(r), 1);
+  if (nargin ~= 2)
+    print_usage ();
   end
+
+  %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
+  % Version(spver) >= Version("0.7.7.dev")
+
+  cmd = {
+         'a, b = _ins'
+         'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
+         '    return (a - b) | (b - a),'
+         ''
+         'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
+         'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
+         'C = (A - B) | (B - A)'
+         'return sp.Matrix([list(C)]),'
+        };
+
+  r = python_cmd (cmd, sym(a), sym(b));
 
 end
 
@@ -88,9 +102,15 @@ end
 %! C = setxor(A, []);
 %! assert (isequal (C, A) || isequal (C, sym([2 1])))
 
-
 %!test
 %! % scalar
 %! syms x
 %! assert (isequal (setxor([x 1], x), sym(1)))
 %! assert (isempty (setxor(x, x)))
+
+%!test
+%! A = interval(sym(1), 3);
+%! B = interval(sym(2), 5);
+%! C = setxor(A, B);
+%! D = union (interval (sym(1), 2, false, true), interval (sym(3), 5, true, false));
+%! assert( isequal( C, D))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -86,7 +86,8 @@ function L = limit(f, x, a, dir)
   end
 
   cmd = { '(f, x, a, pdir) = _ins'
-          'if f.is_Matrix:'
+          '# note, not MatrixExpr'
+          'if isinstance(f, sp.MatrixBase):'
           '    g = f.applyfunc(lambda b: b.limit(x, a, dir=pdir))'
           'else:'
           '    g = f.limit(x, a, dir=pdir)'

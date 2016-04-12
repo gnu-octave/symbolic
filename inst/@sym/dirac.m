@@ -49,13 +49,12 @@ end
 
 %!test
 %! f1 = dirac(x);
-%! f2 = 0;
+%! f2 = dirac(d);
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
 %!test
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = dirac(A);
-%! f2 = 0;
-%! f2 = [f2 f2; f2 f2];
+%! f2 = dirac(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))

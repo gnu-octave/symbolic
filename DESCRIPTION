@@ -1,6 +1,6 @@
 Name: symbolic
-Version: 2.2.4
-Date: 2015-12-14
+Version: 2.3.0
+Date: 2016-04-08
 Author: Colin B. Macdonald <cbm@m.fsf.org>
 Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
 Title: Octave Symbolic Package using SymPy
@@ -12,5 +12,7 @@ Description: The Octave-Forge Symbolic package adds symbolic calculation
  required.  Compatibility with other symbolic toolboxes is intended.
 Categories: symbolic
 Url: http://github.com/cbm755/octsympy
-SystemRequirements: python, sympy (>= 0.7.5)
-BuildRequires: python, sympy (>= 0.7.5)
+Depends: octave (>= 3.8)
+SystemRequirements: python, sympy (>= 0.7.6)
+BuildRequires: python, sympy (>= 0.7.6)
+License: GPL-3.0+

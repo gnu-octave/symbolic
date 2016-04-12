@@ -1,5 +1,32 @@
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @deftypefn  {Function File}  {[@var{A}, @var{db}] =} python_ipc_driver (@dots{})
+%% Private function: run Python/SymPy command and return objects.
+%%
+%% @var{A} is the resulting object, which might be an error code.
+%%
+%% @var{db} usually contains diagnostics to help with debugging
+%% or error reporting.
+%% @end deftypefn
+
 function [A, db] = python_ipc_driver(what, cmd, varargin)
-%PYTHON_IPC_DRIVER  Run Python/SymPy command and return strings
 
   which_ipc = sympref('ipc');
 
