@@ -49,13 +49,12 @@ end
 
 %!test
 %! f1 = heaviside(x);
-%! f2 = 1;
+%! f2 = heaviside(d);
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
 %!test
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = heaviside(A);
-%! f2 = 1;
-%! f2 = [f2 f2; f2 f2];
+%! f2 = heaviside(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
