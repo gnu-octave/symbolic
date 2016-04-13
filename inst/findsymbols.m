@@ -31,24 +31,24 @@
 %%
 %% @example
 %% @group
-%% >> syms x y z
-%% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
-%% >> findsymbols (C)
-%%    @result{} ans =
-%%      @{
-%%        (sym) x
-%%        (sym) y
-%%        (sym) z
-%%      @}
+%% syms x y z
+%% C = @{x, 2*x*y, [1 x; sin(z) pi]@};
+%% findsymbols (C)
+%%   @result{} ans =
+%%       @{
+%%         (sym) x
+%%         (sym) y
+%%         (sym) z
+%%       @}
 %% @end group
 %% @end example
 %%
-%% Note ℯ, ⅈ, π, etc are not counted as symbols.
+%% Note ℯ, ⅈ, π, etc are not considered as symbols.
 %%
 %% Note only returns symbols actually appearing in the RHS of a
 %% @code{symfun}.
 %%
-%% @seealso{symvar, findsym}
+%% @seealso{symvar, @@sym/symvar, @@sym/findsym}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
