@@ -47,7 +47,7 @@
 %%   @result{} 1
 %% @end group
 %% @end example
-%% @seealso{dirac}
+%% @seealso{dirac, @@sym/heaviside}
 %% @end deftypefn
 
 function y = heaviside (x, zero_value)
