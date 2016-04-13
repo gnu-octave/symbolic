@@ -92,6 +92,8 @@ function [V, D] = eig(A, B)
             'if not A.is_Matrix:'
             '    A = sp.Matrix([A])'
             'd = A.eigenvals()'
+            'if len(d) == 0:'
+            '    raise(ValueError("failed to find eigenvalues"))'
             'L = []'
             'for (e, m) in d.items():'
             '    L.extend([e]*m)'
@@ -106,6 +108,8 @@ function [V, D] = eig(A, B)
             'if not A.is_Matrix:'
             '    A = sp.Matrix([A])'
             'd = A.eigenvects()'
+            'if len(d) == 0:'
+            '    raise(ValueError("failed to find eigenvalues"))'
             'V = sp.zeros(A.shape[0], 0)'  % empty
             'L = []'
             'for (e, m, bas) in d:'
