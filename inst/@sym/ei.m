@@ -24,33 +24,32 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = ei(x)
-%%    @result{} f = (sym) Ei(x)
-%% >> diff(f)
-%%    @result{} (sym)
+%% syms x
+%% f = ei(x)
+%%   @result{} f = (sym) Ei(x)
+%% diff(f)
+%%   @result{} (sym)
+%%        x
+%%       ℯ
+%%       ──
 %%       x
-%%      ℯ
-%%      ──
-%%      x
 %% @end group
 %% @end example
 %%
-%% Note @code{ei} differs from @code{expint}:
+%% Note @code{ei} differs from @ref{@@sym/expint}.  Consider:
 %% @example
 %% @group
-%% >> g = expint(x)
-%%    @result{} g = (sym) E₁(x)
-%% >> diff(g)
-%%    @result{} (sym)
-%%        -x
-%%      -ℯ
-%%      ─────
-%%        x
+%% g = expint(x)
+%%   @result{} g = (sym) E₁(x)
+%% diff(g)
+%%   @result{} (sym)
+%%         -x
+%%       -ℯ
+%%       ─────
+%%         x
 %% @end group
 %% @end example
-%%
-%% @seealso{expint}
+%% @seealso{@@sym/expint}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

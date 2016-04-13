@@ -5,6 +5,8 @@ octsympy 2.4.0-dev
 
           cosint
           coshint
+          ei
+          expint
           laguerreL
           sinint
           sinhint
