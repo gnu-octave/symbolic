@@ -40,7 +40,7 @@ gamma
 erf
 erfc
 erfinv||1/2
-erfcinv||||% Note: the erfcinv unit test fails on Octave < 3.8
+erfcinv
 erfi||0,0|
 heaviside|Heaviside
 dirac|DiracDelta

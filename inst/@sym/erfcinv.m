@@ -39,9 +39,6 @@
 %% Keywords: symbolic
 
 function y = erfcinv(x)
-
-  % Note: the erfcinv unit test fails on Octave < 3.8
-
   y = uniop_helper (x, 'erfcinv');
 end
 
