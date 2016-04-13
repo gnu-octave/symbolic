@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{C} =} nchoosek (@var{n}, @var{k})
 %% Symbolic binomial coefficient.
 %%
+%% Examples:
+%% @example
+%% @group
+%% syms n k
+%% nchoosek(n, k)
+%%   @result{} ans = (sym)
+%%       ⎛n⎞
+%%       ⎜ ⎟
+%%       ⎝k⎠
+%%
+%% nchoosek(101, k)
+%%   @result{} ans = (sym)
+%%       ⎛101⎞
+%%       ⎜   ⎟
+%%       ⎝ k ⎠
+%%
+%% nchoosek(sym(1001), sym(25))
+%%   @result{} (sym) 48862197129890117991367706991027565961778719519790
+%% @end group
+%% @end example
+%% @seealso{@@sym/factorial}
 %% @end deftypefn
 
 function C = nchoosek(n, k)
