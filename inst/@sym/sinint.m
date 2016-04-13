@@ -49,12 +49,13 @@ end
 
 %!test
 %! f1 = sinint(x);
-%! f2 = sinint(d);
+%! f2 = 0.9460830703671830149414;
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
 %!test
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = sinint(A);
-%! f2 = sinint(D);
+%! f2 = 0.9460830703671830149414;
+%! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))

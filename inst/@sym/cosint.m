@@ -49,12 +49,13 @@ end
 
 %!test
 %! f1 = cosint(x);
-%! f2 = cosint(d);
+%! f2 = 0.3374039229009681346626;
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
 %!test
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = cosint(A);
-%! f2 = cosint(D);
+%! f2 = 0.3374039229009681346626;
+%! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
