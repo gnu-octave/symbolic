@@ -22,7 +22,8 @@
 %% @deftypefnx {Function File} {@var{A} =} airy (@var{x})
 %% Symbolic Airy functions of first/second kind and their derivatives.
 %%
-%% @var{k} can be 0, 1, 2, or 3, @ref{airy}.
+%% @var{k} can be 0, 1, 2, or 3; as in the documentation for the
+%% non-symbolic Airy function, @pxref{airy}.
 %%
 %% Examples:
 %% @example
@@ -45,7 +46,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{besselj, bessely, besseli, besselk, besselh}
+%% @seealso{@@sym/besselj, @@sym/bessely, @@sym/besseli, @@sym/besselk, @@sym/besselh}
 %% @end deftypefn
 
 function A = airy(k, x)

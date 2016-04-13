@@ -21,7 +21,7 @@
 %% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.  @xref{symvar}, for details.
+%% The list is sorted alphabetically.  For details, @pxref{@@sym/symvar}.
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
