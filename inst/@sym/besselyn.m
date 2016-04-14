@@ -30,9 +30,9 @@
 %% diff(A)
 %%   @result{} ans = (sym)
 %%   
-%%                   (n + 1)⋅yn(n, x)
-%%    yn(n - 1, x) - ────────────────
-%%                          x 
+%%                      (n + 1)⋅yn(n, x)
+%%       yn(n - 1, x) - ────────────────
+%%                             x 
 %% @end group
 %% @end example
 %%
@@ -52,11 +52,11 @@ end
 %! % roundtrip
 %! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
-%! A = besselyn(sym(2), sym(10));
+%! A = double(besselyn(sym(2), sym(10)));
 %! q = besselyn(sym(2), x);
 %! h = function_handle(q);
 %! B = h(10);
-%! assert (abs (A - B) <= eps*abs(A))
+%! assert (abs (A - B) <= eps)
 %! end
 
 %!error yn(sym('x'))

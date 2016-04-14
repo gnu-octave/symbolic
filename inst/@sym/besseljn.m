@@ -29,9 +29,9 @@
 %%   @result{} A = (sym) jn(n, x)
 %% diff(A)
 %%   @result{} ans = (sym)
-%%   
-%%                    (n + 1)⋅jn(n, x)
-%%     jn(n - 1, x) - ────────────────
+%%     
+%%                      (n + 1)⋅jn(n, x)
+%%       jn(n - 1, x) - ────────────────
 %%                           x  
 %% @end group
 %% @end example
@@ -51,11 +51,11 @@ end
 %! % roundtrip
 %! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
-%! A = besseljn(sym(2), sym(10));
+%! A = double(besseljn(sym(2), sym(9)));
 %! q = besseljn(sym(2), x);
 %! h = function_handle(q);
-%! B = h(10);
-%! assert (abs (A - B) <= eps*abs(A))
+%! B = h(9);
+%! assert (abs (A - B) <= eps)
 %! end
 
 %!error jn(sym('x'))
