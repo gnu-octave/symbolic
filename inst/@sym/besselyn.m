@@ -18,28 +18,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{Y} =} yn (@var{alpha}, @var{x})
+%% @deftypefn  {Function File} {@var{Y} =} besselyn (@var{alpha}, @var{x})
 %% Symbolic Spherical Bessel function of the second kind.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms n x
-%% A = 2*yn(n, x)
-%%   @result{} A = (sym) 2⋅yn(n, x)
+%% A = besselyn(n, x)
+%%   @result{} A = (sym) yn(n, x)
 %% diff(A)
 %%   @result{} ans = (sym)
 %%   
-%%                      2⋅(n + 1)⋅yn(n, x)
-%%     2⋅yn(n - 1, x) - ──────────────────
-%%                           x   
+%%                   (n + 1)⋅yn(n, x)
+%%    yn(n - 1, x) - ────────────────
+%%                          x 
 %% @end group
 %% @end example
 %%
-%% @seealso{besselj, besseli, besselk, jn}
+%% @seealso{besselj, besseli, besselk, besseljn}
 %% @end deftypefn
 
-function Y = yn(n, x)
+function Y = besselyn(n, x)
   if (nargin ~= 2)
     print_usage ();
   end
@@ -52,8 +52,8 @@ end
 %! % roundtrip
 %! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
-%! A = yn(2, 10);
-%! q = yn(2, x);
+%! A = besselyn(sym(2), sym(10));
+%! q = besselyn(sym(2), x);
 %! h = function_handle(q);
 %! B = h(10);
 %! assert (abs (A - B) <= eps*abs(A))
