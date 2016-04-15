@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,14 +29,15 @@
 %% This can make anonymous functions from symbolic expressions:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = x^2 + sin(y)
-%%    @result{} f = (sym)
-%%         2
-%%        x  + sin(y)
-%% >> h = function_handle(f)
-%%    @result{} h =
-%%      @@(x, y) x .^ 2 + sin (y)
+%% syms x y
+%% f = x^2 + sin(y)
+%%   @result{} f = (sym)
+%%        2
+%%       x  + sin(y)
+%% h = function_handle(f)
+%%   @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% h(2, pi/2)
+%%   @result{} ans =  5
 %% @end group
 %% @end example
 %%
@@ -45,26 +46,25 @@
 %% specifies the third output (rather than the input):
 %% @example
 %% @group
-%% >> h = function_handle(x^2, 5*x, x);
-%% >> [a, b, c] = h(2)
-%%    @result{} a = 4
-%%    @result{} b = 10
-%%    @result{} c = 2
+%% h = function_handle(x^2, 5*x, x);
+%% [a, b, c] = h(2)
+%%   @result{} a = 4
+%%   @result{} b = 10
+%%   @result{} c = 2
 %% @end group
 %% @end example
 %%
 %% The order and number of inputs can be specified:
 %% @example
 %% @group
-%% >> syms x y z
-%% >> h = function_handle(f, 'vars', [z y x])
-%%    @result{} h =
-%%      @@(z, y, x) x .^ 2 + sin (y)
+%% syms x y z
+%% h = function_handle(f, 'vars', [z y x])
+%%   @result{} h = @@(z, y, x) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
 %% For compatibility with the Symbolic Math Toolbox in Matlab, we
-%% provide a synonym: @xref{matlabFunction}
+%% provide a synonym: @pxref{@@sym/matlabFunction}
 %%
 %% OctSymPy can also generate an @code{.m} file from a symbolic
 %% expression by passing the keyword @code{file} with a string
@@ -73,19 +73,18 @@
 %% Passing an empty @var{filename} creates an anonymous function:
 %% @example
 %% @group
-%% >> h = function_handle(f, 'file', '')
-%%    @result{} h =
-%%      @@(x, y) x .^ 2 + sin (y)
+%% h = function_handle(f, 'file', '')
+%%   @result{} h = @@(x, y) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
-%% FIXME: naming outputs with @var{PARAM} as
-%% @code{outputs} not implemented.
+%% FIXME: naming outputs with @var{PARAM} as @code{outputs}
+%% not implemented.
 %%
 %% FIXME: does not ``optimize'' code, for example, using common
 %% subexpression elimination.
 %%
-%% @seealso{ccode, fortran, latex, matlabFunction}
+%% @seealso{@@sym/ccode, @@sym/fortran, @@sym/latex, @@sym/matlabFunction}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

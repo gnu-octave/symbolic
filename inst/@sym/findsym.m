@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -22,8 +22,8 @@
 %% @deftypefnx {Function File} {@var{S} =} findsym (@var{expr}, @var{n})
 %% Find symbols in expression, return them as comma-separated string.
 %%
-%% See @code{symvar}, this just concatenates its output into a
-%% string.
+%% For details, @pxref{@@sym/symvar}; this just concatenates its output
+%% into a string.
 %%
 %% Example:
 %% @example
@@ -31,13 +31,13 @@
 %% syms y a b
 %% f = a*y + b;
 %% v = findsym (f)
-%%  @result{} v = a,b,y
+%%   @result{} v = a,b,y
 %% v = findsym (f, 1)
-%%  @result{} v = y
+%%   @result{} v = y
 %% @end group
 %% @end example
 %%
-%% @seealso{symvar, findsymbols}
+%% @seealso{@@sym/symvar, symvar, findsymbols}
 %% @end deftypefn
 
 function s = findsym(varargin)

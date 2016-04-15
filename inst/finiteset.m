@@ -49,7 +49,7 @@
 %%   @print{} ??? ind2sub: index out of range
 %% @end group
 %% @end example
-%% Instead you can first convert it to a cell (@pxref{children}):
+%% Instead you can first convert it to a cell (@pxref{@@sym/children}):
 %% @example
 %% @group
 %% elements = children(S)
