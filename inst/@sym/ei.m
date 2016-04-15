@@ -21,32 +21,35 @@
 %% @deftypefn  {Function File} {@var{y} =} ei (@var{x})
 %% Symbolic exponential integral (Ei) function.
 %%
-%% Example:
+%% Definition and example:
 %% @example
 %% @group
 %% syms x
 %% f = ei(x)
 %%   @result{} f = (sym) Ei(x)
+%% rewrite(f, 'Integral')         % doctest: +SKIP
+%%   @result{} (sym)
+%%       x
+%%       ⌠
+%%       ⎮   t
+%%       ⎮  ℯ
+%%       ⎮  ── dt
+%%       ⎮  t
+%%       ⌡
+%%       -∞
+%% @end group
+%% @end example
+%% (@strong{Note} rewriting as an integral is not yet supported.)
+%%
+%% Other examples:
+%% @example
+%% @group
 %% diff(f)
 %%   @result{} (sym)
 %%        x
 %%       ℯ
 %%       ──
 %%       x
-%% @end group
-%% @end example
-%%
-%% Note @code{ei} differs from @ref{@@sym/expint}.  Consider:
-%% @example
-%% @group
-%% g = expint(x)
-%%   @result{} g = (sym) E₁(x)
-%% diff(g)
-%%   @result{} (sym)
-%%         -x
-%%       -ℯ
-%%       ─────
-%%         x
 %% @end group
 %% @end example
 %% @seealso{@@sym/expint}
