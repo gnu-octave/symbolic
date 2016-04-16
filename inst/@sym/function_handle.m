@@ -250,7 +250,8 @@ end
 %! fprintf('\n')
 %! temp_file = tempname('', 'oct_');
 %! % allow loading function from temp_file
-%! addpath('/tmp');
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
@@ -258,14 +259,15 @@ end
 %! assert (a == 400)
 %! assert (b == 1024)
 %! assert (unlink([temp_file '.m']) == 0)
-%! % remove /tmp from load path
-%! rmpath('/tmp');
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % output to disk: also works with .m specified
 %! temp_file = [tempname('', 'oct_') '.m'];
 %! % allow loading function from temp_file
-%! addpath('/tmp');
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
@@ -273,8 +275,8 @@ end
 %! assert (a == 400)
 %! assert (b == 1024)
 %! assert (unlink(temp_file) == 0)
-%! % remove /tmp from load path
-%! rmpath('/tmp');
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % non-scalar outputs
@@ -294,7 +296,8 @@ end
 %! V = [x;y;z];
 %! temp_file = tempname('', 'oct_');
 %! % allow loading function from temp_file
-%! addpath('/tmp');
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
 %! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
 %! [t1,t2,t3] = h(1,2,3);
@@ -302,8 +305,8 @@ end
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
 %! assert (unlink([temp_file '.m']) == 0)
-%! % remove /tmp from load path
-%! rmpath('/tmp');
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % order of outputs is lexiographic
