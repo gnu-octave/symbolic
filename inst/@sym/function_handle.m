@@ -117,7 +117,6 @@ function f = function_handle(varargin)
 
     [fcnpath, fcnname, fcnext] = fileparts(param.fname);
     fname2 = fcnname;
-    %fname2 = param.fname; fcnname = param.fname;
     % was old note about findsymbols vs symvar: not relevant
     [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
 
