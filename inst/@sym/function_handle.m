@@ -243,7 +243,11 @@ end
 %!test
 %! % output to disk
 %! fprintf('\n')
-%! temp_file = tempname('', 'oct_');
+%! if (exist ('octave_config_info', 'builtin'))
+%!   temp_file = tempname('', 'oct_');
+%! else
+%!   temp_file = tempname();
+%! end
 %! % allow loading function from temp_file
 %! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
@@ -259,7 +263,11 @@ end
 
 %!test
 %! % output to disk: also works with .m specified
-%! temp_file = [tempname('', 'oct_') '.m'];
+%! if (exist ('octave_config_info', 'builtin'))
+%!   temp_file = [tempname('', 'oct_') '.m'];
+%! else
+%!   temp_file = [tempname() '.m'];
+%! end
 %! % allow loading function from temp_file
 %! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
@@ -289,7 +297,11 @@ end
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
-%! temp_file = tempname('', 'oct_');
+%! if (exist ('octave_config_info', 'builtin'))
+%!   temp_file = tempname('', 'oct_');
+%! else
+%!   temp_file = tempname();
+%! end
 %! % allow loading function from temp_file
 %! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
