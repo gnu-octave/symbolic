@@ -92,6 +92,7 @@
 
 function f = function_handle(varargin)
 
+  % We use the private/codegen function only for its input parsing
   [flg, meh] = codegen(varargin{:}, 'lang', 'octave');
   assert(flg == -1);
   [Nin, inputs, inputstr, Nout, param] = deal(meh{:});
@@ -109,15 +110,8 @@ function f = function_handle(varargin)
             '    return (False, str(e))' ...
             'return (True, out)' };
 
-    % if filename ends with .m, do not add another
-    if strcmpi(param.fname(end-1:end), '.m')
-      param.fname = param.fname(1:end-2);
-    end
-
     [fcnpath, fcnname, fcnext] = fileparts(param.fname);
-    fname2 = fcnname;
-    % was old note about findsymbols vs symvar: not relevant
-    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
+    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fcnname, param.show_header, inputs);
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
@@ -129,6 +123,8 @@ function f = function_handle(varargin)
     end
     M.name = out{1}{1};
     M.code = out{1}{2};
+
+    assert (strcmp (M.name, [fcnname '.m']), 'sanity check failed: names should match');
 
     file_to_write = fullfile(fcnpath, [fcnname '.m']);
     [fid,msg] = fopen(file_to_write, 'w');
