@@ -114,7 +114,8 @@ function f = function_handle(varargin)
       param.fname = param.fname(1:end-2);
     end
 
-    fname2 = param.fname; fcnname = param.fname;
+    [fcnpath, fcnname, fcnext] = fileparts(param.fname);
+    fname2 = fcnname;
     % was old note about findsymbols vs symvar: not relevant
     [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
 
@@ -129,11 +130,12 @@ function f = function_handle(varargin)
     M.name = out{1}{1};
     M.code = out{1}{2};
 
-    [fid,msg] = fopen(M.name, 'w');
+    file_to_write = fullfile(fcnpath, [fcnname '.m']);
+    [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
     fprintf(fid, '%s', M.code)
     fclose(fid);
-    fprintf('Wrote file %s.\n', M.name);
+    fprintf('Wrote file %s.\n', file_to_write);
     f = str2func(fcnname);
 
   else % output function handle
@@ -245,23 +247,35 @@ end
 %!test
 %! % output to disk
 %! fprintf('\n')
-%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output1');
+%! temp_file = tempname('', 'oct_');
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! delete('temp_test_output1.m')
+%! assert (unlink([temp_file '.m']) == 0)
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % output to disk: also works with .m specified
-%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output2.m');
+%! temp_file = [tempname('', 'oct_') '.m'];
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! delete('temp_test_output2.m')
+%! assert (unlink(temp_file) == 0)
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % non-scalar outputs
@@ -279,13 +293,19 @@ end
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
-%! h = function_handle(H, M, V, 'vars', {x y z}, 'file', 'temp_test_output3');
+%! temp_file = tempname('', 'oct_');
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
 %! [t1,t2,t3] = h(1,2,3);
 %! assert(isequal(t1, [1 2 3]))
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
-%! delete('temp_test_output3.m')
+%! assert (unlink([temp_file '.m']) == 0)
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % order of outputs is lexiographic
