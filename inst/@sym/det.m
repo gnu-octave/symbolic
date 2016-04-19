@@ -26,10 +26,7 @@
 %% @group
 %% A = sym([2 4; 6 8]);
 %% eig(A)
-%%   @result{} ans = (sym 2×1 matrix)
-%%       ⎡5 + √33 ⎤
-%%       ⎢        ⎥
-%%       ⎣-√33 + 5⎦
+%%   @result{} ans = (sym) -8
 %% @end group
 %% @end example
 %% @seealso{@@sym/eig, @@sym/charpoly, @@sym/trace}

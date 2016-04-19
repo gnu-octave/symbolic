@@ -26,11 +26,11 @@
 %% @example
 %% @group
 %% A = sym([2 4; 6 8]);
-%% eig(A)
+%% sort(eig(A))
 %%   @result{} ans = (sym 2×1 matrix)
-%%       ⎡5 + √33 ⎤
+%%       ⎡-√33 + 5⎤
 %%       ⎢        ⎥
-%%       ⎣-√33 + 5⎦
+%%       ⎣5 + √33 ⎦
 %% @end group
 %% @end example
 %%
