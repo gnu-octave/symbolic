@@ -8,6 +8,7 @@ octsympy 2.4.0-dev
           ei
           expint
           laguerreL
+          logint
           sinint
           sinhint
 
