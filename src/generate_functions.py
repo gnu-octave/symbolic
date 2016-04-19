@@ -44,7 +44,6 @@ erfcinv
 erfi||0,0|
 heaviside|Heaviside
 dirac|DiracDelta
-expint|E1
 cosint|Ci|1,0.3374039229009681346626
 sinint|Si|1,0.9460830703671830149414
 coshint|Chi|1,0.8378669409802082408947
