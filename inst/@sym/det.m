@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% A = sym([2 4; 6 8]);
-%% eig(A)
+%% det(A)
 %%   @result{} ans = (sym) -8
 %% @end group
 %% @end example
