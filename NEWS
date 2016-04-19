@@ -3,6 +3,8 @@ octsympy 2.4.0-dev
 
   * New commands:
 
+          besseljn
+          besselyn
           cosint
           coshint
           ei
@@ -21,6 +23,9 @@ octsympy 2.4.0-dev
           lambertw
 
   * Re-implement @double/laguerreL for numerical stability.
+
+  * Add spherical Bessel functions: these are called `besseljn` and
+    `besselyn` (for now, subject to change).  Thanks to Utkarsh Gautam.
 
 
 

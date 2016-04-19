@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Utkarsh Gautam 
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,46 +18,44 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{z} =} det (@var{x})
-%% Symbolic determinant of a matrix.
+%% @deftypefn  {Function File} {@var{Y} =} besseljn (@var{alpha}, @var{x})
+%% Symbolic Spherical Bessel function of the first kind.
 %%
 %% Example:
 %% @example
 %% @group
-%% A = sym([2 4; 6 8]);
-%% eig(A)
-%%   @result{} ans = (sym 2×1 matrix)
-%%       ⎡5 + √33 ⎤
-%%       ⎢        ⎥
-%%       ⎣-√33 + 5⎦
+%% syms n x
+%% A = besseljn(n, x)
+%%   @result{} A = (sym) jn(n, x)
+%% diff(A)
+%%   @result{} ans = (sym)
+%%     
+%%                      (n + 1)⋅jn(n, x)
+%%       jn(n - 1, x) - ────────────────
+%%                           x  
 %% @end group
 %% @end example
-%% @seealso{@@sym/eig, @@sym/charpoly, @@sym/trace}
+%%
+%% @seealso{besselj, besseli, besselk, besselyn}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-function z = det(x)
-
-  cmd = { '(A,) = _ins'
-          'if not A.is_Matrix:'
-          '    A = sp.Matrix([A])'
-          'return A.det(),' };
-
-  z = python_cmd (cmd, x);
-
+function Y = besseljn(n, x)
+  if (nargin ~= 2)
+    print_usage ();
+  end
+  Y = binop_helper(n, x, 'jn');
 end
 
 
-%!assert (isequal (det(sym([])), 1))
-
 %!test
-%! syms x y real
-%! assert (isequal (det([x 5; 7 y]), x*y-35))
-
-%!test
+%! % roundtrip
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
-%! assert (isequal (det(x), x))
-%! assert (isequal (det(sym(-6)), sym(-6)))
+%! A = double(besseljn(sym(2), sym(9)));
+%! q = besseljn(sym(2), x);
+%! h = function_handle(q);
+%! B = h(9);
+%! assert (abs (A - B) <= eps)
+%! end
 
+%!error jn(sym('x'))

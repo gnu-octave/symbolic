@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
 %% Convert symbolic expression into a standard function.
 %%
-%% This is a synonym of @code{function_handle}.  See further
-%% documentation: @xref{function_handle}
+%% This is a synonym of @code{function_handle}.  For further
+%% documentation, @pxref{@@sym/function_handle}
 %%
-%% @seealso{ccode, fortran, latex, function_handle}
+%% @seealso{@@sym/function_handle}
 %%
 %% @end deftypefn
 

@@ -54,8 +54,7 @@
 %%   @result{} ans = (sym) -assoc_laguerre(n - 1, 1, x)
 %% @end group
 %% @end example
-%%
-%% @seealso{chebychevT, chebychevU}
+%% @seealso{laguerreL, @@sym/chebychevT, @@sym/chebychevU}
 %% @end deftypefn
 
 function L = laguerreL(n, alpha, x)

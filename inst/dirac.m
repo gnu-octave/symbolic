@@ -34,7 +34,7 @@
 %%   @result{} 0     0   Inf     0     0
 %% @end group
 %% @end example
-%% @seealso{heaviside}
+%% @seealso{heaviside, @@sym/dirac}
 %% @end deftypefn
 
 function y = dirac(x)

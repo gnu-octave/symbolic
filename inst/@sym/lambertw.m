@@ -46,7 +46,7 @@
 %%   @result{} (sym) [LambertW(x)  LambertW(y, 1)]  (1×2 matrix)
 %% @end group
 %% @end example
-%%
+%% @seealso{lambertw}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
