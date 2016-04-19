@@ -108,7 +108,8 @@
 %% (This is implemented mainly to enable the @code{num2cell} example
 %% above.)
 %%
-%% @seealso{interval, ismember, children, union, intersect, setdiff, setxor}
+%% @seealso{@@sym/interval, @@sym/ismember, @@sym/children, @@sym/union,
+%%          @@sym/intersect, @@sym/setdiff, @@sym/setxor}
 %% @end deftypefn
 
 function S = finiteset(varargin)

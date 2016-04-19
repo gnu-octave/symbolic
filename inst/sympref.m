@@ -33,9 +33,9 @@
 %%
 %% @example
 %% @group
-%% >> sympref python '/usr/bin/python'        % doctest: +SKIP
-%% >> sympref python 'C:\Python\python.exe'   % doctest: +SKIP
-%% >> sympref python 'N:\myprogs\py.exe'      % doctest: +SKIP
+%% sympref python '/usr/bin/python'           % doctest: +SKIP
+%% sympref python 'C:\Python\python.exe'      % doctest: +SKIP
+%% sympref python 'N:\myprogs\py.exe'         % doctest: +SKIP
 %% @end group
 %% @end example
 %%
@@ -47,31 +47,31 @@
 %%
 %% @example
 %% @group
-%% >> sympref display
-%%    @result{} ans = unicode
+%% sympref display
+%%   @result{} ans = unicode
 %%
 %% @end group
 %% @group
-%% >> syms x
-%% >> sympref display flat
-%% >> sin(x/2)
-%%    @result{} (sym) sin(x/2)
+%% syms x
+%% sympref display flat
+%% sin(x/2)
+%%   @result{} (sym) sin(x/2)
 %%
-%% >> sympref display ascii
-%% >> sin(x/2)
+%% sympref display ascii
+%% sin(x/2)
+%%   @result{} (sym)
+%%          /x\
+%%       sin|-|
+%%          \2/
+%%
+%% sympref display unicode
+%% sin(x/2)
 %%    @result{} (sym)
-%%              /x\
-%%           sin|-|
-%%              \2/
+%%           ⎛x⎞
+%%        sin⎜─⎟
+%%           ⎝2⎠
 %%
-%% >> sympref display unicode
-%% >> sin(x/2)
-%%    @result{} (sym)
-%%              ⎛x⎞
-%%           sin⎜─⎟
-%%              ⎝2⎠
-%%
-%% >> sympref display default
+%% sympref display default
 %% @end group
 %% @end example
 %%
@@ -84,8 +84,8 @@
 %%
 %% @example
 %% @group
-%% >> sympref ipc
-%%    @result{} ans = default
+%% sympref ipc
+%%   @result{} ans = default
 %% @end group
 %% @end example
 %%
@@ -119,7 +119,7 @@
 %%
 %% @example
 %% @group
-%% >> sympref reset    % doctest: +SKIP
+%% sympref reset                              % doctest: +SKIP
 %% @end group
 %% @end example
 %%
@@ -129,15 +129,15 @@
 %%
 %% @example
 %% @group
-%% >> syms x;  y = [pi x];
-%% >> sympref snippet on
-%% >> y
-%%    @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
-%%        [π  x]
-%% >> sympref snippet off
-%% >> y
-%%    @result{} y = (sym) [π  x]  (1×2 matrix)
-%% >> sympref snippet default
+%% syms x;  y = [pi x];
+%% sympref snippet on
+%% y
+%%   @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
+%%       [π  x]
+%% sympref snippet off
+%% y
+%%   @result{} y = (sym) [π  x]  (1×2 matrix)
+%% sympref snippet default
 %% @end group
 %% @end example
 %%
@@ -147,20 +147,20 @@
 %%
 %% @example
 %% @group
-%% >> sympref digits          % get
-%%    @result{} ans = 32
-%% >> sympref digits 64       % set
-%% >> sympref digits default
+%% sympref digits          % get
+%%   @result{} ans = 32
+%% sympref digits 64       % set
+%% sympref digits default
 %% @end group
 %% @end example
 %%
 %% Be @strong{quiet} by minimizing startup and diagnostics messages:
 %% @example
 %% @group
-%% >> sympref quiet
-%%    @result{} ans = 0
-%% >> sympref quiet on
-%% >> sympref quiet default
+%% sympref quiet
+%%   @result{} ans = 0
+%% sympref quiet on
+%% sympref quiet default
 %% @end group
 %% @end example
 %%
@@ -168,8 +168,8 @@
 %%
 %% @example
 %% @group
-%% >> sympref version
-%%    @result{} 2.4.0-dev
+%% sympref version
+%%   @result{} 2.4.0-dev
 %% @end group
 %% @end example
 %%
