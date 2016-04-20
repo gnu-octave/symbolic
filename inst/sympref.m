@@ -262,7 +262,17 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin == 1)
-        varargout{1} = settings.whichpython;
+        DEFAULTPYTHON = 'python';
+        if isempty(settings.whichpython)
+          pyenv = getenv('PYTHON');
+          if (isempty(pyenv))
+            varargout{1} = DEFAULTPYTHON;
+          else
+            varargout{1} = pyenv;
+          end
+        else
+          varargout{1} = settings.whichpython;
+        end
       elseif (isempty(arg) || strcmp(arg,'[]'))
         settings.whichpython = '';
         sympref('reset')

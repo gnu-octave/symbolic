@@ -100,9 +100,6 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
-  if (isempty(pyexec))
-    pyexec = 'python';
-  end
 
   bigs = [headers s1 s2 s3];
 

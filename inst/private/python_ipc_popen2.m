@@ -75,17 +75,13 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       disp('Initializing communication with SymPy using a popen2() pipe.')
     end
     pyexec = sympref('python');
-    if (isempty(pyexec))
-      if (ispc() && ~isunix())
-        % Octave popen2 on Windows can't tolerate stderr output
-        % https://savannah.gnu.org/bugs/?43036
-        if (verbose)
-          disp('Detected Windows: using "winwrapy.bat" to workaround Octave bug #43036')
-        end
-        pyexec = 'winwrapy.bat';
-      else
-        pyexec = 'python';
+    if (ispc() && ~isunix())
+      % Octave popen2 on Windows can't tolerate stderr output
+      % https://savannah.gnu.org/bugs/?43036
+      if (verbose)
+        disp('Detected Windows: using "winwrapy.bat" to workaround Octave bug #43036')
       end
+      pyexec = 'winwrapy.bat';
     end
     % perhaps the the '-i' is not always wanted?
     [fin, fout, pid] = popen2 (pyexec, '-i');
