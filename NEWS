@@ -29,6 +29,9 @@ octsympy 2.4.0-dev
   * Add spherical Bessel functions: these are called `besseljn` and
     `besselyn` (for now, subject to change).  Thanks to Utkarsh Gautam.
 
+  * The environment variable `PYTHON` can control which Python executable
+    is used.  Changing the Python executable should work on Windows.
+
 
 
 octsympy 2.3.0 (2016-04-08)
