@@ -29,18 +29,41 @@
 %% @var{args} are documented below.
 %%
 %%
-%% @strong{Python executable} path/command:
+%% Get the current @strong{Python executable} path/name:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref python
+%%   @result{} ans = python
+%% @end example
 %%
+%% By default, this value is first taken from an environment
+%% variable called @code{PYTHON}.  This can be configured
+%% in the OS or it can be set within Octave using:
+%% @example
+%% @comment doctest: +SKIP
+%% setenv('PYTHON', '/usr/bin/python')
+%% sympref reset
+%% @end example
+%%
+%% Alternatively, the environment variable can be overriden by:
 %% @example
 %% @group
-%% sympref python '/usr/bin/python'           % doctest: +SKIP
-%% sympref python 'C:\Python\python.exe'      % doctest: +SKIP
-%% sympref python 'N:\myprogs\py.exe'         % doctest: +SKIP
+%% @comment doctest: +SKIP
+%% sympref python '/usr/bin/python'
+%% sympref python 'C:\Python\python.exe'
 %% @end group
 %% @end example
 %%
-%% Default is an empty string; in which case OctSymPy just runs
-%% @code{python} and assumes the path is set appropriately.
+%% Finally, if neither is set, the package typically assumes the
+%% command is simply @code{python}.
+%%
+%% The default behaviour can be restored using either:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref python []
+%% sympref('python', '')
+%% @end example
+%% or with `sympref defaults` as noted below.
 %%
 %%
 %% @strong{Display} of syms:
