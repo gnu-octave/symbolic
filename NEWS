@@ -9,6 +9,8 @@ octsympy 2.4.0-dev
           coshint
           ei
           expint
+          fresnelc
+          fresnels
           laguerreL
           logint
           sinint
