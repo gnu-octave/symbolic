@@ -81,10 +81,10 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       if (verbose)
         disp('Detected Windows: using "winwrapy.bat" to workaround Octave bug #43036')
       end
-      pyexec = 'winwrapy.bat';
+      [fin, fout, pid] = popen2 ('winwrapy.bat', pyexec);
+    else
+      [fin, fout, pid] = popen2 (pyexec, '-i');
     end
-    % perhaps the the '-i' is not always wanted?
-    [fin, fout, pid] = popen2 (pyexec, '-i');
 
     if (verbose)
       fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)

@@ -66,7 +66,6 @@ cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
 
 # change default python to octpy.exe
 echo "making default python octpy.exe"
-sed -i 's/python.exe/octpy.exe/g' ${WINDIR}/bin/winwrapy.bat
 sed -i "s/DEFAULTPYTHON = 'python'/DEFAULTPYTHON = 'octpy.exe'/" ${WINDIR}/inst/sympref.m
 
 # sympy and mpmath
