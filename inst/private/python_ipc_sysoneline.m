@@ -33,7 +33,7 @@
 
 function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
-  persistent show_msg
+  persistent first_time
 
   info = [];
 
@@ -49,14 +49,17 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   verbose = ~sympref('quiet');
 
-  if (verbose && isempty(show_msg))
+  if (isempty(first_time))
+    first_time = true;
+  end
+
+  if (verbose && first_time)
     fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
             sympref('version'))
     disp('Using system()-based communication with Python [sysoneline].')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')
     disp('Warning: "sysoneline" will fail when using very long expressions.')
-    show_msg = true;
   end
 
   newl = sprintf('\n');
@@ -100,6 +103,9 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
+  if (first_time)
+    assert_we_have_python(pyexec)
+  end
 
   bigs = [headers s1 s2 s3];
 
@@ -149,6 +155,9 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   assert(length(ind) == 2)
   A = extractblock(out(ind(2):end));
 
+  if (first_time)
+    first_time = false;
+  end
 end
 
 
