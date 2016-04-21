@@ -131,7 +131,7 @@ end
 
 %!test
 %! % has output so avoids workspace
-%! if Version(spver) >= Version("1.0"):
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -146,7 +146,7 @@ end
 
 %!test
 %! % has no output so does workspace
-%! if Version(spver) >= Version("1.0"):
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);

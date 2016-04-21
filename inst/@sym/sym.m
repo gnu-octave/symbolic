@@ -673,7 +673,7 @@ end
 
 %!test
 %! % multiple assumptions
-%! if Version(spver) >= Version("1.0"):
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
