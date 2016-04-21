@@ -19,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defun catalan ()
+%% @deffn Constant catalan ()
 %% Return Catalan constant.
 %%
 %% @example
@@ -33,7 +33,7 @@
 %% @end example
 %%
 %% @seealso{eulergamma}
-%% @end defun
+%% @end deffn
 
 %% Author: Carnë Draug
 %% Keywords: symbolic, constants
@@ -41,6 +41,7 @@
 function g = catalan ()
   g = python_cmd ('return sympy.S.Catalan,');
 end
+
 
 %!assert (double (catalan ()) > 0.915965594177)
 %!assert (double (catalan ()) < 0.915965594178)
