@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,11 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} mtimes (@var{x}, @var{y})
+%% @deftypeop  Method   @@sym {@var{z} =} mtimes (@var{x}, @var{y})
+%% @deftypeopx Operator @@sym {@var{z} =} {@var{x} * @var{y}}
 %% Symbolic matrix multiplication (*).
 %%
-%% @end deftypefn
+%% @end deftypeop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

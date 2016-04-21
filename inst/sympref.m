@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,10 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} sympref ()
-%% @deftypefnx {Function File} {@var{r} =} sympref (@var{cmd})
-%% @deftypefnx {Function File} {} sympref @var{cmd}
-%% @deftypefnx {Function File} {} sympref @var{cmd} @var{args}
+%% @deftypefn  Command {} sympref @var{cmd}
+%% @deftypefnx Command {} sympref @var{cmd} @var{args}
+%% @deftypefnx Function {@var{r} =} sympref ()
+%% @deftypefnx Function {@var{r} =} sympref (@var{cmd})
+%% @deftypefnx Function {@var{r} =} sympref (@var{cmd}, @var{args})
 %% Preferences for the Symbolic package.
 %%
 %% @code{sympref} can set or get various preferences and

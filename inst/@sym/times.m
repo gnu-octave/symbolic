@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} times (@var{x}, @var{y})
+%% @deftypeop  Method   @@sym {@var{z} =} times (@var{x}, @var{y})
+%% @deftypeopx Operator @@sym {@var{z} =} {@var{x} .* @var{y}}
 %% Return elementwise multiplication (dot star, Hadamard product).
 %%
 %% Example:
@@ -42,9 +43,8 @@
 %%   @result{} ans = (sym) A∘A
 %% @end group
 %% @end example
-%%
-%% @seealso{power}
-%% @end deftypefn
+%% @seealso{@@sym/power}
+%% @end deftypeop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,12 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {} syms @var{x}
-%% @deftypefnx {Function File} {} syms @var{x} @var{y} @dots{}
-%% @deftypefnx {Function File} {} syms @var{f(x)}
-%% @deftypefnx {Function File} {} syms @var{x} @var{asm}
-%% @deftypefnx {Function File} {} syms @var{x} @var{asm} @var{asm2} @dots{}
-%% @deftypefnx {Function File} {} syms
+%% @deffn  Command syms
+%% @deffnx Command syms @var{x}
+%% @deffnx Command syms {@var{x} @var{y} @dots{}}
+%% @deffnx Command syms @var{f(x)}
+%% @deffnx Command syms {@var{x} @var{asm}}
+%% @deffnx Command syms {@var{x} @var{asm} @var{asm2} @dots{}}
 %% Create symbolic variables and symbolic functions.
 %%
 %% This is a convenience function.  For example:
@@ -67,7 +67,7 @@
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
 %%
 %% @seealso{sym}
-%% @end deftypefn
+%% @end deffn
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
