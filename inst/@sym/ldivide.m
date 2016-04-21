@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} ldivide (@var{x}, @var{y})
-%% Element-wise backslash of sym expressions (dot backslash).
+%% @defop  Method   @@sym ldivide {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} .\ @var{y}} {}
+%% Element-wise backslash division of symbolic expressions.
 %%
 %% Example:
 %% @example
@@ -46,9 +47,8 @@
 %%       ⎣ 3      ⎦
 %% @end group
 %% @end example
-%%
-%% @seealso{rdivide, mldivide}
-%% @end deftypefn
+%% @seealso{@@sym/rdivide, @@sym/mldivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

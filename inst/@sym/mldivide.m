@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{x} =} mldivide (@var{A}, @var{b})
-%% Symbolic backslash: solve linear systems.
+%% @defop  Method   @@sym mldivide {(@var{A}, @var{b})}
+%% @defopx Operator @@sym {@var{A} \ @var{b}} {}
+%% Symbolic backslash: solve symbolic linear systems.
 %%
 %% This operator tries to broadly match the behaviour of the
 %% backslash operator for double matrices.
@@ -80,9 +81,8 @@
 %%       ⎣0⎦
 %% @end group
 %% @end example
-%%
-%% @seealso{ldivide, mrdivide}
-%% @end deftypefn
+%% @seealso{@@sym/ldivide, @@sym/mrdivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -17,11 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypeop  Method   @@sym {@var{z} =} mtimes (@var{x}, @var{y})
-%% @deftypeopx Operator @@sym {@var{z} =} {@var{x} * @var{y}}
-%% Symbolic matrix multiplication (*).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym mtimes {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} * @var{y}} {}
+%% Multiply symbolic matrices.
 %%
-%% @end deftypeop
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% A = sym([1 2; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% B = [x; y]
+%%   @result{} B = (sym 2×1 matrix)
+%%      ⎡x⎤
+%%      ⎢ ⎥
+%%      ⎣y⎦
+%% A * B
+%%   @result{} (sym 2×1 matrix)
+%%       ⎡ x + 2⋅y ⎤
+%%       ⎢         ⎥
+%%       ⎣3⋅x + 4⋅y⎦
+%% @end group
+%% @end example
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

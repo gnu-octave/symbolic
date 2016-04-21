@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypeop  Method   @@sym {@var{z} =} times (@var{x}, @var{y})
-%% @deftypeopx Operator @@sym {@var{z} =} {@var{x} .* @var{y}}
-%% Return elementwise multiplication (dot star, Hadamard product).
+%% @defop  Method   @@sym times {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} .* @var{y}} {}
+%% Return Hadamard product (element-wise multiplication) of matrices.
 %%
 %% Example:
 %% @example
@@ -44,7 +44,7 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/power}
-%% @end deftypeop
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
