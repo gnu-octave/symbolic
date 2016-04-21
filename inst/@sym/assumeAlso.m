@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -31,17 +31,15 @@
 %% >> syms x integer
 %% >> x1 = x;
 %% >> x = assumeAlso(x, 'positive');
-%% >> assumptions(x)                     % doctest: +SKIP
+%% >> assumptions(x)
 %%    @result{} ans =
 %%      @{
 %%        [1,1] = x: integer, positive
 %%      @}
 %% @end group
 %% @end example
-%% @c FIXME: remove SKIP (and text below) once SymPy 0.7.7 is out.
-%%
 %% Note the previous output will be more verbose if you are using
-%% a version of SymPy before SymPy 0.7.7.
+%% an older version of SymPy before SymPy 1.0.
 %%
 %% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
@@ -131,9 +129,9 @@ end
 %! assert(a{1}.positive)
 %! assert(a{1}.even)
 
-%!xtest
+%!test
 %! % has output so avoids workspace
-%! % FIXME: xtest for sympy 0.7.6.x where a is the full dict
+%! if Version(spver) >= Version("1.0"):
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -144,10 +142,11 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! end
 
-%!xtest
+%!test
 %! % has no output so does workspace
-%! % FIXME: xtest for sympy 0.7.6 where a is the full dict
+%! if Version(spver) >= Version("1.0"):
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -158,3 +157,4 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! end

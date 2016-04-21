@@ -671,12 +671,13 @@ end
 %!error <failed>
 %! x = sym('pi', 'integer')
 
-%!xtest
+%!test
 %! % multiple assumptions
-%! % FIXME: xtest for sympy <= 0.7.6.x where a is the full dict
+%! if Version(spver) >= Version("1.0"):
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+%! end
 
 %!test
 %! % save/load sym objects
