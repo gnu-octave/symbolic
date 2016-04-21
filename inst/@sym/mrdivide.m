@@ -50,7 +50,7 @@
 %%       ⎡1 + π  2⋅π⎤
 %%       ⎢          ⎥
 %%       ⎣  7     8 ⎦
-%% C / B                         % doctest: +SKIP
+%% C / B
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡1  π⎤
 %%       ⎢    ⎥
@@ -62,9 +62,6 @@
 %%       ⎣3  4⎦
 %% @end group
 %% @end example
-%% (However, as of 2016-01 this feature requires a development
-%% version of SymPy 0.7.7-dev.)
-%%
 %% @seealso{@@sym/rdivide, @@sym/mldivide}
 %% @end defop
 
