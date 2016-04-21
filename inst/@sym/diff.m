@@ -26,40 +26,39 @@
 %% Examples:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = sin (cos (x));
-%% >> diff (f)
-%%    @result{} (sym) -sin(x)⋅cos(cos(x))
-%% >> diff (f, x)
-%%    @result{} (sym) -sin(x)⋅cos(cos(x))
-%% >> simplify (diff (f, x, x))
-%%    @result{} (sym)
-%%             2
-%%        - sin (x)⋅sin(cos(x)) - cos(x)⋅cos(cos(x))
+%% syms x
+%% f = sin (cos (x));
+%% diff (f)
+%%   @result{} (sym) -sin(x)⋅cos(cos(x))
+%% diff (f, x)
+%%   @result{} (sym) -sin(x)⋅cos(cos(x))
+%% simplify (diff (f, x, x))
+%%   @result{} (sym)
+%%            2
+%%       - sin (x)⋅sin(cos(x)) - cos(x)⋅cos(cos(x))
 %% @end group
 %% @end example
 %%
 %% Partial differentiation:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = cos(2*x + 3*y);
-%% >> diff(f, x, y, x)
-%%    @result{} (sym) 12⋅sin(2⋅x + 3⋅y)
-%% >> diff(f, x, 2, y, 3)
-%%    @result{} (sym) -108⋅sin(2⋅x + 3⋅y)
+%% syms x y
+%% f = cos(2*x + 3*y);
+%% diff(f, x, y, x)
+%%   @result{} (sym) 12⋅sin(2⋅x + 3⋅y)
+%% diff(f, x, 2, y, 3)
+%%   @result{} (sym) -108⋅sin(2⋅x + 3⋅y)
 %% @end group
 %% @end example
 %%
 %% Other examples:
 %% @example
 %% @group
-%% >> diff(sym(1))
-%%    @result{} (sym) 0
+%% diff(sym(1))
+%%   @result{} (sym) 0
 %% @end group
 %% @end example
-%%
-%% @seealso{int}
+%% @seealso{@@sym/int}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
