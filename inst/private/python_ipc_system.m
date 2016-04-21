@@ -77,9 +77,6 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
   s = strjoin([s_in cmd s_out], newl);
 
   pyexec = sympref('python');
-  if (isempty(pyexec))
-    pyexec = 'python';
-  end
 
   %% FIXME: Issue #63: with new regexp code on Matlab
   % workaround:

@@ -22,25 +22,48 @@
 %% @deftypefnx {Function File} {@var{r} =} sympref (@var{cmd})
 %% @deftypefnx {Function File} {} sympref @var{cmd}
 %% @deftypefnx {Function File} {} sympref @var{cmd} @var{args}
-%% Preferences for the OctSymPy symbolic computing package.
+%% Preferences for the Symbolic package.
 %%
 %% @code{sympref} can set or get various preferences and
 %% configurations.  The various choices for @var{cmd} and
 %% @var{args} are documented below.
 %%
 %%
-%% @strong{Python executable} path/command:
+%% Get the current @strong{Python executable} path/name:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref python
+%%   @result{} ans = python
+%% @end example
 %%
+%% By default, this value is first taken from an environment
+%% variable called @code{PYTHON}.  This can be configured
+%% in the OS or it can be set within Octave using:
+%% @example
+%% @comment doctest: +SKIP
+%% setenv('PYTHON', '/usr/bin/python')
+%% sympref reset
+%% @end example
+%%
+%% Alternatively, the environment variable can be overriden by:
 %% @example
 %% @group
-%% sympref python '/usr/bin/python'           % doctest: +SKIP
-%% sympref python 'C:\Python\python.exe'      % doctest: +SKIP
-%% sympref python 'N:\myprogs\py.exe'         % doctest: +SKIP
+%% @comment doctest: +SKIP
+%% sympref python '/usr/bin/python'
+%% sympref python 'C:\Python\python.exe'
 %% @end group
 %% @end example
 %%
-%% Default is an empty string; in which case OctSymPy just runs
-%% @code{python} and assumes the path is set appropriately.
+%% Finally, if neither is set, the package typically assumes the
+%% command is simply @code{python}.
+%%
+%% The default behaviour can be restored using either:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref python []
+%% sympref('python', '')
+%% @end example
+%% or with `sympref defaults` as noted below.
 %%
 %%
 %% @strong{Display} of syms:
@@ -66,16 +89,16 @@
 %%
 %% sympref display unicode
 %% sin(x/2)
-%%    @result{} (sym)
-%%           ⎛x⎞
-%%        sin⎜─⎟
-%%           ⎝2⎠
+%%   @result{} (sym)
+%%          ⎛x⎞
+%%       sin⎜─⎟
+%%          ⎝2⎠
 %%
 %% sympref display default
 %% @end group
 %% @end example
 %%
-%% By default OctSymPy uses the unicode pretty printer to display
+%% By default, a unicode pretty printer is used to display
 %% symbolic expressions.  If that doesn't work (e.g., if you
 %% see @code{?} characters) then try the @code{ascii} option.
 %%
@@ -262,7 +285,17 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin == 1)
-        varargout{1} = settings.whichpython;
+        DEFAULTPYTHON = 'python';
+        if isempty(settings.whichpython)
+          pyenv = getenv('PYTHON');
+          if (isempty(pyenv))
+            varargout{1} = DEFAULTPYTHON;
+          else
+            varargout{1} = pyenv;
+          end
+        else
+          varargout{1} = settings.whichpython;
+        end
       elseif (isempty(arg) || strcmp(arg,'[]'))
         settings.whichpython = '';
         sympref('reset')
@@ -280,11 +313,11 @@ function varargout = sympref(cmd, arg)
         settings.ipc = arg;
         switch arg
           case 'default'
-            msg = 'Choosing the default [autodetect] octsympy communication mechanism';
+            msg = 'Choosing the default [autodetect] communication mechanism';
           case 'system'
-            msg = 'Forcing the system() octsympy communication mechanism';
+            msg = 'Forcing the system() communication mechanism';
           case 'popen2'
-            msg = 'Forcing the popen2() octsympy communication mechanism';
+            msg = 'Forcing the popen2() communication mechanism';
           case 'systmpfile'
             msg = 'Forcing systmpfile ipc: warning: this is for debugging';
           case 'sysoneline'
@@ -301,7 +334,7 @@ function varargout = sympref(cmd, arg)
     case 'reset'
       verbose = ~sympref('quiet');
       if (verbose)
-        disp('Resetting the octsympy communication mechanism');
+        disp('Resetting the communication mechanism');
       end
       r = python_ipc_driver('reset', []);
 
