@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
-%% @deftypefnx {Function File} {} assumeAlso (@var{x}, @var{cond})
+%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
+%% @deftypemethodx @@sym {} assumeAlso (@var{x}, @var{cond})
 %% Add additional assumptions on a symbolic variable.
 %%
 %% Behaviour is similar to @code{assume}; however @var{cond} is combined
@@ -28,14 +28,14 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x integer
-%% >> x1 = x;
-%% >> x = assumeAlso(x, 'positive');
-%% >> assumptions(x)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: integer, positive
-%%      @}
+%% syms x integer
+%% x1 = x;
+%% x = assumeAlso(x, 'positive');
+%% assumptions(x)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer, positive
+%%     @}
 %% @end group
 %% @end example
 %% Note the previous output will be more verbose if you are using
@@ -44,11 +44,11 @@
 %% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
 %% @group
-%% >> assumptions(x1)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: integer
-%%      @}
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer
+%%     @}
 %% @end group
 %% @end example
 %%
@@ -56,8 +56,8 @@
 %% and replace any @var{x} within expressions in the caller's
 %% workspace.  See @ref{assume}.
 %%
-%% @seealso{assume, assumptions, sym, syms}
-%% @end deftypefn
+%% @seealso{@@sym/assume, assumptions, sym, syms}
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
