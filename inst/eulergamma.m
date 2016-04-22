@@ -24,6 +24,8 @@
 %%
 %% @example
 %% @group
+%% @c doctest: +SKIP
+%% @c FIXME: will pass on SymPy-1.0.1-dev
 %% eulergamma
 %%   @result{} (sym) γ
 %%
