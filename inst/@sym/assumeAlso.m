@@ -30,7 +30,15 @@
 %% @group
 %% syms x integer
 %% x1 = x;
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer
+%%     @}
+%%
 %% x = assumeAlso(x, 'positive');
+%% @c doctest: +SKIP
+%% @c (output order may depend on Python version here)
 %% assumptions(x)
 %%   @result{} ans =
 %%     @{
@@ -38,8 +46,8 @@
 %%     @}
 %% @end group
 %% @end example
-%% Note the previous output will be more verbose if you are using
-%% an older version of SymPy before SymPy 1.0.
+%% (Note the previous output will be more verbose if you are using
+%% an older version of SymPy before SymPy 1.0.)
 %%
 %% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
