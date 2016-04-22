@@ -18,9 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod  @@sym {@var{g} =} diff (@var{f})
-%% @deftypemethodx @@sym {@var{g} =} diff (@var{f}, @var{x})
-%% @deftypemethodx @@sym {@var{g} =} diff (@var{f}, @dots{})
+%% @defmethod  @@sym diff (@var{f})
+%% @defmethodx @@sym diff (@var{f}, @var{x})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
@@ -59,7 +60,7 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/int}
-%% @end deftypemethod
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, differentiation
