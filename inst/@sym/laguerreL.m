@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{L} =} laguerre (@var{n}, @var{x})
-%% @deftypefnx {Function File} {@var{L} =} laguerre (@var{n}, @var{alpha}, @var{x})
+%% @defmethod  @@sym laguerreL (@var{n}, @var{x})
+%% @defmethodx @@sym laguerreL (@var{n}, @var{alpha}, @var{x})
 %% Symbolic Laguerre polynomials and associated Laguerre polynomials.
 %%
 %% Example:
@@ -55,7 +55,7 @@
 %% @end group
 %% @end example
 %% @seealso{laguerreL, @@sym/chebychevT, @@sym/chebychevU}
-%% @end deftypefn
+%% @end defmethod
 
 function L = laguerreL(n, alpha, x)
 
