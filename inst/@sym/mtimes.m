@@ -33,9 +33,9 @@
 %%       ⎣3  4⎦
 %% B = [x; y]
 %%   @result{} B = (sym 2×1 matrix)
-%%      ⎡x⎤
-%%      ⎢ ⎥
-%%      ⎣y⎦
+%%       ⎡x⎤
+%%       ⎢ ⎥
+%%       ⎣y⎦
 %% A * B
 %%   @result{} (sym 2×1 matrix)
 %%       ⎡ x + 2⋅y ⎤
