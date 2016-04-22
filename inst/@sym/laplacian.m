@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,25 +18,42 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{G} =} laplacian (@var{f})
-%% @deftypefnx {Function File} {@var{G} =} laplacian (@var{f}, @var{x})
-%% Symbolic laplacian of symbolic expression.
+%% @defmethod  @@sym laplacian (@var{f})
+%% @defmethodx @@sym laplacian (@var{f}, @var{x})
+%% Symbolic Laplacian of symbolic expression.
 %%
+%% The Laplacian of a scalar expression @var{f} is
+%% the scalar expression:
 %% @example
 %% @group
-%% >> syms x y
-%% >> laplacian(x^3 + 5*y^2)
-%%    @result{} (sym) 6⋅x + 10
+%% syms f(x, y, z)
+%% laplacian(f)
+%%   @result{} (sym)
+%%         2                 2                 2
+%%        ∂                 ∂                 ∂
+%%       ───(f(x, y, z)) + ───(f(x, y, z)) + ───(f(x, y, z))
+%%         2                 2                 2
+%%       ∂x                ∂y                ∂z
 %% @end group
 %% @end example
 %%
 %% @var{x} can be a scalar, vector or cell list.  If omitted,
 %% it is determined using @code{symvar}.
 %%
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% laplacian(x^3 + 5*y^2)
+%%   @result{} (sym) 6⋅x + 10
+%% @end group
+%% @end example
+%%
 %% Note: assumes @var{x} is a Cartesian coordinate system.
 %%
-%% @seealso{divergence, gradient, curl, jacobian, hessian}
-%% @end deftypefn
+%% @seealso{@@sym/divergence, @@sym/gradient, @@sym/curl, @@sym/jacobian,
+%%          @@sym/hessian}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -50,6 +67,10 @@ function g = laplacian(f,x)
     if (isempty(x))
       x = sym('x');
     end
+  elseif (nargin == 2)
+    % no-op
+  else
+    print_usage ();
   end
 
   if (~iscell(x) && isscalar(x))
@@ -121,3 +142,5 @@ end
 %! assert (isAlways (l2 == divgr2))
 %! assert (isAlways (l3 == divgr3))
 
+%!error laplacian(sym('x'), sym('x'), 42)
+%!error <only scalar> laplacian([sym('x'), sym('x')])
