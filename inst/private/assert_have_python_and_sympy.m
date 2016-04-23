@@ -16,7 +16,7 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function assert_we_have_python(pyexec)
+function assert_have_python_and_sympy(pyexec)
 %private function
 
   [st, out] = system([pyexec ' -c "a = 42"']);
@@ -27,4 +27,22 @@ function assert_we_have_python(pyexec)
            '    Is Python installed?  Is your "path" configured correctly?'], ...
           pyexec)
   end
+
+
+  minsympyver = '0.7.6';
+
+  [st, out] = system([pyexec ' -c "import sympy; print(sympy.__version__)"']);
+
+  if (st ~= 0)
+    error('OctSymPy:nosympy', ...
+          'Python cannot import SymPy: have you installed SymPy?')
+  else
+    spver = strtrim(out);
+    if (compare_versions (spver, minsympyver, '<'))
+      error('OctSymPy:oldsympy', ...
+            'SymPy is installed but is too old (sympy-%s found, %s required)', ...
+            spver, minsympyver)
+    end
+  end
+
 end

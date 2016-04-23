@@ -75,7 +75,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       disp('Initializing communication with SymPy using a popen2() pipe.')
     end
     pyexec = sympref('python');
-    assert_we_have_python(pyexec)
+    assert_have_python_and_sympy(pyexec)
 
     if (ispc() && ~isunix())
       % Octave popen2 on Windows can't tolerate stderr output
