@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,30 +17,81 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{G} =} gradient (@var{f})
-%% @deftypefnx {Function File} {@var{G} =} gradient (@var{f}, @var{x})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym gradient (@var{f})
+%% @defmethodx @@sym gradient (@var{f}, @var{x})
 %% Symbolic gradient of symbolic expression.
 %%
+%% The gradient of scalar expression is the vector
+%% @example
+%% @group
+%% syms f(x, y, z)
+%% gradient(f)
+%%   @result{} (sym 3×1 matrix)
+%%       ⎡∂             ⎤
+%%       ⎢──(f(x, y, z))⎥
+%%       ⎢∂x            ⎥
+%%       ⎢              ⎥
+%%       ⎢∂             ⎥
+%%       ⎢──(f(x, y, z))⎥
+%%       ⎢∂y            ⎥
+%%       ⎢              ⎥
+%%       ⎢∂             ⎥
+%%       ⎢──(f(x, y, z))⎥
+%%       ⎣∂z            ⎦
+%% @end group
+%% @end example
+%%
+%% Example:
+%% @example
+%% @group
+%% f = x^3 + 5*y^2;
+%% gradient(f)
+%%   @result{} (sym 2×1 matrix)
+%%       ⎡   2⎤
+%%       ⎢3⋅x ⎥
+%%       ⎢    ⎥
+%%       ⎣10⋅y⎦
+%% @end group
+%% @end example
+%%
 %% @var{x} can be a scalar, vector or cell list.  If omitted,
-%% it is determined using @code{symvar}.
+%% it is determined using @code{symvar}.  Example:
+%% @example
+%% @group
+%% gradient(f, @{x y z@})
+%%   @result{} (sym 3×1 matrix)
+%%       ⎡   2⎤
+%%       ⎢3⋅x ⎥
+%%       ⎢    ⎥
+%%       ⎢10⋅y⎥
+%%       ⎢    ⎥
+%%       ⎣ 0  ⎦
+%% @end group
+%% @end example
 %%
 %% Note: assumes @var{x} is a Cartesian coordinate system.
 %%
-%% @seealso{divergence, curl, laplacian, jacobian, hessian}
-%% @end deftypefn
+%% @seealso{@@sym/divergence, @@sym/curl, @@sym/laplacian, @@sym/jacobian,
+%%          @@sym/hessian}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function g = gradient(f,x)
 
-  assert (isscalar(f), 'gradient: defined for scalar functions')
+  assert (isscalar(f), 'gradient: defined only for scalar functions')
 
   if (nargin == 1)
     x = symvar(f);
     if (isempty(x))
       x = sym('x');
     end
+  elseif (nargin == 2)
+    % no-op
+  else
+    print_usage ();
   end
 
   if (~iscell(x) && isscalar(x))
@@ -119,3 +170,5 @@ end
 %! assert (isequal (gradient(f, {x,y}), g2))
 %! assert (isequal (gradient(f, {x,y,z}), g3))
 
+%!error gradient(sym('x'), 42, 42)
+%!error <only for scalar> gradient([sym('x') sym('x')])

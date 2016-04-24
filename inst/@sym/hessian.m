@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,28 +17,72 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{H} =} hessian (@var{f})
-%% @deftypefnx {Function File} {@var{H} =} hessian (@var{f}, @var{x})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym hessian (@var{f})
+%% @defmethodx @@sym hessian (@var{f}, @var{x})
 %% Symbolic Hessian matrix of symbolic scalar expression.
+%%
+%% The Hessian of a scalar expression @var{f} is the matrix consisting
+%% of second derivatives:
+%% @example
+%% @group
+%% syms f(x, y, z)
+%% hessian(f)
+%%   @result{} (sym 3×3 matrix)
+%%     ⎡   2                  2                  2             ⎤
+%%     ⎢  ∂                  ∂                  ∂              ⎥
+%%     ⎢ ───(f(x, y, z))   ─────(f(x, y, z))  ─────(f(x, y, z))⎥
+%%     ⎢   2               ∂y ∂x              ∂z ∂x            ⎥
+%%     ⎢ ∂x                                                    ⎥
+%%     ⎢                                                       ⎥
+%%     ⎢   2                  2                  2             ⎥
+%%     ⎢  ∂                  ∂                  ∂              ⎥
+%%     ⎢─────(f(x, y, z))   ───(f(x, y, z))   ─────(f(x, y, z))⎥
+%%     ⎢∂y ∂x                 2               ∂z ∂y            ⎥
+%%     ⎢                    ∂y                                 ⎥
+%%     ⎢                                                       ⎥
+%%     ⎢   2                  2                  2             ⎥
+%%     ⎢  ∂                  ∂                  ∂              ⎥
+%%     ⎢─────(f(x, y, z))  ─────(f(x, y, z))   ───(f(x, y, z)) ⎥
+%%     ⎢∂z ∂x              ∂z ∂y                 2             ⎥
+%%     ⎣                                       ∂z              ⎦
+%% @end group
+%% @end example
 %%
 %% @var{x} can be a scalar, vector or cell list.  If omitted,
 %% it is determined using @code{symvar}.
 %%
-%% @seealso{jacobian, divergence, gradient, curl, laplacian}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% f = x*y;
+%% hessian(f)
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡0  1⎤
+%%       ⎢    ⎥
+%%       ⎣1  0⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/jacobian, @@sym/divergence, @@sym/gradient, @@sym/curl,
+%%          @@sym/laplacian}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function H = hessian(f,x)
+function H = hessian(f, x)
 
-  assert (isscalar(f), 'hessian: defined for scalar functions')
+  assert (isscalar(f), 'hessian: defined only for scalar functions')
 
   if (nargin == 1)
     x = symvar(f);
     if (isempty(x))
       x = sym('x');
     end
+  elseif (nargin == 2)
+    % no-op
+  else
+    print_usage ();
   end
 
   if (~iscell(x) && isscalar(x))
@@ -107,3 +151,5 @@ end
 %! H = hessian(f, {x y z});
 %! assert (isequal (H, Hexp))
 
+%!error <only for scalar> hessian([sym(1) sym(2)])
+%!error <Invalid call> hessian(sym(1), 2, 3)

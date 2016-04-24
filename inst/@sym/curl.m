@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,80 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{f} =} curl (@var{G})
-%% @deftypefnx {Function File} {@var{f} =} curl (@var{G}, @var{x})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym curl (@var{F})
+%% @defmethodx @@sym curl (@var{F}, @var{x})
 %% Symbolic curl of symbolic expression.
 %%
-%% @var{G} and @var{x} should be vectors of length three.
+%% Consider a vector expression @var{F}:
+%% @example
+%% @group
+%% syms f(x,y,z) g(x,y,z) h(x,y,z)
+%% F = [f; g; h]
+%%   @result{} F = (sym 3×1 matrix)
+%%       ⎡f(x, y, z)⎤
+%%       ⎢          ⎥
+%%       ⎢g(x, y, z)⎥
+%%       ⎢          ⎥
+%%       ⎣h(x, y, z)⎦
+%% @end group
+%% @end example
+%% The curl of @var{F} is the vector expression:
+%% @example
+%% @group
+%% curl(F)
+%%   @result{} (sym 3×1 matrix)
+%%       ⎡  ∂                ∂             ⎤
+%%       ⎢- ──(g(x, y, z)) + ──(h(x, y, z))⎥
+%%       ⎢  ∂z               ∂y            ⎥
+%%       ⎢                                 ⎥
+%%       ⎢ ∂                ∂              ⎥
+%%       ⎢ ──(f(x, y, z)) - ──(h(x, y, z)) ⎥
+%%       ⎢ ∂z               ∂x             ⎥
+%%       ⎢                                 ⎥
+%%       ⎢  ∂                ∂             ⎥
+%%       ⎢- ──(f(x, y, z)) + ──(g(x, y, z))⎥
+%%       ⎣  ∂y               ∂x            ⎦
+%% @end group
+%% @end example
+%%
+%% @var{F} and @var{x} should be vectors of length three.
 %% If omitted, @var{x} is determined using @code{symvar}.
+%%
+%% Example:
+%% @example
+%% @group
+%% syms x y z
+%% F = [y -x 0];
+%% curl(F, @{x y z@})
+%%   @result{} (sym 3×1 matrix)
+%%       ⎡0 ⎤
+%%       ⎢  ⎥
+%%       ⎢0 ⎥
+%%       ⎢  ⎥
+%%       ⎣-2⎦
+%% @end group
+%% @end example
+%%
+%% Example verifying an identity:
+%% @example
+%% @group
+%% syms f(x, y, z)
+%% curl(gradient(f))
+%%   @result{} (sym 3×1 matrix)
+%%       ⎡0⎤
+%%       ⎢ ⎥
+%%       ⎢0⎥
+%%       ⎢ ⎥
+%%       ⎣0⎦
+%% @end group
+%% @end example
 %%
 %% Note: assumes @var{x} is a Cartesian coordinate system.
 %%
-%% @seealso{divergence, gradient, laplacian, jacobian, hessian}
-%% @end deftypefn
+%% @seealso{@@sym/divergence, @@sym/gradient, @@sym/laplacian, @@sym/jacobian,
+%%          @@sym/hessian}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -38,6 +101,10 @@ function g = curl(v,x)
 
   if (nargin == 1)
     x = symvar(v, 3);
+  elseif (nargin == 2)
+    % no-op
+  else
+    print_usage ();
   end
   assert(length(x)==3, 'coordinate system should have three components')
 
@@ -103,3 +170,6 @@ end
 %! omega = curl([u; v; 0], [x y z]);
 %! assert (isequal (omega, [0; 0; vorticity2d]))
 
+%!error <3D vector> curl([sym(1) 2 3 4])
+%!error <three components> curl([sym(1) 2 3], {sym('x') sym('y') sym('z') sym('t')})
+%!error <Invalid> curl([sym(1) 2 3], 42, 42)

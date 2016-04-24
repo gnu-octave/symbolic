@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
+%% @deftypeop  Constructor @@sym {@var{x} =} sym (@var{y})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -153,7 +153,7 @@
 %% directly to @code{sym}: @pxref{@@sym/char} for details.
 %%
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
-%% @end deftypefn
+%% @end deftypeop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
@@ -671,12 +671,13 @@ end
 %!error <failed>
 %! x = sym('pi', 'integer')
 
-%!xtest
+%!test
 %! % multiple assumptions
-%! % FIXME: xtest for sympy <= 0.7.6.x where a is the full dict
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+%! end
 
 %!test
 %! % save/load sym objects

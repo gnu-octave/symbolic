@@ -5,6 +5,7 @@ octsympy 2.4.0-dev
 
           besseljn
           besselyn
+          cat
           cosint
           coshint
           ei

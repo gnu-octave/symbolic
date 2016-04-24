@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @dots{})
+%% @defmethod  @@sym diff (@var{f})
+%% @defmethodx @@sym diff (@var{f}, @var{x})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
@@ -59,7 +60,7 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/int}
-%% @end deftypefn
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, differentiation

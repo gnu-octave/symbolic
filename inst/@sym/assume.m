@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
-%% @deftypefnx {Function File} {} assume (@var{x}, @var{cond})
+%% @deftypemethod  @@sym {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% This function has two different behaviours depending on whether
@@ -28,36 +28,36 @@
 %% example:
 %% @example
 %% @group
-%% >> syms x
-%% >> x1 = x;
-%% >> x = assume(x, 'positive');
-%% >> assumptions(x)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: positive
-%%      @}
-%% >> assumptions(x1)  % empty, x1 still has the original x
-%%    @result{} ans = @{@}(0x0)
+%% syms x
+%% x1 = x;
+%% x = assume(x, 'positive');
+%% assumptions(x)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: positive
+%%     @}
+%% assumptions(x1)  % empty, x1 still has the original x
+%%   @result{} ans = @{@}(0x0)
 %% @end group
 %% @end example
 %%
 %% Another example to help clarify:
 %% @example
 %% @group
-%% >> x1 = sym('x', 'positive')
-%%    @result{} x1 = (sym) x
-%% >> x2 = assume(x1, 'negative')
-%%    @result{} x2 = (sym) x
-%% >> assumptions(x1)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: positive
-%%      @}
-%% >> assumptions(x2)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: negative
-%%      @}
+%% x1 = sym('x', 'positive')
+%%   @result{} x1 = (sym) x
+%% x2 = assume(x1, 'negative')
+%%   @result{} x2 = (sym) x
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: positive
+%%     @}
+%% assumptions(x2)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: negative
+%%     @}
 %% @end group
 %% @end example
 %%
@@ -68,25 +68,25 @@
 %% assumptions).  For example:
 %% @example
 %% @group
-%% >> syms x
-%% >> x1 = x;
-%% >> f = sin(x);
-%% >> assume(x, 'positive');
-%% >> assumptions(x)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: positive
-%%      @}
-%% >> assumptions(x1)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: positive
-%%      @}
-%% >> assumptions(f)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: positive
-%%      @}
+%% syms x
+%% x1 = x;
+%% f = sin(x);
+%% assume(x, 'positive');
+%% assumptions(x)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: positive
+%%     @}
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: positive
+%%     @}
+%% assumptions(f)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: positive
+%%     @}
 %% @end group
 %% @end example
 %%
@@ -99,8 +99,8 @@
 %% FIXME: idea of rewriting all sym vars is a bit of a hack, not
 %% well tested (for example, with global vars.)
 %%
-%% @seealso{assumeAlso, assumptions, sym, syms}
-%% @end deftypefn
+%% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

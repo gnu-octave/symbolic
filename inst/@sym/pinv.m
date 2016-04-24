@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{B} =} pinv (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym pinv (@var{A})
 %% Symbolic Moore-Penrose pseudoinverse of a matrix.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4; 5 6])
+%%   @result{} A = (sym 3×2 matrix)
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎢3  4⎥
+%%       ⎢    ⎥
+%%       ⎣5  6⎦
+%%
+%% pinv(A)
+%%   @result{} (sym 2×3 matrix)
+%%       ⎡-4/3  -1/3   2/3 ⎤
+%%       ⎢                 ⎥
+%%       ⎢ 13              ⎥
+%%       ⎢ ──   1/3   -5/12⎥
+%%       ⎣ 12              ⎦
+%% @end group
+%% @end example
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

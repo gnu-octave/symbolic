@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,15 +17,49 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{M} =} diag (@var{v})
-%% @deftypefnx {Function File} {@var{M} =} diag (@var{v}, @var{k})
-%% @deftypefnx {Function File} {@var{M} =} diag (@var{v}, @var{n}, @var{m})
-%% @deftypefnx {Function File} {@var{v} =} diag (@var{A})
-%% @deftypefnx {Function File} {@var{v} =} diag (@var{A}, @var{k})
+%% @documentencoding UTF-8
+%% @deftypeop  Method @@sym {@var{M} =} diag (@var{v})
+%% @deftypeopx Method @@sym {@var{M} =} diag (@var{v}, @var{k})
+%% @deftypeopx Method @@sym {@var{M} =} diag (@var{v}, @var{n}, @var{m})
+%% @deftypeopx Method @@sym {@var{v} =} diag (@var{A})
+%% @deftypeopx Method @@sym {@var{v} =} diag (@var{A}, @var{k})
 %% Make diagonal matrix or extract diagonal of symbolic matrix.
 %%
-%% @seealso{repmat}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 3; 4 5 6; 7 8 9])
+%%   @result{} A = (sym 3×3 matrix)
+%%       ⎡1  2  3⎤
+%%       ⎢       ⎥
+%%       ⎢4  5  6⎥
+%%       ⎢       ⎥
+%%       ⎣7  8  9⎦
+%%
+%% v = diag(A)
+%%   @result{} v = (sym 3×1 matrix)
+%%       ⎡1⎤
+%%       ⎢ ⎥
+%%       ⎢5⎥
+%%       ⎢ ⎥
+%%       ⎣9⎦
+%% @end group
+%% @end example
+%%
+%% Make it back into a matrix:
+%% @example
+%% @group
+%% diag(v)
+%%   @result{} (sym 3×3 matrix)
+%%       ⎡1  0  0⎤
+%%       ⎢       ⎥
+%%       ⎢0  5  0⎥
+%%       ⎢       ⎥
+%%       ⎣0  0  9⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/repmat}
+%% @end deftypeop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
-%% @deftypefnx {Function File} {} assumeAlso (@var{x}, @var{cond})
+%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
+%% @deftypemethodx @@sym {} assumeAlso (@var{x}, @var{cond})
 %% Add additional assumptions on a symbolic variable.
 %%
 %% Behaviour is similar to @code{assume}; however @var{cond} is combined
@@ -28,29 +28,35 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x integer
-%% >> x1 = x;
-%% >> x = assumeAlso(x, 'positive');
-%% >> assumptions(x)                     % doctest: +SKIP
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: integer, positive
-%%      @}
+%% syms x integer
+%% x1 = x;
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer
+%%     @}
+%%
+%% x = assumeAlso(x, 'positive');
+%% @c doctest: +SKIP
+%% @c (output order may depend on Python version here)
+%% assumptions(x)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer, positive
+%%     @}
 %% @end group
 %% @end example
-%% @c FIXME: remove SKIP (and text below) once SymPy 0.7.7 is out.
-%%
-%% Note the previous output will be more verbose if you are using
-%% a version of SymPy before SymPy 0.7.7.
+%% (Note the previous output will be more verbose if you are using
+%% an older version of SymPy before SymPy 1.0.)
 %%
 %% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
 %% @group
-%% >> assumptions(x1)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = x: integer
-%%      @}
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: integer
+%%     @}
 %% @end group
 %% @end example
 %%
@@ -58,8 +64,8 @@
 %% and replace any @var{x} within expressions in the caller's
 %% workspace.  See @ref{assume}.
 %%
-%% @seealso{assume, assumptions, sym, syms}
-%% @end deftypefn
+%% @seealso{@@sym/assume, assumptions, sym, syms}
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -131,9 +137,9 @@ end
 %! assert(a{1}.positive)
 %! assert(a{1}.even)
 
-%!xtest
+%!test
 %! % has output so avoids workspace
-%! % FIXME: xtest for sympy 0.7.6.x where a is the full dict
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -144,10 +150,11 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! end
 
-%!xtest
+%!test
 %! % has no output so does workspace
-%! % FIXME: xtest for sympy 0.7.6 where a is the full dict
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -158,3 +165,4 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! end
