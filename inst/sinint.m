@@ -14,8 +14,11 @@
 %% this program; if not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{y} =} sinint (@var{x})
-%% Compute the sine integral defined by:
+%% @documentencoding UTF-8
+%% @defun sinint (@var{x})
+%% Compute the sine integral function.
+%%
+%% The sine integral function is defined for complex inputs @var{x} by:
 %% @verbatim
 %%                    x
 %%                   /
@@ -23,8 +26,16 @@
 %%                   /
 %%                   0
 %% @end verbatim
-%% @seealso{cosint, expint}
-%% @end deftypefn
+%%
+%% Example:
+%% @example
+%% @group
+%% sinint (1)
+%%   @result{} 0.94608
+%% @end group
+%% @end example
+%% @seealso{cosint, expint, @@sym/sinint}
+%% @end defun
 
 function y = sinint (x)
   if (nargin ~= 1)
