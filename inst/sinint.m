@@ -34,6 +34,16 @@
 %%   @result{} 0.94608
 %% @end group
 %% @end example
+%%
+%% @strong{WARNING} This implementation is rather poor.
+%% @itemize
+%% @item It has very large errors for @code{abs(x) > 100}.
+%% @item Even for small @var{x}, the relative error is often
+%%       as large as @code{500*eps} (accurate to only about
+%%       13 decimals).
+%% @end itemize
+%% If you can, please help improve Octave by contributing to an
+%% improved implementation!
 %% @seealso{cosint, expint, @@sym/sinint}
 %% @end defun
 
@@ -88,6 +98,14 @@ end
 %! A = sinint(z);
 %! B = double(sinint(zs));
 %! assert (A, B, -20*eps)   % should be tighter
+
+%!test
+%! % random real points in [0 100]
+%! xs = linspace(0, sym(100), 20);
+%! x = linspace(0, 100, 20);
+%! A = sinint(x);
+%! B = double(sinint(xs));
+%! assert (A, B, 500*eps)  % should be tighter
 
 %!xtest
 %! % random complex points in annulus [4, 25]
