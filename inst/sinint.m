@@ -54,3 +54,51 @@ function y = sinint (x)
     y = y.*pi;
   end
 end
+
+
+%!assert (isequal (sinint (0), 0))
+
+%!xtest
+%! % FIXME: could relax to within eps
+%! assert (isequal (sinint (inf), pi/2))
+%! assert (isequal (sinint (-inf), -pi/2))
+
+% FIXME: these should be tighter
+%!assert (sinint (1), 0.9460830703671830149414, 10*eps)
+%!assert (sinint (-1), -0.9460830703671830149414, 10*eps)
+%!assert (sinint (pi), 1.851937051982466170361, 20*eps)
+%!assert (sinint (-pi), -1.851937051982466170361, 20*eps)
+
+%!xtest
+%! % FIXME: when these pass, split these out into individual asserts
+%! assert (sinint (300), 1.570881088213749519252, 2*eps)
+%! assert (sinint (1e4), 1.570233121968771218148, 2*eps)
+%! assert (sinint (20i), 1.280782633202829445942e8*1i, -5*eps)
+
+%!test
+%! % random complex points in disc radius 4
+%! a = 0; b = 4; N = 30;
+%! t = floor(9*rand(1,N))+1;
+%! rs = (b-a) * sym(t)/9 + a;
+%! r = (b-a) * t/9 + a;
+%! ths = linspace(sym(0), 2*sym(pi), N);
+%! th = linspace(0, 2*pi, N);
+%! zs = rs.*exp(1i*ths);
+%! z = r.*exp(1i*th);
+%! A = sinint(z);
+%! B = double(sinint(zs));
+%! assert (A, B, -20*eps)   % should be tighter
+
+%!xtest
+%! % random complex points in annulus [4, 25]
+%! a = 5; b = 25; N = 30;
+%! t = floor(9*rand(1,N))+1;
+%! rs = (b-a) * sym(t)/9 + a;
+%! r = (b-a) * t/9 + a;
+%! ths = linspace(sym(0), 2*sym(pi), N);
+%! th = linspace(0, 2*pi, N);
+%! zs = rs.*exp(1i*ths);
+%! z = r.*exp(1i*th);
+%! A = sinint(z);
+%! B = double(sinint(zs));
+%! assert (A, B, -20*eps)
