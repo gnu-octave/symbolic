@@ -11,6 +11,12 @@ function r = do_highbyte_escapes(s)
 %
 
   I = strfind(s, '\x');
+
+  if (isempty(I))
+    r = s;
+    return
+  end
+
   % new string with X instead of escapes
   r = regexprep(s, '\\x(..)',  'X');
 
