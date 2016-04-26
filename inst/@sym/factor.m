@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,79 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{g} =} factor (@var{f})
-%% @deftypefnx {Function File}  {[@var{p},@var{m}] =} factor (@var{f})
+%% @documentencoding UTF-8
+%% @deftypefn  {Function File}  {@var{e} =} factor (@var{n})
+%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{n})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x})
+%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x}, @var{y}, @dots{})
 %% Factor a symbolic polynomial or integer.
+%%
+%% A symbolic integer @var{n} can be factored:
+%% @example
+%% @group
+%% e = factor(sym(28152))
+%%   @result{} e = (sym)
+%%         1  3   1  2
+%%       17 ⋅2 ⋅23 ⋅3
+%% @end group
+%% @end example
+%%
+%% However, if you want to do anything other than just look at the result,
+%% you probably want:
+%% @example
+%% @group
+%% [p, m] = factor(sym(28152))
+%%   @result{} p = (sym) [2  3  17  23]  (1×4 matrix)
+%%   @result{} m = (sym) [3  2  1  1]  (1×4 matrix)
+%% prod(p.^m)
+%%   @result{} (sym) 28152
+%% @end group
+%% @end example
+%%
+%% An example of factoring a polynomial:
+%% @example
+%% @group
+%% syms x
+%% factor(x**2 + 7*x + 12)
+%%   @result{} (sym) (x + 3)⋅(x + 4)
+%% @end group
+%% @end example
+%%
+%% When the expression @var{f} depends on multiple variables,
+%% the second argument @var{x} effects what is factored:
+%% @example
+%% @group
+%% syms x y
+%% f = expand((x+3)*(x+4)*(y+5)*(y+6));
+%% factor(f)
+%%   @result{} (sym) (x + 3)⋅(x + 4)⋅(y + 5)⋅(y + 6)
+%% factor(f, x, y)
+%%   @result{} (sym) (x + 3)⋅(x + 4)⋅(y + 5)⋅(y + 6)
+%% factor(f, x)
+%%   @result{} (sym)
+%%                       ⎛ 2            ⎞
+%%       (x + 3)⋅(x + 4)⋅⎝y  + 11⋅y + 30⎠
+%% factor(f, y)
+%%   @result{} (sym)
+%%                       ⎛ 2           ⎞
+%%       (y + 5)⋅(y + 6)⋅⎝x  + 7⋅x + 12⎠
+%% @end group
+%% @end example
+%%
+%% Passing input @var{x} can be useful if your expression @var{f} might
+%% be a constant and you wish to avoid factoring it as an integer:
+%% @example
+%% @group
+%% f = sym(42);    % i.e., a degree-zero polynomial
+%% factor(f)       % no, don't want this
+%%   @result{} (sym)
+%%        1  1  1
+%%       2 ⋅3 ⋅7
+%% factor(f, x)
+%%   @result{} (sym) 42
+%% @end group
+%% @end example
 %%
 %% @seealso{expand}
 %% @end deftypefn
@@ -27,20 +97,28 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function [p, m] = factor(f)
+function [p, m] = factor(f, varargin)
 
-  % FIXME: doc: SMT does not expose vector output?  Strange, given Matlab's
-  % factor(double) command!
+  f = sym(f);
+  varargin = sym(varargin);
 
-  if (isempty (findsymbols (f)))
-    %% No syms, integer factorization
+  if ((nargin > 1) || (~isempty (findsymbols (f))))
+    %% have symbols, do polynomial factorization
+
+    if (nargout > 1)
+      print_usage ();
+    end
+
+    p = python_cmd ('return factor(*_ins)', f, varargin{:});
+
+  else
+    %% no symbols: we are doing integer factorization
+
     if (nargout <= 1)
       if (~isscalar(f))
         error('FIXME: check SMT, allows array input here?')
       end
-      % FIXME: this is fragile, even pretty(y) causes it to expand
-      % SMT is less fragile.  Can we do something to force
-      % evaluate=False to persist here?
+      % this is rather fragile, as noted in docs
       p = python_cmd ('return factorint(_ins[0], visual=True),', f);
     else
       if (~isscalar(f))
@@ -56,12 +134,6 @@ function [p, m] = factor(f)
     end
 
 
-  else
-    %% symbols, polynomial factorization
-    % FIXME; symvar? optional 2nd argument
-    cmd = { 'p = factor(_ins[0])'
-            'return p,' };
-    p = python_cmd (cmd, f);
   end
 end
 
@@ -96,3 +168,13 @@ end
 %! A = factor(sym(124));
 %! B = strtrim(disp(A, 'flat'));
 %! assert (strcmp (B, '2**2*31**1'))
+
+%!error [p, m] = factor(sym('x'));
+%!error [p, m] = factor(sym(42), sym('x'));
+
+%!test
+%! # if polynomial happens to be a constant, don't attempt integer
+%! # factorization if a variable is specified
+%! f = sym(42);
+%! q = factor(f, sym('x'));
+%! assert (isequal (f, q));

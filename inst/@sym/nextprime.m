@@ -59,5 +59,5 @@ end
 
 %!test
 %! % result is a sym
-%! p = nextprime(sym(2))
+%! p = nextprime(sym(2));
 %! assert (isa (p, 'sym'))

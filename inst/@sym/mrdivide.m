@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,53 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} mrdivide (@var{x}, @var{y})
-%% Forward slash division of symbolic expressions (/).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym mrdivide {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} / @var{y}} {}
+%% Forward slash division of symbolic expressions.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 pi; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% A / 2
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡     π⎤
+%%       ⎢1/2  ─⎥
+%%       ⎢     2⎥
+%%       ⎢      ⎥
+%%       ⎣3/2  2⎦
+%% @end group
+%% @end example
+%%
+%% The forward slash notation can be used to solve systems
+%% of the form A⋅B = C using @code{A = C / B}:
+%% @example
+%% @group
+%% B = sym([1 0; 1 2]);
+%% C = A*B
+%%   @result{} C = (sym 2×2 matrix)
+%%       ⎡1 + π  2⋅π⎤
+%%       ⎢          ⎥
+%%       ⎣  7     8 ⎦
+%% C / B
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% C * inv(B)
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡1  π⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/rdivide, @@sym/mldivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -35,19 +78,12 @@ function z = mrdivide(x, y)
     return
   end
 
+  z = python_cmd ('return _ins[0]/_ins[1],', sym(x), sym(y));
 
-  if isscalar(x) && isscalar(y)
-    z = rdivide(x, y);
-
-  elseif isscalar(x) && ~isscalar(y)
-    error('FIXME: scalar/array not implemented yet');
-
-  elseif ~isscalar(x) && isscalar(y)
-    z = rdivide(x, y);
-
-  else  % two array's case
-    error('FIXME: array/array not implemented yet');
-  end
+  % Note: SymPy also seems to support 1/A for the inverse (although 2/A
+  % not working as of 2016-01).  We don't disallow this but its not a
+  % good thing to encourage for working in Octave (since it won't work
+  % with doubles).
 
 end
 
@@ -67,11 +103,44 @@ end
 %! assert (isequal ( A/2 , D/2  ))
 %! assert (isequal ( A/sym(2) , D/2  ))
 
-%!error <scalar/array not implemented>
-%! A = [1 2; 3 4];
-%! B = sym(1) / A;
+%!test
+%! % I/A: either invert A or leave unevaluated: not bothered which
+%! A = sym([1 2; 3 4]);
+%! B = sym(eye(2)) / A;
+%! assert (isequal (B, inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
 
-%!error <array/array not implemented>
+%!test
+%! % A = C/B is C = A*B
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   fprintf('\n  skipping a test b/c SymPy <= 0.7.6.x\n')
+%! else
+%! A = sym([1 2; 3 4]);
+%! B = sym([1 3; 4 8]);
+%! C = A*B;
+%! A2 = C / B;
+%! assert (isequal (A, A2))
+%! end
+
+%!test
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   disp('  skipping a test b/c SymPy <= 0.7.6.x')
+%! else
 %! A = [1 2; 3 4];
-%! B = sym(A);
-%! C = A / B;
+%! B = A / A;
+%! % assert (isequal (B, sym(eye(2))
+%! assert (isequal (B(1,1), 1))
+%! assert (isequal (B(2,2), 1))
+%! assert (isequal (B(2,1), 0))
+%! assert (isequal (B(1,2), 0))
+%! end
+
+%!test
+%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
+%!   disp('  skipping a test b/c SymPy <= 0.7.6.x')
+%! else
+%! A = sym([5 6]);
+%! B = sym([1 2; 3 4]);
+%! C = A*B;
+%! A2 = C / B;
+%! assert (isequal (A, A2))
+%! end

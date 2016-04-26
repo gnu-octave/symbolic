@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} plus (@var{x}, @var{y})
-%% Add two symbolic expressions together (+).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym plus {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} + @var{y}} {}
+%% Add two symbolic expressions together.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% x + y
+%%   @result{} (sym) x + y
+%% @end group
+%% @end example
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -35,8 +45,22 @@ function z = plus(x, y)
     return
   end
 
+  % Note binop_helper *prefers* element-wise operations, which may not
+  % be what we always want here (e.g., see MatrixExpr test below).
+  %z = binop_helper(x, y, 'lambda x, y: x + y');
 
-  z = axplusy(1, x, y);
+  % Instead, we do broadcasting only in special cases (to match
+  % Octave behaviour) and otherwise leave it up to SymPy.
+  cmd = { 'x, y = _ins'
+          'if x is None or y is None:'
+          '    return x + y'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return x + y*sp.ones(*x.shape),'
+          'if not x.is_Matrix and y.is_Matrix:'
+          '    return x*sp.ones(*y.shape) + y,'
+          'return x + y' };
+
+  z = python_cmd(cmd, sym(x), sym(y));
 
 end
 
@@ -60,3 +84,14 @@ end
 %! assert( isequal ( A + A , 2*D ))
 %! assert( isequal ( A + 2 , D + 2 ))
 %! assert( isequal ( 4 + A , 4 + D ))
+
+%!test
+%! % ensure MatrixExpr can be manipulated somewhat
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! B = subs(A, [n m], [5 6]);
+%! B = B + 1;
+%! assert (isa (B, 'sym'))
+%! C = B(1, 1);  % currently makes a MatrixElement
+%! C = C + 1;
+%! assert (isa (C, 'sym'))

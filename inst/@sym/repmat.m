@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,8 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File}  {@var{B} =} repmat (@var{A}, @var{n}, @var{m})
+%% @deftypefnx {Function File} {@var{B} =} repmat (@var{A}, [@var{n} @var{m}])
 %% Build symbolic block matrices.
+%%
+%% Examples:
+%% @example
+%% @group
+%% repmat([1 2 sym(pi)], 2, 3)
+%%   @result{} (sym 2×9 matrix)
+%%       ⎡1  2  π  1  2  π  1  2  π⎤
+%%       ⎢                         ⎥
+%%       ⎣1  2  π  1  2  π  1  2  π⎦
+%%
+%% repmat(sym(pi), [1 3])
+%%   @result{} (sym) [π  π  π]  (1×3 matrix)
+%% @end group
+%% @end example
 %%
 %% @seealso{vertcat, horzcat}
 %% @end deftypefn
@@ -29,14 +45,25 @@
 
 function B = repmat(A, n, m)
 
-  cmd = { '(A,n,m) = _ins' ...
-          'if not A.is_Matrix:' ...
-          '    A = sp.Matrix([A])' ...
-          'L = [A]*m' ...
-          'B = sp.Matrix.hstack(*L)' ...
-          'L = [B]*n' ...
-          'B = sp.Matrix.vstack(*L)' ...
-          'return B,' };
+  if (nargin == 2)
+    m = n(2);
+    n = n(1);
+  elseif (nargin == 3)
+    % no-op
+  else
+    print_usage ();
+  end
+
+  cmd = { '(A, n, m) = _ins'
+	  'if n == 0 or m == 0:'
+	  '    return sp.Matrix(n, m, [])'
+          'if A is None or not A.is_Matrix:'
+          '    A = sp.Matrix([A])'
+          'L = [A]*m'
+          'B = sp.Matrix.hstack(*L)'
+          'L = [B]*n'
+          'B = sp.Matrix.vstack(*L)'
+          'return B' };
 
   B = python_cmd (cmd, sym(A), int32(n), int32(m));
 
@@ -57,3 +84,17 @@ end
 %! D = repmat(B, 2, 3);
 %! assert (isequal (C, D))
 
+%!test
+%! % empty
+%! A = repmat(sym([]), 2, 3);
+%! assert (isempty(A));
+%! assert (isequal (size(A), [0 0]))
+
+%!test
+%! % more empties
+%! A = repmat(sym(pi), [0 0]);
+%! assert (isequal (size(A), [0 0]))
+%! A = repmat(sym(pi), [0 3]);
+%! assert (isequal (size(A), [0 3]))
+%! A = repmat(sym(pi), [2 0]);
+%! assert (isequal (size(A), [2 0]))

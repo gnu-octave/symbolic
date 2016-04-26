@@ -1,12 +1,45 @@
-function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
-% "out" is provided for debugging
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
 
-  persistent show_msg
+%% -*- texinfo -*-
+%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_sysoneline (@dots{})
+%% Private helper function for Python IPC.
+%%
+%% @var{A} is the resulting object, which might be an error code.
+%%
+%% @var{info} usually contains diagnostics to help with debugging
+%% or error reporting.
+%%
+%% @code{@var{info}.prelines}: the number of lines of header code
+%% before the command starts.
+%%
+%% @code{@var{info}.raw}: the raw output, for debugging.
+%% @end deftypefn
+
+function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
+
+  persistent first_time
+
+  info = [];
 
   if (strcmp(what, 'reset'))
     show_msg = [];
     A = true;
-    out = [];
     return
   end
 
@@ -16,14 +49,17 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   verbose = ~sympref('quiet');
 
-  if (verbose && isempty(show_msg))
+  if (isempty(first_time))
+    first_time = true;
+  end
+
+  if (verbose && first_time)
     fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
             sympref('version'))
     disp('Using system()-based communication with Python [sysoneline].')
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')
     disp('Warning: "sysoneline" will fail when using very long expressions.')
-    show_msg = true;
   end
 
   newl = sprintf('\n');
@@ -44,28 +80,31 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % extra escaping
   s = myesc(s);
   % join all the cell arrays with escaped newline
-  s = mystrjoin(s, '\\n');
+  s = strjoin(s, '\\n');
   s1 = ['exec(\"' s '\"); '];
 
+  % The number of lines of code before the command itself (IIRC, all
+  % newlines must be escaped so this should always be zero).
+  assert(numel(strfind(s1, newl)) == 0);
+  info.prelines = 0;
 
   %% The actual command
   % cmd will be a snippet of python code that does something
   % with _ins and produce _outs.
-  s = python_format_cmd(cmd);
-  s = myesc(s);
-  s = mystrjoin(s, '\\n');
+  s = myesc(cmd);
+  s = strjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];
 
 
   %% output, or perhaps a thrown error
   s = python_copy_vars_from('_outs');
   s = myesc(s);
-  s = mystrjoin(s, '\\n');
+  s = strjoin(s, '\\n');
   s3 = ['exec(\"' s '\");'];
 
   pyexec = sympref('python');
-  if (isempty(pyexec))
-    pyexec = 'python';
+  if (first_time)
+    assert_have_python_and_sympy(pyexec)
   end
 
   bigs = [headers s1 s2 s3];
@@ -88,21 +127,37 @@ function [A, out] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
     [status,out] = system(['sh ' fname]);
   end
 
-  if status ~= 0
+  info.raw = out;
+
+  % two blocks if everything worked, one on variable import fail
+  ind = strfind(out, '<output_block>');
+
+  if (status ~= 0) && isempty(ind)
     status
     out
-    error('system() call failed!');
+    ind
+    error('sysoneline ipc: system() call failed!');
   end
 
-  % there should be two blocks
-  ind = strfind(out, '<output_block>');
-  assert(length(ind) == 2)
-  out1 = out(ind(1):(ind(2)-1));
-  % could extractblock here, but just search for keyword instead
-  if (isempty(strfind(out1, 'successful')))
-    error('failed to import variables to python?')
+  info.raw = out;
+
+  A = extractblock(out(ind(1):end));
+  if (ischar(A) && strcmp(A, 'PYTHON: successful variable import'))
+    % pass
+  elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    return
+  else
+    A
+    out
+    error('sysoneline ipc: something unexpected happened sending variables to python')
   end
+
+  assert(length(ind) == 2)
   A = extractblock(out(ind(2):end));
+
+  if (first_time)
+    first_time = false;
+  end
 end
 
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -132,7 +132,7 @@ function r = isAlways(p, varargin)
 
   cmd = vertcat(cmd, {
     '(x, unknown) = _ins'
-    'if x.is_Matrix:'
+    'if x is not None and x.is_Matrix:'
     '    r = [a for a in x.T]' % note transpose
     'else:'
     '    r = [x,]'
@@ -229,7 +229,7 @@ end
 %! assert (isAlways(expr))
 
 %!test
-%! % more differences 1, these don't simplify in sympy 0.7.5
+%! % more differences 1, these don't simplify in sympy (as of 2016-01)
 %! expr = (x+1)^2 == x*x + 2*x + 1;
 %! assert (~logical(expr))
 %! assert (isAlways(expr))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,27 +24,26 @@
 %%
 %% Sum over the rows or columns of an expression.  By default, sum
 %% over the rows.  Can specify row or column sums using @var{n}.
-%% To perform symbolic summations, see @xref{symsum}.
+%% To perform symbolic summations, @pxref{@@sym/symsum}.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> syms x y z
-%% >> sum([x y z])
-%%    @result{} (sym) x + y + z
+%% syms x y z
+%% sum([x y z])
+%%   @result{} (sym) x + y + z
 %%
-%% >> sum([x y; x z], 1)
-%%    @result{} (sym) [2⋅x  y + z]  (1×2 matrix)
+%% sum([x y; x z], 1)
+%%   @result{} (sym) [2⋅x  y + z]  (1×2 matrix)
 %%
-%% >> sum([x y; x z], 2)
-%%    @result{} (sym 2×1 matrix)
+%% sum([x y; x z], 2)
+%%   @result{} (sym 2×1 matrix)
 %%       ⎡x + y⎤
 %%       ⎢     ⎥
 %%       ⎣x + z⎦
-%%
 %% @end group
 %% @end example
-%% @seealso{prod, symsum}
+%% @seealso{@@sym/prod, @@sym/symsum}
 %% @end deftypefn
 
 function y = sum(x, n)

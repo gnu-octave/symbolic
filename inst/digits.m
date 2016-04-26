@@ -26,15 +26,15 @@
 %% Examples:
 %% @example
 %% @group
-%% >> n_orig = digits(7);
-%% >> vpa('pi')
-%%    @result{} (sym) 3.141593
+%% n_orig = digits(7);
+%% vpa('pi')
+%%   @result{} (sym) 3.141593
 %%
-%% >> digits(42)
-%% >> vpa('pi')
-%%    @result{} (sym) 3.14159265358979323846264338327950288419717
+%% digits(42)
+%% vpa('pi')
+%%   @result{} (sym) 3.14159265358979323846264338327950288419717
 %%
-%% >> digits(n_orig)   # reset digits to saved value
+%% digits(n_orig)      % reset digits to saved value
 %% @end group
 %% @end example
 %% @seealso{sym, vpa, vpasolve}

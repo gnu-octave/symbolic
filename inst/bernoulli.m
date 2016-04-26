@@ -25,19 +25,19 @@
 %% Examples:
 %% @example
 %% @group
-%% >> bernoulli(6)
-%%    @result{} (sym) 1/42
-%% >> bernoulli(7)
-%%    @result{} (sym) 0
+%% bernoulli(6)
+%%   @result{} (sym) 1/42
+%% bernoulli(7)
+%%   @result{} (sym) 0
 %% @end group
 %% @end example
 %%
 %% Polynomial example:
 %% @example
 %% @group
-%% >> syms x
-%% >> bernoulli(2, x)
-%%    @result{} (sym)
+%% syms x
+%% bernoulli(2, x)
+%%   @result{} (sym)
 %%        2       1
 %%       x  - x + ─
 %%                6

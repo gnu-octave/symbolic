@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge symbolic package], [2.3.0-dev])
+AC_INIT([Octave-Forge symbolic package], [2.4.0-dev])
 
 ## Window users seem to often have their path misconfigured (issue #236)
 ## so we check if we really are running GNU sort
@@ -15,11 +15,9 @@ else
 fi
 
 AC_PATH_PROG(PYTHON, python)
-if test -z $PYTHON; then
-  AC_MSG_ERROR(Failed to find Python)
+if test -z "$PYTHON"; then
+  AC_MSG_WARN(Failed to find Python: many features will not work)
 fi
-
-AX_PYTHON_MODULE(sympy, fatal)
 
 AC_MSG_CHECKING(for SymPy version)
 min_sympy_version='0.7.5'
@@ -28,8 +26,8 @@ if test $? -eq 0; then
   AC_MSG_RESULT($version)
 else
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR(Failed to import SymPy)
+  AC_MSG_WARN(Failed to import SymPy: many features will not work)
 fi
 AX_COMPARE_VERSION($version, ge, $min_sympy_version, [], [
-  AC_MSG_ERROR(SymPy version $min_sympy_version or later is required)
+  AC_MSG_WARN(SymPy version $min_sympy_version or later is recommended)
 ])

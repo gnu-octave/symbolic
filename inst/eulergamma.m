@@ -1,4 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +19,23 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {} eulergamma ()
+%% @deffn Constant eulergamma ()
 %% Return Euler--Mascheroni constant.
 %%
 %% @example
+%% @group
+%% @c doctest: +SKIP
+%% @c FIXME: will pass on SymPy-1.0.1-dev
+%% eulergamma
+%%   @result{} (sym) γ
+%%
 %% vpa (eulergamma ())
-%% @result{} (sym) 0.57721566490153286060651209008240
+%%   @result{} (sym) 0.57721566490153286060651209008240
+%% @end group
 %% @end example
 %%
 %% @seealso{catalan}
-%% @end deftypefn
+%% @end deffn
 
 %% Author: Carnë Draug
 %% Keywords: symbolic, constants
@@ -35,6 +43,7 @@
 function g = eulergamma ()
   g = python_cmd ('return sympy.S.EulerGamma,');
 end
+
 
 %!assert (double (eulergamma ()) > 0.577215664901)
 %!assert (double (eulergamma ()) < 0.577215664902)

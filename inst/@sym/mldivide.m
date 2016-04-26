@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,12 +17,72 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{x} =} mldivide (@var{A}, @var{b})
-%% Symbolic backslash: solve linear systems.
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym mldivide {(@var{A}, @var{b})}
+%% @defopx Operator @@sym {@var{A} \ @var{b}} {}
+%% Symbolic backslash: solve symbolic linear systems.
 %%
-%% Over- and under-determined aystem are supported.
+%% This operator tries to broadly match the behaviour of the
+%% backslash operator for double matrices.
+%% For scalars, this is just division:
+%% @example
+%% @group
+%% sym(2) \ 1
+%%   @result{} ans = (sym) 1/2
+%% @end group
+%% @end example
 %%
-%% @end deftypefn
+%% But for matrices, it solves linear systems
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%% b = sym([5; 11]);
+%% x = A \ b
+%%   @result{} x = (sym 2×1 matrix)
+%%       ⎡1⎤
+%%       ⎢ ⎥
+%%       ⎣2⎦
+%% A*x == b
+%%   @result{} ans = (sym 2×1 matrix)
+%%       ⎡True⎤
+%%       ⎢    ⎥
+%%       ⎣True⎦
+%% @end group
+%% @end example
+%%
+%% Over- and under-determined systems are supported:
+%% @example
+%% @group
+%% A = sym([5 2]);
+%% x = A \ 10
+%%   @result{} x = (sym 2×1 matrix)
+%%       ⎡  2⋅c₁    ⎤
+%%       ⎢- ──── + 2⎥
+%%       ⎢   5      ⎥
+%%       ⎢          ⎥
+%%       ⎣    c₁    ⎦
+%% A*x == 10
+%%   @result{} ans = (sym) True
+%% @end group
+%% @group
+%% A = sym([1 2; 3 4; 9 12]);
+%% b = sym([5; 11; 33]);
+%% x = A \ b
+%%   @result{} x = (sym 2×1 matrix)
+%%       ⎡1⎤
+%%       ⎢ ⎥
+%%       ⎣2⎦
+%% A*x - b
+%%   @result{} ans = (sym 3×1 matrix)
+%%       ⎡0⎤
+%%       ⎢ ⎥
+%%       ⎢0⎥
+%%       ⎢ ⎥
+%%       ⎣0⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/ldivide, @@sym/mrdivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

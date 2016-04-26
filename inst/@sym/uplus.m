@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,19 +17,28 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} uplus (@var{x})
-%% Symbolic unitary minus (+).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym uplus (@var{x})
+%% @defopx Operator @@sym {+@var{x}} {}
+%% Symbolic unitary minus.
 %%
-%% A no-op.
-%%
-%% @end deftypefn
+%% A no-op.  Example:
+%% @example
+%% @group
+%% syms x
+%% +x
+%%   @result{} (sym) x
+%% @end group
+%% @end example
+%% @seealso{@@sym/uminus}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function x = uplus(x)
 
-  x = x;
+  % no-op
 
 end
 

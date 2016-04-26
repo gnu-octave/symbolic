@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,38 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} ldivide (@var{x}, @var{y})
-%% Elementwise backslash of sym expressions (dot backslash).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym ldivide {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} .\ @var{y}} {}
+%% Element-wise backslash division of symbolic expressions.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% A = sym([1 137; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡1  137⎤
+%%       ⎢      ⎥
+%%       ⎣3   4 ⎦
+%% B = [x pi; 2*x 8]
+%%   @result{} B = (sym 2×2 matrix)
+%%       ⎡ x   π⎤
+%%       ⎢      ⎥
+%%       ⎣2⋅x  8⎦
+%% A .\ B
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡      π ⎤
+%%       ⎢ x   ───⎥
+%%       ⎢     137⎥
+%%       ⎢        ⎥
+%%       ⎢2⋅x     ⎥
+%%       ⎢───   2 ⎥
+%%       ⎣ 3      ⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/rdivide, @@sym/mldivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -22,7 +22,7 @@
 %% Rewrite a symbolic expression.
 %%
 %% Attempts to rewrite an expression @var{f} in terms of functions
-%% indicated by the string @var{how}.
+%% indicated by the @emph{case-sensitive} string @var{how}.
 %%
 %% Examples using trigonometry:
 %% @example
@@ -67,6 +67,8 @@
 %%       0
 %% @end group
 %% @end example
+%% @strong{Note} the case-sensitivity of @var{how}:
+%% use @code{Integral} not @code{integral}.
 %%
 %% Further examples:
 %% @example
@@ -98,7 +100,8 @@
 function F = rewrite(f, how)
 
   cmd = { '(f, how) = _ins'
-          'if f.is_Matrix:'
+          '# note, not for MatrixExpr'
+          'if isinstance(f, sp.MatrixBase):'
           '    return f.applyfunc(lambda a: a.rewrite(how)),'
           'else:'
           '    return f.rewrite(how),' };

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} minus (@var{x}, @var{y})
-%% Subtract one symbolic expression from another (-).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym minus {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} - @var{y}} {}
+%% Subtract one symbolic expression from another.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% x - y
+%%   @result{} (sym) x - y
+%% @end group
+%% @end example
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -35,11 +45,19 @@ function z = minus(x, y)
     return
   end
 
+  cmd = { 'x, y = _ins'
+          'if x is None or y is None:'
+          '    return x - y'
+          'if x.is_Matrix and not y.is_Matrix:'
+          '    return x - y*sp.ones(*x.shape),'
+          'if not x.is_Matrix and y.is_Matrix:'
+          '    return x*sp.ones(*y.shape) - y,'
+          'return x - y' };
 
-  % -y + x
-  z = axplusy(-1, y, x);
+  z = python_cmd(cmd, sym(x), sym(y));
 
 end
+
 
 %!test
 %! % scalar

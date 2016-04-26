@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} vertcat (@var{x}, @var{y}, @dots{})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym {vertcat} {(@var{x}, @var{y}, @dots{})}
+%% @defopx Operator @@sym {[@var{x}; @var{y}; @dots{}]} {}
 %% Vertically concatentate symbolic arrays.
 %%
-%% @seealso{horzcat}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2])
+%%   @result{} A = (sym) [1  2]  (1×2 matrix)
+%% [A; A; 2*A]
+%%   @result{} (sym 3×2 matrix)
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎢1  2⎥
+%%       ⎢    ⎥
+%%       ⎣2  4⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/horzcat, @@sym/cat}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -33,25 +49,18 @@ function h = vertcat(varargin)
   cmd = {
           '_proc = []'
           'for i in _ins:'
-          '    if i.is_Matrix:'
+          '    if i is None or not i.is_Matrix:'
+          '        _proc.append(sp.Matrix([[i]]))'
+          '    else:'
           '        if i.shape == (0, 0):'
           '            pass'
           '        else:'
           '            _proc.append(i)'
-          '    else:'
-          '        _proc.append(sp.Matrix([[i]]))'
-          'try:'
-          '    return (0, sp.Matrix.vstack(*_proc))'
-          'except Exception as e:'
-          '    return (1, type(e).__name__ + ": " + str(e))'
+          'return sp.Matrix.vstack(*_proc),'
           };
 
   varargin = sym(varargin);
-  [flag, h] = python_cmd (cmd, varargin{:});
-
-  if (flag)
-    error(h)
-  end
+  h = python_cmd (cmd, varargin{:});
 
 end
 
@@ -124,15 +133,9 @@ end
 %! assert (isequal ([v; q], v))
 
 %!error <ShapeError>
-%! % FIXME: clean-up when we drop 0.7.5 support (Issue #164)
-%! if (str2num(strrep(python_cmd ('return sp.__version__,'),'.',''))<=75)
-%!   disp('skipping: test passes on sympy >= 0.7.6')
-%!   error('ShapeError')   % pass the test with correct error
-%! else
-%!   v = [sym(1) sym(2)];
-%!   q = sym(ones(0, 3));
-%!   w = [v; q];
-%! end
+%! v = [sym(1) sym(2)];
+%! q = sym(ones(0, 3));
+%! w = vertcat(v, q);
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
