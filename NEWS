@@ -30,8 +30,11 @@ octsympy 2.4.0-dev
   * Add spherical Bessel functions: these are called `besseljn` and
     `besselyn` (for now, subject to change).  Thanks to Utkarsh Gautam.
 
-  * The environment variable `PYTHON` can control which Python executable
-    is used.  Changing the Python executable should work on Windows.
+  * The environment variable `PYTHON` controls which Python executable is
+    used.  The command
+         `sympref python C:\bin\python`
+    has been deprecated; instead please use:
+         `setenv PYTHON C:\bin\python`
 
 
 

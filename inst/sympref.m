@@ -30,41 +30,27 @@
 %% @var{args} are documented below.
 %%
 %%
-%% Get the current @strong{Python executable} path/name:
+%% Get the name of the @strong{Python executable}:
 %% @example
 %% @comment doctest: +SKIP
 %% sympref python
 %%   @result{} ans = python
 %% @end example
 %%
-%% By default, this value is first taken from an environment
-%% variable called @code{PYTHON}.  This can be configured
-%% in the OS or it can be set within Octave using:
+%% This value can be changed by setting the environment variable
+%% @code{PYTHON}, which can be configured in the OS, or it can be
+%% set within Octave using:
 %% @example
 %% @comment doctest: +SKIP
-%% setenv('PYTHON', '/usr/bin/python')
+%% setenv PYTHON /usr/bin/python
+%% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
+%% (In older versions, @code{sympref python /bin/python} could be
+%% used: this is deprecated and will be removed in a future version.)
 %%
-%% Alternatively, the environment variable can be overriden by:
-%% @example
-%% @group
-%% @comment doctest: +SKIP
-%% sympref python '/usr/bin/python'
-%% sympref python 'C:\Python\python.exe'
-%% @end group
-%% @end example
-%%
-%% Finally, if neither is set, the package typically assumes the
-%% command is simply @code{python}.
-%%
-%% The default behaviour can be restored using either:
-%% @example
-%% @comment doctest: +SKIP
-%% sympref python []
-%% sympref('python', '')
-%% @end example
-%% or with `sympref defaults` as noted below.
+%% If the environment variable is empty or not set, the package
+%% uses a default setting (usually @code{python}).
 %%
 %%
 %% @strong{Display} of syms:
@@ -285,24 +271,28 @@ function varargout = sympref(cmd, arg)
       end
 
     case 'python'
-      if (nargin == 1)
-        DEFAULTPYTHON = 'python';
-        if isempty(settings.whichpython)
-          pyexec = getenv('PYTHON');
-          if (isempty(pyexec))
-            pyexec = DEFAULTPYTHON;
-          end
+      if (nargin ~= 1)
+        %error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        warning('OctSymPy:deprecation', ...
+          '''sympref python foo'' deprecated; use ''setenv PYTHON foo'' instead');
+        if (isempty(arg) || strcmp(arg,'[]'))
+          settings.whichpython = '';
+          sympref('reset')
         else
-          pyexec = settings.whichpython;
+          settings.whichpython = arg;
+          sympref('reset')
         end
-        varargout{1} = pyexec;
-      elseif (isempty(arg) || strcmp(arg,'[]'))
-        settings.whichpython = '';
-        sympref('reset')
-      else
-        settings.whichpython = arg;
-        sympref('reset')
+        return
       end
+      DEFAULTPYTHON = 'python';
+      pyexec = getenv('PYTHON');
+      if (isempty(pyexec))
+        pyexec = settings.whichpython;   % FIXME: deprecated; remove
+        if (isempty(pyexec))
+          pyexec = DEFAULTPYTHON;
+        end
+      end
+      varargout{1} = pyexec;
 
     case 'ipc'
       if (nargin == 1)
