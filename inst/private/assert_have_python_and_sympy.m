@@ -19,8 +19,8 @@
 function assert_have_python_and_sympy(pyexec)
 %private function
 
-  [st, out] = system([pyexec ' -c "a = 42"']);
-  if (st ~= 0)
+  [st, out] = system([pyexec ' -c "print(\"hello world\")"']);
+  if ( (st ~= 0) || (~ strcmp(strtrim(out), 'hello world')) )
     error('OctSymPy:nopython', ...
           ['Cannot run the Python executable "%s"\n' ...
            '    Python and SymPy are needed for most Symbolic features.\n' ...
