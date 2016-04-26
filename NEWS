@@ -33,7 +33,7 @@ octsympy 2.4.0-dev
   * The environment variable `PYTHON` controls which Python executable is
     used.  The command
          `sympref python C:\bin\python`
-    has been removed; instead one should use:
+    has been deprecated; instead please use:
          `setenv PYTHON C:\bin\python`
 
 

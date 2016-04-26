@@ -47,7 +47,7 @@
 %% sympref reset
 %% @end example
 %% (In older versions, @code{sympref python /bin/python} could be
-%% used: this has been removed.)
+%% used: this is deprecated and will be removed in a future version.)
 %%
 %% If the environment variable is empty or not set, the package
 %% uses a default setting (usually @code{python}).
@@ -205,6 +205,7 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
+      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('snippet', 'default')
@@ -271,12 +272,25 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-        error('please use "setenv" instead of "sympref" to change the python command')
+        %error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        warning('OctSymPy:deprecation', ...
+          '''sympref python foo'' deprecated; use ''setenv PYTHON foo'' instead');
+        if (isempty(arg) || strcmp(arg,'[]'))
+          settings.whichpython = '';
+          sympref('reset')
+        else
+          settings.whichpython = arg;
+          sympref('reset')
+        end
+        return
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
       if (isempty(pyexec))
-        pyexec = DEFAULTPYTHON;
+        pyexec = settings.whichpython;   % FIXME: deprecated; remove
+        if (isempty(pyexec))
+          pyexec = DEFAULTPYTHON;
+        end
       end
       varargout{1} = pyexec;
 
