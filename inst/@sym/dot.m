@@ -50,8 +50,9 @@
 
 function c = dot(a, b)
 
+  % conjugate linear in the 1st slot to match the behavior of @double/dot
   cmd = { 'a, b = _ins'
-          'return a.dot(b),'
+          'return a.conjugate().dot(b),'
         };
 
   c = python_cmd (cmd, sym(a), sym(b));
@@ -72,3 +73,5 @@ end
 %! c = dot(a, b);
 %! assert (isequal (c, sym(0)))
 
+%!test
+%! assert (isequal (dot (sym([1 i]), sym([i 2])), sym(-i)))
