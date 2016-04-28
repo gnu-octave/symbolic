@@ -20,7 +20,7 @@ if test -z "$PYTHON"; then
 fi
 
 AC_MSG_CHECKING(for SymPy version)
-min_sympy_version='0.7.5'
+min_sympy_version='0.7.6'
 version=`$PYTHON -c "import sympy; print(sympy.__version__)" 2>/dev/null`
 if test $? -eq 0; then
   AC_MSG_RESULT($version)
