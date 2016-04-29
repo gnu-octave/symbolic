@@ -140,13 +140,6 @@ function r = process_item(item)
         r = do_string_escapes(do_highbyte_escapes(str_post_xml_filter(C{2})));
       end
 
-    case OCTCODE_USTR
-      assert(M == 1)
-      % FIXME: Extra printf...?  doc
-      %newl = sprintf('\n');
-      %r = strrep(C{2}, '\n', newl);
-      r = str_post_xml_filter(C{2});
-
     case OCTCODE_BOOL
       assert(M == 1)
       r = strcmpi(C{2}, 'true');

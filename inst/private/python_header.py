@@ -189,7 +189,6 @@ try:
         OCTCODE_INT = 1001
         OCTCODE_DOUBLE = 1002
         OCTCODE_STR = 1003
-        OCTCODE_USTR = 1004
         OCTCODE_BOOL = 1005
         OCTCODE_DICT = 1010
         OCTCODE_SYM = 1020
