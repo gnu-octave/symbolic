@@ -14,7 +14,7 @@ else
   AC_MSG_RESULT(yes)
 fi
 
-AC_PATH_PROG(PYTHON, python)
+AC_CHECK_PROG(PYTHON, python, [python], [])
 if test -z "$PYTHON"; then
   AC_MSG_WARN(Failed to find Python: many features will not work)
 fi
