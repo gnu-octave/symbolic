@@ -137,7 +137,7 @@ function r = process_item(item)
       if (isempty(C{2}))
         r = '';
       else
-        r = str_post_xml_filter(C{2});
+        r = do_string_escapes(do_highbyte_escapes(str_post_xml_filter(C{2})));
       end
 
     case OCTCODE_USTR
