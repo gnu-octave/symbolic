@@ -36,6 +36,10 @@ octsympy 2.4.0-dev
     has been deprecated; instead please use:
          `setenv PYTHON C:\bin\python`
 
+  * Improve support for Windows.
+
+  * Installation scripts merely warn if Python and SymPy aren't found.
+
 
 
 octsympy 2.3.0 (2016-04-08)
