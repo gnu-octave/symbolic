@@ -331,6 +331,20 @@ end
 %! s2 = python_cmd (cmd);
 %! assert (strcmp (s1, s2))
 
+%!test
+%! % unicode with \x
+%! s1 = '我';
+%! cmd = 'return b"\xe6\x88\x91".decode("utf-8")';
+%! s2 = python_cmd (cmd);
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % unicode with \x and some escaped backslashes
+%! s1 = '\我\';
+%! cmd = 'return b"\\\xe6\x88\x91\\".decode("utf-8")';
+%! s2 = python_cmd (cmd);
+%! assert (strcmp (s1, s2))
+
 %%!test
 %%! % unicode passthru: FIXME: how to get unicode back to Python?
 %%! s1 = '我爱你'

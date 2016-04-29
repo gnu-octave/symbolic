@@ -5,29 +5,56 @@ function r = do_highbyte_escapes(s)
 %   represent utf-8 characters.
 %
 %   Example:
-%   >> s = 'a\xe2\x8c\x88y\xe2\x8c\x89b';
+%   >> s = 'aaa\xe2\x8c\x88bbb\xe2\x8c\x89ccc';
 %   >> do_highbyte_escapes(s)
-%      ans = a⌈y⌉b
+%      ans = aaa⌈bbb⌉ccc
 %
+%
+%   But be careful for escaped backslashes that happen to be followed
+%   by an 'x'; substrings with an even number of backspaces such as
+%   '\\x' or '\\\\x' should not be converted.  Examples:
+%   >> s = 'aaa \xe2\x8c\x88 bbb \\xe2\\x8c\\\\x89 ccc';
+%   >> do_highbyte_escapes(s)
+%      ans = aaa ⌈ bbb \\xe2\\x8c\\\\x89 ccc
+%
+%   >> s = 'aaa \\\xe2\x8c\x88 bbb';
+%   >> do_highbyte_escapes(s)
+%      ans = aaa \\⌈ bbb
 
-  I = strfind(s, '\x');
 
-  if (isempty(I))
-    r = s;
+  % pad the string with one char in case string starts with \x
+  s = ['_' s];
+  i = 2;  % start at 2 b/c of this padding
+
+  [TE, NM] = regexp(s, '(?<=[^\\])(?:\\\\)*\\x(?<hex>..)', 'tokenExtents', 'names');
+  %                      1.  2.    3.          4.
+  % explanation:
+  % 1. look behind ...
+  % 2. ... for anything that isn't '\'
+  % 3. zero or more pairs '\\'
+  % 4. two chars as a named token
+
+  if (isempty(TE))
+    r = s(i:end);
     return
   end
 
-  % new string with X instead of escapes
-  r = regexprep(s, '\\x(..)',  'X');
+  % get the two-char hex numbers make them into bytes
+  dec = char(hex2dec(NM.hex));
+  % faster:
+  %d = uint8('ee');
+  %d = (d >= 48 & d <= 57).*(d-48) + (d >= 97 & d <= 102).*(d-87);
+  %d = 16*d(1) + d(2);
 
-  % list of 2 digit hex numbers
-  s2 = s([I'+2 I'+3]);
-  % slowest part on Octave
-  dec = char(hex2dec(s2));
-
-  % positions of escaped bytes in the new string r
-  I = I - [0:4:(4*length(I)-1)] + [0:(length(I)-1)];
-  r(I) = dec;
+  % Yep, its a loop :(  Takes about 0.02s for a string of length 1179
+  % containing 291 escaped unicode chars.  Roughly 6 times slower than
+  % the hex2dec bit above.
+  r = '';
+  for j=1:length(TE)
+    r = [r s(i:TE{j}(1)-3) dec(j)];
+    i = TE{j}(2)+1;
+  end
+  r = [r s(i:end)];
 
   if (~ exist ('octave_config_info', 'builtin'))
     % matlab is not UTF-8 internally
@@ -35,3 +62,23 @@ function r = do_highbyte_escapes(s)
   end
 
 end
+
+%!test
+%! s = 'a\\\xe2\x8c\x88y\xe2\x8c\x89b';
+%! r = 'a\\⌈y⌉b';
+%! assert (do_highbyte_escapes(s), r)
+
+%!test
+%! s = '\\xe2';
+%! r = '\\xe2';
+%! assert (do_highbyte_escapes(s), r)
+
+%!test
+%! s = '\xe2\x8c\x88';
+%! r = '⌈';
+%! assert (do_highbyte_escapes(s), r)
+
+%!test
+%! s = '\\\xe2\x8c\x88';
+%! r = '\\⌈';
+%! assert (do_highbyte_escapes(s), r)
