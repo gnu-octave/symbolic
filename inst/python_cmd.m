@@ -356,8 +356,8 @@ end
 %%! % unicode w/ slashes, escapes, etc  FIXME
 %%! s1 = '我爱你<>\\&//\\#%% %\\我'
 %%! s3 = '我爱你<>\&//\#%% %\我'
-%%! cmd = 'return u"\u6211\u7231\u4f60",';
-%%! s2 = python_cmd (cmd)
+%%! cmd = 'return _ins[0]';
+%%! s2 = python_cmd (cmd, s1)
 %%! assert (strcmp (s2, s3))
 
 %!test
