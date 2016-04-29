@@ -393,6 +393,10 @@ end
 %! assert (isequal (a, 3))
 
 %!test
+%! % return empty string (was https://bugs.python.org/issue25270)
+%! assert (isempty (python_cmd ('return ""')))
+
+%!test
 %! % return nothing (via an empty list)
 %! % note distinct from 'return [],'
 %! python_cmd('return []')

@@ -71,6 +71,9 @@ try:
         return LooseVersion(v.replace('.dev', ''))
     def myesc(s):
         if sys.version_info >= (3, 0):
+            # workaround https://bugs.python.org/issue25270
+            if not s:
+                return s
             b, n = codecs.escape_encode(s.encode('utf-8'))
             return b.decode('ascii')
         else:
