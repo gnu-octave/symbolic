@@ -21,17 +21,21 @@
 %% @deftypefn  {Function File} {@var{s} =} dot (@var{a}, @var{b})
 %% Symbolic dot (scalar) product.
 %%
+%% This function computes 'sum (conj (A) .* B)'.
+%%
 %% Examples:
 %% @example
 %% @group
 %% a = [sym('a1'); sym('a2'); sym('a3')];
 %% b = [sym('b1'); sym('b2'); sym('b3')];
 %% dot(a, b)
-%%    @result{} (sym) a₁⋅b₁ + a₂⋅b₂ + a₃⋅b₃
+%%    @result{} (sym)
+%%          __      __      __
+%%       b₁⋅a₁ + b₂⋅a₂ + b₃⋅a₃
 %% dot(a, a)
 %%    @result{} (sym)
-%%         2     2     2
-%%       a₁  + a₂  + a₃
+%%          __      __      __
+%%       a₁⋅a₁ + a₂⋅a₂ + a₃⋅a₃
 %% @end group
 %% @end example
 %%
