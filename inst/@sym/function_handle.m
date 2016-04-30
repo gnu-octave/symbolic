@@ -130,9 +130,16 @@ function f = function_handle(varargin)
     [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
     fprintf(fid, '%s', M.code)
+    fflush(fid);
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
+    
+    fprintf('Checking for the function to exist... ');
+    while (exist(fcnname) == 0)
+    end
+    fprintf('Found!\n');
     f = str2func(fcnname);
+    
 
   else % output function handle
 
