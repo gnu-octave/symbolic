@@ -31,7 +31,7 @@
 function print_usage ()
 
   % if we are on Octave
-  if (exist ('octave_config_info', 'builtin'))
+  if (exist ('OCTAVE_VERSION', 'builtin'))
     %evalin ('caller', 'print_usage ();' );
     %return
   end
