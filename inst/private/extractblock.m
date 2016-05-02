@@ -125,7 +125,7 @@ function r = process_item(item)
   wh = str2double(a);
   assert (~isnan(wh))
 
-  if (~ exist ('octave_config_info', 'builtin'))
+  if (~ exist ('OCTAVE_VERSION', 'builtin'))
     do_string_escapes = @(s) sprintf(s);
   end
 

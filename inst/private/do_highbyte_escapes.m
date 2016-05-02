@@ -40,7 +40,7 @@ function r = do_highbyte_escapes(s)
   end
 
   % get the two-char hex numbers make them into bytes
-  if (exist ('octave_config_info', 'builtin'))
+  if (exist ('OCTAVE_VERSION', 'builtin'))
     dec = char(hex2dec(NM.hex));
   else
     % Matlab:
@@ -61,7 +61,7 @@ function r = do_highbyte_escapes(s)
   end
   r = [r s(i:end)];
 
-  if (~ exist ('octave_config_info', 'builtin'))
+  if (~ exist ('OCTAVE_VERSION', 'builtin'))
     % matlab is not UTF-8 internally
     r = native2unicode(uint8(r));
   end
