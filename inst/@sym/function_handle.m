@@ -243,7 +243,7 @@ end
 %!test
 %! % output to disk
 %! fprintf('\n')
-%! if (exist ('octave_config_info', 'builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   temp_file = tempname('', 'oct_');
 %! else
 %!   temp_file = tempname();
@@ -263,7 +263,7 @@ end
 
 %!test
 %! % output to disk: also works with .m specified
-%! if (exist ('octave_config_info', 'builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   temp_file = [tempname('', 'oct_') '.m'];
 %! else
 %!   temp_file = [tempname() '.m'];
@@ -297,7 +297,7 @@ end
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
-%! if (exist ('octave_config_info', 'builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   temp_file = tempname('', 'oct_');
 %! else
 %!   temp_file = tempname();

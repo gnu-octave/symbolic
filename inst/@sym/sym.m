@@ -573,7 +573,7 @@ end
 %! assert (isequal (a, a1))
 %! assert (isequal (a, a2))
 %! % Octave only, and eval to hide from Matlab parser
-%! if exist('octave_config_info', 'builtin')
+%! if exist('OCTAVE_VERSION', 'builtin')
 %!   eval( 'a3 = sym("Symbol(''a'')");' );
 %!   eval( 'a4 = sym("Symbol(\"a\")");' );
 %!   assert (isequal (a, a3))
