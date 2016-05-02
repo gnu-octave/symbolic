@@ -257,7 +257,11 @@ end
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! assert (unlink([temp_file '.m']) == 0)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink([temp_file '.m']) == 0)
+%! else
+%!   delete ([temp_file '.m'])
+%! end
 %! % remove temp_path from load path
 %! rmpath(temp_path);
 
@@ -277,7 +281,11 @@ end
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! assert (unlink(temp_file) == 0)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink(temp_file) == 0)
+%! else
+%!   delete (temp_file)
+%! end
 %! % remove temp_path from load path
 %! rmpath(temp_path);
 
@@ -311,7 +319,11 @@ end
 %! assert(isequal(t1, [1 2 3]))
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
-%! assert (unlink([temp_file '.m']) == 0)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink([temp_file '.m']) == 0)
+%! else
+%!   delete ([temp_file '.m'])
+%! end
 %! % remove temp_path from load path
 %! rmpath(temp_path);
 
