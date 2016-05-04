@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{tf} =} ismember (@var{x}, @var{S})
-%% @deftypefnx {Function File} {@var{Z} =}  ismember (@var{x}, @var{M})
+%% @defmethod  @@sym ismember (@var{x}, @var{S})
+%% @defmethodx @@sym ismember (@var{x}, @var{M})
 %% Test if an object is contained within a set or a matrix.
 %%
 %% This function can be used in two ways, the first is to check
@@ -53,8 +53,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{unique, union, intersect, setdiff, setxor}
-%% @end deftypefn
+%% @seealso{@@sym/unique, @@sym/union, @@sym/intersect, @@sym/setdiff,
+%%          @@sym/setxor}
+%% @end defmethod
 
 function r = ismember(x, y)
 
