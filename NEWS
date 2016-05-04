@@ -31,6 +31,8 @@ octsympy 2.4.0-dev
   * Add spherical Bessel functions: these are called `besseljn` and
     `besselyn` (for now, subject to change).  Thanks to Utkarsh Gautam.
 
+  * Fix: `@sym/dot` consistent with `@double/dot` thanks to Alex Vong.
+
   * The environment variable `PYTHON` controls which Python executable is
     used.  The command
          `sympref python C:\bin\python`
