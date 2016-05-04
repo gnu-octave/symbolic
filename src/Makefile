@@ -24,6 +24,7 @@ codegen_clean:
 
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
+	cp -pR ../misc/octassert.m ../matlab/tests_matlab/
 	cp -pR ../extract_tests_for_matlab.m ../matlab/
 	cp -pR ../octsympy_tests_matlab.m ../matlab/
 	cd ../matlab/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
