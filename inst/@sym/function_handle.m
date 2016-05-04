@@ -134,12 +134,17 @@ function f = function_handle(varargin)
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
     
-    fprintf('Checking for the function to exist... ');
+    %FIXME: Check upstream to rehash the files correctly once created
+    if(exist('OCTAVE_VERSION') && ispc())
+    fprintf('Due to an upstream bug in octave on windows, we have to wait for the file to be loaded.\n');
+    fprintf('See https://savannah.gnu.org/bugs/?31080 for more information...\n');
+    fprintf('Finding function %s... ', fcnname);
     while (exist(fcnname) == 0)
     end
-    fprintf('Found!\n');
-    f = str2func(fcnname);
+    fprintf('Found!\n\n');
+    end
     
+    f = str2func(fcnname);
 
   else % output function handle
 
