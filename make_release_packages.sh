@@ -52,6 +52,7 @@ cp -R octsympy ${DIR}
 ( cd ${DIR}/src/
   make distclean
   ./bootstrap
+  rm -rf autom4te.cache
   make clean )
 
 # here are the packages
