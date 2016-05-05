@@ -38,7 +38,9 @@ function assert_have_python_and_sympy(pyexec)
           'Python cannot import SymPy: have you installed SymPy?')
   else
     spver = strtrim(out);
-    if (compare_versions (spver, minsympyver, '<'))
+    % we have no compare_versions on matlab, just assume its ok (!)
+    if (exist ('OCTAVE_VERSION', 'builtin') & ...
+        (compare_versions (spver, minsympyver, '<')))
       error('OctSymPy:oldsympy', ...
             'SymPy is installed but is too old (sympy-%s found, %s required)', ...
             spver, minsympyver)

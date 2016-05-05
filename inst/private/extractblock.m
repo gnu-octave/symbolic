@@ -124,6 +124,11 @@ function r = process_item(item)
   a = C{1};
   wh = str2double(a);
   assert (~isnan(wh))
+
+  if (~ exist ('OCTAVE_VERSION', 'builtin'))
+    do_string_escapes = @(s) sprintf(s);
+  end
+
   switch wh
     case OCTCODE_INT
       assert(M == 1)

@@ -24,18 +24,19 @@ codegen_clean:
 
 ml_extract_tests: ml_copy
 	mkdir -p ../matlab/tests_matlab/
-	cp -pR ../extract_tests_for_matlab.m ../matlab/
-	cp -pR ../octsympy_tests_matlab.m ../matlab/
+	cp -pR ../misc/octassert.m ../matlab/tests_matlab/
+	cp -pR ../misc/extract_tests_for_matlab.m ../matlab/
+	cp -pR ../misc/octsympy_tests_matlab.m ../matlab/
 	cd ../matlab/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
 	rm -f ../matlab/extract_tests_for_matlab.m
 
 ml_copy: ml_convert
 	cp -pR ../inst/private ../matlab/
-	mv ../matlab/private/my_print_usage.m ../matlab/private/print_usage.m
 	cp -pR ../inst/@sym/private ../matlab/@sym/
 	cp -pR ../inst/@symfun/private ../matlab/@symfun/
-	cp -pR ../matlab/private/print_usage.m ../matlab/@sym/private/
-	cp -pR ../matlab/private/print_usage.m ../matlab/@symfun/private/
+	cp -pR ../misc/my_print_usage.m ../matlab/private/print_usage.m
+	cp -pR ../misc/my_print_usage.m ../matlab/@sym/private/print_usage.m
+	cp -pR ../misc/my_print_usage.m ../matlab/@symfun/private/print_usage.m
 	cp -fp ../CONTRIBUTORS ../matlab/
 	cp -fp ../NEWS ../matlab/
 	cp -fp ../COPYING ../matlab/
@@ -48,7 +49,7 @@ ml_convert:
 	mkdir -p ../matlab/@sym/
 	mkdir -p ../matlab/@symfun/
 	mkdir -p ../matlab/@logical/
-	cp -pR ../convert_comments.m ../matlab/
+	cp -pR ../misc/convert_comments.m ../matlab/
 	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '',         '../matlab/')"
 	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '@symfun',  '../matlab/')"
 	cd ../matlab/; ${OCTAVE} -q --eval "convert_comments('../inst/', '@sym',     '../matlab/')"

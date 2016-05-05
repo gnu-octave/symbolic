@@ -40,7 +40,12 @@ function r = do_highbyte_escapes(s)
   end
 
   % get the two-char hex numbers make them into bytes
-  dec = char(hex2dec(NM.hex));
+  if (exist ('OCTAVE_VERSION', 'builtin'))
+    dec = char(hex2dec(NM.hex));
+  else
+    % Matlab:
+    dec = arrayfun(@(s) char(hex2dec(s.hex)), NM);
+  end
   % faster:
   %d = uint8('ee');
   %d = (d >= 48 & d <= 57).*(d-48) + (d >= 97 & d <= 102).*(d-87);

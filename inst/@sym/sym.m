@@ -690,4 +690,8 @@ end
 %! load(myfile)
 %! assert(isequal(y, 2*x))
 %! assert(a == 42)
-%! assert(unlink(myfile) == 0)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert(unlink(myfile) == 0)
+%! else
+%!   delete(myfile)
+%! end
