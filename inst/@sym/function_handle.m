@@ -130,16 +130,17 @@ function f = function_handle(varargin)
     [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
     fprintf(fid, '%s', M.code)
-    fflush(fid);
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
     
-    %FIXME: Check upstream to rehash the files correctly once created
-    if(exist('OCTAVE_VERSION') && ispc())
-    fprintf('Due to an upstream bug in octave on windows, we have to wait for the file to be loaded.\n');
-    fprintf('See https://savannah.gnu.org/bugs/?31080 for more information...\n');
+    % FIXME: Check upstream to rehash the files correctly once created
+    % Due to an upstream bug in octave on windows, we have to wait for the file to be loaded.
+    % See https://savannah.gnu.org/bugs/?31080 for more information...\n
+    if(exist('OCTAVE_VERSION', 'builtin') && ispc())
     fprintf('Finding function %s... ', fcnname);
+    fflush(stdout);
     while (exist(fcnname) == 0)
+        rehash
     end
     fprintf('Found!\n\n');
     end
