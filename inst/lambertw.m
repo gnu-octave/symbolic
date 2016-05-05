@@ -170,7 +170,7 @@ end
 %! % input shape preserved
 %! x = [0 1; 2 3];
 %! b = x;
-%! W = lambertw (x, x);
+%! W = lambertw (b, x);
 %! assert (W.*exp (W), x, -10*eps)
 
 %!test
