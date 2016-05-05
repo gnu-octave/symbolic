@@ -39,6 +39,9 @@
 %% Keywords: symbolic
 
 function y = cosh(x)
+  if (nargin ~= 1)
+    print_usage ();
+  end
   y = uniop_helper (x, 'cosh');
 end
 
