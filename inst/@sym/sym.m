@@ -693,5 +693,5 @@ end
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   assert(unlink(myfile) == 0)
 %! else
-%!   delete(myfile)
+%!   delete([myfile '.mat'])
 %! end
