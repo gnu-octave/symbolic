@@ -169,6 +169,6 @@ end
 %! L = laguerreL ([0 1 2 3], 6);
 %! assert (L, [1 -5 7 1], eps)
 
-%! assert (isa (laguerreL (0, single (1)), 'single'))
-%! assert (isa (laguerreL (1, single ([1 2])), 'single'))
-%! assert (isa (laguerreL ([1 2], single ([1 2])), 'single'))
+%!assert (isa (laguerreL (0, single (1)), 'single'))
+%!assert (isa (laguerreL (1, single ([1 2])), 'single'))
+%!assert (isa (laguerreL ([1 2], single ([1 2])), 'single'))
