@@ -132,6 +132,20 @@ function f = function_handle(varargin)
     fprintf(fid, '%s', M.code)
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
+
+    % FIXME: Check upstream to rehash the files correctly once created
+    % Due to an upstream bug in octave on windows, we have to wait for the file to be loaded.
+    % See https://savannah.gnu.org/bugs/?31080 for more information...\n
+    if (exist('OCTAVE_VERSION', 'builtin') && ispc())
+      fprintf('Workaround savannah.gnu.org/bugs/?31080: waiting for %s... ', fcnname);
+      fflush(stdout);
+      while (exist(fcnname) == 0)
+        rehash()
+        pause(1)
+      end
+      fprintf('Found!\n');
+    end
+
     f = str2func(fcnname);
 
   else % output function handle
