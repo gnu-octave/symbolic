@@ -189,6 +189,9 @@ def autogen_functions(L, where):
 """)
 
         fd.write("function y = %s(x)\n" % f)
+        fd.write("  if (nargin ~= 1)\n")
+        fd.write("    print_usage ();\n")
+        fd.write("  end\n")
         fd.write("  y = uniop_helper (x, '%s');\n" % d['spname'])
         fd.write("end\n")
 
