@@ -12,6 +12,7 @@ octsympy 2.4.0-dev
           expint
           fresnelc
           fresnels
+          gammainc
           laguerreL
           logint
           sinint
