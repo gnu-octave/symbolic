@@ -374,7 +374,7 @@ end
 %! assert (d.a == 6 && d.b == 10)
 
 %!test
-%! r = python_cmd ("return 6");
+%! r = python_cmd ('return 6');
 %! assert (isequal (r, 6))
 
 %!test
