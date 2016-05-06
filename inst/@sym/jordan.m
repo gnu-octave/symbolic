@@ -41,8 +41,8 @@
 %% We can also compute the generalized eigenvectors:
 %% @example
 %% @group
-%% [V, D] = jordan (A)
-%%   @result{} V = (sym 4×4matrix)
+%% [V, J] = jordan (A)
+%%   @result{} V = (sym 4×4 matrix)
 %%       ⎡12  1  -26  -2⎤
 %%       ⎢              ⎥
 %%       ⎢-6  2  18   -3⎥
@@ -83,7 +83,7 @@
 %%       ⎢1⎥
 %%       ⎢ ⎥
 %%       ⎣0⎦
-%% v1 = B * v
+%% v1 = B * v2
 %%   @result{} v1 = (sym 4×1 matrix)
 %%       ⎡12⎤
 %%       ⎢  ⎥
