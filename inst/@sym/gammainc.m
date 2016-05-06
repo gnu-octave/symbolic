@@ -89,7 +89,7 @@ end
 %! B = double (gammainc (xs, a));
 %! assert(A, B, -eps)
 
-%!xtest
+%!test
 %! % compare to double
 %! x = 5; a = 1;
 %! A = gammainc (x, a, 'upper');
@@ -97,14 +97,16 @@ end
 %! assert(A, B, -10*eps)
 
 %!xtest
-%! % compare to double
+%! % compare to double: fails:
+%! % https://savannah.gnu.org/bugs/index.php?47800
 %! x = 10; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
 
 %!xtest
-%! % compare to double
+%! % compare to double: fails:
+%! % https://savannah.gnu.org/bugs/index.php?47800
 %! x = 40; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
