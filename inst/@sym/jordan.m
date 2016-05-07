@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{J} =} jordan (@var{A})
-%% @deftypefnx {Function File} {[@var{V}, @var{J}] =} jordan (@var{A})
+%% @deftypemethod @@sym {@var{J} =} jordan (@var{A})
+%% @deftypemethod {Function File} {[@var{V}, @var{J}] =} jordan (@var{A})
 %% Symbolic Jordan canonical form of a matrix.
 %%
 %% Example:
@@ -61,8 +61,8 @@
 %% @end group
 %% @end example
 %% The generalized eigenvectors are the columns of @var{V}.
-%% Those corresponding to a jordan block form a cycle.
-%% We can check those columns corresponding to the leftmost jordan block:
+%% Those corresponding to a Jordan block form a cycle.
+%% We can check those columns corresponding to the leftmost Jordan block:
 %% @example
 %% @group
 %% B = A - J(2, 2) * eye (4)
@@ -113,9 +113,9 @@
 function [V, J] = jordan (A)
   cmd = {'(A,) = _ins'
          'if A.is_Matrix:'
-         '    (V, J) = A.jordan_form ()'
+         '    (V, J) = A.jordan_form()'
          'else:'
-         '    (V, J) = sp.Matrix ([A]).jordan_form ()'};
+         '    (V, J) = sp.Matrix([A]).jordan_form()'};
 
   if (nargout <= 1)
     V = python_cmd ([cmd; {'return (J,)'}], sym (A));
@@ -123,6 +123,7 @@ function [V, J] = jordan (A)
     [V, J] = python_cmd ([cmd; {'return (V, J)'}], sym (A));
   end
 end
+
 
 %!test
 %! % basic
