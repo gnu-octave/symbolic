@@ -49,17 +49,18 @@ end
 
 
 %!shared x, d
-%! d = 1;
-%! x = sym('1');
+%! d = 2;
+%! x = sym('2');
 
 %!test
 %! f1 = cbrt(x);
-%! f2 = cbrt(d);
+%! f2 = 1.2599210498948731647;
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
 %!test
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = cbrt(A);
-%! f2 = cbrt(D);
+%! f2 = 1.2599210498948731647;
+%! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
