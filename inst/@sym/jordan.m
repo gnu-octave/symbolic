@@ -160,7 +160,11 @@ end
 
 %!test
 %! % matrices of mixed entries
-%! A = [sym('x')+9 sym('y'); sym(0) 6];
-%! [V, D] = eig (A);
-%! J = jordan (A);
-%! assert (isequal (simplify (D), simplify (J)));
+%! if (python_cmd ('return (Version(spver) < Version("1.0"),)'))
+%!   disp('  skipping a test b/c SymPy < 1.0')
+%! else
+%!   A = [sym('x')+9 sym('y'); sym(0) 6];
+%!   [V, D] = eig (A);
+%!   J = jordan (A);
+%!   assert (isequal (simplify (D), simplify (J)));
+%! end
