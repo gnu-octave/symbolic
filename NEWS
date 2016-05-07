@@ -13,8 +13,10 @@ octsympy 2.4.0-dev
           fresnelc
           fresnels
           gammainc
+          gammaln
           jordan
           laguerreL
+          lgamma
           logint
           psi
           sinint
