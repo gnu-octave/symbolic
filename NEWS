@@ -16,6 +16,7 @@ octsympy 2.4.0-dev
           jordan
           laguerreL
           logint
+          psi
           sinint
           sinhint
           ssinint
