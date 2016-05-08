@@ -50,9 +50,6 @@ coshint|Chi|1,0.8378669409802082408947||2016
 sinhint|Shi|1,1.057250875375728514572||2016
 logint|li|2,1.045163780117492784845||2016
 """
-# todo:
-#psi(x)|polygamma(0,x)
-#psi(k,x)|polygamma(k,x)
 
 # sec, csc don't have hyperbolic or arc
 #sech asec asech
