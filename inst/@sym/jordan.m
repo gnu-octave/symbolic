@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypemethod @@sym {@var{J} =} jordan (@var{A})
-%% @deftypemethod {Function File} {[@var{V}, @var{J}] =} jordan (@var{A})
+%% @deftypemethodx @@sym {[@var{V}, @var{J}] =} jordan (@var{A})
 %% Symbolic Jordan canonical form of a matrix.
 %%
 %% Example:
@@ -105,7 +105,7 @@
 %% @end example
 %%
 %% @seealso{@@sym/charpoly, @@sym/eig}
-%% @end deftypefn
+%% @end deftypemethod
 
 %% Author: Alex Vong
 %% Keywords: symbolic
