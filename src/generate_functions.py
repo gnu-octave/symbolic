@@ -30,6 +30,11 @@ atan
 atanh||1/2
 csc
 sec
+acsc||||2016
+asec||2||2016
+csch||||2016
+sech||||2016
+asech||1/2||2016
 cot
 coth
 acot
@@ -51,10 +56,7 @@ sinhint|Shi|1,1.057250875375728514572||2016
 logint|li|2,1.045163780117492784845||2016
 zeta||2,pi^2/6||2016
 """
-
-# sec, csc don't have hyperbolic or arc
-#sech asec asech
-#csch acsc acsch
+# FIXME: acsch: https://github.com/sympy/sympy/pull/10714
 
 
 license_boilerplate = \
