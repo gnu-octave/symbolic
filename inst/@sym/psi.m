@@ -81,25 +81,37 @@ end
 %! us = vpa (psi (1, sym (-2) + sym(3i)), 40);
 %! assert (abs(double(maple-us)) < 1e-39)
 
-% should match @double/psi
-%!assert (psi (pi),    double (psi (sym (pi))),    -3*eps)
-%!assert (psi (100),   double (psi (sym (100))),   -3*eps)
-%!assert (psi (1e-3),  double (psi (1/sym (1e3))), -3*eps)
-%!assert (psi (-1.5),  double (psi (sym (-3)/2)),  -3*eps)
-%!assert (psi (2i),    double (psi (sym (2i))),    -3*eps)
-%!assert (psi (10i+3), double (psi (sym (10i)+3)), -3*eps)
-%!assert (psi (-8.3),  double (psi (sym (-83)/10)),-3*eps)
+%!test
+%! % should match @double/psi
+%! if (exist ('psi','builtin'))
+%! assert (psi (pi),    double (psi (sym (pi))),    -3*eps)
+%! assert (psi (100),   double (psi (sym (100))),   -3*eps)
+%! assert (psi (1e-3),  double (psi (1/sym (1e3))), -3*eps)
+%! assert (psi (-1.5),  double (psi (sym (-3)/2)),  -3*eps)
+%! assert (psi (2i),    double (psi (sym (2i))),    -3*eps)
+%! assert (psi (10i+3), double (psi (sym (10i)+3)), -3*eps)
+%! assert (psi (-8.3),  double (psi (sym (-83)/10)),-3*eps)
+%! end
 
 %!test
 %! % @double/psi loses accuracy near the poles: note higher rel tol
+%! if (exist ('psi','builtin'))
 %! assert (psi (-1.1),  double (psi (sym (-11)/10)), -6*eps)
 %! assert (psi (-1.01), double (psi (sym (-101)/100)), -50*eps)
+%! end
 
 % 2016-05: for k>0, @double/psi only does real positive
-%!assert (psi (1, pi),   double (psi (1, sym (pi))),    -3*eps)
-%!assert (psi (1, 100),  double (psi (1, sym (100))),   -3*eps)
-%!assert (psi (1, 1e-4), double (psi (1, 1/sym (1e4))), -3*eps)
 
-%!assert (psi (2, pi),   double (psi (2, sym (pi))), -3*eps)
-%!assert (psi (2, 1000), double (psi (2, sym (1000))), -3*eps)
-%!assert (psi (2, 1e-4), double (psi (2, 1/sym (1e4))), -3*eps)
+%!test
+%! if (exist ('psi','builtin'))
+%! assert (psi (1, pi),   double (psi (1, sym (pi))),    -3*eps)
+%! assert (psi (1, 100),  double (psi (1, sym (100))),   -3*eps)
+%! assert (psi (1, 1e-4), double (psi (1, 1/sym (1e4))), -3*eps)
+%! end
+
+%!test
+%! if (exist ('psi','builtin'))
+%! assert (psi (2, pi),   double (psi (2, sym (pi))), -3*eps)
+%! assert (psi (2, 1000), double (psi (2, sym (1000))), -3*eps)
+%! assert (psi (2, 1e-4), double (psi (2, 1/sym (1e4))), -3*eps)
+%! end
