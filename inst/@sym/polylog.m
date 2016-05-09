@@ -62,7 +62,11 @@ end
 
 %!assert (isequal (polylog (sym('s'), 0), sym(0)))
 
-%!assert (isequal (double (polylog (1, sym(-1))), -log(2)))
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! assert (isequal (double (polylog (1, sym(-1))), -log(2)))
+%! end
+
 %!assert (isequal (double (polylog (0, sym(2))), -2))
 %!assert (isequal (double (polylog (-1, sym(2))), 2))
 %!assert (isequal (double (polylog (-2, sym(3))), -1.5))

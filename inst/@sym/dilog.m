@@ -44,6 +44,10 @@ end
 
 %!assert (isequal (dilog (sym(1)), sym(0)))
 %!assert (isequal (dilog (sym(0)), sym(pi)^2/6))
-%!assert (isequal (dilog (sym(2)), -sym(pi)^2/12))
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! assert (isequal (dilog (sym(2)), -sym(pi)^2/12))
+%! end
 
 %!assert (double(dilog(sym(-1))), pi^2/4 - pi*1i*log(2), eps)
