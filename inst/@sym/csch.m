@@ -50,12 +50,12 @@ end
 %! d = 1;
 %! x = sym('1');
 
-%!test
+%!xtest
 %! f1 = csch(x);
 %! f2 = csch(d);
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
-%!test
+%!xtest
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = csch(A);

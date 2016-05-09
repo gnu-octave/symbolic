@@ -50,12 +50,12 @@ end
 %! d = 1/2;
 %! x = sym('1/2');
 
-%!test
+%!xtest
 %! f1 = asech(x);
 %! f2 = asech(d);
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
-%!test
+%!xtest
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = asech(A);

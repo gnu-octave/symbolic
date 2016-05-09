@@ -50,12 +50,12 @@ end
 %! d = 1;
 %! x = sym('1');
 
-%!test
+%!xtest
 %! f1 = sech(x);
 %! f2 = sech(d);
 %! assert( abs(double(f1) - f2) < 1e-15 )
 
-%!test
+%!xtest
 %! D = [d d; d d];
 %! A = [x x; x x];
 %! f1 = sech(A);
