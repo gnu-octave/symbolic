@@ -53,18 +53,22 @@ end
 
 %!test
 %! % compare to Maple: evalf(lnGAMMA(3+2*I));
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! maple = vpa ('-0.0316390593739611898037677296008797172022603', 40) + ...
 %!         vpa ('2.02219319750132712401643376238334982100512j', 40);
 %! us = vpa (gammaln (sym(3) + 2i), 40);
 %! assert (abs(double(maple-us)) < 1e-39)
+%! end
 
 %!test
 %! % compare to Maple: evalf(lnGAMMA(-1.5));
 %! % notably, @double/gammaln has zero imag part
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! maple = vpa ('0.8600470153764810145109326816703567873271571', 40) - ...
 %!         vpa ('6.2831853071795864769252867665590057683943388j', 40);
 %! us = vpa (gammaln (-sym(3)/2), 40);
 %! assert (abs(double(maple-us)) < 1e-39)
+%! end
 
 % should match @double/gammaln
 %!assert (gammaln (pi),    double (gammaln (sym (pi))),    -3*eps)
