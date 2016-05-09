@@ -35,6 +35,8 @@ try:
     from sympy.functions.elementary.piecewise import ExprCondPair
     from sympy.integrals.risch import NonElementaryIntegral
     from sympy.matrices.expressions.matexpr import MatrixElement
+    # for hypergeometric
+    from sympy.functions.special.hyper import TupleArg
     from sympy.utilities.iterables import uniq
     import copy
     import binascii

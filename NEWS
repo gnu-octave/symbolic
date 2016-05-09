@@ -19,6 +19,7 @@ octsympy 2.4.0-dev
           fresnels
           gammainc
           gammaln
+          hypergeom
           jordan
           laguerreL
           lgamma
