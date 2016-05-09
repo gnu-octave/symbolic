@@ -20,6 +20,7 @@ octsympy 2.4.0-dev
           gammainc
           gammaln
           hypergeom
+          igamma
           jordan
           laguerreL
           lgamma
