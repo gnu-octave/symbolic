@@ -3,11 +3,15 @@ octsympy 2.4.0-dev
 
   * New commands:
 
+          acsc
+          asec
+          asech
           besseljn
           besselyn
           cat
           cosint
           coshint
+          csch
           ei
           expint
           fresnelc
@@ -19,6 +23,7 @@ octsympy 2.4.0-dev
           lgamma
           logint
           psi
+          sech
           sinint
           sinhint
           ssinint
