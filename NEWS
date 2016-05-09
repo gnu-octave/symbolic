@@ -12,6 +12,7 @@ octsympy 2.4.0-dev
           cosint
           coshint
           csch
+          dilog
           ei
           expint
           fresnelc
@@ -22,6 +23,7 @@ octsympy 2.4.0-dev
           laguerreL
           lgamma
           logint
+          polylog
           psi
           sech
           sinint
