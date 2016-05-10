@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} lambertw (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} lambertw (@var{k}, @var{x})
+%% @defmethod  @@sym lambertw (@var{x})
+%% @defmethodx @@sym lambertw (@var{k}, @var{x})
 %% Symbolic Lambert W function.
 %%
 %% The Lambert W function is the inverse of @code{W*exp(W)}.  The
@@ -47,7 +47,7 @@
 %% @end group
 %% @end example
 %% @seealso{lambertw}
-%% @end deftypefn
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

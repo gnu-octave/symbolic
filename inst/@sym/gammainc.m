@@ -33,7 +33,7 @@
 %%   @result{} (sym) Γ(a, x)
 %% @end group
 %% @end example
-%% @seealso{gammainc, @@sym/gamma}
+%% @seealso{gammainc, @@sym/igamma, @@sym/gamma}
 %% @end defmethod
 
 function y = gammainc(z, a, which)

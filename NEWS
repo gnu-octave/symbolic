@@ -12,16 +12,20 @@ octsympy 2.4.0-dev
           cosint
           coshint
           csch
+          dilog
           ei
           expint
           fresnelc
           fresnels
           gammainc
           gammaln
+          hypergeom
+          igamma
           jordan
           laguerreL
           lgamma
           logint
+          polylog
           psi
           sech
           sinint
