@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} mpower (@var{x}, @var{y})
-%% Symbolic expression matrix exponentiation (^).
+%% @defop  Method   @@sym mpower {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} ^ @var{y}} {}
+%% Symbolic expression matrix exponentiation.
 %%
 %% Scalar example:
 %% @example
@@ -55,8 +56,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{power}
-%% @end deftypefn
+%% @seealso{@@sym/power}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
