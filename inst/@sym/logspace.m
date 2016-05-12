@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} logspace (@var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{r} =} logspace (@var{a}, @var{b}, @var{n})
+%% @defmethod  @@sym logspace (@var{a}, @var{b})
+%% @defmethodx @@sym logspace (@var{a}, @var{b}, @var{n})
 %% Return a symbolic vector of logarithmically-spaced points.
 %%
 %% The result will be @var{n} points between @code{10^@var{a}}
@@ -65,8 +65,8 @@
 %% @end example
 %% (This example may fail if using SymPy older than 1.0.)
 %%
-%% @seealso{linspace, colon}
-%% @end deftypefn
+%% @seealso{@@sym/linspace}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
