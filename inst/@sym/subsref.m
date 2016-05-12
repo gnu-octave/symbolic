@@ -71,8 +71,8 @@ function out = subsref (f, idx)
         out = f.ascii;
       elseif (strcmp (fld, 'unicode'))
         out = f.unicode;
-      elseif (strcmp (fld, 'extra'))
-        out = f.extra;
+      %elseif (strcmp (fld, 'extra'))
+      %  out = f.extra;
       % not part of the interface
       %elseif (strcmp (fld, 'size'))
       %  out = f.size;
