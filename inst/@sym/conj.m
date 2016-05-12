@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{z} =} conj (@var{x})
+%% @defmethod @@sym conj (@var{z})
 %% Symbolic conjugate function.
 %%
 %% Examples:
@@ -58,13 +58,18 @@
 %%       ⎣4  5  6 - 7⋅ⅈ⎦
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/ctranspose, @@sym/real, @@sym/imag}
-%% @end deftypefn
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function z = conj(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   % can just use .conjugate on matrix but avoids S.true err
   sf = { 'def sf(x):'

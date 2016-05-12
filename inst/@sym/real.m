@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} real (@var{z})
+%% @defmethod @@sym real (@var{z})
 %% Real part of a symbolic expression.
 %%
 %% Examples:
@@ -31,8 +31,8 @@
 %%       z   z
 %%       ─ + ─
 %%       2   2
-%%
 %% @end group
+%%
 %% @group
 %% syms x real
 %% real(x)
@@ -42,16 +42,18 @@
 %%   @result{} ans = (sym) [x  π  7  0]  (1×4 matrix)
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/imag, @@sym/conj, @@sym/ctranspose}
-%% @end deftypefn
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function x = real(z)
-
+  if (nargin ~= 1)
+    print_usage ();
+  end
   x = (z + conj(z))/2;
-
 end
 
 

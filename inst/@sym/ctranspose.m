@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} ctranspose (@var{x})
+%% @defop  Method   @@sym ctranspose {(@var{A})}
+%% @defopx Operator @@sym {@var{A}'} {}
 %% Conjugate (Hermitian) transpose of a symbolic array.
 %%
 %% Example:
@@ -55,30 +56,35 @@
 %%       ⎣z  6 - 7⋅ⅈ⎦
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/transpose, @@sym/conj}
-%% @end deftypefn
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function z = ctranspose(x)
 
-  cmd = { 'x = _ins[0]' ...
-          '# special case for Boolean terms' ...
-          'if x.has(S.true) or x.has(S.false):' ...
-          '    def sf(x):' ...
-          '        if x in (S.true, S.false):' ...
-          '            return x' ...
-          '        return x.conjugate()' ...
-          '    if x.is_Matrix:' ...
-          '        z = x.T' ...
-          '        return z.applyfunc(lambda a: sf(a)),' ...
-          '    else:' ...
-          '        return sf(x),' ...
-          'if x.is_Matrix:'  ...
-          '    return x.H,' ...
-          'else:' ...
-          '    return x.conjugate(),' };
+  if (nargin ~= 1)
+    print_usage ();
+  end
+
+  cmd = { 'x = _ins[0]'
+          '# special case for Boolean terms'
+          'if x.has(S.true) or x.has(S.false):'
+          '    def sf(x):'
+          '        if x in (S.true, S.false):'
+          '            return x'
+          '        return x.conjugate()'
+          '    if x.is_Matrix:'
+          '        z = x.T'
+          '        return z.applyfunc(lambda a: sf(a))'
+          '    else:'
+          '        return sf(x)'
+          'if x.is_Matrix:'
+          '    return x.H'
+          'else:'
+          '    return x.conjugate()' };
 
   z = python_cmd (cmd, x);
 
