@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,39 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out} =} subsref (@var{f}, @var{idx})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym subsref {(@var{f}, @var{idx})}
+%% @defopx Operator @@sym {@var{f}(@var{i})} {}
+%% @defopx Operator @@sym {@var{f}(@var{i}, @var{j})} {}
+%% @defopx Operator @@sym {@var{f}(@var{i}:@var{j})} {}
+%% @defopx Operator @@sym {@var{f}.property} {}
 %% Access entries of a symbolic array.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% A = sym([10 11 12]);
+%% A(2)
+%%   @result{} (sym) 11
+%%
+%% A(2:3)
+%%   @result{} (sym) [11  12]  (1×2 matrix)
+%%
+%% A(1, 1)
+%%   @result{} (sym) 10
+%% @end group
+%%
+%% @group
+%% A.flat
+%%   @result{} Matrix([[10, 11, 12]])
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/subsasgn, @@sym/subsindex, @@sym/end}
+%% @end defop
 
 function out = subsref (f, idx)
 
-  %disp('call to @sym/subsref')
   switch idx.type
     case '()'
       % sym(sym) indexing in Matlab gets here (on Octave, subsindex
@@ -64,6 +86,7 @@ function out = subsref (f, idx)
   end
 
 end
+
 
 %!shared a,b
 %! b = [1:4];

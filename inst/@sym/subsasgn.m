@@ -17,13 +17,42 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out} =} subsasgn (@var{val}, @var{idx}, @var{rhs})
+%% @documentencoding UTF-8
+%% @deftypeop  Method   @@sym {@var{f} =} subsasgn (@var{f}, @var{idx}, @var{rhs})
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}, @var{j}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}:@var{j}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{x}) = @var{symexpr}} {}
 %% Assign to entries of a symbolic array.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% A = sym([10 11 12]);
+%% A(3) = 44
+%%   @result{} A = (sym) [10  11  44]  (1×3 matrix)
+%%
+%% A(1:2) = [42 43]
+%%   @result{} (sym) [42  43  44]  (1×3 matrix)
+%%
+%% A(1, 1) = 41
+%%   @result{} (sym) [41  43  44]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
+%% This method also gets called when creating @@symfuns:
+%% @example
+%% @group
+%% syms x
+%% f(x) = 3*x^2
+%%   @result{} f(x) = (symfun)
+%%          2
+%%       3⋅x
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/subsref, @@sym/subindex, @@sym/end, symfun}
+%% @end deftypeop
 
 function out = subsasgn (val, idx, rhs)
 

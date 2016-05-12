@@ -17,15 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{i} =} subsindex (@var{x})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym subsindex {(@var{x})}
+%% @defopx Operator @@sym {@var{A}(sym(@var{x}))} {}
 %% Used to implement indexing by sym.
 %%
 %% Note returns zero-based index.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% This function should not need to be called directly, but it
+%% is used internally, for example in:
+%% @example
+%% @group
+%% A = sym([10 11]);
+%% A(sym(1))
+%%   @result{} (sym) 10
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/subsref, @@sym/subsasgn, @@sym/end}
+%% @end defop
 
 function b = subsindex(x)
 
