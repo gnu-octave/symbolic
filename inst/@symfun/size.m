@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,16 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{d} =} size (@var{x})
-%% @deftypefnx {Function File} {[@var{n}, @var{m}] =} size (@var{x})
-%% @deftypefnx {Function File} {@var{d} =} size (@var{x}, @var{dim})
+%% @documentencoding UTF-8
+%% @deftypemethod  @@symfun {@var{d} =} size (@var{x})
+%% @deftypemethodx @@symfun {[@var{n}, @var{m}] =} size (@var{x})
+%% @deftypemethodx @@symfun {@var{d} =} size (@var{x}, @var{dim})
 %% Return the size of a symbolic function.
 %%
-%% @seealso{length, numel}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% This behaves differently than for @@sym:
+%% @example
+%% @group
+%% syms x y
+%% f(x, y) = [1 x; y 2];
+%%
+%% size(f)
+%%   @result{} 1  1
+%% @end group
+%%
+%% @group
+%% length(f)
+%%   @result{} 1
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/size}
+%% @end deftypemethod
 
 function [n, m] = size(x, dim)
 
