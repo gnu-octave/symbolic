@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
-%% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
+%% @defmethod  @@sym symvar (@var{f})
+%% @defmethodx @@sym symvar (@var{f}, @var{n})
 %% Find symbols in expression and return them as a symbolic vector.
 %%
 %% The symbols are sorted in alphabetic order with capital letters
@@ -69,8 +69,8 @@
 %% they will both appear in the output.  It is not well-defined
 %% in what order they appear.
 %%
-%% @seealso{findsym, findsymbols}
-%% @end deftypefn
+%% @seealso{findsymbols, @@sym/findsym}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Willem J. Atsma (previous versions)
 %% Keywords: symbolic

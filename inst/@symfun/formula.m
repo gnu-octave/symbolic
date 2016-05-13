@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{g} =} formula (@var{f})
+%% @defmethod @@symfun formula (@var{f})
 %% Return a symbolic expression for this symfun.
 %%
 %% This returns the expression that defines the function given by
@@ -32,8 +32,8 @@
 %% @end group
 %% @end example
 %%
-%% The command @ref{argname} gives the independent variables of the
-%% @@symfun.  Basically, @code{argname} for the independent
+%% The command @ref{@@symfun/argname} gives the independent variables
+%% of the @@symfun.  Basically, @code{argname} for the independent
 %% variables and @code{formula} for the dependent expression.
 %%
 %% If the symfun @var{f} is abstract, this returns @var{f} as a
@@ -47,10 +47,7 @@
 %% @end example
 %%
 %% @seealso{@@symfun/argnames}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end defmethod
 
 function g = formula(f)
   g = f.sym;

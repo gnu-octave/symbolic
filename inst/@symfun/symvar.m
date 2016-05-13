@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
-%% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
+%% @defmethod  @@symfun symvar (@var{f})
+%% @defmethodx @@symfun symvar (@var{f}, @var{n})
 %% Find symbols in symfun and return them as a symbolic vector.
 %%
 %% If @var{n} specified, we take from the explicit function variables
@@ -93,11 +93,8 @@
 %% they will both appear in the output.  It is not well-defined
 %% in what order they appear.
 %%
-%% @seealso{findsym, findsymbols, argnames, formula}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{findsymbols, @@symfun/argnames, @@symfun/formula}
+%% @end defmethod
 
 function vars = symvar(F, Nout)
 
