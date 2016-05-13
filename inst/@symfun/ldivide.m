@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} ldivide (@var{f}, @var{g})
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun ldivide {(@var{f}, @var{g})}
+%% @defopx Operator @@symfun {@var{f} .\ @var{g}} {}
 %% Component-wise backslash division of symbolic functions.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Simple example:
+%% @example
+%% @group
+%% syms x
+%% f(x) = [1 x sin(x)];
+%% g(x) = [x x pi];
+%% @end group
+%%
+%% @group
+%% h = f .\ g
+%%   @result{} h(x) = (symfun)
+%%       ⎡        π   ⎤
+%%       ⎢x  1  ──────⎥
+%%       ⎣      sin(x)⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/rdivide}
+%% @end defop
 
 function h = ldivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);

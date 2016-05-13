@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} linspace (@var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{r} =} linspace (@var{a}, @var{b}, @var{n})
+%% @defmethod  @@sym linspace (@var{a}, @var{b})
+%% @defmethodx @@sym linspace (@var{a}, @var{b}, @var{n})
 %% Return a symbolic vector of equispaced points.
 %%
 %% Examples:
@@ -43,8 +43,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{logspace, colon}
-%% @end deftypefn
+%% @seealso{@@sym/logspace, @@sym/colon}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

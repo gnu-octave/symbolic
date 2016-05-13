@@ -17,42 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @documentencoding UTF-8
-%% @defmethod @@sym numel (@var{x})
-%% Return number of elements in symbolic array.
+%% @defmethod  @@sym private_disp_name (@var{x}, @var{name})
+%% A string appropriate for representing the name of this sym.
 %%
-%% Example:
-%% @example
-%% @group
-%% syms x
-%% A = [1 2 x; x 3 4];
-%% numel(A)
-%%   @result{} 6
-%% @end group
-%% @end example
+%% Private method: this is not the method you are looking for.
 %%
-%% @seealso{@@sym/length, @@sym/size}
 %% @end defmethod
 
-function n = numel(x)
+function s = private_disp_name(x, input_name)
 
-  %disp('numel call')
-  d = size(x);
-  n = prod(d);
+  s = input_name;
+  % subclasses might do something more interesting, but they should
+  % be careful to ensure empty input_name gives empty s.
 
 end
 
 
 %!test
-%! a = sym([1 2 3]);
-%! assert(numel(a) == 3);
-
-%!test
-%! % 2D array
-%! a = sym([1 2 3; 4 5 6]);
-%! assert(numel(a) == 6);
-
-%!test
-%! % empty
-%! a = sym([]);
-%! assert(numel(a) == 0);
+%! syms x
+%! s = private_disp_name(x, 'x');
+%! assert (strcmp (s, 'x'))

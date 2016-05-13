@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,15 +17,23 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{n} =} numel (@var{f})
-%% Number of elements in symbolic array of symfuns.
+%% @documentencoding UTF-8
+%% @defmethod @@symfun numel (@var{f})
+%% Number of elements in a symfun.
 %%
-%% FIXME: Why do I need this in the subclass symfun?  why is it called so much?
+%% This behaves differently than for @@sym:
+%% @example
+%% @group
+%% syms x y
+%% f(x, y) = [1 x; y 2];
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% numel(f)
+%%   @result{} 1
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/numel}
+%% @end defmethod
 
 function n = numel(f)
 

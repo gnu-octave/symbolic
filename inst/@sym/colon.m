@@ -18,9 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} colon (@var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{x} =} colon (@var{a}, @var{step}, @var{b})
-%% Generate a range of syms.
+%% @defop  Method   @@sym colon {(@var{a}, @var{b})}
+%% @defopx Method   @@sym colon {(@var{a}, @var{step}, @var{b})}
+%% @defopx Operator @@sym {@var{a}:@var{b}} {}
+%% @defopx Operator @@sym {@var{a}:@var{step}:@var{b}} {}
+%% Generate a range of symbolic expressions.
 %%
 %% Examples:
 %% @example
@@ -51,8 +53,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{linspace}
-%% @end deftypefn
+%% @seealso{@@sym/linspace}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

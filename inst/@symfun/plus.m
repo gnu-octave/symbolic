@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,44 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} plus (@var{f}, @var{g})
-%% Add two symbolic functions together (+).
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun plus {(@var{f}, @var{g})}
+%% @defopx Operator @@symfun {@var{f} + @var{g}} {}
+%% Add two symbolic functions together.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% f(x) = 2*x;
+%% g(x) = sin(x);
+%% @end group
+%%
+%% @group
+%% h = f + g
+%%   @result{} h(x) = (symfun) 2⋅x + sin(x)
+%% @end group
+%% @end example
+%%
+%% Matrix example:
+%% @example
+%% @group
+%% syms x y
+%% f(x, y) = sym([1 2; 3 4]);
+%% g(x, y) = [x 0; 0 y];
+%% @end group
+%%
+%% @group
+%% h = f + g
+%%   @result{} h(x, y) = (symfun)
+%%       ⎡x + 1     2  ⎤
+%%       ⎢             ⎥
+%%       ⎣  3     y + 4⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/minus}
+%% @end defop
 
 function h = plus(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);

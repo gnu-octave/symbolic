@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,41 +18,37 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym numel (@var{x})
-%% Return number of elements in symbolic array.
+%% @defop  Method   @@symfun uminus {(@var{f})}
+%% @defopx Operator @@symfun {-@var{f}} {}
+%% Return the negation of a symbolic function.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms x
-%% A = [1 2 x; x 3 4];
-%% numel(A)
-%%   @result{} 6
+%% f(x) = 2*x;
+%% h = -f
+%%   @result{} h(x) = (symfun) -2⋅x
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/length, @@sym/size}
-%% @end defmethod
+%% @seealso{@@symfun/minus}
+%% @end defop
 
-function n = numel(x)
+function h = uminus(f)
 
-  %disp('numel call')
-  d = size(x);
-  n = prod(d);
+  h = symfun(-f.sym, f.vars);
 
 end
 
 
 %!test
-%! a = sym([1 2 3]);
-%! assert(numel(a) == 3);
+%! % Issue #447
+%! syms x
+%! f(x) = x^2;
+%! assert (isa (-f, 'symfun'))
 
 %!test
-%! % 2D array
-%! a = sym([1 2 3; 4 5 6]);
-%! assert(numel(a) == 6);
-
-%!test
-%! % empty
-%! a = sym([]);
-%! assert(numel(a) == 0);
+%! syms f(x)
+%! h = -f;
+%! assert (isa (h, 'symfun'))

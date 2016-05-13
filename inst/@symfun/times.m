@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} times (@var{f}, @var{g})
-%% Symbolic function componentwise multiplication (dot*).
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun times {(@var{f}, @var{g})}
+%% @defopx Operator @@symfun {@var{f} .* @var{g}} {}
+%% Symbolic function component-wise multiplication.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% f(x, y) = sym([1 2; 3 4]);
+%% g(x, y) = [x 0; 2 y];
+%% @end group
+%%
+%% @group
+%% h = f .* g
+%%   @result{} h(x, y) = (symfun)
+%%       ⎡x    0 ⎤
+%%       ⎢       ⎥
+%%       ⎣6   4⋅y⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/mtimes}
+%% @end defop
 
 function h = times(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,29 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} mldivide (@var{f}, @var{g})
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun mldivide {(@var{f}, @var{g})}
+%% @defopx Operator @@symfun {@var{f} \ @var{g}} {}
 %% Backslash division of symbolic functions.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Simple example:
+%% @example
+%% @group
+%% syms f(x)
+%% g(x) = sin(x);
+%% @end group
+%%
+%% @group
+%% h = f \ g
+%%   @result{} h(x) = (symfun)
+%%       sin(x)
+%%       ──────
+%%        f(x)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/mldivide}
+%% @end defop
 
 function h = mldivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);

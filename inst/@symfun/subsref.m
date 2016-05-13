@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out} =} subsref (@var{f}, @var{idx})
-%% Overloaded () reference for symfuns.
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun subsref {(@var{f}, @var{idx})}
+%% @defopx Operator @@symfun {@var{f}(@var{x})} {}
+%% Evaluate a symfun at a particular value.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% f(x) = sin(x);
+%% f(2)
+%%   @result{} (sym) sin(2)
+%%
+%% syms h(x, y)
+%% h(2, 3)
+%%   @result{} (sym) h(2, 3)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/subsref}
+%% @end defop
 
 function out = subsref (f, idx)
 
@@ -66,4 +80,3 @@ end
 %! f(x) = x^2;
 %! y = x^2;    % not a symfun
 %! assert(strcmp(f.flat, y.flat))
-

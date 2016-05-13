@@ -96,7 +96,7 @@ function display(x)
   end
 
   % weird hack to support "ans(x) = " output for @symfun
-  name = priv_disp_name(x, inputname (1));
+  name = private_disp_name(x, inputname (1));
 
   dispstr = disp (x);
   dispstrtrim = strtrim (dispstr);
