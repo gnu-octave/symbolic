@@ -52,11 +52,16 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
-      % sym(sym) indexing in Matlab gets here (on Octave, subsindex
-      % does it)
-      for i=1:length(idx.subs)
+      % sym(sym) indexing gets here
+      for i = 1:length(idx.subs)
         if (isa(idx.subs{i}, 'sym'))
           idx.subs{i} = subsindex(idx.subs{i})+1;
+        end
+      end
+      for i = 1:length(idx.subs)
+        if (~ is_valid_index(idx.subs{i}))
+          error('OctSymPy:subsref:invalidIndices', ...
+                'Invalid indices: should be integers or boolean');
         end
       end
       out = mat_access(f, idx.subs);
@@ -124,6 +129,7 @@ end
 %!assert(isequal( e([1 2 3]), sym([1 2 3]) ))
 %!assert(isequal( e([1; 3; 4]), sym([1; 3; 4]) ))
 %!assert(isempty( e([]) ))
+%!assert(isempty( e('') ))
 %!assert(isequal( e([]), sym([]) ))
 
 
@@ -260,3 +266,23 @@ end
 %! assert (isequal (A([1 2],4), B([1 2],4)  ))
 %! assert (isequal (A([2 1],[4 2]), B([2 1],[4 2])  ))
 %! assert (isequal (A([],[]), B([],[])  ))
+
+%!error <integers>
+%! % issue #445
+%! A = sym([10 11]);
+%! A(1.1)
+
+%!error <integers>
+%! % issue #445
+%! A = sym([10 11]);
+%! A(sym(4)/3)
+
+%!error <integers>
+%! % issue #445
+%! A = sym([1 2; 3 4]);
+%! A(1.1, 1)
+
+%!error <integers>
+%! % issue #445
+%! A = sym([1 2; 3 4]);
+%! A(1, sym(4)/3)
