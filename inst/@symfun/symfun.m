@@ -343,21 +343,21 @@ end
 %! assert (isa (y, 'symfun'))
 
 %!error <unique symbols>
-%! % invalid args
+%! % Issue #444: invalid args
 %! syms x
 %! f(x, x) = 2*x;
 
 %!error <unique symbols>
-%! % invalid args
+%! % Issue #444: invalid args
 %! syms x y
 %! f(x, y, x) = x + y;
 
 %!error <unique symbols>
-%! % invalid args
+%! % Issue #444: invalid args
 %! syms x y
 %! f(x, y, x) = x + y;
 
 %!error
-%! % expression
+%! % Issue #444: expression as arg
 %! syms x
 %! f(2*x) = 4*x;

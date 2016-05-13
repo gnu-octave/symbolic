@@ -257,13 +257,13 @@ end
 %! assert(isa(g,'symfun'))
 
 %!test
-%! % assignment with sym indices
+%! % Issue #443: assignment with sym indices
 %! A = sym([10 11]);
 %! A(sym(1)) = 12;
 %! assert (isequal (A, sym([12 11])))
 
 %!test
-%! % assignment with sym indices 2
+%! % Issue #443: assignment with sym indices
 %! A = sym([10 11]);
 %! A(sym(1), 1) = 12;
 %! assert (isequal (A, sym([12 11])))
@@ -271,16 +271,18 @@ end
 %! assert (isequal (A, sym([13 11])))
 
 %!test
-%! % assignment with sym indices, increase size
+%! % Issue #443: assignment with sym indices, increase size
 %! A = sym([10 11]);
 %! A(sym(2), 1) = 12;
 %! assert (isequal (A, sym([10 11; 12 0])))
 
 %!error
+%! % Issue #443
 %! A = sym([10 11]);
 %! A(2, sym('x')) = sym(12);
 
 %!error
+%! % Issue #443
 %! A = sym([10 11]);
 %! A(sym(2), sym('x')) = sym(12);
 
