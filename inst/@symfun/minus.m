@@ -53,7 +53,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@symfun/plus}
+%% @seealso{@@symfun/plus, @@symfun/uminus}
 %% @end defop
 
 function h = minus(f, g)
