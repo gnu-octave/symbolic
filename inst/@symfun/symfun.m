@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} symfun (@var{expr}, @var{vars})
+%% @deftypemethod  @@symfun {@var{f} =} symfun (@var{expr}, @var{vars})
 %% Define a symbolic function (not usually called directly).
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
@@ -33,85 +33,105 @@
 %%
 %% A concrete symfun:
 %% @example
-%% >> syms x
-%% >> f(x) = sin(x)
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> f
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> f(1)
-%%    @result{} ans = (sym) sin(1)
-%% >> f(x)
-%%    @result{} ans = (sym) sin(x)
+%% @group
+%% syms x
+%% f(x) = sin(x)
+%%   @result{} f(x) = (symfun) sin(x)
+%% f
+%%   @result{} f(x) = (symfun) sin(x)
+%% f(1)
+%%   @result{} ans = (sym) sin(1)
+%% f(x)
+%%   @result{} ans = (sym) sin(x)
+%% @end group
 %% @end example
 %%
 %% An abstract symfun:
 %% @example
-%% >> syms g(x)
-%% >> g
-%%    @result{} g(x) = (symfun) g(x)
+%% @group
+%% syms g(x)
+%% g
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
 %% @end example
 %% and note this creates the sym @code{x} automatically.
 %%
 %% Alternatively:
 %% @example
-%% >> x = sym('x');
-%% >> g(x) = sym('g(x)')
-%%    @result{} g(x) = (symfun) g(x)
+%% @group
+%% x = sym('x');
+%% g(x) = sym('g(x)')
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
 %% @end example
 %% Note the following is @strong{not} the way to create an abstract
 %% symfun:
 %% @example
-%% >> g = sym('g(x)')  % just the symbolic expression g(x)
-%%    @result{} g = (sym) g(x)
+%% @group
+%% g = sym('g(x)')     % just the symbolic expression g(x)
+%%   @result{} g = (sym) g(x)
+%% @end group
 %% @end example
 %% Instead, use @code{g(x)} on the left-hand side as above.
 %%
 %% You can make multidimensional concrete or abstract symfuns:
 %% @example
-%% >> syms x y
-%% >> g(x, y) = 2*x + sin(y)
-%%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
-%% >> syms g(x, y)
-%% >> g
-%%    @result{} g(x, y) = (symfun) g(x, y)
+%% @group
+%% syms x y
+%% g(x, y) = 2*x + sin(y)
+%%   @result{} g(x, y) = (symfun) 2⋅x + sin(y)
+%% syms g(x, y)
+%% g
+%%   @result{} g(x, y) = (symfun) g(x, y)
+%% @end group
 %% @end example
-%% However, on old versions of Octave (before 4.0), one needs to
+%% However, on old versions of Octave (before 4.0), one needed to
 %% workaround a parsing bug:
 %% @example
-%% >> syms 'g(x, y)'
-%% >> g
-%%    @result{} g(x, y) = (symfun) g(x, y)
+%% @group
+%% syms 'g(x, y)'
+%% g
+%%   @result{} g(x, y) = (symfun) g(x, y)
+%% @end group
 %% @end example
 %%
 %% As the above examples demonstrate, it is usually not necessary to
 %% call symfun directly.  However, it can be done:
 %% @example
-%% >> syms x y
-%% >> f = symfun(sin(x), x)
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> F = symfun(x*y, [x y])
-%%    @result{} F(x, y) = (symfun) x⋅y
-%% >> g = symfun(sym('g(x)'), x)
-%%    @result{} g(x) = (symfun) g(x)
-%% >> G = symfun(sym('G(x, y)'), [x y])
-%%    @result{} G(x, y) = (symfun) G(x, y)
+%% @group
+%% syms x y
+%% f = symfun(sin(x), x)
+%%   @result{} f(x) = (symfun) sin(x)
+%% F = symfun(x*y, [x y])
+%%   @result{} F(x, y) = (symfun) x⋅y
+%% @end group
+%% @group
+%% g = symfun(sym('g(x)'), x)
+%%   @result{} g(x) = (symfun) g(x)
+%% G = symfun(sym('G(x, y)'), [x y])
+%%   @result{} G(x, y) = (symfun) G(x, y)
+%% @end group
 %% @end example
 %%
 %% This allows, for example, creating an abstract function formally
 %% of @code{x}, @code{y} but depending only on @code{x}:
 %% @example
-%% >> syms x y
-%% >> h = symfun(sym('h(x)'), [x y])
-%%    @result{} h(x, y) = (symfun) h(x)
+%% @group
+%% syms x y
+%% h = symfun(sym('h(x)'), [x y])
+%%   @result{} h(x, y) = (symfun) h(x)
+%% @end group
 %% @end example
 %% which is the same as:
 %% @example
-%% >> h(x,y) = sym('h(x)')
-%%    @result{} h(x, y) = (symfun) h(x)
+%% @group
+%% h(x,y) = sym('h(x)')
+%%   @result{} h(x, y) = (symfun) h(x)
+%% @end group
 %% @end example
 %%
 %% @seealso{sym, syms}
-%% @end deftypefn
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
