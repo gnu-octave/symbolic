@@ -124,10 +124,11 @@ end
 %! a(I) = [2; 4]; b(I) = [2; 4];
 %! assert(isequal( a, b ))
 
-%!shared a,b
+%!shared
+
+%!test
 %! b = 1:4; b = [b; 2*b; 3*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a([1:2],[1:2]) = rhs;
 %! b([1:2],[1:2]) = rhs;
@@ -135,28 +136,26 @@ end
 %! a(1:2,1:2) = rhs;
 %! assert(isequal( a, b ))
 
-%% slice :
-%!shared a,b
+%!test
+%! % slice :
 %! b = 1:4; b = [b; 2*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a(:,2:3) = rhs;
 %! b(:,2:3) = rhs;
 %! assert(isequal( a, b ))
 
-%% grow 2D
-%!shared a,b
+%!test
+%! % grow 2D
 %! b = 1:4; b = [b; 2*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a([1 end+1],end:end+1) = rhs;
 %! b([1 end+1],end:end+1) = rhs;
 %! assert(isequal( a, b ))
 
-%% linear indices of 2D
 %!test
+%! % linear indices of 2D
 %! b = 1:4; b = [b; 2*b; 3*b];
 %! a = sym(b);
 %! b(1:4) = [10 11 12 13];
@@ -176,15 +175,15 @@ end
 % a(1:2,1:2) = rhs(:);
 % assert(isequal( a, b ))
 
-%% 1D growth and 'end'
 %!test
+%! % 1D growth and 'end'
 %! g = sym([1 2 3]);
 %! g(3:4) = [67 68];
 %! g(end:end+1) = [12 14];
 %! assert(isequal( g, [1 2 67 12 14] ))
 
-%% expanding empty and scalar
 %!test
+%! % expanding empty and scalar
 %! syms x
 %! c = sym([]);
 %! c(1) = x;
@@ -208,11 +207,11 @@ end
 %! a(I, J) = 100;
 %! assert(isequal( a, b ))
 
-%!shared x
-%! syms x
+%!shared
 
-%% logical with all false
 %!test
+%! % logical with all false
+%! syms x
 %! y = x;
 %! y(false) = 6;
 %! assert(isequal( y, x ));
@@ -220,8 +219,9 @@ end
 %! a([false false]) = [6 6];
 %! assert(isequal( a, [x x] ));
 
-%% issue 18, scalar access
 %!test
+%! % issue #18, scalar access
+%! syms x
 %! x(1) = sym(6);
 %! assert(isequal( x, sym(6) ));
 %! x(1) = 6;
@@ -229,24 +229,24 @@ end
 %! x(true) = 88;
 %! assert(isequal( x, sym(88) ));
 
-%% bug: assignment to column vector used to fail
 %!test
+%! % bug: assignment to column vector used to fail
 %! A = sym(zeros(3,1));
 %! A(1) = 5;
 
-%% symfun creation (generic function)
 %!test
+%! % symfun creation (generic function)
 %! syms x
 %! g(x) = x*x;
 %! assert(isa(g,'symfun'))
 
-%% symfun creation (generic function)
 %!test
+%! % symfun creation (generic function)
 %! syms x g(x)
 %! assert(isa(g,'symfun'))
 
-%% symfun creation when g already exists and is a sym/symfun
 %!test
+%! % symfun creation when g already exists and is a sym/symfun
 %! syms x
 %! g = x;
 %! syms g(x)
@@ -340,6 +340,7 @@ end
 
 %!test
 %! % bool scalar assignments of true/false into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;
@@ -349,6 +350,7 @@ end
 
 %!test
 %! % bool vector assignments of true/false into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;
@@ -357,6 +359,7 @@ end
 
 %!test
 %! % bool scalar promoted to vector assignments into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;
