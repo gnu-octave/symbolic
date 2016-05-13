@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,26 +17,47 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{x})
-%% A string appropriate for representing the name of this sym.
+%% @defmethod  @@symfun private_disp_name (@var{f}, @var{name})
+%% A string appropriate for representing the name of this symfun.
 %%
 %% Private method: this is not the method you are looking for.
 %%
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function s = private_disp_name(f, input_name)
 
-function s = priv_disp_name(x, input_name)
+  if (isempty(input_name))
+    s = input_name;
+    return
+  end
 
-  s = input_name;
-  % subclasses might do something more interesting, but they should
-  % be careful to ensure empty input_name gives empty s.
+  vars = f.vars;
+  if length(vars) == 0
+    varstr = '';
+  else
+    v = vars{1};
+    varstr = v.flat;
+  end
+  for i = 2:length(vars);
+    v = vars{i};
+    varstr = [varstr ', ' v.flat];
+  end
+  s = [input_name, '(', varstr, ')'];
 
 end
 
 
 %!test
-%! syms x
-%! s = priv_disp_name(x, 'x');
-%! assert (strcmp (s, 'x'))
+%! syms f(x)
+%! s = private_disp_name(f, 'f');
+%! assert (strcmp (s, 'f(x)'))
+
+%!test
+%! syms x y
+%! g(y, x) = x + y;
+%! s = private_disp_name(g, 'g');
+%! assert (strcmp (s, 'g(y, x)'))
+
+%!test
+%! syms f(x)
+%! assert (isempty (private_disp_name(f, '')))
