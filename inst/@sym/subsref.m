@@ -141,17 +141,18 @@ end
 %!shared x
 %! syms x
 
-%% logical with empty result
 %!test
+%! % logical with empty result
 %! assert(isempty( x(false) ))
 %! a = [x x];
 %! assert(isempty( a([false false]) ))
 
-%% issue 18, scalar access
 %!test
+%! % issue 18, scalar access
 %! assert(isequal( x(1), x ))
 %! assert(isequal( x(true), x ))
 
+%!shared
 
 %!test
 %! % older access tests
@@ -191,6 +192,8 @@ end
 %! assert (all(all(logical(  b(end-1,1) == a(end-1,1)  ))))
 %! assert (all(all(logical(  b(2,end-1) == a(2,end-1)  ))))
 %! assert (all(all(logical(  b(end-1,end-1) == a(end-1,end-1)  ))))
+
+%!shared
 
 %!test
 %! % older slicing tests
