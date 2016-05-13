@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,47 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} mpower (@var{f}, @var{g})
-%% Symbolic function exponentiation (^).
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun mpower {(@var{f}, @var{n})}
+%% @defopx Operator @@symfun {@var{f} ^ @var{n}} {}
+%% Symbolic function exponentiation.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% f(x, y) = [x 0; 2 y];
+%% @end group
+%%
+%% @group
+%% h = f ^ 2
+%%   @result{} h(x, y) = (symfun)
+%%       ⎡    2        ⎤
+%%       ⎢   x       0 ⎥
+%%       ⎢             ⎥
+%%       ⎢            2⎥
+%%       ⎣2⋅x + 2⋅y  y ⎦
+%% @end group
+%% @end example
+%%
+%% The exponent can also be a @@symfun:
+%% @example
+%% @group
+%% syms g(x)
+%% f(x) = sym([2 0; 3 1]);
+%%
+%% h = f^g
+%%   @result{} h(x) = (symfun)
+%%       ⎡    g(x)      ⎤
+%%       ⎢   2         0⎥
+%%       ⎢              ⎥
+%%       ⎢   g(x)       ⎥
+%%       ⎣3⋅2     - 3  1⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/power}
+%% @end defop
 
 function h = mpower(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
