@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{H} =} besselh (@var{alpha}, @var{k}, @var{x})
-%% @deftypefnx {Function File} {@var{H} =} besselh (@var{alpha}, @var{x})
+%% @defmethod  @@sym besselh (@var{alpha}, @var{k}, @var{x})
+%% @defmethodx @@sym besselh (@var{alpha}, @var{x})
 %% Symbolic Hankel functions of first/second kind.
 %%
 %% The kind @var{k} can be 1 or 2 and defaults to 1.
@@ -36,8 +36,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{airy, besselj, bessely, besseli, besselk}
-%% @end deftypefn
+%% @seealso{@@sym/airy, @@sym/besselj, @@sym/bessely, @@sym/besseli,
+%%          @@sym/besselk}
+%% @end defmethod
 
 function A = besselh(alpha, k, x)
 
