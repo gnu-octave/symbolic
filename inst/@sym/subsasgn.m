@@ -64,14 +64,31 @@ function out = subsasgn (val, idx, rhs)
       %   x is idx.subs{1}
       % This also gets called for "syms f(x)"
 
-      if (isa(idx.subs{1}, 'sym'))  % f(sym) = ..., define symfun
+      all_syms = true;
+      for i = 1:length(idx.subs)
+        all_syms = all_syms && isa(idx.subs{i}, 'sym');
+      end
+      if (all_syms)
+        cmd = { 'L, = _ins'
+                'return all([x is not None and x.is_Symbol for x in L])' };
+        all_Symbols = python_cmd (cmd, idx.subs);
+      end
+      if (all_syms && all_Symbols)
+	%% Make a symfun
         if (~isa(rhs, 'sym'))
           % rhs is, e.g., a double, then we call the constructor
           rhs = sym(rhs);
         end
         out = symfun(rhs, idx.subs);
 
-      else   % f(double) = ..., array assignment
+      else
+        %% Not symfun: e.g., f(double) = ..., f(sym(2)) = ...,
+        % convert any sym subs to double and do array assign
+        for i = 1:length(idx.subs)
+          if (isa(idx.subs{i}, 'sym'))
+            idx.subs{i} = double(idx.subs{i});
+          end
+        end
         out = mat_replace(val, idx.subs, sym(rhs));
       end
 
@@ -238,6 +255,34 @@ end
 %! g(x) = x;
 %! g(x) = x*x;
 %! assert(isa(g,'symfun'))
+
+%!test
+%! % assignment with sym indices
+%! A = sym([10 11]);
+%! A(sym(1)) = 12;
+%! assert (isequal (A, sym([12 11])))
+
+%!test
+%! % assignment with sym indices 2
+%! A = sym([10 11]);
+%! A(sym(1), 1) = 12;
+%! assert (isequal (A, sym([12 11])))
+%! A(sym(1), sym(1)) = 13;
+%! assert (isequal (A, sym([13 11])))
+
+%!test
+%! % assignment with sym indices, increase size
+%! A = sym([10 11]);
+%! A(sym(2), 1) = 12;
+%! assert (isequal (A, sym([10 11; 12 0])))
+
+%!error
+%! A = sym([10 11]);
+%! A(2, sym('x')) = sym(12);
+
+%!error
+%! A = sym([10 11]);
+%! A(sym(2), sym('x')) = sym(12);
 
 
 %!test

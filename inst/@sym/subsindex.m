@@ -31,6 +31,9 @@
 %% A = sym([10 11]);
 %% A(sym(1))
 %%   @result{} (sym) 10
+%%
+%% A(sym(2)) = sym('x')
+%%   @result{} A = (sym) [10  x]  (1×2 matrix)
 %% @end group
 %% @end example
 %%
