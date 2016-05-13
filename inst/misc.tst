@@ -20,8 +20,8 @@
 %!assert (isequal (x(:, :), x));
 %!assert (isequal (x(:), x));
 
-%!error <invalid indexing> x('::')
-%!error <unknown 2d> x(1, '::')
+%!error <invalid ind> x('::')
+%!error <invalid ind> x(1, '::')
 
 
 %!shared a

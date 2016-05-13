@@ -92,7 +92,7 @@ function out = subsasgn (val, idx, rhs)
 	for i = 1:length(idx.subs)
           if (~ is_valid_index(idx.subs{i}))
             error('OctSymPy:subsref:invalidIndices', ...
-                  'Invalid indices: should be integers or boolean');
+                  'invalid indices: should be integers or boolean');
           end
 	end
         out = mat_replace(val, idx.subs, sym(rhs));

@@ -61,7 +61,7 @@ function out = subsref (f, idx)
       for i = 1:length(idx.subs)
         if (~ is_valid_index(idx.subs{i}))
           error('OctSymPy:subsref:invalidIndices', ...
-                'Invalid indices: should be integers or boolean');
+                'invalid indices: should be integers or boolean');
         end
       end
       out = mat_access(f, idx.subs);
