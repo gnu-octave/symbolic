@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{h} =} rdivide (@var{f}, @var{g})
-%% Forward slash component division of symbolic functions (dot/).
+%% @documentencoding UTF-8
+%% @defop  Method   @@symfun rdivide {(@var{f}, @var{g})}
+%% @defopx Operator @@symfun {@var{f} ./ @var{g}} {}
+%% Forward slash component division of symbolic functions.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Simple example:
+%% @example
+%% @group
+%% syms x
+%% f(x) = [1 x sin(x)];
+%% g(x) = [x x pi];
+%% @end group
+%%
+%% @group
+%% h = f ./ g
+%%   @result{} h(x) = (symfun)
+%%       ⎡1     sin(x)⎤
+%%       ⎢─  1  ──────⎥
+%%       ⎣x       π   ⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@symfun/ldivide}
+%% @end defop
 
 function h = rdivide(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
