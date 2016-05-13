@@ -33,10 +33,10 @@
 %%   @result{} A = (sym) [10  11  44]  (1×3 matrix)
 %%
 %% A(1:2) = [42 43]
-%%   @result{} (sym) [42  43  44]  (1×3 matrix)
+%%   @result{} A = (sym) [42  43  44]  (1×3 matrix)
 %%
 %% A(1, 1) = 41
-%%   @result{} (sym) [41  43  44]  (1×3 matrix)
+%%   @result{} A = (sym) [41  43  44]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
