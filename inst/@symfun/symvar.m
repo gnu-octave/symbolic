@@ -29,26 +29,26 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms a x f(t, s)
-%% >> symvar (f, 1)
-%%    @result{} (sym) t
-%% >> symvar (f, 2)
-%%    @result{} (sym) [t  s]  (1×2 matrix)
+%% syms a x f(t, s)
+%% symvar (f, 1)
+%%   @result{} (sym) t
+%% symvar (f, 2)
+%%   @result{} (sym) [t  s]  (1×2 matrix)
 %% @end group
 %% @end example
 %% Note preference for the arguments of the symfun:
 %% @example
 %% @group
-%% >> h = f*a + x
-%%    @result{} h(t, s) = (symfun) a⋅f(t, s) + x
-%% >> symvar (h, 1)
-%%    @result{} (sym) t
-%% >> symvar (h, 2)
-%%    @result{} (sym) [t  s]  (1×2 matrix)
-%% >> symvar (h, 3)
-%%    @result{} (sym) [t  s  x]  (1×3 matrix)
-%% >> symvar (h, 4)
-%%    @result{} (sym) [t  s  x  a]  (1×4 matrix)
+%% h = f*a + x
+%%   @result{} h(t, s) = (symfun) a⋅f(t, s) + x
+%% symvar (h, 1)
+%%   @result{} (sym) t
+%% symvar (h, 2)
+%%   @result{} (sym) [t  s]  (1×2 matrix)
+%% symvar (h, 3)
+%%   @result{} (sym) [t  s  x]  (1×3 matrix)
+%% symvar (h, 4)
+%%   @result{} (sym) [t  s  x  a]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -57,12 +57,12 @@
 %% For example:
 %% @example
 %% @group
-%% >> symvar (f, 2)
-%%    @result{} (sym) [t  s]  (1×2 matrix)
-%% >> symvar (f)
-%%    @result{} (sym) [s  t]  (1×2 matrix)
-%% >> symvar (h)
-%%    @result{} (sym) [a  s  t  x]  (1×4 matrix)
+%% symvar (f, 2)
+%%   @result{} (sym) [t  s]  (1×2 matrix)
+%% symvar (f)
+%%   @result{} (sym) [s  t]  (1×2 matrix)
+%% symvar (h)
+%%   @result{} (sym) [a  s  t  x]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -71,21 +71,21 @@
 %% (tested with version 2014a).  For example:
 %% @example
 %% @group
-%% >> syms x y s t
-%% >> f(t, s) = 1
-%%    @result{} f(t, s) = (symfun) 1
-%% >> symvar (f, 1)
-%%    @result{} (sym) t
-%% >> symvar (f, 2)
-%%    @result{} (sym) [t  s]  (1×2 matrix)
+%% syms x y s t
+%% f(t, s) = 1
+%%   @result{} f(t, s) = (symfun) 1
+%% symvar (f, 1)
+%%   @result{} (sym) t
+%% symvar (f, 2)
+%%   @result{} (sym) [t  s]  (1×2 matrix)
 %% @end group
 %% @end example
 %% However, when the symfun formula does not depend on the
 %% arguments, the results are not the same:
 %% @example
 %% @group
-%% >> symvar (f)  % SMT would give []
-%%    @result{} (sym) [s  t]  (1×2 matrix)
+%% symvar (f)  % SMT would give []
+%%   @result{} (sym) [s  t]  (1×2 matrix)
 %% @end group
 %% @end example
 %%

@@ -29,33 +29,33 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = x^2 + 3*x*y - y^2;
-%% >> symvar (f)
-%%    @result{} (sym) [x  y]  (1×2 matrix)
-%% >> symvar (f, 1)
-%%    @result{} (sym) x
+%% syms x y
+%% f = x^2 + 3*x*y - y^2;
+%% symvar (f)
+%%   @result{} (sym) [x  y]  (1×2 matrix)
+%% symvar (f, 1)
+%%   @result{} (sym) x
 %% @end group
 %% @end example
 %%
 %% Further examples:
 %% @example
 %% @group
-%% >> syms a x t
-%% >> f = a*x + t;
-%% >> symvar (f, 1)
-%%    @result{} (sym) x
-%% >> symvar (f, 2)
-%%    @result{} (sym) [x  t]  (1×2 matrix)
-%% >> symvar (f, 3)
-%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% syms a x t
+%% f = a*x + t;
+%% symvar (f, 1)
+%%   @result{} (sym) x
+%% symvar (f, 2)
+%%   @result{} (sym) [x  t]  (1×2 matrix)
+%% symvar (f, 3)
+%%   @result{} (sym) [x  t  a]  (1×3 matrix)
 %% @end group
 %% @end example
 %% And note its ok to ask for more:
 %% @example
 %% @group
-%% >> symvar (f, 1000)
-%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% symvar (f, 1000)
+%%   @result{} (sym) [x  t  a]  (1×3 matrix)
 %% @end group
 %% @end example
 %%

@@ -28,10 +28,10 @@
 %% Examples:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f(x, y) = x^2;
-%% >> argnames(f)
-%%    @result{} (sym) [x  y]  (1×2 matrix)
+%% syms x y
+%% f(x, y) = x^2;
+%% argnames(f)
+%%   @result{} (sym) [x  y]  (1×2 matrix)
 %% @end group
 %% @end example
 %%
