@@ -155,6 +155,15 @@ function f = symfun(expr, vars)
     end
   end
 
+  % check that vars are unique Symbols
+  cmd = { 'L, = _ins'
+          'if not all([x is not None and x.is_Symbol for x in L]):'
+	  '    return False'
+	  'return len(set(L)) == len(L)' };
+  if (~ python_cmd (cmd, vars))
+    error('OctSymPy:symfun:symfun arguments must be unique symbols')
+  end
+
   if (ischar (expr))
     % FIXME: drop this later
     warning('symfun: deprecated: symfun(''f'', x) format not supported')
@@ -332,3 +341,23 @@ end
 %! assert (isa (y, 'symfun'))
 %! y = symfun(x, t);
 %! assert (isa (y, 'symfun'))
+
+%!error <unique symbols>
+%! % invalid args
+%! syms x
+%! f(x, x) = 2*x;
+
+%!error <unique symbols>
+%! % invalid args
+%! syms x y
+%! f(x, y, x) = x + y;
+
+%!error <unique symbols>
+%! % invalid args
+%! syms x y
+%! f(x, y, x) = x + y;
+
+%!error
+%! % expression
+%! syms x
+%! f(2*x) = 4*x;
