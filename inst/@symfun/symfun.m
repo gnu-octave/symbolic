@@ -161,7 +161,8 @@ function f = symfun(expr, vars)
 	  '    return False'
 	  'return len(set(L)) == len(L)' };
   if (~ python_cmd (cmd, vars))
-    error('OctSymPy:symfun:symfun arguments must be unique symbols')
+    error('OctSymPy:symfun:argNotUniqSymbols', ...
+          'symfun arguments must be unique symbols')
   end
 
   if (ischar (expr))
