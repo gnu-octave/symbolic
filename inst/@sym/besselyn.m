@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{Y} =} besselyn (@var{alpha}, @var{x})
+%% @defmethod besselyn (@var{alpha}, @var{x})
 %% Symbolic Spherical Bessel function of the second kind.
 %%
 %% Example:
@@ -36,8 +36,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{besselj, besseli, besselk, besseljn}
-%% @end deftypefn
+%% @seealso{@@sym/besseljn, @@sym/bessely}
+%% @end defmethod
 
 function Y = besselyn(n, x)
   if (nargin ~= 2)
