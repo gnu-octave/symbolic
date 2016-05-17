@@ -54,6 +54,9 @@
 %%   @result{} ans = (sym) -assoc_laguerre(n - 1, 1, x)
 %% @end group
 %% @end example
+%%
+%% Note: the Generalized Laguerre @emph{Function} is not implemented.
+%%
 %% @seealso{laguerreL, @@sym/chebychevT, @@sym/chebychevU}
 %% @end defmethod
 
