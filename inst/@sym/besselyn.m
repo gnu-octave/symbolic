@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Utkarsh Gautam 
+%% Copyright (C) 2016 Utkarsh Gautam
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,10 +29,10 @@
 %%   @result{} A = (sym) yn(n, x)
 %% diff(A)
 %%   @result{} ans = (sym)
-%%   
+%%
 %%                      (n + 1)⋅yn(n, x)
 %%       yn(n - 1, x) - ────────────────
-%%                             x 
+%%                             x
 %% @end group
 %% @end example
 %%
