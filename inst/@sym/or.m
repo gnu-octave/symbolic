@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,18 +18,35 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{z} =} or (@var{x}, @var{y})
-%% Logical or of symbolic arrays.
+%% @defop  Method   @@sym or {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} | @var{y}} {}
+%% Logical "or" of symbolic arrays.
 %%
-%% @seealso{and, not, xor, eq, ne, logical, isAlways, isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% sym(false) | sym(true)
+%%   @result{} (sym) True
+%% @end group
+%%
+%% @group
+%% syms x y z
+%% x & (y | z)
+%%   @result{} (sym) x ∧ (y ∨ z)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/and, @@sym/not, @@sym/xor, @@sym/eq, @@sym/ne,
+%%          @@sym/logical, @@sym/isAlways, @@sym/isequal}
+%% @end defop
 
 function r = or(x, y)
 
-    r = binop_helper(x, y, 'lambda a,b: Or(a, b)');
+  if (nargin ~= 2)
+    print_usage ();
+  end
+
+  r = binop_helper(x, y, 'lambda a,b: Or(a, b)');
 
 end
 
@@ -61,3 +78,4 @@ end
 %! e = or(x == 4, x == 5);
 %! assert (isequal (subs(e, x, [3 4 5 6]), [f t t f]))
 
+%!error or (sym(1), 2, 3)

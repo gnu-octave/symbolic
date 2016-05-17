@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,26 +18,34 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{z} =} xor (@var{x}, @var{y})
+%% @defmethod @@sym xor (@var{x}, @var{y})
 %% Logical xor of symbolic arrays.
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
-%% >> xor(sym(true), sym(true))
-%%  @result{} ans = (sym) False
+%% xor(sym(true), sym(true))
+%%   @result{} ans = (sym) False
+%% @end group
+%%
+%% @group
+%% syms x y
+%% xor (x, y)
+%%   @result{} (sym) x ⊻ y
 %% @end group
 %% @end example
 %%
-%% @seealso{and, or, not, eq, ne, logical, isAlways, isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/and, @@sym/or, @@sym/not, @@sym/eq, @@sym/ne,
+%%          @@sym/logical, @@sym/isAlways}
+%% @end defmethod
 
 function r = xor(x, y)
 
-    r = binop_helper(x, y, 'lambda a,b: Xor(a, b)');
+  if (nargin ~= 2)
+    print_usage ();
+  end
+
+  r = binop_helper(x, y, 'lambda a,b: Xor(a, b)');
 
 end
 
@@ -74,3 +82,4 @@ end
 %! e = xor(x == 3, x^2 == 9);
 %! assert (isequal (subs(e, x, [-3 0 3]), [t f f]))
 
+%!error xor (sym('x'), 1, 2)
