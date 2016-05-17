@@ -22,7 +22,18 @@
 %% @defmethodx @@sym lgamma (@var{x})
 %% Symbolic logarithm of the gamma function.
 %%
-%% @seealso{@@sym/gammaln}
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% y = gammaln(x)
+%%   @result{} y = (sym) loggamma(x)
+%% y = lgamma(x)
+%%   @result{} y = (sym) loggamma(x)
+%% @end group
+%% @end example
+%%
+%% @seealso{gammaln, @@sym/gamma, @@sym/psi}
 %% @end defmethod
 
 function y = lgamma(x)
