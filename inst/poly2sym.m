@@ -22,7 +22,7 @@
 %% @defunx poly2sym (@var{c}, @var{x})
 %% Create a symbolic polynomial expression from coefficients.
 %%
-%% If @var{x} is not specified, the free variable is set to @code{x}. @var{c}
+%% If @var{x} is not specified, the free variable is set to @code{sym('x')}. @var{c}
 %% may be a vector of doubles or syms. It can also be a cell array vector.
 %% @var{x} may be a symbolic expression or something that converts to one.
 %% The coefficients correspond to decreasing exponent of the free variable.
