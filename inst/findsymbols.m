@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
+%% @defun findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
 %% The list is sorted alphabetically.  For details, @pxref{@@sym/symvar}.
@@ -49,15 +49,14 @@
 %% @code{symfun}.
 %%
 %% @seealso{symvar, @@sym/symvar, @@sym/findsym}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end defun
 
 function L = findsymbols(obj, dosort)
 
-  if nargin == 1
+  if (nargin == 1)
     dosort = true;
+  elseif (nargin ~= 2)
+    print_usage ();
   end
 
   if isa(obj, 'sym')

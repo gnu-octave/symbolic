@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} vpasolve (@var{e})
-%% @deftypefnx {Function File} {@var{y} =} vpasolve (@var{e}, @var{x})
-%% @deftypefnx {Function File} {@var{y} =} vpasolve (@var{e}, @var{x}, @var{x0})
+%% @defun  vpasolve (@var{e})
+%% @defunx vpasolve (@var{e}, @var{x})
+%% @defunx vpasolve (@var{e}, @var{x}, @var{x0})
 %% Numerical solution of a symbolic equation.
 %%
 %% Variable-precision numerical solution of the equation @var{e}
@@ -37,12 +37,13 @@
 %% @end example
 %%
 %% @seealso{vpa}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end defun
 
 function r = vpasolve(e, x, x0)
+
+  if (nargin < 1 || nargin > 3)
+    print_usage ();
+  end
 
   if (nargin < 3)
     x0 = sym(0);

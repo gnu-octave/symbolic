@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} fibonacci (@var{n})
-%% @deftypefnx {Function File} {@var{p} =} fibonacci (@var{n}, @var{x})
-%% Return Fibonacci numbers and polynomials.
+%% @documentencoding UTF-8
+%% @deftypefun  {@var{F} =} fibonacci (@var{n})
+%% @deftypefunx {@var{p} =} fibonacci (@var{n}, @var{x})
+%% Return symbolic Fibonacci numbers or Fibonacci polynomials.
 %%
 %% Examples:
 %% @example
@@ -45,17 +46,16 @@
 %% @end example
 %%
 %% @seealso{euler, bernoulli}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end deftypefun
 
 function r = fibonacci(n, x)
 
   if (nargin == 1)
     r = python_cmd ('return sp.fibonacci(*_ins),', sym(n));
-  else
+  elseif (nargin == 2)
     r = python_cmd ('return sp.fibonacci(*_ins),', sym(n), sym(x));
+  else
+    print_usage ();
   end
 
 end

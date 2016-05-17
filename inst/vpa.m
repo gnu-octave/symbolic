@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} vpa (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} vpa (@var{x}, @var{n})
+%% @defun  vpa (@var{x})
+%% @defunx vpa (@var{x}, @var{n})
 %% Create a variable-precision floating point number.
 %%
 %% @var{x} can be a string, a sym or a double.  Example:
@@ -46,15 +46,14 @@
 %% @code{digits()}.
 %%
 %% @seealso{sym, vpasolve, digits}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end defun
 
 function r = vpa(x, n)
 
   if (nargin == 1)
     n = digits();
+  elseif (nargin ~= 2)
+    print_usage ();
   end
 
 

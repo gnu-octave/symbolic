@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} octsympy_tests ()
+%% @defun octsympy_tests ()
 %% Run the OctSymPy tests, log results, and return true if any fail.
 %%
 %% I threw this together by modifying "__run_test_suite__.m" which
@@ -28,7 +28,7 @@
 %% this and call "__run_test_suite(@{'@@sym', '@@symfun'@}, @{@})"
 %% instead.  See https://savannah.gnu.org/bugs/?41215
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald, David Bateman
 %% Keywords: tests

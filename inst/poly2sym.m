@@ -1,5 +1,5 @@
 %% Copyright (C) 2003 Willem J. Atsma
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{p} =} poly2sym (@var{c})
-%% @deftypefnx {Function File} {@var{p} =} poly2sym (@var{c}, @var{x})
+%% @defun  poly2sym (@var{c})
+%% @defunx poly2sym (@var{c}, @var{x})
 %% Create a symbolic polynomial expression from coefficients.
 %%
 %% If @var{x} is not specified, the free variable is set to @code{x}. @var{c}
@@ -42,14 +42,16 @@
 %% @end example
 %%
 %% @seealso{@@sym/sym2poly, polyval, roots}
-%% @end deftypefn
+%% @end defun
 
 function p = poly2sym(c,x)
 
   if (nargin == 1)
     x = sym('x');
-  else
+  elseif (nargin == 2)
     x = sym(x);
+  else
+    print_usage ();
   end
 
   N = length(c);
