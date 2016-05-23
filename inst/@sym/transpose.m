@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,55 +18,60 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} transpose (@var{x})
+%% @defop  Method   @@sym transpose {(@var{A})}
+%% @defopx Operator @@sym {@var{A}.'} {}
 %% Structural transpose (not conjugate) of a symbolic array.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms z
-%% >> syms x real
-%% >> A = [1 x z; sym(4) 5 6+7i]
-%%    @result{} A = (sym 2×3 matrix)
-%%        ⎡1  x     z   ⎤
-%%        ⎢             ⎥
-%%        ⎣4  5  6 + 7⋅ⅈ⎦
-%% >> transpose(A)
-%%    @result{} (sym 3×2 matrix)
-%%        ⎡1     4   ⎤
-%%        ⎢          ⎥
-%%        ⎢x     5   ⎥
-%%        ⎢          ⎥
-%%        ⎣z  6 + 7⋅ⅈ⎦
+%% syms z
+%% syms x real
+%% A = [1 x z; sym(4) 5 6+7i]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡1  x     z   ⎤
+%%       ⎢             ⎥
+%%       ⎣4  5  6 + 7⋅ⅈ⎦
+%% transpose(A)
+%%   @result{} (sym 3×2 matrix)
+%%       ⎡1     4   ⎤
+%%       ⎢          ⎥
+%%       ⎢x     5   ⎥
+%%       ⎢          ⎥
+%%       ⎣z  6 + 7⋅ⅈ⎦
 %% @end group
 %% @end example
 %%
 %% This can be abbreviated to:
 %% @example
 %% @group
-%% >> A.'
-%%    @result{} (sym 3×2 matrix)
-%%        ⎡1     4   ⎤
-%%        ⎢          ⎥
-%%        ⎢x     5   ⎥
-%%        ⎢          ⎥
-%%        ⎣z  6 + 7⋅ⅈ⎦
+%% A.'
+%%   @result{} (sym 3×2 matrix)
+%%       ⎡1     4   ⎤
+%%       ⎢          ⎥
+%%       ⎢x     5   ⎥
+%%       ⎢          ⎥
+%%       ⎣z  6 + 7⋅ⅈ⎦
 %% @end group
 %% @end example
 %%
-%% @seealso{ctranspose}
-%% @end deftypefn
+%% @seealso{@@sym/ctranspose}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function z = transpose(x)
 
-  cmd = { 'x = _ins[0]'  ...
-          'if x.is_Matrix:'  ...
-          '    return x.T,' ...
-          'else:' ...
-          '    return x,' };
+  if (nargin ~= 1)
+    print_usage ();
+  end
+
+  cmd = { 'x = _ins[0]'
+          'if x.is_Matrix:'
+          '    return x.T'
+          'else:'
+          '    return x' };
 
   z = python_cmd (cmd, x);
 

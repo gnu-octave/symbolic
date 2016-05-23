@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{x} =} sym (@var{y})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
-%% @deftypefnx {Function File} {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
+%% @deftypeop  Constructor @@sym {@var{x} =} sym (@var{y})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -31,45 +31,45 @@
 %% Examples:
 %% @example
 %% @group
-%% >> x = sym ('x')
-%%    @result{} x = (sym) x
-%% >> y = sym ('2')
-%%    @result{} y = (sym) 2
-%% >> y = sym (3)
-%%    @result{} y = (sym) 3
-%% >> y = sym (inf)
-%%    @result{} y = (sym) ∞
-%% >> y = sym (pi)
-%%    @result{} y = (sym) π
+%% x = sym ('x')
+%%   @result{} x = (sym) x
+%% y = sym ('2')
+%%   @result{} y = (sym) 2
+%% y = sym (3)
+%%   @result{} y = (sym) 3
+%% y = sym (inf)
+%%   @result{} y = (sym) ∞
+%% y = sym (pi)
+%%   @result{} y = (sym) π
 %% @end group
 %% @end example
 %%
 %% A sym of a sym is a sym (idempotence):
 %% @example
 %% @group
-%% >> sym (sym (pi))
-%%    @result{} (sym) π
+%% sym (sym (pi))
+%%   @result{} (sym) π
 %% @end group
 %% @end example
 %%
 %% A matrix can be input:
 %% @example
 %% @group
-%% >> sym ([1 2; 3 4])
-%%    @result{} (sym 2×2 matrix)
-%%        ⎡1  2⎤
-%%        ⎢    ⎥
-%%        ⎣3  4⎦
+%% sym ([1 2; 3 4])
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
 %% @end group
 %% @end example
 %%
 %% Boolean input, giving symbolic True/False:
 %% @example
 %% @group
-%% >> sym (true)
-%%    @result{} (sym) True
-%% >> sym (false)
-%%    @result{} (sym) False
+%% sym (true)
+%%   @result{} (sym) True
+%% sym (false)
+%%   @result{} (sym) False
 %% @end group
 %% @end example
 %%
@@ -77,22 +77,23 @@
 %% bit heuristic/magical:
 %% @example
 %% @group
-%% >> y = sym(pi/100)
-%%    @result{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
-%%      y = (sym)
-%%         π
-%%        ───
-%%        100
+%% y = sym(pi/100)
+%%   @print{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
+%%   @result{} y = (sym)
+%%        π
+%%       ───
+%%       100
 %% @end group
 %% @end example
-%% While this works fine for “small” fractions, its probably safer to do:
+%% While this works fine for ``small'' fractions, its safer to avoid
+%% the warning by using:
 %% @example
 %% @group
-%% >> y = sym(pi)/100
-%%    @result{} y = (sym)
-%%         π
-%%        ───
-%%        100
+%% y = sym(pi)/100
+%%   @result{} y = (sym)
+%%        π
+%%       ───
+%%       100
 %% @end group
 %% @end example
 %%
@@ -101,10 +102,10 @@
 %% or restrictions on the type of the symbol:
 %% @example
 %% @group
-%% >> x = sym ('x', 'positive')
-%%    @result{} x = (sym) x
-%% >> x = sym ('x', 'positive', 'integer')
-%%    @result{} x = (sym) x
+%% x = sym ('x', 'positive')
+%%   @result{} x = (sym) x
+%% x = sym ('x', 'positive', 'integer')
+%%   @result{} x = (sym) x
 %% @end group
 %% @end example
 %% @xref{assumptions}, for the list of supported assumptions.
@@ -113,46 +114,46 @@
 %% same symbol with different assumptions.
 %% @example
 %% @group
-%% >> x1 = sym('x')
-%%    @result{} x1 = (sym) x
-%% >> x2 = sym('x', 'positive')
-%%    @result{} x2 = (sym) x
-%% >> x1 == x2
-%%    @result{} (sym) x = x
-%% >> isAlways(x1 == x2)
-%%    @result{} 0
-%% >> logical(x1 == x2)
-%    @result{} 0
+%% x1 = sym('x')
+%%   @result{} x1 = (sym) x
+%% x2 = sym('x', 'positive')
+%%   @result{} x2 = (sym) x
+%% x1 == x2
+%%   @result{} (sym) x = x
+%% isAlways(x1 == x2)
+%%   @result{} 0
+%% logical(x1 == x2)
+%%   @result{} 0
 %% @end group
 %% @end example
 %%
 %% The second argument can also specify the size of a matrix:
 %% @example
 %% @group
-%% >> A = sym('a', [2 3])
-%%    @result{} A = (sym 2×3 matrix)
-%%        ⎡a₁₁  a₁₂  a₁₃⎤
-%%        ⎢             ⎥
-%%        ⎣a₂₁  a₂₂  a₂₃⎦
+%% A = sym('a', [2 3])
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡a₁₁  a₁₂  a₁₃⎤
+%%       ⎢             ⎥
+%%       ⎣a₂₁  a₂₂  a₂₃⎦
 %% @end group
 %% @end example
 %% or even with symbolic size:
 %% @example
 %% @group
-%% >> syms m n positive integer
-%% >> B = sym('B', [m n])
-%%    @result{} B = (sym) B  (m×n matrix expression)
+%% syms m n positive integer
+%% B = sym('B', [m n])
+%%   @result{} B = (sym) B  (m×n matrix expression)
 %% @end group
 %% @end example
 %%
 %% It is also possible to save sym objects to file and then load them when
 %% needed in the usual way with the @code{save} and @code{load} commands.
 %%
-%% The underlying SymPy “srepr” can also be passed directly to
-%% @code{sym}: @pxref{char} for details.
+%% The underlying SymPy string representation (``srepr'') can also be passed
+%% directly to @code{sym}: @pxref{@@sym/char} for details.
 %%
-%% @seealso{syms, assumptions, assume, assumeAlso}
-%% @end deftypefn
+%% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
+%% @end deftypeop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
@@ -572,7 +573,7 @@ end
 %! assert (isequal (a, a1))
 %! assert (isequal (a, a2))
 %! % Octave only, and eval to hide from Matlab parser
-%! if exist('octave_config_info', 'builtin')
+%! if exist('OCTAVE_VERSION', 'builtin')
 %!   eval( 'a3 = sym("Symbol(''a'')");' );
 %!   eval( 'a4 = sym("Symbol(\"a\")");' );
 %!   assert (isequal (a, a3))
@@ -670,12 +671,13 @@ end
 %!error <failed>
 %! x = sym('pi', 'integer')
 
-%!xtest
+%!test
 %! % multiple assumptions
-%! % FIXME: xtest for sympy <= 0.7.6.x where a is the full dict
+%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+%! end
 
 %!test
 %! % save/load sym objects
@@ -688,4 +690,8 @@ end
 %! load(myfile)
 %! assert(isequal(y, 2*x))
 %! assert(a == 42)
-%! assert(unlink(myfile) == 0)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert(unlink(myfile) == 0)
+%! else
+%!   delete([myfile '.mat'])
+%! end

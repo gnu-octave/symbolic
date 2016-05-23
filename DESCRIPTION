@@ -14,5 +14,4 @@ Categories: symbolic
 Url: http://github.com/cbm755/octsympy
 Depends: octave (>= 4.0.0)
 SystemRequirements: python, sympy (>= 0.7.6)
-BuildRequires: python, sympy (>= 0.7.6)
 License: GPL-3.0+

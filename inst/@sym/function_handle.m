@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,14 +29,15 @@
 %% This can make anonymous functions from symbolic expressions:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = x^2 + sin(y)
-%%    @result{} f = (sym)
-%%         2
-%%        x  + sin(y)
-%% >> h = function_handle(f)
-%%    @result{} h =
-%%      @@(x, y) x .^ 2 + sin (y)
+%% syms x y
+%% f = x^2 + sin(y)
+%%   @result{} f = (sym)
+%%        2
+%%       x  + sin(y)
+%% h = function_handle(f)
+%%   @result{} h = @@(x, y) x .^ 2 + sin (y)
+%% h(2, pi/2)
+%%   @result{} ans =  5
 %% @end group
 %% @end example
 %%
@@ -45,26 +46,25 @@
 %% specifies the third output (rather than the input):
 %% @example
 %% @group
-%% >> h = function_handle(x^2, 5*x, x);
-%% >> [a, b, c] = h(2)
-%%    @result{} a = 4
-%%    @result{} b = 10
-%%    @result{} c = 2
+%% h = function_handle(x^2, 5*x, x);
+%% [a, b, c] = h(2)
+%%   @result{} a = 4
+%%   @result{} b = 10
+%%   @result{} c = 2
 %% @end group
 %% @end example
 %%
 %% The order and number of inputs can be specified:
 %% @example
 %% @group
-%% >> syms x y z
-%% >> h = function_handle(f, 'vars', [z y x])
-%%    @result{} h =
-%%      @@(z, y, x) x .^ 2 + sin (y)
+%% syms x y z
+%% h = function_handle(f, 'vars', [z y x])
+%%   @result{} h = @@(z, y, x) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
 %% For compatibility with the Symbolic Math Toolbox in Matlab, we
-%% provide a synonym: @xref{matlabFunction}
+%% provide a synonym: @pxref{@@sym/matlabFunction}
 %%
 %% OctSymPy can also generate an @code{.m} file from a symbolic
 %% expression by passing the keyword @code{file} with a string
@@ -73,19 +73,18 @@
 %% Passing an empty @var{filename} creates an anonymous function:
 %% @example
 %% @group
-%% >> h = function_handle(f, 'file', '')
-%%    @result{} h =
-%%      @@(x, y) x .^ 2 + sin (y)
+%% h = function_handle(f, 'file', '')
+%%   @result{} h = @@(x, y) x .^ 2 + sin (y)
 %% @end group
 %% @end example
 %%
-%% FIXME: naming outputs with @var{PARAM} as
-%% @code{outputs} not implemented.
+%% FIXME: naming outputs with @var{PARAM} as @code{outputs}
+%% not implemented.
 %%
 %% FIXME: does not ``optimize'' code, for example, using common
 %% subexpression elimination.
 %%
-%% @seealso{ccode, fortran, latex, matlabFunction}
+%% @seealso{@@sym/ccode, @@sym/fortran, @@sym/latex, @@sym/matlabFunction}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald
@@ -93,6 +92,7 @@
 
 function f = function_handle(varargin)
 
+  % We use the private/codegen function only for its input parsing
   [flg, meh] = codegen(varargin{:}, 'lang', 'octave');
   assert(flg == -1);
   [Nin, inputs, inputstr, Nout, param] = deal(meh{:});
@@ -110,14 +110,8 @@ function f = function_handle(varargin)
             '    return (False, str(e))' ...
             'return (True, out)' };
 
-    % if filename ends with .m, do not add another
-    if strcmpi(param.fname(end-1:end), '.m')
-      param.fname = param.fname(1:end-2);
-    end
-
-    fname2 = param.fname; fcnname = param.fname;
-    % was old note about findsymbols vs symvar: not relevant
-    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fname2, param.show_header, inputs);
+    [fcnpath, fcnname, fcnext] = fileparts(param.fname);
+    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fcnname, param.show_header, inputs);
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
@@ -130,11 +124,28 @@ function f = function_handle(varargin)
     M.name = out{1}{1};
     M.code = out{1}{2};
 
-    [fid,msg] = fopen(M.name, 'w');
+    assert (strcmp (M.name, [fcnname '.m']), 'sanity check failed: names should match');
+
+    file_to_write = fullfile(fcnpath, [fcnname '.m']);
+    [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
     fprintf(fid, '%s', M.code)
     fclose(fid);
-    fprintf('Wrote file %s.\n', M.name);
+    fprintf('Wrote file %s.\n', file_to_write);
+
+    % FIXME: Check upstream to rehash the files correctly once created
+    % Due to an upstream bug in octave on windows, we have to wait for the file to be loaded.
+    % See https://savannah.gnu.org/bugs/?31080 for more information...\n
+    if (exist('OCTAVE_VERSION', 'builtin') && ispc())
+      fprintf('Workaround savannah.gnu.org/bugs/?31080: waiting for %s... ', fcnname);
+      fflush(stdout);
+      while (exist(fcnname) == 0)
+        rehash()
+        pause(1)
+      end
+      fprintf('Found!\n');
+    end
+
     f = str2func(fcnname);
 
   else % output function handle
@@ -246,23 +257,51 @@ end
 %!test
 %! % output to disk
 %! fprintf('\n')
-%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output1');
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   temp_file = tempname('', 'oct_');
+%! else
+%!   temp_file = tempname();
+%! end
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! delete('temp_test_output1.m')
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink([temp_file '.m']) == 0)
+%! else
+%!   delete ([temp_file '.m'])
+%! end
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % output to disk: also works with .m specified
-%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', 'temp_test_output2.m');
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   temp_file = [tempname('', 'oct_') '.m'];
+%! else
+%!   temp_file = [tempname() '.m'];
+%! end
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
 %! assert (b == 1024)
-%! delete('temp_test_output2.m')
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink(temp_file) == 0)
+%! else
+%!   delete (temp_file)
+%! end
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % non-scalar outputs
@@ -280,13 +319,27 @@ end
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
-%! h = function_handle(H, M, V, 'vars', {x y z}, 'file', 'temp_test_output3');
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   temp_file = tempname('', 'oct_');
+%! else
+%!   temp_file = tempname();
+%! end
+%! % allow loading function from temp_file
+%! [temp_path, ans, ans] = fileparts(temp_file);
+%! addpath(temp_path);
+%! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
 %! [t1,t2,t3] = h(1,2,3);
 %! assert(isequal(t1, [1 2 3]))
 %! assert(isequal(t2, [1 2; 3 16]))
 %! assert(isequal(t3, [1;2;3]))
-%! delete('temp_test_output3.m')
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   assert (unlink([temp_file '.m']) == 0)
+%! else
+%!   delete ([temp_file '.m'])
+%! end
+%! % remove temp_path from load path
+%! rmpath(temp_path);
 
 %!test
 %! % order of outputs is lexiographic

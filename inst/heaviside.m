@@ -16,8 +16,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} heaviside (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} heaviside (@var{x}, @var{zero_value})
+%% @defun  heaviside (@var{x})
+%% @defunx heaviside (@var{x}, @var{zero_value})
 %% Compute the Heaviside unit-step function.
 %%
 %% The Heaviside function is 0 for negative @var{x} and 1 for
@@ -47,8 +47,8 @@
 %%   @result{} 1
 %% @end group
 %% @end example
-%% @seealso{dirac}
-%% @end deftypefn
+%% @seealso{dirac, @@sym/heaviside}
+%% @end defun
 
 function y = heaviside (x, zero_value)
   if (nargin < 1 || nargin > 2)

@@ -17,13 +17,42 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{out} =} subsasgn (@var{val}, @var{idx}, @var{rhs})
+%% @documentencoding UTF-8
+%% @deftypeop  Method   @@sym {@var{f} =} subsasgn (@var{f}, @var{idx}, @var{rhs})
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}, @var{j}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{i}:@var{j}) = @var{rhs}} {}
+%% @deftypeopx Operator @@sym {} {@var{f}(@var{x}) = @var{symexpr}} {}
 %% Assign to entries of a symbolic array.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% A = sym([10 11 12]);
+%% A(3) = 44
+%%   @result{} A = (sym) [10  11  44]  (1×3 matrix)
+%%
+%% A(1:2) = [42 43]
+%%   @result{} A = (sym) [42  43  44]  (1×3 matrix)
+%%
+%% A(1, 1) = 41
+%%   @result{} A = (sym) [41  43  44]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
+%% This method also gets called when creating @@symfuns:
+%% @example
+%% @group
+%% syms x
+%% f(x) = 3*x^2
+%%   @result{} f(x) = (symfun)
+%%          2
+%%       3⋅x
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/subsref, @@sym/subindex, @@sym/end, symfun}
+%% @end deftypeop
 
 function out = subsasgn (val, idx, rhs)
 
@@ -35,14 +64,37 @@ function out = subsasgn (val, idx, rhs)
       %   x is idx.subs{1}
       % This also gets called for "syms f(x)"
 
-      if (isa(idx.subs{1}, 'sym'))  % f(sym) = ..., define symfun
+      all_syms = true;
+      for i = 1:length(idx.subs)
+        all_syms = all_syms && isa(idx.subs{i}, 'sym');
+      end
+      if (all_syms)
+        cmd = { 'L, = _ins'
+                'return all([x is not None and x.is_Symbol for x in L])' };
+        all_Symbols = python_cmd (cmd, idx.subs);
+      end
+      if (all_syms && all_Symbols)
+	%% Make a symfun
         if (~isa(rhs, 'sym'))
           % rhs is, e.g., a double, then we call the constructor
           rhs = sym(rhs);
         end
         out = symfun(rhs, idx.subs);
 
-      else   % f(double) = ..., array assignment
+      else
+        %% Not symfun: e.g., f(double) = ..., f(sym(2)) = ...,
+        % convert any sym subs to double and do array assign
+        for i = 1:length(idx.subs)
+          if (isa(idx.subs{i}, 'sym'))
+            idx.subs{i} = double(idx.subs{i});
+          end
+        end
+	for i = 1:length(idx.subs)
+          if (~ is_valid_index(idx.subs{i}))
+            error('OctSymPy:subsref:invalidIndices', ...
+                  'invalid indices: should be integers or boolean');
+          end
+	end
         out = mat_replace(val, idx.subs, sym(rhs));
       end
 
@@ -78,10 +130,11 @@ end
 %! a(I) = [2; 4]; b(I) = [2; 4];
 %! assert(isequal( a, b ))
 
-%!shared a,b
+%!shared
+
+%!test
 %! b = 1:4; b = [b; 2*b; 3*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a([1:2],[1:2]) = rhs;
 %! b([1:2],[1:2]) = rhs;
@@ -89,28 +142,26 @@ end
 %! a(1:2,1:2) = rhs;
 %! assert(isequal( a, b ))
 
-%% slice :
-%!shared a,b
+%!test
+%! % slice :
 %! b = 1:4; b = [b; 2*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a(:,2:3) = rhs;
 %! b(:,2:3) = rhs;
 %! assert(isequal( a, b ))
 
-%% grow 2D
-%!shared a,b
+%!test
+%! % grow 2D
 %! b = 1:4; b = [b; 2*b];
 %! a = sym(b);
-%!test
 %! rhs = [10 11; 12 13];
 %! a([1 end+1],end:end+1) = rhs;
 %! b([1 end+1],end:end+1) = rhs;
 %! assert(isequal( a, b ))
 
-%% linear indices of 2D
 %!test
+%! % linear indices of 2D
 %! b = 1:4; b = [b; 2*b; 3*b];
 %! a = sym(b);
 %! b(1:4) = [10 11 12 13];
@@ -130,15 +181,15 @@ end
 % a(1:2,1:2) = rhs(:);
 % assert(isequal( a, b ))
 
-%% 1D growth and 'end'
 %!test
+%! % 1D growth and 'end'
 %! g = sym([1 2 3]);
 %! g(3:4) = [67 68];
 %! g(end:end+1) = [12 14];
 %! assert(isequal( g, [1 2 67 12 14] ))
 
-%% expanding empty and scalar
 %!test
+%! % expanding empty and scalar
 %! syms x
 %! c = sym([]);
 %! c(1) = x;
@@ -162,11 +213,11 @@ end
 %! a(I, J) = 100;
 %! assert(isequal( a, b ))
 
-%!shared x
-%! syms x
+%!shared
 
-%% logical with all false
 %!test
+%! % logical with all false
+%! syms x
 %! y = x;
 %! y(false) = 6;
 %! assert(isequal( y, x ));
@@ -174,8 +225,9 @@ end
 %! a([false false]) = [6 6];
 %! assert(isequal( a, [x x] ));
 
-%% issue 18, scalar access
 %!test
+%! % issue #18, scalar access
+%! syms x
 %! x(1) = sym(6);
 %! assert(isequal( x, sym(6) ));
 %! x(1) = 6;
@@ -183,24 +235,24 @@ end
 %! x(true) = 88;
 %! assert(isequal( x, sym(88) ));
 
-%% bug: assignment to column vector used to fail
 %!test
+%! % bug: assignment to column vector used to fail
 %! A = sym(zeros(3,1));
 %! A(1) = 5;
 
-%% symfun creation (generic function)
 %!test
+%! % symfun creation (generic function)
 %! syms x
 %! g(x) = x*x;
 %! assert(isa(g,'symfun'))
 
-%% symfun creation (generic function)
 %!test
+%! % symfun creation (generic function)
 %! syms x g(x)
 %! assert(isa(g,'symfun'))
 
-%% symfun creation when g already exists and is a sym/symfun
 %!test
+%! % symfun creation when g already exists and is a sym/symfun
 %! syms x
 %! g = x;
 %! syms g(x)
@@ -209,6 +261,51 @@ end
 %! g(x) = x;
 %! g(x) = x*x;
 %! assert(isa(g,'symfun'))
+
+%!test
+%! % Issue #443: assignment with sym indices
+%! A = sym([10 11]);
+%! A(sym(1)) = 12;
+%! assert (isequal (A, sym([12 11])))
+
+%!test
+%! % Issue #443: assignment with sym indices
+%! A = sym([10 11]);
+%! A(sym(1), 1) = 12;
+%! assert (isequal (A, sym([12 11])))
+%! A(sym(1), sym(1)) = 13;
+%! assert (isequal (A, sym([13 11])))
+
+%!test
+%! % Issue #443: assignment with sym indices, increase size
+%! A = sym([10 11]);
+%! A(sym(2), 1) = 12;
+%! assert (isequal (A, sym([10 11; 12 0])))
+
+%!error
+%! % Issue #443
+%! A = sym([10 11]);
+%! A(2, sym('x')) = sym(12);
+
+%!error
+%! % Issue #443
+%! A = sym([10 11]);
+%! A(sym(2), sym('x')) = sym(12);
+
+%!error <integers>
+%! % issue #445
+%! A = sym([10 11]);
+%! A(1.1) = 13
+
+%!error <integers>
+%! % issue #445
+%! A = sym([10 11]);
+%! A(sym(pi)) = 13
+
+%!error <integers>
+%! % issue #445
+%! A = sym([1 2; 3 4]);
+%! A(1.3, 1.2) = 13
 
 
 %!test
@@ -266,6 +363,7 @@ end
 
 %!test
 %! % bool scalar assignments of true/false into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;
@@ -275,6 +373,7 @@ end
 
 %!test
 %! % bool vector assignments of true/false into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;
@@ -283,6 +382,7 @@ end
 
 %!test
 %! % bool scalar promoted to vector assignments into sym
+%! syms x
 %! a = sym([1 2 x 3]);
 %! b = [1 2 10 4];
 %! e = a == b;

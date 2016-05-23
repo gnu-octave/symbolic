@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,24 +17,71 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} divergence (@var{F})
-%% @deftypefnx {Function File} {@var{g} =} divergence (@var{F}, @var{x})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym divergence (@var{F})
+%% @defmethodx @@sym divergence (@var{F}, @var{x})
 %% Symbolic divergence of symbolic expression.
+%%
+%% Consider a vector expression @var{F}:
+%% @example
+%% @group
+%% syms f_1(x,y,z) f_2(x,y,z) f_3(x,y,z)
+%% F = [f_1; f_2; f_3]
+%%   @result{} F = (sym 3×1 matrix)
+%%       ⎡f₁(x, y, z)⎤
+%%       ⎢           ⎥
+%%       ⎢f₂(x, y, z)⎥
+%%       ⎢           ⎥
+%%       ⎣f₃(x, y, z)⎦
+%% @end group
+%% @end example
+%% The divergence of @var{F} is the scalar expression:
+%% @example
+%% @group
+%% divergence(F)
+%%   @result{} (sym)
+%%       ∂                 ∂                 ∂
+%%       ──(f₁(x, y, z)) + ──(f₂(x, y, z)) + ──(f₃(x, y, z))
+%%       ∂x                ∂y                ∂z
+%% @end group
+%% @end example
+%%
+%% Examples:
+%% @example
+%% @group
+%% syms x y
+%% F = [x^2/2  y^2/2];
+%% divergence(F)
+%%   @result{} (sym) x + y
+%% @end group
+%%
+%% @group
+%% syms z
+%% F = [y x x*y];
+%% divergence(F, [x; y; z])
+%%   @result{} (sym) 0
+%% @end group
+%% @end example
 %%
 %% Note: assumes @var{x} is a Cartesian coordinate system.
 %%
-%% @seealso{gradient, curl, laplacian, jacobian, hessian}
-%% @end deftypefn
+%% @seealso{@@sym/gradient, @@sym/curl, @@sym/laplacian, @@sym/jacobian,
+%%          @@sym/hessian}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function g = divergence(f,x)
+function g = divergence(f, x)
 
   assert (isvector(f), 'divergence: defined for vectors')
 
   if (nargin == 1)
     x = symvar(f);
+  elseif (nargin == 2)
+    % np-op
+  else
+    print_usage ();
   end
 
   assert (length(f) == length(x), 'divergence: num vars must match vec length')
@@ -97,3 +144,5 @@ end
 %! assert (isequal (divergence(g2, {x,y}), l2))
 %! assert (isequal (divergence(g3, {x,y,z}), l3))
 
+%!error divergence ([1 2], [sym('x')])
+%!error divergence ([1 2], sym('x'), 42)

@@ -1,4 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +19,21 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {} catalan ()
+%% @deffn Constant catalan ()
 %% Return Catalan constant.
 %%
 %% @example
+%% @group
+%% catalan ()
+%%   @result{} (sym) Catalan
+%%
 %% vpa (catalan ())
-%% @result{} (sym) 0.91596559417721901505460351493238
+%%   @result{} (sym) 0.91596559417721901505460351493238
+%% @end group
 %% @end example
 %%
 %% @seealso{eulergamma}
-%% @end deftypefn
+%% @end deffn
 
 %% Author: Carnë Draug
 %% Keywords: symbolic, constants
@@ -35,6 +41,7 @@
 function g = catalan ()
   g = python_cmd ('return sympy.S.Catalan,');
 end
+
 
 %!assert (double (catalan ()) > 0.915965594177)
 %!assert (double (catalan ()) < 0.915965594178)

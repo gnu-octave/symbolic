@@ -17,7 +17,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} = } laguerreL (@var{n}, @var{x})
+%% @defun laguerreL (@var{n}, @var{x})
+%% Evaluate Laguerre polynomials.
 %%
 %% Compute the value of the Laguerre polynomial of order @var{n}
 %% for each element of @var{x}.
@@ -59,7 +60,7 @@
 %% @end example
 %%
 %% @seealso{@@sym/laguerreL}
-%% @end deftypefn
+%% @end defun
 
 function L = laguerreL(n, x)
 
@@ -168,6 +169,6 @@ end
 %! L = laguerreL ([0 1 2 3], 6);
 %! assert (L, [1 -5 7 1], eps)
 
-%! assert (isa (laguerreL (0, single (1)), 'single'))
-%! assert (isa (laguerreL (1, single ([1 2])), 'single'))
-%! assert (isa (laguerreL ([1 2], single ([1 2])), 'single'))
+%!assert (isa (laguerreL (0, single (1)), 'single'))
+%!assert (isa (laguerreL (1, single ([1 2])), 'single'))
+%!assert (isa (laguerreL ([1 2], single ([1 2])), 'single'))

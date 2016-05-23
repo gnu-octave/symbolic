@@ -30,7 +30,7 @@ function n = ustr_length(str)
 %   sure of the relationship between the amount of (monospaced) space
 %   taken by a string and the results of this function.
 
-  if ~exist('octave_config_info', 'builtin')
+  if ~exist('OCTAVE_VERSION', 'builtin')
     n = length(str);
     return
   end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,12 +34,12 @@
 %%
 %% @example
 %% @group
-%% >> syms n m
-%% >> symsum(1/n^2, n, 1, m)
-%%    @result{} (sym) harmonic(m, 2)
+%% syms n m
+%% symsum(1/n^2, n, 1, m)
+%%   @result{} (sym) harmonic(m, 2)
 %%
-%% >> symsum(exp(2*n)/sin(n), n, 2*m, 6*m)
-%%    @result{} (sym)
+%% symsum(exp(2*n)/sin(n), n, 2*m, 6*m)
+%%   @result{} (sym)
 %%           6⋅m
 %%           ____
 %%           ╲
@@ -53,7 +53,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{symprod, sum}
+%% @seealso{@@sym/symprod, @@sym/sum}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

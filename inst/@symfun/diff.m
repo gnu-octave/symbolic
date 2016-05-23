@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,50 +18,56 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} diff (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} diff (@var{f}, @dots{})
+%% @defmethod  @@symfun diff (@var{f})
+%% @defmethodx @@symfun diff (@var{f}, @var{x})
+%% @defmethodx @@symfun diff (@var{f}, @dots{})
 %% Symbolic differentiation of symbolic functions.
 %%
-%% Mostly the same as @code{diff} for class @code{sym} (indeed it
+%% Mostly the same as @code{@@sym/diff} (and indeed it
 %% calls that code) but returns a @code{symfun}.
 %%
 %% The derivative is itself a symfun so you can evaluate at a point like:
 %% @example
-%% >> syms u(x)
-%% >> up = diff(u)  % u'(x)
-%%    @result{} up(x) = (symfun)
-%%         d
-%%         ──(u(x))
-%%         dx
-%% >> up(2)         % u'(2)
-%%    @result{} ans = (sym)
-%%         ⎛d       ⎞│
-%%         ⎜──(u(x))⎟│
-%%         ⎝dx      ⎠│x=2
+%% @group
+%% syms u(x)
+%% up = diff(u)           % u'(x)
+%%   @result{} up(x) = (symfun)
+%%       d
+%%       ──(u(x))
+%%       dx
+%% up(2)                  % u'(2)
+%%   @result{} ans = (sym)
+%%       ⎛d       ⎞│
+%%       ⎜──(u(x))⎟│
+%%       ⎝dx      ⎠│x=2
+%% @end group
 %% @end example
 %%
-%% At least on GNU Octave, a further shortcut is possible:
+%% On GNU Octave, a further shortcut is possible:
 %% @example
-%% >> syms u(x)
-%% >> diff(u)(2)
-%%    @result{} ans = (sym)
-%%         ⎛d       ⎞│
-%%         ⎜──(u(x))⎟│
-%%         ⎝dx      ⎠│x=2
+%% @group
+%% syms u(x)
+%% diff(u)(2)
+%%   @result{} ans = (sym)
+%%       ⎛d       ⎞│
+%%       ⎜──(u(x))⎟│
+%%       ⎝dx      ⎠│x=2
+%% @end group
 %%
-%% >> syms f(x, y)
-%% >> diff(f, x, y, y)(3, 2)  % a third partial eval at (3, 2)
-%%    @result{} ans = (sym)
-%%         ⎛⎛   3           ⎞│   ⎞│
-%%         ⎜⎜  ∂            ⎟│   ⎟│
-%%         ⎜⎜──────(f(x, y))⎟│   ⎟│
-%%         ⎜⎜  2            ⎟│   ⎟│
-%%         ⎝⎝∂y  ∂x         ⎠│x=3⎠│y=2
+%% @group
+%% syms f(x, y)
+%% diff(f, x, y, y)(3, 2)     % a third partial eval at (3, 2)
+%%   @result{} ans = (sym)
+%%       ⎛⎛   3           ⎞│   ⎞│
+%%       ⎜⎜  ∂            ⎟│   ⎟│
+%%       ⎜⎜──────(f(x, y))⎟│   ⎟│
+%%       ⎜⎜  2            ⎟│   ⎟│
+%%       ⎝⎝∂y  ∂x         ⎠│x=3⎠│y=2
+%% @end group
 %% @end example
 %%
-%% @seealso{int}
-%% @end deftypefn
+%% @seealso{@@sym/diff, @@symfun/int}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, differentiation

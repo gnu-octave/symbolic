@@ -25,11 +25,11 @@
 %% @var{x} can be a string, a sym or a double.  Example:
 %% @example
 %% @group
-%% >> x = vpa('1/3', 32)
-%%    @result{} x = (sym) 0.33333333333333333333333333333333
-%% >> a = sym(1)/3;
-%% >> x = vpa(a, 32)
-%%    @result{} x = (sym) 0.33333333333333333333333333333333
+%% x = vpa('1/3', 32)
+%%   @result{} x = (sym) 0.33333333333333333333333333333333
+%% a = sym(1)/3;
+%% x = vpa(a, 32)
+%%   @result{} x = (sym) 0.33333333333333333333333333333333
 %% @end group
 %% @end example
 %%
@@ -37,8 +37,8 @@
 %% double as you will generally only get 15 digits:
 %% @example
 %% @group
-%% >> vpa(1/3, 32)
-%%    @result{} (sym) 0.33333333333333331482961625624739
+%% vpa(1/3, 32)
+%%   @result{} (sym) 0.33333333333333331482961625624739
 %% @end group
 %% @end example
 %%

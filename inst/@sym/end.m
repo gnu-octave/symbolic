@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y} =} end (@var{x})
-%% Overloaded end for sym arrays.
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym end {(@var{A})}
+%% @defopx Operator @@sym {@var{A}(@var{n}:end)} {}
+%% @defopx Operator @@sym {@var{A}(end:@var{m})} {}
+%% Overloaded end for symbolic arrays.
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% A = sym([10 11 12])
+%%   @result{} A = (sym) [10  11  12]  (1×3 matrix)
+%%
+%% A(2:end)
+%%   @result{} (sym) [11  12]  (1×2 matrix)
+%%
+%% A(end-1:end)
+%%   @result{} (sym) [11  12]  (1×2 matrix)
+%% @end group
+%% @end example
+%% @end defop
 
 function r = end (obj, index_pos, num_indices)
 

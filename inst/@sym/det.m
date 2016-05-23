@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,9 +17,19 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn  {Function File} {@var{z} =} det (@var{x})
 %% Symbolic determinant of a matrix.
 %%
+%% Example:
+%% @example
+%% @group
+%% A = sym([2 4; 6 8]);
+%% det(A)
+%%   @result{} ans = (sym) -8
+%% @end group
+%% @end example
+%% @seealso{@@sym/eig, @@sym/charpoly, @@sym/trace}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

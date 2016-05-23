@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} mrdivide (@var{x}, @var{y})
-%% Forward slash division of symbolic expressions (/).
+%% @defop  Method   @@sym mrdivide {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} / @var{y}} {}
+%% Forward slash division of symbolic expressions.
 %%
 %% Example:
 %% @example
@@ -49,7 +50,7 @@
 %%       ⎡1 + π  2⋅π⎤
 %%       ⎢          ⎥
 %%       ⎣  7     8 ⎦
-%% C / B                         % doctest: +SKIP
+%% C / B
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡1  π⎤
 %%       ⎢    ⎥
@@ -61,11 +62,8 @@
 %%       ⎣3  4⎦
 %% @end group
 %% @end example
-%% (However, as of 2016-01 this feature requires a development
-%% version of SymPy 0.7.7-dev.)
-%%
-%% @seealso{rdivide, mldivide}
-%% @end deftypefn
+%% @seealso{@@sym/rdivide, @@sym/mldivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

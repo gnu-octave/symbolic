@@ -49,7 +49,7 @@
 %%   @print{} ??? ind2sub: index out of range
 %% @end group
 %% @end example
-%% Instead you can first convert it to a cell (@pxref{children}):
+%% Instead you can first convert it to a cell (@pxref{@@sym/children}):
 %% @example
 %% @group
 %% elements = children(S)
@@ -108,7 +108,8 @@
 %% (This is implemented mainly to enable the @code{num2cell} example
 %% above.)
 %%
-%% @seealso{interval, ismember, children, union, intersect, setdiff, setxor}
+%% @seealso{@@sym/interval, @@sym/ismember, @@sym/children, @@sym/union,
+%%          @@sym/intersect, @@sym/setdiff, @@sym/setxor}
 %% @end deftypefn
 
 function S = finiteset(varargin)

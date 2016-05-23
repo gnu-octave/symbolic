@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,10 +17,25 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
+%% @documentencoding UTF-8
 %% @deftypefn {Function File} {@var{y} =} log10 (@var{x})
 %% Symbolic log base 10 function.
 %%
-%% @seealso{log,log2}
+%% Examples:
+%% @example
+%% @group
+%% log10(sym(1000))
+%%   @result{} ans = (sym) 3
+%%
+%% syms x
+%% log10(x)
+%%   @result{} ans = (sym)
+%%        log(x)
+%%       ───────
+%%       log(10)
+%% @end group
+%% @end example
+%% @seealso{@@sym/log, @@sym/log2}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

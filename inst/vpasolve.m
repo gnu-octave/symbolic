@@ -29,10 +29,10 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> eqn = exp(x) == x + 2;
-%% >> vpasolve(eqn, x, 0.1)
-%%    @result{} (sym) 1.1461932206205825852370610285214
+%% syms x
+%% eqn = exp(x) == x + 2;
+%% vpasolve(eqn, x, 0.1)
+%%   @result{} (sym) 1.1461932206205825852370610285214
 %% @end group
 %% @end example
 %%

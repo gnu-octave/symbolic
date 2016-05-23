@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{I} =} besseli (@var{alpha}, @var{x})
+%% @defmethod @@sym besseli (@var{alpha}, @var{x})
 %% Symbolic modified Bessel function of the first kind.
 %%
 %% Example:
@@ -32,8 +32,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{besselk, besselj, bessely}
-%% @end deftypefn
+%% @seealso{@@sym/besselk, @@sym/besselj, @@sym/bessely}
+%% @end defmethod
 
 function I = besseli(n, x)
 

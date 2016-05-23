@@ -5,7 +5,7 @@ REM This is a workaround as Octave for Windows cannot tolerate stderr from a pop
 REM subprocess: see [this bug report](https://savannah.gnu.org/bugs/?43036).
 REM You'll need to edit this script if your python is called something else.
 
-python.exe -i 2> NUL
+%1 -i 2> NUL
 
 REM If you are using the windows bundle for octsympy then "octpy.exe" will be used.
 REM It is [available online](http://www.orbitals.com/programs/pyexe.html)

@@ -16,7 +16,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} dirac (@var{x})
+%% @defun dirac (@var{x})
 %% Compute the Dirac delta (generalized) function.
 %%
 %% The Dirac delta "function" is a generalized function (or distribution)
@@ -34,8 +34,8 @@
 %%   @result{} 0     0   Inf     0     0
 %% @end group
 %% @end example
-%% @seealso{heaviside}
-%% @end deftypefn
+%% @seealso{heaviside, @@sym/dirac}
+%% @end defun
 
 function y = dirac(x)
   if (nargin ~= 1)

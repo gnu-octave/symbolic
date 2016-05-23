@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald and others
+%% Copyright (C) 2014-2016 Colin B. Macdonald and others
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
+%% @defmethod @@symfun argnames (@var{f})
 %% Return the independent variables in a symfun.
 %%
 %% The counterpart of @code{argname} is @code{formula}:
@@ -28,18 +28,15 @@
 %% Examples:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f(x, y) = x^2;
-%% >> argnames(f)
-%%    @result{} (sym) [x  y]  (1×2 matrix)
+%% syms x y
+%% f(x, y) = x^2;
+%% argnames(f)
+%%   @result{} (sym) [x  y]  (1×2 matrix)
 %% @end group
 %% @end example
 %%
-%% @seealso{@@symfun/formula, symvar, findsym, findsymbols}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@symfun/formula, @@symfun/symvar, findsymbols}
+%% @end defmethod
 
 function vars = argnames(F)
 

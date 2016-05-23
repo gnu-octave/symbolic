@@ -26,8 +26,34 @@
 %% W(z) is a shorthand for W(0,z), the principal branch.  Branches
 %% 0 and -1 are the only ones that can take on non-complex values.
 %%
+%% For example, the principal branch passes through the point (0, 0):
+%% @example
+%% @group
+%% lambertw (0)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%% And the 0 and -1 branches coincide for the following real value:
+%% @example
+%% @group
+%% x = -1/exp (1);
+%% lambertw (x)
+%%   @result{} ans = -1
+%% lambertw (-1, x)
+%%   @result{} ans = -1
+%% @end group
+%% @end example
+%%
 %% If either @var{n} or @var{z} are non-scalar, the function is mapped to each
 %% element; both may be non-scalar provided their dimensions agree.
+%% For example, we can repeat the above calculation as:
+%% @example
+%% @group
+%% lambertw ([0 -1], x)
+%%   @result{} ans =
+%%       -1  -1
+%% @end group
+%% @end example
 %%
 %% This implementation should return values within 2.5*eps of its
 %% counterpart in Maple V, release 3 or later.  Please report any
@@ -144,7 +170,7 @@ end
 %! % input shape preserved
 %! x = [0 1; 2 3];
 %! b = x;
-%! W = lambertw (x, x);
+%! W = lambertw (b, x);
 %! assert (W.*exp (W), x, -10*eps)
 
 %!test

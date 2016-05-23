@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} symfun (@var{expr}, @var{vars})
+%% @deftypemethod  @@symfun {@var{f} =} symfun (@var{expr}, @var{vars})
 %% Define a symbolic function (not usually called directly).
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
@@ -33,78 +33,96 @@
 %%
 %% A concrete symfun:
 %% @example
-%% >> syms x
-%% >> f(x) = sin(x)
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> f
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> f(1)
-%%    @result{} ans = (sym) sin(1)
-%% >> f(x)
-%%    @result{} ans = (sym) sin(x)
+%% @group
+%% syms x
+%% f(x) = sin(x)
+%%   @result{} f(x) = (symfun) sin(x)
+%% f
+%%   @result{} f(x) = (symfun) sin(x)
+%% f(1)
+%%   @result{} ans = (sym) sin(1)
+%% f(x)
+%%   @result{} ans = (sym) sin(x)
+%% @end group
 %% @end example
 %%
 %% An abstract symfun:
 %% @example
-%% >> syms g(x)
-%% >> g
-%%    @result{} g(x) = (symfun) g(x)
+%% @group
+%% syms g(x)
+%% g
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
 %% @end example
 %% and note this creates the sym @code{x} automatically.
 %%
 %% Alternatively:
 %% @example
-%% >> x = sym('x');
-%% >> g(x) = sym('g(x)')
-%%    @result{} g(x) = (symfun) g(x)
+%% @group
+%% x = sym('x');
+%% g(x) = sym('g(x)')
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
 %% @end example
 %% Note the following is @strong{not} the way to create an abstract
 %% symfun:
 %% @example
-%% >> g = sym('g(x)')  % just the symbolic expression g(x)
-%%    @result{} g = (sym) g(x)
+%% @group
+%% g = sym('g(x)')     % just the symbolic expression g(x)
+%%   @result{} g = (sym) g(x)
+%% @end group
 %% @end example
 %% Instead, use @code{g(x)} on the left-hand side as above.
 %%
 %% You can make multidimensional concrete or abstract symfuns:
 %% @example
-%% >> syms x y
-%% >> g(x, y) = 2*x + sin(y)
-%%    @result{} g(x, y) = (symfun) 2⋅x + sin(y)
-%% >> syms g(x, y)
-%% >> g
-%%    @result{} g(x, y) = (symfun) g(x, y)
+%% @group
+%% syms x y
+%% g(x, y) = 2*x + sin(y)
+%%   @result{} g(x, y) = (symfun) 2⋅x + sin(y)
+%% syms g(x, y)
+%% g
+%%   @result{} g(x, y) = (symfun) g(x, y)
+%% @end group
 %% @end example
 %%
 %% As the above examples demonstrate, it is usually not necessary to
 %% call symfun directly.  However, it can be done:
 %% @example
-%% >> syms x y
-%% >> f = symfun(sin(x), x)
-%%    @result{} f(x) = (symfun) sin(x)
-%% >> F = symfun(x*y, [x y])
-%%    @result{} F(x, y) = (symfun) x⋅y
-%% >> g = symfun(sym('g(x)'), x)
-%%    @result{} g(x) = (symfun) g(x)
-%% >> G = symfun(sym('G(x, y)'), [x y])
-%%    @result{} G(x, y) = (symfun) G(x, y)
+%% @group
+%% syms x y
+%% f = symfun(sin(x), x)
+%%   @result{} f(x) = (symfun) sin(x)
+%% F = symfun(x*y, [x y])
+%%   @result{} F(x, y) = (symfun) x⋅y
+%% @end group
+%% @group
+%% g = symfun(sym('g(x)'), x)
+%%   @result{} g(x) = (symfun) g(x)
+%% G = symfun(sym('G(x, y)'), [x y])
+%%   @result{} G(x, y) = (symfun) G(x, y)
+%% @end group
 %% @end example
 %%
 %% This allows, for example, creating an abstract function formally
 %% of @code{x}, @code{y} but depending only on @code{x}:
 %% @example
-%% >> syms x y
-%% >> h = symfun(sym('h(x)'), [x y])
-%%    @result{} h(x, y) = (symfun) h(x)
+%% @group
+%% syms x y
+%% h = symfun(sym('h(x)'), [x y])
+%%   @result{} h(x, y) = (symfun) h(x)
+%% @end group
 %% @end example
 %% which is the same as:
 %% @example
-%% >> h(x,y) = sym('h(x)')
-%%    @result{} h(x, y) = (symfun) h(x)
+%% @group
+%% h(x,y) = sym('h(x)')
+%%   @result{} h(x, y) = (symfun) h(x)
+%% @end group
 %% @end example
 %%
 %% @seealso{sym, syms}
-%% @end deftypefn
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, symbols, CAS
@@ -126,6 +144,16 @@ function f = symfun(expr, vars)
     for i = 1:numel(varsarray)
       vars{i} = varsarray(i);
     end
+  end
+
+  % check that vars are unique Symbols
+  cmd = { 'L, = _ins'
+          'if not all([x is not None and x.is_Symbol for x in L]):'
+	  '    return False'
+	  'return len(set(L)) == len(L)' };
+  if (~ python_cmd (cmd, vars))
+    error('OctSymPy:symfun:argNotUniqSymbols', ...
+          'symfun arguments must be unique symbols')
   end
 
   if (ischar (expr))
@@ -301,3 +329,23 @@ end
 %! assert (isa (y, 'symfun'))
 %! y = symfun(x, t);
 %! assert (isa (y, 'symfun'))
+
+%!error <unique symbols>
+%! % Issue #444: invalid args
+%! syms x
+%! f(x, x) = 2*x;
+
+%!error <unique symbols>
+%! % Issue #444: invalid args
+%! syms x y
+%! f(x, y, x) = x + y;
+
+%!error <unique symbols>
+%! % Issue #444: invalid args
+%! syms x y
+%! f(x, y, x) = x + y;
+
+%!error
+%! % Issue #444: expression as arg
+%! syms x
+%! f(2*x) = 4*x;

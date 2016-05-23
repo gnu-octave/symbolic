@@ -33,15 +33,15 @@
 %% x = sym ('x');
 %% y = sym ('y');
 %% poly2sym ([2 5])
-%%    @result{} (sym) 2⋅x + 5
+%%   @result{} (sym) 2⋅x + 5
 %% poly2sym (@{2*y 5 -3@}, x)
-%%    @result{} (sym)
+%%   @result{} (sym)
 %%          2
 %%       2⋅x ⋅y + 5⋅x - 3
 %% @end group
 %% @end example
 %%
-%% @seealso{sym2poly, polyval, roots}
+%% @seealso{@@sym/sym2poly, polyval, roots}
 %% @end deftypefn
 
 function p = poly2sym(c,x)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,43 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{L} =} tril (@var{A})
-%% @deftypefnx {Function File} {@var{L} =} tril (@var{A}, @var{k})
-%% Lower triangular part of a symbolic matrix.
+%% @documentencoding UTF-8
+%% @defmethod  @@sym tril (@var{A})
+%% @defmethodx @@sym tril (@var{A}, @var{k})
+%% Lower-triangular part of a symbolic matrix.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 3; 4 5 6; 7 8 9])
+%%   @result{} A = (sym 3×3 matrix)
+%%       ⎡1  2  3⎤
+%%       ⎢       ⎥
+%%       ⎢4  5  6⎥
+%%       ⎢       ⎥
+%%       ⎣7  8  9⎦
+%%
+%% tril(A)
+%%   @result{} (sym 3×3 matrix)
+%%       ⎡1  0  0⎤
+%%       ⎢       ⎥
+%%       ⎢4  5  0⎥
+%%       ⎢       ⎥
+%%       ⎣7  8  9⎦
+%% @end group
+%%
+%% @group
+%% tril(A, 1)
+%%   @result{} (sym 3×3 matrix)
+%%       ⎡1  2  0⎤
+%%       ⎢       ⎥
+%%       ⎢4  5  6⎥
+%%       ⎢       ⎥
+%%       ⎣7  8  9⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/tril}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

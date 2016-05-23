@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,21 +17,38 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{g} =} int (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, [@var{a}, @var{b}])
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, [@var{a}, @var{b}])
+%% @documentencoding UTF-8
+%% @defmethod  @@symfun int (@var{f})
+%% @defmethodx @@symfun int (@var{f}, @var{x})
+%% @defmethodx @@symfun int (@var{f}, @var{x}, @var{a}, @var{b})
+%% @defmethodx @@symfun int (@var{f}, @var{x}, [@var{a}, @var{b}])
+%% @defmethodx @@symfun int (@var{f}, @var{a}, @var{b})
+%% @defmethodx @@symfun int (@var{f}, [@var{a}, @var{b}])
 %% Symbolic integration of a symfun.
 %%
-%% Indefinite integrals of a symfun returns a symfun.  Definite
-%% integrals return a sym.
+%% The indefinite integral of a symfun returns another symfun:
+%% @example
+%% @group
+%% syms x
+%% f(x) = sin(x)
+%%   @result {} f(x) = (symfun) sin(x)
+%% h = int(f, x)
+%%   @result {} h(x) = (symfun) -cos(x)
+%% @end group
+%% @end example
 %%
-%% See help for sym int.
+%% Definite integrals return a sym:
+%% @example
+%% @group
+%% f(x) = sin(x)
+%%   @result {} f(x) = (symfun) sin(x)
+%% int(f, x, [0 pi])
+%%   @result {} (sym) 2
+%% @end group
+%% @end example
 %%
-%% @seealso{diff}
-%% @end deftypefn
+%% @seealso{@@sym/int, @@symfun/diff}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic, integration

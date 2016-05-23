@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -124,6 +124,7 @@ function r = process_item(item)
   a = C{1};
   wh = str2double(a);
   assert (~isnan(wh))
+
   switch wh
     case OCTCODE_INT
       assert(M == 1)
@@ -137,15 +138,8 @@ function r = process_item(item)
       if (isempty(C{2}))
         r = '';
       else
-        r = str_post_xml_filter(C{2});
+        r = str_do_escapes(str_post_xml_filter(C{2}));
       end
-
-    case OCTCODE_USTR
-      assert(M == 1)
-      % FIXME: Extra printf...?  doc
-      %newl = sprintf('\n');
-      %r = strrep(C{2}, '\n', newl);
-      r = str_post_xml_filter(C{2});
 
     case OCTCODE_BOOL
       assert(M == 1)
@@ -157,8 +151,8 @@ function r = process_item(item)
       % fixme: should we use <item>'s for these not raw <f>?
       str = str_post_xml_filter(C{2});
       flat = str_post_xml_filter(C{5});
-      ascii = str_post_xml_filter(C{6});
-      unicode = str_post_xml_filter(C{7});
+      ascii = str_do_escapes(str_post_xml_filter(C{6}));
+      unicode = str_do_escapes(str_post_xml_filter(C{7}));
       % empty [] here identifies this to the sym ctor
       r = sym([], str, [sz1 sz2], flat, ascii, unicode);
     case OCTCODE_DICT
@@ -188,6 +182,14 @@ function r = process_item(item)
   end
 end
 
+function r = str_do_escapes(s)
+  if (exist ('OCTAVE_VERSION', 'builtin'))
+    r = do_string_escapes (do_highbyte_escapes (s));
+  else
+    s = strrep (s, '%', '%%');
+    r = sprintf (do_highbyte_escapes (s));
+  end
+end
 
 function r = str_post_xml_filter(r)
   r = strrep(r, '&lt;', '<');

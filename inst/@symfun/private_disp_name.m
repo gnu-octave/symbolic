@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{s} =} priv_disp_name (@var{f})
+%% @defmethod  @@symfun private_disp_name (@var{f}, @var{name})
 %% A string appropriate for representing the name of this symfun.
 %%
 %% Private method: this is not the method you are looking for.
 %%
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-function s = priv_disp_name(f, input_name)
+function s = private_disp_name(f, input_name)
 
   if (isempty(input_name))
     s = input_name;
@@ -52,15 +49,15 @@ end
 
 %!test
 %! syms f(x)
-%! s = priv_disp_name(f, 'f');
+%! s = private_disp_name(f, 'f');
 %! assert (strcmp (s, 'f(x)'))
 
 %!test
 %! syms x y
 %! g(y, x) = x + y;
-%! s = priv_disp_name(g, 'g');
+%! s = private_disp_name(g, 'g');
 %! assert (strcmp (s, 'g(y, x)'))
 
 %!test
 %! syms f(x)
-%! assert (isempty (priv_disp_name(f, '')))
+%! assert (isempty (private_disp_name(f, '')))

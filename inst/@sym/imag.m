@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,20 +17,47 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y} =} imag (@var{z})
+%% @documentencoding UTF-8
+%% @defmethod @@sym imag (@var{z})
 %% Imaginary part of a symbolic expression.
 %%
-%% @seealso{real, conj, ctranspose}
+%% Examples:
+%% @example
+%% @group
+%% syms z
+%% imag(z)
+%%   @result{} ans = (sym)
+%%          ⎛    _⎞
+%%       -ⅈ⋅⎝z - z⎠
+%%       ───────────
+%%            2
+%% @end group
 %%
-%% @end deftypefn
+%% @group
+%% syms x real
+%% imag(x)
+%%   @result{} ans = (sym) 0
+%% imag(1i*x)
+%%   @result{} ans = (sym) x
+%% @end group
+%%
+%% @group
+%% imag([x  sym(pi) + 6i  7  3i])
+%%   @result{} ans = (sym) [0  6  0  3]  (1×4 matrix)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/real, @@sym/conj, @@sym/ctranspose}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function y = imag(z)
-
+  if (nargin ~= 1)
+    print_usage ();
+  end
   y = (z - conj(z))/2i;
-
 end
 
 

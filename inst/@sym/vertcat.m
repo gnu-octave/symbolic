@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} vertcat (@var{x}, @var{y}, @dots{})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym {vertcat} {(@var{x}, @var{y}, @dots{})}
+%% @defopx Operator @@sym {[@var{x}; @var{y}; @dots{}]} {}
 %% Vertically concatentate symbolic arrays.
 %%
-%% @seealso{horzcat}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2])
+%%   @result{} A = (sym) [1  2]  (1×2 matrix)
+%% [A; A; 2*A]
+%%   @result{} (sym 3×2 matrix)
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎢1  2⎥
+%%       ⎢    ⎥
+%%       ⎣2  4⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/horzcat, @@sym/cat}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

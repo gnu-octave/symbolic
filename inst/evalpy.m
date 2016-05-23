@@ -25,22 +25,22 @@
 %% Examples:
 %% @example
 %% @group
-%% >> x = -4;
-%% >> evalpy ('y = 2*x', x)
-%%    @print{} y = -8
-%% >> y
-%%    @result{} y = -8
+%% x = -4;
+%% evalpy ('y = 2*x', x)
+%%   @print{} y = -8
+%% y
+%%   @result{} y = -8
 %% @end group
 %% @end example
 %%
 %% You can replace @code{x} with a new value in the Python code:
 %% @example
 %% @group
-%% >> syms x
-%% >> evalpy ('y = 3*x; x = -1.5; z = x**2', x)
-%%    @print{} x = -1.5000
-%%    @print{} y = (sym) 3⋅x
-%%    @print{} z =  2.2500
+%% syms x
+%% evalpy ('y = 3*x; x = -1.5; z = x**2', x)
+%%   @print{} x = -1.5000
+%%   @print{} y = (sym) 3⋅x
+%%   @print{} z =  2.2500
 %% @end group
 %% @end example
 %%
@@ -48,9 +48,9 @@
 %% This is useful if they don't have inputnames:
 %% @example
 %% @group
-%% >> x = 10;
-%% >> evalpy ('y = ", ".join( (str(x),str(i0),str(i1)) )', x, 5)
-%%    @print{} y = 10.0, 10.0, 5.0
+%% x = 10;
+%% evalpy ('y = ", ".join( (str(x),str(i0),str(i1)) )', x, 5)
+%%   @print{} y = 10.0, 10.0, 5.0
 %% @end group
 %% @end example
 %%
@@ -58,13 +58,13 @@
 %% to Octave, put an @code{_} (underscore) at the beginning or end.
 %% @example
 %% @group
-%% >> x = 20;
-%% >> evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
-%%    @print{} Variables effected: my
-%% >> _y
-%%    @print{} ??? '_y' undefined near line 1 column 1
-%% >> z_
-%%    @print{} ??? 'z_' undefined near line 1 column 1
+%% x = 20;
+%% evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
+%%   @print{} Variables effected: my
+%% _y
+%%   @print{} ??? '_y' undefined near line 1 column 1
+%% z_
+%%   @print{} ??? 'z_' undefined near line 1 column 1
 %% @end group
 %% @end example
 %%

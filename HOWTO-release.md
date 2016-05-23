@@ -24,6 +24,9 @@ Checklist
   * Update version in src/configure.ac.  Test the bootstrap script (note
     the scripts below will run bootstrap for the packages).
 
+  * Check minimum sympy version is consistent: its in:
+    configure.ac, DESCRIPTION, assert_have_python_and_sympy.m
+
   * Packages: need to run the following two scripts.  I recommend
     testing them first without using the tag.  Then test the packages
     by running the test suite.

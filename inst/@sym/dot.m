@@ -1,4 +1,5 @@
 %% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald, Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +19,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} dot (@var{a}, @var{b})
+%% @defmethod @@sym dot (@var{a}, @var{b})
 %% Symbolic dot (scalar) product.
+%%
+%% This function computes 'sum (conj (A) .* B)'.
 %%
 %% Examples:
 %% @example
@@ -27,11 +30,13 @@
 %% a = [sym('a1'); sym('a2'); sym('a3')];
 %% b = [sym('b1'); sym('b2'); sym('b3')];
 %% dot(a, b)
-%%    @result{} (sym) a₁⋅b₁ + a₂⋅b₂ + a₃⋅b₃
+%%   @result{} (sym)
+%%          __      __      __
+%%       b₁⋅a₁ + b₂⋅a₂ + b₃⋅a₃
 %% dot(a, a)
-%%    @result{} (sym)
-%%         2     2     2
-%%       a₁  + a₂  + a₃
+%%   @result{} (sym)
+%%          __      __      __
+%%       a₁⋅a₁ + a₂⋅a₂ + a₃⋅a₃
 %% @end group
 %% @end example
 %%
@@ -41,17 +46,18 @@
 %% a = [x; 0; 0];
 %% b = [0; 0; sym(1)];
 %% dot(a, b)
-%%    @result{} ans = (sym) 0
+%%   @result{} ans = (sym) 0
 %% @end group
 %% @end example
 %%
 %% @seealso{cross}
-%% @end deftypefn
+%% @end defmethod
 
 function c = dot(a, b)
 
+  % conjugate linear in the 1st slot to match the behavior of @double/dot
   cmd = { 'a, b = _ins'
-          'return a.dot(b),'
+          'return a.conjugate().dot(b),'
         };
 
   c = python_cmd (cmd, sym(a), sym(b));
@@ -72,3 +78,5 @@ end
 %! c = dot(a, b);
 %! assert (isequal (c, sym(0)))
 
+%!test
+%! assert (isequal (dot (sym([1 i]), sym([i 2])), sym(-i)))

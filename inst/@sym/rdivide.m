@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} rdivide (@var{x}, @var{y})
-%% Element-wise forward slash division of sym expressions (dot slash).
+%% @defop  Method   @@sym rdivide {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} ./ @var{y}} {}
+%% Element-wise forward slash division of symbolic expressions.
 %%
 %% Example:
 %% @example
@@ -77,9 +78,8 @@
 %%       x
 %% @end group
 %% @end example
-%%
-%% @seealso{ldivide, mrdivide}
-%% @end deftypefn
+%% @seealso{@@sym/ldivide, @@sym/mrdivide}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
