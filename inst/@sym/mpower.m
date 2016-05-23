@@ -73,16 +73,9 @@ function z = mpower(x, y)
   end
 
   cmd = { 'x, y = _ins'
-          'if x.is_Matrix and not y.is_Matrix and Version(spver) < Version("0.7.7.dev"):'
-          '    return sympy.MatPow(x, y).doit()'
-          'else:'
-          '    return x**y'
-        };
+          'return x**y' };
 
   z = python_cmd (cmd, sym(x), sym(y));
-
-  % FIXME: with some future SymPy (>0.7.6.1?), we may be able to use:
-  %z = python_cmd ('return _ins[0]**_ins[1],', sym(x), sym(y))
 
 end
 
@@ -113,14 +106,10 @@ end
 
 %!test
 %! % non-integer power
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   fprintf('\n  skipping known failure b/c SymPy <= 0.7.6.x\n')
-%! else
 %! A = sym([1 2; 0 3]);
 %! B = A^pi;
 %! C = [1 -1+3^sym(pi); 0 sym(3)^pi];
 %! assert (isequal (B, C))
-%! end
 
 %!test
 %! % matpow

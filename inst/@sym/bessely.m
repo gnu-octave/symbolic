@@ -56,13 +56,11 @@ end
 
 %!test
 %! % roundtrip
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
 %! A = bessely(2, 10);
 %! q = bessely(2, x);
 %! h = function_handle(q);
 %! B = h(10);
 %! assert (abs (A - B) <= eps*abs(A))
-%! end
 
 %!error bessely(sym('x'))
