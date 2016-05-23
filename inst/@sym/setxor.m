@@ -54,17 +54,14 @@ function r = setxor(a, b)
     print_usage ();
   end
 
-  %%FIXME: In future version of SymPy, replace (A - B) | (B - A) with A ^ B
-  % Version(spver) >= Version("0.7.7.dev")
-
   cmd = {
          'a, b = _ins'
          'if isinstance(a, sp.Set) or isinstance(b, sp.Set):'
-         '    return (a - b) | (b - a),'
+         '    return a ^ b'
          ''
          'A = sp.FiniteSet(*(list(a) if isinstance(a, sp.MatrixBase) else [a]))'
          'B = sp.FiniteSet(*(list(b) if isinstance(b, sp.MatrixBase) else [b]))'
-         'C = (A - B) | (B - A)'
+         'C = A ^ B'
          'return sp.Matrix([list(C)]),'
         };
 
