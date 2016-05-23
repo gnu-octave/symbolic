@@ -416,10 +416,14 @@ end
 %!test
 %! sympref('ipc', 'systmpfile');
 %! syms x
+%! delete('tmp_python_cmd.py')
 
 %!error <line 1> python_cmd('raise ValueError')
 %!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
 
+%!test
+%! % (just to cleanup after the error tests)
+%! delete('tmp_python_cmd.py')
 
 %!test
 %! sympref('defaults')
