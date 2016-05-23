@@ -61,16 +61,7 @@ function L = findsymbols(obj, dosort)
   end
 
   if isa(obj, 'sym')
-    cmd = { 'x = _ins[0]'
-            'if Version(spver) < Version("0.7.6"):'   % deprecate with Issue #164
-            '    if not x.is_Matrix:'
-            '        s = x.free_symbols'
-            '    else:'
-            '        s = set()'
-            '        for i in x.values():'
-            '            s = s.union(i.free_symbols)'
-            'else:'
-            '    s = x.free_symbols'
+    cmd = { 's = _ins[0].free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
