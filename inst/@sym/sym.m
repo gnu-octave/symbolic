@@ -621,8 +621,8 @@ end
 %! s = sym(a);
 %! assert (isequal (double(a), [1 2 100]))
 
-%!xtest
-%! % bigger int64 integer types: TODO: passes on Octave 4?
+%!test
+%! % bigger int64 integer types
 %! q = int64(123456789012345);
 %! w = 10000*q + 123;
 %! a = sym('1234567890123450123');
