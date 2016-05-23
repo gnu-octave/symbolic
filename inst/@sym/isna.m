@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,16 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{r} =} isna (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym isna (@var{x})
 %% Symbolic expressions cannot be the Octave/R missing data NA.
 %%
-%% We have this mainly so @code{assert} works properly.
+%% Always returns false:
+%% @example
+%% @group
+%% isna([sym(1) sym('x') sym(nan)])
+%%   @result{} ans =
+%%       0   0   0
+%% @end group
+%% @end example
+%% (We have this mainly so @code{assert} works properly.)
 %%
-%% @seealso{isnan}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/isnan}
+%% @end defmethod
 
 
 function r = isna(x)
