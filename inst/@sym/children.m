@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{r} =} children (@var{f})
+%% @defmethod @@sym children (@var{f})
 %% Return "children" (terms, lhs/rhs, etc) of symbolic expression.
 %%
 %% For a scalar expression, return a row vector of sym expressions:
@@ -72,11 +72,9 @@
 %% an matrix (array) containing the set elements, @pxref{finiteset}.
 %% This is useful for accessing the elements of a set.
 %%
-%% @seealso{lhs, rhs, eq, lt, finiteset}
-%% @end deftypefn
+%% @seealso{@@sym/lhs, @@sym/rhs, @@sym/eq, @@sym/lt, finiteset}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = children(f)
 

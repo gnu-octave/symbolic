@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} ne (@var{a}, @var{b})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym ne {(@var{a}, @var{b})}
+%% @defopx Operator @@sym {@var{a} ~= @var{b}} {}
+%% @defopx Operator @@sym {@var{a} != @var{b}} {}
 %% Test/define symbolic inequality, not equal to.
 %%
-%% @seealso{eq, lt, le, gt, ge, logical, isAlways, isequal}
-%% @end deftypefn
+%% Examples:
+%% @example
+%% @group
+%% syms x y
+%% x ~= y
+%%   @result{} ans = (sym) x ≠ y
+%% @end group
+%%
+%% @group
+%% sym(1) ~= sym(pi)
+%%   @result{} ans = (sym) True
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/eq, @@sym/lt, @@sym/le, @@sym/gt, @@sym/ge,
+%%          @@sym/logical, @@sym/isAlways, @@sym/isequal}
+%% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
-
-function t = ne(x,y)
+function t = ne(x, y)
 
   % nanspecial is (python) 'True' here b/c nan is not equal
   % to everything, even itself.
@@ -74,4 +88,3 @@ end
 %! assert (logical (e))
 %! e = snan ~= snan;
 %! assert (logical (e))
-

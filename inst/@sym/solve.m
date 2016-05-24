@@ -19,23 +19,23 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{sol} =} solve (@var{eq, var})
-%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, eq2})
-%% @deftypefnx {Function File} {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
-%% @deftypefnx {Function File} {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
+%% @deftypemethod  @@sym {@var{sol} =} solve (@var{eq, var})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, eq2})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
+%% @deftypemethodx @@sym {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
 %% Symbolic solutions of equations and systems.
 %%
 %% Examples
 %% @example
 %% @group
-%% >> syms x
-%% >> solve(x == 2*x + 6, x)
-%%    @result{} ans = (sym) -6
-%% >> solve(x^2 + 6 == 5*x, x)
-%%    @result{} ans = (sym 2×1 matrix)
-%%        ⎡2⎤
-%%        ⎢ ⎥
-%%        ⎣3⎦
+%% syms x
+%% solve(x == 2*x + 6, x)
+%%   @result{} ans = (sym) -6
+%% solve(x^2 + 6 == 5*x, x)
+%%   @result{} ans = (sym 2×1 matrix)
+%%       ⎡2⎤
+%%       ⎢ ⎥
+%%       ⎣3⎦
 %% @end group
 %% @end example
 %%
@@ -45,20 +45,20 @@
 %% struct).
 %% @example
 %% @group
-%% >> syms x y
-%% >> d = solve(x^2 == 4, x + y == 1);
+%% syms x y
+%% d = solve(x^2 == 4, x + y == 1);
 %%
-%% >> % the first solution
-%% >> d@{1@}.x
-%%    @result{} (sym) -2
-%% >> d@{1@}.y
-%%    @result{} (sym) 3
+%% % the first solution
+%% d@{1@}.x
+%%   @result{} (sym) -2
+%% d@{1@}.y
+%%   @result{} (sym) 3
 %%
-%% >> % the second solution
-%% >> d@{2@}.x
-%%    @result{} (sym) 2
-%% >> d@{2@}.y
-%%    @result{} (sym) -1
+%% % the second solution
+%% d@{2@}.x
+%%   @result{} (sym) 2
+%% d@{2@}.y
+%%   @result{} (sym) -1
 %% @end group
 %% @end example
 %%
@@ -71,20 +71,20 @@
 %% Alternatively:
 %% @example
 %% @group
-%% >> [X, Y] = solve(x^2 == 4, x + y == 1, x, y)
-%%    @result{} X = (sym 2×1 matrix)
-%%        ⎡-2⎤
-%%        ⎢  ⎥
-%%        ⎣2 ⎦
-%%      Y = (sym 2×1 matrix)
-%%        ⎡3 ⎤
-%%        ⎢  ⎥
-%%        ⎣-1⎦
+%% [X, Y] = solve(x^2 == 4, x + y == 1, x, y)
+%%   @result{} X = (sym 2×1 matrix)
+%%       ⎡-2⎤
+%%       ⎢  ⎥
+%%       ⎣2 ⎦
+%%   @result{} Y = (sym 2×1 matrix)
+%%       ⎡3 ⎤
+%%       ⎢  ⎥
+%%       ⎣-1⎦
 %% @end group
 %% @end example
 %%
-%% @seealso{dsolve}
-%% @end deftypefn
+%% @seealso{@@sym/eq, @@sym/dsolve}
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic

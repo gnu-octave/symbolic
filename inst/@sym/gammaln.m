@@ -28,6 +28,8 @@
 %% syms x
 %% y = gammaln(x)
 %%   @result{} y = (sym) loggamma(x)
+%% y = lgamma(x)
+%%   @result{} y = (sym) loggamma(x)
 %% @end group
 %% @end example
 %%

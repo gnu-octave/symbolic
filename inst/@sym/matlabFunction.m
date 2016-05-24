@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} matlabFunction (@var{f})
+%% @defmethod @@sym matlabFunction (@var{f})
 %% Convert symbolic expression into a standard function.
 %%
 %% This is a synonym of @code{function_handle}.  For further
@@ -26,10 +26,8 @@
 %%
 %% @seealso{@@sym/function_handle}
 %%
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function f = matlabFunction(varargin)
 

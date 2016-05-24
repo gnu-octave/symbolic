@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{y} =} expand (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym expand (@var{f})
 %% Combine parts of a symbolic product.
 %%
-%% @seealso{factor}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% expand ((x+1)*(x+5))
+%%   @result{} (sym)
+%%        2
+%%       x  + 6⋅x + 5
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/factor}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = expand(x)
 

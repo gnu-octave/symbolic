@@ -1,4 +1,5 @@
-%% Copyright (C) 1998 by Nicol N. Schraudolph <schraudo@inf.ethz.ch>
+%% Copyright (C) 1998 Nicol N. Schraudolph <schraudo@inf.ethz.ch>
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
@@ -15,8 +16,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{x} = } lambertw (@var{z})
-%% @deftypefnx {Function File} {@var{x} = } lambertw (@var{n}, @var{z})
+%% @defun  lambertw (@var{z})
+%% @defunx lambertw (@var{n}, @var{z})
 %% Compute the Lambert W function of @var{z}.
 %%
 %% This function satisfies W(z).*exp(W(z)) = z, and can thus be used to express
@@ -65,7 +66,7 @@
 %% W Function', Advances in Computational Mathematics 5(4):329-359.
 %%
 %% @seealso{@@sym/lambertw}
-%% @end deftypefn
+%% @end defun
 
 function w = lambertw(b,z)
     if (nargin == 1)

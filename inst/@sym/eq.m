@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,38 +17,76 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} eq (@var{a}, @var{b})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym eq {(@var{a}, @var{b})}
+%% @defopx Operator @@sym {@var{a} == @var{b}} {}
 %% Test for symbolic equality, and/or define equation.
 %%
-%% @code{a == b} tries to convert both @code{a} and @code{b} to
-%% numbers and compare them as doubles.  If this fails, it defines
-%% a symbolic expression for @code{a == b}.  When each happens is a
-%% potential source of bugs!
-%%
-%% FIXME: Notes from SMT:
+%% The code @code{@var{a} == @var{b}} can do one of two things:
 %% @itemize
-%% @item If any varibles appear in the matrix, then you get a matrix
-%%   of equalities:  syms x; a = sym([1 2; 3 x]); a == 1
-%% @item @code{x==x} is an equality, rather than @code{true}.
-%%   We currently satisfy neither of these (FIXME).
+%% @item Return a symbolic boolean value if it can quickly determine
+%% that @code{a} and @code{b} are the same or not:
+%% @example
+%% @group
+%% sym(1) == sym(pi)
+%%   @result{} (sym) False
+%% @end group
+%% @end example
+%% @item Otherwise, return a symbolic equation:
+%% @example
+%% @group
+%% syms x y
+%% 3*y == 24*x
+%%   @result{} ans = (sym) 3⋅y = 24⋅x
+%% solve(ans, y)
+%%   @result{} (sym) 8⋅x
+%% @end group
+%% @end example
 %% @end itemize
 %%
-%% FIXME: from reading SymPy's @code{Eq??}, the following would
-%% seem to work:
-%%    @code{>>> e = relational.Relational.__new__(relational.Eq, x, x)}
-%% (but passing this to solve() is still different from SMT).
+%% Exactly which behaviour happens is a potential source of bugs!
+%% When @var{a} and/or @var{b} contain variables, we @emph{usually}
+%% (but not always) expect a symbolic equation.  Compare:
+%% @example
+%% @group
+%% x == 3*x
+%%   @result{} (sym) x = 3⋅x
+%% x == x
+%%   @result{} (sym) True
+%% @end group
+%% @end example
 %%
-%% FIXME: array case is hardcoded only to check for equality (see logical()).
-%%   to get the SMT, could do two passes through the array.
+%% If you wish to force a boolean result, @pxref{@@sym/logical} and @pxref{@@sym/isAlways}:
+%% @example
+%% @group
+%% logical(x == 3*x)
+%%   @result{} 0
+%% islogical(ans)
+%%   @result{} 1
+%% @end group
 %%
-%% @seealso{logical, isAlways, isequal}
-%% @end deftypefn
+%% @group
+%% syms x y z
+%% eqn = x*(y + z) == x*y + x*z
+%%   @result{} eqn = (sym) x⋅(y + z) = x⋅y + x⋅z
+%% logical(eqn)
+%%   @result{} 0
+%% isAlways(eqn)
+%%   @result{} 1
+%% @end group
+%% @end example
+%%
+%% Currently, these is no robust way to force an an equality equation
+%% @code{x == x}.
+%%
+%% @seealso{@@sym/logical, @@sym/isAlways, @@sym/isequal, @@sym/ne, @@sym/le}
+%% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+function t = eq(x, y)
 
-
-function t = eq(x,y)
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   t = ineq_helper('[donotuse]', 'Eq', x, y);
 

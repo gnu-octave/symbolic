@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{n} =} columns (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym columns (@var{x})
 %% Return the number of columns in a symbolic array.
 %%
-%% @seealso{columns, size, length, numel}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = [1 2 sym(pi); 4 5 2*sym(pi)];
+%% m = columns (A)
+%%   @result{} m =  3
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/rows, @@sym/size, @@sym/length, @@sym/numel}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function n = columns(x)
 

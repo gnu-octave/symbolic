@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,56 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} lt (@var{a}, @var{b})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym lt {(@var{a}, @var{b})}
+%% @defopx Operator @@sym {@var{a} < @var{b}} {}
 %% Test/define symbolic inequality, less than.
 %%
-%% @seealso{le, gt, ge, eq, ne, logical, isAlways, isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
+%% Examples:
+%% @example
+%% @group
+%% sym(1) < sym(pi)
+%%   @result{} (sym) True
+%%
+%% syms x real
+%% x < 10
+%%   @result{} (sym) x < 10
+%% @end group
+%% @end example
+%%
+%%
+%% Note that having symbols in the expressions for @var{a}
+%% or @var{b} does not necessarily give an inequation:
+%% @example
+%% @group
+%% x < x + 2
+%%   @result{} (sym) True
+%% @end group
+%% @end example
+%%
+%% Assumptions can also play a role:
+%% @example
+%% @group
+%% syms x real
+%% x^2 < 0
+%%   @result{} (sym) False
+%%
+%% syms n negative
+%% syms p positive
+%%   n < p
+%%   @result{} (sym) True
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/le, @@sym/gt, @@sym/ge, @@sym/eq, @@sym/ne,
+%%          @@sym/logical, @@sym/isAlways}
+%% @end defop
 
 function t = lt(x, y)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   t = ineq_helper('<', 'Lt', x, y);
 

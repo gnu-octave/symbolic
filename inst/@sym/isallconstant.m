@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy
 %%
@@ -17,14 +17,38 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{y} =} isallconstant (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym isallconstant (@var{x})
 %% Whether all elements of a symbolic array are constant.
 %%
-%% @seealso{isconstant, symvar, findsymbols}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = [1 2 sym(pi); sym(4) 5 6]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡1  2  π⎤
+%%       ⎢       ⎥
+%%       ⎣4  5  6⎦
+%%
+%% isallconstant (A)
+%%   @result{} ans = 1
+%% @end group
+%%
+%% @group
+%% A(1) = sym('x')
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡x  2  π⎤
+%%       ⎢       ⎥
+%%       ⎣4  5  6⎦
+%%
+%% isallconstant (A)
+%%   @result{} ans = 0
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/isconstant, @@sym/symvar, findsymbols}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = isallconstant(x)
 

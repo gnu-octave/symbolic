@@ -1,5 +1,5 @@
 %% Copyright (C) 2003 Willem J. Atsma
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{c} =} sym2poly (@var{p})
-%% @deftypefnx {Function File} {@var{c} =} sym2poly (@var{p}, @var{x})
+%% @deftypemethod  @@sym {@var{doublec} =} sym2poly (@var{p})
+%% @deftypemethodx @@sym {@var{c} =} sym2poly (@var{p}, @var{x})
 %% Return vector of coefficients of a symbolic polynomial.
 %%
 %% In the two-input form, the second argument @var{x} specifies the free
@@ -53,7 +53,7 @@
 %% yet expose all of that here.
 %%
 %% @seealso{poly2sym, polyval, roots}
-%% @end deftypefn
+%% @end deftypemethod
 
 %% Created: 18 April 2003
 %% Changed: 25 April 2003
@@ -79,8 +79,10 @@ function c = sym2poly(p, x)
     end
     x = ss{1};
     convert_to_double = true;
-  else
+  elseif (nargin == 2)
     convert_to_double = false;
+  else
+    print_usage ();
   end
 
   cmd = { 'f = _ins[0]'

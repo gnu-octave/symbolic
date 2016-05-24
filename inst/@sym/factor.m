@@ -18,11 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{e} =} factor (@var{n})
-%% @deftypefnx {Function File}  {[@var{p}, @var{m}] =} factor (@var{n})
-%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f})
-%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x})
-%% @deftypefnx {Function File}  {@var{g} =} factor (@var{f}, @var{x}, @var{y}, @dots{})
+%% @deftypemethod  @@sym {@var{e} =} factor (@var{n})
+%% @deftypemethodx @@sym {[@var{p}, @var{m}] =} factor (@var{n})
+%% @deftypemethodx @@sym {@var{g} =} factor (@var{f})
+%% @deftypemethodx @@sym {@var{g} =} factor (@var{f}, @var{x})
+%% @deftypemethodx @@sym {@var{g} =} factor (@var{f}, @var{x}, @var{y}, @dots{})
 %% Factor a symbolic polynomial or integer.
 %%
 %% A symbolic integer @var{n} can be factored:
@@ -91,11 +91,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{expand}
-%% @end deftypefn
+%% @seealso{@@sym/expand}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [p, m] = factor(f, varargin)
 

@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} isnan (@var{x})
+%% @defmethod @@sym isnan (@var{x})
 %% Return true if a symbolic expression is Not-a-Number.
 %%
 %% Example:
@@ -31,18 +31,16 @@
 %%       ⎣nan   1    2 ⎦
 %% isnan(A)
 %%   @result{} ans =
-%%        0   1   0
-%%        1   0   0
+%%       0   1   0
+%%       1   0   0
 %% @end group
 %% @end example
 %%
 %% Note that the return is of type logical.
 %%
-%% @seealso{isinf, double}
-%% @end deftypefn
+%% @seealso{@@sym/isinf, @@sym/double}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = isnan(x)
 

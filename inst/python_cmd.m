@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
+%% @deftypefun {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run some Python command on some objects and return other objects.
 %%
 %% Here @var{cmd} is a string of Python code.
@@ -116,7 +116,7 @@
 %% w/o having the SymPy package, you'd need to hack a bit.
 %%
 %% @seealso{evalpy}
-%% @end deftypefn
+%% @end deftypefun
 
 %% Author: Colin B. Macdonald
 %% Keywords: python

@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{L} =} lhs (@var{f})
+%% @defmethod @@sym lhs (@var{f})
 %% Left-hand side of symbolic expression.
 %%
 %% Example:
@@ -44,11 +44,9 @@
 %%
 %% Gives an error if any of the symbolic objects have no left-hand side.
 %%
-%% @seealso{rhs, children, formula, argnames}
-%% @end deftypefn
+%% @seealso{@@sym/rhs, @@sym/children, @@sym/formula, @@sym/argnames}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function L = lhs(f)
 

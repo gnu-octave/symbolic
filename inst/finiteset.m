@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{S} =} finiteset (@var{a}, @var{b}, @dots{})
-%% @deftypefnx {Function File}  {@var{S} =} finiteset (@var{cellarray})
-%% @deftypefnx {Function File}  {@var{e} =} finiteset ()
-%% Return a set containing the inputs without duplicates.
+%% @deftypefun  {@var{S} =} finiteset (@var{a}, @var{b}, @dots{})
+%% @deftypefunx {@var{S} =} finiteset (@var{cellarray})
+%% @deftypefunx {@var{emptyset} =} finiteset ()
+%% Return a symbolic set containing the inputs without duplicates.
 %%
 %% Example:
 %% @example
@@ -110,7 +110,7 @@
 %%
 %% @seealso{@@sym/interval, @@sym/ismember, @@sym/children, @@sym/union,
 %%          @@sym/intersect, @@sym/setdiff, @@sym/setxor}
-%% @end deftypefn
+%% @end deftypefun
 
 function S = finiteset(varargin)
 

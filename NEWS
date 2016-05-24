@@ -15,6 +15,7 @@ octsympy 2.4.0-dev
           dilog
           ei
           expint
+          ezsurf
           fresnelc
           fresnels
           gammainc
@@ -28,6 +29,7 @@ octsympy 2.4.0-dev
           logint
           polylog
           psi
+          resize
           sech
           signIm
           sinint

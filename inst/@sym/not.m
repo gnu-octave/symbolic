@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} not (@var{x})
-%% Logical not of a symbolic array.
+%% @defop  Method   @@sym not {(@var{x})}
+%% @defopx Operator @@sym {~@var{x}} {}
+%% @defopx Operator @@sym {!@var{x}} {}
+%% Logical "not" of a symbolic array.
 %%
 %% Example:
 %% @example
@@ -52,13 +54,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{eq, ne, logical, isAlways, isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/eq, @@sym/ne, @@sym/logical, @@sym/isAlways}
+%% @end defop
 
 function r = not(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   r = uniop_helper (x, 'Not');
 
@@ -108,3 +111,5 @@ end
 %! y = ~x;
 %! s = disp(y, 'flat');
 %! assert (strcmpi(strtrim(s), 'Not(x)'))
+
+%!error not (sym(1), 2)

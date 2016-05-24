@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,54 +18,51 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {} disp (@var{x})
-%% @deftypefnx {Function File}  {} disp (@var{x}, 'unicode')
-%% @deftypefnx {Function File}  {} disp (@var{x}, 'ascii')
-%% @deftypefnx {Function File}  {} disp (@var{x}, 'flat')
-%% @deftypefnx {Function File}  {@var{s} =} disp (@var{x})
+%% @deftypemethod  @@sym {} disp (@var{x})
+%% @deftypemethodx @@sym {} disp (@var{x}, 'unicode')
+%% @deftypemethodx @@sym {} disp (@var{x}, 'ascii')
+%% @deftypemethodx @@sym {} disp (@var{x}, 'flat')
+%% @deftypemethodx @@sym {@var{s} =} disp (@var{x})
 %% Display the value of a symbolic expression.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> syms x a c
-%% >> str = disp(sin(2*sym(pi)*x))
-%%    @result{} str =   sin(2⋅π⋅x)
+%% syms x a c
+%% str = disp(sin(2*sym(pi)*x))
+%%   @result{} str =   sin(2⋅π⋅x)
 %%
-%% >> A = [sin(x/2) floor(a^(x*c)); acosh(2*x/pi) ceil(sin(x/gamma(x)))];
-%% >> disp(A, 'unicode')
-%%    @print{} ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
-%%    @print{} ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
-%%    @print{} ⎢     ⎝2⎠               ⎥
-%%    @print{} ⎢                       ⎥
-%%    @print{} ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
-%%    @print{} ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
-%%    @print{} ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
+%% A = [sin(x/2) floor(a^(x*c)); acosh(2*x/pi) ceil(sin(x/gamma(x)))];
+%% disp(A, 'unicode')
+%%   @print{}   ⎡     ⎛x⎞      ⎢ c⋅x⎥   ⎤
+%%   @print{}   ⎢  sin⎜─⎟      ⎣a   ⎦   ⎥
+%%   @print{}   ⎢     ⎝2⎠               ⎥
+%%   @print{}   ⎢                       ⎥
+%%   @print{}   ⎢     ⎛2⋅x⎞  ⎡   ⎛ x  ⎞⎤⎥
+%%   @print{}   ⎢acosh⎜───⎟  ⎢sin⎜────⎟⎥⎥
+%%   @print{}   ⎣     ⎝ π ⎠  ⎢   ⎝Γ(x)⎠⎥⎦
 %% @end group
 %%
 %% @group
-%% >> disp(A, 'ascii')
-%%    @print{} [     /x\              / c*x\      ]
-%%    @print{} [  sin|-|         floor\a   /      ]
-%%    @print{} [     \2/                          ]
-%%    @print{} [                                  ]
-%%    @print{} [     /2*x\         /   /   x    \\]
-%%    @print{} [acosh|---|  ceiling|sin|--------||]
-%%    @print{} [     \ pi/         \   \gamma(x)//]
+%% disp(A, 'ascii')
+%%   @print{}   [     /x\              / c*x\      ]
+%%   @print{}   [  sin|-|         floor\a   /      ]
+%%   @print{}   [     \2/                          ]
+%%   @print{}   [                                  ]
+%%   @print{}   [     /2*x\         /   /   x    \\]
+%%   @print{}   [acosh|---|  ceiling|sin|--------||]
+%%   @print{}   [     \ pi/         \   \gamma(x)//]
 %%
-%% >> disp(A, 'flat')
-%%    @print{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
+%% disp(A, 'flat')
+%%   @print{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
 %% @end group
 %% @end example
 %%
-%% @seealso{pretty}
-%% @end deftypefn
+%% @seealso{@@sym/pretty}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = disp(x, wh)
-
 
   if (nargin == 1)
     %% read config to see how to display x

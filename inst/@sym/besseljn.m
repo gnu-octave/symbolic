@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Utkarsh Gautam 
+%% Copyright (C) 2016 Utkarsh Gautam
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{Y} =} besseljn (@var{alpha}, @var{x})
+%% @defmethod @@sym besseljn (@var{alpha}, @var{x})
 %% Symbolic Spherical Bessel function of the first kind.
 %%
 %% Example:
@@ -29,15 +29,15 @@
 %%   @result{} A = (sym) jn(n, x)
 %% diff(A)
 %%   @result{} ans = (sym)
-%%     
+%%
 %%                      (n + 1)⋅jn(n, x)
 %%       jn(n - 1, x) - ────────────────
-%%                           x  
+%%                           x
 %% @end group
 %% @end example
 %%
-%% @seealso{besselj, besseli, besselk, besselyn}
-%% @end deftypefn
+%% @seealso{@@sym/besselyn, @@sym/besselj}
+%% @end defmethod
 
 function Y = besseljn(n, x)
   if (nargin ~= 2)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {} evalpy (@var{cmd})
-%% @deftypefnx {Function File} {} evalpy (@var{cmd}, @var{x}, @var{y}, @dots{})
+%% @defun  evalpy (@var{cmd})
+%% @defunx evalpy (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run Python code, automatically transferring results.
 %%
 %% Examples:
@@ -97,7 +97,7 @@
 %% @end itemize
 %%
 %% @seealso{python_cmd}
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: python

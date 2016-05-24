@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,33 +18,48 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym ezplot3 (@var{f1}, @var{f2}, @var{f3})
-%% @defmethodx @@sym ezplot3 (@dots{}, @var{dom})
-%% @defmethodx @@sym ezplot3 (@dots{}, @var{N})
-%% Simple 3D parametric plotting of symbolic expressions.
+%% @defmethod  @@sym ezsurf (@var{z})
+%% @defmethodx @@sym ezsurf (@var{f1}, @var{f2}, @var{f3})
+%% @defmethodx @@sym ezsurf (@dots{}, @var{dom})
+%% @defmethodx @@sym ezsurf (@dots{}, @var{N})
+%% Simple 3D surface plots of symbolic expressions.
 %%
-%% Example parametric plot of a spiral:
+%% Example 3D surface plot:
 %% @example
 %% @group
-%% syms t
-%% x = t*cos(10*t), y = t*sin(10*t), z = t
-%%   @result{} x = (sym) t⋅cos(10⋅t)
-%%   @result{} y = (sym) t⋅sin(10⋅t)
-%%   @result{} z = (sym) t
-%%
-%% ezplot3(x, y, z)                             % doctest: +SKIP
+%% syms x y
+%% z = sin(2*x)*sin(y)
+%%   @result{} z = (sym) sin(2⋅x)⋅sin(y)
+%% ezsurf(z)                                    % doctest: +SKIP
 %% @end group
 %% @end example
 %%
-%% See help for the (non-symbolic) @code{ezplot3}, which this
+%% Example parametric surface plot of a Möbius strip:
+%% @example
+%% @group
+%% syms u v
+%% x = (1+v*cos(u/2))*cos(u)
+%%   @result{} x = (sym)
+%%       ⎛     ⎛u⎞    ⎞
+%%       ⎜v⋅cos⎜─⎟ + 1⎟⋅cos(u)
+%%       ⎝     ⎝2⎠    ⎠
+%% y = (1+v*cos(u/2))*sin(u);
+%% z = v*sin(u/2);
+%%
+%% ezsurf(x, y, z, [0 2*pi -0.5 0.5], 32)       % doctest: +SKIP
+%% axis equal
+%% @end group
+%% @end example
+%%
+%% See help for the (non-symbolic) @code{ezsurf}, which this
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
 %%
-%% @seealso{ezplot3, @@sym/ezplot, @@sym/ezsurf, @@sym/function_handle}
+%% @seealso{ezsurf, @@sym/ezplot, @@sym/function_handle}
 %% @end defmethod
 
 
-function varargout = ezplot3(varargin)
+function varargout = ezsurf(varargin)
 
   % first input is handle, shift
   if (ishandle(varargin{1}))
@@ -63,8 +78,8 @@ function varargout = ezplot3(varargin)
 
         % Each is function of one var, and its the same var for all
         thissym = symvar(varargin{i});
-        assert(length(thissym) <= 1, ...
-          'ezplot3: plotting curves: functions should have at most one input');
+        assert(length(thissym) <= 2, ...
+          'ezplot3: plotting curves: functions should have at most two inputs');
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
@@ -75,8 +90,8 @@ function varargout = ezplot3(varargin)
           if (isempty(firstsym))
             firstsym = thissym;
           else
-            assert(logical(thissym == firstsym), ...
-              'ezplot3: all functions must be in terms of the same variables');
+            assert(all(logical(thissym == firstsym)), ...
+              'ezsurf: all functions must be in terms of the same variables');
           end
           thisf = function_handle(varargin{i});
         end
@@ -90,7 +105,7 @@ function varargout = ezplot3(varargin)
     end
   end
 
-  h = ezplot3(varargin{:});
+  h = ezsurf(varargin{:});
 
   if (nargout)
     varargout{1} = h;
@@ -99,36 +114,10 @@ function varargout = ezplot3(varargin)
 end
 
 
-%!test
-%! % parametric
-%! syms t
-%! f1 = cos(t);
-%! f2 = sin(t);
-%! f3 = t;
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%! h = ezplot3(f1, f2, f3);
-%! warning(s)
-%! zz = get(h, 'zdata');
-%! assert (abs(zz(end) - 2*pi) <= 4*eps)
-
 %!error <all functions must be in terms of the same variables>
-%! syms x t
-%! ezplot3(t, x, t)
+%! syms u v t
+%! ezsurf(u*v, 2*u*v, 3*v*t)
 
-%!error <functions should have at most one input>
-%! syms x t
-%! ezplot3(t, t*x, t)
-
-%%!test
-%%! % bounds etc as syms
-%%! % FIXME: disabled for matlab, see ezplot.m too
-%%! syms t
-%%! f1 = cos(t);
-%%! f2 = sin(t);
-%%! f3 = t;
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot3(f1, f2, f3, [sym(0) sym(pi)], sym(42));
-%%! warning(s)
-%%! zz = get(h, 'zdata');
-%%! assert (length(zz) == 42)
-%%! assert (abs(zz(end) - pi) <= 4*eps)
+%!error <functions should have at most two inputs>
+%! syms u v t
+%! ezsurf(u*v, 2*u*v, u*v*t)
