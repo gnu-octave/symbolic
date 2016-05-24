@@ -111,7 +111,7 @@
 %% @group
 %% syms x(t) y(t)
 %% ode_sys = [diff(x(t),t) == 2*y(t);  diff(y(t),t) == 2*x(t)]
-%%   @result{} odesys = (sym 2×1 matrix)
+%%   @result{} ode_sys = (sym 2×1 matrix)
 %%       ⎡d                ⎤
 %%       ⎢──(x(t)) = 2⋅y(t)⎥
 %%       ⎢dt               ⎥
@@ -122,7 +122,7 @@
 %% @end group
 %%
 %% @group
-%% dsolve (odesys)
+%% dsolve (ode_sys)
 %%   @result{} ans =
 %%     @{
 %%       (sym)
