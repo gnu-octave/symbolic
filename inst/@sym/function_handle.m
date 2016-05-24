@@ -18,12 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} function_handle (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (@var{f1}, @dots{}, @var{fn})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, @var{param}, @var{value})
-%% @deftypefnx {Function File} {@var{g} =} function_handle (@dots{}, 'vars', [@var{x} @dots{} @var{z}])
-%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'file', @var{filename})
-%% @deftypefnx {Function File} {@dots{}} function_handle (@dots{}, 'outputs', [@var{o1} @dots{} @var{on}])
+%% @defmethod  @@sym function_handle (@var{f})
+%% @defmethodx @@sym function_handle (@var{f1}, @dots{}, @var{fn})
+%% @defmethodx @@sym function_handle (@dots{}, @var{param}, @var{value})
+%% @defmethodx @@sym function_handle (@dots{}, 'vars', [@var{x} @dots{} @var{z}])
+%% @defmethodx @@sym function_handle (@dots{}, 'file', @var{filename})
+%% @defmethodx @@sym function_handle (@dots{}, 'outputs', [@var{o1} @dots{} @var{on}])
 %% Convert symbolic expression into a standard function.
 %%
 %% This can make anonymous functions from symbolic expressions:
@@ -85,10 +85,8 @@
 %% subexpression elimination.
 %%
 %% @seealso{@@sym/ccode, @@sym/fortran, @@sym/latex, @@sym/matlabFunction}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function f = function_handle(varargin)
 

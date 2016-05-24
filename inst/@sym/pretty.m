@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {} pretty (@var{x})
-%% @deftypefnx {Function File}  {@var{s} =} pretty (@var{x})
-%% Return/display ASCII-art/unicode representation of expression.
+%% @deftypemethod  @@sym  {} pretty (@var{x})
+%% @deftypemethodx @@sym  {@var{s} =} pretty (@var{x})
+%% @deftypemethodx @@sym  {@var{s} =} pretty (@var{x}, 'unicode')
+%% @deftypemethodx @@sym  {@var{s} =} pretty (@var{x}, 'ascii')
+%% Return/display unicode/ascii-art representation of expression.
 %%
 %% This is usually the same as @code{disp(x)}, unless you have
 %% @code{sympref display flat}, in which case
@@ -33,11 +35,9 @@
 %% @code{pretty} exists mainly for compatibility with the
 %% Symbolic Math Toolbox.
 %%
-%% @seealso{disp, latex}
-%% @end deftypefn
+%% @seealso{@@sym/disp, @@sym/latex}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = pretty(x, wh)
 

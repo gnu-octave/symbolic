@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} nextprime (@var{x})
+%% @defmethod @@sym nextprime (@var{x})
 %% Return the next prime number.
 %%
 %% Example:
@@ -32,11 +32,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{isprime}
-%% @end deftypefn
+%% @seealso{@@sym/isprime}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = nextprime(x)
 

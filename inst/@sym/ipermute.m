@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{A} =} ipermute (@var{B}, @var{iperm})
-%% Permute the indices of a symbolic array.
+%% @documentencoding UTF-8
+%% @defmethod @@sym ipermute (@var{B}, @var{iperm})
+%% Invert a permutation the indices of a symbolic array.
 %%
-%% @seealso{permute}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 pi; 4 5 6]);
+%% B = permute(A, [2 1]);
+%% ipermute(B, [2 1])
+%%   @result{} ans = (sym 2×3 matrix)
+%%       ⎡1  2  π⎤
+%%       ⎢       ⎥
+%%       ⎣4  5  6⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/permute}
+%% @end defmethod
+
 
 function A = ipermute(B, iperm)
 
