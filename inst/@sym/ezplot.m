@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,11 +18,24 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{h} =} ezplot (@var{f})
-%% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{f2})
-%% @deftypefnx {Function File} {@var{h} =} ezplot (@var{f1}, @var{n})
-%% @deftypefnx {Function File} {@var{h} =} ezplot (@dots{})
+%% @defmethod  @@ym ezplot (@var{f})
+%% @defmethodx @@ym ezplot (@var{f1}, @var{f2})
+%% @defmethodx @@ym ezplot (@var{f}, @var{dom})
+%% @defmethodx @@ym ezplot (@var{f1}, @var{f2}, @var{dom})
+%% @defmethodx @@ym ezplot (@dots{}, @var{N})
 %% Simple plotting of symbolic expressions.
+%%
+%% Example parametric plot of a Lissajous Curve:
+%% @example
+%% @group
+%% syms t
+%% x = cos(3*t), y = sin(2*t)
+%%   @result{} x = (sym) cos(3⋅t)
+%%   @result{} y = (sym) sin(2⋅t)
+%%
+%% ezplot(x, y)                                 % doctest: +SKIP
+%% @end group
+%% @end example
 %%
 %% See help for the (non-symbolic) @code{ezplot}, which this
 %% routine calls after trying to convert sym inputs to
@@ -33,15 +46,15 @@
 %% or @var{f2}.  For example:
 %% @example
 %% @group
-%% >> syms t
-%% >> f = sin(t);
-%% >> N = sym(50);
+%% syms t
+%% f = sin(t);
+%% N = sym(50);
 %%
-%% >> % parametric plot of f(t), N(t)
-%% >> ezplot(f, N)                       % doctest: +SKIP
+%% % parametric plot of f(t), N(t)
+%% ezplot(f, N)                                 % doctest: +SKIP
 %%
-%% >> % plot f vs t using 50 pts
-%% >> ezplot(f, double(N))               % doctest: +SKIP
+%% % plot f vs t using 50 pts
+%% ezplot(f, double(N))                         % doctest: +SKIP
 %% @end group
 %% @end example
 %%
@@ -52,11 +65,9 @@
 %% and Octave's ezplot and Matlab 2014a does not support N as
 %% number of points.  Disabled some tests.
 %%
-%% @seealso{ezplot3, ezsurf, ezmesh, function_handle}
-%% @end deftypefn
+%% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/function_handle}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, plotting
 
 function varargout = ezplot(varargin)
 
