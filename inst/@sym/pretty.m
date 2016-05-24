@@ -24,16 +24,32 @@
 %% @deftypemethodx @@sym  {@var{s} =} pretty (@var{x}, 'ascii')
 %% Return/display unicode/ascii-art representation of expression.
 %%
-%% This is usually the same as @code{disp(x)}, unless you have
-%% @code{sympref display flat}, in which case
-%% @code{pretty(x)} displays ASCII-art.  You can force unicode
-%% with @code{pretty(x, 'unicode')}.
+%% By default, this is similar to @code{disp(x)}:
+%% @example
+%% @group
+%% syms n
+%% pretty (ceil (pi/n));
+%%   @print{}   ⎡π⎤
+%%   @print{}   ⎢─⎥
+%%   @print{}   ⎢n⎥
+%% @end group
+%% @end example
 %%
-%% Note: pretty(x) works like disp(x) (makes output even if has a
-%% semicolon)
+%% However, if you set @code{sympref display ascii}, @code{pretty(x)}
+%% displays ascii-art instead.  The optional second argument forces
+%% the output:
+%% @example
+%% @group
+%% pretty (ceil (pi/n), 'ascii');
+%%   @print{}          /pi\
+%%   @print{}   ceiling|--|
+%%   @print{}          \n /
+%% @end group
+%% @end example
 %%
-%% @code{pretty} exists mainly for compatibility with the
-%% Symbolic Math Toolbox.
+%% This method might be useful if you usually prefer
+%% @code{sympref display flat} but occasionally want to pretty
+%% print an expression.
 %%
 %% @seealso{@@sym/disp, @@sym/latex}
 %% @end deftypemethod
@@ -46,9 +62,14 @@ function varargout = pretty(x, wh)
     wh = sympref('display');
   end
 
-  % if config says flat, pretty does ascii
+  % if config says flat, pretty does unicode
   if (strcmp('flat', lower(wh)))
-    wh = 'ascii';
+    if (ispc () && (~isunix ()))
+      % Unicode not working on Windows, Issue #83.
+      wh = 'ascii';
+    else
+      wh = 'unicode';
+    end
   end
 
   if (nargout == 0)
