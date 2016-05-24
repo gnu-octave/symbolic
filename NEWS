@@ -28,6 +28,7 @@ octsympy 2.4.0-dev
           logint
           polylog
           psi
+          resize
           sech
           signIm
           sinint

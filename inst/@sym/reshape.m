@@ -48,7 +48,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/size}
+%% @seealso{@@sym/size, @@sym/resize}
 %% @end defmethod
 
 
