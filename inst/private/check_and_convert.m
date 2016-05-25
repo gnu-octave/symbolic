@@ -1,36 +1,38 @@
 function obj = check_and_convert()
   newl = sprintf('\n');
   
-  str_check_is_sym = strjoin({'if temp is None or isinstance(temp, (sp.Basic, sp.MatrixBase)):',
-                              '  is_sym = True',
+  str_check_is_list = strjoin({'if isinstance(_outs, (list, tuple)):',
+                              '  is_list = True',
                               'else:',
-                              '  is_sym = False'},newl);
-  pyexec(str_check_is_sym);
-  is_sym = pyeval('is_sym');
+                              '  is_list = False'},newl);
+  pyexec(str_check_is_list);
+  is_list = pyeval('is_list');
   
-  if is_sym
-    ascii = pyeval('sp.pretty(_outs[0], use_unicode=False)');
-    unicode = pyeval('sp.pretty(_outs[0], use_unicode=True)');
-    str = pyeval('sympy.srepr(_outs[0])');
-    flat = pyeval('str(_outs[0])');
-    
-    str_eval = strjoin({'temp = Matrix([_outs[0]])',
-                        'if isinstance(temp, (sp.Basic, sp.MatrixBase)):',
-                        '  _d = temp.shape' ,
-                        'elif isinstance(temp, sp.MatrixExpr):' ,
-                        '  _d = [float("nan") if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in temp.shape]',
-                        'else:' ,
-                        '  _d = (1, 1)',
-                        '#function call to pyobj with params not implemented yet',
-                        'd0 = _d[0]',
-                        'd1 = _d[1]'}, newl);
-    pyexec(str_eval);
-    _d = [1 1];
-    _d(1) = pyeval('d0');
-    _d(2) = pyeval('d1');
-    
-    obj = sym([], str, [_d(1) _d(2)], flat, ascii, unicode);
+  if is_list
+    n = pyeval('len(_outs)');
   else
-    obj = pyeval('_outs[0]');
+    n = 1;
+  end
+  
+  obj = [];
+  for i=1:n
+    if is_list
+      cur_var = sprintf('_outs[%d]', i-1)
+    else
+      cur_var = sprintf('_outs');
+    end
+    
+    str_check_is_sym = strjoin({strjoin({'if ', cur_var, ' is None or isinstance(', cur_var, ', (sp.Basic, sp.MatrixBase)):'}),
+                                '  is_sym = True',
+                                'else:',
+                                '  is_sym = False'},newl);
+    pyexec(str_check_is_sym);
+    is_sym = pyeval('is_sym');
+    
+    if is_sym
+      obj = [obj get_sym_from_python(cur_var)];
+    else
+      obj = [obj pyeval(cur_var)];
+    end
   end
 end

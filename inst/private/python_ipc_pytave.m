@@ -71,7 +71,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   s = strjoin(cmd, newl);
   pyexec(s);
   
-  info.raw = pyeval('_outs[0]');
+  info.raw = pyeval('_outs');
   A = check_and_convert();
 
   % TODO: here we reuse our existing xml output code (we only return
