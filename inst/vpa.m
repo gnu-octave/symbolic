@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,18 +18,18 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} vpa (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} vpa (@var{x}, @var{n})
+%% @defun  vpa (@var{x})
+%% @defunx vpa (@var{x}, @var{n})
 %% Create a variable-precision floating point number.
 %%
 %% @var{x} can be a string, a sym or a double.  Example:
 %% @example
 %% @group
-%% >> x = vpa('1/3', 32)
-%%    @result{} x = (sym) 0.33333333333333333333333333333333
-%% >> a = sym(1)/3;
-%% >> x = vpa(a, 32)
-%%    @result{} x = (sym) 0.33333333333333333333333333333333
+%% x = vpa('1/3', 32)
+%%   @result{} x = (sym) 0.33333333333333333333333333333333
+%% a = sym(1)/3;
+%% x = vpa(a, 32)
+%%   @result{} x = (sym) 0.33333333333333333333333333333333
 %% @end group
 %% @end example
 %%
@@ -37,8 +37,8 @@
 %% double as you will generally only get 15 digits:
 %% @example
 %% @group
-%% >> vpa(1/3, 32)
-%%    @result{} (sym) 0.33333333333333331482961625624739
+%% vpa(1/3, 32)
+%%   @result{} (sym) 0.33333333333333331482961625624739
 %% @end group
 %% @end example
 %%
@@ -46,15 +46,14 @@
 %% @code{digits()}.
 %%
 %% @seealso{sym, vpasolve, digits}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end defun
 
 function r = vpa(x, n)
 
   if (nargin == 1)
     n = digits();
+  elseif (nargin ~= 2)
+    print_usage ();
   end
 
 

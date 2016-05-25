@@ -35,10 +35,13 @@ try:
     from sympy.functions.elementary.piecewise import ExprCondPair
     from sympy.integrals.risch import NonElementaryIntegral
     from sympy.matrices.expressions.matexpr import MatrixElement
+    # for hypergeometric
+    from sympy.functions.special.hyper import TupleArg
     from sympy.utilities.iterables import uniq
     import copy
     import binascii
     import struct
+    import codecs
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
 except:
@@ -68,6 +71,15 @@ try:
     def Version(v):
         # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
+    def myesc(s):
+        if sys.version_info >= (3, 0):
+            # workaround https://bugs.python.org/issue25270
+            if not s:
+                return s
+            b, n = codecs.escape_encode(s.encode('utf-8'))
+            return b.decode('ascii')
+        else:
+            return s.encode('utf-8').encode('string_escape')
 except:
     echo_exception_stdout("in python_header defining fcns block 1")
     raise
@@ -163,6 +175,7 @@ try:
         # Clashes with some expat lib in Matlab, Issue #63
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
+        # want real newlines here (so hard to do escaping *after* this)
         if sys.version_info >= (3, 0):
             s = DOM.toprettyxml(indent="", newl="\n")
         else:
@@ -177,12 +190,10 @@ except:
 
 
 try:
-    # FIXME: unicode may not have enough escaping, but cannot string_escape
     def octoutput(x, et):
         OCTCODE_INT = 1001
         OCTCODE_DOUBLE = 1002
         OCTCODE_STR = 1003
-        OCTCODE_USTR = 1004
         OCTCODE_BOOL = 1005
         OCTCODE_DICT = 1010
         OCTCODE_SYM = 1020
@@ -220,11 +231,11 @@ try:
             f = ET.SubElement(a, "f")
             f.text = str(_d[1])
             f = ET.SubElement(a, "f")
-            f.text = str(x)
+            f.text = str(x)  # esc?
             f = ET.SubElement(a, "f")
-            f.text = pretty_ascii
+            f.text = myesc(pretty_ascii)
             f = ET.SubElement(a, "f")
-            f.text = pretty_unicode
+            f.text = myesc(pretty_unicode)
         elif isinstance(x, (list, tuple)):
             c = ET.SubElement(et, "list")
             for y in x:
@@ -247,7 +258,7 @@ try:
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
             f = ET.SubElement(a, "f")
-            f.text = x
+            f.text = myesc(x)
         elif isinstance(x, dict):
             # Note: the dict cannot be too complex, keys must convert to
             # strings for example.  Values can be dicts, lists.

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,44 +18,44 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} fibonacci (@var{n})
-%% @deftypefnx {Function File} {@var{p} =} fibonacci (@var{n}, @var{x})
-%% Return Fibonacci numbers and polynomials.
+%% @documentencoding UTF-8
+%% @deftypefun  {@var{F} =} fibonacci (@var{n})
+%% @deftypefunx {@var{p} =} fibonacci (@var{n}, @var{x})
+%% Return symbolic Fibonacci numbers or Fibonacci polynomials.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> fibonacci(15)
-%%    @result{} (sym) 610
-%% >> syms n
-%% >> fibonacci(n)
-%%    @result{} (sym) fibonacci(n)
+%% fibonacci(15)
+%%   @result{} (sym) 610
+%% syms n
+%% fibonacci(n)
+%%   @result{} (sym) fibonacci(n)
 %% @end group
 %% @end example
 %%
 %% Polynomial example:
 %% @example
 %% @group
-%% >> syms x
-%% >> fibonacci(10, x)
-%%    @result{} (sym)
-%%       9      7       5       3
-%%      x  + 8⋅x  + 21⋅x  + 20⋅x  + 5⋅x
+%% syms x
+%% fibonacci(10, x)
+%%   @result{} (sym)
+%%        9      7       5       3
+%%       x  + 8⋅x  + 21⋅x  + 20⋅x  + 5⋅x
 %% @end group
 %% @end example
 %%
-%% @seealso{euler, bernouilli}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{euler, bernoulli}
+%% @end deftypefun
 
 function r = fibonacci(n, x)
 
   if (nargin == 1)
     r = python_cmd ('return sp.fibonacci(*_ins),', sym(n));
-  else
+  elseif (nargin == 2)
     r = python_cmd ('return sp.fibonacci(*_ins),', sym(n), sym(x));
+  else
+    print_usage ();
   end
 
 end

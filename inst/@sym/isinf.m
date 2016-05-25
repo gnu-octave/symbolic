@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} isinf (@var{x})
+%% @defmethod @@sym isinf (@var{x})
 %% Return true if a symbolic expression is infinite.
 %%
 %% Example:
@@ -32,8 +32,8 @@
 %%       ⎣x   1   ∞⎦
 %% isinf(A)
 %%   @result{} ans =
-%%        1   1   0
-%%        0   0   1
+%%       1   1   0
+%%       0   0   1
 %% @end group
 %% @end example
 %%
@@ -56,11 +56,9 @@
 %% FIXME: this is behaviour might change in a future version; come
 %% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.
 %%
-%% @seealso{isnan, double}
-%% @end deftypefn
+%% @seealso{@@sym/isnan, @@sym/double}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = isinf(x)
 
@@ -68,16 +66,7 @@ function r = isinf(x)
     print_usage ();
   end
 
-  % When we drop 0.7.5 support:
-  %r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
-
-  sf = { 'def sf(x):'
-         '    if Version(spver) < Version("0.7.6"):'
-         '        return x.is_unbounded'
-         '    else:'
-         '        return x.is_infinite' };
-
-  r = uniop_bool_helper(x, sf);
+  r = uniop_bool_helper(x, 'lambda a: a.is_infinite');
 
 end
 

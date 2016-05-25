@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,36 +18,42 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{A} =} assumptions ()
-%% @deftypefnx {Function File} {@var{A} =} assumptions (@var{x})
-%% @deftypefnx {Function File} {[@var{v}, @var{d}] =} assumptions (@var{x}, 'dict')
-%% @deftypefnx {Function File} {@var{L} =} assumptions ('possible')
+%% @deftypefun  {@var{A} =} assumptions ()
+%% @deftypefunx {@var{A} =} assumptions (@var{x})
+%% @deftypefunx {[@var{v}, @var{d}] =} assumptions (@var{x}, 'dict')
+%% @deftypefunx {@var{L} =} assumptions ('possible')
 %% List assumptions on symbolic variables.
 %%
 %% The assumptions are returned as a cell-array of strings:
 %% @example
 %% @group
-%% >> syms x y positive
-%% >> syms n integer
-%% >> assumptions
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = n: integer
-%%        [1,2] = x: positive
-%%        [1,3] = y: positive
-%%      @}
-%% >> f = sin(n*x);
-%% >> assumptions(f)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = n: integer
-%%        [1,2] = x: positive
-%%      @}
-%% >> assumptions(n)
-%%    @result{} ans =
-%%      @{
-%%        [1,1] = n: integer
-%%      @}
+%% syms x y positive
+%% syms n integer
+%% assumptions
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%       [1,2] = x: positive
+%%       [1,3] = y: positive
+%%     @}
+%% assumptions(n)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%     @}
+%% @end group
+%% @end example
+%%
+%% You can get the list of assumptions relevant to an expression:
+%% @example
+%% @group
+%% f = sin(n*x);
+%% assumptions(f)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = n: integer
+%%       [1,2] = x: positive
+%%     @}
 %% @end group
 %% @end example
 %%
@@ -58,14 +64,14 @@
 %% You can also get a list of possible assumptions:
 %% @example
 %% @group
-%% >> A = assumptions('possible');
-%% >> sprintf('%s ', A@{:@})
-%%    @result{} ans = real positive negative integer even odd rational finite
+%% A = assumptions('possible');
+%% sprintf('%s ', A@{:@})
+%%   @result{} ans = real positive negative integer even odd rational finite
 %% @end group
 %% @end example
 %%
-%% @seealso{sym, syms, assume, assumeAlso}
-%% @end deftypefn
+%% @seealso{sym, syms, @@sym/assume, @@sym/assumeAlso}
+%% @end deftypefun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -312,4 +318,4 @@ end
 %!test
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
-%! assert (~isequal (e, sym(true)) && ~isequal (e, sym(false)))
+%! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))

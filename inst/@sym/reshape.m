@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,15 +17,39 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{y} =} reshape (@var{x}, @var{n}, @var{m})
-%% @deftypefnx {Function File} {@var{y} =} reshape (@var{x}, [@var{n}, @var{m}])
+%% @documentencoding UTF-8
+%% @defmethod  @@sym reshape (@var{x}, @var{n}, @var{m})
+%% @defmethodx @@sym reshape (@var{x}, [@var{n}, @var{m}])
 %% Change the shape of a symbolic array.
 %%
-%% @seealso{size}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 2 3; 4 5 6])
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡1  2  3⎤
+%%       ⎢       ⎥
+%%       ⎣4  5  6⎦
+%% @end group
+%%
+%% @group
+%% reshape(A, [3 2])
+%%   @result{} ans = (sym 3×2 matrix)
+%%       ⎡1  5⎤
+%%       ⎢    ⎥
+%%       ⎢4  3⎥
+%%       ⎢    ⎥
+%%       ⎣2  6⎦
+%% @end group
+%%
+%% @group
+%% reshape(A, 1, 6)
+%%   @result{} ans = (sym) [1  4  2  5  3  6]  (1×6 matrix)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/size, @@sym/resize}
+%% @end defmethod
 
 
 function z = reshape(a, n, m)

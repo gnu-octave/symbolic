@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,24 +19,133 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{sol} =} dsolve (@var{ode})
-%% @deftypefnx {Function File} {@var{sol} =} dsolve (@var{ode}, @var{ics})
+%% @deftypemethod  @@sym {@var{sol} =} dsolve (@var{ode})
+%% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC})
+%% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC1}, @var{IC2}, @dots{})
+%% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@var{ode}, @var{IC})
 %% Solve ordinary differentual equations (ODEs) symbolically.
 %%
-%% Many types of ODEs can be solved, including initial-value
-%% problems and boundary-value problem.  Some systems can be
-%% solved, including initial-value problems involving linear systems
-%% of first order ODEs with constant coefficients.
+%% Basic example:
+%% @example
+%% @group
+%% syms y(x)
+%% DE = diff(y, x) - 4*y == 0
+%%   @result{} DE = (sym)
+%%                 d
+%%       -4⋅y(x) + ──(y(x)) = 0
+%%                 dx
+%% @end group
 %%
-%% *WARNING*: As of SymPy 0.7.6 (May 2015), there are many problems
+%% @group
+%% sol = dsolve (DE)
+%%   @result{} sol = (sym)
+%%                  4⋅x
+%%       y(x) = C₁⋅ℯ
+%% @end group
+%% @end example
+%%
+%% You can specify initial conditions:
+%% @example
+%% @group
+%% sol = dsolve (DE, y(0) == 1)
+%%   @result{} sol = (sym)
+%%               4⋅x
+%%       y(x) = ℯ
+%% @end group
+%% @end example
+%%
+%% Note the result is an equation so if you need an expression
+%% for the solution:
+%% @example
+%% @group
+%% rhs (sol)
+%%   @result{} (sym)
+%%        4⋅x
+%%       ℯ
+%% @end group
+%% @end example
+%%
+%% In some cases, SymPy can return a classification of the
+%% differential equation:
+%% @example
+%% @group
+%% DE = diff(y) == y^2
+%%   @result{} DE = (sym)
+%%       d           2
+%%       ──(y(x)) = y (x)
+%%       dx
+%%
+%% [sol, classify] = dsolve (DE, y(0) == 1)
+%%   @result{} sol = (sym)
+%%                -1
+%%        y(x) = ─────
+%%               x - 1
+%%   @result{} classify = separable
+%% @end group
+%% @end example
+%%
+%% Many types of ODEs can be solved, including initial-value
+%% problems and boundary-value problem:
+%% @example
+%% @group
+%% DE = diff(y, 2) == -9*y
+%%   @result{} DE = (sym)
+%%          2
+%%         d
+%%        ───(y(x)) = -9⋅y(x)
+%%          2
+%%        dx
+%%
+%% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
+%%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
+%%
+%% dsolve (DE, y(0)==1, y(sym(pi)/2) == 2)
+%%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
+%% @end group
+%% @end example
+%%
+%% Some systems can be solved, including initial-value problems
+%% involving linear systems of first order ODEs with constant
+%% coefficients:
+%% @example
+%% @group
+%% syms x(t) y(t)
+%% ode_sys = [diff(x(t),t) == 2*y(t);  diff(y(t),t) == 2*x(t)]
+%%   @result{} ode_sys = (sym 2×1 matrix)
+%%       ⎡d                ⎤
+%%       ⎢──(x(t)) = 2⋅y(t)⎥
+%%       ⎢dt               ⎥
+%%       ⎢                 ⎥
+%%       ⎢d                ⎥
+%%       ⎢──(y(t)) = 2⋅x(t)⎥
+%%       ⎣dt               ⎦
+%% @end group
+%%
+%% @group
+%% dsolve (ode_sys)
+%%   @result{} ans =
+%%     @{
+%%       (sym)
+%%                      -2⋅t         2⋅t
+%%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%
+%%       (sym)
+%%                        -2⋅t         2⋅t
+%%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%     @}
+%% @end group
+%% @end example
+%%
+%% @strong{WARNING}: As of SymPy 0.7.6 (May 2015), there are many problems
 %% with systems, even very simple ones.  Use these at your own risk,
 %% or even better: help us fix SymPy.
 %%
-%% FIXME: SMT supports strings like 'Dy + y = 0': we are unlikely
-%% to support this.
+%% Note: The Symbolic Math Toolbox supports strings like 'Dy + y = 0'; we
+%% are unlikely to support this so you will need to assemble a symbolic
+%% equation instead.
 %%
-%% @seealso{int}
-%% @end deftypefn
+%% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
+%% @end deftypemethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic
@@ -54,7 +164,7 @@ function [soln,classify] = dsolve(ode,varargin)
   if (isscalar(ode) && nargout==2)
     classify = python_cmd ('return sp.ode.classify_ode(_ins[0])[0],', ode);
   elseif(~isscalar(ode) && nargout==2)
-    disp('Classification of systems of ODEs is currently not supported')
+    warning('Classification of systems of ODEs is currently not supported')
     classify='';
   end
 
@@ -197,7 +307,7 @@ end
 %! % System of ODEs
 %! syms x(t) y(t) C1 C2
 %! ode_1=diff(x(t),t) == 2*y(t);
-%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! ode_2=diff(y(t),t) == 2*x(t);
 %! sol_sodes=dsolve([ode_1,ode_2]);
 %! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
 %! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
@@ -206,7 +316,7 @@ end
 %! % System of ODEs (initial-value problem)
 %! syms x(t) y(t)
 %! ode_1=diff(x(t),t) == 2*y(t);
-%! ode_2=diff(y(t),t) == 2*x(t)-3*t;
+%! ode_2=diff(y(t),t) == 2*x(t);
 %! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
 %! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
 %! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))

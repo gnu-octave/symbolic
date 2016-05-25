@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,22 +17,50 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {} cat ()
-%% Overloaded cat for sym class, perhaps unnecessary.
+%% @documentencoding UTF-8
+%% @defmethod  @@sym cat (@var{dim}, @var{A}, @var{B}, @dots{})
+%% Concatenate symbolic arrays along particular dimension.
 %%
-%% FIXME: do we need this?
+%% @var{dim} is currently restricted to 1 or 2 as symbolic arrays
+%% are currently only two-dimensional.
 %%
-%% @seealso{vertcat,horzcat}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% cat(1, x, 2*x, 3*x)
+%%   @result{} (sym) [x  2⋅x  3⋅x] (1×3 matrix)
+%% cat(2, x, x)
+%%   @result{} (sym 2×1 matrix)
+%%       ⎡x⎤
+%%       ⎢ ⎥
+%%       ⎣x⎦
+%% @end group
+%% @end example
+%% @seealso{@@sym/vertcat, @@sym/horzcat}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function cat(varargin)
+function z = cat(dim, varargin)
 
-  error('cat: not implemented, unnecessary?');
+  if (logical(dim == 1))
+    z = horzcat(varargin{:});
+  elseif (logical(dim == 2))
+    z = vertcat(varargin{:});
+  else
+    print_usage ();
+  end
 
 end
 
 
-%!assert(true)   % so far, everything works :)
+%!test
+%! % mostly tested in horzcat, vertcat: one for good measure
+%! syms x
+%! assert (isequal (cat(1, x, x), [x x]))
+%! assert (isequal (cat(2, x, x), [x; x]))
+
+%!error cat(3, sym(2), sym(3))
+%!error cat(0, sym(2), sym(3))

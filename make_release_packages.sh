@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # for day-to-day testing
-VER=2.3.0-dev
+VER=2.4.1-dev
 # for release
-#VER=2.3.0
+#VER=2.4.1
 #TAG=v${VER}
 
 #----------------------------------------------------------------
@@ -15,19 +15,21 @@ MLDIR=$MLPKG
 
 echo "Making packages for octsympy-$VER."
 
-read -p "Press [Enter] to git clone and make packages..."
+printf "Press [Enter] to git clone and make packages..."
+read dummy
 
 
 # checkout a clean copy
 rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
-pushd octsympy
-if [ -z $TAG]; then
-  git checkout master
-else
-  git checkout tags/${TAG}
-fi
-popd
+( cd octsympy
+  if [ -z $TAG ]; then
+    git checkout master
+  else
+    # note: its ok that this gives the "detached state" warning
+    git checkout tags/${TAG}
+  fi
+  )
 
 
 
@@ -36,34 +38,33 @@ rm -f ${PKG}.tar.gz ${PKG}.zip
 rm -f ${MLPKG}.tar.gz ${MLPKG}.zip
 rm -rf ${DIR}
 rm -rf ${MLDIR}
-cp -r octsympy ${DIR}
+cp -R octsympy ${DIR}
 
 # remove .git dir and other things not needed for package
-pushd ${DIR}/
-rm .gitignore
-rm -rf .git/
-rm -f screenshot.png
-rm -f screenshot-install.png
-popd
+( cd ${DIR}/
+  rm .gitignore
+  rm -rf .git/
+  rm -f screenshot.png
+  rm -f screenshot-install.png
+  )
 
 # make clean
-pushd ${DIR}/src/
-make distclean
-./bootstrap
-make clean
-popd
+( cd ${DIR}/src/
+  make distclean
+  ./bootstrap
+  rm -rf autom4te.cache
+  make clean )
 
 # here are the packages
-tar -zcvf ${PKG}.tar.gz ${DIR}
+tar -cvf - ${DIR} | gzip -9n > ${PKG}.tar.gz
 zip -r ${PKG}.zip ${DIR}
 
 
 # Now, matlab packages
-pushd ${DIR}/src/
-make matlab
-popd
-cp -ra ${DIR}/matlab ${MLDIR}
-tar -zcvf ${MLPKG}.tar.gz ${MLDIR}
+( cd ${DIR}/src/
+  make matlab )
+cp -pR ${DIR}/matlab ${MLDIR}
+tar -cvf - ${MLDIR} | gzip -9n > ${MLPKG}.tar.gz
 zip -r ${MLPKG}.zip ${MLDIR}
 
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n} =} numel (@var{x})
+%% @defmethod @@sym numel (@var{x})
 %% Return number of elements in symbolic array.
 %%
 %% Example:
@@ -27,15 +27,12 @@
 %% syms x
 %% A = [1 2 x; x 3 4];
 %% numel(A)
-%%    @result{} 6
+%%   @result{} 6
 %% @end group
 %% @end example
 %%
-%% @seealso{length, size}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/length, @@sym/size}
+%% @end defmethod
 
 function n = numel(x)
 

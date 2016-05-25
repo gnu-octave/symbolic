@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,44 +24,38 @@
 %% Examples:
 %% @example
 %% @group
-%% >> x = sym('x')
-%%    @result{} x = (sym) x
+%% x = sym('x')
+%%   @result{} x = (sym) x
 %%
-%% >> display(x)
-%%    @result{} x = (sym) x
+%% display(x)
+%%   @result{} x = (sym) x
 %%
-%% >> display([x 2 pi])
-%%    @result{} (sym) [x  2  π]  (1×3 matrix)
+%% display([x 2 pi])
+%%   @result{} (sym) [x  2  π]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% @group
-%% >> A = sym([1 2; 3 4])
-%%    @result{} A = (sym 2×2 matrix)
+%% A = sym([1 2; 3 4])
+%%   @result{} A = (sym 2×2 matrix)
 %%        ⎡1  2⎤
 %%        ⎢    ⎥
 %%        ⎣3  4⎦
 %%
-%% >> syms n
-%% >> B = A^n
-%%    @result{} B = (sym 2×2 matrix expression)
-%%                n
-%%        ⎛⎡1  2⎤⎞
-%%        ⎜⎢    ⎥⎟
-%%        ⎝⎣3  4⎦⎠
-%% @end group
+%% syms n
+%% A = sym('A', [n n])
+%%   @result{} A = (sym) A  (n×n matrix expression)
+%% B = 3*A
+%%   @result{} B = (sym) 3⋅A  (n×n matrix expression)
 %%
-%% @group
-%% >> A = sym(ones(0, 3))
-%%    @result{} A = (sym) []  (empty 0×3 matrix)
+%% A = sym(ones(0, 3))
+%%   @result{} A = (sym) []  (empty 0×3 matrix)
 %%
-%% >> B = 3*A^n
-%%    @result{} B = (sym empty 0×3 matrix expression)
-%%              n
-%%        3⋅([])
-%% @end group
+%% A = sym('A', [0, n])
+%%   @result{} A = (sym) A  (empty 0×n matrix expression)
+%% B = 3*A
+%%   @result{} B = (sym) 3⋅A  (empty 0×n matrix expression)
 %% @end example
 %% @end deftypefn
 
@@ -102,7 +96,7 @@ function display(x)
   end
 
   % weird hack to support "ans(x) = " output for @symfun
-  name = priv_disp_name(x, inputname (1));
+  name = private_disp_name(x, inputname (1));
 
   dispstr = disp (x);
   dispstrtrim = strtrim (dispstr);

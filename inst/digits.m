@@ -18,32 +18,34 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n} =} digits ()
-%% @deftypefnx {Function File} {} digits (@var{n})
-%% @deftypefnx {Function File} {@var{oldn} =} digits (@var{n})
-%% Get/set number of digits used in variable precision arith.
+%% @deftypefn  {Command}  {} digits @var{n}
+%% @deftypefnx {Function} {} digits (@var{n})
+%% @deftypefnx {Function} {@var{n} =} digits ()
+%% @deftypefnx {Function} {@var{oldn} =} digits (@var{n})
+%% Set/get number of digits used in variable precision arith.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> n_orig = digits(7);
-%% >> vpa('pi')
-%%    @result{} (sym) 3.141593
+%% n_orig = digits(7);
+%% vpa('pi')
+%%   @result{} (sym) 3.141593
 %%
-%% >> digits(42)
-%% >> vpa('pi')
-%%    @result{} (sym) 3.14159265358979323846264338327950288419717
+%% digits(42)
+%% vpa('pi')
+%%   @result{} (sym) 3.14159265358979323846264338327950288419717
 %%
-%% >> digits(n_orig)   # reset digits to saved value
+%% digits(n_orig)      % reset digits to saved value
 %% @end group
 %% @end example
 %% @seealso{sym, vpa, vpasolve}
 %% @end deftypefn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
 function m = digits(n)
+
+  if (~ ((nargin == 0) || (nargin == 1)))
+    print_usage ();
+  end
 
   if (nargin == 0) || (nargout == 1)
     m = sympref('digits');

@@ -2,6 +2,8 @@
 *.so
 *~
 
+octave-workspace
+
 # temporary communcation files
 temp_sym_python_cmd.py
 inlog.txt

@@ -17,10 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} uminus (@var{x})
-%% Symbolic unitary minus (-).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym uminus (@var{x})
+%% @defopx Operator @@sym {-@var{x}} {}
+%% Return the negation of a symbolic expression.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% -x
+%%   @result{} (sym) -x
+%% -(3 - 2*x)
+%%   @result{} (sym) 2⋅x - 3
+%% @end group
+%% @end example
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

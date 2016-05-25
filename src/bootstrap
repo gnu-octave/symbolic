@@ -1,6 +1,8 @@
 #! /bin/sh
 
-aclocal
+set -e
+
+aclocal -I m4
 autoconf
 
 echo "$0: done.  Now you can run './configure'."

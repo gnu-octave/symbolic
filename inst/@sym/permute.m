@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{B} =} permute (@var{A}, @var{perm})
+%% @documentencoding UTF-8
+%% @defmethod @@sym permute (@var{A}, @var{perm})
 %% Permute the indices of a symbolic array.
 %%
 %% Generalizes transpose, but currently doesn't do much as we only
 %% support 2D symbolic arrays.
 %%
-%% @seealso{ipermute}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 pi; 4 5 6]);
+%% B = permute(A, [2 1])
+%%   @result{} B = (sym 3×2 matrix)
+%%       ⎡1  4⎤
+%%       ⎢    ⎥
+%%       ⎢2  5⎥
+%%       ⎢    ⎥
+%%       ⎣π  6⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/ipermute}
+%% @end defmethod
+
 
 function B = permute(A, perm)
 

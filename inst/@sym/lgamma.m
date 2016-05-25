@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,32 +18,29 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {} print_usage ()
-%% Wrapper for print_usage on Matlab.
+%% @defmethod  @@sym gammaln (@var{x})
+%% @defmethodx @@sym lgamma (@var{x})
+%% Symbolic logarithm of the gamma function.
 %%
-%% Matlab has no print_usage function.  Preparing
-%% the Matlab package should rename this from
-%% "my_print_usage.m" to "print_usage.m".
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% y = gammaln(x)
+%%   @result{} y = (sym) loggamma(x)
+%% y = lgamma(x)
+%%   @result{} y = (sym) loggamma(x)
+%% @end group
+%% @end example
 %%
-%% @seealso{error}
-%% @end deftypefn
+%% @seealso{gammaln, @@sym/gamma, @@sym/psi}
+%% @end defmethod
 
-function print_usage ()
-
-  % if we are on Octave
-  if (exist ('octave_config_info', 'builtin'))
-    %evalin ('caller', 'print_usage ();' );
-    %return
-  end
-
-  H = dbstack;
-  name = H(2).name;
-
-  msgid = sprintf('%s:invalidCall', name);
-  errmsg = sprintf('Invalid call to "%s": see documentation', name);
-
-  %error('Invalid call to "%s": see documentation', name)
-  ME = MException(msgid, errmsg);
-  ME.throwAsCaller();
-
+function y = lgamma(x)
+  y = gammaln(x);
 end
+
+
+%!test
+%! % tested by gammaln
+%! assert (isequal (lgamma (sym ('x')), gammaln (sym ('x'))))

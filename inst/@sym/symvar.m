@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{vars} =} symvar (@var{f})
-%% @deftypefnx {Function File} {@var{vars} =} symvar (@var{f}, @var{n})
+%% @defmethod  @@sym symvar (@var{f})
+%% @defmethodx @@sym symvar (@var{f}, @var{n})
 %% Find symbols in expression and return them as a symbolic vector.
 %%
 %% The symbols are sorted in alphabetic order with capital letters
@@ -29,33 +29,33 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = x^2 + 3*x*y - y^2;
-%% >> symvar (f)
-%%    @result{} (sym) [x  y]  (1×2 matrix)
-%% >> symvar (f, 1)
-%%    @result{} (sym) x
+%% syms x y
+%% f = x^2 + 3*x*y - y^2;
+%% symvar (f)
+%%   @result{} (sym) [x  y]  (1×2 matrix)
+%% symvar (f, 1)
+%%   @result{} (sym) x
 %% @end group
 %% @end example
 %%
 %% Further examples:
 %% @example
 %% @group
-%% >> syms a x t
-%% >> f = a*x + t;
-%% >> symvar (f, 1)
-%%    @result{} (sym) x
-%% >> symvar (f, 2)
-%%    @result{} (sym) [x  t]  (1×2 matrix)
-%% >> symvar (f, 3)
-%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% syms a x t
+%% f = a*x + t;
+%% symvar (f, 1)
+%%   @result{} (sym) x
+%% symvar (f, 2)
+%%   @result{} (sym) [x  t]  (1×2 matrix)
+%% symvar (f, 3)
+%%   @result{} (sym) [x  t  a]  (1×3 matrix)
 %% @end group
 %% @end example
 %% And note its ok to ask for more:
 %% @example
 %% @group
-%% >> symvar (f, 1000)
-%%    @result{} (sym) [x  t  a]  (1×3 matrix)
+%% symvar (f, 1000)
+%%   @result{} (sym) [x  t  a]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
@@ -69,8 +69,8 @@
 %% they will both appear in the output.  It is not well-defined
 %% in what order they appear.
 %%
-%% @seealso{findsym, findsymbols}
-%% @end deftypefn
+%% @seealso{findsymbols, @@sym/findsym}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Willem J. Atsma (previous versions)
 %% Keywords: symbolic

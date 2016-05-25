@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,17 +17,32 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{g} =} ge (@var{a}, @var{b})
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym ge {(@var{a}, @var{b})}
+%% @defopx Operator @@sym {@var{a} >= @var{b}} {}
 %% Test/define symbolic inequality, greater than or equal to.
 %%
-%% @seealso{lt, le, gt, eq, ne, logical, isAlways, isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
+%% Examples:
+%% @example
+%% @group
+%% sym(1) >= sym(pi)
+%%   @result{} (sym) False
+%%
+%% syms x
+%% x >= 10
+%%   @result{} (sym) x ≥ 10
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/gt, @@sym/lt, @@sym/le, @@sym/eq, @@sym/ne,
+%%          @@sym/logical, @@sym/isAlways}
+%% @end defop
 
 function t = ge(x, y)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   t = ineq_helper('>=', 'Ge', x, y);
 

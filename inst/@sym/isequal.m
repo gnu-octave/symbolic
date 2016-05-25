@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,22 +17,35 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} isequal (@var{f}, @var{g})
-%% @deftypefnx {Function File} {@var{r} =} isequal (@var{f}, @var{g}, @dots{})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym isequal (@var{f}, @var{g})
+%% @defmethodx @@sym isequal (@var{f}, @var{g}, @dots{})
 %% Test if contents of two or more arrays are equal.
 %%
-%% Here nan's are considered nonequal, see also @code{isequaln}
-%% where @code{nan == nan}.
+%% Example:
+%% @example
+%% @group
+%% syms x
+%% isequal([1 x], [1 x])
+%%   @result{} 1
+%% @end group
+%% @end example
+%%
+%% Note NaN's compare as false:
+%% @example
+%% @group
+%% snan = sym(nan);
+%% isequal([1 snan], [1 snan])
+%%   @result{} 0
+%% @end group
+%% @end example
+%% To avoid this behaviour, @pxref{isequaln}.
 %%
 %% Note the type of the arrays is not considered, just their shape
 %% and values.
 %%
-%% @seealso{logical, isAlways, eq (==), isequaln}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
+%% @seealso{@@sym/isequaln, @@sym/logical, @@sym/isAlways, @@sym/eq}
+%% @end defmethod
 
 function t = isequal(x, y, varargin)
 

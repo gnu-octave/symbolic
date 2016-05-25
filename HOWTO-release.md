@@ -24,6 +24,9 @@ Checklist
   * Update version in src/configure.ac.  Test the bootstrap script (note
     the scripts below will run bootstrap for the packages).
 
+  * Check minimum sympy version is consistent: its in:
+    configure.ac, DESCRIPTION, assert_have_python_and_sympy.m
+
   * Packages: need to run the following two scripts.  I recommend
     testing them first without using the tag.  Then test the packages
     by running the test suite.
@@ -52,7 +55,8 @@ Checklist
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
 
-      - regenerating the html documentation.
+      - regenerate the html documentation.  It will create a directory
+        called "html".  Then "tar -zcvf symbolic-html.tar.gz html".
 
       - create ticket for binaries and doc tarball on sourceforge.
 

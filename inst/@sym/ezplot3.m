@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,19 +17,32 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{h} =} ezplot3 (@var{f1}, @var{f2},@var{f3})
-%% @deftypefnx {Function File} {@var{h} =} ezplot3 (@dots{})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym ezplot3 (@var{f1}, @var{f2}, @var{f3})
+%% @defmethodx @@sym ezplot3 (@dots{}, @var{dom})
+%% @defmethodx @@sym ezplot3 (@dots{}, @var{N})
 %% Simple 3D parametric plotting of symbolic expressions.
+%%
+%% Example parametric plot of a spiral:
+%% @example
+%% @group
+%% syms t
+%% x = t*cos(10*t), y = t*sin(10*t), z = t
+%%   @result{} x = (sym) t⋅cos(10⋅t)
+%%   @result{} y = (sym) t⋅sin(10⋅t)
+%%   @result{} z = (sym) t
+%%
+%% ezplot3(x, y, z)                             % doctest: +SKIP
+%% @end group
+%% @end example
 %%
 %% See help for the (non-symbolic) @code{ezplot3}, which this
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
 %%
-%% @seealso{ezplot, ezsurf, ezmesh, function_handle}
-%% @end deftypefn
+%% @seealso{ezplot3, @@sym/ezplot, @@sym/ezsurf, @@sym/function_handle}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, plotting
 
 function varargout = ezplot3(varargin)
 

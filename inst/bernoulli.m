@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,43 +18,42 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{b} =} bernoulli (@var{n})
-%% @deftypefnx {Function File} {@var{p} =} bernoulli (@var{n}, @var{x})
-%% Return Bernoulli numbers and polynomials.
+%% @deftypefun  {@var{B} =} bernoulli (@var{n})
+%% @deftypefunx {@var{p} =} bernoulli (@var{n}, @var{x})
+%% Return symbolic Bernoulli numbers or Bernoulli polynomials.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> bernoulli(6)
-%%    @result{} (sym) 1/42
-%% >> bernoulli(7)
-%%    @result{} (sym) 0
+%% bernoulli(6)
+%%   @result{} (sym) 1/42
+%% bernoulli(7)
+%%   @result{} (sym) 0
 %% @end group
 %% @end example
 %%
 %% Polynomial example:
 %% @example
 %% @group
-%% >> syms x
-%% >> bernoulli(2, x)
-%%    @result{} (sym)
+%% syms x
+%% bernoulli(2, x)
+%%   @result{} (sym)
 %%        2       1
 %%       x  - x + ─
 %%                6
 %% @end group
 %% @end example
 %% @seealso{euler}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @end deftypefun
 
 function r = bernoulli(n, x)
 
   if (nargin == 1)
     r = python_cmd ('return sp.bernoulli(*_ins),', sym(n));
-  else
+  elseif (nargin == 2)
     r = python_cmd ('return sp.bernoulli(*_ins),', sym(n), sym(x));
+  else
+    print_usage ();
   end
 
 end

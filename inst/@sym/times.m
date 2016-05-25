@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} times (@var{x}, @var{y})
-%% Return elementwise multiplication (dot star, Hadamard product).
+%% @defop  Method   @@sym times {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} .* @var{y}} {}
+%% Return Hadamard product (element-wise multiplication) of matrices.
 %%
 %% Example:
 %% @example
@@ -42,9 +43,8 @@
 %%   @result{} ans = (sym) A∘A
 %% @end group
 %% @end example
-%%
-%% @seealso{power}
-%% @end deftypefn
+%% @seealso{@@sym/power}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

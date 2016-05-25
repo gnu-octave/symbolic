@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,16 +17,59 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} conj (@var{x})
-%% Symbolic conj function.
+%% @documentencoding UTF-8
+%% @defmethod @@sym conj (@var{z})
+%% Symbolic conjugate function.
 %%
-%% @seealso{ctranspose, real, imag}
-%% @end deftypefn
+%% Examples:
+%% @example
+%% @group
+%% syms z
+%% conj(z)
+%%   @result{} ans = (sym)
+%%       _
+%%       z
+%%
+%% @end group
+%% @group
+%% syms x real
+%% conj(x)
+%%   @result{} ans = (sym) x
+%%
+%% conj(sym(pi) + 6i)
+%%   @result{} ans = (sym) π - 6⋅ⅈ
+%% @end group
+%% @end example
+%%
+%% Unlike @ref{@@sym/ctranspose}, this command does not transpose
+%% a matrix:
+%% @example
+%% @group
+%% A = [1 z x; sym(4) 5 6+7i]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡1  z     x   ⎤
+%%       ⎢             ⎥
+%%       ⎣4  5  6 + 7⋅ⅈ⎦
+%% conj(A)
+%%   @result{} ans = (sym 2×3 matrix)
+%%       ⎡   _         ⎤
+%%       ⎢1  z     x   ⎥
+%%       ⎢             ⎥
+%%       ⎣4  5  6 - 7⋅ⅈ⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/ctranspose, @@sym/real, @@sym/imag}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function z = conj(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   % can just use .conjugate on matrix but avoids S.true err
   sf = { 'def sf(x):'

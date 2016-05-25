@@ -18,11 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{g} =} rewrite (@var{f}, @var{how})
+%% @defmethod @@sym rewrite (@var{f}, @var{how})
 %% Rewrite a symbolic expression.
 %%
 %% Attempts to rewrite an expression @var{f} in terms of functions
-%% indicated by the string @var{how}.
+%% indicated by the @emph{case-sensitive} string @var{how}.
 %%
 %% Examples using trigonometry:
 %% @example
@@ -67,6 +67,8 @@
 %%       0
 %% @end group
 %% @end example
+%% @strong{Note} the case-sensitivity of @var{how}:
+%% use @code{Integral} not @code{integral}.
 %%
 %% Further examples:
 %% @example
@@ -89,13 +91,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{simplify, expand, factor}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/simplify, @@sym/expand, @@sym/factor}
+%% @end defmethod
 
 function F = rewrite(f, how)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   cmd = { '(f, how) = _ins'
           '# note, not for MatrixExpr'

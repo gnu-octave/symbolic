@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,20 +17,43 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{x} =} real (@var{z})
+%% @documentencoding UTF-8
+%% @defmethod @@sym real (@var{z})
 %% Real part of a symbolic expression.
 %%
-%% @seealso{imag, conj, ctranspose}
+%% Examples:
+%% @example
+%% @group
+%% syms z
+%% real(z)
+%%   @result{} ans = (sym)
+%%           _
+%%       z   z
+%%       ─ + ─
+%%       2   2
+%% @end group
 %%
-%% @end deftypefn
+%% @group
+%% syms x real
+%% real(x)
+%%   @result{} ans = (sym) x
+%%
+%% real([x  sym(pi) + 6i  7  3i])
+%%   @result{} ans = (sym) [x  π  7  0]  (1×4 matrix)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/imag, @@sym/conj, @@sym/ctranspose}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function x = real(z)
-
+  if (nargin ~= 1)
+    print_usage ();
+  end
   x = (z + conj(z))/2;
-
 end
 
 

@@ -17,10 +17,20 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {@var{z} =} plus (@var{x}, @var{y})
-%% Add two symbolic expressions together (+).
+%% @documentencoding UTF-8
+%% @defop  Method   @@sym plus {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} + @var{y}} {}
+%% Add two symbolic expressions together.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% x + y
+%%   @result{} (sym) x + y
+%% @end group
+%% @end example
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

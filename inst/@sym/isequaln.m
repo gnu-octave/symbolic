@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,18 +17,24 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} isequaln (@var{f}, @var{g})
-%% @deftypefnx {Function File} {@var{r} =} isequaln (@var{f}, @var{g}, @dots{})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym isequaln (@var{f}, @var{g})
+%% @defmethodx @@sym isequaln (@var{f}, @var{g}, @dots{})
 %% Test if contents of arrays are equal, even with nan.
 %%
-%% Here @code{nan == nan} is considered true, see also
-%% @code{isequal} where as usual @code{nan ~= nan}.
+%% Here NaN's are considered equal:
+%% @example
+%% @group
+%% syms x
+%% snan = sym(nan);
+%% isequaln([1 snan x], [1 snan x])
+%%   @result{} 1
+%% @end group
+%% @end example
+%% To get the usual NaN convention, @pxref{isequal}.
 %%
-%% @seealso{logical, isAlways, eq (==), isequal}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/isequal, @@sym/logical, @@sym/isAlways, @@sym/eq}
+%% @end defmethod
 
 function t = isequaln(x, y, varargin)
 

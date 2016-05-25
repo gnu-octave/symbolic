@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{a} =} atan2 (@var{x}, @var{y})
-%% Symbolic atan2 function, return angle from a point.
+%% @defmethod @@sym atan2 (@var{x}, @var{y})
+%% Return an angle from a point given by symbolic expressions.
 %%
 %% Examples:
 %% @example
@@ -34,12 +34,17 @@
 %% @end group
 %% @end example
 %%
-%% @end deftypefn
+%% @seealso{@@sym/atan, @@sym/hypot}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
 function a = atan2(y, x)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   a = binop_helper (y, x, 'sp.atan2');
 

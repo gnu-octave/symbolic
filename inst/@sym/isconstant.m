@@ -17,14 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{y} =} isconstant (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym isconstant (@var{x})
 %% Indicate which elements of symbolic array are constant.
 %%
-%% @seealso{isallconstant, symvar, findsymbols}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% syms x y
+%% A = [x 1 pi; 2 2*y catalan()]
+%%   @result{} A = (sym 2×3 matrix)
+%%       ⎡x   1      π   ⎤
+%%       ⎢               ⎥
+%%       ⎣2  2⋅y  Catalan⎦
+%%
+%% isconstant (A)
+%%   @result{} ans =
+%%       0  1  1
+%%       1  0  1
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/isallconstant, @@sym/symvar, findsymbols}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = isconstant(x)
 

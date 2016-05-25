@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{l} =} findsymbols (@var{x})
+%% @defun findsymbols (@var{x})
 %% Return a list (cell array) of the symbols in an expression.
 %%
-%% The list is sorted alphabetically.  @xref{symvar}, for details.
+%% The list is sorted alphabetically.  For details, @pxref{@@sym/symvar}.
 %%
 %% If two variables have the same symbol but different assumptions,
 %% they will both appear in the output.  It is not well-defined
@@ -31,33 +31,32 @@
 %%
 %% @example
 %% @group
-%% >> syms x y z
-%% >> C = @{x, 2*x*y, [1 x; sin(z) pi]@};
-%% >> findsymbols (C)
-%%    @result{} ans =
-%%      @{
-%%        (sym) x
-%%        (sym) y
-%%        (sym) z
-%%      @}
+%% syms x y z
+%% C = @{x, 2*x*y, [1 x; sin(z) pi]@};
+%% findsymbols (C)
+%%   @result{} ans =
+%%       @{
+%%         (sym) x
+%%         (sym) y
+%%         (sym) z
+%%       @}
 %% @end group
 %% @end example
 %%
-%% Note ℯ, ⅈ, π, etc are not counted as symbols.
+%% Note ℯ, ⅈ, π, etc are not considered as symbols.
 %%
 %% Note only returns symbols actually appearing in the RHS of a
 %% @code{symfun}.
 %%
-%% @seealso{symvar, findsym}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{symvar, @@sym/symvar, @@sym/findsym}
+%% @end defun
 
 function L = findsymbols(obj, dosort)
 
-  if nargin == 1
+  if (nargin == 1)
     dosort = true;
+  elseif (nargin ~= 2)
+    print_usage ();
   end
 
   if isa(obj, 'sym')

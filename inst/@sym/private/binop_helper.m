@@ -33,6 +33,7 @@ function z = binop_helper(x, y, scalar_fcn)
 %
 %   FIXME: even faster if move to python_header (load once)?
 
+  assert (nargin == 3)
 
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)

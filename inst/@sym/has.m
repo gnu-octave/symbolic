@@ -59,9 +59,9 @@
 %%   @result{} ans =  1
 %% @end group
 %% @end example
-%% Instead, @pxref{ismember}.
+%% Instead, @pxref{@@sym/ismember}.
 %%
-%% @seealso{ismember}
+%% @seealso{@@sym/ismember}
 %% @end deftypefn
 
 function r = has(f, x)

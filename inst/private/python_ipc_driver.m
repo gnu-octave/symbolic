@@ -31,7 +31,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   which_ipc = sympref('ipc');
 
   %% version check
-  if exist('octave_config_info', 'builtin')
+  if exist('OCTAVE_VERSION', 'builtin')
     if (compare_versions (OCTAVE_VERSION (), '3.6.4', '<'))
       fprintf(['\n********************************************************************\n' ...
                'Your Octave version is %s but Octsympy is currently untested on\n' ...

@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
+%% @deftypefun {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run some Python command on some objects and return other objects.
 %%
 %% Here @var{cmd} is a string of Python code.
@@ -116,7 +116,7 @@
 %% w/o having the SymPy package, you'd need to hack a bit.
 %%
 %% @seealso{evalpy}
-%% @end deftypefn
+%% @end deftypefun
 
 %% Author: Colin B. Macdonald
 %% Keywords: python
@@ -331,6 +331,20 @@ end
 %! s2 = python_cmd (cmd);
 %! assert (strcmp (s1, s2))
 
+%!test
+%! % unicode with \x
+%! s1 = '我';
+%! cmd = 'return b"\xe6\x88\x91".decode("utf-8")';
+%! s2 = python_cmd (cmd);
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % unicode with \x and some escaped backslashes
+%! s1 = '\我\';
+%! cmd = 'return b"\\\xe6\x88\x91\\".decode("utf-8")';
+%! s2 = python_cmd (cmd);
+%! assert (strcmp (s1, s2))
+
 %%!test
 %%! % unicode passthru: FIXME: how to get unicode back to Python?
 %%! s1 = '我爱你'
@@ -342,8 +356,8 @@ end
 %%! % unicode w/ slashes, escapes, etc  FIXME
 %%! s1 = '我爱你<>\\&//\\#%% %\\我'
 %%! s3 = '我爱你<>\&//\#%% %\我'
-%%! cmd = 'return u"\u6211\u7231\u4f60",';
-%%! s2 = python_cmd (cmd)
+%%! cmd = 'return _ins[0]';
+%%! s2 = python_cmd (cmd, s1)
 %%! assert (strcmp (s2, s3))
 
 %!test
@@ -360,7 +374,7 @@ end
 %! assert (d.a == 6 && d.b == 10)
 
 %!test
-%! r = python_cmd ("return 6");
+%! r = python_cmd ('return 6');
 %! assert (isequal (r, 6))
 
 %!test
@@ -377,6 +391,10 @@ end
 %! cmd = {'a = 1', '', '#', '', '#   ', '     #', 'a = a + 2', '  #', 'return a'};
 %! a = python_cmd(cmd);
 %! assert (isequal (a, 3))
+
+%!test
+%! % return empty string (was https://bugs.python.org/issue25270)
+%! assert (isempty (python_cmd ('return ""')))
 
 %!test
 %! % return nothing (via an empty list)

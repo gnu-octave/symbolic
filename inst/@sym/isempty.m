@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} isempty (@var{x})
+%% @defmethod  @@sym isempty (@var{x})
 %% Return true a symbolic array is empty (one dimension is zero).
 %%
 %% Examples:
@@ -33,13 +33,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{size, numel}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/size, @@sym/numel}
+%% @end defmethod
 
 function r = isempty(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   d = size(x);
 

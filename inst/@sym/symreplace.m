@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,21 +27,21 @@
 %% Replace symbols in caller's workspace or in syms/struct/cells.
 %%
 %% @strong{WARNING}: you probably do not need this for normal
-%% usage; @pxref{subs} instead.
+%% usage; @pxref{@@sym/subs} instead.
 %%
 %% One mode of operation is similar to @code{subs()}:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = @{x; 2*x; sin(x)@};
-%% >> g = symreplace(f, x, y)
-%%    @result{} g =
-%%      @{
-%%      (sym) y
-%%      (sym) 2⋅y
-%%      (sym) sin(y)
-%%      @}
-%% >> g = symreplace(f, 'x', y);   % alternative
+%% syms x y
+%% f = @{x; 2*x; sin(x)@};
+%% g = symreplace(f, x, y)
+%%   @result{} g =
+%%       @{
+%%         (sym) y
+%%         (sym) 2⋅y
+%%         (sym) sin(y)
+%%       @}
+%% g = symreplace(f, 'x', y);   % alternative
 %% @end group
 %% @end example
 %% However, unlike @code{subs()}, here @code{f} can be a cell array
@@ -51,28 +51,28 @@
 %% the input @var{f}:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = sin(y);
-%% >> [g, flag] = symreplace(f, x, y)
-%%    @result{} g = (sym) sin(y)
-%%      flag = 0
+%% syms x y
+%% f = sin(y);
+%% [g, flag] = symreplace(f, x, y)
+%%   @result{} g = (sym) sin(y)
+%%   @result{} flag = 0
 %% @end group
 %% @end example
 %%
 %% The alternative form using @var{xstr} is used internally by
-%% OctSymPy for assumptions (@pxref{assume}, @pxref{assumeAlso}),
+%% OctSymPy for assumptions (@pxref{@@sym/assume}, @pxref{@@sym/assumeAlso}),
 %% to replace one @code{x} with another @code{x} with possibly
 %% different assumptions.  For example:
 %% @example
 %% @group
-%% >> syms x positive
-%% >> f = x^2;
-%% >> assumptions(f)@{:@}
-%%    @result{} x: positive
-%% >> x = sym('x', 'real');
-%% >> f = symreplace(f, 'x', x);
-%% >> assumptions(f)@{:@}
-%%    @result{} x: real
+%% syms x positive
+%% f = x^2;
+%% assumptions(f)@{:@}
+%%   @result{} x: positive
+%% x = sym('x', 'real');
+%% f = symreplace(f, 'x', x);
+%% assumptions(f)@{:@}
+%%   @result{} x: real
 %% @end group
 %% @end example
 %%
@@ -81,14 +81,14 @@
 %% side-effects!  Not scared off yet?  Here's what it does:
 %% @example
 %% @group
-%% >> syms x real
-%% >> f = abs(x);
-%% >> syms x positive
-%% >> f
-%%    @result{} f = (sym) │x│
-%% >> symreplace ('x', x)
-%% >> f
-%%    @result{} f = (sym) x
+%% syms x real
+%% f = abs(x);
+%% syms x positive
+%% f
+%%   @result{} f = (sym) │x│
+%% symreplace ('x', x)
+%% f
+%%   @result{} f = (sym) x
 %% @end group
 %% @end example
 %%
@@ -99,11 +99,11 @@
 %% precisely what happens when using @code{assume}:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = abs(x);
-%% >> assume(x, 'positive')
-%% >> f
-%%    @result{} f = (sym) x
+%% syms x
+%% f = abs(x);
+%% assume(x, 'positive')
+%% f
+%%   @result{} f = (sym) x
 %% @end group
 %% @end example
 %%
@@ -119,7 +119,7 @@
 %% be possible.  Copy-paste the highlighted bits of this code into
 %% your function instead (see @code{assume} for example).
 %%
-%% @seealso{assume, assumeAlso, assumptions, sym, syms}
+%% @seealso{@@sym/assume, @@sym/assumeAlso, assumptions, sym, syms}
 %% @end deftypefn
 
 %% Author: Colin B. Macdonald

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n} =} length (@var{x})
+%% @defmethod @@sym length (@var{x})
 %% Length of a symbolic vector.
 %%
 %% Example:
@@ -27,18 +27,16 @@
 %% syms x
 %% A = [1 2 x; x 3 4];
 %% length(A)
-%%    @result{} 3
+%%   @result{} 3
 %% @end group
 %% @end example
 %%
 %% As usual, be careful with this and matrices: you may want
 %% @code{numel} instead.
 %%
-%% @seealso{numel, size}
-%% @end deftypefn
+%% @seealso{@@sym/numel, @@sym/size}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 function n = length(x)
 
   d = size(x);

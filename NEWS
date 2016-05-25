@@ -1,45 +1,104 @@
-octsympy 2.3.0-dev
+octsympy 2.4.1-dev
 ==================
+
+
+
+octsympy 2.4.0 (2016-05-24)
+===========================
+
+  * New symbolic commands:
+
+          acsc          csch          gammaln       polylog
+          asec          dilog         hypergeom     psi
+          asech         ei            hypot         resize
+          besseljn      expint        igamma        sech
+          besselyn      ezsurf        jordan        signIm
+          cat           fresnelc      laguerreL     sinint
+          cosint        fresnels      lgamma        sinhint
+          coshint       gammainc      logint        ssinint
+
+  * Move some functions from the "specfun" package.  So now the Symbolic
+    package includes some numerical (@double/@single) implementations:
+
+          dirac
+          heaviside
+          laguerreL
+          lambertw
+
+  * Re-implement @double/laguerreL for numerical stability.
+
+  * Add spherical Bessel functions: these are called `besseljn` and
+    `besselyn` (for now, subject to change).  Thanks to Utkarsh Gautam.
+
+  * Fix: `@sym/dot` consistent with `@double/dot` thanks to Alex Vong.
+
+  * The environment variable `PYTHON` controls which Python executable is
+    used.  The command
+         `sympref python C:\bin\python`
+    has been deprecated; instead please use:
+         `setenv PYTHON C:\bin\python`
+
+  * Improve support for Windows.  Thanks to Abhinav Tripathi, Tatsuro
+    Matsuoka, finalsnd, and Mike Miller.
+
+  * Installation scripts merely warn if Python and SymPy aren't found.
+
+
+
+octsympy 2.3.0 (2016-04-08)
+===========================
 
   * New commands:
 
-          cbrt
-          fix
-          frac
-          intersect
-          interval
-          ismember
-          finiteset
-          has
-          linspace
-          logspace
-          max
-          min
-          rewrite
-          round
-          union
-          unique
+          airy          chebyshevU      finiteset     rewrite
+          besselj       chebyshevT      has           round
+          bessely       fix             kron          sort
+          besseli       frac            linspace      union
+          besselk       intersect       logspace      unique
+          besselh       interval        max
+          cbrt          ismember        min
 
   * Bug fix for working with certain unevaluated integrals.
 
   * Bug fixes for function_handle, fortran and ccode.
 
+  * Bug fixes or improvements to repmat, reshape, python_cmd, factor,
+    dot star, children.
+
+  * Support for SymPy 1.0.
+
   * Errors raised in Python code are now caught and passed back to Octave
-    in most cases.  This simplies implementation.
+    in most cases.  This simplifies implementation.
       - Note some error messages have changed slightly.
       - Windows users now see previously hidden error messages.
-      - Stack traces from Python are now hidden: could change in future.
     Thanks to @latot.
+
+  * Windows "bundle" package should work even if the system has another
+    Python installed.  Thanks to Abhinav Tripathi.
+
+  * Installation bug fixes.  Thanks to Abhinav Tripathi and Mike Miller.
 
   * New functions for converting sym to integers.  Thanks to @latot.
 
+  * Making a sym of a large integer like `sym(10^16)` gives a warning.
+    Please use `sym(10)^16` or `sym('1000000000000123456789').
+
   * New functions for dealing with sets and intervals and operations
     on them, thanks to @latot.
+
+  * 2D Taylor expansions are implemented, thanks to Utkarsh Gautam.
+
+  * Sort is implemented, thanks to Utkarsh Gautam.
 
   * Fourier and Laplace transforms (and their inverses) use a
     different implementation which improves handling of delta
     functions.  Ideally, a later version will consolidate this with
     SymPy's original implementations.
+
+  * Python `None` can be returned and manipulated.
+
+  * Saving/Loading sym objects is now fully-supported (thanks to Abhinav
+    Tripathi).
 
   * Documentation improvements.
 

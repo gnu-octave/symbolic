@@ -18,29 +18,30 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n}, @var{d} =} numden (@var{x})
+%% @deftypemethod @@sym {@var{n}, @var{d} =} numden (@var{x})
 %% Extract numerator and denominator of symbolic expression.
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> [n, d] = numden(sym(4)/5)
-%%    @result{} n = (sym) 4
-%%    @result{} d = (sym) 5
+%% [n, d] = numden(sym(4)/5)
+%%   @result{} n = (sym) 4
+%%   @result{} d = (sym) 5
 %% @end group
 %% @end example
 %%
 %% @example
 %% @group
-%% >> syms x y
-%% >> [n, d] = numden((x+y)/sin(x))
-%%    @result{} n = (sym) x + y
-%%    @result{} d = (sym) sin(x)
+%% syms x y
+%% [n, d] = numden((x+y)/sin(x))
+%%   @result{} n = (sym) x + y
+%%   @result{} d = (sym) sin(x)
 %% @end group
 %% @end example
 %%
-%% @seealso{coeffs, children, lhs, rhs}
-%% @end deftypefn
+%% @seealso{@@sym/coeffs, @@sym/children, @@sym/lhs, @@sym/rhs}
+%% @end deftypemethod
+
 
 function [n, d] = numden(x)
 

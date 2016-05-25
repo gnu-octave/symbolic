@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{S} =} finiteset (@var{a}, @var{b}, @dots{})
-%% @deftypefnx {Function File}  {@var{S} =} finiteset (@var{cellarray})
-%% @deftypefnx {Function File}  {@var{e} =} finiteset ()
-%% Return a set containing the inputs without duplicates.
+%% @deftypefun  {@var{S} =} finiteset (@var{a}, @var{b}, @dots{})
+%% @deftypefunx {@var{S} =} finiteset (@var{cellarray})
+%% @deftypefunx {@var{emptyset} =} finiteset ()
+%% Return a symbolic set containing the inputs without duplicates.
 %%
 %% Example:
 %% @example
@@ -49,7 +49,7 @@
 %%   @print{} ??? ind2sub: index out of range
 %% @end group
 %% @end example
-%% Instead you can first convert it to a cell (@pxref{children}):
+%% Instead you can first convert it to a cell (@pxref{@@sym/children}):
 %% @example
 %% @group
 %% elements = children(S)
@@ -108,8 +108,9 @@
 %% (This is implemented mainly to enable the @code{num2cell} example
 %% above.)
 %%
-%% @seealso{interval, ismember, children, union, intersect, setdiff, setxor}
-%% @end deftypefn
+%% @seealso{@@sym/interval, @@sym/ismember, @@sym/children, @@sym/union,
+%%          @@sym/intersect, @@sym/setdiff, @@sym/setxor}
+%% @end deftypefun
 
 function S = finiteset(varargin)
 

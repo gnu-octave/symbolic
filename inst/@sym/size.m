@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{d} =} size (@var{x})
-%% @deftypefnx {Function File} {[@var{n}, @var{m}] =} size (@var{x})
-%% @deftypefnx {Function File} {@var{d} =} size (@var{x}, @var{dim})
+%% @deftypemethod  @@sym {@var{d} =} size (@var{x})
+%% @deftypemethodx @@sym {[@var{n}, @var{m}] =} size (@var{x})
+%% @deftypemethodx @@sym {@var{d} =} size (@var{x}, @var{dim})
 %% Return the size of a symbolic array.
 %%
 %% Examples:
@@ -29,19 +29,19 @@
 %% syms x
 %% A = [1 2 x; x 3 4];
 %% [n, m] = size(A)
-%%    @result{} n = 2
-%%    @result{} m = 3
+%%   @result{} n = 2
+%%   @result{} m = 3
 %% @end group
 %%
 %% @group
 %% A = sym('a', [3 4]);
 %% [n, m] = size(A)
-%%    @result{} n = 3
-%%    @result{} m = 4
+%%   @result{} n = 3
+%%   @result{} m = 4
 %% size(A, 1)
-%%    @result{} 3
+%%   @result{} 3
 %% size(A, 2)
-%%    @result{} 4
+%%   @result{} 4
 %% @end group
 %% @end example
 %%
@@ -51,18 +51,15 @@
 %% @group
 %% syms n m integer
 %% A = sym('a', [n m])
-%%    @result{} A = (sym) a  (n×m matrix expression)
+%%   @result{} A = (sym) a  (n×m matrix expression)
 %%
 %% size(A)          % doctest: +XFAIL
-%%    @result{} NaN   NaN
+%%   @result{} NaN   NaN
 %% @end group
 %% @end example
 %%
-%% @seealso{length, numel}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/length, @@sym/numel}
+%% @end deftypemethod
 
 function [n, m] = size(x, dim)
 

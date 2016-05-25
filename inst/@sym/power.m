@@ -18,8 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{z} =} power (@var{x}, @var{y})
-%% Symbolic expression componentwise exponentiation (dot carat).
+%% @defop  Method   @@sym power {(@var{x}, @var{y})}
+%% @defopx Operator @@sym {@var{x} .^ @var{y}} {}
+%% Symbolic expression componentwise exponentiation.
 %%
 %% The @code{.^} notation can be used to raise each @emph{element}
 %% of a matrix to a power:
@@ -53,8 +54,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{mpower}
-%% @end deftypefn
+%% @seealso{@@sym/mpower}
+%% @end defop
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

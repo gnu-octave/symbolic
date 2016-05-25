@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{r} =} isprime (@var{n})
+%% @defmethod @@sym isprime (@var{n})
 %% Return true if a symbolic number is prime.
 %%
 %% Example:
@@ -41,11 +41,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{nextprime}
-%% @end deftypefn
+%% @seealso{@@sym/nextprime}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = isprime(x)
 
