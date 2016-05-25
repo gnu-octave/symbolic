@@ -1,43 +1,19 @@
-octsympy 2.4.0-dev
-==================
+octsympy 2.4.0 (2016-05-24)
+===========================
 
-  * New commands:
+  * New symbolic commands:
 
-          acsc
-          asec
-          asech
-          besseljn
-          besselyn
-          cat
-          cosint
-          coshint
-          csch
-          dilog
-          ei
-          expint
-          ezsurf
-          fresnelc
-          fresnels
-          gammainc
-          gammaln
-          hypergeom
-          hypot
-          igamma
-          jordan
-          laguerreL
-          lgamma
-          logint
-          polylog
-          psi
-          resize
-          sech
-          signIm
-          sinint
-          sinhint
-          ssinint
+          acsc          csch          gammaln       polylog
+          asec          dilog         hypergeom     psi
+          asech         ei            hypot         resize
+          besseljn      expint        igamma        sech
+          besselyn      ezsurf        jordan        signIm
+          cat           fresnelc      laguerreL     sinint
+          cosint        fresnels      lgamma        sinhint
+          coshint       gammainc      logint        ssinint
 
-  * Move some functions from the specfun package.  So now the Symbolic
-    package hosts some numerical implementations as well:
+  * Move some functions from the "specfun" package.  So now the Symbolic
+    package includes some numerical (@double/@single) implementations:
 
           dirac
           heaviside
@@ -57,7 +33,8 @@ octsympy 2.4.0-dev
     has been deprecated; instead please use:
          `setenv PYTHON C:\bin\python`
 
-  * Improve support for Windows.
+  * Improve support for Windows.  Thanks to Abhinav Tripathi, Tatsuro
+    Matsuoka, finalsnd, and Mike Miller.
 
   * Installation scripts merely warn if Python and SymPy aren't found.
 
