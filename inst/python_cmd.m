@@ -121,7 +121,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: python
 
-function varout = python_cmd(cmd, varargin)
+function varargout = python_cmd(cmd, varargin)
 
   if (~iscell(cmd))
     if (isempty(cmd))
@@ -179,9 +179,13 @@ function varout = python_cmd(cmd, varargin)
   end
 
   M = length(A);
-  varout = cell(1,M);
+  varargout = cell(1,M);
   for i=1:M
-    varout{i} = A{i};
+    varargout{i} = A{i};
+  end
+
+  if nargout ~= M
+    warning('number of outputs don''t match, was this intentional?')
   end
 end
 
