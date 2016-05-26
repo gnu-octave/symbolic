@@ -121,7 +121,7 @@
 %% Author: Colin B. Macdonald
 %% Keywords: python
 
-function varargout = python_cmd(cmd, varargin)
+function varout = python_cmd(cmd, varargin)
 
   if (~iscell(cmd))
     if (isempty(cmd))
@@ -178,10 +178,10 @@ function varargout = python_cmd(cmd, varargin)
     error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
-  M = length(A);
-  varargout = cell(1,M);
+  M = length(A)
+  varout = cell(1,M);
   for i=1:M
-    varargout{i} = A{i};
+    varout{i} = A{i}
   end
 
   if nargout ~= M

@@ -14,10 +14,10 @@ function obj = check_and_convert()
     n = 1;
   end
   
-  obj = [];
+  obj = {};
   for i=1:n
     if is_list
-      cur_var = sprintf('_outs[%d]', i-1)
+      cur_var = sprintf('_outs[%d]', i-1);
     else
       cur_var = sprintf('_outs');
     end
@@ -30,9 +30,14 @@ function obj = check_and_convert()
     is_sym = pyeval('is_sym');
     
     if is_sym
-      obj = [obj get_sym_from_python(cur_var)];
+      obj(end+1) = {get_sym_from_python(cur_var)};
     else
-      obj = [obj pyeval(cur_var)];
+      obj(end+1) = {pyeval(cur_var)};
     end
   end
+  
+  if n==1
+    obj = obj{1};
+  end
+  obj
 end
