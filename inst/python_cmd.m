@@ -178,14 +178,10 @@ function varout = python_cmd(cmd, varargin)
     error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
 
-  M = length(A)
+  M = length(A);
   varout = cell(1,M);
   for i=1:M
-    varout{i} = A{i}
-  end
-
-  if nargout ~= M
-    warning('number of outputs don''t match, was this intentional?')
+    varout{i} = A{i};
   end
 end
 

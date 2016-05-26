@@ -39,5 +39,4 @@ function obj = check_and_convert()
   if n==1
     obj = obj{1};
   end
-  obj
 end
