@@ -1,7 +1,11 @@
 function retS = get_sym_from_python(var_name)
   newl = sprintf('\n');
   ascii = pyeval(strjoin({'sp.pretty(', var_name,', use_unicode=False)'}));
-  unicode = pyeval(strjoin({'sp.pretty(', var_name,', use_unicode=True)'}));
+  % workaround https://bitbucket.org/mtmiller/pytave/issues/5
+  pyexec (strjoin ( { ['_d = sp.pretty(' var_name ', use_unicode=True)']
+                      'if sys.version_info < (3, 0):'
+                      '    _d = _d.encode("utf-8")' }, newl));
+  unicode = pyeval('_d');
   str = pyeval(strjoin({'sympy.srepr(', var_name,')'}));
   flat = pyeval(strjoin({'str(', var_name,')'}));
   
