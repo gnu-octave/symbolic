@@ -51,8 +51,6 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       which_ipc = 'system';
     end
   end
-  
-  which_ipc = 'pytave';
 
   switch lower(which_ipc)
     case 'pytave'

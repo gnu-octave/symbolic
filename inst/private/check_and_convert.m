@@ -1,6 +1,9 @@
 function obj = check_and_convert()
   newl = sprintf('\n');
   
+  pyexec(strjoin({'if isinstance(_outs, sp.Matrix) and _outs.shape == (1, 1):',
+                  '  _outs = _outs[0, 0];'}, newl));
+
   str_check_is_list = strjoin({'if isinstance(_outs, (list, tuple)):',
                               '  is_list = True',
                               'else:',
@@ -34,9 +37,5 @@ function obj = check_and_convert()
     else
       obj(end+1) = {pyeval(cur_var)};
     end
-  end
-  
-  if n==1
-    obj = obj{1};
   end
 end
