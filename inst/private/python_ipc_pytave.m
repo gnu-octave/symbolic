@@ -61,28 +61,16 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   % TODO: bit wasteful to repeat this every call
   headers = python_header();
-  pyexec(headers);
+  pyexec(headers)
 
   % load all the inputs into python
-  loc = python_copy_vars_to('_ins', true, varargin{:});
+  loc = python_copy_vars_to('_ins', false, varargin{:});
   s = strjoin(loc, newl);
-  pyexec(s);
+  pyexec(s)
 
   s = strjoin(cmd, newl);
-  pyexec(s);
+  pyexec(s)
   
   info.raw = pyeval('str(_outs)');
   A = check_and_convert();
-
-  % TODO: here we reuse our existing xml output code (we only return
-  % strings from pytave---it can do more).
-
-  % TODO: no exception handling here (we don't use "python_copy_vars_from")
-  %out = pyeval('octoutput_drv(_outs, tostdout=False)')
-  %assert(ischar(out));
-  %ind = strfind(out, '<output_block>');
-  %assert(length(ind) == 1)
-  %A = extractblock(out(ind(1):end));
-  %info.raw = out;
-
 end
