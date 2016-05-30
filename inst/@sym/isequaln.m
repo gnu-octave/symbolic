@@ -58,6 +58,9 @@ function t = isequaln(x, y, varargin)
 
   t = python_cmd (cmd, sym(x), sym(y));
 
+  % workaround: https://bitbucket.org/mtmiller/pytave/issues/6
+  t = logical(t);
+
   if (~ islogical(t))
     error('nonboolean return from python');
   end
