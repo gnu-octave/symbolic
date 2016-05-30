@@ -72,5 +72,5 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   pyexec(s)
   
   info.raw = pyeval('str(_outs)');
-  A = check_and_convert();
+  A = check_and_convert('_outs');
 end
