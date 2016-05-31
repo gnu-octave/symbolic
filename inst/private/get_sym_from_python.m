@@ -1,15 +1,15 @@
 function retS = get_sym_from_python(var_name)
   newl = sprintf('\n');
-  ascii = pyeval(strjoin({'sp.pretty(', var_name,', use_unicode=False)'}));
+  ascii = pyeval(['sp.pretty(', var_name,', use_unicode=False)']);
   % workaround https://bitbucket.org/mtmiller/pytave/issues/5
   pyexec (strjoin ( { ['_d = sp.pretty(' var_name ', use_unicode=True)']
                       'if sys.version_info < (3, 0):'
                       '    _d = _d.encode("utf-8")' }, newl));
   unicode = pyeval('_d');
-  str = pyeval(strjoin({'sympy.srepr(', var_name,')'}));
-  flat = pyeval(strjoin({'str(', var_name,')'}));
+  str = pyeval(['sympy.srepr(', var_name,')']);
+  flat = pyeval(['str(', var_name,')']);
   
-  str_eval = strjoin({strjoin({'temp = Matrix([', var_name,'])'}),
+  str_eval = strjoin({['temp = Matrix([', var_name,'])'],
                       'if isinstance(temp, (sp.Basic, sp.MatrixBase)):',
                       '  _d = list(temp.shape)' ,
                       'elif isinstance(temp, sp.MatrixExpr):' ,
