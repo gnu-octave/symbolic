@@ -126,28 +126,29 @@ function varargout = ezplot(varargin)
 end
 
 
+%!shared hf
+%! hf = figure ('visible', 'off');
+
 %!test
 %! % simple
 %! syms x
 %! f = cos(x);
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(f);
-%! warning(s)
 %! xx = get(h, 'xdata');
 %! yy = get(h, 'ydata');
 %! assert (abs(yy(end) - cos(xx(end))) <= 2*eps)
-%! % matlab misses endpoint wtth nodisplay
-%! %assert (abs(xx(end) - 2*pi) <= 4*eps)
-%! %assert (abs(yy(end) - cos(2*pi)) <= 4*eps)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % matlab misses endpoint with nodisplay
+%! assert (abs(xx(end) - 2*pi) <= 4*eps)
+%! assert (abs(yy(end) - cos(2*pi)) <= 4*eps)
+%! end
 
 %!test
 %! % parametric
 %! syms t
 %! x = cos(t);
 %! y = sin(t);
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(x, y);
-%! warning(s)
 %! xx = get(h, 'xdata');
 %! assert (abs(xx(end) - cos(2*pi)) <= 4*eps)
 
@@ -159,25 +160,25 @@ end
 %! syms x t
 %! ezplot(t, t*x)
 
-%%!test
-%%! % contour, FIXME: broken on Matlab?  Issue #108
-%%! syms x y
-%%! f = sqrt(x*x + y*y) - 1;
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot(f);
-%%! warning(s)
-%%! y = get(h, 'ydata');
-%%! assert (max(y) - 1 <= 4*eps)
+%!xtest
+%! % contour, broken Issue #462
+%! syms x y
+%! f = sqrt(x*x + y*y) - 1;
+%! h = ezplot(f);
+%! y = get(h, 'ydata');
+%! assert (max(y) - 1 <= 4*eps)
 
-%%!test
-%%! % bounds etc as syms
-%%! % FIXME: this number-of-points option no supported on matlab
-%%! syms x
-%%! f = cos(x);
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot(f, [0 2*sym(pi)], sym(42));
-%%! warning(s)
-%%! y = get(h, 'ydata');
-%%! assert (length(y) == 42)
-%%! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
+%!test
+%! % bounds etc as syms
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % this number-of-points option not supported on matlab
+%! syms x
+%! f = cos(x);
+%! h = ezplot(f, [0 2*sym(pi)], sym(42));
+%! y = get(h, 'ydata');
+%! assert (length(y) == 42)
+%! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
+%! end
 
+%!test
+%! close (hf);
