@@ -1,6 +1,8 @@
 octsympy 2.4.1-dev
 ==================
 
+  * ezplot supports implicit plotting of f(x, y) == 0.
+
 
 
 octsympy 2.4.0 (2016-05-24)
