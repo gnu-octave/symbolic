@@ -1,3 +1,11 @@
+octsympy 2.5.0-dev
+==================
+
+  * Remove deprecated method for changing the Python executable using
+    `sympref`: instead use the environment variable `PYTHON`.
+
+
+
 octsympy 2.4.1-dev
 ==================
 
