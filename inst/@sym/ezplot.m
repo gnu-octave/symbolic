@@ -135,8 +135,10 @@ function varargout = ezplot(varargin)
 end
 
 
-%!shared hf
-%! hf = figure ('visible', 'off');
+%%!shared hf
+%%! % offscreen rendering currently (2016-06) causing crashes:
+%%! % e.g., https://savannah.gnu.org/bugs/?44478
+%%! hf = figure ('visible', 'off');
 
 %!test
 %! % simple
@@ -196,5 +198,5 @@ end
 %! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
 %! end
 
-%!test
-%! close (hf);
+%%!test
+%%! close (hf);

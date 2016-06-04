@@ -99,8 +99,10 @@ function varargout = ezplot3(varargin)
 end
 
 
-%!shared hf
-%! hf = figure ('visible', 'off');
+%%!shared hf
+%%! % offscreen rendering currently (2016-06) causing crashes:
+%%! % e.g., https://savannah.gnu.org/bugs/?44478
+%%! hf = figure ('visible', 'off');
 
 %!test
 %! % parametric
@@ -134,5 +136,5 @@ end
 %! assert (abs(zz(end) - pi) <= 4*eps)
 %! end
 
-%!test
-%! close (hf)
+%%!test
+%%! close (hf)
