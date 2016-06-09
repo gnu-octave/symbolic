@@ -85,7 +85,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
     x = varargin{i};
     if(isa(x, 'sym'))
       pycall('pyevalstore', sprintf(char(x)));
-    elseif(isstr(x))
+    elseif(ischar(x))
       pycall('pyevalstore', sprintf('str("%s")', x));
     else
       pycall('pystore', x);
