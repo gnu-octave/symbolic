@@ -43,7 +43,7 @@ function y = dilog (x)
     print_usage ();
   end
   cmd = { 'L = _ins[0]'
-          'A = [float(polylog(2, float(1-x))) for x in L]'
+          'A = [complex(polylog(2, complex(1-x))) for x in L]'
           'return A,' };
   c = python_cmd (cmd, num2cell(x(:)));
   assert (numel (c) == numel (x))
