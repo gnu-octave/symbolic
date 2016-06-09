@@ -60,16 +60,7 @@ function L = findsymbols(obj, dosort)
   end
 
   if isa(obj, 'sym')
-    cmd = { 'x = _ins[0]'
-            'if Version(spver) < Version("0.7.6"):'   % deprecate with Issue #164
-            '    if not x.is_Matrix:'
-            '        s = x.free_symbols'
-            '    else:'
-            '        s = set()'
-            '        for i in x.values():'
-            '            s = s.union(i.free_symbols)'
-            'else:'
-            '    s = x.free_symbols'
+    cmd = { 's = _ins[0].free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
@@ -139,13 +130,9 @@ end
 
 %!test
 %! % empty sym for findsymbols, findsym, and symvar
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   fprintf('\n  skipping: findsymbols of empty sym broken before SymPy 0.7.7\n')
-%! else
-%!   assert (isempty (findsymbols (sym([]))))
-%!   assert (isempty (findsym (sym([]))))
-%!   assert (isempty (symvar (sym([]))))
-%! end
+%! assert (isempty (findsymbols (sym([]))))
+%! assert (isempty (findsym (sym([]))))
+%! assert (isempty (symvar (sym([]))))
 
 %!test
 %! % diff. assumptions make diff. symbols

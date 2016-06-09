@@ -29,7 +29,7 @@ function assert_have_python_and_sympy(pyexec)
   end
 
 
-  minsympyver = '0.7.6';
+  minsympyver = '1.0';
 
   [st, out] = system([pyexec ' -c "import sympy; print(sympy.__version__)"']);
 
