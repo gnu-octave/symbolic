@@ -85,15 +85,6 @@
 %%   @result{} g(x, y) = (symfun) g(x, y)
 %% @end group
 %% @end example
-%% However, on old versions of Octave (before 4.0), one needed to
-%% workaround a parsing bug:
-%% @example
-%% @group
-%% syms 'g(x, y)'
-%% g
-%%   @result{} g(x, y) = (symfun) g(x, y)
-%% @end group
-%% @end example
 %%
 %% As the above examples demonstrate, it is usually not necessary to
 %% call symfun directly.  However, it can be done:
@@ -276,18 +267,14 @@ end
 
 %!test
 %! % Bug #41: Octave <= 3.8 parser fails without quotes around 2D fcn
-%! % (put inside eval to hide from 3.6 parser)
-%! if exist('OCTAVE_VERSION', 'builtin')
-%!   if (compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
-%!     syms x y
-%!     eval('syms g(x,y)')
-%!     assert (isa (g, 'symfun'))
-%!   end
-%! else  % matlab
-%!   syms x y
-%!   eval('syms g(x,y)')
-%!   assert (isa (g, 'symfun'))
-%! end
+%! syms x y
+%! eval('syms g(x,y)')
+%! assert (isa (g, 'symfun'))
+
+%!test
+%! % and these days it works without eval trick
+%! syms g(x,y)
+%! assert (isa (g, 'symfun'))
 
 %!test
 %! % syms f(x) without defining x
@@ -308,16 +295,16 @@ end
 
 %!test
 %! % syms has its own parsing code, check it works
-%! syms 'f(x,y)'
+%! syms f(x,y)
 %! g = f;
-%! syms 'f(x, y)'
+%! syms f(x, y)
 %! assert (isequal (f, g))
 %! syms 'f( x,  y  )'
 %! assert (isequal (f, g))
 
 %!test
 %! % syms own parsing code should not reorder the vars
-%! syms 'f(y, x)'
+%! syms f(y, x)
 %! v = f.vars;
 %! assert (isequal (v{1}, y) && isequal (v{2}, x))
 

@@ -621,8 +621,8 @@ end
 %! s = sym(a);
 %! assert (isequal (double(a), [1 2 100]))
 
-%!xtest
-%! % bigger int64 integer types: TODO: passes on Octave 4?
+%!test
+%! % bigger int64 integer types
 %! q = int64(123456789012345);
 %! w = 10000*q + 123;
 %! a = sym('1234567890123450123');
@@ -673,11 +673,9 @@ end
 
 %!test
 %! % multiple assumptions
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! n = sym('n', 'negative', 'even');
 %! a = assumptions(n);
 %! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
-%! end
 
 %!test
 %! % save/load sym objects
