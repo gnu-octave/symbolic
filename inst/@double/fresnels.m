@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% fresnels (1.1)
-%%   @result{} ans = 0.5365
+%%   @result{} ans = 0.53650
 %% @end group
 %% @end example
 %%
