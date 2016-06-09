@@ -61,7 +61,9 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   info.prelines = 0;
 
   if isempty(have_headers)
-    pyexec(strjoin({'import sympy as sp',
+    pyexec(strjoin({'import sys',
+                    'import sympy',
+                    'import sympy as sp',
                     'from sympy import __version__ as spver',
                     'from sympy import *',
                     '_ins = []',
