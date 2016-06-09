@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cbrt(x)
+%% y = cbrt (x)
 %%   @result{} y = (sym)
 %%       3 ___
 %%       ╲╱ x
@@ -37,8 +37,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cbrt(x)
   if (nargin ~= 1)
@@ -64,3 +62,12 @@ end
 %! f2 = 1.2599210498948731647;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = cbrt (d);
+%! f = cbrt (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

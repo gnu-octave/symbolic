@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = dirac(x)
+%% y = dirac (x)
 %%   @result{} y = (sym) DiracDelta(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = dirac(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = dirac(A);
 %! f2 = dirac(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = dirac (d);
+%! f = dirac (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

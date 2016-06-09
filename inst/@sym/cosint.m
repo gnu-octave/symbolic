@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cosint(x)
+%% y = cosint (x)
 %%   @result{} y = (sym) Ci(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cosint(x)
   if (nargin ~= 1)
@@ -62,3 +60,12 @@ end
 %! f2 = 0.3374039229009681346626;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = cosint (d);
+%! f = cosint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

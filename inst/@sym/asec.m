@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = asec(x)
+%% y = asec (x)
 %%   @result{} y = (sym) asec(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = asec(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = asec(A);
 %! f2 = asec(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = asec (d);
+%! f = asec (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

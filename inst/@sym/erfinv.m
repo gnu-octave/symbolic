@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = erfinv(x)
+%% y = erfinv (x)
 %%   @result{} y = (sym) erfinv(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = erfinv(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = erfinv(A);
 %! f2 = erfinv(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = erfinv (d);
+%! f = erfinv (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

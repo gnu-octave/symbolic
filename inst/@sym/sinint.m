@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = sinint(x)
+%% y = sinint (x)
 %%   @result{} y = (sym) Si(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = sinint(x)
   if (nargin ~= 1)
@@ -62,3 +60,12 @@ end
 %! f2 = 0.9460830703671830149414;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = sinint (d);
+%! f = sinint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

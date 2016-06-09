@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = coshint(x)
+%% y = coshint (x)
 %%   @result{} y = (sym) Chi(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = coshint(x)
   if (nargin ~= 1)
@@ -62,3 +60,12 @@ end
 %! f2 = 0.8378669409802082408947;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = coshint (d);
+%! f = coshint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

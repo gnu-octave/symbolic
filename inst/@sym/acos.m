@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = acos(x)
+%% y = acos (x)
 %%   @result{} y = (sym) acos(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = acos(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = acos(A);
 %! f2 = acos(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = acos (d);
+%! f = acos (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

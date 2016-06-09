@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = log(x)
+%% y = log (x)
 %%   @result{} y = (sym) log(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = log(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = log(A);
 %! f2 = log(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = log (d);
+%! f = log (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

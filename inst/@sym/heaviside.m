@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = heaviside(x)
+%% y = heaviside (x)
 %%   @result{} y = (sym) Heaviside(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = heaviside(x)
   if (nargin ~= 1)
@@ -61,3 +59,12 @@ end
 %! f1 = heaviside(A);
 %! f2 = heaviside(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = heaviside (d);
+%! f = heaviside (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

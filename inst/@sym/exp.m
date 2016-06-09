@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = exp(x)
+%% y = exp (x)
 %%   @result{} y = (sym)
 %%        x
 %%       ℯ
@@ -37,8 +37,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = exp(x)
   if (nargin ~= 1)
@@ -63,3 +61,12 @@ end
 %! f1 = exp(A);
 %! f2 = exp(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = exp (d);
+%! f = exp (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

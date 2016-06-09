@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = logint(x)
+%% y = logint (x)
 %%   @result{} y = (sym) li(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = logint(x)
   if (nargin ~= 1)
@@ -62,3 +60,12 @@ end
 %! f2 = 1.045163780117492784845;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = logint (d);
+%! f = logint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
