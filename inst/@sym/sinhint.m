@@ -63,9 +63,12 @@ end
 
 %!test
 %! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! y = sym('y');
 %! A = sinhint (d);
 %! f = sinhint (y);
 %! h = function_handle (f);
 %! B = h (d);
 %! assert (A, B, -eps)
+%! end

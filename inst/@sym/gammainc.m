@@ -139,18 +139,24 @@ end
 
 %!test
 %! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x a
 %! f = gammainc (x, a, 'upper');
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'upper');
 %! assert (A, B)
+%! end
 
 %!test
 %! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x a
 %! f = gammainc (x, a, 'lower');
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'lower');
 %! assert (A, B)
+%! end
