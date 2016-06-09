@@ -34,6 +34,7 @@
 function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   persistent show_msg
+  persistent have_headers
 
   info = [];
 
@@ -59,14 +60,35 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   info.prelines = 0;
 
-  % TODO: bit wasteful to repeat this every call
-  headers = python_header();
-  pyexec(headers)
+  if isempty(have_headers)
+    pyexec(strjoin({'import sympy as sp',
+                    'from sympy import __version__ as spver',
+                    'from sympy import *',
+                    '_ins = []',
+                    'def pyclear():',
+                    '    global _ins',
+                    '    _ins = []',
+                    'def pystore(x):',
+                    '    global _ins',
+                    '    _ins.append(x[0])',
+                    'def pyevalstore(x):',
+                    '    global _ins',
+                    '    obj = compile(x, "", "eval")',
+                    '    _ins.append(eval(obj))'}, newl))
+    have_headers = true;
+  end
 
-  % load all the inputs into python
-  loc = python_copy_vars_to('_ins', false, varargin{:});
-  s = strjoin(loc, newl);
-  pyexec(s)
+  pycall('pyclear');
+  for i= 1:numel(varargin)
+    x = varargin{i};
+    if(isa(x, 'sym'))
+      pycall('pyevalstore', sprintf(char(x)));
+    elseif(isstr(x))
+      pycall('pyevalstore', sprintf('str("%s")', x));
+    else
+      pycall('pystore', x);
+    end
+  end
 
   s = strjoin(cmd, newl);
   pyexec(s)
