@@ -413,7 +413,7 @@ end
 %! % return nothing (because no command)
 %! python_cmd({})
 
-%!error <AttributeError>
+%!error <Python exception: ValueError: need more than 1 value to unpack>
 %! % python exception while passing variables to python
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
@@ -424,7 +424,7 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!error <octoutput does not know how to export type>
+%!error <pyeval: error in return value type conversion>
 %! python_cmd({'return type(int)'});
 %!test
 %! % ...and after the above test, the pipe should still work
