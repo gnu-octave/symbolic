@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{z} =} fresnelc (@var{x})
+%% @defmethod @@sym fresnelc (@var{x})
 %% Symbolic Fresnel Cosine function.
 %%
 %% Example:
@@ -34,13 +34,16 @@
 %%          ⎝ 2  ⎠
 %% @end group
 %% @end example
-%% @seealso{fresnels}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/fresnels}
+%% @end defmethod
 
-function J = fresnelc(x)
 
+function J = fresnelc (x)
+  if (nargin ~= 1)
+    print_usage ();
+  end
   J = uniop_helper(x, 'fresnelc');
-
 end
 
 
@@ -58,3 +61,12 @@ end
 %! a = fresnelc([sym(0)  sym('oo')  x  1]);
 %! b = [sym(0)  sym(1)/2  fresnelc(x)  fresnelc(sym(1))];
 %! assert (isequal (a, b))
+
+%!test
+%! % round trip
+%! syms x
+%! f = fresnelc (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = fresnelc (1.1);
+%! assert (A, B)

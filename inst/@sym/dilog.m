@@ -51,3 +51,12 @@ end
 %! end
 
 %!assert (double(dilog(sym(-1))), pi^2/4 - pi*1i*log(2), eps)
+
+%!test
+%! % round-trip
+%! syms x
+%! f = dilog (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = dilog (1.1);
+%! assert (A, B, -eps)

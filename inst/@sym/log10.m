@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} log10 (@var{x})
+%% @defmethod @@sym log10 (@var{x})
 %% Symbolic log base 10 function.
 %%
 %% Examples:
@@ -36,10 +36,8 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/log, @@sym/log2}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = log10(x)
 
@@ -53,3 +51,12 @@ end
 %!assert (isequal (log10 (sym (1000)), sym (3)))
 
 %!assert (isequal (log10 (sym ([10 100])), sym ([1 2])))
+
+%!test
+%! % round-trip
+%! syms x
+%! f = log10 (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = log10 (1.1);
+%! assert (A, B, -eps)

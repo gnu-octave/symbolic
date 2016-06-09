@@ -72,3 +72,12 @@ end
 %!assert (gammaln (pi),    double (gammaln (sym (pi))),    -3*eps)
 %!assert (gammaln (100),   double (gammaln (sym (100))),   -3*eps)
 %!assert (gammaln (1e-3),  double (gammaln (1/sym (1e3))), -3*eps)
+
+%!test
+%! % round trip
+%! syms x
+%! f = gammaln (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = gammaln (1.1);
+%! assert (A, B)

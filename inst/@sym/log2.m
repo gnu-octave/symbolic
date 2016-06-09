@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} log2 (@var{x})
+%% @defmethod @@sym log2 (@var{x})
 %% Symbolic log base 2 function.
 %%
 %% Examples:
@@ -36,10 +36,8 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/log, @@sym/log10}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = log2(x)
 
@@ -53,3 +51,12 @@ end
 %!assert (isequal (log2 (sym (1024)), sym (10)))
 
 %!assert (isequal (log2 (sym ([2 16; 32 1])), sym ([1 4; 5 0])))
+
+%!test
+%! % round-trip
+%! syms x
+%! f = log2 (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = log2 (1.1);
+%! assert (A, B, -eps)
