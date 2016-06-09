@@ -226,6 +226,18 @@ end
             fd.write("%! f2 = [f2 f2; f2 f2];\n")
         fd.write("%! assert( all(all( abs(double(f1) - f2) < 1e-15 )))\n")
 
+        fd.write( \
+"""
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = {NAME} (d);
+%! f = {NAME} (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+""".format(NAME=f))
+
         fd.close()
 
 
