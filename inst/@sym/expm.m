@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,33 +18,36 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{B} =} expm (@var{A})
+%% @defmethod expm (@var{A})
 %% Symbolic matrix exponential.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> A = [sym(4) 1; sym(0) 4]
-%%    @result{} A = (sym 2×2 matrix)
-%%        ⎡4  1⎤
-%%        ⎢    ⎥
-%%        ⎣0  4⎦
-%% >> expm(A)
-%%    @result{} (sym 2×2 matrix)
-%%        ⎡ 4   4⎤
-%%        ⎢ℯ   ℯ ⎥
-%%        ⎢      ⎥
-%%        ⎢     4⎥
-%%        ⎣0   ℯ ⎦
+%% A = [sym(4) 1; sym(0) 4]
+%%   @result{} A = (sym 2×2 matrix)
+%%       ⎡4  1⎤
+%%       ⎢    ⎥
+%%       ⎣0  4⎦
+%%
+%% expm(A)
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡ 4   4⎤
+%%       ⎢ℯ   ℯ ⎥
+%%       ⎢      ⎥
+%%       ⎢     4⎥
+%%       ⎣0   ℯ ⎦
 %% @end group
 %% @end example
 %%
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/eig}
+%% @end defmethod
 
 function z = expm(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   cmd = { 'x, = _ins'
           'if not x.is_Matrix:'

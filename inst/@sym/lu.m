@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,15 +17,36 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{L}, @var{U} =} lu (@var{A})
-%% @deftypefnx {Function File} {@var{L}, @var{U}, @var{P} =} lu (@var{A})
-%% @deftypefnx {Function File} {@dots{} =} lu (@var{A}, 'vector')
+%% @documentencoding UTF-8
+%% @deftypemethod  @@sym {[@var{L}, @var{U}] =} lu (@var{A})
+%% @deftypemethodx @@sym {[@var{L}, @var{U}, @var{P}] =} lu (@var{A})
+%% @deftypemethodx @@sym {[@dots{}] =} lu (@var{A}, 'vector')
 %% Symbolic LU factorization of a matrix.
 %%
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%%
+%% [L, U] = lu (A)
+%%   @result{} L = (sym 2×2 matrix)
+%%
+%%       ⎡1  0⎤
+%%       ⎢    ⎥
+%%       ⎣3  1⎦
+%%
+%%   @result{} U = (sym 2×2 matrix)
+%%
+%%       ⎡1  2 ⎤
+%%       ⎢     ⎥
+%%       ⎣0  -2⎦
+%%
+%% @end group
+%% @end example
+%%
+%% @seealso{lu, @@sym/qr}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [L, U, P] = lu(A, opt)
 
@@ -69,7 +90,7 @@ end
 %! [l, u] = lu(x);
 %! assert (isequal (l*u, x))
 
-%!test 
+%!test
 %! % perm
 %! A = sym(fliplr(2*eye(3)));
 %! [L, U, P] = lu(A);

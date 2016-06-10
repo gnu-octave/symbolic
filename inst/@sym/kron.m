@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2016 Utkarsh Gautam and Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{c} =} kron (@var{a}, @var{b})
+%% @defmethod @@sym kron (@var{a}, @var{b})
 %% Kronecker tensor product of two matrices.
 %%
 %% Examples:
@@ -51,15 +51,15 @@
 %%
 %% @end group
 %% @end example
-%% @end deftypefn
+%% @end defmethod
 
 %% Author: Utkarsh Gautam
 %% Keywords:  kron product
 
-function c = kron(a, b)
+function c = kron (a, b)
 
-  if (isscalar(a) || isscalar(b))
-    c=a*b;
+  if (isscalar (a) || isscalar (b))
+    c = a*b;
   else
     cmd = { 'a, b = _ins'
             'from sympy.physics.quantum import TensorProduct'

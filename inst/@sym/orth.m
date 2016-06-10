@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,47 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File} {@var{B} =} orth (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod @@sym orth (@var{A})
 %% Orthonormal basis for column space (range) of symbolic matrix.
 %%
-%% The basis is often not unique and in general @code{double(B)} may
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 1; 2 0]);
+%% orth (A)
+%%   @result{} (sym 2×2 matrix)
+%%
+%%       ⎡ √5   2⋅√5⎤
+%%       ⎢ ──   ────⎥
+%%       ⎢ 5     5  ⎥
+%%       ⎢          ⎥
+%%       ⎢2⋅√5  -√5 ⎥
+%%       ⎢────  ────⎥
+%%       ⎣ 5     5  ⎦
+%% @end group
+%%
+%% @group
+%% A = sym([1 2; 1 2]);
+%% orth (A)
+%%   @result{} ans = (sym 2×1 matrix)
+%%
+%%       ⎡√2⎤
+%%       ⎢──⎥
+%%       ⎢2 ⎥
+%%       ⎢  ⎥
+%%       ⎢√2⎥
+%%       ⎢──⎥
+%%       ⎣2 ⎦
+%% @end group
+%% @end example
+%%
+%% The basis is often not unique and in general @code{double(orth(A))} may
 %% not match the output of @code{orth(double(A))}.
 %%
-%% @seealso{rank, null, rref}
-%% @end deftypefn
+%% @seealso{@@sym/rank, @@sym/null, @@sym/rref}
+%% @end defmethod
+
 
 function B = orth(A)
 

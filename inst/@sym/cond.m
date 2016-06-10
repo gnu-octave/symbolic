@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +17,26 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{k} =} cond (@var{a})
+%% @documentencoding UTF-8
+%% @defmethod @@sym cond (@var{A})
 %% Symbolic condition number of a symbolic matrix.
 %%
-%% @end deftypefn
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 2; 3 0]);
+%% cond(A)^2
+%%   @result{} (sym)
+%%
+%%       √13 + 7
+%%       ────────
+%%       -√13 + 7
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/svd}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function k = cond(A)
 
