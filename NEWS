@@ -9,6 +9,9 @@ octsympy 2.5.0-dev
 
   * Deprecation notice: `evalpy` will be removed in a future release.
 
+  * Change (and document!) default matrix norm to the 2-norm (it was
+    Frobenius).
+
 
 
 octsympy 2.4.1-dev

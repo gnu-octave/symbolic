@@ -66,7 +66,7 @@ function z = norm(x, ord)
 
   if (nargin < 2)
     ord = 'meh';
-    line1 = 'x = _ins[0]; ord = None';
+    line1 = 'x = _ins[0]; ord = 2';
   else
     line1 = '(x,ord) = _ins';
   end
