@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,30 +17,81 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{r} =} isfinite (@var{x})
+%% @documentencoding UTF-8
+%% @defmethod @@sym isfinite (@var{x})
 %% Is symbolic expression finite.
 %%
-%% We have this mainly so @code{assert} works properly.
+%% A number is finite if it is neither infinite (@pxref{@@sym/isinf})
+%% nor NaN (@pxref{@@sym/isnan}), for example:
+%% @example
+%% @group
+%% isfinite (sym(42))
+%%   @result{} ans =  1
+%% isfinite (sym(inf))
+%%   @result{} ans =  0
+%% isfinite (sym(nan))
+%%   @result{} ans =  0
+%% @end group
+%% @end example
 %%
-%% @seealso{isnan}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
+%% However for symbolic @emph{expressions}, the situation is more
+%% complicated, for example we cannot be sure @code{x} is finite:
+%% @example
+%% @group
+%% syms x
+%% isfinite (x)
+%%   @result{} ans =  0
+%% @end group
+%% @end example
+%% Of course, we also cannot be sure @code{x} is infinite:
+%% @example
+%% @group
+%% isinf (x)
+%%   @result{} ans =  0
+%% @end group
+%% @end example
+%%
+%% Assumptions play a role:
+%% @example
+%% @group
+%% syms x finite
+%% isfinite (x)
+%%   @result{} ans =  1
+%% @end group
+%%
+%% @group
+%% isfinite (1/x)            % x could be zero
+%%   @result{} ans =  0
+%%
+%% syms y positive finite
+%% isfinite (1/y)
+%%   @result{} ans =  1
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/isinf, @@sym/isnan}
+%% @end defmethod
 
 function r = isfinite(x)
 
-  r = ~ (isnan(x) | isinf(x));
+  if (nargin ~= 1)
+    print_usage ();
+  end
+
+  r = uniop_bool_helper(x, 'lambda a: a.is_finite');
 
 end
 
 
-%!test
-%! syms x oo
-%! assert (isfinite(x))   % FIXME: why?
-%! assert (isfinite(sym(1)))
-%! assert (~isfinite(oo))
-%! assert (~isfinite(sym(nan)))
-%! assert (isequal (isfinite (sym ([1 oo])), [true false]))
+%!assert (isfinite(sym(1)))
+%!assert (isfinite(sym(-10)))
+%!assert (~isfinite(sym('oo')))
+%!assert (~isfinite(sym('-oo')))
+%!assert (~isfinite(sym(1)/0))
+%!assert (~isfinite(sym(nan)))
+%!assert (isequal (isfinite (sym ([1 inf])), [true false]))
 
+%!test
+%! % finite-by-assumption
+%! syms x finite
+%! assert (isfinite (x))
