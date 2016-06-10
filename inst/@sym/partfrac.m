@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,42 +19,52 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{g} =} partfrac (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} partfrac (@var{f}, @var{x})
+%% @defmethod  @@sym partfrac (@var{f})
+%% @defmethodx @@sym partfrac (@var{f}, @var{x})
 %% Compute partial fraction decomposition of a rational function.
 %%
 %% Examples:
 %% @example
-%% >> syms x
-%% >> f = 2/(x + 4)/(x + 1)
-%%  @result{} f = (sym)
-%%               2
-%%        ───────────────
-%%        (x + 1)⋅(x + 4)
-%% >> partfrac(f)
-%%  @result{} ans = (sym)
-%%            2           2
-%%      - ───────── + ─────────
-%%        3⋅(x + 4)   3⋅(x + 1)
+%% @group
+%% syms x
+%% f = 2/(x + 4)/(x + 1)
+%%   @result{} f = (sym)
+%%              2
+%%       ───────────────
+%%       (x + 1)⋅(x + 4)
+%% @end group
+%%
+%% @group
+%% partfrac(f)
+%%   @result{} ans = (sym)
+%%             2           2
+%%       - ───────── + ─────────
+%%         3⋅(x + 4)   3⋅(x + 1)
+%% @end group
 %% @end example
 %%
 %% Other examples:
 %% @example
-%% >> syms x y
-%% >> partfrac(y/(x + y)/(x + 1), x)
-%%  @result{} ans = (sym)
+%% @group
+%% syms x y
+%% partfrac(y/(x + y)/(x + 1), x)
+%%   @result{} ans = (sym)
 %%                y                 y
 %%       - ─────────────── + ───────────────
 %%         (x + y)⋅(y - 1)   (x + 1)⋅(y - 1)
-%% >> partfrac(y/(x + y)/(x + 1), y)
-%%  @result{} ans = (sym)
+%% @end group
+%%
+%% @group
+%% partfrac(y/(x + y)/(x + 1), y)
+%%   @result{} ans = (sym)
 %%                x            1
 %%       - ─────────────── + ─────
 %%         (x + 1)⋅(x + y)   x + 1
+%% @end group
 %% @end example
 %%
-%% @seealso{factor}
-%% @end deftypefn
+%% @seealso{@@sym/factor}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, fractions

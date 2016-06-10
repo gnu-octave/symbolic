@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} unique (@var{A})
+%% @defmethod @@sym unique (@var{A})
 %% Return the unique elements of a symbolic matrix.
 %%
 %% Example:
@@ -40,8 +40,10 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{union, intersect, setdiff, setxor, ismember, finiteset}
-%% @end deftypefn
+%% @seealso{@@sym/union, @@sym/intersect, @@sym/setdiff, @@sym/setxor,
+%%          @@sym/ismember, @@sym/finiteset}
+%% @end defmethod
+
 
 function r = unique(A)
 

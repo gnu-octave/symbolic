@@ -19,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} setxor (@var{A}, @var{B})
+%% @defmethod @@sym setxor (@var{A}, @var{B})
 %% Return the symmetric difference of two sets.
 %%
 %% Example:
@@ -42,11 +42,10 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{union, intersect, setdiff, unique, ismember, finiteset, interval}
-%% @end deftypefn
+%% @seealso{@@sym/union, @@sym/intersect, @@sym/setdiff, @@sym/unique,
+%%          @@sym/ismember, @@sym/finiteset, @@sym/interval}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = setxor(a, b)
 
