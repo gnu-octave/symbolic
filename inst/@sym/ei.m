@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} ei (@var{x})
+%% @defmethod @@sym ei (@var{x})
 %% Symbolic exponential integral (Ei) function.
 %%
 %% Definition and example:
@@ -52,13 +52,15 @@
 %%       x
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/expint}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = ei(x)
+  if (nargin ~= 1)
+    print_usage ();
+  end
   y = uniop_helper (x, 'Ei');
 end
 
