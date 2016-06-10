@@ -22,6 +22,11 @@
 %% @defunx evalpy (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run Python code, automatically transferring results.
 %%
+%% @strong{Note} this function is @emph{deprecated}.
+%% @example
+%% s = warning ('off', 'OctSymPy:deprecated');
+%% @end example
+%%
 %% Examples:
 %% @example
 %% @group
@@ -65,6 +70,7 @@
 %%   @print{} ??? '_y' undefined near line 1 column 1
 %% z_
 %%   @print{} ??? 'z_' undefined near line 1 column 1
+%% warning (s);
 %% @end group
 %% @end example
 %%
@@ -103,6 +109,8 @@
 %% Keywords: python
 
 function evalpy(cmd, varargin)
+
+  warning('OctSymPy:deprecated', 'evalpy is deprecated')
 
   %% import variables
   % use name of input if it has one, also i0, i1, etc
@@ -202,23 +210,30 @@ end
 
 
 %!test
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = 6;
 %! evalpy('y = 2*x;;', x);
 %! assert( y == 12 )
+%! warning (s)
 
 %!test
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = 6;
 %! evalpy('y = 2*x; x = 10; z = 3*x;;', x);
 %! assert( isequal( [x y z], [10 12 30] ))
+%! warning (s)
 
 %% underscore variables not returned
 %!test
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! evalpy('_y = 42; x_ = 42');
 %! assert( ~exist('_y', 'var'))
 %! assert( ~exist('x_', 'var'))
+%! warning (s)
 
 %!test
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! evalpy('_y = "GNU Octave Rocks"; z = _y.split();;');
 %! assert( iscell(z) )
 %! assert( isequal (z, {'GNU', 'Octave','Rocks'} ))
-
+%! warning (s)
