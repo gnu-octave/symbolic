@@ -96,30 +96,21 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'def pyclear():',
                     '    global _ins',
                     '    _ins = []',
-                    'def pystore(x):',
-                    '    global _ins',
-                    '    _ins.append(x[0])',
-                    'def pyevalstore(x):',
-                    '    global _ins',
+                    '_temp = '
+                    'def pystoretemp(x):',
+                    '    global _temp',
+                    '    _temp = x[0]',
+                    'def pyevalstoretemp(x):',
+                    '    global _temp',
                     '    obj = compile(x, "", "eval")',
-                    '    _ins.append(eval(obj))'}, newl))
+                    '    _temp = eval(obj)'}, newl))
     have_headers = true;
   end
 
   pycall('pyclear');
-  for i= 1:numel(varargin)
-    x = varargin{i};
-    if(isa(x, 'sym'))
-      pycall('pyevalstore', sprintf(char(x)));
-    elseif(ischar(x))
-      pycall('pyevalstore', sprintf('str("%s")', x));
-    else
-      pycall('pystore', x);
-    end
-  end
+  store_vars_in_python('_ins', varargin{:});
 
   s = strjoin(cmd, newl);
-  pyexec(s)
-
+  pyexec(s);
   A = check_and_convert('_outs');
 end
