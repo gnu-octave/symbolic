@@ -96,7 +96,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'def pyclear():',
                     '    global _ins',
                     '    _ins = []',
-                    '_temp = '
+                    '_temp = None'
                     'def pystoretemp(x):',
                     '    global _temp',
                     '    _temp = x[0]',
@@ -108,7 +108,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   end
 
   pycall('pyclear');
-  store_vars_in_python('_ins', varargin{:});
+  store_vars_in_python('_ins', varargin);
 
   s = strjoin(cmd, newl);
   pyexec(s);

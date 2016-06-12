@@ -10,7 +10,7 @@ function store_vars_in_python(var_name, varargin)
     store_cur_var = true;
     
     if(isa(x, 'sym'));
-      pycall('pystoretemp', sprintf(char(x)));
+      pycall('pyevalstoretemp', sprintf(char(x)));
       
     elseif(ischar(x))
       pycall('pyevalstoretemp', sprintf('str("%s")', x));
