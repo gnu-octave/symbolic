@@ -2,12 +2,10 @@ function obj = check_and_convert(var_name)
   newl = sprintf('\n');
 
   pyexec(strjoin({ ...
-     ['if isinstance(' var_name ', sp.Matrix) and ' var_name '.shape == (1, 1):'],
-     ['    ' var_name ' = ' var_name '[0, 0]']}, newl));
-
-  pyexec(strjoin({ ...
-     ['if isinstance(', var_name, ', (list, tuple)):'],
+     ['if isinstance(' var_name ', (list, tuple)):'],
       '    is_list = True',
+     ['    if isinstance(' var_name ', tuple):'],
+     ['        ' var_name ' = list(' var_name ')'],
       'else:',
       '    is_list = False'}, newl));
   is_list = pyeval('is_list');
@@ -25,6 +23,12 @@ function obj = check_and_convert(var_name)
     else
       cur_var = var_name;
     end
+
+    pyexec(strjoin({ ...
+       ['temp = ' cur_var],
+        'if isinstance(temp, sp.Matrix) and temp.shape == (1, 1):',
+       ['    ' cur_var ' = temp[0, 0]']}, newl));
+
 
     is_list_curvar = pyeval(['isinstance(', cur_var, ', (list, tuple))']);
     if is_list_curvar
