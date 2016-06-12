@@ -1,12 +1,13 @@
 function store_vars_in_python (varname, L)
-  varname
-  L
+%varname
+%L
 
   for i = 1:numel(L)
-    i
+    %i
     x = L{i};
     if (isa(x, 'sym'));
-      pycall('pystoretemp', sprintf(char(x)))
+      pyobj = pyeval((char(x)));
+      pycall('pystoretemp', pyobj)
       pyexec([varname '.append(_temp)'])
     elseif (iscell (x))
       % FIXME: this is wrong, could be a collision.
