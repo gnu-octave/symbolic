@@ -92,9 +92,18 @@ end
 %!assert (isequal (norm(sym(-6)), 6))
 
 %!test
+%! % 2-norm default
+%! A = [1 2; 3 4];
+%! n1 = norm (sym (A));
+%! assert (isequal (n1, sqrt (sqrt (sym(221)) + 15)))
+%! assert (norm (A), double (n1), -eps)
+
+%!test
 %! syms x y real
-%! assert (isequal (norm([x 1; 3 y]), sqrt(x^2 + y^2 + 10)))
 %! assert (isequal (norm([x 1; 3 y], 'fro'), sqrt(x^2 + y^2 + 10)))
+
+%!test
+%! syms x real
 %! assert (isequal (norm([x 1], 2), sqrt(x^2 + 1)))
 
 %!test
