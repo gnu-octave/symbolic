@@ -84,3 +84,34 @@ end
 %!       0.069822228467306149311 - 3.1184744625477294643*1i ];
 %! B = cosint (x);
 %! assert (A, B, -eps)
+
+%!xtest
+%! % is it nan or -inf?  SymPy says zoo.
+%! assert (isnan (cosint (0)))
+
+% could relax to within eps
+%!assert (cosint (inf), 0)
+%!assert (cosint (-inf), pi*1i, -eps)
+
+%!assert (cosint (1), 0.33740392290096813466, -eps)
+%!assert (cosint (-1), 0.33740392290096813466 + pi*1i, -eps)
+%!assert (cosint (pi), 0.073667912046425485978, -5*eps)
+%!assert (cosint (-pi), 0.07366791204642548597821 + pi*1i, -5*eps)
+
+%!assert (cosint (300), -3.3321999185921117800e-3, -2*eps)
+%!assert (cosint (1e4), -3.0551916724485212665e-5, -2*eps)
+
+%!assert (cosint (1 + 1i), 0.8821721805559363250506+0.2872491335199559395273*1i, eps)
+
+%!assert (cosint (1i), 0.8378669409802082408947 + pi/2*1i, -2*eps)
+
+%!test
+%! % compare both sinint and cosint to expint
+%! x = pi;
+%! C1 = cosint (x);
+%! S1 = sinint (x);
+%! R = expint (1i*x);
+%! C2 = -real (R);
+%! S2 = imag (R) + pi/2;
+%! assert (C1, C2, -10*eps);
+%! assert (S1, S2, -10*eps);
