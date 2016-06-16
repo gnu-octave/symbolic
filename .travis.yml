@@ -7,11 +7,11 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: SYMPY_VER=1.0 OCT_PPA=yes PYTAVE=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "2.7"
-      env: SYMPY_VER=1.0 OCT_PPA=yes PYTAVE=no DOCTEST=yes COLUMNS=80
+      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "3.5"
-      env: SYMPY_VER=1.0 OCT_PPA=yes PYTAVE=no DOCTEST=yes COLUMNS=80
+      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
