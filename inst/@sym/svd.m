@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,21 +17,33 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{S} =} svd (@var{A})
-%% @deftypefnx {Function File} {@var{U}, @var{S}, @var{V} =} svd (@var{A})
+%% @documentencoding UTF-8
+%% @deftypemethod  @@sym {@var{S} =} svd (@var{A})
+%% @deftypemethodx @@sym {[@var{U}, @var{S}, @var{V}] =} svd (@var{A})
 %% Symbolic singular value decomposition.
 %%
-%% The SVD:
-%% U*S*V' = A
+%% The SVD: U*S*V' = A
+%%
+%% Singular values example:
+%% @example
+%% @group
+%% A = sym([1 0; 3 0]);
+%% svd(A)
+%%   @result{} (sym 2×1 matrix)
+%%
+%%       ⎡√10⎤
+%%       ⎢   ⎥
+%%       ⎣ 0 ⎦
+%%
+%% @end group
+%% @end example
 %%
 %% FIXME: currently only singular values, not singular vectors.
 %% Should add full SVD to sympy.
 %%
-%% @seealso{eig}
-%% @end deftypefn
+%% @seealso{svd, @@sym/eig}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [S, varargout] = svd(A)
 

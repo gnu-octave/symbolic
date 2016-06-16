@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,12 +76,10 @@ end
 
 %!test
 %! % compare to Maple: evalf(Psi(1, 3*I-2));
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! maple = vpa ('-0.1651414829219882371561038184133243839778799', 40) - ...
 %!         vpa ('0.1960040752985823275302034466611711263617296j', 40);
 %! us = vpa (psi (1, sym (-2) + sym(3i)), 40);
 %! assert (abs(double(maple-us)) < 1e-39)
-%! end
 
 %!test
 %! % should match @double/psi

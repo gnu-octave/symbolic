@@ -49,13 +49,11 @@ end
 
 %!test
 %! % roundtrip
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
 %! A = double(besseljn(sym(2), sym(9)));
 %! q = besseljn(sym(2), x);
 %! h = function_handle(q);
 %! B = h(9);
 %! assert (abs (A - B) <= eps)
-%! end
 
 %!error jn(sym('x'))

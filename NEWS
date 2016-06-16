@@ -1,5 +1,25 @@
+octsympy 2.5.0-dev
+==================
+
+  * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
+    we can remove some crufty workarounds.
+
+  * Remove deprecated method for changing the Python executable using
+    `sympref`: instead use the environment variable `PYTHON`.
+
+  * Deprecation notice: `evalpy` will be removed in a future release.
+
+  * Change (and document!) default matrix norm to the 2-norm (it was
+    Frobenius).
+
+  * `isfinite` behaves correctly for variables (and is documented).
+
+
+
 octsympy 2.4.1-dev
 ==================
+
+  * ezplot supports implicit plotting of f(x, y) == 0.
 
 
 

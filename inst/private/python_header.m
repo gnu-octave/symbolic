@@ -28,6 +28,7 @@ function s = python_header()
     % octave 3.6 workaround
     sz = size(PyStrCache);
     if (sz(1) > sz(2))
+      warning('Octave 3.6 support is deprecated');
       PyStrCache = PyStrCache';
     end
   end

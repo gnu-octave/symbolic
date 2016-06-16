@@ -105,8 +105,6 @@ function [A, B] = assumptions(F, outp)
     F = findsymbols(workspace);
   end
 
-  % Nice and easy on SymPy >= 0.7.7
-  % FIXME: See also, sym.m and syms.m, updates there?
   cmd = {
       'x = _ins[0]'
       'outputdict = _ins[1]'
@@ -121,66 +119,6 @@ function [A, B] = assumptions(F, outp)
       '    return (astr, d)'
       'else:'
       '    return astr,' };
-
-  % FIXME: Deprecate 0.7.6.x.  But on older SymPy we do some foolishness.
-  % Abbreviate certain assumption dicts to shorter equivalent forms.
-  % I look forward to deleting all this.
-  oldsympy = python_cmd('return Version(spver) < Version("0.7.7.dev"),');
-  if (oldsympy)
-    cmd = {
-    'x = _ins[0]'
-    'outputdict = _ins[1]'
-    '# saved cases to abbreviate later'
-    'adict_default = {"commutative":True}'
-    'adict_real = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "real":True}'
-    'adict_pos = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "negative":False, "nonnegative":True, "nonpositive":False, "nonzero":True, "positive":True, "real":True, "zero":False}'
-    'adict_neg = {"commutative":True, "complex":True, "hermitian":True, "imaginary":False, "negative":True, "nonnegative":False, "nonpositive":True, "nonzero":True, "positive":False, "prime":False, "composite":False, "real":True, "zero":False}'
-    'adict_odd = {"even":False, "nonzero":True, "commutative":True, "noninteger":False, "hermitian":True, "zero":False, "complex":True, "rational":True, "real":True, "integer":True, "imaginary":False, "odd":True, "irrational":False}'
-    'adict_even = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}'
-    'adict_even_076 = {"real":True, "even":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "odd":False, "irrational":False}'
-    'adict_integer = {"real":True, "commutative":True, "noninteger":False, "hermitian":True, "complex":True, "rational":True, "integer":True, "imaginary":False, "irrational":False}'
-    'adict_rational = {"real":True, "commutative":True, "hermitian":True, "complex":True, "rational":True, "imaginary":False, "irrational":False}'
-    'if (Version(spver) >= Version("0.7.6")) and (Version(spver) < Version("0.7.7.dev")):'
-    '    new076 = {"algebraic":True,  "transcendental":False}'
-    '    adict_integer.update(new076)'
-    '    adict_even.update(new076)'
-    '    adict_odd.update(new076)'
-    '    adict_rational.update(new076)'
-    'adict = x.assumptions0'
-    'if adict == adict_default:'
-    '    astr = ""'
-    '    #adict={}'
-    'elif adict == adict_real:'
-    '    astr = "real"'
-    '    #adict = {"real":True}'
-    'elif adict == adict_pos:'
-    '    astr = "positive"'
-    '    #adict = {"positive":True}'
-    'elif adict == adict_neg:'
-    '    astr = "negative"'
-    '    #adict = {"negative":False}'
-    'elif adict == adict_integer:'
-    '    astr = "integer"'
-    '    #adict = {"integer":True}'
-    'elif adict == adict_even:'
-    '    astr = "even"'
-    '    #adict = {"even":True}'
-    'elif adict == adict_odd:'
-    '    astr = "odd"'
-    '    #adict = {"odd":True}'
-    'elif adict == adict_rational:'
-    '    astr = "rational"'
-    '    #adict = {"rational":True}'
-    'else:'
-    '    astr = str(adict)'
-    '    astr = astr.replace("True","1").replace("False","0").replace(": ",":")'
-    '#astr = str(x) + ": " + astr'
-    'if outputdict:'
-    '    return (astr,adict)'
-    'else:'
-    '    return (astr,)'
-  };
-  end
 
   c = 0; A = {};
   if strcmp(outp, 'dict')
@@ -240,27 +178,20 @@ end
 %! assert(isempty(assumptions()))
 
 %!test
+%! % make sure we have at least these possible assumptions
 %! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
-%! % FIXME: remove once SymPy 0.7.6 support deprecated
+%! B = assumptions('possible');
+%! assert (isempty (setdiff(A, B)))
+
+%!test
+%! A = assumptions('possible');
 %! for i = 1:length(A)
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
 %!   assert(strcmp(a{1}, ['x: ' A{i}] ))
-%! end
-
-%!test
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   fprintf('\n  skipping: char(x) of assumptions suboptimal in <= 0.7.6.x\n')
-%! else
-%!   A = assumptions('possible');
-%!   for i = 1:length(A)
-%!     x = sym('x', A{i});
-%!     a = assumptions(x);
-%!     assert(strcmp(a{1}, ['x: ' A{i}] ))
-%!     s1 = char(x);
-%!     s2 = ['Symbol(''x'', ' A{i} '=True)'];
-%!     assert (strcmp (s1, s2))
-%!   end
+%!   s1 = char(x);
+%!   s2 = ['Symbol(''x'', ' A{i} '=True)'];
+%!   assert (strcmp (s1, s2))
 %! end
 
 %!test

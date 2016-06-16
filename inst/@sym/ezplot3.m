@@ -99,15 +99,18 @@ function varargout = ezplot3(varargin)
 end
 
 
+%%!shared hf
+%%! % offscreen rendering currently (2016-06) causing crashes:
+%%! % e.g., https://savannah.gnu.org/bugs/?44478
+%%! hf = figure ('visible', 'off');
+
 %!test
 %! % parametric
 %! syms t
 %! f1 = cos(t);
 %! f2 = sin(t);
 %! f3 = t;
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot3(f1, f2, f3);
-%! warning(s)
 %! zz = get(h, 'zdata');
 %! assert (abs(zz(end) - 2*pi) <= 4*eps)
 
@@ -119,16 +122,19 @@ end
 %! syms x t
 %! ezplot3(t, t*x, t)
 
+%!test
+%! % bounds etc as syms
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % disabled for matlab, see ezplot.m too
+%! syms t
+%! f1 = cos(t);
+%! f2 = sin(t);
+%! f3 = t;
+%! h = ezplot3(f1, f2, f3, [sym(0) sym(pi)], sym(42));
+%! zz = get(h, 'zdata');
+%! assert (length(zz) == 42)
+%! assert (abs(zz(end) - pi) <= 4*eps)
+%! end
+
 %%!test
-%%! % bounds etc as syms
-%%! % FIXME: disabled for matlab, see ezplot.m too
-%%! syms t
-%%! f1 = cos(t);
-%%! f2 = sin(t);
-%%! f3 = t;
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot3(f1, f2, f3, [sym(0) sym(pi)], sym(42));
-%%! warning(s)
-%%! zz = get(h, 'zdata');
-%%! assert (length(zz) == 42)
-%%! assert (abs(zz(end) - pi) <= 4*eps)
+%%! close (hf)

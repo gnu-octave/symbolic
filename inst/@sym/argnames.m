@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{vars} =} argnames (@var{f})
+%% @defmethod @@sym argnames (@var{f})
 %% Return the independent variables in a symfun.
 %%
 %% For a @@sym, this always returns the empty sym, but
@@ -35,10 +35,8 @@
 %% @end example
 %%
 %% @seealso{@@symfun/argnames, symvar, findsym, findsymbols}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function vars = argnames(F)
 
