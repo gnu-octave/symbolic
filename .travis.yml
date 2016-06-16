@@ -27,8 +27,12 @@ install:
   - if [ "x$PYTAVE" = "xyes" ]; then
         hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave;
+	pwd;
+	aclocal -I m4;
+	autoconf;
         ./configure;
         make;
+	cd ..;
     fi
 
 
