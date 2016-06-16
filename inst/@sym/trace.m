@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{B} =} trace (@var{A})
+%% @defmethod @@ym trace (@var{A})
 %% Trace of symbolic matrix.
 %%
 %% Example:
@@ -68,11 +68,10 @@
 %%   @result{} ans = (sym) 5⋅π + 40
 %% @end group
 %% @end example
-%% @seealso{det}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/det}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = trace(x)
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{b} =} ismatrix (@var{x})
+%% @defmethod @@sym ismatrix (@var{x})
 %% Return true if this symbolic expression is a matrix.
 %%
 %% This returns true for all 2D arrays including matrices, scalars,
@@ -37,11 +37,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{isscalar, isvector, size}
-%% @end deftypefn
+%% @seealso{@@sym/isscalar, @@sym/isvector, @@sym/size}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function b = ismatrix(x)
 

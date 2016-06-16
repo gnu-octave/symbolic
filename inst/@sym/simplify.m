@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,37 +18,37 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} simplify (@var{x})
+%% @defmethod @@sym simplify (@var{x})
 %% Simplify an expression.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> p = x^2 + x + 1
-%%    @result{} p = (sym)
-%%       2
-%%      x  + x + 1
-%% >> q = horner (p)
-%%    @result{} q = (sym) x⋅(x + 1) + 1
-%% >> d = p - q
-%%    @result{} d = (sym)
-%%       2
-%%      x  - x⋅(x + 1) + x
+%% syms x
+%% p = x^2 + x + 1
+%%   @result{} p = (sym)
+%%        2
+%%       x  + x + 1
+%% q = horner (p)
+%%   @result{} q = (sym) x⋅(x + 1) + 1
+%% @end group
 %%
-%% >> isAlways(p == q)
-%%    @result{} 1
+%% @group
+%% d = p - q
+%%   @result{} d = (sym)
+%%        2
+%%       x  - x⋅(x + 1) + x
 %%
-%% >> simplify(p - q)
-%%    @result{} (sym) 0
+%% isAlways(p == q)
+%%   @result{} 1
+%%
+%% simplify(p - q)
+%%   @result{} (sym) 0
 %% @end group
 %% @end example
 %%
-%% FIXME: SymPy has other operations to manipulate expressions,
-%% should provide those too.
-%%
-%% @seealso{isAlways}
-%% @end deftypefn
+%% @seealso{@@sym/isAlways, @@sym/factor, @@sym/expand, @@sym/rewrite}
+%% @end defmethod
 
 
 function y = simplify(x)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Lagu and Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,8 +33,6 @@
 %% @end group
 %% @end example
 %%
-%% *Note*: this function relies on SymPy >= 1.0.
-%%
 %% @seealso{ceil, floor, fix, round}
 %% @end deftypefn
 
@@ -43,27 +41,16 @@ function y = frac(x)
 end
 
 %!test
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%!   fprintf('\n  skipping: no "frac" in SymPy <= 0.7.6.x\n')
-%! else
 %! f1 = frac(sym(11)/10);
 %! f2 = sym(1)/10;
 %! assert (isequal (f1, f2))
-%! end
 
 %!test
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%! else
-%! % fails on SymPy 0.7.6.1
 %! d = sym(-11)/10;
 %! c = sym(9)/10;
 %! assert (isequal (frac (d), c))
-%! end
 
 %!test
-%! if (python_cmd ('return Version(spver) < Version("0.7.7.dev"),'))
-%! else
 %! d = sym(-19)/10;
 %! c = sym(1)/10;
 %! assert (isequal (frac (d), c))
-%! end

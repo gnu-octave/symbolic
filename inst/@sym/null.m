@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,44 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} null (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod @@sym null (@var{A})
 %% Basis for the nullspace of a symbolic matrix.
 %%
 %% Return a matrix whose columns are a basis for the nullspace of
 %% the matrix.
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 1; 2 0]);
+%% null (A)
+%%   @result{} (sym) []  (empty 2×0 matrix)
+%% @end group
 %%
-%% @seealso{rank, orth}
-%% @end deftypefn
+%% @group
+%% A = sym([1 2; 1 2]);
+%% null (A)
+%%   @result{} (sym 2×1 matrix)
+%%
+%%       ⎡-2⎤
+%%       ⎢  ⎥
+%%       ⎣1 ⎦
+%% @end group
+%%
+%% @group
+%% A = sym(zeros(2,2));
+%% null (A)
+%%   @result{} (sym 2×2 matrix)
+%%
+%%       ⎡1  0⎤
+%%       ⎢    ⎥
+%%       ⎣0  1⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/rank, @@sym/orth}
+%% @end defmethod
+
 
 function r = null(A)
 

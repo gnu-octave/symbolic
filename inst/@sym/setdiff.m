@@ -19,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} setdiff (@var{A}, @var{B})
+%% @defmethod @@sym setdiff (@var{A}, @var{B})
 %% Set subtraction.
 %%
 %% Example:
@@ -46,11 +46,10 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{union, intersect, setxor, unique, ismember, finiteset, interval}
-%% @end deftypefn
+%% @seealso{@@sym/union, @@sym/intersect, @@sym/setxor, @@sym/unique,
+%%          @@sym/ismember, @@sym/finiteset, @@sym/interval}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = setdiff(a, b)
 

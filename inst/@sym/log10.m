@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} log10 (@var{x})
+%% @defmethod @@sym log10 (@var{x})
 %% Symbolic log base 10 function.
 %%
 %% Examples:
@@ -36,10 +36,8 @@
 %% @end group
 %% @end example
 %% @seealso{@@sym/log, @@sym/log2}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = log10(x)
 

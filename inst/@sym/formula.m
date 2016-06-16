@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{g} =} formula (@var{f})
+%% @defmethod @@sym formula (@var{f})
 %% Return a symbolic expression for this object.
 %%
 %% For a @@sym, this simply returns the sym itself.  Subclasses
@@ -34,11 +34,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@symfun/formula, argnames}
-%% @end deftypefn
+%% @seealso{@@symfun/formula, argnames, @@sym/argnames}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function g = formula(f)
   g = f;

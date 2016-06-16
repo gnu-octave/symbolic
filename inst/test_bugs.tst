@@ -78,8 +78,7 @@
 %! assert (isequal (flipud(A), [x 5 6; 1 x 3]))
 %! assert (isequal (fliplr(A), [3 x 1; 6 5 x]))
 
-%!xtest
-%! % flip: FIXME: fails in Octave 3.8
+%!test
 %! syms x
 %! h = [1 2 x];
 %! v = [1; 2; x];

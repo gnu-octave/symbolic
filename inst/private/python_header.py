@@ -85,78 +85,6 @@ except:
     raise
 
 
-# FIXME: Remove all this when we deprecate 0.7.6.x support.
-if Version(spver) >= Version("0.7.7.dev"):
-    my_srepr = sympy.srepr
-else:
-    def _monkey_patch_matpow_doit(self, **kwargs):
-        deep = kwargs.get('deep', True)
-        if deep:
-            args = [arg.doit(**kwargs) for arg in self.args]
-        else:
-            args = self.args
-        base = args[0]
-        exp = args[1]
-        if isinstance(base, MatrixBase) and exp.is_number:
-            if exp is S.One:
-                return base
-            return base**exp
-        if exp.is_zero and base.is_square:
-            return Identity(base.shape[0])
-        elif exp is S.One:
-            return base
-        return MatPow(base, exp)
-    sympy.MatPow.doit = _monkey_patch_matpow_doit
-    sympy.MatAdd.doit_orig = sympy.MatAdd.doit
-    def _monkey_patch_matadd_doit(self, **kwargs):
-        deep = kwargs.get('deep', True)
-        if deep:
-            args = [arg.doit(**kwargs) for arg in self.args]
-        else:
-            args = self.args
-        return MatAdd(*args).doit_orig(**kwargs)
-    sympy.MatAdd.doit = _monkey_patch_matadd_doit
-    try:
-        class _ReprPrinter_w_asm(sympy.printing.repr.ReprPrinter):
-            def _print_Symbol(self, expr):
-                asm = expr.assumptions0
-                # SymPy < 0.7.7: srepr does not list assumptions.
-                # Abbreviate some common cases.
-                asm_default = {"commutative":True}
-                asm_real = {"commutative":True, "complex":True, "hermitian":True,
-                            "imaginary":False, "real":True}
-                asm_pos = {"commutative":True, "complex":True, "hermitian":True,
-                           "imaginary":False, "negative":False, "nonnegative":True,
-                           "nonpositive":False, "nonzero":True, "positive":True,
-                           "real":True, "zero":False}
-                asm_neg = {"commutative":True, "complex":True, "hermitian":True,
-                           "imaginary":False, "negative":True, "nonnegative":False,
-                           "nonpositive":True, "nonzero":True, "positive":False,
-                           "prime":False, "composite":False, "real":True,
-                           "zero":False}
-                if asm == asm_default:
-                    xtra = ""
-                elif asm == asm_real:
-                    xtra = ", real=True"
-                elif asm == asm_pos:
-                    xtra = ", positive=True"
-                elif asm == asm_neg:
-                    xtra = ", negative=True"
-                else:
-                    xtra = ""
-                    for (key, val) in asm.items():
-                        xtra = xtra + ", %s=%s" % (key, val)
-                return "%s(%s%s)" % (expr.__class__.__name__,
-                                     self._print(expr.name), xtra)
-        #
-        def my_srepr(expr, **settings):
-            """return expr in repr form w/ assumptions listed"""
-            return _ReprPrinter_w_asm(settings).doprint(expr)
-    except:
-        echo_exception_stdout("in python_header defining fcns block 2")
-        raise
-
-
 try:
     def objectfilter(x):
         """Perform final fixes before passing objects back to Octave"""
@@ -225,7 +153,7 @@ try:
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_SYM)
             f = ET.SubElement(a, "f")
-            f.text = my_srepr(x)
+            f.text = sympy.srepr(x)
             f = ET.SubElement(a, "f")
             f.text = str(_d[0])
             f = ET.SubElement(a, "f")

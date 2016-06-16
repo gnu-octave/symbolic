@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,20 +17,51 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{q}, @var{r} =} qr (@var{a})
+%% @documentencoding UTF-8
+%% @deftypemethod @@sym {[@var{Q}, @var{R}] =} qr (@var{A})
 %% Symbolic QR factorization of a matrix.
+%%
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 1; 1 0]);
+%%
+%% [Q, R] = qr (A)
+%%   @result{} Q = (sym 2×2 matrix)
+%%
+%%       ⎡√2   √2 ⎤
+%%       ⎢──   ── ⎥
+%%       ⎢2    2  ⎥
+%%       ⎢        ⎥
+%%       ⎢√2  -√2 ⎥
+%%       ⎢──  ────⎥
+%%       ⎣2    2  ⎦
+%%
+%%   @result{} R = (sym 2×2 matrix)
+%%
+%%       ⎡    √2⎤
+%%       ⎢√2  ──⎥
+%%       ⎢    2 ⎥
+%%       ⎢      ⎥
+%%       ⎢    √2⎥
+%%       ⎢0   ──⎥
+%%       ⎣    2 ⎦
+%%
+%% @end group
+%% @end example
 %%
 %% FIXME: The sympy QR routine could probably be improved.
 %%
-%% @end deftypefn
+%% @seealso{qr, @@sym/lu}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [Q, R] = qr(A, ord)
 
   if (nargin == 2)
     warning('OctSymPy:NotImplemented', 'economy-size not implemented')
+  elseif (nargin ~= 1)
+    print_usage ();
   end
 
   cmd = { 'A = _ins[0]' ...

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,28 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} rank (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod @@sym rank (@var{A})
 %% Rank of a symbolic matrix.
 %%
-%% @seealso{cond, null, orth}
-%% @end deftypefn
+%% Examples:
+%% @example
+%% @group
+%% A = sym([1 1; 2 0]);
+%% rank (A)
+%%   @result{} ans =  2
+%% @end group
+%%
+%% @group
+%% A = sym([1 2; 1 2]);
+%% rank (A)
+%%   @result{} ans =  1
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/cond, @@sym/null, @@sym/orth}
+%% @end defmethod
+
 
 function r = rank(A)
 

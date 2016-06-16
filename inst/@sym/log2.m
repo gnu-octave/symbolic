@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{y} =} log2 (@var{x})
+%% @defmethod @@sym log2 (@var{x})
 %% Symbolic log base 2 function.
 %%
 %% Examples:
@@ -35,11 +35,10 @@
 %%       log(2)
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/log, @@sym/log10}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = log2(x)
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{A} =} toeplitz (@var{c}, @var{r})
-%% @deftypefnx {Function File} {@var{A} =} toeplitz (@var{r})
+%% @defmethod  @@sym toeplitz (@var{c}, @var{r})
+%% @defmethodx @@sym toeplitz (@var{r})
 %% Construct a symbolic Toeplitz matrix.
 %%
 %% Examples:
@@ -49,24 +49,19 @@
 %% @end group
 %% @end example
 %%
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function A = toeplitz(C,R)
+function A = toeplitz (C, R)
 
   if (nargin == 1)
-    [C,R] = deal(C',C);
+    [C, R] = deal(C', C);
+  elseif (nargin ~= 2)
+    print_usage ();
   end
 
-  if ~(isa(R, 'sym'))
-    R = sym(R);
-  end
-
-  if ~(isa(C, 'sym'))
-    C = sym(C);
-  end
+  R = sym(R);
+  C = sym(C);
 
   assert(isvector(R));
   assert(isvector(C));
@@ -81,18 +76,18 @@ function A = toeplitz(C,R)
   % (if just one input (R) then we want it to get the diag)
 
 
-  cmd = { '(C, R) = _ins' ...
-          'if not R.is_Matrix:' ...
-          '    return (R[0],)' ...
-          '(n, m) = (len(C), len(R))' ...
-          'A = sp.zeros(n, m)' ...
-          'for i in range(0, n):' ...
-          '    for j in range(0, m):' ...
-          '        if i - j > 0:' ...
-          '            A[i, j] = C[i-j]' ...
-          '        else:' ...
-          '            A[i, j] = R[j-i]' ...
-          'return (A,)' };
+  cmd = { '(C, R) = _ins'
+          'if not R.is_Matrix:'
+          '    return R'
+          '(n, m) = (len(C), len(R))'
+          'A = sp.zeros(n, m)'
+          'for i in range(0, n):'
+          '    for j in range(0, m):'
+          '        if i - j > 0:'
+          '            A[i, j] = C[i-j]'
+          '        else:'
+          '            A[i, j] = R[j-i]'
+          'return A' };
 
   A = python_cmd (cmd, C, R);
 
@@ -130,6 +125,11 @@ end
 %! % mismatch
 %! syms x
 %! B = toeplitz([10 x], [1 3 x]);
+
+%!warning <diagonal conflict>
+%! % scalar
+%! B = toeplitz(sym(2), 3);
+%! assert (isequal (B, sym(2)))
 
 %!test
 %! % mismatch

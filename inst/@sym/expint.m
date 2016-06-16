@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} expint (@var{x})
+%% @defmethod @@sym expint (@var{x})
 %% Symbolic generalized exponential integral (expint) function.
 %%
 %% Integral definition:
@@ -87,11 +87,10 @@
 %%   @result{} (sym) -expint(n - 1, x)
 %% @end group
 %% @end example
+%%
 %% @seealso{expint, @@sym/ei}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = expint(n, x)
 

@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{C} =} nchoosek (@var{n}, @var{k})
+%% @defmethod @@sym nchoosek (@var{n}, @var{k})
 %% Symbolic binomial coefficient.
 %%
 %% Examples:
@@ -41,8 +41,10 @@
 %%   @result{} (sym) 48862197129890117991367706991027565961778719519790
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/factorial}
-%% @end deftypefn
+%% @end defmethod
+
 
 function C = nchoosek(n, k)
 

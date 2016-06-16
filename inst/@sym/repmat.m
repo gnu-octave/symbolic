@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{B} =} repmat (@var{A}, @var{n}, @var{m})
-%% @deftypefnx {Function File} {@var{B} =} repmat (@var{A}, [@var{n} @var{m}])
+%% @defmethod  @@sym repmat (@var{A}, @var{n}, @var{m})
+%% @defmethodx @@sym repmat (@var{A}, [@var{n} @var{m}])
 %% Build symbolic block matrices.
 %%
 %% Examples:
@@ -36,11 +36,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{vertcat, horzcat}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
+%% @seealso{@@sym/vertcat, @@sym/horzcat}
+%% @end defmethod
 
 
 function B = repmat(A, n, m)
