@@ -25,10 +25,10 @@ install:
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
-        hg clone https://bitbucket.org/mtmiller/pytave
-        cd pytave
-        ./configure
-        make
+        hg clone https://bitbucket.org/mtmiller/pytave;
+        cd pytave;
+        ./configure;
+        make;
     fi
 
 
