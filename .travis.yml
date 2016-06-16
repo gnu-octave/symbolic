@@ -12,7 +12,6 @@ matrix:
       env: SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
-# TODO: once doctest is in OF, change to "install -forge" below
 install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
