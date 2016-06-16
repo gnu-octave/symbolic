@@ -44,6 +44,8 @@ function y = gamma(x)
 end
 
 
+%!error <Invalid> gamma (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

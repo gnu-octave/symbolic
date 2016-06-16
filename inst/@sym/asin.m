@@ -44,6 +44,8 @@ function y = asin(x)
 end
 
 
+%!error <Invalid> asin (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

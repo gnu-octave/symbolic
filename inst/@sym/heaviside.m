@@ -44,6 +44,8 @@ function y = heaviside(x)
 end
 
 
+%!error <Invalid> heaviside (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

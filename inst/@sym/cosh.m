@@ -44,6 +44,8 @@ function y = cosh(x)
 end
 
 
+%!error <Invalid> cosh (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

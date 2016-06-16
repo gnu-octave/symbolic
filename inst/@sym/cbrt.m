@@ -46,6 +46,8 @@ function y = cbrt(x)
 end
 
 
+%!error <Invalid> cbrt (sym(1), 2)
+
 %!shared x, d
 %! d = 2;
 %! x = sym('2');

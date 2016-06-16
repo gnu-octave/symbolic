@@ -47,6 +47,8 @@ function y = sqrt(x)
 end
 
 
+%!error <Invalid> sqrt (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

@@ -44,6 +44,8 @@ function y = acot(x)
 end
 
 
+%!error <Invalid> acot (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

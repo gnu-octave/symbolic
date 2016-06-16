@@ -44,6 +44,8 @@ function y = asinh(x)
 end
 
 
+%!error <Invalid> asinh (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

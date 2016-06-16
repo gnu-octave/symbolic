@@ -44,6 +44,8 @@ function y = sinhint(x)
 end
 
 
+%!error <Invalid> sinhint (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

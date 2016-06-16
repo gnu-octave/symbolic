@@ -44,6 +44,8 @@ function y = abs(x)
 end
 
 
+%!error <Invalid> abs (sym(1), 2)
+
 %!shared x, d
 %! d = -1;
 %! x = sym('-1');

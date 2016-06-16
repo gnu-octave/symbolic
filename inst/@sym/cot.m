@@ -44,6 +44,8 @@ function y = cot(x)
 end
 
 
+%!error <Invalid> cot (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

@@ -44,6 +44,8 @@ function y = acoth(x)
 end
 
 
+%!error <Invalid> acoth (sym(1), 2)
+
 %!shared x, d
 %! d = 2;
 %! x = sym('2');

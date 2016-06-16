@@ -44,6 +44,8 @@ function y = atanh(x)
 end
 
 
+%!error <Invalid> atanh (sym(1), 2)
+
 %!shared x, d
 %! d = 1/2;
 %! x = sym('1/2');

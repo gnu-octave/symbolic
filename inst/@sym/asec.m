@@ -44,6 +44,8 @@ function y = asec(x)
 end
 
 
+%!error <Invalid> asec (sym(1), 2)
+
 %!shared x, d
 %! d = 2;
 %! x = sym('2');

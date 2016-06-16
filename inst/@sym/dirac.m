@@ -44,6 +44,8 @@ function y = dirac(x)
 end
 
 
+%!error <Invalid> dirac (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

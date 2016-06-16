@@ -44,6 +44,8 @@ function y = sech(x)
 end
 
 
+%!error <Invalid> sech (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

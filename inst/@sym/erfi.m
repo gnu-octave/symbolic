@@ -44,6 +44,8 @@ function y = erfi(x)
 end
 
 
+%!error <Invalid> erfi (sym(1), 2)
+
 %!shared x, d
 %! d = 0;
 %! x = sym('0');

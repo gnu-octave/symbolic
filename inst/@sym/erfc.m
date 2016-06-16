@@ -44,6 +44,8 @@ function y = erfc(x)
 end
 
 
+%!error <Invalid> erfc (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

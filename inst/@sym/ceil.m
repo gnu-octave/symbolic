@@ -44,6 +44,8 @@ function y = ceil(x)
 end
 
 
+%!error <Invalid> ceil (sym(1), 2)
+
 %!shared x, d
 %! d = 3/2;
 %! x = sym('3/2');

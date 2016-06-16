@@ -44,6 +44,8 @@ function y = tanh(x)
 end
 
 
+%!error <Invalid> tanh (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

@@ -44,6 +44,8 @@ function y = csch(x)
 end
 
 
+%!error <Invalid> csch (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

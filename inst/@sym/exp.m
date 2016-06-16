@@ -46,6 +46,8 @@ function y = exp(x)
 end
 
 
+%!error <Invalid> exp (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

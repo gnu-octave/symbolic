@@ -44,6 +44,8 @@ function y = log(x)
 end
 
 
+%!error <Invalid> log (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

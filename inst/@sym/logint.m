@@ -44,6 +44,8 @@ function y = logint(x)
 end
 
 
+%!error <Invalid> logint (sym(1), 2)
+
 %!shared x, d
 %! d = 2;
 %! x = sym('2');

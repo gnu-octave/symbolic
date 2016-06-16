@@ -44,6 +44,8 @@ function y = erfcinv(x)
 end
 
 
+%!error <Invalid> erfcinv (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

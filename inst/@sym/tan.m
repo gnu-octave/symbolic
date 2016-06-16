@@ -44,6 +44,8 @@ function y = tan(x)
 end
 
 
+%!error <Invalid> tan (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

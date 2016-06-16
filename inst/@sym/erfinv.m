@@ -44,6 +44,8 @@ function y = erfinv(x)
 end
 
 
+%!error <Invalid> erfinv (sym(1), 2)
+
 %!shared x, d
 %! d = 1/2;
 %! x = sym('1/2');

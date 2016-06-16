@@ -44,6 +44,8 @@ function y = cosint(x)
 end
 
 
+%!error <Invalid> cosint (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

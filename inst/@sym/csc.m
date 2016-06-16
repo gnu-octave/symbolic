@@ -44,6 +44,8 @@ function y = csc(x)
 end
 
 
+%!error <Invalid> csc (sym(1), 2)
+
 %!shared x, d
 %! d = 1;
 %! x = sym('1');

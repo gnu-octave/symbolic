@@ -235,12 +235,16 @@ function y = {NAME}(x)
   end
   y = uniop_helper (x, '{SPNAME}');
 end
+
+
+%!error <Invalid> {NAME} (sym(1), 2)
+
 """.format(NAME=f, SPNAME=d['spname'], XSTR=xstr, YUTF8=yutf8)
 
         fd.write(body)
 
         # tests
-        fd.write("\n\n%!shared x, d\n")
+        fd.write("%!shared x, d\n")
         fd.write("%%! d = %s;\n" % d['test_in_val'])
         fd.write("%%! x = sym('%s');\n\n" % d['test_in_val'])
         fd.write("%!test\n")

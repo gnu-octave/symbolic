@@ -44,6 +44,8 @@ function y = zeta(x)
 end
 
 
+%!error <Invalid> zeta (sym(1), 2)
+
 %!shared x, d
 %! d = 2;
 %! x = sym('2');
