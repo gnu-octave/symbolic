@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> erf (sym(1), 2)
+%!assert (isequaln (erf (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

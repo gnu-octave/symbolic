@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> acoth (sym(1), 2)
+%!assert (isequaln (acoth (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;

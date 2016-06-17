@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> sign (sym(1), 2)
+%!assert (isequaln (sign (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

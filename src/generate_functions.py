@@ -237,6 +237,7 @@ end
 
 
 %!error <Invalid> {NAME} (sym(1), 2)
+%!assert (isequaln ({NAME} (sym(nan)), sym(nan)))
 
 """.format(NAME=f, SPNAME=d['spname'], XSTR=xstr, YUTF8=yutf8)
 

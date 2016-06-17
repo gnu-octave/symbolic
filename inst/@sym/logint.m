@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> logint (sym(1), 2)
+%!assert (isequaln (logint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;

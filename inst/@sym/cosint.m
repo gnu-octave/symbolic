@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> cosint (sym(1), 2)
+%!assert (isequaln (cosint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> csc (sym(1), 2)
+%!assert (isequaln (csc (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

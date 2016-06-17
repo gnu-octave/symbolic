@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> erfcinv (sym(1), 2)
+%!assert (isequaln (erfcinv (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

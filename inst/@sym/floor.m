@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> floor (sym(1), 2)
+%!assert (isequaln (floor (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

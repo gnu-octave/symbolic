@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> erfc (sym(1), 2)
+%!assert (isequaln (erfc (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

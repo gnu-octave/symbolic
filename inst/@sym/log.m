@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> log (sym(1), 2)
+%!assert (isequaln (log (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
