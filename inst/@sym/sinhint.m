@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = sinhint(x)
+%% y = sinhint (x)
 %%   @result{} y = (sym) Shi(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = sinhint(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = sinhint(x)
   y = uniop_helper (x, 'Shi');
 end
 
+
+%!error <Invalid> sinhint (sym(1), 2)
 
 %!shared x, d
 %! d = 1;
@@ -62,3 +62,15 @@ end
 %! f2 = 1.057250875375728514572;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = sinhint (d);
+%! f = sinhint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

@@ -430,3 +430,14 @@ end
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
+
+%!test
+%! % complex input
+%! [A, B] = python_cmd ('z = 2*_ins[0]; return (z.real,z.imag)', 3+4i);
+%! assert (A, 6)
+%! assert (B, 8)
+
+%!test
+%! % complex output
+%! z = python_cmd ('return 3+2j');
+%! assert (z, 3+2i)

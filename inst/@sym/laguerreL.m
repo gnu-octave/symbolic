@@ -142,3 +142,22 @@ end
 %! L = laguerreL(1, pi, [x y]);
 %! expected = [laguerreL(1, pi, x)  laguerreL(1, pi, y)];
 %! assert (isequal (L, expected))
+
+%!test
+%! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! f = laguerreL (n, x);
+%! h = function_handle (f);
+%! A = h (1, 3.2);
+%! B = laguerreL (1, 3.2);
+%! assert (A, B)
+%! A = h ([1 2], [3.3 4.4]);
+%! B = laguerreL ([1 2], [3.3 4.4]);
+%! assert (A, B)
+%! end
+
+%!error <codegen failed>
+%! % round trip
+%! f = laguerreL (n, y, x);
+%! h = function_handle (f);

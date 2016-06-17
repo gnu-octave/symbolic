@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = erfi(x)
+%% y = erfi (x)
 %%   @result{} y = (sym) erfi(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = erfi(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = erfi(x)
   y = uniop_helper (x, 'erfi');
 end
 
+
+%!error <Invalid> erfi (sym(1), 2)
 
 %!shared x, d
 %! d = 0;
@@ -62,3 +62,15 @@ end
 %! f2 = 0;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! % https://github.com/sympy/sympy/pull/11219
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = erfi (d);
+%! f = erfi (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

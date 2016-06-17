@@ -71,7 +71,7 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(%s)  # int type', ...
                             sp, in, num2str(x, '%ld'));
 
-    elseif (isfloat(x) && isscalar(x))
+    elseif (isfloat(x) && isscalar(x) && isreal(x))
       % Floating point input.  By default, all Octave numbers are
       % IEEE double: we pass these using the exact hex
       % representation.  We could detect and treat
@@ -84,6 +84,13 @@ function a = do_list(indent, in, varlist)
       end
       c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
                             sp, in, num2hex(x));
+
+    elseif (isfloat(x) && isscalar(x) && iscomplex(x))
+      if (isa(x, 'single'))
+        x = double(x);  % don't hate, would happen in Python anyway
+      end
+      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s")+hex2d("%s")*1j)  # complex', ...
+                            sp, in, num2hex(real(x)), num2hex(imag(x)));
 
     elseif (iscell(x))
       c=c+1; a{c} = [sp '# cell array: xfer to list'];
