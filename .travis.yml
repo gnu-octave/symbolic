@@ -28,8 +28,7 @@ install:
         hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave;
         pwd;
-        aclocal -I m4;
-        autoconf;
+        autoreconf --install;
         ./configure;
         make;
         cd ..;
