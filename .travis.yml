@@ -25,6 +25,7 @@ install:
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
+        sudo apt-get install libboost-python-dev;
         hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave;
         pwd;
