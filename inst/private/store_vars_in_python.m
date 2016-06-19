@@ -1,6 +1,7 @@
 function store_vars_in_python (varname, L)
 %varname
 %L
+  persistent counter = round(100000*rand())
 
   for i = 1:numel(L)
     %i
@@ -10,9 +11,8 @@ function store_vars_in_python (varname, L)
       pycall('pystoretemp', pyobj)
       pyexec([varname '.append(_temp)'])
     elseif (iscell (x))
-      % FIXME: this is wrong, could be a collision.
-      % instead, keep a counter, increase with depth...
-      tempname = [varname num2str(round(100000*rand()))];
+      tempname = [varname num2str(counter)];
+      counter = counter + 1;
       pyexec ([tempname ' = []'])
       store_vars_in_python (tempname, x)
       pyexec([varname '.append(' tempname ')'])
