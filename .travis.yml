@@ -7,7 +7,7 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=no COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
@@ -15,7 +15,6 @@ install:
         sudo apt-add-repository -y ppa:octave/stable;
     fi
   - sudo apt-get update -qq -y;
-  - sudo apt-get install -qq -y gcc g++;
   - sudo apt-get install -qq -y octave liboctave-dev;
   - "pip install sympy==$SYMPY_VER"
   - if [ "x$DOCTEST" = "xyes" ]; then
@@ -41,7 +40,6 @@ script:
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
-  - octave -W --no-gui --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
