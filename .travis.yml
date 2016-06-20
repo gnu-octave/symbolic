@@ -23,8 +23,8 @@ install:
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -qq -y libboost-python-dev;
-        hg clone https://bitbucket.org/mtmiller/pytave;
-        cd pytave;
+        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
+        cd pytave_main;
         pwd;
         autoreconf --install;
         ./configure;
