@@ -8,9 +8,9 @@ function retS = get_sym_from_python(var_name)
   unicode = pyeval('_d');
   str = pyeval(['sympy.srepr(', var_name,')']);
   flat = pyeval(['str(', var_name,')']);
-  
-  str_eval = strjoin({['temp = Matrix([', var_name,'])'],
-                      'if isinstance(temp, (sp.Basic, sp.MatrixBase)):',
+
+  str_eval = strjoin({['temp = ' var_name],
+                      'if isinstance(temp, (sp.Matrix, sp.ImmutableMatrix)):',
                       '  _d = list(temp.shape)' ,
                       'elif isinstance(temp, sp.MatrixExpr):' ,
                       '  _d = [float("nan") if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in temp.shape]',
