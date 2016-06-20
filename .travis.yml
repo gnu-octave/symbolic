@@ -40,7 +40,6 @@ script:
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
-  - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
