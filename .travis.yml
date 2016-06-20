@@ -7,7 +7,7 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=no COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
@@ -40,8 +40,10 @@ script:
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
+  - octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "r = octsympy_tests; exit(r)"
+  - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 
