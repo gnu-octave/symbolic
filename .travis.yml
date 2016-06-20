@@ -7,15 +7,30 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=no BUILD_OCT=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
+        sudo apt-get update -qq -y;
+        sudo apt-get install -qq -y octave liboctave-dev;
     fi
-  - sudo apt-get update -qq -y;
-  - sudo apt-get install -qq -y octave liboctave-dev;
+  - if [ "x$BUILD_OCT" = "xyes" ]; then
+        hg clone http://www.octave.org/hg/octave;
+        cd octave;
+        hg -v pull;
+        hg -v update;
+        ./bootstrap;
+        mkdir build_;
+        cd build_;
+        sudo apt-get install -qq -y g++ gcc gfortran make autoconf automake bison flex gperf gzip icoutils librsvg2-bin libtool perl rsync tar;
+        sudo apt-get install -qq -y libblas-dev liblapack-dev libpcre3-dev libarpack2-dev libcurl4-gnutls-dev epstool libfftw3-dev transfig libfltk1.3-dev libfontconfig1-dev libfreetype6-dev libgl2ps-dev libglpk-dev libreadline-dev gnuplot libgraphicsmagick++-dev libhdf5-serial-dev openjdk-7-jdk libsndfile1-dev llvm-dev lpr texinfo libgl1-mesa-dev libosmesa6-dev pstoedit portaudio19-dev libqhull-dev libqrupdate-dev libqscintilla2-dev libqt4-dev libqtcore4 libqtwebkit4 libqt4-network libqtgui4 libsuitesparse-dev libxft-dev zlib1g-dev;
+        ../configure --prefix=/opt/octave_dev;
+        make;
+        make check;
+        sudo make install;
+    fi
   - "pip install sympy==$SYMPY_VER"
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg install -forge doctest";
@@ -26,7 +41,7 @@ install:
         cd pytave_main;
         pwd;
         autoreconf --install;
-        ./configure;
+        ./configure --with-octave=/opt/octave_dev;
         make;
         sudo make install;
         cd ..;
