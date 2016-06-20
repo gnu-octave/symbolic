@@ -15,6 +15,7 @@ install:
         sudo apt-add-repository -y ppa:octave/stable;
     fi
   - sudo apt-get update -qq -y;
+  - sudo apt-get install -qq -y gcc g++;
   - sudo apt-get install -qq -y octave liboctave-dev;
   - "pip install sympy==$SYMPY_VER"
   - if [ "x$DOCTEST" = "xyes" ]; then
