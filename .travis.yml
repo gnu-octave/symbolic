@@ -28,6 +28,7 @@ install:
         autoreconf --install;
         ./configure;
         make;
+        sudo make install;
         cd ..;
     fi
 
