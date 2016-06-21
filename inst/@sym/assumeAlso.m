@@ -30,15 +30,7 @@
 %% @group
 %% syms x integer
 %% x1 = x;
-%% assumptions(x1)
-%%   @result{} ans =
-%%     @{
-%%       [1,1] = x: integer
-%%     @}
-%%
 %% x = assumeAlso(x, 'positive');
-%% @c doctest: +SKIP
-%% @c (output order may depend on Python version here)
 %% assumptions(x)
 %%   @result{} ans =
 %%     @{
