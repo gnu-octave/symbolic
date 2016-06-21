@@ -18,7 +18,11 @@ function store_vars_in_python (varname, L)
       % workaround upstream PyTave bug: https://fixme.url.here
       % FIXME: add bug number, about making arrays [[42]] when passing 42
       pycall ('pystoretemp', x)
-      pyexec ([varname '.append(_temp[0,0])'])
+      if isinteger(x)
+        pyexec ([varname '.append(int(_temp[0,0]))'])
+      else
+        pyexec ([varname '.append(_temp[0,0])'])
+      end
     else
       pycall ('pystoretemp', x)
       pyexec ([varname '.append(_temp)'])
