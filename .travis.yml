@@ -21,6 +21,7 @@ install:
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
+	# TODO: failures here need to make the tests fail
         hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave;
         pwd;
