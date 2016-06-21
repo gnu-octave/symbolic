@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,11 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{n} =} nnz (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod @@sym nnz (@var{A})
 %% Number of non-zero elements in the symbolic array.
 %%
-%% @seealso{numel}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 0 0; 0 1 0]);
+%% nnz(A)
+%%   @result{} ans =  2
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/numel}
+%% @end defmethod
+
 
 function n = nnz(A)
 

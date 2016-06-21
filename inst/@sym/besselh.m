@@ -89,7 +89,6 @@ end
 
 %!test
 %! % round-trip
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x
 %! for k = 1:2
 %!   A = besselh(4, k, 10);
@@ -97,5 +96,4 @@ end
 %!   h = function_handle(q);
 %!   B = h(10);
 %!   assert (abs(A - B) <= eps*abs(A))
-%! end
 %! end

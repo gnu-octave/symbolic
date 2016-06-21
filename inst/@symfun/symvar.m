@@ -140,8 +140,8 @@ end
 
 
 %!test
-%! % basic, quotes are oct 3.6 workaround
-%! syms 'f(t, s)'
+%! % basic
+%! syms f(t, s)
 %! assert (isequal (symvar (f, 0), sym([])))
 %! assert (isequal (symvar (f, 1), t))
 %! assert (isequal (symvar (f, 2), [t s]))
@@ -163,7 +163,7 @@ end
 
 %!test
 %! % preference for the explicit variables
-%! syms a x 'f(t, s)'
+%! syms a x f(t, s)
 %! h = f*a + x;
 %! assert (isequal (symvar (h, 1), t))
 %! assert (isequal (symvar (h, 2), [t s]))

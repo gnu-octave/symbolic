@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,20 +17,56 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} norm (@var{x})
-%% @deftypefnx {Function File} {@var{z} =} norm (@var{x}, @var{ord})
+%% @documentencoding UTF-8
+%% @defmethod  @@sym norm (@var{A})
+%% @defmethodx @@sym norm (@var{v})
+%% @defmethodx @@sym norm (@var{A}, @var{ord})
 %% Symbolic vector/matrix norm.
 %%
-%% @end deftypefn
+%% The first argument can either be a matrix @var{A} or a
+%% matrix @var{v}.
+%% The second argument @var{ord} defaults to 2.
+%%
+%% Matrix example:
+%% @example
+%% @group
+%% A = sym([8 1 6; 3  5  7; 4  9  2]);
+%% norm (A)
+%%   @result{} (sym) 15
+%% norm (A, 2)
+%%   @result{} (sym) 15
+%% norm (A, 'fro')
+%%   @result{} (sym) √285
+%% @end group
+%% @end example
+%%
+%% Vector example:
+%% @example
+%% @group
+%% syms a positive
+%% v = sym([1; a; 2]);
+%% norm (v)
+%%   @result{} (sym)
+%%          ________
+%%         ╱  2
+%%       ╲╱  a  + 5
+%%
+%% norm (v, 1)
+%%   @result{} (sym) a + 3
+%% norm (v, inf)
+%%   @result{} (sym) Max(2, a)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/svd}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = norm(x, ord)
 
   if (nargin < 2)
     ord = 'meh';
-    line1 = 'x = _ins[0]; ord = None';
+    line1 = 'x = _ins[0]; ord = 2';
   else
     line1 = '(x,ord) = _ins';
   end
@@ -56,9 +92,18 @@ end
 %!assert (isequal (norm(sym(-6)), 6))
 
 %!test
+%! % 2-norm default
+%! A = [1 2; 3 4];
+%! n1 = norm (sym (A));
+%! assert (isequal (n1, sqrt (sqrt (sym(221)) + 15)))
+%! assert (norm (A), double (n1), -eps)
+
+%!test
 %! syms x y real
-%! assert (isequal (norm([x 1; 3 y]), sqrt(x^2 + y^2 + 10)))
 %! assert (isequal (norm([x 1; 3 y], 'fro'), sqrt(x^2 + y^2 + 10)))
+
+%!test
+%! syms x real
 %! assert (isequal (norm([x 1], 2), sqrt(x^2 + 1)))
 
 %!test

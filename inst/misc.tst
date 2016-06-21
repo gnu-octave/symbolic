@@ -112,3 +112,11 @@
 %!test
 %! r = python_cmd ('return Version("0.7.6.dev") >= Version("0.7.5"),');
 %! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("1.0.1") > Version("1.0"),');
+%! assert (isequal (r, true))
+
+%!test
+%! r = python_cmd ('return Version("1.0") > Version("0.7.6"),');
+%! assert (isequal (r, true))

@@ -17,17 +17,27 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn {Function File}  {@var{B} =} flipud (@var{A})
+%% @documentencoding UTF-8
+%% @defmethod @@sym flipud (@var{A})
 %% Flip a symbolic matrix vertically.
 %%
-%% @seealso{fliplr, reshape}
-%% @end deftypefn
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 pi; 4 5 6]);
+%% flipud (A)
+%%   @result{} (sym 2×3 matrix)
+%%       ⎡4  5  6⎤
+%%       ⎢       ⎥
+%%       ⎣1  2  π⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/fliplr, @@sym/reshape}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-
-function B = flipud(A)
+function B = flipud (A)
 
   cmd = { 'A, = _ins'
           'if A is None or not A.is_Matrix:'

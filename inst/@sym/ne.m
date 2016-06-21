@@ -57,7 +57,7 @@ end
 %! x = sym(1); y = sym(2); e = x ~= y;
 %! assert (logical(e))
 
-%!xtest
+%!test
 %! % array -- array
 %! syms x
 %! a = sym([1 3 3 2*x]);

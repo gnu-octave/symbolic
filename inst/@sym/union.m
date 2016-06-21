@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} union (@var{A}, @var{B})
+%% @defmethod @@sym union (@var{A}, @var{B})
 %% Return the union of elements of two sets.
 %%
 %% Examples:
@@ -35,8 +35,10 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{intersect, setdiff, setxor, unique, ismember, finiteset, interval}
-%% @end deftypefn
+%% @seealso{@@sym/intersect, @@sym/setdiff, @@sym/setxor, @@sym/unique,
+%%          @@sym/ismember, @@sym/finiteset, @@sym/interval}
+%% @end defmethod
+
 
 function r = union(a, b)
 

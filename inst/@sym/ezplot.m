@@ -37,6 +37,18 @@
 %% @end group
 %% @end example
 %%
+%% Example plotting the zero level curve of a function of two
+%% variables:
+%% @example
+%% @group
+%% syms x y
+%% f = x^2 + y^2 - 1;
+%% ezplot (f)                                   % doctest: +SKIP
+%% @end group
+%% @end example
+%% Here the curve is defined implicitly by @code{f(x, y) == 0},
+%% but we do not enter to the @code{== 0} part.
+%%
 %% See help for the (non-symbolic) @code{ezplot}, which this
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
@@ -60,10 +72,6 @@
 %%
 %% The solution, as shown in the example, is to convert the sym to
 %% a double.
-%%
-%% FIXME: Sept 2014, there are differences between Matlab
-%% and Octave's ezplot and Matlab 2014a does not support N as
-%% number of points.  Disabled some tests.
 %%
 %% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/function_handle}
 %% @end defmethod
@@ -89,9 +97,10 @@ function varargout = ezplot(varargin)
         % The "i == 2" issscalar cond is to supports ezplot(f, sym([0 1]))
 
         % Each is function of one var, and its the same var for all
+        % (or could be a single function of two variables)
         thissym = symvar(varargin{i});
-        assert(length(thissym) <= 1, ...
-          'ezplot: plotting curves: functions should have at most one input');
+        assert(length(thissym) <= 2, ...
+          'ezplot: plotting curves: functions should have at most two inputs');
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
@@ -126,28 +135,31 @@ function varargout = ezplot(varargin)
 end
 
 
+%%!shared hf
+%%! % offscreen rendering currently (2016-06) causing crashes:
+%%! % e.g., https://savannah.gnu.org/bugs/?44478
+%%! hf = figure ('visible', 'off');
+
 %!test
 %! % simple
 %! syms x
 %! f = cos(x);
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(f);
-%! warning(s)
 %! xx = get(h, 'xdata');
 %! yy = get(h, 'ydata');
 %! assert (abs(yy(end) - cos(xx(end))) <= 2*eps)
-%! % matlab misses endpoint wtth nodisplay
-%! %assert (abs(xx(end) - 2*pi) <= 4*eps)
-%! %assert (abs(yy(end) - cos(2*pi)) <= 4*eps)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % matlab misses endpoint with nodisplay
+%! assert (abs(xx(end) - 2*pi) <= 4*eps)
+%! assert (abs(yy(end) - cos(2*pi)) <= 4*eps)
+%! end
 
 %!test
 %! % parametric
 %! syms t
 %! x = cos(t);
 %! y = sin(t);
-%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
 %! h = ezplot(x, y);
-%! warning(s)
 %! xx = get(h, 'xdata');
 %! assert (abs(xx(end) - cos(2*pi)) <= 4*eps)
 
@@ -155,29 +167,36 @@ end
 %! syms x t
 %! ezplot(t, x)
 
-%!error <functions should have at most one input>
+%!error
 %! syms x t
 %! ezplot(t, t*x)
 
-%%!test
-%%! % contour, FIXME: broken on Matlab?  Issue #108
-%%! syms x y
-%%! f = sqrt(x*x + y*y) - 1;
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot(f);
-%%! warning(s)
-%%! y = get(h, 'ydata');
-%%! assert (max(y) - 1 <= 4*eps)
+%!test
+%! % implicit plot of f(x,y) == 0
+%! syms x y
+%! f = sqrt(x*x + y*y) - 1;
+%! h = ezplot(f);
+%! y = get(h, 'ydata');
+%! assert (max(y) - 1 <= 4*eps)
+
+%!error
+%! % implicit plot supports single function
+%! syms x y
+%! f = sqrt(x*x + y*y) - 1;
+%! g = sqrt(x*x + y*y) - 4;
+%! h = ezplot(f, g);
+
+%!test
+%! % bounds etc as syms
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % this number-of-points option not supported on matlab
+%! syms x
+%! f = cos(x);
+%! h = ezplot(f, [0 2*sym(pi)], sym(42));
+%! y = get(h, 'ydata');
+%! assert (length(y) == 42)
+%! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
+%! end
 
 %%!test
-%%! % bounds etc as syms
-%%! % FIXME: this number-of-points option no supported on matlab
-%%! syms x
-%%! f = cos(x);
-%%! s = warning('off', 'OctSymPy:function_handle:nocodegen');
-%%! h = ezplot(f, [0 2*sym(pi)], sym(42));
-%%! warning(s)
-%%! y = get(h, 'ydata');
-%%! assert (length(y) == 42)
-%%! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
-
+%%! close (hf);

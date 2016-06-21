@@ -46,8 +46,6 @@
 %%     @}
 %% @end group
 %% @end example
-%% (Note the previous output will be more verbose if you are using
-%% an older version of SymPy before SymPy 1.0.)
 %%
 %% As with @code{assume}, note @code{x1} is unchanged:
 %% @example
@@ -139,7 +137,6 @@ end
 
 %!test
 %! % has output so avoids workspace
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -150,11 +147,9 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
-%! end
 
 %!test
 %! % has no output so does workspace
-%! if (python_cmd ('return Version(spver) >= Version("1.0")'))
 %! syms x positive
 %! x2 = x;
 %! f = sin(x);
@@ -165,4 +160,3 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
-%! end

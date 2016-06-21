@@ -56,23 +56,11 @@ function r = vpasolve(e, x, x0)
 
   % nsolve gives back mpf object: https://github.com/sympy/sympy/issues/6092
 
-  % In SymPy >= 0.7.7, mpmath is not bundled so we import mpmath.
-  % In older versions it is usually bundled except on Fedora, hence
-  % the try, except bit.
   cmd = {
     '(e, x, x0, n) = _ins'
-    'if Version(spver) < Version("0.7.7.dev"):'
-    '    try:'
-    '        sympy.mpmath.mp.dps = n'
-    '        findroot = sympy.mpmath.findroot'
-    '    except AttributeError:'
-    '        import mpmath'
-    '        mpmath.mp.dps = n'
-    '        findroot = mpmath.findroot'
-    'else:'
-    '        import mpmath'
-    '        mpmath.mp.dps = n'
-    '        findroot = mpmath.findroot'
+    'import mpmath'
+    'mpmath.mp.dps = n'
+    'findroot = mpmath.findroot'
     '#r = nsolve(e, x, x0)'  % https://github.com/sympy/sympy/issues/8564
     '#r = sympy.N(r, n)'  % deal with mpf
     'if isinstance(e, Equality):'

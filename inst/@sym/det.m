@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{z} =} det (@var{x})
+%% @defmethod @@sym det (@var{x})
 %% Symbolic determinant of a matrix.
 %%
 %% Example:
@@ -29,13 +29,16 @@
 %%   @result{} ans = (sym) -8
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/eig, @@sym/charpoly, @@sym/trace}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = det(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   cmd = { '(A,) = _ins'
           'if not A.is_Matrix:'

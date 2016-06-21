@@ -46,9 +46,6 @@
 %% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
-%% (In older versions, @code{sympref python /bin/python} could be
-%% used: this is deprecated and will be removed in a future version.)
-%%
 %% If the environment variable is empty or not set, the package
 %% uses a default setting (usually @code{python}).
 %%
@@ -179,7 +176,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.4.1-dev
+%%   @result{} 2.5.0-dev
 %% @end group
 %% @end example
 %%
@@ -213,7 +210,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.4.1-dev';
+      varargout{1} = '2.5.0-dev';
 
     case 'display'
       if (nargin == 1)
@@ -272,25 +269,12 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-        %error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
-        warning('OctSymPy:deprecation', ...
-          '''sympref python foo'' deprecated; use ''setenv PYTHON foo'' instead');
-        if (isempty(arg) || strcmp(arg,'[]'))
-          settings.whichpython = '';
-          sympref('reset')
-        else
-          settings.whichpython = arg;
-          sympref('reset')
-        end
-        return
+	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
       if (isempty(pyexec))
-        pyexec = settings.whichpython;   % FIXME: deprecated; remove
-        if (isempty(pyexec))
-          pyexec = DEFAULTPYTHON;
-        end
+        pyexec = DEFAULTPYTHON;
       end
       varargout{1} = pyexec;
 

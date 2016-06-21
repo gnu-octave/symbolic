@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +17,30 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{r} =} rref (@var{A})
-%% @deftypefnx {Function File} {[@var{r, k}] =} rref (@var{A})
+%% @documentencoding UTF-8
+%% @deftypemethod  @@sym {@var{r} =} rref (@var{A})
+%% @deftypemethodx @@sym {[@var{r}, @var{k}] =} rref (@var{A})
 %% Reduced Row Echelon Form of a symbolic matrix.
+%%
+%% Example:
+%% @example
+%% @group
+%% A = sym([1 2 3; 2 3 4]);
+%% rref (A)
+%%   @result{} (sym 2×3 matrix)
+%%
+%%       ⎡1  0  -1⎤
+%%       ⎢        ⎥
+%%       ⎣0  1  2 ⎦
+%%
+%% @end group
+%% @end example
 %%
 %% Optional second output gives the indices of pivots.
 %%
-%% @seealso{rank, null, orth}
-%% @end deftypefn
+%% @seealso{@@sym/rank, @@sym/null, @@sym/orth}
+%% @end deftypemethod
+
 
 function [r, k] = rref(A)
 

@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {@var{r} =} intersect (@var{A}, @var{B})
+%% @defmethod @@sym intersect (@var{A}, @var{B})
 %% Return the common elements of two sets.
 %%
 %% Example:
@@ -45,11 +45,10 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{union, setdiff, setxor, unique, ismember, finiteset, interval}
-%% @end deftypefn
+%% @seealso{@@sym/union, @@sym/setdiff, @@sym/setxor, @@sym/unique,
+%%          @@sym/ismember, @@sym/finiteset, @@sym/interval}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = intersect(a, b)
 
