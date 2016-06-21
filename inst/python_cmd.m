@@ -347,20 +347,20 @@ end
 %! s2 = python_cmd (cmd);
 %! assert (strcmp (s1, s2))
 
-%%!test
-%%! % unicode passthru: FIXME: how to get unicode back to Python?
-%%! s1 = '我爱你'
-%%! cmd = 'return (_ins[0],)';
-%%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s1, s2))
+%!xtest
+%! % unicode passthru
+%! s = '我爱你';
+%! s2 = python_cmd ('return _ins', s);
+%! assert (strcmp (s, s2))
+%! s = '我爱你<>\&//\#%% %\我';
+%! s2 = python_cmd ('return _ins', s);
+%! assert (strcmp (s, s2))
 
-%%!test
-%%! % unicode w/ slashes, escapes, etc  FIXME
-%%! s1 = '我爱你<>\\&//\\#%% %\\我'
-%%! s3 = '我爱你<>\&//\#%% %\我'
-%%! cmd = 'return _ins[0]';
-%%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s2, s3))
+%!xtest
+%! % unicode w/ slashes, escapes
+%! s = '我<>\&//\#%% %\我';
+%! s2 = python_cmd ('return "我<>\\&//\\#%% %\\我"');
+%! assert (strcmp (s, s2))
 
 %!test
 %! % list, tuple
