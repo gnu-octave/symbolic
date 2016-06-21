@@ -7,9 +7,7 @@ function store_vars_in_python (varname, L)
     %i
     x = L{i};
     if (isa(x, 'sym'));
-      pyobj = pyeval((char(x)));
-      pycall('pystoretemp', pyobj)
-      pyexec([varname '.append(_temp)'])
+      pyexec([varname '.append(' char(x) ')'])
     elseif (iscell (x))
       tempname = [varname num2str(counter)];
       counter = counter + 1;

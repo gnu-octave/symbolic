@@ -48,7 +48,4 @@ function obj = check_and_convert(var_name)
       end
     end
   end
-  if n == 1
-    obj = obj{1};
-  end
 end
