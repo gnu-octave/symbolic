@@ -21,7 +21,7 @@ install:
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
-        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
+        hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave_main;
         pwd;
         autoreconf --install;
