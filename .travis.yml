@@ -22,12 +22,12 @@ install:
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
         hg clone https://bitbucket.org/mtmiller/pytave;
-        cd pytave_main;
+        cd pytave;
         pwd;
         autoreconf --install;
         ./configure;
         make;
-        sudo make install;
+	# sudo make install;
         cd ..;
     fi
 
@@ -40,10 +40,10 @@ script:
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
-  - octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "r = octsympy_tests; exit(r)"
+  - octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 
