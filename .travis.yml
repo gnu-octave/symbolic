@@ -14,6 +14,7 @@ matrix:
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1397BC53640DB551;
         sudo apt-add-repository -y ppa:octave/stable;
     fi
   - sudo apt-get update -qq -y;
