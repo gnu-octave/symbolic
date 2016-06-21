@@ -15,7 +15,7 @@ install:
   - sudo apt-get update -qq -y;
   - sudo apt-get install -qq -y octave liboctave-dev;
   - sudo apt-get install -qq -y python;
-  - "pip install sympy==$SYMPY_VER"
+  - "pip install --user sympy==$SYMPY_VER"
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
