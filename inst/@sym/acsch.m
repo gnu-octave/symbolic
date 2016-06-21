@@ -24,7 +24,7 @@
 %% Example:
 %% @example
 %% @group
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% syms x
 %% y = acsch(x)
 %%   @result{} y = (sym) acsch(x)
