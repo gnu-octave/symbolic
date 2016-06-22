@@ -43,7 +43,9 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   if (strcmp(lower(which_ipc), 'default'))
-    if (exist('popen2') > 1)
+    if ((exist('pyeval') > 1) && (exist('pyexec') > 1))
+      which_ipc = 'pytave';
+    elseif (exist('popen2') > 1)
       which_ipc = 'popen2';
     else
       which_ipc = 'system';
@@ -51,6 +53,9 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   switch lower(which_ipc)
+    case 'pytave'
+      [A, db] = python_ipc_pytave(what, cmd, varargin{:});
+
     case 'popen2'
       [A, db] = python_ipc_popen2(what, cmd, varargin{:});
 
