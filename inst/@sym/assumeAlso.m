@@ -37,8 +37,6 @@
 %%     @}
 %%
 %% x = assumeAlso(x, 'positive');
-%% @c doctest: +SKIP
-%% @c (output order may depend on Python version here)
 %% assumptions(x)
 %%   @result{} ans =
 %%     @{

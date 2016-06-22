@@ -48,7 +48,6 @@ erfc
 erfinv||1/2
 erfcinv
 erfi||0,0|
-heaviside|Heaviside
 dirac|DiracDelta
 cosint|Ci|1,0.3374039229009681346626||2016
 sinint|Si|1,0.9460830703671830149414||2016
