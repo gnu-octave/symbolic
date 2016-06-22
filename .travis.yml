@@ -21,14 +21,12 @@ install:
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
-        # TODO: if pytave fails to build, the travis run needs to fail
         hg clone https://bitbucket.org/mtmiller/pytave;
         cd pytave;
         pwd;
         autoreconf --install;
         ./configure;
         make;
-        # sudo make install;
         cd ..;
     fi
 
