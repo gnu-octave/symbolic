@@ -77,7 +77,6 @@ end
 
 %!test
 %! % round trip
-%! % https://github.com/sympy/sympy/pull/11219
 %! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms s z
 %! f = polylog (s, z);
