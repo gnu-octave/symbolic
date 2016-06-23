@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Colin B. Macdonald, Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_pytave (@dots{})
+%% @deftypefn {} {[@var{A}, @var{info}] =} python_ipc_pytave (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -27,8 +27,6 @@
 %%
 %% @code{@var{info}.prelines}: the number of lines of header code
 %% before the command starts.
-%%
-%% @code{@var{info}.raw}: the raw output, for debugging.
 %% @end deftypefn
 
 function [A, info] = python_ipc_pytave(what, cmd, varargin)
