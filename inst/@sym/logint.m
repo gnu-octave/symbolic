@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = logint(x)
+%% y = logint (x)
 %%   @result{} y = (sym) li(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = logint(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = logint(x)
   y = uniop_helper (x, 'li');
 end
 
+
+%!error <Invalid> logint (sym(1), 2)
 
 %!shared x, d
 %! d = 2;
@@ -62,3 +62,14 @@ end
 %! f2 = 1.045163780117492784845;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = logint (d);
+%! f = logint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

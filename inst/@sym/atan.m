@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = atan(x)
+%% y = atan (x)
 %%   @result{} y = (sym) atan(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = atan(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = atan(x)
   y = uniop_helper (x, 'atan');
 end
 
+
+%!error <Invalid> atan (sym(1), 2)
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +61,12 @@ end
 %! f1 = atan(A);
 %! f2 = atan(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = atan (d);
+%! f = atan (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

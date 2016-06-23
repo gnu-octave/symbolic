@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cosint(x)
+%% y = cosint (x)
 %%   @result{} y = (sym) Ci(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cosint(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = cosint(x)
   y = uniop_helper (x, 'Ci');
 end
 
+
+%!error <Invalid> cosint (sym(1), 2)
 
 %!shared x, d
 %! d = 1;
@@ -62,3 +62,14 @@ end
 %! f2 = 0.3374039229009681346626;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = cosint (d);
+%! f = cosint (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

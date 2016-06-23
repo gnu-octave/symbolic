@@ -26,7 +26,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = heaviside(x)
+%% y = heaviside (x)
 %%   @result{} y = (sym) Heaviside(x)
 %% @end group
 %% @end example
@@ -104,3 +104,12 @@ end
 %! A = heaviside ([-1 0 1], sym(1)/2);
 %! assert (isequal (A, [0 sym(1)/2 1]))
 %! end
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = heaviside (d);
+%! f = heaviside (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

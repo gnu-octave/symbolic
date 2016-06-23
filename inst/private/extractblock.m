@@ -116,6 +116,7 @@ function r = process_item(item)
   OCTCODE_STR = 1003;
   OCTCODE_USTR = 1004;
   OCTCODE_BOOL = 1005;
+  OCTCODE_COMPLEX = 1006;
   OCTCODE_DICT = 1010;
   OCTCODE_SYM = 1020;
 
@@ -132,6 +133,9 @@ function r = process_item(item)
     case OCTCODE_DOUBLE
       assert(M == 1)
       r = hex2num(C{2});
+    case OCTCODE_COMPLEX
+      assert(M == 2)
+      r = hex2num(C{2}) + hex2num(C{3})*1i;
     case OCTCODE_STR
       assert(M == 1)
       % did we escape all strings?

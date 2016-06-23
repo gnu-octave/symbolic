@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{z} =} fresnels (@var{x})
+%% @defmethod @@sym fresnels (@var{x})
 %% Symbolic Fresnel Sine function.
 %%
 %% Example:
@@ -34,13 +34,16 @@
 %%          ⎝ 2  ⎠
 %% @end group
 %% @end example
-%% @seealso{fresnelc}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/fresnelc}
+%% @end defmethod
 
-function J = fresnels(x)
 
+function J = fresnels (x)
+  if (nargin ~= 1)
+    print_usage ();
+  end
   J = uniop_helper(x, 'fresnels');
-
 end
 
 
@@ -58,3 +61,14 @@ end
 %! a = fresnels([sym(0)  sym('oo')  x  1]);
 %! b = [sym(0)  sym(1)/2  fresnels(x)  fresnels(sym(1))];
 %! assert (isequal (a, b))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x
+%! f = fresnels (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = fresnels (1.1);
+%! assert (A, B)
+%! end

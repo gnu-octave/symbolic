@@ -115,3 +115,14 @@ end
 %! assert (psi (2, 1000), double (psi (2, sym (1000))), -3*eps)
 %! assert (psi (2, 1e-4), double (psi (2, 1/sym (1e4))), -3*eps)
 %! end
+
+%!test
+%! % round trip
+%! if (exist ('psi','builtin'))
+%! syms x
+%! f = psi (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = psi (1.1);
+%! assert (A, B)
+%! end

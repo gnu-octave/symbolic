@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = acsc(x)
+%% y = acsc (x)
 %%   @result{} y = (sym) acsc(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = acsc(x)
   if (nargin ~= 1)
@@ -45,6 +43,8 @@ function y = acsc(x)
   y = uniop_helper (x, 'acsc');
 end
 
+
+%!error <Invalid> acsc (sym(1), 2)
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +61,14 @@ end
 %! f1 = acsc(A);
 %! f2 = acsc(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = acsc (d);
+%! f = acsc (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end
