@@ -34,7 +34,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   persistent show_msg
   persistent have_headers
 
-  disp('ipc_pytave: here we go'); fflush(stdout)
+  disp('ipc_pytave: here we go'); fflush(stdout);
 
   info = [];
 
@@ -63,26 +63,26 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   if isempty(have_headers)
 
-    disp('about to do imports'); fflush(stdout)
+    disp('about to do imports'); fflush(stdout);
 
     pyexec (strjoin ({
         'from __future__ import print_function'
         'from __future__ import division'
     }, newl))
 
-    disp('imports 1'); fflush(stdout)
+    disp('imports 1'); fflush(stdout);
 
     pyexec('import sys')
 
-    disp('imports 2'); fflush(stdout)
+    disp('imports 2'); fflush(stdout);
 
     pyexec('import mpmath')
 
-    disp('imports 3'); fflush(stdout)
+    disp('imports 3'); fflush(stdout);
 
     pyexec('import sympy')
 
-    disp('imports 4'); fflush(stdout)
+    disp('imports 4'); fflush(stdout);
 
     pyexec(strjoin({'import sys'
                     'import sympy'
@@ -119,15 +119,29 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     '    _temp = x'
                   }, newl))
 
-    disp('imports N'); fflush(stdout)
+    disp('imports N'); fflush(stdout);
 
     have_headers = true;
   end
 
   pyexec('_ins = []')
+
+  disp('debug: made empty'); fflush(stdout);
+
   store_vars_in_python('_ins', varargin);
 
+  disp('debug: finished storing'); fflush(stdout);
+
   s = strjoin(cmd, newl);
+
+  disp('debug: going to exec the cmd'); fflush(stdout);
+
   pyexec(s)
+
+  disp('debug: going to check_and_convert'); fflush(stdout);
+
   A = check_and_convert('_outs');
+
+  disp('debug: back from check_and_convert'); fflush(stdout);
+
 end
