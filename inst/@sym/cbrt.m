@@ -47,6 +47,7 @@ end
 
 
 %!error <Invalid> cbrt (sym(1), 2)
+%!assert (isequaln (cbrt (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;

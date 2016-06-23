@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> abs (sym(1), 2)
+%!assert (isequaln (abs (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = -1;

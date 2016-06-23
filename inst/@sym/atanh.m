@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> atanh (sym(1), 2)
+%!assert (isequaln (atanh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1/2;

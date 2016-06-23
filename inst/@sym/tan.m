@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> tan (sym(1), 2)
+%!assert (isequaln (tan (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

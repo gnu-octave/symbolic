@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> ceil (sym(1), 2)
+%!assert (isequaln (ceil (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 3/2;

@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> acot (sym(1), 2)
+%!assert (isequaln (acot (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

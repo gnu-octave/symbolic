@@ -48,6 +48,7 @@ end
 
 
 %!error <Invalid> sqrt (sym(1), 2)
+%!assert (isequaln (sqrt (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

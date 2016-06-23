@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> asec (sym(1), 2)
+%!assert (isequaln (asec (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;

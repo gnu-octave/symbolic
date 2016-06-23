@@ -47,6 +47,7 @@ end
 
 
 %!error <Invalid> exp (sym(1), 2)
+%!assert (isequaln (exp (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

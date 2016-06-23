@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> erfi (sym(1), 2)
+%!assert (isequaln (erfi (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 0;

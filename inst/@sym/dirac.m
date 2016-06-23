@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> dirac (sym(1), 2)
+%!assert (isequaln (dirac (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

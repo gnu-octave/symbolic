@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> cot (sym(1), 2)
+%!assert (isequaln (cot (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

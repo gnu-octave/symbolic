@@ -45,6 +45,7 @@ end
 
 
 %!error <Invalid> tanh (sym(1), 2)
+%!assert (isequaln (tanh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
