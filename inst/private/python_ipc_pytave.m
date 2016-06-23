@@ -34,6 +34,8 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   persistent show_msg
   persistent have_headers
 
+  disp('ipc_pytave: here we go'); fflush(stdout)
+
   info = [];
 
   if (strcmp(what, 'reset'))
@@ -60,6 +62,24 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   info.prelines = 0;
 
   if isempty(have_headers)
+
+    disp('about to do imports'); fflush(stdout)
+
+    pyexec (strjoin ({
+        'from __future__ import print_function'
+        'from __future__ import division'
+    }, newl))
+
+    disp('imports 1'); fflush(stdout)
+
+    pyexec('import sys')
+
+    disp('imports 2'); fflush(stdout)
+
+    pyexec('import sympy')
+
+    disp('imports 3'); fflush(stdout)
+
     pyexec(strjoin({'import sys'
                     'import sympy'
                     'import sympy as sp'
@@ -94,6 +114,9 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     '    global _temp'
                     '    _temp = x'
                   }, newl))
+
+    disp('imports 4'); fflush(stdout)
+
     have_headers = true;
   end
 
