@@ -76,9 +76,13 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
     disp('imports 2'); fflush(stdout)
 
-    pyexec('import sympy')
+    pyexec('import mpmath')
 
     disp('imports 3'); fflush(stdout)
+
+    pyexec('import sympy')
+
+    disp('imports 4'); fflush(stdout)
 
     pyexec(strjoin({'import sys'
                     'import sympy'
@@ -115,7 +119,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     '    _temp = x'
                   }, newl))
 
-    disp('imports 4'); fflush(stdout)
+    disp('imports N'); fflush(stdout)
 
     have_headers = true;
   end
