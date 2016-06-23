@@ -107,9 +107,21 @@ end
 
 %!test
 %! % round trip
-%! y = sym('y');
-%! A = heaviside (d);
-%! f = heaviside (y);
+%! syms x
+%! A = heaviside (1);
+%! f = heaviside (x);
 %! h = function_handle (f);
-%! B = h (d);
+%! B = h (1);
+%! assert (A, B, -eps)
+
+%!test
+%! % round trip
+%! syms x h0
+%! f = heaviside (x, h0);
+%! h = function_handle (f, 'vars', {x h0});
+%! A = heaviside (1, 1/2);
+%! B = h (1, 1/2);
+%! assert (A, B, -eps)
+%! A = heaviside (0, 1/2);
+%! B = h (0, 1/2);
 %! assert (A, B, -eps)
