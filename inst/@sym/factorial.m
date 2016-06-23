@@ -45,7 +45,7 @@ end
 
 
 %!error <Invalid> factorial (sym(1), 2)
-%!assert (isequaln (factorial (sym(nan)), sym(nan)))
+%!xtest assert (isequaln (factorial (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
