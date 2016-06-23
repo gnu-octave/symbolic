@@ -98,11 +98,25 @@ end
 %! end
 
 %!test
-%! if (python_cmd ('return Version(spver) <= Version("1.0")'))
-%! print ('skipping test, sympy too old')
-%! else
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! A = heaviside ([-1 0 1], sym(1)/2);
 %! assert (isequal (A, [0 sym(1)/2 1]))
+%! end
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! A = heaviside ([-1 0 1], sym(1)/2);
+%! assert (isequal (A, [0 sym(1)/2 1]))
+%! end
+
+%!assert (isequaln (heaviside (sym(nan)), sym(nan)))
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! assert (isequaln (heaviside (sym(nan), sym(nan)), sym(nan)))
+%! assert (isequaln (heaviside (0, sym(nan)), sym(nan)))
+%! assert (isequaln (heaviside (2, sym(nan)), sym(1)))
+%! assert (isequaln (heaviside (-2, sym(nan)), sym(0)))
 %! end
 
 %!test
@@ -116,6 +130,7 @@ end
 
 %!test
 %! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x h0
 %! f = heaviside (x, h0);
 %! h = function_handle (f, 'vars', {x h0});
@@ -125,3 +140,4 @@ end
 %! A = heaviside (0, 1/2);
 %! B = h (0, 1/2);
 %! assert (A, B, -eps)
+%! end
