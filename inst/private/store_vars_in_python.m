@@ -20,17 +20,21 @@ function store_vars_in_python (varname, L)
   persistent counter = 0
 
   for i = 1:numel(L)
-    x = L{i};
+    x = L{i}
     if (isa(x, 'sym'));
+      disp('debug: storing a sym'); fflush(stdout);
       pyexec([varname '.append(' char(x) ')'])
     elseif (iscell (x))
-      tempname = [varname num2str(counter)];
+      disp('debug: dealing with a cell'); fflush(stdout);
+      tempname = [varname num2str(counter)]
       counter = counter + 1;
       pyexec ([tempname ' = []'])
+      disp('debug: recursing into the cell'); fflush(stdout);
       store_vars_in_python (tempname, x)
       pyexec([varname '.append(' tempname ')'])
     elseif (isscalar (x) && isnumeric (x))
       % workaround upstream PyTave bug: https://bitbucket.org/mtmiller/pytave/issues/14
+      disp('debug: storing a scalar number'); fflush(stdout);
       pycall ('pystoretemp', x)
       if isinteger(x)
         % FIXME: workaround as PyTave apparently stores everything as numpy types
@@ -40,6 +44,7 @@ function store_vars_in_python (varname, L)
         pyexec ([varname '.append(_temp[0,0])'])
       end
     else
+      disp('debug: storing anything else'); fflush(stdout);
       pycall ('pystoretemp', x)
       pyexec ([varname '.append(_temp)'])
     end

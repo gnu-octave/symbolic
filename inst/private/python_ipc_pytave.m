@@ -126,7 +126,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   pyexec('_ins = []')
 
-  disp('debug: made empty'); fflush(stdout);
+  disp('debug: made empty, going to store'); fflush(stdout);
 
   store_vars_in_python('_ins', varargin);
 
