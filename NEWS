@@ -22,6 +22,8 @@ octsympy 2.5.0-dev
   * Change (and document!) default matrix norm to the 2-norm (it was
     Frobenius).
 
+  * `heaviside` accepts a second argument for its value at zero.
+
   * `isfinite` behaves correctly for variables (and is documented).
 
 
