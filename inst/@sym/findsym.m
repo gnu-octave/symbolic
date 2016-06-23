@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{S} =} findsym (@var{expr})
-%% @deftypefnx {Function File} {@var{S} =} findsym (@var{expr}, @var{n})
+%% @defmethod  @@sym findsym (@var{expr})
+%% @defmethodx @@sym findsym (@var{expr}, @var{n})
 %% Find symbols in expression, return them as comma-separated string.
 %%
 %% For details, @pxref{@@sym/symvar}; this just concatenates its output
@@ -38,7 +38,8 @@
 %% @end example
 %%
 %% @seealso{@@sym/symvar, symvar, findsymbols}
-%% @end deftypefn
+%% @end defmethod
+
 
 function s = findsym(varargin)
 

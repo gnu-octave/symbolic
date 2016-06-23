@@ -18,11 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{tf} =} has (@var{expr}, @var{subexpr})
-%% @deftypefnx {Function File} {@var{tf} =} has (@var{M}, @var{subexpr})
+%% @defmethod  @@sym has (@var{expr}, @var{subexpr})
+%% @defmethodx @@sym has (@var{M}, @var{subexpr})
 %% Naively test if an expression contains a subexpression.
 %%
-%% For example:
+%% Example:
 %% @example
 %% @group
 %% syms x
@@ -62,7 +62,8 @@
 %% Instead, @pxref{@@sym/ismember}.
 %%
 %% @seealso{@@sym/ismember}
-%% @end deftypefn
+%% @end defmethod
+
 
 function r = has(f, x)
 

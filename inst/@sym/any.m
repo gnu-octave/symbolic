@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} any (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} any (@var{x}, @var{dim})
+%% @defmethod  @@sym any (@var{x})
+%% @defmethodx @@sym any (@var{x}, @var{dim})
 %% Return true if any entries of a symbolic vector are nonzero.
 %%
 %% Similar behaviour to the built-in @code{any} with regard to
@@ -30,18 +30,20 @@
 %% Example:
 %% @example
 %% @group
-%% >> any([0; sym(pi); 0])
-%%    @result{} ans = 1
+%% any([0; sym(pi); 0])
+%%   @result{} ans = 1
 %% @end group
 %% @end example
 %%
-%% @seealso{all}
-%% @end deftypefn
+%% @seealso{@sym/all}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = any(x, varargin)
+
+  if (nargin > 2)
+    print_usage ();
+  end
 
   z = any (logical (x), varargin{:});
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{c} =} cross (@var{a}, @var{b})
+%% @defmethod @@sym cross (@var{a}, @var{b})
 %% Symbolic cross product.
 %%
 %% Examples:
@@ -27,7 +27,7 @@
 %% a = [sym('a1'); sym('a2'); sym('a3')];
 %% b = [sym('b1'); sym('b2'); sym('b3')];
 %% cross(a, b)
-%%    @result{} (sym 3×1 matrix)
+%%   @result{} (sym 3×1 matrix)
 %%       ⎡a₂⋅b₃ - a₃⋅b₂ ⎤
 %%       ⎢              ⎥
 %%       ⎢-a₁⋅b₃ + a₃⋅b₁⎥
@@ -35,7 +35,7 @@
 %%       ⎣a₁⋅b₂ - a₂⋅b₁ ⎦
 %%
 %% cross(a, a)
-%%    @result{} (sym 3×1 matrix)
+%%   @result{} (sym 3×1 matrix)
 %%       ⎡0⎤
 %%       ⎢ ⎥
 %%       ⎢0⎥
@@ -44,10 +44,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{dot}
-%% @end deftypefn
+%% @seealso{@@sym/dot}
+%% @end defmethod
+
 
 function c = cross(a, b)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   cmd = { 'a, b = _ins'
           'return a.cross(b),'
@@ -57,6 +62,8 @@ function c = cross(a, b)
 
 end
 
+
+%!error <Invalid> cross (sym(1), 2, 3)
 
 %!test
 %! a = sym([1; 0; 0]);
