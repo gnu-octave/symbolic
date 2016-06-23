@@ -1,10 +1,25 @@
+%% Copyright (C) 2016 Abhinav Tripathi, Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
 function store_vars_in_python (varname, L)
-%varname
-%L
-  persistent counter = round(100000*rand())
+  persistent counter = 0
 
   for i = 1:numel(L)
-    %i
     x = L{i};
     if (isa(x, 'sym'));
       pyexec([varname '.append(' char(x) ')'])
@@ -15,10 +30,10 @@ function store_vars_in_python (varname, L)
       store_vars_in_python (tempname, x)
       pyexec([varname '.append(' tempname ')'])
     elseif (isscalar (x) && isnumeric (x))
-      % workaround upstream PyTave bug: https://fixme.url.here
-      % FIXME: add bug number, about making arrays [[42]] when passing 42
+      % workaround upstream PyTave bug: https://bitbucket.org/mtmiller/pytave/issues/14
       pycall ('pystoretemp', x)
       if isinteger(x)
+	    % workaround as PyTave apparently stores everything as Float
         pyexec ([varname '.append(int(_temp[0,0]))'])
       else
         pyexec ([varname '.append(_temp[0,0])'])
