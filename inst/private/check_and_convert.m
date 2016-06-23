@@ -29,10 +29,22 @@ function obj = check_and_convert(var_name)
         'if isinstance(temp, sp.Matrix) and temp.shape == (1, 1):',
        ['    ' cur_var ' = temp[0, 0]']}, newl));
 
-
+    is_dict_with_sym_keys_curvar = pyeval(['isinstance(', cur_var, ', dict) and len(' cur_var '.keys())>0 and isinstance(' cur_var, '.keys()[0], (sp.Basic, sp.MatrixBase))']);
     is_list_curvar = pyeval(['isinstance(', cur_var, ', (list, tuple))']);
+
     if is_list_curvar
       obj{i} = check_and_convert(cur_var);
+    elseif is_dict_with_sym_keys_curvar
+      %if cur_var is dictionary with symbols as keys then convert it to a struct
+      pyexec(strjoin({'_allKeysStr = []',
+                      '_allValues = []',
+                      ['for key, value in ' cur_var '.iteritems():'],
+                      '    _allKeysStr.append(str(key))',
+                      '    _allValues.append(value)'}, newl));
+      _allKeysStr = pyeval('_allKeysStr');
+      for j = 1:numel(_allKeysStr)
+        obj{i}.(_allKeysStr{j}) = get_sym_from_python(sprintf('_allValues[%d]', j-1));
+      end
     else
       pyexec(strjoin({ ...
          ['if ' cur_var ' is None or isinstance(' cur_var ', (sp.Basic, sp.MatrixBase)):'],
