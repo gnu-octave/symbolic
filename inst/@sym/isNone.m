@@ -26,6 +26,8 @@
 %% Example:
 %% @example
 %% @group
+%% @c FIXME: python_cmd is implementation detail, maybe better
+%% @c to avoid it in our docs.
 %% a = python_cmd('return None')
 %%   @result{} a = (sym) None
 %% isNone(a)
