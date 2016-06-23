@@ -33,7 +33,8 @@ function store_vars_in_python (varname, L)
       % workaround upstream PyTave bug: https://bitbucket.org/mtmiller/pytave/issues/14
       pycall ('pystoretemp', x)
       if isinteger(x)
-	    % workaround as PyTave apparently stores everything as Float
+        % FIXME: workaround as PyTave apparently stores everything as numpy types
+        % and this inhibits integer variables from being used as index to a list
         pyexec ([varname '.append(int(_temp[0,0]))'])
       else
         pyexec ([varname '.append(_temp[0,0])'])
