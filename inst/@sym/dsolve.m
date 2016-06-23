@@ -99,7 +99,7 @@
 %% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
 %%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
 %%
-%% dsolve (DE, y(0)==1, y(sym(pi)/2) == 2)
+%% dsolve (DE, y(0) == 1, y(sym(pi)/2) == 2)
 %%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
 %% @end group
 %% @end example
@@ -144,6 +144,8 @@
 %% are unlikely to support this so you will need to assemble a symbolic
 %% equation instead.
 %%
+%% FIXME: should we support a cell array list input for ICs/BCs?
+%%
 %% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
 %% @end deftypemethod
 
@@ -169,65 +171,19 @@ function [soln,classify] = dsolve(ode,varargin)
   end
 
   % FIXME: the initial/boundary conditions admit parameters
-  %        but only on their values (not at the evaluation point) 
-
-  % FIXME: it is not currently supported a list of boundary/initial conditions
-  if (isscalar(ode) && nargin>=2)
-  cmd = { 'ode=_ins[0]; ics=_ins[1:]'
-          'sol=sp.dsolve(ode)'
-          'x=list(ode.free_symbols)[0]'
-          'ic_eqs=[]'
-          'for ic in ics:'
-          '    funcarg=ic.lhs'
-          '    if isinstance(funcarg, sp.Subs):'
-          '        x0=funcarg.point[0]'
-          '        dorder=sp.ode_order(funcarg.expr, x)'
-          '        dsol_eq=sp.Eq(sp.diff(sol.lhs,x,dorder),sp.diff(sol.rhs,x,dorder))'
-          '        dy_at_x0=funcarg.expr.subs(x,x0)'
-          '        ic_eqs.append(dsol_eq.subs(x,x0).subs(dy_at_x0,ic.rhs))'
-          '    elif isinstance(funcarg, sp.function.AppliedUndef):'
-          '        x0=funcarg.args[0]'
-          '        ic_eqs.append(sol.subs(x,x0).subs(funcarg,ic.rhs))'
-          'sol_C=sp.solve(ic_eqs)'
-          'if type(sol_C)==dict:'
-          '    sol_final=sol.subs(sol_C)'
-          'elif type(sol_C)==list:'
-          '    sol_final=[]'
-          '    for c in sol_C:'
-          '        sol_final.append(sol.subs(c))'
-          'return sol_final,'};
-
-    soln = python_cmd (cmd, ode, varargin{:});
-
-  % FIXME: only solve initial-value problems involving linear systems 
-  %        of first order ODEs with constant coefficients (a unique
-  %        solution is expected)
-  elseif(~isscalar(ode) && nargin>=2)
+  %        but only on their values (not at the evaluation point)
+  %        cbm: 2016-06 maybe sympy lifts this restriction...
 
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
-          'sol=sp.dsolve(ode)'
-          'x=list(ode[0].free_symbols)[0]'
-          'ic_eqs=[]'
-          'for solu in sol:'
-          '    ic_eqs.append(solu)'
-          '    for ic in ics:'
-          '        funcarg=ic.lhs'
-          '        if isinstance(funcarg, sp.function.AppliedUndef):'
-          '            x0=funcarg.args[0]'
-          '            ic_eqs[-1]=ic_eqs[-1].subs(x,x0).subs(funcarg,ic.rhs)'
-          'sol_C=sp.solve(ic_eqs)'
-          'sol_final=[]'
-          'for y in sol:'
-          '    sol_final.append(y.subs(sol_C))'
-          'return sol_final,'};
+          '# convert our input to a dict'
+          'ics2 = {}'
+          'for s in ics:'
+          '    ics2[s.lhs] = s.rhs'
+          'sol = sp.dsolve(ode, ics=ics2)'
+          'return sol,' };
 
-    soln = python_cmd (cmd, ode, varargin{:});
+  soln = python_cmd (cmd, ode, varargin{:});
 
-  elseif(nargin==1)
-
-    soln = python_cmd ('return sp.dsolve(*_ins),', ode);
-
-  end
 end
 
 
@@ -240,7 +196,7 @@ end
 %! g2 = C2*exp(-2*x) + C1*exp(2*x);
 %! assert (isequal (rhs(f), g1) || isequal (rhs(f), g2))
 
-%!test
+%!xtest
 %! % Not enough initial conditions
 %! syms y(x) C1
 %! de = diff(y, 2) + 4*y == 0;
