@@ -42,6 +42,7 @@ function obj = check_and_convert(var_name)
                       '    _allKeysStr.append(str(key))',
                       '    _allValues.append(value)'}, newl));
       _allKeysStr = pyeval('_allKeysStr');
+      obj{i} = struct ();
       for j = 1:numel(_allKeysStr)
         obj{i}.(_allKeysStr{j}) = get_sym_from_python(sprintf('_allValues[%d]', j-1));
       end
