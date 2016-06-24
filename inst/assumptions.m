@@ -173,6 +173,9 @@ end
 %! disp('going to call pycall with sym');
 %! syms x
 %! disp(pycall ("typename", x);
+%! disp('going to call pycall with list of syms');
+%! syms x y
+%! disp(pycall ("typename", [x y]);
 
 %!test
 %! syms x
