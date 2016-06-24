@@ -169,13 +169,13 @@ end
 %! disp('going to call pycall with ints');
 %! disp(pycall ("typename", 2));
 %! disp('going to call pycall with float');
-%! disp(pycall ("typename", 5.5654);
+%! disp(pycall ("typename", 5.5654));
 %! disp('going to call pycall with sym');
 %! syms x
-%! disp(pycall ("typename", x);
+%! disp(pycall ("typename", x));
 %! disp('going to call pycall with list of syms');
 %! syms x y
-%! disp(pycall ("typename", [x y]);
+%! disp(pycall ("typename", [x y]));
 
 %!test
 %! syms x
