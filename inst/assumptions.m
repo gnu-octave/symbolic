@@ -127,9 +127,10 @@ function [A, B] = assumptions(F, outp)
   if (isempty(F))
     return
   end
-  s = findsymbols(F);
+  disp('calling  FindSymbols'); fflush(stdout);
+  s = findsymbols(F)
   for i=1:length(s)
-    x = s{i};
+    x = s{i}
     if strcmp(outp, 'dict')
       [astr, adict] = python_cmd(cmd, x, true);
       if ~isempty(astr)
@@ -138,7 +139,9 @@ function [A, B] = assumptions(F, outp)
         B{c} = adict;
       end
     else
+	  disp('running python_cmd with cmd'); fflush(stdout);
       astr = python_cmd(cmd, x, false);
+	  disp('after python_cmd'); fflush(stdout);
       if ~isempty(astr)
         c = c + 1;
         str = [x.flat ': ' astr];
