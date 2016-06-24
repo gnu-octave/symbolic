@@ -166,16 +166,16 @@ end
 %! disp('\ngoing to call pycall now');
 %! assert (pycall ("typename", "Hello world"), "str")
 %! assert (pycall ("typename", char ([1, 2, 3])), "str")
-%! disp('going to call pycall with float');
-%! disp(pycall ("typename", 5.5654));
-%! disp('going to call pycall with sym');
+%! disp('going to call pycall with sym'); fflush(stdout);
 %! syms x
 %! disp(pycall ("typename", x));
-%! disp('going to call pycall with list of syms');
+%! disp('going to call pycall with list of syms'); fflush(stdout);
 %! syms x y
 %! disp(pycall ("typename", [x y]));
-%! disp('going to call pycall with ints');
+%! disp('going to call pycall with ints'); fflush(stdout);
 %! disp(pycall ("typename", 2));
+%! disp('going to call pycall with float'); fflush(stdout);
+%! disp(pycall ("typename", 5.5654));
 
 %!test
 %! syms x
