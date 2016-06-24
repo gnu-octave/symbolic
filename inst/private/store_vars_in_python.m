@@ -23,7 +23,7 @@ function store_vars_in_python (varname, L)
     x = L{i}
     if (isa(x, 'sym'));
       disp('debug: storing a sym'); fflush(stdout);
-	  pyexec(['print ' char(x)]);
+	  pyexec(['print str(' char(x) ')']);
       pyexec([varname '.append(' char(x) ')'])
       disp('debug: storedd a sym'); fflush(stdout);
     elseif (iscell (x))
@@ -50,6 +50,7 @@ function store_vars_in_python (varname, L)
       pycall ('pystoretemp', x)
 	  pyexec ('print type(_temp), "  ", _temp');
       pyexec ([varname '.append(_temp)'])
+      disp('debug: stored anything else'); fflush(stdout);
     end
   end
 end
