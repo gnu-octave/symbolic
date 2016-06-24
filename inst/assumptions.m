@@ -163,8 +163,8 @@ end
 %! assert(isempty(assumptions(x)))
 
 %!test
-%! x = sym('x', 'positive');
 %! disp('test two doing..');
+%! x = sym('x', 'positive');
 %! a = assumptions(x);
 %! assert(~isempty(strfind(a{1}, 'positive')))
 

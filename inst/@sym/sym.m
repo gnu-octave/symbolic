@@ -350,6 +350,7 @@ function s = sym(x, varargin)
         end
         cmd = ['z = sympy.Symbol("' x '"' ...
                sprintf(', %s=True', asm{:}) ')'];
+	    disp(cmd); fflush(stdout);
       else
         error('sym: invalid extra input, perhaps invalid assumptions?');
       end

@@ -46,6 +46,7 @@ function store_vars_in_python (varname, L)
     else
       disp('debug: storing anything else'); fflush(stdout);
       pycall ('pystoretemp', x)
+	  pyexec ('print type(_temp), "  ", _temp');
       pyexec ([varname '.append(_temp)'])
     end
   end
