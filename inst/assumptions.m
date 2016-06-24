@@ -163,9 +163,16 @@ end
 
 %!test
 %! pyexec ("def typename(x): return type(x).__name__");
-%! disp('going to call pycall now');
-%!assert (pycall ("typename", "Hello world"), "str")
-%!assert (pycall ("typename", char ([1, 2, 3])), "str")
+%! disp('\ngoing to call pycall now');
+%! assert (pycall ("typename", "Hello world"), "str")
+%! assert (pycall ("typename", char ([1, 2, 3])), "str")
+%! disp('going to call pycall with ints');
+%! disp(pycall ("typename", 2));
+%! disp('going to call pycall with float');
+%! disp(pycall ("typename", 5.5654);
+%! disp('going to call pycall with sym');
+%! syms x
+%! disp(pycall ("typename", x);
 
 %!test
 %! syms x
