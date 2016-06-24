@@ -159,6 +159,13 @@ function [A, B] = assumptions(F, outp)
 
 end
 
+%% some copied tests from pycall.cc from pytave, just to tests
+
+%!test
+%! pyexec ("def typename(x): return type(x).__name__");
+%! disp('going to call pycall now');
+%!assert (pycall ("typename", "Hello world"), "str")
+%!assert (pycall ("typename", char ([1, 2, 3])), "str")
 
 %!test
 %! syms x
