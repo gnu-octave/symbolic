@@ -170,10 +170,6 @@ function [soln,classify] = dsolve(ode,varargin)
     classify='';
   end
 
-  % FIXME: the initial/boundary conditions admit parameters
-  %        but only on their values (not at the evaluation point)
-  %        cbm: 2016-06 maybe sympy lifts this restriction...
-
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           '# convert our input to a dict'
           'ics2 = {}'
@@ -310,3 +306,9 @@ end
 %! Y = rhs(soln{2});
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
+
+%!test
+%! syms f(x) a b
+%! de = diff(f, x) == 4*f;
+%! s = dsolve(de, f(a) == b);
+%! assert (isequal (subs(rhs(s), x, a), b))
