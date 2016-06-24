@@ -159,20 +159,24 @@ end
 
 %!test
 %! syms x
+%! disp('test one doing..');
 %! assert(isempty(assumptions(x)))
 
 %!test
 %! x = sym('x', 'positive');
+%! disp('test two doing..');
 %! a = assumptions(x);
 %! assert(~isempty(strfind(a{1}, 'positive')))
 
 %!test
 %! syms x
+%! disp('test three doing..');
 %! assert(isempty(assumptions(x)))
 
 %!test
 %! clear  % for matlab test script
 %! syms x positive
+%! disp('test four doing..');
 %! assert(~isempty(assumptions()))
 %! clear
 %! assert(isempty(assumptions()))
@@ -181,10 +185,12 @@ end
 %! % make sure we have at least these possible assumptions
 %! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
 %! B = assumptions('possible');
+%! disp('test five doing..');
 %! assert (isempty (setdiff(A, B)))
 
 %!test
 %! A = assumptions('possible');
+%! disp('test six doing..');
 %! for i = 1:length(A)
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
@@ -198,6 +204,7 @@ end
 %! syms x positive
 %! syms y real
 %! syms z
+%! disp('test seven doing..');
 %! f = x*y*z;
 %! a = assumptions(f);
 %! assert(length(a) == 2)
@@ -209,6 +216,7 @@ end
 %! syms x positive
 %! syms y real
 %! syms z
+%! disp('test eight doing..');
 %! f = x*y*z;
 %! [v, d] = assumptions(f, 'dict');
 %! assert(length(v) == 2)
@@ -225,6 +233,7 @@ end
 %! clear  % for matlab test script
 %! syms x y positive
 %! f = 2*x;
+%! disp('test nine doing..');
 %! assert(length(assumptions(f))==1)
 %! assert(length(assumptions())==2)
 
@@ -232,6 +241,7 @@ end
 %! %% assumptions in cell/struct
 %! clear  % for matlab test script
 %! syms x y z w positive
+%! disp('test ten doing..');
 %! f = {2*x [1 2 y] {1, {z}}};
 %! assert(length(assumptions())==4)
 %! assert(length(assumptions(f))==3)
@@ -242,6 +252,7 @@ end
 %!test
 %! % multiple assumptions
 %! n = sym('n', 'negative', 'even');
+%! disp('test eleven doing..');
 %! assert (logical (n < 0))
 %! assert (~(logical (n > 0)))
 %! assert (~(logical (n == -1)))
@@ -249,4 +260,5 @@ end
 %!test
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
+%! disp('test twelve doing..');
 %! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
