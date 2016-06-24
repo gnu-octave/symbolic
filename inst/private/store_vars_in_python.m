@@ -23,7 +23,9 @@ function store_vars_in_python (varname, L)
     x = L{i}
     if (isa(x, 'sym'));
       disp('debug: storing a sym'); fflush(stdout);
+	  pyexec(['print ' char(x)]);
       pyexec([varname '.append(' char(x) ')'])
+      disp('debug: storedd a sym'); fflush(stdout);
     elseif (iscell (x))
       disp('debug: dealing with a cell'); fflush(stdout);
       tempname = [varname num2str(counter)]
