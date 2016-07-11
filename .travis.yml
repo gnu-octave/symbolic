@@ -24,6 +24,7 @@ install:
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
         hg clone https://bitbucket.org/genuinelucifer/pytave_main;
         cd pytave_main;
+        hg checkout crash_fix;
         pwd;
         autoreconf --install;
         ./configure;
