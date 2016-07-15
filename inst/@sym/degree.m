@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{n} =} degree (@var{p})
-%% @deftypefnx {Function File} {@var{n} =} degree (@var{p}, @var{x})
+%% @defmethod  @@sym degree (@var{p})
+%% @defmethodx @@sym degree (@var{p}, @var{x})
 %% Return the degree of a polynomial expression.
 %%
 %% Examples:
@@ -27,7 +27,7 @@
 %% @group
 %% syms x
 %% degree(x^2 + 6)
-%%    @result{} (sym) 2
+%%   @result{} (sym) 2
 %% @end group
 %% @end example
 %%
@@ -36,20 +36,25 @@
 %% @group
 %% syms x y
 %% degree(x^2 + y*x + 1)
-%%    @result{} (sym) 2
+%%   @result{} (sym) 2
 %% degree(x^2 + y*x + 1, x)
-%%    @result{} (sym) 2
+%%   @result{} (sym) 2
 %% degree(x^2 + y*x + 1, y)
-%%    @result{} (sym) 1
+%%   @result{} (sym) 1
 %% @end group
 %% @end example
 %%
 %% FIXME: @code{degree(x^n, x)} does not work here (nor in SMT).
 %%
-%% @seealso{sym2poly, poly2sym}
-%% @end deftypefn
+%% @seealso{@@sym/sym2poly, poly2sym}
+%% @end defmethod
+
 
 function n = degree(p, x)
+
+  if (nargin > 2)
+    print_usage ();
+  end
 
   if (nargin == 1)
     x = symvar(p, 1);
@@ -64,6 +69,8 @@ function n = degree(p, x)
 
 end
 
+
+%!error <Invalid> degree (sym(1), 2, 3)
 
 %!test
 %! syms x

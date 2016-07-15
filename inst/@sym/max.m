@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,30 +18,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} max (@var{a})
-%% @deftypefnx {Function File} {@var{r} =} max (@var{a}, @var{b})
-%% @deftypefnx {Function File} {[@var{r}, @var{I}] =} max (@var{a})
-%% @deftypefnx {Function File} {@var{r} =} max (@var{a}, [], @var{dim})
+%% @deftypemethod  @@sym {} max (@var{a})
+%% @deftypemethodx @@sym {} max (@var{a}, @var{b})
+%% @deftypemethodx @@sym {} max (@var{a}, [], @var{dim})
+%% @deftypemethodx @@sym {[@var{r}, @var{I}] =} max (@dots{})
 %% Return maximum value of a symbolic vector or vectors.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> max(sym(1), sym(2))
-%%    @result{} (sym) 2
-%% >> max([1 2*sym(pi) 6])
-%%    @result{} (sym) 2⋅π
-%% >> [M, I] = max([1 2*sym(pi) 6])
-%%    @result{} M = (sym) 2⋅π
-%%    @result{} I = 2
+%% max(sym(1), sym(2))
+%%   @result{} (sym) 2
+%% max([1 2*sym(pi) 6])
+%%   @result{} (sym) 2⋅π
+%% [M, I] = max([1 2*sym(pi) 6])
+%%   @result{} M = (sym) 2⋅π
+%%   @result{} I = 2
 %% @end group
 %% @end example
 %%
-%% @seealso{min}
-%% @end deftypefn
+%% @seealso{@@sym/min}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [z, I] = max(A, B, dim)
 

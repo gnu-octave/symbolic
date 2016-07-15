@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} round (@var{x})
+%% @defmethod @@sym round (@var{x})
 %% Symbolic round function.
 %%
 %% Example:
@@ -29,12 +29,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ceil, floor, fix, frac}
-%% @end deftypefn
+%% @seealso{@@sym/ceil, @@sym/floor, @@sym/fix, @@sym/frac}
+%% @end defmethod
+
 
 function y = round(x)
   y = uniop_helper (x, 'round');
 end
+
 
 %!test
 %! d = 3/2;

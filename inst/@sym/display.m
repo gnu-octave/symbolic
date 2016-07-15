@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File}  {} display (@var{x})
+%% @defmethod @@sym display (@var{x})
 %% Display, on command line, the contents of a symbolic expression.
 %%
 %% Examples:
@@ -37,12 +37,15 @@
 %%
 %% Other examples:
 %% @example
+%% @group
 %% A = sym([1 2; 3 4])
 %%   @result{} A = (sym 2×2 matrix)
-%%        ⎡1  2⎤
-%%        ⎢    ⎥
-%%        ⎣3  4⎦
+%%       ⎡1  2⎤
+%%       ⎢    ⎥
+%%       ⎣3  4⎦
+%% @end group
 %%
+%% @group
 %% syms n
 %% A = sym('A', [n n])
 %%   @result{} A = (sym) A  (n×n matrix expression)
@@ -56,11 +59,12 @@
 %%   @result{} A = (sym) A  (empty 0×n matrix expression)
 %% B = 3*A
 %%   @result{} B = (sym) 3⋅A  (empty 0×n matrix expression)
+%% @end group
 %% @end example
-%% @end deftypefn
+%%
+%% @seealso{@@sym/disp}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function display(x)
 

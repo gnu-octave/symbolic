@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} sort (@var{f})
+%% @defmethod @@sym sort (@var{f})
 %% Order the elements in increasing order.
 %%
 %% Example:
@@ -35,18 +35,24 @@
 %% s = sort([sym(2), sym(1); sym(3), sym(0)])
 %%   @result{} s = (sym 2×2 matrix)
 %%
-%%               ⎡2  0⎤
-%%               ⎢    ⎥
-%%               ⎣3  1⎦
+%%       ⎡2  0⎤
+%%       ⎢    ⎥
+%%       ⎣3  1⎦
 %%
 %% @end group
 %% @end example
-%% @end deftypefn
+%%
+%% @seealso{@@sym/unique}
+%% @end defmethod
 
 %% Author: Utkarsh Gautam
 %% Keywords: symbolic, sort
 
 function s = sort(f)
+  if (nargin ~= 1)
+    print_usage ();
+  end
+
   if (rows(f) <=  1 && columns(f) <=  1)
     s = f;
   else
@@ -67,6 +73,9 @@ function s = sort(f)
     end
   end
 end
+
+
+%!error <Invalid> sort (sym(1), 2)
 
 %!test
 %! f = [sym(1), sym(0)];
