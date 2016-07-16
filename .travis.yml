@@ -6,11 +6,7 @@ language: generic
 matrix:
   include:
     - python: "2.7"
-      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - python: "2.7"
-      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - python: "3.5"
-      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=no COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
@@ -28,6 +24,7 @@ install:
         sudo apt-get install -qq -y libboost-python-dev python-numpy;
         hg clone https://bitbucket.org/genuinelucifer/pytave_main;
         cd pytave_main;
+        hg checkout travis;
         pwd;
         autoreconf --install;
         ./configure;

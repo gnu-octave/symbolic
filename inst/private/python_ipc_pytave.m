@@ -116,6 +116,9 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'global _temp'
                     'def pystoretemp(x):'
                     '    global _temp'
+                    '    print str(x)'
+                    '    print type(x)'
+                    '    print x'
                     '    _temp = x'
                   }, newl))
 

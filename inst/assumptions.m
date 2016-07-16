@@ -127,9 +127,10 @@ function [A, B] = assumptions(F, outp)
   if (isempty(F))
     return
   end
-  s = findsymbols(F);
+  disp('calling  FindSymbols'); fflush(stdout);
+  s = findsymbols(F)
   for i=1:length(s)
-    x = s{i};
+    x = s{i}
     if strcmp(outp, 'dict')
       [astr, adict] = python_cmd(cmd, x, true);
       if ~isempty(astr)
@@ -138,7 +139,9 @@ function [A, B] = assumptions(F, outp)
         B{c} = adict;
       end
     else
+	  disp('running python_cmd with cmd'); fflush(stdout);
       astr = python_cmd(cmd, x, false);
+	  disp('after python_cmd'); fflush(stdout);
       if ~isempty(astr)
         c = c + 1;
         str = [x.flat ': ' astr];
@@ -156,23 +159,44 @@ function [A, B] = assumptions(F, outp)
 
 end
 
+%% some copied tests from pycall.cc from pytave, just to tests
+
+%!test
+%! pyexec ("def typename(x): return type(x).__name__");
+%! disp('\ngoing to call pycall now');
+%! assert (pycall ("typename", "Hello world"), "str")
+%! assert (pycall ("typename", char ([1, 2, 3])), "str")
+%! disp('going to call pycall with sym'); fflush(stdout);
+%! syms x
+%! disp(pycall ("typename", x));
+%! disp('going to call pycall with list of syms'); fflush(stdout);
+%! syms x y
+%! disp(pycall ("typename", [x y]));
+%! disp('going to call pycall with ints'); fflush(stdout);
+%! disp(pycall ("typename", 2));
+%! disp('going to call pycall with float'); fflush(stdout);
+%! disp(pycall ("typename", 5.5654));
 
 %!test
 %! syms x
+%! disp('test one doing..');
 %! assert(isempty(assumptions(x)))
 
 %!test
+%! disp('test two doing..');
 %! x = sym('x', 'positive');
 %! a = assumptions(x);
 %! assert(~isempty(strfind(a{1}, 'positive')))
 
 %!test
 %! syms x
+%! disp('test three doing..');
 %! assert(isempty(assumptions(x)))
 
 %!test
 %! clear  % for matlab test script
 %! syms x positive
+%! disp('test four doing..');
 %! assert(~isempty(assumptions()))
 %! clear
 %! assert(isempty(assumptions()))
@@ -181,10 +205,12 @@ end
 %! % make sure we have at least these possible assumptions
 %! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
 %! B = assumptions('possible');
+%! disp('test five doing..');
 %! assert (isempty (setdiff(A, B)))
 
 %!test
 %! A = assumptions('possible');
+%! disp('test six doing..');
 %! for i = 1:length(A)
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
@@ -198,6 +224,7 @@ end
 %! syms x positive
 %! syms y real
 %! syms z
+%! disp('test seven doing..');
 %! f = x*y*z;
 %! a = assumptions(f);
 %! assert(length(a) == 2)
@@ -209,6 +236,7 @@ end
 %! syms x positive
 %! syms y real
 %! syms z
+%! disp('test eight doing..');
 %! f = x*y*z;
 %! [v, d] = assumptions(f, 'dict');
 %! assert(length(v) == 2)
@@ -225,6 +253,7 @@ end
 %! clear  % for matlab test script
 %! syms x y positive
 %! f = 2*x;
+%! disp('test nine doing..');
 %! assert(length(assumptions(f))==1)
 %! assert(length(assumptions())==2)
 
@@ -232,6 +261,7 @@ end
 %! %% assumptions in cell/struct
 %! clear  % for matlab test script
 %! syms x y z w positive
+%! disp('test ten doing..');
 %! f = {2*x [1 2 y] {1, {z}}};
 %! assert(length(assumptions())==4)
 %! assert(length(assumptions(f))==3)
@@ -242,6 +272,7 @@ end
 %!test
 %! % multiple assumptions
 %! n = sym('n', 'negative', 'even');
+%! disp('test eleven doing..');
 %! assert (logical (n < 0))
 %! assert (~(logical (n > 0)))
 %! assert (~(logical (n == -1)))
@@ -249,4 +280,5 @@ end
 %!test
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
+%! disp('test twelve doing..');
 %! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
