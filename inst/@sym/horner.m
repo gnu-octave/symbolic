@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{q} =} horner (@var{p})
-%% @deftypefnx {Function File} {@var{q} =} horner (@var{p}, @var{x})
+%% @defmethod  @@sym horner (@var{p})
+%% @defmethodx @@sym horner (@var{p}, @var{x})
 %% Convert a symbolic polynomial to Horner form.
 %%
 %% The Horner form minimizes the number of arthimetic operators to
@@ -28,30 +28,35 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> p = poly2sym ([2 4 6 8], x)
-%%  @result{} p = (sym)
+%% syms x
+%% p = poly2sym ([2 4 6 8], x)
+%%   @result{} p = (sym)
 %%          3      2
 %%       2⋅x  + 4⋅x  + 6⋅x + 8
-%% >> horner (p)
-%%  @result{} ans = (sym) x⋅(x⋅(2⋅x + 4) + 6) + 8
+%% horner (p)
+%%   @result{} ans = (sym) x⋅(x⋅(2⋅x + 4) + 6) + 8
 %% @end group
 %% @end example
 %%
 %% You can specify the variable as a second input:
 %% @example
 %% @group
-%% >> syms x a
-%% >> p = expand((a+2)*(2*a+x)*(3*a+7));
-%% >> horner(p, a)
-%%  @result{} ans = (sym) a⋅(a⋅(6⋅a + 3⋅x + 26) + 13⋅x + 28) + 14⋅x
+%% syms x a
+%% p = expand((a+2)*(2*a+x)*(3*a+7));
+%% horner(p, a)
+%%   @result{} ans = (sym) a⋅(a⋅(6⋅a + 3⋅x + 26) + 13⋅x + 28) + 14⋅x
 %% @end group
 %% @end example
 %%
 %% @seealso{poly2sym}
-%% @end deftypefn
+%% @end defmethod
+
 
 function y = horner(p, x)
+
+  if (nargin > 2)
+    print_usage ();
+  end
 
   if (nargin == 1)
     x = symvar(p, 1);
@@ -65,6 +70,8 @@ function y = horner(p, x)
 
 end
 
+
+%!error <Invalid> horner (sym(1), 2, 3)
 
 %!assert (isAlways (horner(sym(1)) == 1))
 

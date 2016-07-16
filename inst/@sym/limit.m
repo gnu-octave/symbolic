@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a}, @var{dir})
-%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{x}, @var{a})
-%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr}, @var{a})
-%% @deftypefnx {Function File} {@var{y} =} limit (@var{expr})
+%% @defmethod  @@sym limit (@var{expr}, @var{x}, @var{a}, @var{dir})
+%% @defmethodx @@sym limit (@var{expr}, @var{x}, @var{a})
+%% @defmethodx @@sym limit (@var{expr}, @var{a})
+%% @defmethodx @@sym limit (@var{expr})
 %% Evaluate symbolic limits.
 %%
 %% The limit of @var{expr} as @var{x} tends to @var{a} from
@@ -30,15 +30,15 @@
 %% Examples:
 %% @example
 %% @group
-%% >> syms x
-%% >> L = limit(sin(x)/x, x, 0)
-%%    @result{} L = (sym) 1
-%% >> L = limit(1/x, x, sym(inf))
-%%    @result{} L = (sym) 0
-%% >> L = limit(1/x, x, 0, 'left')
-%%    @result{} L = (sym) -∞
-%% >> L = limit(1/x, x, 0, 'right')
-%%    @result{} L = (sym) ∞
+%% syms x
+%% L = limit(sin(x)/x, x, 0)
+%%   @result{} L = (sym) 1
+%% L = limit(1/x, x, sym(inf))
+%%   @result{} L = (sym) 0
+%% L = limit(1/x, x, 0, 'left')
+%%   @result{} L = (sym) -∞
+%% L = limit(1/x, x, 0, 'right')
+%%   @result{} L = (sym) ∞
 %% @end group
 %% @end example
 %%
@@ -52,11 +52,9 @@
 %% sure how to get this nicer behaviour from SymPy.
 %% FIXME: this is https://github.com/cbm755/octsympy/issues/74
 %%
-%% @seealso{diff}
-%% @end deftypefn
+%% @seealso{@@sym/diff}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function L = limit(f, x, a, dir)
 
@@ -96,6 +94,8 @@ function L = limit(f, x, a, dir)
 
 end
 
+
+%!error <Invalid> limit (sym(1), 2, 3, 4, 5)
 
 %!shared x, oo
 %! syms x

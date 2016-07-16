@@ -19,9 +19,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{G} =} laplace (@var{f}, @var{t}, @var{s})
-%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f})
-%% @deftypefnx {Function File} {@var{G} =} laplace (@var{f}, @var{s})
+%% @defmethod  @@sym laplace (@var{f}, @var{t}, @var{s})
+%% @defmethodx @@sym laplace (@var{f})
+%% @defmethodx @@sym laplace (@var{f}, @var{s})
 %% Laplace transform.
 %%
 %% The Laplace transform of a function @var{f} of @var{t}
@@ -79,8 +79,8 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ilaplace}
-%% @end deftypefn
+%% @seealso{@@sym/ilaplace}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms
