@@ -31,13 +31,7 @@ function store_vars_in_python (varname, L)
       pyexec([varname '.append(' tempname ')'])
     else
       pycall ('pystoretemp', x)
-      if (isscalar (x) && isinteger (x))
-        % FIXME: workaround as PyTave apparently stores everything as numpy types
-        % and this inhibits integer variables from being used as index to a list
-        pyexec ([varname '.append(int(_temp))'])
-      else
-        pyexec ([varname '.append(_temp)'])
-      end
+      pyexec ([varname '.append(_temp)'])
     end
   end
 end
