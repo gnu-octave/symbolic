@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of Octave-Symbolic-SymPy
 %%
@@ -19,10 +19,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{c} =} coeffs (@var{p}, @var{x})
-%% @deftypefnx {Function File} {@var{c} =} coeffs (@var{p})
-%% @deftypefnx {Function File} {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
-%% @deftypefnx {Function File} {[@var{c}, @var{t}] =} coeffs (@var{p})
+%% @deftypemethod  @@sym {@var{c} =} coeffs (@var{p}, @var{x})
+%% @deftypemethodx @@sym {@var{c} =} coeffs (@var{p})
+%% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
+%% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p})
 %% Return non-zero coefficients of symbolic polynomial.
 %%
 %% @var{c} contains the coefficients and @var{t} the corresponding
@@ -31,10 +31,10 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> [c, t] = coeffs (x^6 + 3*x - 4)
-%%    @result{} c = (sym) [1  3  -4]  (1×3 matrix)
-%%      t = (sym 1×3 matrix)
+%% syms x
+%% [c, t] = coeffs (x^6 + 3*x - 4)
+%%   @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%%   @result{} t = (sym 1×3 matrix)
 %%        ⎡ 6      ⎤
 %%        ⎣x   x  1⎦
 %% @end group
@@ -43,26 +43,26 @@
 %% The polynomial can be multivariate:
 %% @example
 %% @group
-%% >> syms x y
-%% >> [c, t] = coeffs (x^2 + y*x)
-%%    @result{} c = (sym) [1  1]  (1×2 matrix)
-%%      t = (sym 1×2 matrix)
-%%        ⎡ 2     ⎤
-%%        ⎣x   x⋅y⎦
-%%
+%% syms x y
+%% [c, t] = coeffs (x^2 + y*x)
+%%   @result{} c = (sym) [1  1]  (1×2 matrix)
+%%   @result{} t = (sym 1×2 matrix)
+%%       ⎡ 2     ⎤
+%%       ⎣x   x⋅y⎦
 %% @end group
-%% @group
-%% >> [c, t] = coeffs (x^2 + y*x, [x y])   % same
-%%    @result{} c = (sym) [1  1]  (1×2 matrix)
-%%      t = (sym 1×2 matrix)
-%%        ⎡ 2     ⎤
-%%        ⎣x   x⋅y⎦
 %%
-%% >> [c, t] = coeffs (x^2 + y*x, @{x y@})   % same
-%%    @result{} c = (sym) [1  1]  (1×2 matrix)
-%%      t = (sym 1×2 matrix)
-%%        ⎡ 2     ⎤
-%%        ⎣x   x⋅y⎦
+%% @group
+%% [c, t] = coeffs (x^2 + y*x, [x y])   % same
+%%   @result{} c = (sym) [1  1]  (1×2 matrix)
+%%   @result{} t = (sym 1×2 matrix)
+%%       ⎡ 2     ⎤
+%%       ⎣x   x⋅y⎦
+%%
+%% [c, t] = coeffs (x^2 + y*x, @{x y@})   % same
+%%   @result{} c = (sym) [1  1]  (1×2 matrix)
+%%   @result{} t = (sym 1×2 matrix)
+%%       ⎡ 2     ⎤
+%%       ⎣x   x⋅y⎦
 %% @end group
 %% @end example
 %%
@@ -70,19 +70,19 @@
 %% variables:
 %% @example
 %% @group
-%% >> [c, t] = coeffs (x^2 + y*x, x)
-%%    @result{} c = (sym) [1  y]  (1×2 matrix)
-%%      t = (sym 1×2 matrix)
-%%        ⎡ 2   ⎤
-%%        ⎣x   x⎦
+%% [c, t] = coeffs (x^2 + y*x, x)
+%%   @result{} c = (sym) [1  y]  (1×2 matrix)
+%%   @result{} t = (sym 1×2 matrix)
+%%       ⎡ 2   ⎤
+%%       ⎣x   x⎦
 %% @end group
 %% @end example
 %%
 %% Omitting the second output gives only the coefficients:
 %% @example
 %% @group
-%% >> c = coeffs (x^6 + 3*x - 4)
-%%    @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%% c = coeffs (x^6 + 3*x - 4)
+%%   @result{} c = (sym) [1  3  -4]  (1×3 matrix)
 %% @end group
 %% @end example
 %% WARNING: Matlab's Symbolic Math Toolbox returns c = [-4 3 1]
@@ -90,10 +90,14 @@
 %% inconsistent with the rest of Matlab's polynomial routines.  We
 %% do not copy this bug.
 %%
-%% @seealso{sym2poly}
-%% @end deftypefn
+%% @seealso{@@sym/sym2poly}
+%% @end deftypemethod
 
 function [c, t] = coeffs(p, x)
+
+  if (nargin > 2)
+    print_usage ();
+  end
 
   if ~(isscalar(p))
     error('coeffs: works for scalar input only');
@@ -141,6 +145,8 @@ function [c, t] = coeffs(p, x)
 
 end
 
+
+%!error <Invalid> coeffs (sym(1), 2, 3)
 
 %!test
 %! % simple

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,30 +18,30 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} prod (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} prod (@var{x}, @var{n})
+%% @defmethod  @@sym prod (@var{x})
+%% @defmethodx @@sym prod (@var{x}, @var{n})
 %% Product of symbolic expressions.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms x y z
-%% >> prod([x y z])
-%%  @result{} ans = (sym) x⋅y⋅z
+%% syms x y z
+%% prod([x y z])
+%%   @result{} (sym) x⋅y⋅z
 %% @end group
 %% @end example
 %%
 %% Can specify row or column sums using @var{n}:
 %% @example
 %% @group
-%% >> f = prod([x y; x z], 1)
-%%  @result{} f = (sym 1×2 matrix)
+%% f = prod([x y; x z], 1)
+%%   @result{} f = (sym 1×2 matrix)
 %%
 %%       ⎡ 2     ⎤
 %%       ⎣x   y⋅z⎦
 %%
-%% >> f = prod([x y; x z], 2)
-%%  @result{} f = (sym 2×1 matrix)
+%% f = prod([x y; x z], 2)
+%%   @result{} f = (sym 2×1 matrix)
 %%
 %%       ⎡x⋅y⎤
 %%       ⎢   ⎥
@@ -50,17 +50,13 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{sum, symprod}
-%% @end deftypefn
+%% @seealso{@@sym/sum, @@sym/symprod}
+%% @end defmethod
+
 
 function y = prod(x, n)
 
   x = sym(x);
-
-  if (isscalar(x))
-    y = x;
-    return
-  end
 
   if (nargin == 1)
     if (isrow(x))
@@ -70,16 +66,19 @@ function y = prod(x, n)
     else
       n = 1;
     end
-  else
+  elseif (nargin == 2)
     n = double(n);
+  else
+    print_usage ();
   end
 
-  %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
   cmd = { 'A = _ins[0]'
+          'if not isinstance(A, sympy.MatrixBase):'
+          '    A = Matrix([A])'
           'B = sp.Matrix.zeros(A.rows, 1)'
           'for i in range(0, A.rows):'
-          '   B[i] = prod(A.row(i))'
-          'return B,' };
+          '    B[i] = prod(A.row(i))'
+          'return B' };
   if (n == 1)
     y = python_cmd (cmd, transpose(x));
     y = transpose(y);
@@ -90,6 +89,9 @@ function y = prod(x, n)
   end
 end
 
+
+%!error <Invalid> prod (sym(1), 2, 3)
+%!error <Invalid> prod (sym(1), 42)
 
 %!shared x,y,z
 %! syms x y z

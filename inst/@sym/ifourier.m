@@ -20,9 +20,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} ifourier (@var{G}, @var{w}, @var{x})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{G})
-%% @deftypefnx {Function File} {@var{f} =} ifourier (@var{G}, @var{x})
+%% @defmethod  @@sym ifourier (@var{G}, @var{w}, @var{x})
+%% @defmethodx @@sym ifourier (@var{G})
+%% @defmethodx @@sym ifourier (@var{G}, @var{x})
 %% Symbolic inverse Fourier transform.
 %%
 %% The inverse Fourier transform of a function @var{G} of @var{w}
@@ -46,18 +46,18 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms k
-%% >> F = sqrt(sym(pi))*exp(-k^2/4);
-%% >> ifourier(F)
-%%    @result{} (sym)
-%%         2
-%%       -x
-%%      ℯ
+%% syms k
+%% F = sqrt(sym(pi))*exp(-k^2/4);
+%% ifourier(F)
+%%   @result{} (sym)
+%%          2
+%%        -x
+%%       ℯ
 %% @end group
 %% @group
-%% >> F = 2*sym(pi)*dirac(k);
-%% >> ifourier(F)
-%%    @result{} ans = (sym) 1
+%% F = 2*sym(pi)*dirac(k);
+%% ifourier(F)
+%%   @result{} ans = (sym) 1
 %% @end group
 %% @end example
 %%
@@ -68,8 +68,8 @@
 %% with (inverse) Fourier transforms of non-smooth functions, even very
 %% simple ones. Use at your own risk, or even better: help us fix SymPy.
 %%
-%% @seealso{fourier}
-%% @end deftypefn
+%% @seealso{@@sym/fourier}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms

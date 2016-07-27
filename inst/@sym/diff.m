@@ -59,11 +59,10 @@
 %%   @result{} (sym) 0
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/int}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, differentiation
 
 function z = diff(f, varargin)
 
@@ -79,7 +78,7 @@ function z = diff(f, varargin)
     end
     z = diff(f, x);
     return
-  elseif (nargin >= 2)
+  else
     q = varargin{1};
     % Note: pickle: to avoid double() overhead for common diff(f,x)
     isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));

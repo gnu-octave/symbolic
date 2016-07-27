@@ -17,14 +17,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{db}] =} python_ipc_driver (@dots{})
+%% @deftypefun {[@var{A}, @var{db}] =} python_ipc_driver (@dots{})
 %% Private function: run Python/SymPy command and return objects.
 %%
 %% @var{A} is the resulting object, which might be an error code.
 %%
 %% @var{db} usually contains diagnostics to help with debugging
 %% or error reporting.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, db] = python_ipc_driver(what, cmd, varargin)
 

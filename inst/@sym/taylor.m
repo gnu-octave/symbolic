@@ -19,12 +19,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} taylor (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}])
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
-%% @deftypefnx {Function File} {@var{g} =} taylor (@dots{}, @var{key}, @var{value})
+%% @defmethod  @@sym taylor (@var{f})
+%% @defmethodx @@sym taylor (@var{f}, @var{x})
+%% @defmethodx @@sym taylor (@var{f}, @var{x}, @var{a})
+%% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}])
+%% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
+%% @defmethodx @@sym taylor (@dots{}, @var{key}, @var{value})
 %% Symbolic Taylor series.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
@@ -66,8 +66,9 @@
 %%           6            2
 %% @end group
 %% @end example
-%% @seealso{diff}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/diff}
+%% @end defmethod
 
 %% Author: Utkarsh Gautam, Colin B. Macdonald
 %% Keywords: symbolic, differentiation, multivariable

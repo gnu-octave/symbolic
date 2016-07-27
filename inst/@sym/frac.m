@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} frac (@var{x})
+%% @defmethod @@sym frac (@var{x})
 %% Return the fractional part of a symbolic expression.
 %%
 %% Examples:
@@ -33,12 +33,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ceil, floor, fix, round}
-%% @end deftypefn
+%% @seealso{@@sym/ceil, @@sym/floor, @@sym/fix, @@sym/round}
+%% @end defmethod
+
 
 function y = frac(x)
   y = uniop_helper (x, 'frac');
 end
+
 
 %!test
 %! f1 = frac(sym(11)/10);

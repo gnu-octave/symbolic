@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,34 +18,32 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{s} =} char (@var{x})
+%% @defmethod @@sym char (@var{x})
 %% Return underlying string representation of a symbolic expression.
 %%
 %% Although not intended for general use, the underlying SymPy string
 %% representation (“srepr”) can be recovered with this command:
 %% @example
 %% @group
-%% >> syms x positive
-%% >> srepr = char (x)
-%%    @result{} srepr = Symbol('x', positive=True)
+%% syms x positive
+%% srepr = char (x)
+%%   @result{} srepr = Symbol('x', positive=True)
 %% @end group
 %% @end example
 %%
 %% It can then be passed directly to sym:
 %% @example
 %% @group
-%% >> x2 = sym (srepr)
-%%    @result{} x2 = (sym) x
-%% >> x2 == x
-%%    @result{} (sym) True
+%% x2 = sym (srepr)
+%%   @result{} x2 = (sym) x
+%% x2 == x
+%%   @result{} (sym) True
 %% @end group
 %% @end example
 %%
-%% @seealso{disp, pretty, sym}
-%% @end deftypefn
+%% @seealso{@@sym/disp, @@sym/pretty, sym}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function s = char(x)
 

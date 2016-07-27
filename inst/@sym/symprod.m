@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,12 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} symprod (@var{f}, @var{n}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n}, [@var{a} @var{b}])
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, [@var{a} @var{b}])
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f}, @var{n})
-%% @deftypefnx {Function File} {@var{y} =} symprod (@var{f})
+%% @defmethod  @@sym symprod (@var{f}, @var{n}, @var{a}, @var{b})
+%% @defmethodx @@sym symprod (@var{f}, @var{n}, [@var{a} @var{b}])
+%% @defmethodx @@sym symprod (@var{f}, @var{a}, @var{b})
+%% @defmethodx @@sym symprod (@var{f}, [@var{a} @var{b}])
+%% @defmethodx @@sym symprod (@var{f}, @var{n})
+%% @defmethodx @@sym symprod (@var{f})
 %% Symbolic product.
 %%
 %% The product of the expression @var{f} as variable @var{n} changes
@@ -37,9 +37,9 @@
 %% @group
 %% syms n m x
 %% symprod(sin(n*x), n, [1 3])
-%%    @result{} (sym) sin(x)⋅sin(2⋅x)⋅sin(3⋅x)
+%%   @result{} (sym) sin(x)⋅sin(2⋅x)⋅sin(3⋅x)
 %% symprod(n, n, 1, m)
-%%    @result{} (sym) m!
+%%   @result{} (sym) m!
 %% @end group
 %% @end example
 %%
@@ -48,7 +48,7 @@
 %% @group
 %% syms x m
 %% symprod(sin(x), x, [1 m])
-%%    @result{} (sym)
+%%   @result{} (sym)
 %%         m
 %%       ┬───┬
 %%       │   │ sin(x)
@@ -57,13 +57,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{symsum, prod}
-%% @end deftypefn
+%% @seealso{@@sym/symsum, @@sym/prod}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function S = symprod(f, n, a, b)
+
+  if (nargin > 4)
+    print_usage ();
+  end
 
   idx1.type = '()';
   idx1.subs = {1};
@@ -122,6 +124,8 @@ function S = symprod(f, n, a, b)
 
 end
 
+
+%!error <Invalid> symprod (sym(1), 2, 3, 4, 5)
 
 %!test
 %! % simple

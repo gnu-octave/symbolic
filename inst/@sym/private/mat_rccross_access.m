@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_rccross_access (@var{A}, @var{r}, @var{c})
+%% @defun mat_rccross_access (@var{A}, @var{r}, @var{c})
 %% Private helper routine for symbolic array access.
 %%
 %% Access entries of @var{A} that are the cross product of vectors
@@ -28,7 +28,7 @@
 %% reason by this code doesn't easily replace
 %% @code{mat_rclist_access}.
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

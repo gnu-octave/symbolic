@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{p} =} potential (@var{v})
-%% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x})
-%% @deftypefnx {Function File} {@var{p} =} potential (@var{v}, @var{x}, @var{y})
+%% @defmethod  @@sym potential (@var{v})
+%% @defmethodx @@sym potential (@var{v}, @var{x})
+%% @defmethodx @@sym potential (@var{v}, @var{x}, @var{y})
 %% Symbolic potential of a vector field.
 %%
 %% Finds the potential of the vector field @var{v} with respect to
@@ -57,13 +57,16 @@
 %%  @result{} (sym) nan
 %% @end group
 %% @end example
-%% @seealso{gradient, jacobian}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/gradient, @@sym/jacobian}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function p = potential(v, x, y)
+
+  if (nargin > 3)
+    print_usage ();
+  end
 
   assert (isvector(v), 'potential: defined for vector fields')
 
@@ -101,6 +104,8 @@ function p = potential(v, x, y)
 
 end
 
+
+%!error <Invalid> potential (sym(1), 2, 3, 4)
 
 %!shared x,y,z
 %! syms x y z
