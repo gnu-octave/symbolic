@@ -1,7 +1,13 @@
 octsympy 2.5.0-dev
 ==================
 
-  * Add More @double numerical functions.  For now these are simply
+  * New symbolic commands:
+
+          acosd         cosd
+          asind         sind
+          atand         tand
+
+  * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
     point implementations.
 
