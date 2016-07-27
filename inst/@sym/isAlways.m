@@ -268,7 +268,7 @@ end
 %! assert (~isAlways(e2, 'unknown', 'error'))
 
 %!error <invalid argument .* keyword> isAlways(x, 'unknown', 'kevin')
-%!error <assert .* failed> isAlways(x, 'unknown')
+%!error <Invalid call> isAlways(x, 'unknown')
 %!error <assert .* failed> isAlways(x, 'kevin', 'true')
 
 %!error <isAlways: cannot reliably convert sym to bool>
