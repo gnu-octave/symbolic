@@ -17,12 +17,12 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_access (@var{A}, @var{subs})
+%% @defun mat_access (@var{A}, @var{subs})
 %% Private helper routine for symbolic array access.
 %%
 %% Big piece of spaghetti code :(
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {[@var{s}, @var{flag}] =} magic_double_str (@var{x})
+%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x})
 %% Recognize special double values.
 %%
 %% Private helper function.
@@ -26,7 +26,7 @@
 %% reasons: make sure you modify both of them!
 %%
 %% @seealso{sym, vpa}
-%% @end deftypefn
+%% @end deftypefun
 
 function [s, flag] = magic_double_str(x)
 

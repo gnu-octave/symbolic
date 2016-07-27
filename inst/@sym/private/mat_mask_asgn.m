@@ -17,10 +17,10 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_mask_asgn (@var{A}, @var{I}, @var{rhs})
+%% @defun mat_mask_asgn (@var{A}, @var{I}, @var{rhs})
 %% Private helper routine for symbolic array assignment via mask.
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_sysoneline (@dots{})
+%% @deftypefun {[@var{A}, @var{info}] =} python_ipc_sysoneline (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -29,7 +29,7 @@
 %% before the command starts.
 %%
 %% @code{@var{info}.raw}: the raw output, for debugging.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 

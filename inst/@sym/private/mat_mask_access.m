@@ -17,18 +17,18 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_mask_access (@var{A}, @var{I})
+%% @defun mat_mask_access (@var{A}, @var{I})
 %% Private helper routine for symbolic array access via mask.
 %%
 %% Notes on shape, from observing Matlab/Octave behaviour on doubles:
 %% @itemize
-%% @item If A is a vector, Z always has the same orientation as A.
-%% @item If A is a matrix and if I is a vector than Z has the same
+%% @item If A is a vector, result always has the same orientation as A.
+%% @item If A is a matrix and if I is a vector than result has the same
 %%       orientation as I.
 %% @item In all other cases (?) result is a column vector.
 %% @end itemize
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
