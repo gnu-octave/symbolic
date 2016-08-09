@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,17 +18,17 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} subs (@var{f}, @var{x}, @var{y})
-%% @deftypefnx {Function File} {@var{g} =} subs (@var{f}, @var{y})
+%% @defmethod  @@sym subs (@var{f}, @var{x}, @var{y})
+%% @defmethodx @@sym subs (@var{f}, @var{y})
 %% Replace symbols in an expression with other expressions.
 %%
 %% Example substituting a value for a variable:
 %% @example
 %% @group
-%% >> syms x y
-%% >> f = x*y;
-%% >> subs(f, x, 2)
-%%  @result{} ans = (sym) 2⋅y
+%% syms x y
+%% f = x*y;
+%% subs(f, x, 2)
+%%   @result{} ans = (sym) 2⋅y
 %% @end group
 %% @end example
 %% If @var{x} is omitted, @code{symvar} is used on @var{f}.
@@ -37,16 +37,16 @@
 %% replace:
 %% @example
 %% @group
-%% >> subs(f, @{x y@}, @{sin(x) 16@})
-%%  @result{} ans = (sym) 16⋅sin(x)
+%% subs(f, @{x y@}, @{sin(x) 16@})
+%%   @result{} ans = (sym) 16⋅sin(x)
 %%
-%% >> F = [x x*y; 2*x*y y];
-%% >> subs(F, @{x y@}, [2 sym(pi)])
-%%  @result{} ans = (sym 2×2 matrix)
+%% F = [x x*y; 2*x*y y];
+%% subs(F, @{x y@}, [2 sym(pi)])
+%%   @result{} ans = (sym 2×2 matrix)
 %%
-%%         ⎡ 2   2⋅π⎤
-%%         ⎢        ⎥
-%%         ⎣4⋅π   π ⎦
+%%       ⎡ 2   2⋅π⎤
+%%       ⎢        ⎥
+%%       ⎣4⋅π   π ⎦
 %%
 %% @end group
 %% @end example
@@ -56,13 +56,13 @@
 %% case of subbing a matrix in for a scalar in a scalar expression:
 %% @example
 %% @group
-%% >> f = sin(x);
-%% >> g = subs(f, x, [1 2; 3 4])
-%%  @result{} g = (sym 2×2 matrix)
+%% f = sin(x);
+%% g = subs(f, x, [1 2; 3 4])
+%%   @result{} g = (sym 2×2 matrix)
 %%
-%%         ⎡sin(1)  sin(2)⎤
-%%         ⎢              ⎥
-%%         ⎣sin(3)  sin(4)⎦
+%%       ⎡sin(1)  sin(2)⎤
+%%       ⎢              ⎥
+%%       ⎣sin(3)  sin(4)⎦
 %%
 %% @end group
 %% @end example
@@ -70,11 +70,8 @@
 %% start, as of July 2014, is the Sympy Issue #2962
 %% [https://github.com/sympy/sympy/issues/2962].
 %%
-%% @seealso{symfun}
-%% @end deftypefn
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, substitution
+%% @seealso{@@sym/symfun}
+%% @end defmethod
 
 
 function g = subs(f, in, out)
@@ -82,7 +79,11 @@ function g = subs(f, in, out)
   if (nargin == 1)
     % FIXME: SMT will take values of x from the workspace in this case.
     error('subs: we do not support single-input w/ substitution from workspace')
-  elseif (nargin == 2)
+  elseif (nargin > 3)
+    print_usage ();
+  end
+
+  if (nargin == 2)
     out = in;
     in = symvar(f, 1);
     if (isempty(in))
@@ -160,6 +161,8 @@ function g = subs(f, in, out)
 
 end
 
+
+%!error <Invalid> subs (sym(1), 2, 3, 4)
 
 %!shared x,y,t,f
 %! syms x y t

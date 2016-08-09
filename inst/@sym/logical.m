@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{r} =} logical (@var{eq})
+%% @defmethod @@sym logical (@var{eq})
 %% Test if expression is "structurally" true.
 %%
 %% This should probably be used with if/else flow control.
@@ -26,11 +26,11 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x y
-%% >> logical(x*(1+y) == x*(y+1))
-%%    @result{} 1
-%% >> logical(x == y)
-%%    @result{} 0
+%% syms x y
+%% logical(x*(1+y) == x*(y+1))
+%%   @result{} 1
+%% logical(x == y)
+%%   @result{} 0
 %% @end group
 %% @end example
 %%
@@ -38,16 +38,28 @@
 %% determine mathematical truth:
 %% @example
 %% @group
-%% >> isAlways(x*(1+y) == x+x*y)
-%%    @result{} 1
-%% >> logical(x*(1+y) == x+x*y)
-%%    @result{} 0
+%% isAlways(x*(1+y) == x+x*y)
+%%   @result{} 1
+%% logical(x*(1+y) == x+x*y)
+%%   @result{} 0
+%% @end group
+%% @end example
+%%
+%% Sometimes we end up with a symbolic logical values; @code{logical}
+%% can convert these to native logical values:
+%% @example
+%% @group
+%% sym(true)
+%%   @result{} ans = (sym) True
+%% logical(ans)
+%%   @result{} ans = 1
 %% @end group
 %% @end example
 %%
 %% @code{logical} treats objects according to:
 %% @itemize
-%% @item true/false in various forms: as is.
+%% @item @code{@@logical} true/false: as is.
+%% @item symbolic logical true/false: convert to true/false.
 %% @item equalities (==), unequalities (~=): check for structural
 %% equivalence (whether lhs and rhs match without simplifying.)
 %% @item numbers: true if nonzero, false if zero.
@@ -56,11 +68,9 @@
 %% @item other objects raise error.
 %% @end itemize
 %%
-%% @seealso{isAlways, isequal, eq (==)}
-%% @end deftypefn
+%% @seealso{@@sym/isAlways, @@sym/isequal, @@sym/eq}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = logical(p)
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,34 +18,38 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn {Function File} {@var{r} =} isAlways (@var{t})
+%% @defmethod @@logical isAlways (@var{t})
 %% Test if expression is mathematically true.
 %%
 %% For inputs of type logical (true/false) this is just the
-%% logical itself.  See sym/isAlways for why we need this function.
+%% logical itself.  The reason for having this function is
+%% explained elsewhere (@pxref{@@sym/isAlways}).
 %%
 %% Examples:
 %% @example
 %% @group
-%% >> isAlways(true)
-%%    @result{} ans = 1
-%% >> isAlways(false)
-%%    @result{} ans = 0
+%% isAlways(true)
+%%   @result{} ans = 1
+%% isAlways(false)
+%%   @result{} ans = 0
 %% @end group
 %% @end example
 %%
-%% @seealso{sym/isAlways}
-%% @end deftypefn
+%% @seealso{@@sym/isAlways}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = isAlways(p)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   r = p;
 
 end
 
 
+%!error <Invalid> isAlways (true, false)
 %!assert(isAlways(true))
 %!assert(~isAlways(false))

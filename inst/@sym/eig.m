@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{Lambda} =} eig (@var{A})
-%% @deftypefnx {Function File} {[@var{V}, @var{D}] =} eig (@var{A})
+%% @deftypemethod  @@sym {@var{Lambda} =} eig (@var{A})
+%% @deftypemethodx @@sym {[@var{V}, @var{D}] =} eig (@var{A})
 %% Symbolic eigenvalues/eigenvectors of a matrix.
 %%
 %% Example:
@@ -76,15 +76,17 @@
 %% @strong{Note}: the generalized eigenvalue problem is not yet supported.
 %%
 %% @seealso{@@sym/svd}
-%% @end deftypefn
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [V, D] = eig(A, B)
 
-  if (nargin >= 2)
+  if (nargin == 1)
+    % no-op
+  elseif (nargin == 2)
     error('eig: generalized eigenvalue problem not implemented')
+  else
+    print_usage ();
   end
 
   if (nargout <= 1)

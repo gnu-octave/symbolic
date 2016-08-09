@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} interval (@var{A}, @var{B})
-%% @deftypefnx {Function File} {@var{r} =} interval (@var{A}, @var{B}, @var{lopen})
-%% @deftypefnx {Function File} {@var{r} =} interval (@var{A}, @var{B}, @var{lopen}, @var{ropen})
+%% @defmethod  @@sym interval (@var{A}, @var{B})
+%% @defmethodx @@sym interval (@var{A}, @var{B}, @var{lopen})
+%% @defmethodx @@sym interval (@var{A}, @var{B}, @var{lopen}, @var{ropen})
 %% Return an interval.
 %%
 %% Examples:
@@ -45,11 +45,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{finiteset, union, intersect, setdiff, unique, ismember}
-%% @end deftypefn
+%% @seealso{finiteset, @@sym/union, @@sym/intersect, @@sym/setdiff, @@sym/unique, @@sym/ismember}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function I = interval(varargin)
 

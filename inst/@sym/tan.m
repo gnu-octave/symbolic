@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = tan(x)
+%% y = tan (x)
 %%   @result{} y = (sym) tan(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = tan(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = tan(x)
   y = uniop_helper (x, 'tan');
 end
 
+
+%!error <Invalid> tan (sym(1), 2)
+%!assert (isequaln (tan (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = tan(A);
 %! f2 = tan(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = tan (d);
+%! f = tan (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

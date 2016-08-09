@@ -112,7 +112,7 @@ function [A, B] = assumptions(F, outp)
       'if d == {}:'
       '    astr = ""'
       'elif all(d.values()):'  % all True so list them
-      '    astr = ", ".join([str(i) for i in d.keys()])'
+      '    astr = ", ".join(sorted([str(i) for i in d.keys()]))'
       'else:'  % more complicated case, just the raw dict
       '    astr = str(d)'
       'if outputdict:'

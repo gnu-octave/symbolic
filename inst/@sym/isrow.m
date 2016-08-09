@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} isrow (@var{x})
+%% @defmethod @@sym isrow (@var{x})
 %% Return true if symbolic expression is a row vector.
 %%
 %% Example:
@@ -34,10 +34,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{iscolumn, isvector, isscalar}
-%% @end deftypefn
+%% @seealso{@@sym/iscolumn, @@sym/isvector, @@sym/isscalar}
+%% @end defmethod
+
 
 function r = isrow(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   % from Rik Wehbring's Octave function
   sz = size (x);

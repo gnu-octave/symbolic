@@ -36,6 +36,7 @@
 function anyfail = octsympy_tests ()
   fcndirs = { '.'
               '@logical'
+              '@double'
               '@sym'
               '@symfun' };
   mycwd = pwd ();

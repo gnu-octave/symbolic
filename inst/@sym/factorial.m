@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = factorial(x)
+%% y = factorial (x)
 %%   @result{} y = (sym) x!
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = factorial(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = factorial(x)
   y = uniop_helper (x, 'factorial');
 end
 
+
+%!error <Invalid> factorial (sym(1), 2)
+%!xtest assert (isequaln (factorial (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = factorial(A);
 %! f2 = factorial(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = factorial (d);
+%! f = factorial (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

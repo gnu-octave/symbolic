@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,53 +18,56 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} fortran (@var{g})
-%% @deftypefnx {Function File} {@var{s} =} fortran (@var{g1}, @dots{}, @var{gn})
-%% @deftypefnx {Function File} {} fortran (@dots{}, 'file', @var{filename})
-%% @deftypefnx {Function File} {[@var{F}, @var{H}] =} fortran (@dots{}, 'file', '')
+%% @deftypemethod  @@sym {@var{s} =} fortran (@var{g})
+%% @deftypemethodx @@sym {@var{s} =} fortran (@var{g1}, @dots{}, @var{gn})
+%% @deftypemethodx @@sym {} fortran (@dots{}, 'file', @var{filename})
+%% @deftypemethodx @@sym {[@var{F}, @var{H}] =} fortran (@dots{}, 'file', '')
 %% Convert symbolic expression into C code.
 %%
-%% Example:
+%% Example returning a string of Fortran code:
 %% @example
 %% @group
-%% >> syms x
-%% >> g = taylor(log(1 + x), x, 0, 'order', 5);
-%% >> g = horner(g)
-%%    @result{} g = (sym)
-%%          ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
-%%        x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
-%%          ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
-%% >> fortran(g)
-%%    @result{} x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%% syms x
+%% g = taylor(log(1 + x), x, 0, 'order', 5);
+%% g = horner(g)
+%%   @result{} g = (sym)
+%%         ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
+%%       x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
+%%         ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
+%% fortran(g)
+%%   @result{} x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
 %% @end group
 %% @end example
 %%
 %% We can write to a file or obtain the contents directly:
 %% @example
 %% @group
-%% >> [f90, h] = fortran(g, 'file', '', 'show_header', false);
-%% >> f90.name
-%%    @result{} file.f90
-%% >> h.name
-%%    @result{} file.h
-%% >> f90.code
-%%    @result{}
-%%      REAL*8 function myfun(x)
-%%      implicit none
-%%      REAL*8, intent(in) :: x
+%% [f90, h] = fortran(g, 'file', '', 'show_header', false);
+%% f90.name
+%%   @result{} file.f90
+%% h.name
+%%   @result{} file.h
+%% @end group
 %%
-%%      myfun = x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%% @group
+%% disp(f90.code)
+%%   @print{}  REAL*8 function myfun(x)
+%%   @print{}  implicit none
+%%   @print{}  REAL*8, intent(in) :: x
+%%   @print{}
+%%   @print{}  myfun = x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%%   @print{}
+%%   @print{}  end function
+%% @end group
 %%
-%%      end function
-%%
-%% >> h.code
-%%    @result{}
-%%      interface
-%%      REAL*8 function myfun(x)
-%%      implicit none
-%%      REAL*8, intent(in) :: x
-%%      end function
-%%      end interface
+%% @group
+%% disp(h.code)
+%%   @print{}  interface
+%%   @print{}  REAL*8 function myfun(x)
+%%   @print{}  implicit none
+%%   @print{}  REAL*8, intent(in) :: x
+%%   @print{}  end function
+%%   @print{}  end interface
 %% @end group
 %% @end example
 %%
@@ -74,11 +77,9 @@
 %% anyway.  Sympy has a "cse" module that will do it.  See:
 %% http://stackoverflow.com/questions/22665990/optimize-code-generated-by-sympy
 %%
-%% @seealso{ccode, latex, function_handle}
-%% @end deftypefn
+%% @seealso{@@sym/ccode, @@sym/latex, @@sym/function_handle}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = fortran(varargin)
 

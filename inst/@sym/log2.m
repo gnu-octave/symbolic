@@ -52,3 +52,12 @@ end
 %!assert (isequal (log2 (sym (1024)), sym (10)))
 
 %!assert (isequal (log2 (sym ([2 16; 32 1])), sym ([1 4; 5 0])))
+
+%!test
+%! % round-trip
+%! syms x
+%! f = log2 (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = log2 (1.1);
+%! assert (A, B, -eps)

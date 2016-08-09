@@ -1,6 +1,22 @@
 octsympy 2.5.0-dev
 ==================
 
+  * New symbolic commands:
+
+          acosd         cosd
+          asind         sind
+          atand         tand
+
+  * Add more `@double` numerical functions.  For now these are simply
+    wrappers around SymPy, so they are slower than native floating
+    point implementations.
+
+          coshint       logint
+          cosint        polylog
+          dilog         sinhint
+          fresnelc      sinint
+          fresnels      zeta
+
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
 
@@ -11,6 +27,8 @@ octsympy 2.5.0-dev
 
   * Change (and document!) default matrix norm to the 2-norm (it was
     Frobenius).
+
+  * `heaviside` accepts a second argument for its value at zero.
 
   * `isfinite` behaves correctly for variables (and is documented).
 

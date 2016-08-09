@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = csch(x)
+%% y = csch (x)
 %%   @result{} y = (sym) csch(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = csch(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = csch(x)
   y = uniop_helper (x, 'csch');
 end
 
+
+%!error <Invalid> csch (sym(1), 2)
+%!assert (isequaln (csch (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,14 @@ end
 %! f1 = csch(A);
 %! f2 = csch(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = csch (d);
+%! f = csch (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

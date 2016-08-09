@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +18,16 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} double (@var{x})
+%% @defmethod @@sym double (@var{x})
 %% Convert symbolic to doubles.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> x = sym(1) / 3
-%%    @result{} x = (sym) 1/3
-%% >> double (x)
-%%    @result{} ans =  0.33333
+%% x = sym(1) / 3
+%%   @result{} x = (sym) 1/3
+%% double (x)
+%%   @result{} ans =  0.33333
 %% @end group
 %% @end example
 %%
@@ -35,26 +35,24 @@
 %% floating point:
 %% @example
 %% @group
-%% >> z = sym(4i) - 3;
-%% >> double (z)
-%%    @result{} ans = -3 + 4i
+%% z = sym(4i) - 3;
+%% double (z)
+%%   @result{} ans = -3 + 4i
 %% @end group
 %% @end example
 %%
 %% If conversion fails, you get an error:
 %% @example
 %% @group
-%% >> syms x
-%% >> double (x)
-%%    @print{} ??? ... can't convert expression ...
+%% syms x
+%% double (x)
+%%   @print{} ??? ... can't convert expression ...
 %% @end group
 %% @end example
 %%
-%% @seealso{sym}
-%% @end deftypefn
+%% @seealso{sym, vpa}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = double(x)
 

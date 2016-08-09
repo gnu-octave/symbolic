@@ -18,54 +18,52 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} int (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{x}, [@var{a}, @var{b}])
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{g} =} int (@var{f}, [@var{a}, @var{b}])
+%% @defmethod @@sym int (@var{f})
+%% @defmethodx @@sym int (@var{f}, @var{x})
+%% @defmethodx @@sym int (@var{f}, @var{x}, @var{a}, @var{b})
+%% @defmethodx @@sym int (@var{f}, @var{x}, [@var{a}, @var{b}])
+%% @defmethodx @@sym int (@var{f}, @var{a}, @var{b})
+%% @defmethodx @@sym int (@var{f}, [@var{a}, @var{b}])
 %% Symbolic integration.
 %%
 %% Definite integral:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = x^2;
-%% >> F = int(f, x, 1, 2)
-%%    @result{} F = (sym) 7/3
+%% syms x
+%% f = x^2;
+%% F = int(f, x, 1, 2)
+%%   @result{} F = (sym) 7/3
 %% @end group
 %% @end example
 %% or alternatively
 %% @example
 %% @group
-%% >> F = int(f, x, [1 2])
-%%    @result{} F = (sym) 7/3
+%% F = int(f, x, [1 2])
+%%   @result{} F = (sym) 7/3
 %% @end group
 %% @end example
 %%
 %% Indefinite integral:
 %% @example
 %% @group
-%% >> F = int(f, x)
-%%    @result{} F = (sym)
-%%         3
-%%        x
-%%        ──
+%% F = int(f, x)
+%%   @result{} F = (sym)
 %%        3
-%% >> F = int(f)
-%%    @result{} F = (sym)
-%%         3
-%%        x
-%%        ──
+%%       x
+%%       ──
+%%       3
+%% F = int(f)
+%%   @result{} F = (sym)
 %%        3
+%%       x
+%%       ──
+%%       3
 %% @end group
 %% @end example
 %%
-%% @seealso{diff}
-%% @end deftypefn
+%% @seealso{@@sym/diff}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, integration
 
 function F = int(f, x, a, b)
 
@@ -195,4 +193,3 @@ end
 %! f = f + 2;
 %! g = diff(f);
 %! assert (isequal (g, exp(exp(x))))
-b

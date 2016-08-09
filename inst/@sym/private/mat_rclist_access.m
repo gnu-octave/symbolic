@@ -17,13 +17,13 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_rclist_access (@var{A}, @var{r}, @var{c})
+%% @defun mat_rclist_access (@var{A}, @var{r}, @var{c})
 %% Private helper routine for sym array access via lists of row/col.
 %%
 %% @code{(r(i),c(i))} specify entries of the matrix @var{A}.
 %% Returns a column vector of these extracted from @var{A}.
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic

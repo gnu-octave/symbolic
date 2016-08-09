@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = asin(x)
+%% y = asin (x)
 %%   @result{} y = (sym) asin(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = asin(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = asin(x)
   y = uniop_helper (x, 'asin');
 end
 
+
+%!error <Invalid> asin (sym(1), 2)
+%!assert (isequaln (asin (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = asin(A);
 %! f2 = asin(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = asin (d);
+%! f = asin (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

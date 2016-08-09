@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{tf} =} isNone (@var{x})
+%% @defmethod @@sym isNone (@var{x})
 %% Return true if symbolic expression is Python object None.
 %%
 %% Python has a @code{None} object.
@@ -26,6 +26,8 @@
 %% Example:
 %% @example
 %% @group
+%% @c FIXME: python_cmd is implementation detail, maybe better
+%% @c to avoid it in our docs.
 %% a = python_cmd('return None')
 %%   @result{} a = (sym) None
 %% isNone(a)
@@ -33,8 +35,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{isnan, isinf}
-%% @end deftypefn
+%% @seealso{@@sym/isnan, @@sym/isinf}
+%% @end defmethod
+
 
 function tf = isNone(x)
 

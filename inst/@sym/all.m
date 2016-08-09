@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} all (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} all (@var{x}, @var{dim})
+%% @defmethod  @@sym all (@var{x})
+%% @defmethodx @@sym all (@var{x}, @var{dim})
 %% Return true if all entries of a symbolic vector are nonzero.
 %%
 %% Similar behaviour to the built-in @code{all} with regard to
@@ -30,18 +30,20 @@
 %% Example:
 %% @example
 %% @group
-%% >> all([sym(1) pi 3])
-%%    @result{} ans = 1
+%% all([sym(1) pi 3])
+%%   @result{} ans = 1
 %% @end group
 %% @end example
 %%
-%% @seealso{any}
-%% @end deftypefn
+%% @seealso{@@sym/any}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = all(x, varargin)
+
+  if (nargin > 2)
+    print_usage ();
+  end
 
   z = all (logical (x), varargin{:});
 

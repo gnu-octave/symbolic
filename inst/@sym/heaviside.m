@@ -26,7 +26,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = heaviside(x)
+%% y = heaviside (x)
 %%   @result{} y = (sym) Heaviside(x)
 %% @end group
 %% @end example
@@ -98,9 +98,46 @@ end
 %! end
 
 %!test
-%! if (python_cmd ('return Version(spver) <= Version("1.0")'))
-%! print ('skipping test, sympy too old')
-%! else
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! A = heaviside ([-1 0 1], sym(1)/2);
 %! assert (isequal (A, [0 sym(1)/2 1]))
+%! end
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! A = heaviside ([-1 0 1], sym(1)/2);
+%! assert (isequal (A, [0 sym(1)/2 1]))
+%! end
+
+%!assert (isequaln (heaviside (sym(nan)), sym(nan)))
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! assert (isequaln (heaviside (sym(nan), sym(nan)), sym(nan)))
+%! assert (isequaln (heaviside (0, sym(nan)), sym(nan)))
+%! assert (isequaln (heaviside (2, sym(nan)), sym(1)))
+%! assert (isequaln (heaviside (-2, sym(nan)), sym(0)))
+%! end
+
+%!test
+%! % round trip
+%! syms x
+%! A = heaviside (1);
+%! f = heaviside (x);
+%! h = function_handle (f);
+%! B = h (1);
+%! assert (A, B, -eps)
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x h0
+%! f = heaviside (x, h0);
+%! h = function_handle (f, 'vars', {x h0});
+%! A = heaviside (1, 1/2);
+%! B = h (1, 1/2);
+%! assert (A, B, -eps)
+%! A = heaviside (0, 1/2);
+%! B = h (0, 1/2);
+%! assert (A, B, -eps)
 %! end

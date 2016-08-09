@@ -17,11 +17,10 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{L}} valid_sym_assumptions ()
-%% @deftypefnx {Function File} {} syms
+%% @defun valid_sym_assumptions ()
 %% Return list of valid assumptions.
 %%
-%% @end deftypefn
+%% @end defun
 
 function L = valid_sym_assumptions()
 

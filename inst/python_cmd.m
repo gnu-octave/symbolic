@@ -218,28 +218,24 @@ end
 %! assert (strcmp(y, 'Octave'))
 
 %!test
-%! % string with newlines
-%! % FIXME: escaped in input should still be escaped in output
+%! % string with escaped newlines, comes back as escaped newlines
 %! x = 'a string\nbroke off\nmy guitar\n';
-%! x2 = sprintf(x);
 %! y = python_cmd ('return _ins', x);
-%! x3 = strrep(x2, sprintf('\n'), sprintf('\r\n'));  % windows
-%! assert (strcmp(y, x2) || strcmp(y, x3))
+%! assert (strcmp(y, x))
 
 %!test
-%! % bug: cmd string with newlines, works with cell
-%! % FIXME: no addition escaping for this one
+%! % string with actual newlines, comes back as actual newlines
+%! x = sprintf('a string\nbroke off\nmy guitar\n');
+%! y = python_cmd ('return _ins', x);
+%! y2 = strrep(y, sprintf('\n'), sprintf('\r\n'));  % windows
+%! assert (strcmp(x, y) || strcmp(x, y2))
+
+%!test
+%! % cmd string with newlines, works with cell
 %! y = python_cmd ('return "string\nbroke",');
 %! y2 = sprintf('string\nbroke');
 %! y3 = strrep(y2, sprintf('\n'), sprintf('\r\n'));  % windows
 %! assert (strcmp(y, y2) || strcmp(y, y3))
-
-%%!test
-%%! % FIXME: newlines: should be escaped for import?
-%%! x = 'a string\nbroke off\nmy guitar\n';
-%%! x2 = sprintf(x);
-%%! y = python_cmd ('return _ins', x2);
-%%! assert (strcmp(y, x2))
 
 %!test
 %! % string with XML escapes
@@ -252,16 +248,12 @@ end
 
 %!test
 %! % strings with double quotes
-%! % maybe its sensible to need to escape double-quotes to send to python?
-%! % FIXME: or we could escape ", \, \n automatically?
 %! x = 'a\"b\"c';
-%! expy = 'a"b"c';
 %! y = python_cmd ('return _ins', x);
-%! assert (strcmp(y, expy))
+%! assert (strcmp(y, x))
 %! x = '\"';
-%! expy = '"';
 %! y = python_cmd ('return _ins', x);
-%! assert (strcmp(y, expy))
+%! assert (strcmp(y, x))
 
 %!test
 %! % cmd has double quotes, these must be escaped by user
@@ -279,10 +271,14 @@ end
 %!test
 %! % strings with quotes
 %! x = '\"a''b\"c''\"d';
-%! y1 = '"a''b"c''"d';
-%! cmd = 's = _ins[0]; return s,';
-%! y2 = python_cmd (cmd, x);
-%! assert (strcmp(y1, y2))
+%! y = python_cmd ('return _ins[0]', x);
+%! assert (strcmp(y, x))
+
+%!test
+%! % strings with quotes
+%! expy = '"a''b"c''"d';
+%! y = python_cmd ('s = "\"a''b\"c''\"d"; return s');
+%! assert (strcmp(y, expy))
 
 %!test
 %! % strings with printf escapes
@@ -303,10 +299,16 @@ end
 %! assert (strcmp(y, expy))
 
 %!test
-%! % slashes: FIXME: auto escape backslashes
+%! % slashes
 %! x = '/\\ // \\\\ \\/\\/\\';
 %! z = '/\ // \\ \/\/\';
 %! y = python_cmd ('return _ins', x);
+%! assert (strcmp(y, x))
+
+%!test
+%! % slashes
+%! z = '/\ // \\ \/\/\';
+%! y = python_cmd ('return "/\\ // \\\\ \\/\\/\\"');
 %! assert (strcmp(y, z))
 
 %!test
@@ -345,20 +347,20 @@ end
 %! s2 = python_cmd (cmd);
 %! assert (strcmp (s1, s2))
 
-%%!test
-%%! % unicode passthru: FIXME: how to get unicode back to Python?
-%%! s1 = '我爱你'
-%%! cmd = 'return (_ins[0],)';
-%%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s1, s2))
+%!xtest
+%! % unicode passthru
+%! s = '我爱你';
+%! s2 = python_cmd ('return _ins', s);
+%! assert (strcmp (s, s2))
+%! s = '我爱你<>\&//\#%% %\我';
+%! s2 = python_cmd ('return _ins', s);
+%! assert (strcmp (s, s2))
 
-%%!test
-%%! % unicode w/ slashes, escapes, etc  FIXME
-%%! s1 = '我爱你<>\\&//\\#%% %\\我'
-%%! s3 = '我爱你<>\&//\#%% %\我'
-%%! cmd = 'return _ins[0]';
-%%! s2 = python_cmd (cmd, s1)
-%%! assert (strcmp (s2, s3))
+%!xtest
+%! % unicode w/ slashes, escapes
+%! s = '我<>\&//\#%% %\我';
+%! s2 = python_cmd ('return "我<>\\&//\\#%% %\\我"');
+%! assert (strcmp (s, s2))
 
 %!test
 %! % list, tuple
@@ -430,3 +432,14 @@ end
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
+
+%!test
+%! % complex input
+%! [A, B] = python_cmd ('z = 2*_ins[0]; return (z.real,z.imag)', 3+4i);
+%! assert (A, 6)
+%! assert (B, 8)
+
+%!test
+%! % complex output
+%! z = python_cmd ('return 3+2j');
+%! assert (z, 3+2i)

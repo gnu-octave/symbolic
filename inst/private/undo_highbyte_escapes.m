@@ -11,6 +11,7 @@ function r = undo_highbyte_escapes(s)
 %   >> r = undo_highbyte_escapes(s)
 %   r = \xe2\x8c\x88y\xe2\x8c\x89
 %
+%
 %   FIXME: do a vectorized implementation, or at least skip
 %   continuous chunks of ascii
 %

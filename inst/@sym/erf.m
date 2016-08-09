@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = erf(x)
+%% y = erf (x)
 %%   @result{} y = (sym) erf(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = erf(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = erf(x)
   y = uniop_helper (x, 'erf');
 end
 
+
+%!error <Invalid> erf (sym(1), 2)
+%!assert (isequaln (erf (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = erf(A);
 %! f2 = erf(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = erf (d);
+%! f = erf (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

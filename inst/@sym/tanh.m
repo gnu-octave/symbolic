@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = tanh(x)
+%% y = tanh (x)
 %%   @result{} y = (sym) tanh(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = tanh(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = tanh(x)
   y = uniop_helper (x, 'tanh');
 end
 
+
+%!error <Invalid> tanh (sym(1), 2)
+%!assert (isequaln (tanh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = tanh(A);
 %! f2 = tanh(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = tanh (d);
+%! f = tanh (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

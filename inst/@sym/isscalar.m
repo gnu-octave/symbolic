@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{b} =} isscalar (@var{x})
+%% @defmethod @@sym isscalar (@var{x})
 %% Return true if this symbolic expression is a scalar.
 %%
 %% Example:
@@ -33,13 +33,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{size, numel, isvector}
-%% @end deftypefn
+%% @seealso{@@sym/size, @@sym/numel, @@sym/isvector}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function b = isscalar(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   d = size(x);
   n = prod(d);

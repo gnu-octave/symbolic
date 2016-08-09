@@ -20,9 +20,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{FF} =} fourier (@var{f}, @var{x}, @var{w})
-%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f})
-%% @deftypefnx {Function File} {@var{FF} =} fourier (@var{f}, @var{w})
+%% @defmethod  @@sym fourier (@var{f}, @var{x}, @var{w})
+%% @defmethodx @@sym fourier (@var{f})
+%% @defmethodx @@sym fourier (@var{f}, @var{w})
 %% Symbolic Fourier transform.
 %%
 %% The Fourier transform of a function @var{f} of @var{x}
@@ -44,14 +44,14 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> f = exp(-abs(x));
-%% >> fourier(f)
-%%    @result{} (sym)
+%% syms x
+%% f = exp(-abs(x));
+%% fourier(f)
+%%   @result{} (sym)
+%%         2
+%%       ──────
 %%        2
-%%      ──────
-%%       2
-%%      w  + 1
+%%       w  + 1
 %% @end group
 %% @end example
 %%
@@ -62,8 +62,8 @@
 %% with (inverse) Fourier transforms of non-smooth functions, even very
 %% simple ones.  Use at your own risk, or even better: help us fix SymPy.
 %%
-%% @seealso{ifourier}
-%% @end deftypefn
+%% @seealso{@@sym/ifourier}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms

@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = abs(x)
+%% y = abs (x)
 %%   @result{} y = (sym) │x│
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = abs(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = abs(x)
   y = uniop_helper (x, 'Abs');
 end
 
+
+%!error <Invalid> abs (sym(1), 2)
+%!assert (isequaln (abs (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = -1;
@@ -61,3 +62,12 @@ end
 %! f1 = abs(A);
 %! f2 = abs(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = abs (d);
+%! f = abs (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

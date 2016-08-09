@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = sinh(x)
+%% y = sinh (x)
 %%   @result{} y = (sym) sinh(x)
 %% @end group
 %% @end example
@@ -35,8 +35,6 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = sinh(x)
   if (nargin ~= 1)
@@ -45,6 +43,9 @@ function y = sinh(x)
   y = uniop_helper (x, 'sinh');
 end
 
+
+%!error <Invalid> sinh (sym(1), 2)
+%!assert (isequaln (sinh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = sinh(A);
 %! f2 = sinh(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = sinh (d);
+%! f = sinh (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

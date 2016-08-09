@@ -56,6 +56,16 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
 
     elseif (ischar(x))
+      if (exist ('OCTAVE_VERSION', 'builtin'))
+        x = undo_string_escapes(x);
+      else
+        % roughly same as the above on Matlab?
+        x = strrep(x, '\', '\\');
+        x = strrep(x, '"', '\"');
+        for cc = {'\n' '\r' '\t' '\b' '\f'}
+          x = strrep(x, sprintf(cc{:}), cc{:});
+        end
+      end
       c=c+1; a{c} = [sp in '.append("' x '")'];
       % or do we want a printf() around the string?
       %c=c+1; a{c} = sprintf('%s%s.append("%s")', sp, in, x);
@@ -71,7 +81,7 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(%s)  # int type', ...
                             sp, in, num2str(x, '%ld'));
 
-    elseif (isfloat(x) && isscalar(x))
+    elseif (isfloat(x) && isscalar(x) && isreal(x))
       % Floating point input.  By default, all Octave numbers are
       % IEEE double: we pass these using the exact hex
       % representation.  We could detect and treat
@@ -84,6 +94,13 @@ function a = do_list(indent, in, varlist)
       end
       c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
                             sp, in, num2hex(x));
+
+    elseif (isfloat(x) && isscalar(x) && iscomplex(x))
+      if (isa(x, 'single'))
+        x = double(x);  % don't hate, would happen in Python anyway
+      end
+      c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s")+hex2d("%s")*1j)  # complex', ...
+                            sp, in, num2hex(real(x)), num2hex(imag(x)));
 
     elseif (iscell(x))
       c=c+1; a{c} = [sp '# cell array: xfer to list'];

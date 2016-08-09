@@ -123,6 +123,7 @@ try:
         OCTCODE_DOUBLE = 1002
         OCTCODE_STR = 1003
         OCTCODE_BOOL = 1005
+        OCTCODE_COMPLEX = 1006
         OCTCODE_DICT = 1010
         OCTCODE_SYM = 1020
         x = objectfilter(x)
@@ -138,7 +139,9 @@ try:
                 _d = x.shape
             elif isinstance(x, sp.MatrixExpr):
                 # nan for symbolic size
-                _d = [float('nan') if (isinstance(r, sp.Basic) and not r.is_Integer) else r for r in x.shape]
+                _d = [float(r) if (isinstance(r, sp.Basic) and r.is_Integer)
+                      else float('nan') if isinstance(r, sp.Basic)
+                      else r for r in x.shape]
             elif x is None:
                 _d = (1,1)
             else:
@@ -181,6 +184,14 @@ try:
             f.text = str(OCTCODE_DOUBLE)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x)
+        elif isinstance(x, complex):
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
+            f.text = str(OCTCODE_COMPLEX)
+            f = ET.SubElement(a, "f")
+            f.text = d2hex(x.real)
+            f = ET.SubElement(a, "f")
+            f.text = d2hex(x.imag)
         elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
