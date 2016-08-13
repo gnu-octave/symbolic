@@ -1,25 +1,22 @@
-function retS = get_sym_from_python(var_name)
-  newl = sprintf('\n');
-  ascii = pyeval(['sp.pretty(', var_name,', use_unicode=False)']);
-  % workaround https://bitbucket.org/mtmiller/pytave/issues/5
-  pyexec (strjoin ( { ['_d = sp.pretty(' var_name ', use_unicode=True)']
-                      'if sys.version_info < (3, 0):'
-                      '    _d = _d.encode("utf-8")' }, newl));
-  unicode = pyeval('_d');
-  str = pyeval(['sympy.srepr(', var_name,')']);
-  flat = pyeval(['str(', var_name,')']);
+function retS = get_sym_from_python(var_pyobj, sp)
+  pyexec('def sp_pretty_proxy(s, u): return sp.pretty(s, use_unicode=u)');
+  ascii = pycall('sp_pretty_proxy', var_pyobj, false);
+  unicode = pycall('sp_pretty_proxy', var_pyobj, true);
 
-  str_eval = strjoin({['temp = ' var_name],
-                      'if isinstance(temp, (sp.Matrix, sp.ImmutableMatrix)):',
-                      '  _d = list(temp.shape)' ,
-                      'elif isinstance(temp, sp.MatrixExpr):' ,
-                      '  _d = [float(r) if (isinstance(r, sp.Basic) and r.is_Integer)',
-                      '        else float("nan") if isinstance(r, sp.Basic)',
-                      '        else r for r in temp.shape]',
-                      'else:' ,
-                      '  _d = [1, 1]'}, newl);
-  pyexec(str_eval);
-  _d = pyeval('_d');
+  str = sp.srepr(var_pyobj);
+  flat = py.str(var_pyobj);
+
+  if py.isinstance(var_pyobj, py.tuple({sp.Matrix, sp.ImmutableMatrix}))
+    _d = py.list(var_pyobj.shape);
+  elseif py.isinstance(var_pyobj, sp.MatrixExpr)
+    shape_func = pyeval(strjoin({'lambda x : [float(r)',
+                                 'if (isinstance(r, sp.Basic) and r.is_Integer)',
+                                 'else float("nan") if isinstance(r, sp.Basic)',
+                                 'else r for r in x.shape]'}, ' '));
+    _d = pycall(shape_func, var_pyobj);
+  else
+    _d = {1, 1};
+  end
 
   retS = sym([], str, [_d{1} _d{2}], flat, ascii, unicode);
 end

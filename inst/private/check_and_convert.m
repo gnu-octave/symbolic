@@ -1,17 +1,15 @@
-function obj = check_and_convert(var_name)
-  newl = sprintf('\n');
+function obj = check_and_convert(var_pyobj)
+  persistent builtins
+  persistent sp
+  if isempty(builtins)
+    builtins = pyeval("__builtins__");
+    sp = pyeval("sympy");
+  end
 
-  pyexec(strjoin({ ...
-     ['if isinstance(' var_name ', (list, tuple)):'],
-      '    is_list = True',
-     ['    if isinstance(' var_name ', tuple):'],
-     ['        ' var_name ' = list(' var_name ')'],
-      'else:',
-      '    is_list = False'}, newl));
-  is_list = pyeval('is_list');
-
+  is_list = py.isinstance(var_pyobj, py.tuple({builtins.list, builtins.tuple}));
   if is_list
-    n = pyeval(['len(' var_name ')']);
+    var_pyobj = py.list(var_pyobj);
+    n = length(var_pyobj);
   else
     n = 1;
   end
@@ -19,45 +17,43 @@ function obj = check_and_convert(var_name)
   obj = {};
   for i=1:n
     if is_list
-      cur_var = sprintf('%s[%d]', var_name, i-1);
+      cur_pyobj = var_pyobj{i};
     else
-      cur_var = var_name;
+      cur_pyobj = var_pyobj;
     end
 
-    pyexec(strjoin({ ...
-       ['temp = ' cur_var],
-        'if isinstance(temp, sp.Matrix) and temp.shape == (1, 1):',
-       ['    ' cur_var ' = temp[0, 0]']}, newl));
+    if(py.isinstance(cur_pyobj, sp.Matrix) && isequal(cur_pyobj.shape, py.tuple({1, 1})))
+      cur_pyobj = cur_pyobj.__getitem__(py.tuple({int8(0),int8(0)}));
+    end
 
-    is_dict_with_sym_keys_curvar = pyeval(['isinstance(', cur_var, ', dict) and len(' cur_var '.keys())>0 and isinstance(' cur_var, '.keys()[0], (sp.Basic, sp.MatrixBase))']);
-    is_list_curvar = pyeval(['isinstance(', cur_var, ', (list, tuple))']);
-
-    if is_list_curvar
-      obj{i} = check_and_convert(cur_var);
-    elseif is_dict_with_sym_keys_curvar
-      %if cur_var is dictionary with symbols as keys then convert it to a struct
-      pyexec(strjoin({'_allKeysStr = []',
-                      '_allValues = []',
-                      ['for key, value in ' cur_var '.iteritems():'],
-                      '    _allKeysStr.append(str(key))',
-                      '    _allValues.append(value)'}, newl));
-      _allKeysStr = pyeval('_allKeysStr');
-      obj{i} = struct ();
-      for j = 1:numel(_allKeysStr)
-        obj{i}.(_allKeysStr{j}) = get_sym_from_python(sprintf('_allValues[%d]', j-1));
+    if py.isinstance(cur_pyobj, builtins.dict)
+      cur_keys = cur_pyobj.keys();
+      dict_to_struct = true;
+      for j = 1:length(cur_keys)
+        dict_to_struct = dict_to_struct && py.isinstance(cur_pyobj.keys(){j}, py.tuple({sp.Basic, sp.MatrixBase, builtins.str}));
       end
     else
-      pyexec(strjoin({ ...
-         ['if ' cur_var ' is None or isinstance(' cur_var ', (sp.Basic, sp.MatrixBase)):'],
-          '    is_sym = True',
-          'else:',
-          '    is_sym = False'}, newl));
-      is_sym = pyeval('is_sym');
+      dict_to_struct = false;
+    end
+
+    is_list_curvar = py.isinstance(cur_pyobj, py.tuple({builtins.list, builtins.tuple}));
+
+    if is_list_curvar
+      obj{i} = check_and_convert(cur_pyobj);
+    elseif dict_to_struct
+      %if cur_var is dictionary with symbols/strings as keys then convert it to a struct
+      allKeys = cur_pyobj.keys();
+      obj{i} = struct ();
+      for j = 1:length(allKeys)
+        obj{i}.(py.str(allKeys{j})) = check_and_convert(cur_pyobj{allKeys{j}}){1};
+      end
+    else
+      is_sym = isequal(cur_pyobj, py.None) || py.isinstance(cur_pyobj, py.tuple({sp.Basic, sp.MatrixBase}));
 
       if is_sym
-        obj{i} = get_sym_from_python(cur_var);
+        obj{i} = get_sym_from_python(cur_pyobj, sp);
       else
-        obj{i} = pyeval(cur_var);
+        obj{i} = cur_pyobj;
       end
     end
   end

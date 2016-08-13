@@ -104,5 +104,5 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   s = strjoin(cmd, newl);
   pyexec(s)
-  A = check_and_convert('_outs');
+  A = check_and_convert(pyeval('_outs'));
 end
