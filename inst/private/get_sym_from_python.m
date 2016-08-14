@@ -19,22 +19,24 @@
 function retS = get_sym_from_python(var_pyobj)
   persistent shape_func
   persistent sp
+  persistent sp_matrix
   if isempty(shape_func)
     shape_func = pyeval(strjoin({'lambda x : [float(r)',
                                  'if (isinstance(r, sp.Basic) and r.is_Integer)',
                                  'else float("nan") if isinstance(r, sp.Basic)',
                                  'else r for r in x.shape]'}, ' '));
     sp = py.sympy;
+    sp_matrix = py.tuple({sp.Matrix, sp.ImmutableMatrix});
+    pyexec('def sp_pretty_proxy(s, u): return sp.pretty(s, use_unicode=u)');
   end
 
-  pyexec('def sp_pretty_proxy(s, u): return sp.pretty(s, use_unicode=u)');
   ascii = pycall('sp_pretty_proxy', var_pyobj, false);
   unicode = pycall('sp_pretty_proxy', var_pyobj, true);
 
   srepr = sp.srepr(var_pyobj);
   flat = py.str(var_pyobj);
 
-  if py.isinstance(var_pyobj, py.tuple({sp.Matrix, sp.ImmutableMatrix}))
+  if py.isinstance(var_pyobj, sp_matrix)
     _d = py.list(var_pyobj.shape);
   elseif py.isinstance(var_pyobj, sp.MatrixExpr)
     _d = pycall(shape_func, var_pyobj);
