@@ -19,12 +19,24 @@
 function obj = check_and_convert(var_pyobj)
   persistent builtins
   persistent sp
+  persistent tuple_1_1
+  persistent tuple_0_0
+  persistent list_or_tuple
+  persistent _sym
+  persistent sym_or_str
   if isempty(builtins)
+    tuple_1_1 = py.tuple({1, 1});
+    tuple_0_0 = py.tuple({int8(0),int8(0)});
+
     builtins = pyeval("__builtins__");
-    sp = pyeval("sympy");
+    list_or_tuple = py.tuple({builtins.list, builtins.tuple});
+
+    sp = py.sympy;
+    _sym = py.tuple({sp.Basic, sp.MatrixBase});
+    sym_or_str = py.tuple({sp.Basic, sp.MatrixBase, builtins.str});
   end
 
-  is_list = py.isinstance(var_pyobj, py.tuple({builtins.list, builtins.tuple}));
+  is_list = py.isinstance(var_pyobj, list_or_tuple);
   if is_list
     var_pyobj = py.list(var_pyobj);
     n = length(var_pyobj);
@@ -40,21 +52,21 @@ function obj = check_and_convert(var_pyobj)
       cur_pyobj = var_pyobj;
     end
 
-    if(py.isinstance(cur_pyobj, sp.Matrix) && isequal(cur_pyobj.shape, py.tuple({1, 1})))
-      cur_pyobj = cur_pyobj.__getitem__(py.tuple({int8(0),int8(0)}));
+    if(py.isinstance(cur_pyobj, sp.Matrix) && isequal(cur_pyobj.shape, tuple_1_1))
+      cur_pyobj = cur_pyobj.__getitem__(tuple_0_0);
     end
 
     if py.isinstance(cur_pyobj, builtins.dict)
       cur_keys = cur_pyobj.keys();
       dict_to_struct = true;
       for j = 1:length(cur_keys)
-        dict_to_struct = dict_to_struct && py.isinstance(cur_pyobj.keys(){j}, py.tuple({sp.Basic, sp.MatrixBase, builtins.str}));
+        dict_to_struct = dict_to_struct && py.isinstance(cur_pyobj.keys(){j}, sym_or_str);
       end
     else
       dict_to_struct = false;
     end
 
-    is_list_curvar = py.isinstance(cur_pyobj, py.tuple({builtins.list, builtins.tuple}));
+    is_list_curvar = py.isinstance(cur_pyobj, list_or_tuple);
 
     if is_list_curvar
       obj{i} = check_and_convert(cur_pyobj);
@@ -66,10 +78,10 @@ function obj = check_and_convert(var_pyobj)
         obj{i}.(py.str(allKeys{j})) = check_and_convert(cur_pyobj{allKeys{j}}){1};
       end
     else
-      is_sym = isequal(cur_pyobj, py.None) || py.isinstance(cur_pyobj, py.tuple({sp.Basic, sp.MatrixBase}));
+      is_sym = isequal(cur_pyobj, py.None) || py.isinstance(cur_pyobj, _sym);
 
       if is_sym
-        obj{i} = get_sym_from_python(cur_pyobj, sp);
+        obj{i} = get_sym_from_python(cur_pyobj);
       else
         obj{i} = cur_pyobj;
       end
