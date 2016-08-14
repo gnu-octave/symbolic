@@ -34,11 +34,13 @@
 function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   persistent show_msg
+  persistent have_headers
 
   info = [];
 
   if (strcmp(what, 'reset'))
     A = true;
+    have_headers = [];
     return
   end
 
@@ -59,17 +61,48 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   info.prelines = 0;
 
-  % TODO: bit wasteful to repeat this every call
-  headers = python_header();
-  pyexec(headers)
+  if isempty(have_headers)
+    pyexec(strjoin({'import sys'
+                    'import sympy'
+                    'import sympy as sp'
+                    'from sympy import __version__ as spver'
+                    'from sympy import *'
+                    'from sympy.logic.boolalg import Boolean, BooleanFunction'
+                    'from sympy.core.relational import Relational'
+                    '# temporary? for piecewise support'
+                    'from sympy.functions.elementary.piecewise import ExprCondPair'
+                    'from sympy.integrals.risch import NonElementaryIntegral'
+                    'from sympy.matrices.expressions.matexpr import MatrixElement'
+                    '# for hypergeometric'
+                    'from sympy.functions.special.hyper import TupleArg'
+                    'from sympy.utilities.iterables import uniq'
+                    'import copy'
+                    'import struct'
+                    'import codecs'
+                    'from distutils.version import LooseVersion'
+                    'def dictdiff(a, b):'
+                    '    """ keys from a that are not in b, used by evalpy() """'
+                    '    n = dict()'
+                    '    for k in a:'
+                    '        if not k in b:'
+                    '            n[k] = a[k]'
+                    '    return n'
+                    'def Version(v):'
+                    '    # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
+                    '    return LooseVersion(v.replace(".dev", ""))'
+                    '# hack to be called by pycall'
+                    'global _temp'
+                    'def pystoretemp(x):'
+                    '    global _temp'
+                    '    _temp = x'
+                  }, newl))
+    have_headers = true;
+  end
 
-  % load all the inputs into python
-  loc = python_copy_vars_to('_ins', false, varargin{:});
-  s = strjoin(loc, newl);
-  pyexec(s)
+  pyexec('_ins = []')
+  store_vars_in_python('_ins', varargin);
 
   s = strjoin(cmd, newl);
   pyexec(s)
-
   A = check_and_convert('_outs');
 end
