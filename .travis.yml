@@ -1,15 +1,16 @@
 sudo: required
 dist: trusty
 
-language: python
-# well its really octave, but that is not supported
+language: generic
 
 matrix:
   include:
     - python: "2.7"
-      env: SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - python: "2.7"
+      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
     - python: "3.5"
-      env: SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 install:
@@ -18,10 +19,23 @@ install:
     fi
   - sudo apt-get update -qq -y;
   - sudo apt-get install -qq -y octave liboctave-dev;
-  - "pip install sympy==$SYMPY_VER"
+  - sudo apt-get install -qq -y python;
+  - "pip install --user sympy==$SYMPY_VER"
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
+  - if [ "x$PYTAVE" = "xyes" ]; then
+        sudo apt-get install -qq -y libboost-python-dev python-numpy;
+        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
+        cd pytave_main;
+        hg checkout travis;
+        pwd;
+        autoreconf --install;
+        ./configure;
+        make;
+        cd ..;
+    fi
+
 
 # all commands here must have exit code 0 for the build to be called "passing"
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
@@ -31,10 +45,10 @@ script:
   - tput cols; stty size
   - pushd src; make; popd
   - pushd inst
-  - octave -W --no-gui --eval "r = octsympy_tests; exit(r)"
+  - octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 

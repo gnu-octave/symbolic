@@ -415,7 +415,8 @@ end
 %! % return nothing (because no command)
 %! python_cmd({})
 
-%!error <AttributeError>
+%!xtest error <AttributeError>
+%! % Fails using pytave IPC due to #457 (Pytave returning python exceptions)
 %! % python exception while passing variables to python
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
@@ -426,7 +427,8 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!error <octoutput does not know how to export type>
+%!xtest error <octoutput does not know how to export type>
+%! % This command does not fail with PyTave and '@pyobject'
 %! python_cmd({'return type(int)'});
 %!test
 %! % ...and after the above test, the pipe should still work
