@@ -27,6 +27,8 @@ function retS = get_sym_from_python(var_pyobj)
                                  'else r for r in x.shape]'}, ' '));
     sp = py.sympy;
     sp_matrix = py.tuple({sp.Matrix, sp.ImmutableMatrix});
+    % TODO: Should use kwargs for this?
+    % https://bitbucket.org/mtmiller/pytave/issues/45
     pyexec('def sp_pretty_proxy(s, u): return sp.pretty(s, use_unicode=u)');
   end
 

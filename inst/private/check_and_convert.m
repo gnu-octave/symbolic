@@ -39,6 +39,7 @@ function obj = check_and_convert(var_pyobj)
   is_list = py.isinstance(var_pyobj, list_or_tuple);
   if is_list
     var_pyobj = py.list(var_pyobj);
+    % TODO: This only fails for an empty string, probably can be handled in a better way!
     n = length(var_pyobj);
   else
     n = 1;
@@ -53,6 +54,8 @@ function obj = check_and_convert(var_pyobj)
     end
 
     if(py.isinstance(cur_pyobj, sp.Matrix) && isequal(cur_pyobj.shape, tuple_1_1))
+      %TODO: Probably better if supported via pytave
+      % https://bitbucket.org/mtmiller/pytave/issues/63
       cur_pyobj = cur_pyobj.__getitem__(tuple_0_0);
     end
 
@@ -60,6 +63,8 @@ function obj = check_and_convert(var_pyobj)
       cur_keys = cur_pyobj.keys();
       dict_to_struct = true;
       for j = 1:length(cur_keys)
+        %we can convert only dicts with string &/or sym keys for now as struct
+        %members must be string
         dict_to_struct = dict_to_struct && py.isinstance(cur_pyobj.keys(){j}, sym_or_str);
       end
     else
@@ -72,6 +77,8 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = check_and_convert(cur_pyobj);
     elseif dict_to_struct
       %if cur_var is dictionary with symbols/strings as keys then convert it to a struct
+      %TODO: will be better after https://bitbucket.org/mtmiller/pytave/issues/62  is resolved
+      % obj{i} = struct(cur_pyobj);
       allKeys = cur_pyobj.keys();
       obj{i} = struct ();
       for j = 1:length(allKeys)
