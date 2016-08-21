@@ -36,62 +36,34 @@ function obj = check_and_convert(var_pyobj)
     sym_or_str = py.tuple({sp.Basic, sp.MatrixBase, builtins.str});
   end
 
-  is_list = py.isinstance(var_pyobj, list_or_tuple);
-  if is_list
-    var_pyobj = py.list(var_pyobj);
-    % TODO: This only fails for an empty string, probably can be handled in a better way!
-    n = length(var_pyobj);
-  else
-    n = 1;
+
+  if (~ py.isinstance(var_pyobj, list_or_tuple))
+    var_pyobj = {var_pyobj};
   end
 
   obj = {};
-  for i=1:n
-    if is_list
-      cur_pyobj = var_pyobj{i};
-    else
-      cur_pyobj = var_pyobj;
-    end
+  for i = 1:length(var_pyobj)
+    x = var_pyobj{i};
 
-    if(py.isinstance(cur_pyobj, sp.Matrix) && isequal(cur_pyobj.shape, tuple_1_1))
+    if (py.isinstance(x, sp.Matrix) && isequal(x.shape, tuple_1_1))
       %TODO: Probably better if supported via pytave
       % https://bitbucket.org/mtmiller/pytave/issues/63
-      cur_pyobj = cur_pyobj.__getitem__(tuple_0_0);
+      x = x.__getitem__(tuple_0_0);
     end
 
-    if py.isinstance(cur_pyobj, builtins.dict)
-      cur_keys = cur_pyobj.keys();
-      dict_to_struct = true;
-      for j = 1:length(cur_keys)
-        %we can convert only dicts with string &/or sym keys for now as struct
-        %members must be string
-        dict_to_struct = dict_to_struct && py.isinstance(cur_pyobj.keys(){j}, sym_or_str);
-      end
+    if (py.isinstance(x, list_or_tuple))
+      obj{i} = check_and_convert(x);
+    elseif (py.isinstance(x, builtins.dict))
+      make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
+      x = pycall (make_str_keys, x);
+      s = struct (x);
+      % make sure values are converted to sym
+      s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
+      obj{i} = s;
+    elseif (isequal(x, py.None) || py.isinstance(x, _sym))
+      obj{i} = get_sym_from_python(x);
     else
-      dict_to_struct = false;
-    end
-
-    is_list_curvar = py.isinstance(cur_pyobj, list_or_tuple);
-
-    if is_list_curvar
-      obj{i} = check_and_convert(cur_pyobj);
-    elseif dict_to_struct
-      %if cur_var is dictionary with symbols/strings as keys then convert it to a struct
-      %TODO: will be better after https://bitbucket.org/mtmiller/pytave/issues/62  is resolved
-      % obj{i} = struct(cur_pyobj);
-      allKeys = cur_pyobj.keys();
-      obj{i} = struct ();
-      for j = 1:length(allKeys)
-        obj{i}.(py.str(allKeys{j})) = check_and_convert(cur_pyobj{allKeys{j}}){1};
-      end
-    else
-      is_sym = isequal(cur_pyobj, py.None) || py.isinstance(cur_pyobj, _sym);
-
-      if is_sym
-        obj{i} = get_sym_from_python(cur_pyobj);
-      else
-        obj{i} = cur_pyobj;
-      end
+      obj{i} = x;
     end
   end
 end
