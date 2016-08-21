@@ -40,11 +40,14 @@ function retS = get_sym_from_python(var_pyobj)
 
   if py.isinstance(var_pyobj, sp_matrix)
     _d = py.list(var_pyobj.shape);
+    % TODO (?) https://bitbucket.org/mtmiller/pytave/issues/68
+    sz = [double(_d{1}) double(_d{2})];
   elseif py.isinstance(var_pyobj, sp.MatrixExpr)
     _d = pycall(shape_func, var_pyobj);
+    % TODO (?) https://bitbucket.org/mtmiller/pytave/issues/68
+    sz = [double(_d{1}) double(_d{2})];
   else
-    _d = {1, 1};
+    sz = [1 1];
   end
-
-  retS = sym([], srepr, [_d{1} _d{2}], flat, ascii, unicode);
+  retS = sym([], srepr, sz, flat, ascii, unicode);
 end
