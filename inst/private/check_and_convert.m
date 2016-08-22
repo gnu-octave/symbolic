@@ -73,6 +73,8 @@ function obj = check_and_convert(var_pyobj)
       % TODO: probably double is wrong, int32?
       obj{i} = double (x);
     else
+      x
+      warning('something was not converted from pyobject')
       obj{i} = x;
     end
   end
