@@ -59,8 +59,6 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   newl = sprintf('\n');
 
-  info.prelines = 0;
-
   if isempty(have_headers)
     pyexec(strjoin({'import sys'
                     'import sympy'
@@ -99,10 +97,18 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
     have_headers = true;
   end
 
-  pyexec('_ins = []')
-  store_vars_in_python('_ins', varargin);
+  ins = py.list();
+  store_vars_in_python(ins, varargin);
 
+  cmd = indent_lines(cmd, 4);
+  cmd = { 'def _fcn(_ins):' ...
+          '    _outs = []'  ...
+          cmd{:} ...
+          '    return _outs'
+           };
   s = strjoin(cmd, newl);
   pyexec(s)
-  A = check_and_convert('_outs');
+  outs = pycall ('_fcn', ins);
+  A = check_and_convert(outs);
+  info.prelines = 2;
 end

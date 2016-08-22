@@ -1,64 +1,81 @@
-function obj = check_and_convert(var_name)
-  newl = sprintf('\n');
+%% Copyright (C) 2016 Abhinav Tripathi
+%% Copyright (C) 2016 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
 
-  pyexec(strjoin({ ...
-     ['if isinstance(' var_name ', (list, tuple)):'],
-      '    is_list = True',
-     ['    if isinstance(' var_name ', tuple):'],
-     ['        ' var_name ' = list(' var_name ')'],
-      'else:',
-      '    is_list = False'}, newl));
-  is_list = pyeval('is_list');
+function obj = check_and_convert(var_pyobj)
+  persistent builtins
+  persistent sp
+  persistent tuple_1_1
+  persistent tuple_0_0
+  persistent list_or_tuple
+  persistent _sym
+  persistent sym_or_str
+  if isempty(builtins)
+    tuple_1_1 = py.tuple({1, 1});
+    tuple_0_0 = py.tuple({int8(0),int8(0)});
 
-  if is_list
-    n = pyeval(['len(' var_name ')']);
-  else
-    n = 1;
+    builtins = pyeval("__builtins__");
+    list_or_tuple = py.tuple({builtins.list, builtins.tuple});
+
+    sp = py.sympy;
+    _sym = py.tuple({sp.Basic, sp.MatrixBase});
+    sym_or_str = py.tuple({sp.Basic, sp.MatrixBase, builtins.str});
+  end
+
+
+  if (~ py.isinstance(var_pyobj, list_or_tuple))
+    var_pyobj = {var_pyobj};
   end
 
   obj = {};
-  for i=1:n
-    if is_list
-      cur_var = sprintf('%s[%d]', var_name, i-1);
-    else
-      cur_var = var_name;
+  for i = 1:length(var_pyobj)
+    x = var_pyobj{i};
+
+    if (py.isinstance(x, sp.Matrix) && isequal(x.shape, tuple_1_1))
+      %TODO: Probably better if supported via pytave
+      % https://bitbucket.org/mtmiller/pytave/issues/63
+      x = x.__getitem__(tuple_0_0);
     end
 
-    pyexec(strjoin({ ...
-       ['temp = ' cur_var],
-        'if isinstance(temp, sp.Matrix) and temp.shape == (1, 1):',
-       ['    ' cur_var ' = temp[0, 0]']}, newl));
-
-    is_dict_with_sym_keys_curvar = pyeval(['isinstance(', cur_var, ', dict) and len(' cur_var '.keys())>0 and isinstance(' cur_var, '.keys()[0], (sp.Basic, sp.MatrixBase))']);
-    is_list_curvar = pyeval(['isinstance(', cur_var, ', (list, tuple))']);
-
-    if is_list_curvar
-      obj{i} = check_and_convert(cur_var);
-    elseif is_dict_with_sym_keys_curvar
-      %if cur_var is dictionary with symbols as keys then convert it to a struct
-      pyexec(strjoin({'_allKeysStr = []',
-                      '_allValues = []',
-                      ['for key, value in ' cur_var '.iteritems():'],
-                      '    _allKeysStr.append(str(key))',
-                      '    _allValues.append(value)'}, newl));
-      _allKeysStr = pyeval('_allKeysStr');
-      obj{i} = struct ();
-      for j = 1:numel(_allKeysStr)
-        obj{i}.(_allKeysStr{j}) = get_sym_from_python(sprintf('_allValues[%d]', j-1));
+    if (~ isa (x, 'pyobject'))
+      obj{i} = x;
+    elseif (py.isinstance(x, list_or_tuple))
+      obj{i} = check_and_convert(x);
+    elseif (py.isinstance(x, builtins.dict))
+      make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
+      x = pycall (make_str_keys, x);
+      s = struct (x);
+      % make sure values are converted to sym
+      s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
+      obj{i} = s;
+    elseif (isequal(x, py.None) || py.isinstance(x, _sym))
+      obj{i} = get_sym_from_python(x);
+    elseif (py.isinstance(x, pyeval('int')))
+      if (py.isinstance(x, pyeval('bool')))
+        error ('unexpected python bool')
       end
+      % python 3: https://bitbucket.org/mtmiller/pytave/issues/68
+      % TODO: probably double is wrong, int32?
+      obj{i} = double (x);
     else
-      pyexec(strjoin({ ...
-         ['if ' cur_var ' is None or isinstance(' cur_var ', (sp.Basic, sp.MatrixBase)):'],
-          '    is_sym = True',
-          'else:',
-          '    is_sym = False'}, newl));
-      is_sym = pyeval('is_sym');
-
-      if is_sym
-        obj{i} = get_sym_from_python(cur_var);
-      else
-        obj{i} = pyeval(cur_var);
-      end
+      x
+      warning('something was not converted from pyobject')
+      obj{i} = x;
     end
   end
 end

@@ -16,22 +16,17 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function store_vars_in_python (varname, L)
-  persistent counter = 0
-
+function store_vars_in_python (var_pyobj, L)
   for i = 1:numel(L)
     x = L{i};
-    if (isa(x, 'sym'));
-      pyexec([varname '.append(' char(x) ')'])
+    if (isa(x, 'sym'))
+      var_pyobj.append(pyeval(char(x)))
     elseif (iscell (x))
-      tempname = [varname num2str(counter)];
-      counter = counter + 1;
-      pyexec ([tempname ' = []'])
-      store_vars_in_python (tempname, x)
-      pyexec([varname '.append(' tempname ')'])
+      temp_var = py.list();
+      store_vars_in_python (temp_var, x)
+      var_pyobj.append(temp_var);
     else
-      pycall ('pystoretemp', x)
-      pyexec ([varname '.append(_temp)'])
+      var_pyobj.append(x);
     end
   end
 end
