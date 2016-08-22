@@ -65,6 +65,13 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = s;
     elseif (isequal(x, py.None) || py.isinstance(x, _sym))
       obj{i} = get_sym_from_python(x);
+    elseif (py.isinstance(x, pyeval('int')))
+      if (py.isinstance(x, pyeval('bool')))
+        error ('unexpected python bool')
+      end
+      % python 3: https://bitbucket.org/mtmiller/pytave/issues/68
+      % TODO: probably double is wrong, int32?
+      obj{i} = double (x);
     else
       obj{i} = x;
     end
