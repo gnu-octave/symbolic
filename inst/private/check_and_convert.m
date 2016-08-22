@@ -52,7 +52,9 @@ function obj = check_and_convert(var_pyobj)
       x = x.__getitem__(tuple_0_0);
     end
 
-    if (py.isinstance(x, list_or_tuple))
+    if (~ isa (x, 'pyobject'))
+      obj{i} = x;
+    elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
     elseif (py.isinstance(x, builtins.dict))
       make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
