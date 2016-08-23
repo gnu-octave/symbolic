@@ -29,7 +29,6 @@
 %% @code{@var{info}.prelines}: the number of lines of header code
 %% before the command starts.
 %%
-%% @code{@var{info}.raw}: the raw output, for debugging.
 %% @end deftypefn
 
 function [A, info] = python_ipc_pytave(what, cmd, varargin)
@@ -37,7 +36,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   persistent show_msg
   persistent have_headers
 
-  info = [];
+  info.prelines = 2;
 
   if (strcmp(what, 'reset'))
     A = true;
@@ -98,8 +97,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
     have_headers = true;
   end
 
-  ins = py.list();
-  store_vars_in_python(ins, varargin);
+  ins = store_vars_in_python(varargin);
 
   cmd = indent_lines(cmd, 4);
   cmd = { 'def _fcn(_ins):' ...
@@ -111,5 +109,4 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   pyexec(s)
   outs = pycall ('_fcn', ins);
   A = check_and_convert(outs);
-  info.prelines = 2;
 end

@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,15 +17,14 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function store_vars_in_python (var_pyobj, L)
+function var_pyobj = store_vars_in_python (L)
+  var_pyobj = py.list ();
   for i = 1:numel(L)
     x = L{i};
     if (isa(x, 'sym'))
       var_pyobj.append(pyeval(char(x)))
     elseif (iscell (x))
-      temp_var = py.list();
-      store_vars_in_python (temp_var, x)
-      var_pyobj.append(temp_var);
+      var_pyobj.append (store_vars_in_python (x))
     else
       var_pyobj.append(x);
     end
