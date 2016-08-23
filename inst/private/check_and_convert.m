@@ -24,7 +24,6 @@ function obj = check_and_convert(var_pyobj)
   persistent tuple_0_0
   persistent list_or_tuple
   persistent _sym
-  persistent sym_or_str
   if isempty(builtins)
     tuple_1_1 = py.tuple({1, 1});
     tuple_0_0 = py.tuple({int8(0),int8(0)});
@@ -34,7 +33,6 @@ function obj = check_and_convert(var_pyobj)
 
     sp = py.sympy;
     _sym = py.tuple({sp.Basic, sp.MatrixBase});
-    sym_or_str = py.tuple({sp.Basic, sp.MatrixBase, builtins.str});
   end
 
 
