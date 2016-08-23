@@ -56,9 +56,7 @@ function obj = check_and_convert(var_pyobj)
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
       end
-      % python 3: https://bitbucket.org/mtmiller/pytave/issues/68
-      % TODO: probably double is wrong, int32?
-      obj{i} = double (x);
+      obj{i} = int64 (x);
     else
       x
       warning('something was not converted from pyobject')
