@@ -43,10 +43,10 @@ function retS = get_sym_from_python(var_pyobj)
     var_pyobj = var_pyobj.__getitem__(tuple_0_0);
   end
 
-  ascii = sp.pretty(var_pyobj, use_unicode_false);
-  unicode = sp.pretty(var_pyobj, use_unicode_true);
-  srepr = sp.srepr(var_pyobj);
-  flat = py.str(var_pyobj);
+  ascii = char (sp.pretty (var_pyobj, use_unicode_false));
+  unicode = char (sp.pretty (var_pyobj, use_unicode_true));
+  srepr = char (sp.srepr (var_pyobj));
+  flat = char (py.str (var_pyobj));
 
   if py.isinstance(var_pyobj, sp_matrix)
     _d = var_pyobj.shape;

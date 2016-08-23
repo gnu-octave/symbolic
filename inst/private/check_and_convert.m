@@ -45,6 +45,8 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
+    elseif (py.isinstance (x, six.string_types))
+      obj{i} = char (x);
     elseif (py.isinstance(x, builtins.dict))
       make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
       x = pycall (make_str_keys, x);

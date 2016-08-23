@@ -61,6 +61,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
 
   if isempty(have_headers)
     pyexec(strjoin({'import sys'
+                    'import six'
                     'import sympy'
                     'import sympy as sp'
                     'from sympy import __version__ as spver'
