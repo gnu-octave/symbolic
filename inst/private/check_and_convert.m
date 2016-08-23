@@ -52,6 +52,8 @@ function obj = check_and_convert(var_pyobj)
 
     if (~ isa (x, 'pyobject'))
       obj{i} = x;
+    elseif (py.isinstance(x, _sym) || isequal(x, py.None))
+      obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
     elseif (py.isinstance(x, builtins.dict))
@@ -61,8 +63,6 @@ function obj = check_and_convert(var_pyobj)
       % make sure values are converted to sym
       s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
       obj{i} = s;
-    elseif (isequal(x, py.None) || py.isinstance(x, _sym))
-      obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, pyeval('int')))
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
