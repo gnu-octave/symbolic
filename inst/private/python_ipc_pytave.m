@@ -88,11 +88,6 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'def Version(v):'
                     '    # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
                     '    return LooseVersion(v.replace(".dev", ""))'
-                    '# hack to be called by pycall'
-                    'global _temp'
-                    'def pystoretemp(x):'
-                    '    global _temp'
-                    '    _temp = x'
                   }, newl))
     have_headers = true;
   end
