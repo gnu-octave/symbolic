@@ -49,12 +49,11 @@ function retS = get_sym_from_python(var_pyobj)
   flat = py.str(var_pyobj);
 
   if py.isinstance(var_pyobj, sp_matrix)
-    _d = py.list(var_pyobj.shape);
-    % TODO (?) https://bitbucket.org/mtmiller/pytave/issues/68
+    _d = var_pyobj.shape;
+    % TODO: could use int64, but is size supposed to be double?
     sz = [double(_d{1}) double(_d{2})];
   elseif py.isinstance(var_pyobj, sp.MatrixExpr)
     _d = pycall(shape_func, var_pyobj);
-    % TODO (?) https://bitbucket.org/mtmiller/pytave/issues/68
     sz = [double(_d{1}) double(_d{2})];
   else
     sz = [1 1];
