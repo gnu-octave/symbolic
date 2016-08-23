@@ -20,14 +20,9 @@
 function obj = check_and_convert(var_pyobj)
   persistent builtins
   persistent sp
-  persistent tuple_1_1
-  persistent tuple_0_0
   persistent list_or_tuple
   persistent _sym
   if isempty(builtins)
-    tuple_1_1 = py.tuple({1, 1});
-    tuple_0_0 = py.tuple({int8(0),int8(0)});
-
     builtins = pyeval("__builtins__");
     list_or_tuple = py.tuple({builtins.list, builtins.tuple});
 
@@ -43,12 +38,6 @@ function obj = check_and_convert(var_pyobj)
   obj = {};
   for i = 1:length(var_pyobj)
     x = var_pyobj{i};
-
-    if (py.isinstance(x, sp.Matrix) && isequal(x.shape, tuple_1_1))
-      %TODO: Probably better if supported via pytave
-      % https://bitbucket.org/mtmiller/pytave/issues/63
-      x = x.__getitem__(tuple_0_0);
-    end
 
     if (~ isa (x, 'pyobject'))
       obj{i} = x;

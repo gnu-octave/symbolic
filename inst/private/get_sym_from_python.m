@@ -21,6 +21,8 @@ function retS = get_sym_from_python(var_pyobj)
   persistent shape_func
   persistent sp
   persistent sp_matrix
+  persistent tuple_1_1 tuple_0_0
+  persistent use_unicode_false use_unicode_true
   if isempty(shape_func)
     shape_func = pyeval(strjoin({'lambda x : [float(r)',
                                  'if (isinstance(r, sp.Basic) and r.is_Integer)',
@@ -28,14 +30,21 @@ function retS = get_sym_from_python(var_pyobj)
                                  'else r for r in x.shape]'}, ' '));
     sp = py.sympy;
     sp_matrix = py.tuple({sp.Matrix, sp.ImmutableMatrix});
-    % TODO: Should use kwargs for this?
-    % https://bitbucket.org/mtmiller/pytave/issues/45
-    pyexec('def sp_pretty_proxy(s, u): return sp.pretty(s, use_unicode=u)');
+    use_unicode_false = pyargs('use_unicode', false);
+    use_unicode_true = pyargs('use_unicode', true);
+    tuple_1_1 = py.tuple ({1, 1});
+    tuple_0_0 = py.tuple ({int8(0),int8(0)});
   end
 
-  ascii = pycall('sp_pretty_proxy', var_pyobj, false);
-  unicode = pycall('sp_pretty_proxy', var_pyobj, true);
+  % Don't return 1x1 matrices
+  if (py.isinstance(var_pyobj, sp_matrix) && isequal(var_pyobj.shape, tuple_1_1))
+    %TODO: Probably better if supported via pytave
+    % https://bitbucket.org/mtmiller/pytave/issues/63
+    var_pyobj = var_pyobj.__getitem__(tuple_0_0);
+  end
 
+  ascii = sp.pretty(var_pyobj, use_unicode_false);
+  unicode = sp.pretty(var_pyobj, use_unicode_true);
   srepr = sp.srepr(var_pyobj);
   flat = py.str(var_pyobj);
 
