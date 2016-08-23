@@ -415,8 +415,7 @@ end
 %! % return nothing (because no command)
 %! python_cmd({})
 
-%!xtest error <AttributeError>
-%! % Fails using pytave IPC due to #457 (Pytave returning python exceptions)
+%!error <AttributeError>
 %! % python exception while passing variables to python
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
