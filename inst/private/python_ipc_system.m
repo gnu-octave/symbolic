@@ -76,6 +76,7 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
   %% output, or perhaps a thrown error
   s_out = python_copy_vars_from('_outs');
 
+  cmd = [cmd '_outs = _fcn(_ins)'];
   % join all the cell arrays with newlines
   s = strjoin([s_in cmd s_out], newl);
 

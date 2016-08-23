@@ -36,7 +36,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   persistent show_msg
   persistent have_headers
 
-  info.prelines = 2;
+  info.prelines = 0;
 
   if (strcmp(what, 'reset'))
     A = true;
@@ -93,15 +93,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   end
 
   ins = store_vars_in_python(varargin);
-
-  cmd = indent_lines(cmd, 4);
-  cmd = { 'def _fcn(_ins):' ...
-          '    _outs = []'  ...
-          cmd{:} ...
-          '    return _outs'
-           };
-  s = strjoin(cmd, newl);
-  pyexec(s)
+  pyexec (strjoin (cmd, newl));
   outs = pycall ('_fcn', ins);
   A = check_and_convert(outs);
 end
