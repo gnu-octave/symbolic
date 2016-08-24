@@ -426,7 +426,8 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!error <octoutput does not know how to export type>
+%!xtest error <octoutput does not know how to export type>
+%! % This command does not fail with PyTave and '@pyobject'
 %! python_cmd({'return type(int)'});
 %!test
 %! % ...and after the above test, the pipe should still work
