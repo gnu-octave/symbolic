@@ -22,12 +22,14 @@ function obj = check_and_convert(var_pyobj)
   persistent sp
   persistent list_or_tuple
   persistent _sym
+  persistent string_types
   if isempty(builtins)
     builtins = pyeval("__builtins__");
     list_or_tuple = py.tuple({builtins.list, builtins.tuple});
 
     sp = py.sympy;
     _sym = py.tuple({sp.Basic, sp.MatrixBase});
+    string_types = py.six.string_types;
   end
 
 
@@ -45,7 +47,7 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
-    elseif (py.isinstance (x, six.string_types))
+    elseif (py.isinstance (x, string_types))
       obj{i} = char (x);
     elseif (py.isinstance(x, builtins.dict))
       make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
