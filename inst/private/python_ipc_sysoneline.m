@@ -89,8 +89,10 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   info.prelines = 0;
 
   %% The actual command
-  % cmd will be a snippet of python code that does something
-  % with _ins and produce _outs.
+  % cmd is a snippet of python code defining a function '_fcn'.
+  cmd = [cmd '_outs = _fcn(_ins)'];
+  % now we have a snippet of python code that does something
+  % with _ins and produces _outs.
   s = myesc(cmd);
   s = strjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];
