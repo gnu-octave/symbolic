@@ -45,7 +45,7 @@ function r = xor(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'lambda a,b: Xor(a, b)');
+  r = binop_helper(x, y, 'Xor');
 
 end
 

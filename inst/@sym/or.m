@@ -46,7 +46,7 @@ function r = or(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'lambda a,b: Or(a, b)');
+  r = binop_helper(x, y, 'Or');
 
 end
 
