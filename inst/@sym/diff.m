@@ -66,40 +66,25 @@
 
 function z = diff(f, varargin)
 
-  % simpler version, but gives error on differentiating a constant
-  %cmd = 'return sp.diff(*_ins),';
-
-  %% some special cases for SMT compat.
-  % FIXME: with a sympy symvar, could move this to python?
-  if (nargin == 1)  % diff(f) -> symvar
-    x = symvar(f, 1);
-    if (isempty(x))
-      x = sym('x');  % e.g., diff(sym(6))
-    end
-    z = diff(f, x);
-    return
-  else
-    q = varargin{1};
-    % Note: pickle: to avoid double() overhead for common diff(f,x)
-    isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
-    if ((nargin == 2) && isnum2)  % diff(f,2) -> symvar
-      x = symvar(f, 1);
-      if (isempty(x))
-        x = sym('x');   % e.g., diff(sym(6), 2)
-      end
-      z = diff(f, x, varargin{1});
-      return
-    end
-    if ((nargin == 3) && isnum2)  % diff(f,2,x) -> diff(f,x,2)
-      z = diff(f, varargin{2}, varargin{1});
-      return
-    end
-  end
-
-
   cmd = { 'f = _ins[0]'
           'args = _ins[1:]'
-          'return f.diff(*args),' };
+          'd = list(f.free_symbols)'
+          'if len(d) == 0:'
+          '    return sympy.S(0),'
+          'if len(args) == 0:'
+          '    d = [d[0]]'
+          'else:'
+          '    if args[0].is_integer:'
+          '        d = d*args[0]'
+          '    else:'
+          '        d = [args[0]]'
+          '    for i in xrange(1, len(args)):'
+          '        if args[i].is_integer:'
+          '            if args[i] >= 1:'
+          '                d = d + [d[-1]]*(args[i]-1)'
+          '        else:'
+          '            d = d + [args[i]]'
+          'return f.diff(*d),' };
 
   varargin = sym(varargin);
   z = python_cmd (cmd, sym(f), varargin{:});
