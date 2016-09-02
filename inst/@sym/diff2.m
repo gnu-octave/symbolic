@@ -29,11 +29,11 @@
 %% @group
 %% syms x
 %% f = sin (cos (x));
-%% diff (f)
+%% diff2 (f)
 %%   @result{} (sym) -sin(x)⋅cos(cos(x))
-%% diff (f, x)
+%% diff2 (f, x)
 %%   @result{} (sym) -sin(x)⋅cos(cos(x))
-%% simplify (diff (f, x, x))
+%% simplify (diff2 (f, x, x))
 %%   @result{} (sym)
 %%            2
 %%       - sin (x)⋅sin(cos(x)) - cos(x)⋅cos(cos(x))
@@ -45,9 +45,9 @@
 %% @group
 %% syms x y
 %% f = cos(2*x + 3*y);
-%% diff(f, x, y, x)
+%% diff2(f, x, y, x)
 %%   @result{} (sym) 12⋅sin(2⋅x + 3⋅y)
-%% diff(f, x, 2, y, 3)
+%% diff2(f, x, 2, y, 3)
 %%   @result{} (sym) -108⋅sin(2⋅x + 3⋅y)
 %% @end group
 %% @end example
@@ -55,7 +55,7 @@
 %% Other examples:
 %% @example
 %% @group
-%% diff(sym(1))
+%% diff2(sym(1))
 %%   @result{} (sym) 0
 %% @end group
 %% @end example
@@ -104,60 +104,59 @@ end
 
 %!test
 %! % basic
-%! assert(logical( diff(sin(x)) - cos(x) == 0 ))
-%! assert(logical( diff(sin(x),x) - cos(x) == 0 ))
-%! assert(logical( diff(sin(x),x,x) + sin(x) == 0 ))
+%! assert(logical( diff2(sin(x)) - cos(x) == 0 ))
+%! assert(logical( diff2(sin(x),x) - cos(x) == 0 ))
+%! assert(logical( diff2(sin(x),x,x) + sin(x) == 0 ))
 
 %!test
 %! % these fail when doubles are not converted to sym
-%! assert(logical( diff(sin(x),x,2) + sin(x) == 0 ))
-%! assert(logical( diff(sym(1),x) == 0 ))
-%! assert(logical( diff(1,x) == 0 ))
-%! assert(logical( diff(pi,x) == 0 ))
+%! assert(logical( diff2(sin(x),x,2) + sin(x) == 0 ))
+%! assert(logical( diff2(sym(1),x) == 0 ))
+%! assert(logical( diff2(1,x) == 0 ))
+%! assert(logical( diff2(pi,x) == 0 ))
 
 %!test
 %! % symbolic diff of const (w/o variable) fails in sympy, but we work around
-%! assert (isequal (diff(sym(1)), sym(0)))
+%! assert (isequal (diff2(sym(1)), sym(0)))
 
 %!test
 %! % nth symbolic diff of const
-%! assert (isequal (diff(sym(1), 2), sym(0)))
-%! assert (isequal (diff(sym(1), sym(1)), sym(0)))
+%! assert (isequal (diff2(sym(1), 2), sym(0)))
+%! assert (isequal (diff2(sym(1), sym(1)), sym(0)))
 
 %!test
 %! % octave's vector difference still works
-%! assert(isempty(diff(1)))
-%! assert((diff([2 6]) == 4))
+%! assert(isempty(diff2(1)))
+%! assert((diff2([2 6]) == 4))
 
 %!test
 %! % other forms
 %! f = sin(x);
-%! g = diff(f,x,2);
-%! assert (isequal (diff(f,2), g))
-%! assert (isequal (diff(f,sym(2)), g))
-%! assert (isequal (diff(f,sym(2),x), diff(g)))
-%! g = diff(f,x);
-%! assert (isequal (diff(f), g))
-%! assert (isequal (diff(f,1), g))
-%! assert (isequal (diff(f,1,x), diff(g)))
+%! g = diff2(f,x,2);
+%! assert (isequal (diff2(f,2), g))
+%! assert (isequal (diff2(f,sym(2)), g))
+%! assert (isequal (diff2(f,sym(2),x), diff2(g)))
+%! g = diff2(f,x);
+%! assert (isequal (diff2(f), g))
+%! assert (isequal (diff2(f,1), g))
+%! assert (isequal (diff2(f,1,x), diff2(g)))
 
 %!test
 %! % matrix
 %! A = [x sin(x); x*y 10];
 %! B = [1 cos(x); y 0];
-%! assert(isequal(diff(A,x),B))
+%! assert(isequal(diff2(A,x),B))
 
 %!error
-%! % bug: use symvar
 %! a = x*y;
-%! b = diff(a);
+%! b = diff2(a);
 
 %!test
 %! % bug: symvar should be used on the matrix, not comp-by-comp
 %! a = [x y x*x];
-%! b = diff(a, x);
+%! b = diff2(a, x);
 %! assert (~isequal (b(2), 1))
 %! assert (isequal (b, [1 0 2*x]))
-%! b = diff(a, x, 1);
+%! b = diff2(a, x, 1);
 %! assert (~isequal (b(2), 1))
 %! assert (isequal (b, [1 0 2*x]))
