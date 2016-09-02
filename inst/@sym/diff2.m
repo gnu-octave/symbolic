@@ -64,7 +64,7 @@
 %% @end defmethod
 
 
-function z = diff(f, varargin)
+function z = diff2(f, varargin)
 
   cmd = { 'f = _ins[0]'
           'args = _ins[1:]'
