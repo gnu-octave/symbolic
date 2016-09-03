@@ -47,6 +47,6 @@ end
 
 
 %!test
-%! A = hilb(sym(3));
+%! A = invhilb(sym(3));
 %! B = sym([9 -36 30;-36 192 -180;30 -180 180]);
 %! assert( isequal( A, B))
