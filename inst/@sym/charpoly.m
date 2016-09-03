@@ -42,7 +42,7 @@ function y = charpoly(a, b)
     print_usage ();
   end
   if (nargin == 1)
-    error("Charpoly as vector its not supported now");
+    error('Charpoly as vector its not supported now');
   else
     y = python_cmd('return _ins[0].charpoly(_ins[1]).as_expr(),', a, b);
   end
