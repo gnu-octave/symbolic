@@ -1,0 +1,55 @@
+%% Copyright (C) 2016 Lagu
+%%
+%% This program is free software; you can redistribute it and/or
+%% modify it under the terms of the GNU General Public
+%% License as published by the Free Software Foundation;
+%% either version 3, or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied
+%% warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+%% PURPOSE.  See the GNU General Public License for more
+%% details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.  If not,
+%% see <http://www.gnu.org/licenses/>.
+
+%% -*- texinfo -*-
+%% @documentencoding UTF-8
+%% @defmethod @@sym beta (@var{x})
+%% Convert cell array to symbolic array.
+%%
+%% Examples:
+%% @example
+%% @group
+%% syms x y
+%% cell2sym({x, y})
+%%   @result{} ans = (sym) [x  y]  (1×2 matrix)
+%% @end group
+%% @end defmethod
+
+function c = cell2sym(p)
+
+  if (nargin < 1 || nargin > 2)
+    print_usage ();
+  elseif (nargin == 2)
+    error('Flag not supported yet');
+  end
+
+  s = size(p);
+  c = sym([]);
+
+  for i=1:s(1)
+    for j=1:s(2)
+      c(i, j)=p{i, j};
+    end
+  end
+
+end
+
+
+%!test
+%! A = {1, 2, 3;4, 5, 6;7, 8, 9};
+%! B = [1, 2, 3;4, 5, 6;7, 8, 9];
+%! assert( isequal( cell2sym(A), sym(B)))
