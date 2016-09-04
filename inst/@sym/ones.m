@@ -57,7 +57,8 @@ function y = ones(varargin)
     return;
   end
 
-  y = python_cmd('return ones(*_ins),', varargin{:});
+  %% Be careful, varargin should be always sym.
+  y = python_cmd('return ones(*_ins),', sym(varargin){:});
 end
 
 %!test

@@ -57,6 +57,7 @@ function y = eye(varargin)
     return;
   end
 
+  %% Be careful, varargin should be always sym.
   y = python_cmd('return eye(*_ins),', varargin{:});
 end
 

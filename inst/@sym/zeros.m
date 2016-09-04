@@ -56,7 +56,8 @@ function y = zeros(varargin)
     return;
   end
 
-  y = python_cmd('return zeros(*_ins),', varargin{:});
+  %% Be careful, varargin should be always sym
+  y = python_cmd('return zeros(*_ins),', sym(varargin){:});
 end
 
 

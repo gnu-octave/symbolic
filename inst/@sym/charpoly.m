@@ -44,7 +44,7 @@ function y = charpoly(a, b)
   if (nargin == 1)
     error('Charpoly as vector its not supported now');
   else
-    y = python_cmd('return _ins[0].charpoly(_ins[1]).as_expr(),', a, b);
+    y = python_cmd('return _ins[0].charpoly(_ins[1]).as_expr(),', sym(a), sym(b));
   end
 end
 
