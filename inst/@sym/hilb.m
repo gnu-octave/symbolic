@@ -18,14 +18,14 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym acosd (@var{x})
-%% Symbolic inverse cos function with output in degrees.
+%% @defmethod @@sym hilb (@var{x})
+%% Return the Hilbert matrix of order N.
 %%
 %% Example:
 %% @example
 %% @group
 %% hilb (sym(2))
-%%   @result{} and = (sym 2×2 matrix)
+%%   @result{} ans = (sym 2×2 matrix)
 %%  ⎡ 1   1/2⎤
 %%  ⎢        ⎥
 %%  ⎣1/2  1/3⎦

@@ -18,16 +18,16 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym ones (@var{x})
-%% @defmethod @@sym ones (@var{x}, @var{y})
-%% @defmethod @@sym ones (@var{x}, @var{y}, @var{class})
+%% @defmethod @@sym eye (@var{x})
+%% @defmethod @@sym eye (@var{x}, @var{y})
+%% @defmethod @@sym eye (@var{x}, @var{y}, @var{class})
 %% Return an identity matrix.
 %%
 %% Example:
 %% @example
 %% @group
 %% y = eye (sym(3))
-%%   @result{} ans = (sym 3×3 matrix)
+%%   @result{} y = (sym 3×3 matrix)
 %%  ⎡1  0  0⎤
 %%  ⎢       ⎥
 %%  ⎢0  1  0⎥

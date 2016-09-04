@@ -19,13 +19,13 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @defmethod @@sym invhilb (@var{x})
-%% Symbolic inverse cos function with output in degrees.
+%% Return the inverse of the Hilbert matrix of order N.
 %%
 %% Example:
 %% @example
 %% @group
 %% invhilb (sym(2))
-%%   @result{} and = (sym 2×2 matrix)
+%%   @result{} ans = (sym 2×2 matrix)
 %%  ⎡4   -6⎤
 %%  ⎢      ⎥
 %%  ⎣-6  12⎦

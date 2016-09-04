@@ -27,7 +27,7 @@
 %% @example
 %% @group
 %% y = ones (sym(3))
-%%   @result{} ans = (sym 3×3 matrix)
+%%   @result{} y = (sym 3×3 matrix)
 %%  ⎡1  1  1⎤
 %%  ⎢       ⎥
 %%  ⎢1  1  1⎥

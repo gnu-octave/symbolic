@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym cosd (@var{x})
-%% Symbolic cos function with input in degrees.
+%% @defmethod @@sym dawson (@var{x})
+%% Compute the Dawson (scaled imaginary error) function.
 %%
 %% Example:
 %% @example
