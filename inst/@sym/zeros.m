@@ -74,4 +74,3 @@ end
 %! y = zeros(sym(1), 2);
 %! x = [0 0];
 %! assert( isequal( y, sym(x)))
-
