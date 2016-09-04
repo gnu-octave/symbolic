@@ -28,6 +28,7 @@
 %% beta(x, y)
 %%   @result{} ans = (sym) β(x, y)
 %% @end group
+%% @end example
 %% @end defmethod
 
 function r = beta(x, y)
