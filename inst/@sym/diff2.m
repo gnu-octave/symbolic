@@ -18,10 +18,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym diff (@var{f})
-%% @defmethodx @@sym diff (@var{f}, @var{x})
-%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
-%% @defmethodx @@sym diff (@var{f}, @dots{})
+%% @defmethod  @@sym diff2 (@var{f})
+%% @defmethodx @@sym diff2 (@var{f}, @var{x})
+%% @defmethodx @@sym diff2 (@var{f}, @var{x}, @dots{})
+%% @defmethodx @@sym diff2 (@var{f}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
@@ -73,7 +73,7 @@ function z = diff2(f, varargin)
           '    return sympy.S(0),'
           'if len(args) == 0:'
           '    if len(d) > 1:'
-          '        return ("NO_DEV_VAR"),'
+          '        d = []'
           'else:'
           '    if args[0].is_integer:'
           '        if len(d) > 1:'
