@@ -17,16 +17,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym beta (@var{x})
+%% @defmethod @@sym cell2sym (@var{x})
 %% Convert cell array to symbolic array.
 %%
 %% Examples:
 %% @example
 %% @group
 %% syms x y
-%% cell2sym({x, y})
+%% cell2sym(@{x, y@})
 %%   @result{} ans = (sym) [x  y]  (1×2 matrix)
 %% @end group
+%% @end example
+%%
+%% @example
+%% @group
+%% syms x y
+%% cell2sym(@{'x', 2; pi 'y'@})
+%%   @result{} ans = (sym 2×2 matrix)
+%%  ⎡x  2⎤
+%%  ⎢    ⎥
+%%  ⎣π  y⎦
+%% @end group
+%% @end example
 %% @end defmethod
 
 function c = cell2sym(p)
@@ -40,9 +52,12 @@ function c = cell2sym(p)
   s = size(p);
   c = sym([]);
 
+  %% FIXME: Don't support multi-dimensional yet.
+  assert (length (s) == 2)
+
   for i=1:s(1)
     for j=1:s(2)
-      c(i, j)=p{i, j};
+      c(i, j) = p{i, j};
     end
   end
 
@@ -50,6 +65,6 @@ end
 
 
 %!test
-%! A = {1, 2, 3;4, 5, 6;7, 8, 9};
-%! B = [1, 2, 3;4, 5, 6;7, 8, 9];
+%! A = {1, 2, 3; 4, 5, 6; 7, 8, 9};
+%! B = [1, 2, 3; 4, 5, 6; 7, 8, 9];
 %! assert( isequal( cell2sym(A), sym(B)))
