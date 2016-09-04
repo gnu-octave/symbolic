@@ -34,7 +34,6 @@ function y = chol(x)
 end
 
 %!test
-%! %%FIXME: In a future when we support hilb replace it with @sym
-%! A = chol(sym(hilb(2)));
+%! A = chol(hilb(sym(2)));
 %! B = [[1 0]; sym(1)/2 sqrt(sym(3))/6];
 %! assert( isequal( A, B ))
