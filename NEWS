@@ -3,9 +3,14 @@ octsympy 2.5.0-dev
 
   * New symbolic commands:
 
-          acosd         cosd
-          asind         sind
-          atand         tand
+          acosd
+          asind
+          atand
+          cell2sym
+          cosd
+          divisors
+          sind
+          tand
 
   * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
