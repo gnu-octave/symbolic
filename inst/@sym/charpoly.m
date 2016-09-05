@@ -18,18 +18,31 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym charpoly (@var{x})
-%% @defmethod @@sym charpoly (@var{x}, @var{y})
+%% @defmethod @@sym charpoly (@var{A})
+%% @defmethodx @@sym charpoly (@var{A}, @var{x})
 %% Characteristic polynomial of matrix.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms x
-%% a = x*x;
-%% y = charpoly ([x x;1 x], x)
-%%   @result{} y = (sym)
-%%   -x
+%% lambda = sym('lambda');
+%% y(lambda) = charpoly ([x x;1 x], lambda)
+%%   @result{} y(lamda) = (symfun)
+%%   2            2    
+%%  λ  - 2⋅λ⋅x + x  - x
+%% @end group
+%% @end example
+%%
+%% Numerical example:
+%% @example
+%% @group
+%% A = sym([1 2; 3 4]);
+%% mu = sym('mu');
+%% y(mu) = charpoly (A, mu)
+%%   @result{} y(mu) = (symfun)
+%%   2          
+%%  μ  - 5⋅μ - 2
 %% @end group
 %% @end example
 %% @end defmethod

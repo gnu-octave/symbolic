@@ -34,7 +34,7 @@
 %%         2     
 %% @end group
 %% @end example
-%% @seealso{@@sym/erfc, @@sym/erf, @@sym/erfcx, @@sym/erfi, @@sym/erfinv, @@sym/erfcinv}
+%% @seealso{@@sym/erfc, @@sym/erf, @@sym/erfcx, @@sym/erfi, @@sym/erfinv, @@sym/erfcinv, @@sym/dawsonm}
 %% @end defmethod
 
 
@@ -44,3 +44,8 @@ function y = dawson(x)
   end
   y = uniop_helper (x, 'lambda a: exp(-a**2)*erfi(a)*(sqrt(S(pi))/2)');
 end
+
+%!test
+%! A = dawson([1 2]);
+%! B = double(dawson(sym([1 2])));
+%! assert(A, B, -eps)

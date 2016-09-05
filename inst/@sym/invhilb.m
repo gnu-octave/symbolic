@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @defmethod @@sym invhilb (@var{x})
-%% Return the inverse of the Hilbert matrix of order N.
+%% Return the inverse of the Hilbert matrix of order @var{x}.
 %%
 %% Example:
 %% @example
