@@ -44,7 +44,7 @@ function r = and(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'lambda a,b: And(a, b)');
+  r = binop_helper(x, y, 'And');
 
 end
 
