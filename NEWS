@@ -4,11 +4,19 @@ octsympy 2.5.0-dev
   * New symbolic commands:
 
           acosd
+          adjoint
+          angle
           asind
           atand
+          beta
           cell2sym
+          charpoly
+          chol
           cosd
+          dawson
           divisors
+          hilb
+          invhilb
           sind
           tand
 
