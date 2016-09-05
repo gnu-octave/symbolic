@@ -18,12 +18,10 @@
 
 function z = cell2nosyms(x)
 
-  for i=1:size(x)(1)
-    for j=1:size(x)(2)
-      if (isa(x{i, j}, 'sym') || isa(x{i, j}, 'symfun'))
-        x{i, j} = double(x{i, j});
+  for i=1:length(x)
+      if (isa(x{i}, 'sym') || isa(x{i}, 'symfun'))
+        x{i} = double(x{i});
       end
-    end
   end
 
   z = x;

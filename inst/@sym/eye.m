@@ -18,9 +18,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym eye (@var{x})
-%% @defmethod @@sym eye (@var{x}, @var{y})
-%% @defmethod @@sym eye (@var{x}, @var{y}, @var{class})
+%% @defmethod @@sym eye (@var{n})
+%% @defmethodx @@sym eye (@var{n}, @var{m})
+%% @defmethodx @@sym eye (@var{n}, @var{m}, @var{class})
 %% Return an identity matrix.
 %%
 %% Example:
@@ -28,11 +28,11 @@
 %% @group
 %% y = eye (sym(3))
 %%   @result{} y = (sym 3×3 matrix)
-%%  ⎡1  0  0⎤
-%%  ⎢       ⎥
-%%  ⎢0  1  0⎥
-%%  ⎢       ⎥
-%%  ⎣0  0  1⎦
+%%       ⎡1  0  0⎤
+%%       ⎢       ⎥
+%%       ⎢0  1  0⎥
+%%       ⎢       ⎥
+%%       ⎣0  0  1⎦
 %% @end group
 %% @end example
 %%
@@ -41,37 +41,50 @@
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
+
 function y = eye(varargin)
 
-  if (nargin >= 2)
-    for i=1:size(varargin)(2)
-      if (ischar(varargin{i}))
-        y = sym(eye(cell2nosyms(varargin){:}));
-        return;
-      end
-    end
+  % partial workaround for issue #13: delete when/if fixed properly
+  if (strcmp (varargin{nargin}, 'sym'))
+    nargin = nargin - 1;
+    varargin = varargin(1:nargin);
   end
 
-  if (nargin > 1)
-    y = sym(eye(cell2nosyms(varargin){:}));
-    return;
+  if (isa (varargin{nargin}, 'char'))
+    y = eye (cell2nosyms (varargin){:});
+    return
   end
 
-  %% Be careful, varargin should be always sym.
-  y = python_cmd('return eye(*_ins),', varargin{:});
+  if nargin > 1 %%Sympy don't support eye(A, B)
+    y = sym(eye (cell2nosyms (varargin){:}));
+  else
+    y = python_cmd ('return eye(*_ins)', sym(varargin){:});
+  end
+
 end
+
 
 %!test
 %! y = eye(sym(2));
-%! x = [1 0;0 1];
+%! x = [1 0; 0 1];
 %! assert( isequal( y, sym(x)))
 
 %!test
 %! y = eye(sym(2), 1);
-%! x = [1;0];
+%! x = [1; 0];
 %! assert( isequal( y, sym(x)))
 
 %!test
 %! y = eye(sym(1), 2);
 %! x = [1 0];
 %! assert( isequal( y, sym(x)))
+
+%% Check types:
+%!assert( isa( eye(sym(2), 'double'), 'double'))
+%!assert( isa( eye(3, sym(3), 'single') , 'single'))
+%!assert( isa( eye(3, sym(3)), 'sym'))
+%!assert( isa( eye(3, sym(3), 'sym'), 'sym'))
+
+%!xtest
+%! % Issue #13
+%! assert( isa( eye(3, 3, 'sym'), 'sym'))
