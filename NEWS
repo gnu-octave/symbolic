@@ -32,6 +32,9 @@ octsympy 2.5.0-dev
 
   * `isfinite` behaves correctly for variables (and is documented).
 
+  * New experimental Python communication using Pytave, due to
+    Abhinav Tripathi during Google Summer of Code 2016.
+
 
 
 octsympy 2.4.1-dev
