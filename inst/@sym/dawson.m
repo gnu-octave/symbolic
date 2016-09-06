@@ -34,7 +34,7 @@
 %%              2
 %% @end group
 %% @end example
-%% @seealso{@@sym/erfc, @@sym/erf, @@sym/erfcx, @@sym/erfi, @@sym/erfinv, @@sym/erfcinv, @@sym/dawsonm}
+%% @seealso{dawson, @@sym/erfc, @@sym/erf, @@sym/erfcx, @@sym/erfi, @@sym/erfinv, @@sym/erfcinv}
 %% @end defmethod
 
 
