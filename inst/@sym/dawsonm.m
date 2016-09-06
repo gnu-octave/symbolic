@@ -24,18 +24,16 @@
 %% Example:
 %% @example
 %% @group
-%% A = sym([1 2; 3 4]);
+%% A = sym([1 1; 0 1]);
 %% dawsonm (A)
 %%   @result{} ans = (sym 2×2 matrix)
-%%  ⎡   ⎛ 7            10        ⎞      ⎛ 7            10        ⎞ ⎤
-%%  ⎢√π⋅⎝ℯ ⋅erfi(1) + ℯ  ⋅erfi(3)⎠   √π⋅⎝ℯ ⋅erfi(2) + ℯ  ⋅erfi(4)⎠ ⎥
-%%  ⎢─────────────────────────────   ───────────────────────────── ⎥
-%%  ⎢              2                               2               ⎥
-%%  ⎢                                                              ⎥
-%%  ⎢   ⎛ 15            22        ⎞     ⎛ 15            22        ⎞⎥
-%%  ⎢√π⋅⎝ℯ  ⋅erfi(1) + ℯ  ⋅erfi(3)⎠  √π⋅⎝ℯ  ⋅erfi(2) + ℯ  ⋅erfi(4)⎠⎥
-%%  ⎢──────────────────────────────  ──────────────────────────────⎥
-%%  ⎣              2                               2               ⎦
+%%     ⎡ℯ⋅√π⋅erfi(1)  3⋅ℯ⋅√π⋅erfi(1)⎤
+%%     ⎢────────────  ──────────────⎥
+%%     ⎢     2              2       ⎥
+%%     ⎢                            ⎥
+%%     ⎢               ℯ⋅√π⋅erfi(1) ⎥
+%%     ⎢     0         ──────────── ⎥
+%%     ⎣                    2       ⎦
 %% @end group
 %% @end example
 %% @seealso{@@sym/dawson, @@sym/erfc, @@sym/erf, @@sym/erfcx, @@sym/erfi, @@sym/erfinv, @@sym/erfcinv}
@@ -46,11 +44,11 @@ function y = dawsonm(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = exp(x^2)*erfi(x)*(sqrt(sym('pi'))/2);
+  y = expm(x^2)*erfi(x)*(sqrt(sym('pi'))/2);
 end
 
 %!test
 %! M = [0 1; 1 0];
-%! A = exp(M^2)*erfi(M)*(sqrt(pi)/2);
+%! A = expm(M^2)*erfi(M)*(sqrt(pi)/2);
 %! B = double(dawsonm(sym(M)));
 %! assert(A, B, -eps*1.0062) %% Octave diverge in that proportion of error.
