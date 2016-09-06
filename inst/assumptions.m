@@ -66,7 +66,7 @@
 %% @group
 %% A = assumptions('possible');
 %% sprintf('%s ', A@{:@})
-%%   @result{} ans = real positive negative integer even odd rational finite
+%%   @result{} ans = ...
 %% @end group
 %% @end example
 %%
