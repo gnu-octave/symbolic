@@ -54,11 +54,17 @@ function y = charpoly(a, b)
   if (nargin >= 3)
     print_usage ();
   end
+
+  cmd = {'return _ins[0].charpoly(_ins[1]).as_expr(),'};
+
   if (nargin == 1)
-    error('Charpoly as vector its not supported now');
+    syms b
+    y = python_cmd(cmd , sym(a), b);
+    y = sym2poly(y, b);
   else
-    y = python_cmd('return _ins[0].charpoly(_ins[1]).as_expr(),', sym(a), sym(b));
+    y = python_cmd(cmd , sym(a), sym(b));
   end
+  
 end
 
 %!test
@@ -70,3 +76,15 @@ end
 %! syms x
 %! A = sym([1, 2;3, 4]);
 %! assert( isequal( charpoly(A, x), x^2 - 5*x -2))
+
+%!test
+%! syms x
+%! A = sym([x, x;x, x]);
+%! B = sym([1 -2*x 0]);
+%! assert( isequal( charpoly(A), B))
+
+%!xtest
+%! syms x
+%! A = sym([1, 2;3, 4]);
+%! B = sym([1 -5 -2]);
+%! assert( isequal( charpoly(A), B))
