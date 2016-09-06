@@ -24,23 +24,16 @@
 
 %% Source: http://docs.sympy.org/dev/modules/core.html
 
+%% FIXME: Maybe in the future remove this file and replace with something else.
+
 function L = valid_sym_assumptions()
 
   persistent List
 
   if (isempty(List))
 
-    %%FIXME: After a while update the list.
-    cmd = {'r = []'
-           'L = ["commutative", "complex", "imaginary", "real", "integer", "odd", "even", "prime", "composite", "zero", "nonzero", "rational", "algebraic", "trascendental", "irrational", "finite", "infinite", "negative", "nonnegative", "positive", "nonpositive", "hermitian", "antihermitian"]'
-           'x = Symbol("x")'
-           'for i in range(len(L)):'
-           '    try:'
-           '        q = eval("x.is_" + L[i])'
-           '        r = r + [L[i]]'
-           '    except:'
-           '        pass'
-           'return r,'};
+    cmd = {'from sympy.core.assumptions import _assume_defined as L'
+           'return list(L),'};
     List = python_cmd(cmd);
 
   end
