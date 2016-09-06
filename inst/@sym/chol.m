@@ -18,11 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym chol (@var{x})
-%% Cholesky factorization.
+%% @defmethod @@sym chol (@var{A})
+%% Cholesky factorization of symbolic matrix.
 %% @end defmethod
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
+
 
 function y = chol(x)
   if (nargin == 2)
@@ -32,6 +33,7 @@ function y = chol(x)
   end
   y = python_cmd('return _ins[0].cholesky(),', x);
 end
+
 
 %!test
 %! A = chol(hilb(sym(2)));

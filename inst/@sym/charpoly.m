@@ -63,10 +63,10 @@ end
 
 %!test
 %! syms x
-%! A = sym([x, x;x, x]);
+%! A = sym([x x; x x]);
 %! assert( isequal( charpoly(A, x), -x^2))
 
 %!xtest
 %! syms x
-%! A = sym([1, 2;3, 4]);
+%! A = sym([1 2; 3 4]);
 %! assert( isequal( charpoly(A, x), x^2 - 5*x -2))

@@ -25,10 +25,11 @@
 %% @example
 %% @group
 %% A = [sym(1); 2];
-%% y =  adjoint(A)
+%% y = adjoint(A)
 %%   @result{} y = (sym) [1  2]  (1×2 matrix)
 %% @end group
 %% @end example
+%% @seealso{@@sym/ctranspose}
 %% @end defmethod
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
