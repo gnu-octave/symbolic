@@ -1,6 +1,8 @@
 octsympy 2.5.0-dev
 ==================
 
+  * The full set of assumptions implemented by Sympy can now be used.
+
   * New symbolic commands:
 
           acosd         cosd
