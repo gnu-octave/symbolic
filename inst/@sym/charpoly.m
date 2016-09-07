@@ -65,28 +65,41 @@
 %%       λ  - 2⋅λ⋅x + x  - x
 %% @end group
 %% @end example
+%%
+%% If you don't send any @var{x}, you will get a vector with the
+%% coefficients of the polynomi:
+%% @example
+%% @group
+%% charpoly (sym([4 1;3 9]))
+%%   @result{} ans = (sym) [1  -13  33]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
-function y = charpoly(a, b)
+function y = charpoly(varargin)
   if (nargin >= 3)
     print_usage ();
   end
 
-  cmd = {'return _ins[0].charpoly(_ins[1]).as_expr(),'};
+  cmd = {'if len(_ins) == 1:'
+         '    a = Dummy()'
+         '    return Poly.from_expr(_ins[0].charpoly(a).as_expr(), a).all_coeffs(),'
+         'else:'
+         '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
 
-  if (nargin == 1)
-    syms b
-    y = python_cmd(cmd , sym(a), b);
-    y = sym2poly(y, b);
-  else
-    y = python_cmd(cmd , sym(a), sym(b));
-  end
+  y = python_cmd(cmd , sym(varargin){:});
   
+  if (nargin == 1)
+    y = cell2sym(y);
+  end
+
 end
+
 
 %!test
 %! syms x
