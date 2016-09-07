@@ -18,17 +18,17 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym hilb (@var{x})
-%% Return the Hilbert matrix of order @var{x}.
+%% @defmethod @@sym hilb (@var{n})
+%% Return the symbolic Hilbert matrix.
 %%
 %% Example:
 %% @example
 %% @group
 %% hilb (sym(2))
 %%   @result{} ans = (sym 2×2 matrix)
-%%  ⎡ 1   1/2⎤
-%%  ⎢        ⎥
-%%  ⎣1/2  1/3⎦
+%%       ⎡ 1   1/2⎤
+%%       ⎢        ⎥
+%%       ⎣1/2  1/3⎦
 %% @end group
 %% @end example
 %%
@@ -40,7 +40,7 @@ function y = hilb(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  
+
   y = python_cmd('return Matrix(_ins[0], _ins[0], lambda i,j: 1 / (i + j + 1)),', x);
 
 end

@@ -31,6 +31,7 @@
 %% @end example
 %% @end defmethod
 
+
 function r = beta(x, y)
 
   if (nargin ~= 2)
@@ -41,5 +42,6 @@ function r = beta(x, y)
 
 end
 
+
 %!test
-%! assert( isequal( vpa(beta(1, 2)), sym(1)/2))
+%! assert (isequal (double (beta(1, 2)), 1/2))
