@@ -20,31 +20,52 @@
 %% @documentencoding UTF-8
 %% @defmethod @@sym charpoly (@var{A})
 %% @defmethodx @@sym charpoly (@var{A}, @var{x})
-%% Characteristic polynomial of matrix.
-%%
-%% Example:
-%% @example
-%% @group
-%% syms x
-%% lambda = sym('lambda');
-%% y(lambda) = charpoly ([x x;1 x], lambda)
-%%   @result{} y(lamda) = (symfun)
-%%   2            2    
-%%  λ  - 2⋅λ⋅x + x  - x
-%% @end group
-%% @end example
+%% Characteristic polynomial of symbolic matrix.
 %%
 %% Numerical example:
 %% @example
 %% @group
 %% A = sym([1 2; 3 4]);
 %% mu = sym('mu');
-%% y(mu) = charpoly (A, mu)
-%%   @result{} y(mu) = (symfun)
-%%   2          
-%%  μ  - 5⋅μ - 2
+%% charpoly (A, mu)
+%%   @result{} (sym)
+%%        2
+%%       μ  - 5⋅μ - 2
 %% @end group
 %% @end example
+%%
+%% We can then manipulate the characteristic polynomial, for example:
+%% @example
+%% @group
+%% b(mu) = charpoly (A, mu)
+%%   @result{} b(mu) = (symfun)
+%%        2
+%%       μ  - 5⋅μ - 2
+%% b(1)
+%%   @result{} (sym) -6
+%% @end group
+%% @end example
+%% We can also confirm that the characteristic polynomial is zero
+%% at an eigenvalue:
+%% @example
+%% @group
+%% ev = eig(A);
+%% simplify(b(ev(1)))
+%%   @result{} (sym) 0
+%% @end group
+%% @end example
+%%
+%% The matrix can contain symbols:
+%% @example
+%% @group
+%% syms x
+%% charpoly ([x x;1 x], sym('lambda'))
+%%   @result{} (sym)
+%%        2            2
+%%       λ  - 2⋅λ⋅x + x  - x
+%% @end group
+%% @end example
+%% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
 
@@ -69,12 +90,12 @@ end
 
 %!test
 %! syms x
-%! A = sym([x, x;x, x]);
+%! A = sym([x x; x x]);
 %! assert( isequal( charpoly(A, x), -x^2))
 
-%!xtest
+%!test
 %! syms x
-%! A = sym([1, 2;3, 4]);
+%! A = sym([1 2; 3 4]);
 %! assert( isequal( charpoly(A, x), x^2 - 5*x -2))
 
 %!test

@@ -3,9 +3,22 @@ octsympy 2.5.0-dev
 
   * New symbolic commands:
 
-          acosd         cosd
-          asind         sind
-          atand         tand
+          acosd
+          adjoint
+          angle
+          asind
+          atand
+          beta
+          cell2sym
+          charpoly
+          chol
+          cosd
+          dawson
+          divisors
+          hilb
+          invhilb
+          sind
+          tand
 
   * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
@@ -31,6 +44,9 @@ octsympy 2.5.0-dev
   * `heaviside` accepts a second argument for its value at zero.
 
   * `isfinite` behaves correctly for variables (and is documented).
+
+  * New experimental Python communication using Pytave, due to
+    Abhinav Tripathi during Google Summer of Code 2016.
 
 
 

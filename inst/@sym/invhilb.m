@@ -18,17 +18,17 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym invhilb (@var{x})
-%% Return the inverse of the Hilbert matrix of order @var{x}.
+%% @defmethod @@sym invhilb (@var{n})
+%% Return the symbolic inverse of the Hilbert matrix.
 %%
 %% Example:
 %% @example
 %% @group
 %% invhilb (sym(2))
 %%   @result{} ans = (sym 2×2 matrix)
-%%  ⎡4   -6⎤
-%%  ⎢      ⎥
-%%  ⎣-6  12⎦
+%%       ⎡4   -6⎤
+%%       ⎢      ⎥
+%%       ⎣-6  12⎦
 %% @end group
 %% @end example
 %%
@@ -40,7 +40,7 @@ function y = invhilb(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  
+
   y = inv(hilb(x));
 
 end
