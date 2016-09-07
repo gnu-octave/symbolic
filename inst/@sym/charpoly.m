@@ -20,7 +20,7 @@
 %% @documentencoding UTF-8
 %% @defmethod @@sym charpoly (@var{A})
 %% @defmethodx @@sym charpoly (@var{A}, @var{x})
-%% Characteristic polynomial of matrix.
+%% Characteristic polynomial of symbolic matrix.
 %%
 %% Numerical example:
 %% @example
@@ -34,17 +34,38 @@
 %% @end group
 %% @end example
 %%
-%% Example with symbols:
+%% We can then manipulate the characteristic polynomial, for example:
+%% @example
+%% @group
+%% b(mu) = charpoly (A, mu)
+%%   @result{} b(mu) = (symfun)
+%%        2
+%%       μ  - 5⋅μ - 2
+%% b(1)
+%%   @result{} (sym) -6
+%% @end group
+%% @end example
+%% We can also confirm that the characteristic polynomial is zero
+%% at an eigenvalue:
+%% @example
+%% @group
+%% ev = eig(A);
+%% simplify(b(ev(1)))
+%%   @result{} (sym) 0
+%% @end group
+%% @end example
+%%
+%% The matrix can contain symbols:
 %% @example
 %% @group
 %% syms x
-%% lambda = sym('lambda');
-%% charpoly ([x x;1 x], lambda)
+%% charpoly ([x x;1 x], sym('lambda'))
 %%   @result{} (sym)
 %%        2            2
 %%       λ  - 2⋅λ⋅x + x  - x
 %% @end group
 %% @end example
+%% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
 
