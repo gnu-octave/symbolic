@@ -66,7 +66,7 @@
 %% @end group
 %% @end example
 %%
-%% If you don't send any @var{x}, you will get a vector with the
+%% If you don't pass in any @var{x}, you will get a vector with the
 %% coefficients of the polynomi:
 %% @example
 %% @group
