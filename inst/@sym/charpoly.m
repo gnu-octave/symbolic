@@ -65,22 +65,41 @@
 %%       λ  - 2⋅λ⋅x + x  - x
 %% @end group
 %% @end example
+%%
+%% If you don't pass in any @var{x}, you will get a vector with the
+%% coefficients of the polynomi:
+%% @example
+%% @group
+%% charpoly (sym([4 1;3 9]))
+%%   @result{} ans = (sym) [1  -13  33]  (1×3 matrix)
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
-function y = charpoly(a, b)
+function y = charpoly(varargin)
   if (nargin >= 3)
     print_usage ();
   end
+
+  cmd = {'if len(_ins) == 1:'
+         '    a = Dummy()'
+         '    return Poly.from_expr(_ins[0].charpoly(a).as_expr(), a).all_coeffs(),'
+         'else:'
+         '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
+
+  y = python_cmd(cmd , sym(varargin){:});
+  
   if (nargin == 1)
-    error('Charpoly as vector its not supported now');
-  else
-    y = python_cmd('return _ins[0].charpoly(_ins[1]).as_expr(),', sym(a), sym(b));
+    y = cell2sym(y);
   end
+
 end
+
 
 %!test
 %! syms x
@@ -91,3 +110,15 @@ end
 %! syms x
 %! A = sym([1 2; 3 4]);
 %! assert( isequal( charpoly(A, x), x^2 - 5*x -2))
+
+%!test
+%! syms x
+%! A = sym([x, x;x, x]);
+%! B = sym([1 -2*x 0]);
+%! assert( isequal( charpoly(A), B))
+
+%!xtest
+%! syms x
+%! A = sym([1, 2;3, 4]);
+%! B = sym([1 -5 -2]);
+%! assert( isequal( charpoly(A), B))
