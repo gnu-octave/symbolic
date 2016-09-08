@@ -24,9 +24,14 @@
 %% Example:
 %% @example
 %% @group
-%% A = [sym(1); 2];
+%% syms x
+%% A = [x x^3; 2*x i];
 %% y = adjoint(A)
-%%   @result{} y = (sym) [1  2]  (1×2 matrix)
+%%   @result{} y = (sym 2×2 matrix)
+%%     ⎡        3⎤
+%%     ⎢ ⅈ    -x ⎥
+%%     ⎢         ⎥
+%%     ⎣-2⋅x   x ⎦
 %% @end group
 %% @end example
 %% @seealso{@@sym/ctranspose}
@@ -36,13 +41,14 @@
 
 function y = adjoint(x)
   if (nargin ~= 1)
-    print_usage ();
+    print_usage();
   end
-  y = python_cmd('return _ins[0].adjoint(),', x);
+
+  y = python_cmd('return _ins[0].adjugate(),', x);
 end
 
 %!test
 %! syms x
 %! A = [x x^2; x^3 x^4];
-%! B = [conj(x) conj(x)^3; conj(x)^2 conj(x)^4];
+%! B = [x^4 -x^2; -x^3 x];
 %! assert( isequal( adjoint(A), B ))
