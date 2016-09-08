@@ -66,8 +66,7 @@
 %% @end group
 %% @end example
 %%
-%% If you don't pass in any @var{x}, you will get a vector with the
-%% coefficients of the polynomi:
+%% If @var{x} is omitted, the polynomial coefficients are returned:
 %% @example
 %% @group
 %% charpoly (sym([4 1;3 9]))
@@ -93,7 +92,7 @@ function y = charpoly(varargin)
          '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
 
   y = python_cmd(cmd , sym(varargin){:});
-  
+
   if (nargin == 1)
     y = cell2sym(y);
   end
@@ -113,12 +112,12 @@ end
 
 %!test
 %! syms x
-%! A = sym([x, x;x, x]);
+%! A = sym([x x; x x]);
 %! B = sym([1 -2*x 0]);
 %! assert( isequal( charpoly(A), B))
 
 %!xtest
 %! syms x
-%! A = sym([1, 2;3, 4]);
+%! A = sym([1 2; 3 4]);
 %! B = sym([1 -5 -2]);
 %! assert( isequal( charpoly(A), B))
