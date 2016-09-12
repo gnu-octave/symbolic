@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,20 +19,34 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym adjoint (@var{x})
-%% Adjoint of symbolic square matrix.
+%% @defmethod @@sym adjoint (@var{A})
+%% Adjoint/Adjugate of a symbolic square matrix.
+%%
+%% @strong{Caution}: This computes the Adjugate or ``Classical Adjoint''
+%% of the matrix.  For the Conjugate Transpose (which is commonly
+%% referred to the ``Adjoint''), @pxref{@@sym/ctranspose}.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms x
 %% A = [x x^3; 2*x i];
-%% y = adjoint(A)
-%%   @result{} y = (sym 2×2 matrix)
-%%     ⎡        3⎤
-%%     ⎢ ⅈ    -x ⎥
-%%     ⎢         ⎥
-%%     ⎣-2⋅x   x ⎦
+%% X = adjoint(A)
+%%   @result{} X = (sym 2×2 matrix)
+%%       ⎡        3⎤
+%%       ⎢ ⅈ    -x ⎥
+%%       ⎢         ⎥
+%%       ⎣-2⋅x   x ⎦
+%% @end group
+%% @end example
+%% And note the matrix adjugate @code{X} satisfies:
+%% @example
+%% @group
+%% A*X - det(A)*eye(2)
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡0  0⎤
+%%       ⎢    ⎥
+%%       ⎣0  0⎦
 %% @end group
 %% @end example
 %% @seealso{@@sym/ctranspose}
