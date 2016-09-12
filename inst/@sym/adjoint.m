@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,15 +19,34 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym adjoint (@var{x})
-%% Adjoint of symbolic square matrix.
+%% @defmethod @@sym adjoint (@var{A})
+%% Adjoint/Adjugate of a symbolic square matrix.
+%%
+%% @strong{Caution}: This computes the Adjugate or ``Classical Adjoint''
+%% of the matrix.  For the Conjugate Transpose (which is commonly
+%% referred to the ``Adjoint''), @pxref{@@sym/ctranspose}.
 %%
 %% Example:
 %% @example
 %% @group
-%% A = [sym(1); 2];
-%% y = adjoint(A)
-%%   @result{} y = (sym) [1  2]  (1×2 matrix)
+%% syms x
+%% A = [x x^3; 2*x i];
+%% X = adjoint(A)
+%%   @result{} X = (sym 2×2 matrix)
+%%       ⎡        3⎤
+%%       ⎢ ⅈ    -x ⎥
+%%       ⎢         ⎥
+%%       ⎣-2⋅x   x ⎦
+%% @end group
+%% @end example
+%% And note the matrix adjugate @code{X} satisfies:
+%% @example
+%% @group
+%% A*X - det(A)*eye(2)
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡0  0⎤
+%%       ⎢    ⎥
+%%       ⎣0  0⎦
 %% @end group
 %% @end example
 %% @seealso{@@sym/ctranspose}
@@ -34,15 +54,18 @@
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
+
 function y = adjoint(x)
   if (nargin ~= 1)
-    print_usage ();
+    print_usage();
   end
-  y = python_cmd('return _ins[0].adjoint(),', x);
+
+  y = python_cmd('return _ins[0].adjugate(),', x);
 end
+
 
 %!test
 %! syms x
 %! A = [x x^2; x^3 x^4];
-%! B = [conj(x) conj(x)^3; conj(x)^2 conj(x)^4];
+%! B = [x^4 -x^2; -x^3 x];
 %! assert( isequal( adjoint(A), B ))
