@@ -39,6 +39,7 @@
 
 %% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
+
 function y = adjoint(x)
   if (nargin ~= 1)
     print_usage();
@@ -46,6 +47,7 @@ function y = adjoint(x)
 
   y = python_cmd('return _ins[0].adjugate(),', x);
 end
+
 
 %!test
 %! syms x
