@@ -30,6 +30,9 @@ octsympy 2.5.0-dev
           fresnelc      sinint
           fresnels      zeta
 
+  * The full set of assumptions implemented by Sympy can now be used.
+    For example, `syms p prime` assumes `p` is prime.
+
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
 
