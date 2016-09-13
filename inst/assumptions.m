@@ -65,8 +65,8 @@
 %% @example
 %% @group
 %% A = assumptions('possible');
-%% sprintf('%s ', A@{:@})
-%%   @result{} ans = ...
+%% strjoin(sort(A), ', ')
+%%   @result{} ans = ..., finite, ..., positive, ..., zero
 %% @end group
 %% @end example
 %%
