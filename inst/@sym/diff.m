@@ -145,12 +145,19 @@ end
 %! f = sin(x);
 %! g = diff(f,x,2);
 %! assert (isequal (diff(f,2), g))
-%! assert (isequal (diff(f,2,x), g))
 %! assert (isequal (diff(f,sym(2)), g))
-%! assert (isequal (diff(f,sym(2),x), g))
 %! g = diff(f,x);
 %! assert (isequal (diff(f), g))
 %! assert (isequal (diff(f,1), g))
+
+%!test
+%! % old SMT supported (still does?) the 'n' before the 'x'
+%! % we might remove this someday, no longer seems documented in SMT
+%! f = sin(x);
+%! g = diff(f,x,2);
+%! assert (isequal (diff(f,2,x), g))
+%! assert (isequal (diff(f,sym(2),x), g))
+%! g = diff(f,x);
 %! assert (isequal (diff(f,1,x), g))
 
 %!test
