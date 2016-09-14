@@ -20,8 +20,11 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym diff (@var{f})
 %% @defmethodx @@sym diff (@var{f}, @var{x})
-%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
-%% @defmethodx @@sym diff (@var{f}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{y})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @var{y}, @var{y}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n}, @var{y}, @var{m}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
