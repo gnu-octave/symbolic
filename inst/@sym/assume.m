@@ -99,7 +99,7 @@
 %% FIXME: idea of rewriting all sym vars is a bit of a hack, not
 %% well tested (for example, with global vars.)
 %%
-%% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
+%% @seealso{@@sym/assumeAlso, assumptions, sym, syms, isassumption}
 %% @end deftypemethod
 
 %% Author: Colin B. Macdonald

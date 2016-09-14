@@ -60,7 +60,7 @@
 %% and replace any @var{x} within expressions in the caller's
 %% workspace.  See @ref{assume}.
 %%
-%% @seealso{@@sym/assume, assumptions, sym, syms}
+%% @seealso{@@sym/assume, assumptions, sym, syms, isassumption}
 %% @end deftypemethod
 
 %% Author: Colin B. Macdonald
