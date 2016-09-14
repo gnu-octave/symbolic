@@ -20,8 +20,11 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym diff (@var{f})
 %% @defmethodx @@sym diff (@var{f}, @var{x})
-%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
-%% @defmethodx @@sym diff (@var{f}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{y})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @var{y}, @var{y}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n}, @var{y}, @var{m}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
@@ -142,12 +145,19 @@ end
 %! f = sin(x);
 %! g = diff(f,x,2);
 %! assert (isequal (diff(f,2), g))
-%! assert (isequal (diff(f,2,x), g))
 %! assert (isequal (diff(f,sym(2)), g))
-%! assert (isequal (diff(f,sym(2),x), g))
 %! g = diff(f,x);
 %! assert (isequal (diff(f), g))
 %! assert (isequal (diff(f,1), g))
+
+%!test
+%! % old SMT supported (still does?) the 'n' before the 'x'
+%! % we might remove this someday, no longer seems documented in SMT
+%! f = sin(x);
+%! g = diff(f,x,2);
+%! assert (isequal (diff(f,2,x), g))
+%! assert (isequal (diff(f,sym(2),x), g))
+%! g = diff(f,x);
 %! assert (isequal (diff(f,1,x), g))
 
 %!test
