@@ -31,8 +31,7 @@
 %% @group
 %% syms x y
 %% sym2poly(2*x^2 + 3*x - pi, x)
-%%    @result{} ans =
-%%   2.0000   3.0000  -3.1416
+%%    @result{} ans = (sym) [2  3  -π]  (1×3 matrix)
 %% sym2poly(x^2 + y*x, x)
 %%    @result{} (sym) [1  y  0]  (1×3 matrix)
 %% sym2poly(pi*x^2 + 3*x/2 + exp(sym(1)))
@@ -49,22 +48,12 @@
 %% @seealso{sym2polysane, poly2sym, polyval, roots}
 %% @end deftypemethod
 
-%% Created: 18 April 2003
-%% Changed: 25 April 2003
-%%    Removed the use of differentiate to get to coefficients - round-off
-%%     errors cause problems. Now using newly created sumterms().
-%% Changed: 6 May 2003
-%%    Removed the attempt to use ldegree(), degree() and coeff() - results
-%%     with these are inconsistent.
-%% Changed: 16 April 2014
-%%    Used the comment header and tests in OctSymPy, but rewrote
-%%    the body (by Colin Macdonald).
 
 function c = sym2poly(varargin)
 
   c = sym2polysane(varargin{:});
 
-  if isempty(findsymbols(c))
+  if isempty(findsymbols(c)) && nargin == 1
     c = double(c);
   end
 
@@ -73,19 +62,19 @@ end
 
 %!shared x,y,a,b,c
 %! syms x y a b c
-%! assert (isequal (sym2poly (x^2 + 3*x - 4), [1 3 -4]))
-%! assert (isequal (sym2poly (x^6 - x^3), [1 0 0 -1 0 0 0]))
-%! assert (isequal (sym2poly (x^2 + 3*x - 4, x), [1 3 -4]))
-%! assert (norm (sym2poly (pi*x^2 + exp(sym(1))) - [pi 0 exp(1)]) < 10*eps)
-%! assert (isa (sym2poly (x^2 + 3*x - 4), 'double'))
-%! assert (isequal (sym2poly (poly2sym ([1 2 3])), [1 2 3]))
+%!assert (isequal (sym2poly (x^2 + 3*x - 4), [1 3 -4]))
+%!assert (isequal (sym2poly (x^6 - x^3), [1 0 0 -1 0 0 0]))
+%!assert (isequal (sym2poly (x^2 + 3*x - 4, x), [1 3 -4]))
+%!assert (norm (sym2poly (pi*x^2 + exp(sym(1))) - [pi 0 exp(1)]) < 10*eps)
+%!assert (isa (sym2poly (x^2 + 3*x - 4), 'double'))
+%!assert (isequal (sym2poly (poly2sym ([1 2 3])), [1 2 3]))
 %% types
 %% tests with other vars
-%! assert (isequal (sym2poly (x^2+y*x, x), [sym(1) y sym(0)]))
-%! assert (isequal (sym2poly (x^2+y*x, y), [x x^2]))
+%!assert (isequal (sym2poly (x^2+y*x, x), [sym(1) y sym(0)]))
+%!assert (isequal (sym2poly (x^2+y*x, y), [x x^2]))
 %% inverse relationship
-%! assert (isequal (sym2poly (poly2sym ([a b c], x), x), [a b c]))
-%! assert (isequal (poly2sym (sym2poly(a*x^2 + c, x), x), a*x^2 + c))
+%!assert (isequal (sym2poly (poly2sym ([a b c], x), x), [a b c]))
+%!assert (isequal (poly2sym (sym2poly(a*x^2 + c, x), x), a*x^2 + c))
 
 %!error <more than one symbol>
 %! % too many symbols for single-input

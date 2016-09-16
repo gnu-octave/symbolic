@@ -46,16 +46,6 @@
 %% @seealso{sym2poly, poly2sym, polyval, roots}
 %% @end deftypemethod
 
-%% Created: 18 April 2003
-%% Changed: 25 April 2003
-%%    Removed the use of differentiate to get to coefficients - round-off
-%%     errors cause problems. Now using newly created sumterms().
-%% Changed: 6 May 2003
-%%    Removed the attempt to use ldegree(), degree() and coeff() - results
-%%     with these are inconsistent.
-%% Changed: 16 April 2014
-%%    Used the comment header and tests in OctSymPy, but rewrote
-%%    the body (by Colin Macdonald).
 
 function c = sym2polysane(p, x)
 
@@ -99,19 +89,19 @@ end
 
 %!shared x,y,a,b,c
 %! syms x y a b c
-%! assert (isequal (sym2polysane (x^2 + 3*x - 4), sym([1 3 -4])))
-%! assert (isequal (sym2polysane (x^6 - x^3), sym([1 0 0 -1 0 0 0])))
-%! assert (isequal (sym2polysane (x^2 + 3*x - 4, x), sym([1 3 -4])))
-%! assert (isequal (sym2polysane (pi*x^2 + exp(sym(1))), [sym(pi) 0 exp(sym(1))]))
-%! assert (isequal (sym2polysane (poly2sym ([1 2 3])), sym([1 2 3])))
-%! assert (isa (sym2polysane (x^2 + 3*x - 4), 'sym'))
+%!assert (isequal (sym2polysane (x^2 + 3*x - 4), sym([1 3 -4])))
+%!assert (isequal (sym2polysane (x^6 - x^3), sym([1 0 0 -1 0 0 0])))
+%!assert (isequal (sym2polysane (x^2 + 3*x - 4, x), sym([1 3 -4])))
+%!assert (isequal (sym2polysane (pi*x^2 + exp(sym(1))), [sym(pi) 0 exp(sym(1))]))
+%!assert (isequal (sym2polysane (poly2sym ([1 2 3])), sym([1 2 3])))
+%!assert (isa (sym2polysane (x^2 + 3*x - 4), 'sym'))
 %% types
 %% tests with other vars
-%! assert (isequal (sym2polysane (x^2+y*x, x), [sym(1) y sym(0)]))
-%! assert (isequal (sym2polysane (x^2+y*x, y), [x x^2]))
+%!assert (isequal (sym2polysane (x^2+y*x, x), [sym(1) y sym(0)]))
+%!assert (isequal (sym2polysane (x^2+y*x, y), [x x^2]))
 %% inverse relationship
-%! assert (isequal (sym2polysane (poly2sym ([a b c], x), x), [a b c]))
-%! assert (isequal (poly2sym (sym2polysane(a*x^2 + c, x), x), a*x^2 + c))
+%!assert (isequal (sym2polysane (poly2sym ([a b c], x), x), [a b c]))
+%!assert (isequal (poly2sym (sym2polysane(a*x^2 + c, x), x), a*x^2 + c))
 
 %!error <more than one symbol>
 %! % too many symbols for single-input
