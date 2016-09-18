@@ -60,7 +60,7 @@ function y = adjoint(x)
     print_usage();
   end
 
-  y = python_cmd('return _ins[0].adjugate(),', x);
+  y = python_cmd('_ins[0] = _ins[0] if _ins[0].is_Matrix else Matrix([_ins[0]]); return _ins[0].adjugate(),', x);
 end
 
 
@@ -69,3 +69,6 @@ end
 %! A = [x x^2; x^3 x^4];
 %! B = [x^4 -x^2; -x^3 x];
 %! assert( isequal( adjoint(A), B ))
+
+%!test syms x
+%! assert( isequal( adjoint(x), 1))
