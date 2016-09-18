@@ -228,19 +228,21 @@ function s = sym(x, varargin)
       [N2, D2] = rat(x/pi);
       if (10*abs(D2) < abs(D1))
         % use frac*pi if demoninator significantly shorter
-        s = sprintf('Rational(%s, %s)*pi', num2str(N2), num2str(D2));
+        s = sprintf('return S(Rational(%s, %s)*pi)', num2str(N2), num2str(D2));
       else
-        s = sprintf('Rational(%s, %s)', num2str(N1), num2str(D1));
+        s = sprintf('return S(Rational(%s, %s))', num2str(N1), num2str(D1));
       end
+      s = python_cmd(s);
+    else
+      s = sym(s);
     end
-    s = sym(s);
     return
 
   elseif (islogical (x)  &&  isscalar(x)  &&  nargin==1)
     if (x)
-      cmd = 'z = sp.S.true';
+      cmd = {'z = sp.S.true'};
     else
-      cmd = 'z = sp.S.false';
+      cmd = {'z = sp.S.false'};
     end
 
   elseif (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
@@ -329,16 +331,20 @@ function s = sym(x, varargin)
         warning('possibly unintended decimal point in constructor string');
       end
       % x is raw sympy, could have various quotes in it
-      cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+      x = strrep(x, '"', '\"');
+      cmd = [check_notfunc(x); sprintf('z = sympy.S("%s")', x)];
 
     else % useSymbolNotS
       if (isempty(asm))
-        cmd = sprintf('z = sympy.Symbol("%s")', x);
+        cmd = [check_notfunc(x); sprintf('z = sympy.Symbol("%s")', x)];
 
       elseif (isscalar(asm) && isscalar(asm{1}) && isstruct(asm{1}))
         % we have an assumptions dict
-        cmd = sprintf('return sympy.Symbol("%s", **_ins[0]),', x);
-        s = python_cmd (cmd, asm{1});
+        cmd = [check_notfunc(x); sprintf('return (sympy.Symbol("%s", **_ins[0]), True)', x)];
+        [s, u] = python_cmd (cmd, asm{1});
+        if ~u
+          error(['You can not use "' s '" as variable name, its a Python function.']);
+        end
         return
 
       elseif (iscell(asm))
@@ -348,8 +354,8 @@ function s = sym(x, varargin)
           assert(ismember(asm{n}, valid_asm), ...
                  'sym: that assumption is not supported')
         end
-        cmd = ['z = sympy.Symbol("' x '"' ...
-               sprintf(', %s=True', asm{:}) ')'];
+        cmd = {['z = sympy.Symbol("' x '"' sprintf(', %s=True', asm{:}), ')']};
+        cmd = [check_notfunc(x); cmd];
       else
         error('sym: invalid extra input, perhaps invalid assumptions?');
       end
@@ -362,7 +368,29 @@ function s = sym(x, varargin)
     error('conversion to symbolic with those arguments not (yet) supported');
   end
 
-  s = python_cmd ({cmd 'return z,'});
+  [s, u] = python_cmd ([cmd; 'return (z, True)']);
+  if ~u
+    error(['You can not use "' s '" as symfun, its a Python function.']);
+  end
+
+end
+
+
+function a = check_notfunc(x)
+
+  cmd = { 'if "(" in x or ")" in x:'
+          '    list = ("Symbol", "MatrixSymbol", "S")' %% White list
+          '    x = re.split("\(|\)| |,", x)'
+          '    x = [p for p in x if p]'
+          '    for i in x:'
+          '        if not i in list:'
+          '            try:'
+          '                if eval("callable(" + i + ")"):'
+          '                    return (i, False)' 
+          '            except:'
+          '                pass' };
+
+  a = [sprintf('x = "%s"', x); cmd];
 
 end
 
@@ -426,7 +454,6 @@ end
 
 %!test
 %! assert (isa (sym (pi), 'sym'))
-%! assert (isa (sym ('beta'), 'sym'))
 
 %!test
 %! % sym from array
@@ -566,21 +593,6 @@ end
 %! assert (isequal (size (a), [2 0]))
 
 %!test
-%! % embedded sympy commands, various quotes, issue #143
-%! a = sym('a');
-%! a1 = sym('Symbol("a")');
-%! a2 = sym('Symbol(''a'')');
-%! assert (isequal (a, a1))
-%! assert (isequal (a, a2))
-%! % Octave only, and eval to hide from Matlab parser
-%! if exist('OCTAVE_VERSION', 'builtin')
-%!   eval( 'a3 = sym("Symbol(''a'')");' );
-%!   eval( 'a4 = sym("Symbol(\"a\")");' );
-%!   assert (isequal (a, a3))
-%!   assert (isequal (a, a4))
-%! end
-
-%!test
 %! % doubles bigger than int32 INTMAX should not fail
 %! d = 4294967295;
 %! a = sym(d);
@@ -693,3 +705,6 @@ end
 %! else
 %!   delete([myfile '.mat'])
 %! end
+
+%!error
+%! sym('Eq(t)')
