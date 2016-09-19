@@ -117,28 +117,40 @@ function s = taylor(f, varargin)
     end
   end
 
+  if isa(n, 'sym')
+    n = double(n);
+  end
+
   if (isfloat(n))
     n = int32(n);
   end
+
+  assert( isequal( length(x), length(a)), 'The length of the expansion point must be the same as the input variables.')
 
   if (numel(x) == 1)
     cmd = { '(f, x, a, n) = _ins'
         's = f.series(x, a, n).removeO()'
         'return s,' };
-  elseif (numel(x) == 2)
-    cmd = {'(f, x, a, n) = _ins'
-      'expn = f.subs(zip(x, a))  # first constant term'
-      'for k in range(1, n):'
-      '    bin = [binomial(k, m) for m in range(k+1)]  # binomial constants'
-      '    fact = sp.factorial(k)'
-      '    for (i, y) in enumerate(bin):'
-      '        j = k - i'
-      '        fterm = f.diff(x[0], i, x[1], j).subs(zip(x, a))'
-      '        expn = expn + y*(S.One/fact)*fterm*((x[0]-a[0])**i)*((x[1]-a[1])**j)'
-      'return simplify(expn)'
-    };
   else
-    error('Only 2d expansions supported.');
+
+    cmd = {'(f, x, a, n) = _ins'
+           'dic = dict(zip(x, a))'
+           'xa = list(x)'
+           'for i in xrange(len(x)):'
+           '    xa[i] = x[i]-a[i]'
+           'expn = f.subs(dic)  # first constant term'
+           'for i in xrange(1,n):'
+           '    tmp = S(0)'
+           '    d = list(itertools.product(x, repeat=i))'
+           '    for j in d:'
+           '        tmp2 = S(1)'
+           '        for p in xrange(len(x)):'
+           '            tmp2 = tmp2*xa[p]**j.count(x[p])'
+           '        tmp = tmp + f.diff(*j).subs(dic)*tmp2' %%FIXME: In this case we should use a cache system to avoid
+           '    expn = expn + tmp / factorial(i)'          %%       diff in all vars every time (more ram, less time).
+           'return simplify(expn)'
+    };
+
   end
 
   s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
@@ -266,9 +278,3 @@ end
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
-
-%!error<Only 2d expansions supported.>
-%! syms x y z
-%! g = x^2 + 2*y + 3*z;
-%! h = taylor (g, [x,y,z], 'order', 4);
-%! assert (isAlways(h == 27)) ;
