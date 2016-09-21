@@ -293,3 +293,7 @@ end
 %! g = sin(x*y*z);		
 %! h = taylor (g, [x,y,z], 'order', 4);		
 %! assert (isAlways(h == x*y*z)) ;
+
+%!error <length>
+%! syms x y
+%! taylor(0, [x, y], [1, 2, 3]);
