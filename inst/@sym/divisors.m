@@ -31,7 +31,8 @@
 %% @end example
 %% @end defmethod
 
-%% Source: http://docs.sympy.org/dev/modules/ntheory.html
+%% Reference: http://docs.sympy.org/dev/modules/ntheory.html
+
 
 function y = divisors(x)
   if (nargin ~= 1)
@@ -40,6 +41,7 @@ function y = divisors(x)
   y = python_cmd('return S(divisors(_ins[0])),', x);
   y = cell2sym(y);
 end
+
 
 %!test
 %! assert( isequal( divisors(sym(150)), divisors(sym(-150)) ))
