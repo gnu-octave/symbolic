@@ -38,7 +38,7 @@
 %% @seealso{@@sym/zeros}
 %% @end defmethod
 
-%% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
+%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
 
 function y = ones(varargin)

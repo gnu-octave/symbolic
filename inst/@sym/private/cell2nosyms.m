@@ -19,9 +19,9 @@
 function z = cell2nosyms(x)
 
   for i=1:length(x)
-      if (isa(x{i}, 'sym') || isa(x{i}, 'symfun'))
-        x{i} = double(x{i});
-      end
+    if isa(x{i}, 'sym')
+      x{i} = double(x{i});
+    end
   end
 
   z = x;
