@@ -22,7 +22,7 @@
 %% Cholesky factorization of symbolic matrix.
 %% @end defmethod
 
-%% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
+%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
 
 function y = chol(x)

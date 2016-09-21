@@ -77,8 +77,8 @@
 %% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
+%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
-%% Source: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
 function y = charpoly(varargin)
   if (nargin >= 3)

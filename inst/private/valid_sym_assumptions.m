@@ -22,9 +22,10 @@
 %%
 %% @end defun
 
-%% Source: http://docs.sympy.org/dev/modules/core.html
+%% Reference: http://docs.sympy.org/dev/modules/core.html
 
 %% FIXME: Maybe in the future remove this file and replace with something else.
+
 
 function L = valid_sym_assumptions()
 

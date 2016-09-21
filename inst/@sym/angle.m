@@ -32,7 +32,7 @@
 %% @seealso{@@sym/abs}
 %% @end defmethod
 
-%% Source: https://stackoverflow.com/questions/33338349/python-sympy-angle-of-a-complex-number
+%% Reference: https://stackoverflow.com/questions/33338349/python-sympy-angle-of-a-complex-number
 
 
 function y = angle(x)
