@@ -120,10 +120,6 @@ function s = taylor(f, varargin)
     end
   end
 
-  if isa(n, 'sym')
-    n = double(n);
-  end
-
   if (isfloat(n))
     n = int32(n);
   end
