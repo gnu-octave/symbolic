@@ -20,7 +20,6 @@
 %% @documentencoding UTF-8
 %% @defmethod @@sym eye (@var{n})
 %% @defmethodx @@sym eye (@var{n}, @var{m})
-%% @defmethodx @@sym eye (@var{n}, @var{m}, @var{class})
 %% Return an identity matrix.
 %%
 %% Example:
