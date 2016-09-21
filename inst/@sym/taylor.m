@@ -278,3 +278,15 @@ end
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
+
+%!test		
+%! syms x y z		
+%! g = x^2 + 2*y + 3*z;		
+%! h = taylor (g, [x,y,z], 'order', 4);		
+%! assert (isAlways(h == g)) ;
+
+%!test		
+%! syms x y z		
+%! g = sin(x*y*z);		
+%! h = taylor (g, [x,y,z], 'order', 4);		
+%! assert (isAlways(h == x*y*z)) ;
