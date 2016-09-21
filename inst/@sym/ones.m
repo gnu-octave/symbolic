@@ -35,7 +35,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/zeros}
+%% @seealso{ones, @@sym/zeros, @@sym/eye}
 %% @end defmethod
 
 %% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
