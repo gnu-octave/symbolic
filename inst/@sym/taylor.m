@@ -89,6 +89,9 @@ function s = taylor(f, varargin)
     % taylor(f, [x,y], [a,b], 'param', ...)
     x = varargin{1};
     a = varargin{2};
+    if length(a) ~= length(x) && length(a) == 1
+          a = a*ones(1, length(x));    
+    end
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
     % taylor(f, x, 'param', ...)
