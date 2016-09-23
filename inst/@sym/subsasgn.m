@@ -95,42 +95,7 @@ function out = subsasgn (val, idx, rhs)
                   'invalid indices: should be integers or boolean');
           end
 	end
-        
-        if isempty(rhs)
-
-          switch length(idx.subs)
-            case 1
-              if strcmp(idx.subs{1}, ':')
-                out = sym([]);
-              else
-                if rows(val) == 1
-                  out = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', val, sym(idx.subs{1}));
-                elseif columns(val) == 1          
-                  out = python_cmd('_ins[0].row_del(_ins[1] - 1); return _ins[0],', val, sym(idx.subs{1}));         
-                else
-                  out = sym([]);
-                  for i=1:val.size(2)
-                    out = [out subsref(val, substruct ('()', {':', i})).'];
-                  end
-                  out = subsasgn (out, substruct ('()', {idx.subs{1}}), []);
-                end
-              end
-            case 2
-              if strcmp(idx.subs{1}, ':')
-                out = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', val, sym(idx.subs{2}));
-              elseif strcmp(idx.subs{2}, ':')
-                out = python_cmd('_ins[0].row_del(_ins[1] - 1); return _ins[0],', val, sym(idx.subs{1}));
-              else
-                error('A null assignment can only have one non-colon index.'); %% Standard octave error
-              end
-          end
-
-        elseif length(idx.subs) == 1 && strcmp(idx.subs{1}, ':') && length(rhs) == 1
-          out = python_cmd('return ones(_ins[0], _ins[1])*_ins[2],', val.size(1), val.size(2), sym(rhs));
-        else
-          out = mat_replace(val, idx.subs, sym(rhs));
-        end
-
+        out = mat_replace(val, idx.subs, sym(rhs));
       end
 
     case '.'
