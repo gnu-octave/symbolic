@@ -547,7 +547,7 @@ end
 %! a(1) = [];
 %! assert( isequal( a, b));
 
-%!error
+%!error <null assignment>
 %! a = sym([1, 2; 3, 4]);
 %! a(1, 2) = [];
 
