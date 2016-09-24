@@ -79,6 +79,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'import codecs'
                     'from distutils.version import LooseVersion'
                     'import itertools'
+                    'import collections'
                     'def dictdiff(a, b):'
                     '    """ keys from a that are not in b, used by evalpy() """'
                     '    n = dict()'
@@ -89,7 +90,17 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'def Version(v):'
                     '    # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
                     '    return LooseVersion(v.replace(".dev", ""))'
-                  }, newl))
+                    'def flatten(l):'
+                    '    if isinstance(l, MatrixBase):'
+                    '        l = l.tolist()'
+                    '    for el in l:'
+                    '        if isinstance(el, MatrixBase):'
+                    '            el = el.tolist()'
+                    '        if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):'
+                    '            for sub in flatten(el):'
+                    '                yield sub'
+                    '        else:'
+                    '            yield el' }, newl))
     have_headers = true;
   end
 
