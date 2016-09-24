@@ -48,6 +48,7 @@ try:
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
     import itertools
+    import collections
 except:
     echo_exception_stdout("in python_header import block")
     raise
@@ -84,6 +85,17 @@ try:
             return b.decode('ascii')
         else:
             return s.encode('utf-8').encode('string_escape')
+    def flatten(l):
+        if isinstance(l, MatrixBase):
+            l = l.tolist()
+        for el in l:
+            if isinstance(el, MatrixBase):
+                el = el.tolist()
+            if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):
+                for sub in flatten(el):
+                    yield sub
+            else:
+                yield el
 except:
     echo_exception_stdout("in python_header defining fcns block 1")
     raise
