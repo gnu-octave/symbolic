@@ -23,7 +23,7 @@
 %% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, eq2})
 %% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
 %% @deftypemethodx @@sym {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
-%% Symbolic solutions of equations and systems.
+%% Symbolic solutions of equations, inequalities and systems.
 %%
 %% Examples
 %% @example
@@ -83,11 +83,30 @@
 %% @end group
 %% @end example
 %%
+%% You can solve inequalities with or without equations:
+%%
+%% Example:
+%% @example
+%% @group
+%% solve(x^2 == 4, x > 0)
+%%   @result{} ans = (sym) x = 2
+%% @end group
+%% @end example
+%%
+%% Example:
+%% @example
+%% @group
+%% solve(x^2 - 1 > 0, x < 10)
+%%   @result{} ans = (sym) (-∞ < x ∧ x < -1) ∨ (1 < x ∧ x < 10)
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/eq, @@sym/dsolve}
 %% @end deftypemethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic
+
 
 function varargout = solve(varargin)
 
@@ -101,11 +120,10 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'if len(symbols) > 0:'
-            '    d = sp.solve(eqs, symbols, dict=True)'
-            'else:'
-            '    d = sp.solve(eqs, dict=True)'
+            'd = sp.solve(eqs, *symbols, dict=True)'
             '#'
+            'if not isinstance(d, (list, tuple)):'
+            '    return d,'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
             '        return d[0].popitem()[1],'
@@ -128,15 +146,15 @@ function varargout = solve(varargin)
             '    else:'
             '        symbols.append(arg)'
             '#'
-            'if len(symbols) > 0:'
-            '    (vars, solns) = sp.solve(eqs, symbols, set=True)'
-            'else:'
-            '    (vars, solns) = sp.solve(eqs, set=True)'
+            'd = sp.solve(eqs, *symbols, set=True)'
             '#'
-            'd = []'
+            'if not isinstance(d, (list, tuple)):'
+            '    return d,'
+            '(vars, solns) = d'
+            'q = []'
             'for (i, var) in enumerate(vars):'
-            '    d.append(sp.Matrix([t[i] for t in solns]))'
-            'return d,' };
+            '    q.append(sp.Matrix([t[i] for t in solns]))'
+            'return q,' };
 
     out = python_cmd (cmd, varargin{:});
 
@@ -229,6 +247,11 @@ end
 %! [X, Y] = solve(x*x == 4, x == 2*y, x, y);
 %! assert (isequal (X, [2; -2]))
 %! assert (isequal (Y, [1; -1]))
+
+%!test
+%! syms x
+%! a = solve(2*x >= 10, 10*x <= 50);
+%! assert (isequal( a, x==sym(5)))
 
 %!error
 %! syms a b
