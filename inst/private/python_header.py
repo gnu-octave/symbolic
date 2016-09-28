@@ -29,6 +29,7 @@ try:
     # need this to reactivate from srepr
     from sympy import *
     from sympy.sets.fancysets import *
+    from sympy.sets.sets import *
     import sympy.printing
     from sympy.logic.boolalg import Boolean, BooleanFunction
     from sympy.core.relational import Relational

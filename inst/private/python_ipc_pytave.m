@@ -66,6 +66,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
                     'from sympy import __version__ as spver'
                     'from sympy import *'
                     'from sympy.sets.fancysets import *'
+                    'from sympy.sets.sets import *'
                     'from sympy.logic.boolalg import Boolean, BooleanFunction'
                     'from sympy.core.relational import Relational'
                     '# temporary? for piecewise support'
