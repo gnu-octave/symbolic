@@ -23,7 +23,7 @@
 %%
 %% @example
 %% @group
-%% isassumption(@{"real", "prime", "polar"@})
+%% isassumption (@{"real", "prime", "polar"@})
 %%   @result{} ...
 %% @end group
 %% @end example
@@ -46,11 +46,11 @@
 
 function out = isassumption(in)
 
-  list = assumptions('possible');
+  list = assumptions ('possible');
   out = [];  
 
-  for i=1:length(in)
-    if (isempty(strmatch(in{i}, list, 'exact')))
+  for i=1:length (in)
+    if isempty (strmatch (in{i}, list, 'exact'))
       out = [out, i];
     end
   end
@@ -59,5 +59,5 @@ end
 
 
 %!test
-%! out = isassumption({"blabla", "mehmeh"});
-%! assert( isequal( out, [1, 2]))
+%! out = isassumption ({"blabla", "mehmeh"});
+%! assert (isequal (out, [1, 2]))
