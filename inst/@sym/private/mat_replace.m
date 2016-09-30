@@ -64,14 +64,15 @@ function z = mat_replace(A, subs, b)
       otherwise
         error('Unexpected subs input')
     end
-  elseif length(subs) == 1 && strcmp(subs{1}, ':') && length(b) == 1
-    z = python_cmd('return ones(_ins[0], _ins[1])*_ins[2],', A.size(1), A.size(2), sym(b));
-    return
   end
 
   if (length(subs) == 1 && islogical(subs{1}))
     %% A(logical) = B
     z = mat_mask_asgn(A, subs{1}, b);
+    return
+
+  elseif (length(subs) == 1 && strcmp(subs{1}, ':') && length(b) == 1)
+    z = python_cmd('return ones(_ins[0], _ins[1])*_ins[2],', A.size(1), A.size(2), sym(b));
     return
 
   elseif (length(subs) == 1)
