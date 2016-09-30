@@ -85,18 +85,14 @@
 %% @end group
 %% @end example
 %%
-%% You can solve inequalities with or without equations:
-%%
-%% Example:
+%% You can solve inequalities and systems involving mixed
+%% inequalities and equations.  For example:
 %% @example
 %% @group
 %% solve(x^2 == 4, x > 0)
 %%   @result{} ans = (sym) x = 2
 %% @end group
-%% @end example
 %%
-%% Example:
-%% @example
 %% @group
 %% solve(x^2 - 1 > 0, x < 10)
 %%   @result{} ans = (sym) (-∞ < x ∧ x < -1) ∨ (1 < x ∧ x < 10)
