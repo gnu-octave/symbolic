@@ -20,9 +20,6 @@ function [vars,s1,s2] = helper_symfun_binops(f, g)
 
   if (isa(f,'symfun')) && (isa(g, 'symfun'))
     %disp('debug: symfun <op> symfun')
-    if ~isequal(f.vars, g.vars)
-      error('arithmetric operators on symfuns must have same vars')
-    end
     vars = f.vars;
     s1 = f.sym;
     s2 = g.sym;

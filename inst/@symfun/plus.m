@@ -67,3 +67,9 @@ end
 %! f(x) = x^2;
 %! assert( isa(f + f, 'symfun'))
 %! assert( isa(f + x, 'symfun'))
+
+%!test
+%! syms g(x) x(t)
+%! f(g) = g ^ 2 + x;
+%! p = x^2 + x;
+%! assert (isequal (p, f (x)))

@@ -26,38 +26,47 @@
 
 function s = private_disp_name(f, input_name)
 
-  if (isempty(input_name))
+  if (isempty (input_name))
     s = input_name;
     return
   end
 
   vars = f.vars;
-  if length(vars) == 0
+  if length (vars) == 0
     varstr = '';
   else
     v = vars{1};
-    varstr = v.flat;
+    varstr = get_name (v);
   end
-  for i = 2:length(vars);
+  for i = 2:length (vars);
     v = vars{i};
-    varstr = [varstr ', ' v.flat];
+    varstr = [varstr ', ' get_name(v)];
   end
+  
   s = [input_name, '(', varstr, ')'];
 
+end
+
+function a = get_name(x)
+  try
+    a = x.flat;
+  catch
+    a = x.name;
+  end
 end
 
 
 %!test
 %! syms f(x)
-%! s = private_disp_name(f, 'f');
+%! s = private_disp_name (f, 'f');
 %! assert (strcmp (s, 'f(x)'))
 
 %!test
 %! syms x y
-%! g(y, x) = x + y;
-%! s = private_disp_name(g, 'g');
+%! g (y, x) = x + y;
+%! s = private_disp_name (g, 'g');
 %! assert (strcmp (s, 'g(y, x)'))
 
 %!test
 %! syms f(x)
-%! assert (isempty (private_disp_name(f, '')))
+%! assert (isempty (private_disp_name (f, '')))
