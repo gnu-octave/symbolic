@@ -26,7 +26,7 @@
 %% @example
 %% @group
 %% syms x y z
-%% [A b] = equationsToMatrix(x + y == 1, x - y + 1, x, y)
+%% [A b] = equationsToMatrix (x + y == 1, x - y + 1, x, y)
 %%   @result{} A = (sym 2×2 matrix)
 %%       ⎡1  1 ⎤
 %%       ⎢     ⎥
@@ -43,7 +43,7 @@
 %%
 %% @example
 %% @group
-%% [A, B] = equationsToMatrix([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y])
+%% [A, B] = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y])
 %%   @result{} A = (sym 3×2 matrix)
 %%
 %%       ⎡1  1⎤
@@ -68,7 +68,7 @@
 
 function [A b] = equationsToMatrix(varargin)
 
-  s = symvar([varargin{:}]);
+  s = symvar ([varargin{:}]);
 
   cmd = {'vars = list()'
          'if not isinstance(_ins[-2], MatrixBase):'
@@ -110,7 +110,7 @@ function [A b] = equationsToMatrix(varargin)
          '    b[i] = -q'
          'return True, A, b' };
 
-  [s A b] = python_cmd(cmd, sym(varargin){:}, s);
+  [s A b] = python_cmd (cmd, sym (varargin){:}, s);
 
 
   if ~s
@@ -124,50 +124,50 @@ end
 
 %!test
 %! syms x y z
-%! [A, B] = equationsToMatrix([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
-%! a = sym([1 1 -2; 1 1 1; 0 2 -1]);
-%! b = sym([0; 1; -5]);
-%! assert( isequal( A, a))
-%! assert( isequal( B, b))
+%! [A, B] = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
+%! a = sym ([1 1 -2; 1 1 1; 0 2 -1]);
+%! b = sym ([0; 1; -5]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
 
 %!test
 %! syms x y z
-%! A = equationsToMatrix([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
-%! a = sym([1 1 -2; 1 1 1; 0 2 -1]);
-%! assert( isequal( A, a))
+%! A = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
+%! a = sym ([1 1 -2; 1 1 1; 0 2 -1]);
+%! assert (isequal (A, a))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix([x - 2*y + 1 == 0, 3*x - y == 10]);
-%! a = sym([1 -2; 3 -1]);
-%! b = sym([-1; 10]);
-%! assert( isequal( A, a))
-%! assert( isequal( B, b))
+%! [A, B] = equationsToMatrix ([x - 2*y + 1 == 0, 3*x - y == 10]);
+%! a = sym ([1 -2; 3 -1]);
+%! b = sym ([-1; 10]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
 
 %!test
 %! syms x y z
-%! [A, B] = equationsToMatrix([x - 2*y + z == 0, 3*x - z*y == 10], [y, x]);
-%! a = sym([[-2 1]; -z 3]);
-%! b = sym([-z; 10]);
-%! assert( isequal( A, a))
-%! assert( isequal( B, b))
+%! [A, B] = equationsToMatrix ([x - 2*y + z == 0, 3*x - z*y == 10], [y, x]);
+%! a = sym ([[-2 1]; -z 3]);
+%! b = sym ([-z; 10]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix(x + y == 1, x - y + 1, x, y);
-%! a = sym([1 1; 1 -1]);
-%! b = sym([1; -1]);
-%! assert( isequal( A, a))
-%! assert( isequal( B, b))
+%! [A, B] = equationsToMatrix (x + y == 1, x - y + 1, x, y);
+%! a = sym ([1 1; 1 -1]);
+%! b = sym ([1; -1]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix(x + y == 1, x, x - y + 1, y);
-%! a = sym([1; 0; -1]);
-%! b = sym([1-x; -x; -x-1]);
-%! assert( isequal( A, a))
-%! assert( isequal( B, b))
+%! [A, B] = equationsToMatrix (x + y == 1, x, x - y + 1, y);
+%! a = sym ([1; 0; -1]);
+%! b = sym ([1-x; -x; -x-1]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
 
 %!error <system does not seem to be linear>
 %! syms x y
-%! [A, B] = equationsToMatrix(x^2 + y^2 == 1, x - y + 1, x, y);
+%! [A, B] = equationsToMatrix (x^2 + y^2 == 1, x - y + 1, x, y);
