@@ -464,4 +464,56 @@ end
 %! B(1,5) = 10;
 %! assert (isequal (A, B))
 
+%!test
+%! % Check row deletion 1D
+%! a = sym([1; 3; 5]);
+%! b = sym([3; 5]);
+%! a(1) = [];
+%! assert( isequal( a, b))
+
+%!test
+%! % Check column deletion 1D
+%! a = sym([1, 4, 8]);
+%! b = sym([4, 8]);
+%! a(1) = [];
+%! assert( isequal( a, b))
+
+%!test
+%! % Check row deletion 2D
+%! a = sym([1, 2; 3, 4]);
+%! b = sym([3, 4]);
+%! a(1, :) = [];
+%! assert( isequal( a, b))
+
+%!test
+%! % Check column deletion 2D
+%! a = sym([1, 2; 3, 4]);
+%! b = sym([2; 4]);
+%! a(:, 1) = [];
+%! assert( isequal( a, b))
+
+%!test
+%! % General assign
+%! a = sym([1, 2; 3, 4]);
+%! b = sym([5, 5; 5, 5]);
+%! a(:) = 5;
+%! assert( isequal( a, b))
+
+%!test
+%! % Empty matrix
+%! a = sym([1, 2; 3, 4]);
+%! a(:) = [];
+%! assert( isequal( a, sym([])))
+
+%!test
+%! % Dissamble Matrix
+%! a = sym([1, 2; 3, 4; 5 6]);
+%! b = sym([3, 5, 2, 4, 6]);
+%! a(1) = [];
+%! assert( isequal( a, b));
+
+%!error <null assignment>
+%! a = sym([1, 2; 3, 4]);
+%! a(1, 2) = [];
+
 %% End of mat_* tests
