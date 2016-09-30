@@ -15,10 +15,13 @@ octsympy 2.5.0-dev
           cosd
           dawson
           divisors
+          eye
           hilb
           invhilb
+          ones
           sind
           tand
+          zeros
 
   * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
