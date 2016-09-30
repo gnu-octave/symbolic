@@ -114,17 +114,14 @@ function varargout = solve(varargin)
             '        eqs.append(arg)'
             '    else:'
             '        symbols.append(arg)'
-            '#'
             'd = sp.solve(eqs, *symbols, dict=True)'
-            '#'
-            'if not isinstance(d, (list, tuple)):'
+            'if not isinstance(d, (list, tuple)):'  % https://github.com/sympy/sympy/issues/11661
             '    return d,'
             'if len(d) >= 1 and len(d[0].keys()) == 1:'  % one variable...
             '    if len(d) == 1:'  % one variable, single solution
             '        return d[0].popitem()[1],'
             '    else:'  % one variable, multiple solutions
             '        return sp.Matrix([r.popitem()[1] for r in d]),'
-            '#'
             'if len(d) == 1:'
             '    d = d[0]'
             'return d,' };
@@ -140,10 +137,8 @@ function varargout = solve(varargin)
             '        eqs.append(arg)'
             '    else:'
             '        symbols.append(arg)'
-            '#'
             'd = sp.solve(eqs, *symbols, set=True)'
-            '#'
-            'if not isinstance(d, (list, tuple)):'
+            'if not isinstance(d, (list, tuple)):'  % https://github.com/sympy/sympy/issues/11661
             '    return d,'
             '(vars, solns) = d'
             'q = []'
