@@ -36,6 +36,8 @@ octsympy 2.5.0-dev
   * The full set of assumptions implemented by Sympy can now be used.
     For example, `syms p prime` assumes `p` is prime.
 
+  * `solve` now works with inequalities.
+
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
 
