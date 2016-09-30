@@ -38,6 +38,7 @@
 %% @seealso{@@symfun/formula, @@symfun/symvar, findsymbols}
 %% @end defmethod
 
+
 function vars = argnames(F)
 
   vars = [F.vars{:}];
