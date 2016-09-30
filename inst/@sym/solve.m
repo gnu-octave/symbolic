@@ -1,5 +1,7 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
+%% Copyright (C) 2014-2015 Colin B. Macdonald
+%% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -103,9 +105,6 @@
 %%
 %% @seealso{@@sym/eq, @@sym/dsolve}
 %% @end deftypemethod
-
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic
 
 
 function varargout = solve(varargin)
