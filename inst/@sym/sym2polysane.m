@@ -30,11 +30,11 @@
 %% @example
 %% @group
 %% syms x y
-%% sym2polysane(2*x^2 + 3*x - pi, x)
+%% sym2polysane (2*x^2 + 3*x - pi)
 %%    @result{} (sym) [2  3  -π]  (1×3 matrix)
-%% sym2polysane(x^2 + y*x, x)
+%% sym2polysane (x^2 + y*x, x)
 %%    @result{} (sym) [1  y  0]  (1×3 matrix)
-%% sym2polysane(pi*x^2 + 3*x/2 + exp(sym(1)))
+%% sym2polysane (pi*x^2 + 3*x/2 + exp (sym (1)))
 %%    @result{} (sym) [π  3/2  ℯ]  (1×3 matrix)
 %% @end group
 %% @end example
@@ -49,39 +49,34 @@
 
 function c = sym2polysane(p, x)
 
-  if ~(isscalar(p))
+  if ~isscalar (p)
     error('works for scalar input only');
   end
 
-  ss = findsymbols(p);
-  if (nargin == 1)
-    if (length(ss) >= 2)
-      error('Input has more than one symbol: not clear what you want me to do')
+  ss = findsymbols (p);
+  if nargin == 1
+    if length (ss) >= 2
+      error ('Input has more than one symbol: not clear what you want me to do')
     end
     x = ss{1};
-  elseif (nargin > 2)
+  elseif nargin > 2
     print_usage ();
   end
 
-  cmd = { 'f = _ins[0]'
-          'x = _ins[1]'
-          'p = Poly.from_expr(f,x)'
-          'return p.all_coeffs(),' };
-
-  c2 = python_cmd (cmd, sym(p), sym(x));
-  if (isempty(c2))
-    error('Empty python output, can this happen?  A bug.')
+  c2 = python_cmd ('return Poly.from_expr(_ins[0], _ins[1]).all_coeffs(),', sym (p), sym (x));
+  if isempty (c2)
+    error ('Empty python output, can this happen?  A bug.')
   end
 
   % FIXME: should be able to convert c2 to array faster than array
   % expansion!  Particularly in the case where we just convert to
   % double anyway!
-  c = sym([]);
+  c = sym ([]);
   for j = 1:numel(c2)
     % Bug #17
     %c(j) = c2{j};
     idx.type = '()'; idx.subs = {j};
-    c = subsasgn(c, idx, c2{j});
+    c = subsasgn (c, idx, c2{j});
   end
 
 end
@@ -92,16 +87,16 @@ end
 %!assert (isequal (sym2polysane (x^2 + 3*x - 4), sym([1 3 -4])))
 %!assert (isequal (sym2polysane (x^6 - x^3), sym([1 0 0 -1 0 0 0])))
 %!assert (isequal (sym2polysane (x^2 + 3*x - 4, x), sym([1 3 -4])))
-%!assert (isequal (sym2polysane (pi*x^2 + exp(sym(1))), [sym(pi) 0 exp(sym(1))]))
+%!assert (isequal (sym2polysane (pi*x^2 + exp (sym (1))), [sym(pi) 0 exp(sym(1))]))
 %!assert (isequal (sym2polysane (poly2sym ([1 2 3])), sym([1 2 3])))
 %!assert (isa (sym2polysane (x^2 + 3*x - 4), 'sym'))
 %% types
 %% tests with other vars
-%!assert (isequal (sym2polysane (x^2+y*x, x), [sym(1) y sym(0)]))
-%!assert (isequal (sym2polysane (x^2+y*x, y), [x x^2]))
+%!assert (isequal (sym2polysane (x^2 + y*x, x), [sym(1) y sym(0)]))
+%!assert (isequal (sym2polysane (x^2 + y*x, y), [x x^2]))
 %% inverse relationship
 %!assert (isequal (sym2polysane (poly2sym ([a b c], x), x), [a b c]))
-%!assert (isequal (poly2sym (sym2polysane(a*x^2 + c, x), x), a*x^2 + c))
+%!assert (isequal (poly2sym (sym2polysane (a*x^2 + c, x), x), a*x^2 + c))
 
 %!error <more than one symbol>
 %! % too many symbols for single-input

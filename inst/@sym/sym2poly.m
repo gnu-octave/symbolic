@@ -30,11 +30,11 @@
 %% @example
 %% @group
 %% syms x y
-%% sym2poly(2*x^2 + 3*x - pi, x)
+%% sym2poly (2*x^2 + 3*x - pi, x)
 %%    @result{} ans = (sym) [2  3  -π]  (1×3 matrix)
-%% sym2poly(x^2 + y*x, x)
+%% sym2poly (x^2 + y*x, x)
 %%    @result{} (sym) [1  y  0]  (1×3 matrix)
-%% sym2poly(pi*x^2 + 3*x/2 + exp(sym(1)))
+%% sym2poly (pi*x^2 + 3*x/2 + exp (sym (1)))
 %%    @result{}     3.1416   1.5000   2.7183
 %% @end group
 %% @end example
@@ -51,10 +51,10 @@
 
 function c = sym2poly(varargin)
 
-  c = sym2polysane(varargin{:});
+  c = sym2polysane (varargin{:});
 
-  if isempty(findsymbols(c)) && nargin == 1
-    c = double(c);
+  if isempty (findsymbols (c)) && nargin == 1
+    c = double (c);
   end
 
 end
@@ -65,13 +65,13 @@ end
 %!assert (isequal (sym2poly (x^2 + 3*x - 4), [1 3 -4]))
 %!assert (isequal (sym2poly (x^6 - x^3), [1 0 0 -1 0 0 0]))
 %!assert (isequal (sym2poly (x^2 + 3*x - 4, x), [1 3 -4]))
-%!assert (norm (sym2poly (pi*x^2 + exp(sym(1))) - [pi 0 exp(1)]) < 10*eps)
+%!assert (norm (sym2poly (pi*x^2 + exp (sym (1))) - [pi 0 exp(1)]) < 10*eps)
 %!assert (isa (sym2poly (x^2 + 3*x - 4), 'double'))
 %!assert (isequal (sym2poly (poly2sym ([1 2 3])), [1 2 3]))
 %% types
 %% tests with other vars
-%!assert (isequal (sym2poly (x^2+y*x, x), [sym(1) y sym(0)]))
-%!assert (isequal (sym2poly (x^2+y*x, y), [x x^2]))
+%!assert (isequal (sym2poly (x^2 + y*x, x), [sym(1) y sym(0)]))
+%!assert (isequal (sym2poly (x^2 + y*x, y), [x x^2]))
 %% inverse relationship
 %!assert (isequal (sym2poly (poly2sym ([a b c], x), x), [a b c]))
 %!assert (isequal (poly2sym (sym2poly(a*x^2 + c, x), x), a*x^2 + c))
