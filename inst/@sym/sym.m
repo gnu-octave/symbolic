@@ -299,6 +299,12 @@ function s = sym(x, varargin)
       x = 'lamda';
     elseif (strcmp(x, 'Lambda'))
       x = 'Lamda';
+    elseif (strcmp(x, '-e'))  %%Special case, don't assign e to E.
+      s = python_cmd ('return -E');
+      return
+    elseif (strcmp(x, 'e'))
+      s = python_cmd ('return E');
+      return
     end
 
     % Decide whether to pass to S() or Symbol()
@@ -693,3 +699,9 @@ end
 %! else
 %!   delete([myfile '.mat'])
 %! end
+
+%!test
+%! a = sym(e);
+%! b = sym('e');
+%! assert (isequal (a, exp(sym(1))))
+%! assert (isequal (b, exp(sym(1))))

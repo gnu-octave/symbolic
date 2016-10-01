@@ -42,6 +42,10 @@ function [s, flag] = magic_double_str(x)
     s = 'pi';
   elseif (x == -pi)
     s = '-pi';
+  elseif (x == e)
+    s = 'e';
+  elseif (x == -e)
+    s = '-e';
   elseif ((isinf(x)) && (x > 0))
     s = 'inf';
   elseif ((isinf(x)) && (x < 0))
