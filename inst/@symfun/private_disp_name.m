@@ -36,23 +36,15 @@ function s = private_disp_name(f, input_name)
     varstr = '';
   else
     v = vars{1};
-    varstr = get_name (v);
+    varstr = v.flat;
   end
   for i = 2:length (vars);
     v = vars{i};
-    varstr = [varstr ', ' get_name(v)];
+    varstr = [varstr ', ' v.flat];
   end
   
   s = [input_name, '(', varstr, ')'];
 
-end
-
-function a = get_name(x)
-  try
-    a = x.flat;
-  catch
-    a = x.name;
-  end
 end
 
 

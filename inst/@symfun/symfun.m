@@ -204,7 +204,7 @@ function f = symfun(expr, vars)
   end
 
   f.vars = vars;
-  f.name = python_cmd ('return str(_ins[0]).split("(")[0]', expr);
+  f.flat = python_cmd ('return str(_ins[0]).split("(")[0]', expr);
   f = class(f, 'symfun', expr);
   superiorto ('sym');
 
