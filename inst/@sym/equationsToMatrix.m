@@ -120,51 +120,49 @@ function [A b] = equationsToMatrix(varargin)
 end
 
 
-%%Matlab Tests
-
 %!test
 %! syms x y z
-%! [A, B] = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
-%! a = sym ([1 1 -2; 1 1 1; 0 2 -1]);
-%! b = sym ([0; 1; -5]);
+%! [A, B] = equationsToMatrix ([x + y - z == 1, 3*x - 2*y + z == 3, 4*x - 2*y + z + 9 == 0], [x, y, z]);
+%! a = sym ([1 1 -1; 3 -2 1; 4 -2 1]);
+%! b = sym ([1; 3; -9]);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
 %!test
 %! syms x y z
-%! A = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y, z]);
-%! a = sym ([1 1 -2; 1 1 1; 0 2 -1]);
+%! A = equationsToMatrix ([3*x + -3*y - 5*z == 9, 4*x - 7*y + -3*z == -1, 4*x - 9*y - 3*z + 2 == 0], [x, y, z]);
+%! a = sym ([3 -3 -5; 4 -7 -3; 4 -9 -3]);
 %! assert (isequal (A, a))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix ([x - 2*y + 1 == 0, 3*x - y == 10]);
-%! a = sym ([1 -2; 3 -1]);
-%! b = sym ([-1; 10]);
+%! [A, B] = equationsToMatrix ([3*x + 9*y - 5 == 0, -8*x - 3*y == -2]);
+%! a = sym ([3 9; -8 -3]);
+%! b = sym ([5; -2]);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
 %!test
 %! syms x y z
-%! [A, B] = equationsToMatrix ([x - 2*y + z == 0, 3*x - z*y == 10], [y, x]);
-%! a = sym ([[-2 1]; -z 3]);
-%! b = sym ([-z; 10]);
+%! [A, B] = equationsToMatrix ([x - 9*y + z == -5, -9*y*z == -5], [y, x]);
+%! a = sym ([[-9 1]; -9*z 0]);
+%! b = sym ([-5 - z; -5]);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix (x + y == 1, x - y + 1, x, y);
-%! a = sym ([1 1; 1 -1]);
-%! b = sym ([1; -1]);
+%! [A, B] = equationsToMatrix (-6*x + 4*y == 5, 4*x - 4*y - 5, x, y);
+%! a = sym ([-6 4; 4 -4]);
+%! b = sym ([5; 5]);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
 %!test
 %! syms x y
-%! [A, B] = equationsToMatrix (x + y == 1, x, x - y + 1, y);
-%! a = sym ([1; 0; -1]);
-%! b = sym ([1-x; -x; -x-1]);
+%! [A, B] = equationsToMatrix (5*x == 1, y, x - 6*y - 7, y);
+%! a = sym ([0; 1; -6]);
+%! b = sym ([1 - 5*x; 0; -x + 7]);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
