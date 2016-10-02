@@ -1,4 +1,5 @@
 %% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +18,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x})
+%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x}, @var{in})
 %% Recognize special double values.
 %%
 %% Private helper function.
@@ -28,27 +29,43 @@
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
-function [s, flag] = magic_double_str(x)
+function [s, flag] = magic_double_str(x, in)
+
+  persistent list %%format: number, octave string, python return format
+
+  if isempty(list)
+    list = {pi, 'pi', 'pi';inf, 'inf', 'oo';inf, 'Inf', 'oo';nan, 'nan', 'nan';i, 'i', 'I';e, 'e', 'E'};
+  end
 
   flag = 1;
 
-  if (~isa(x, 'double') || ~isreal(x))
-    error('OctSymPy:magic_double_str:notrealdouble', ...
-          'Expected a real double precision number');
+  for j=1:length(list)
+    if strcmp(in, 'number')
+      if x == list{j, 1}
+        s = list{j, 2};
+        return
+      elseif x == -list{j, 1}
+        s = ['-' list{j, 2}];
+        return
+      end
+    else
+      if strcmp(x, list{j, 2}) || strcmp(x, ['+' list{j, 2}])
+        s = list{j, 3};
+        return
+      elseif strcmp(x, ['-' list{j, 2}])
+        s = ['-' list{j, 3}];
+        return
+      end
+    end
   end
 
-  % NOTE: yes, these are floating point equality checks!
-  if (x == pi)
-    s = 'pi';
-  elseif (x == -pi)
-    s = '-pi';
-  elseif ((isinf(x)) && (x > 0))
-    s = 'inf';
-  elseif ((isinf(x)) && (x < 0))
-    s = '-inf';
-  elseif (isnan(x))
-    s = 'nan';
-  elseif (isreal(x) && (abs(x) < 1e15) && (mod(x,1) == 0))
+  if strcmp(in, 'char')
+    flag = 0;
+    s = x;
+    return
+  end
+
+  if (abs(x) < 1e15) && (mod(x,1) == 0)
     % special treatment for "small" integers
     s = num2str(x);  % better than sprintf('%d', large)
   else

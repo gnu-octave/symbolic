@@ -45,6 +45,7 @@ try:
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
     import itertools
+    import re
 except:
     echo_exception_stdout("in python_header import block")
     raise
