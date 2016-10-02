@@ -219,10 +219,10 @@ function s = sym(x, varargin)
   isnumber = isnumeric(x) || islogical(x);
   assert(isempty(asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
 
-  if ~isscalar(x) && isnumber
+  if ~isscalar(x) && isnumber  %%Handle octave numeric matrix
     s = numeric_array_to_sym (x);
     return
-  elseif isa(x, 'double')
+  elseif isa(x, 'double')  %%Handle doubles
     if ~isreal(x)
       s = sym(real(x)) + sym('I')*sym(imag(x));
       return
@@ -247,18 +247,19 @@ function s = sym(x, varargin)
       s = sym (s);
       return
     end
-  elseif islogical(x)
+  elseif islogical(x) %%Handle logical values
     s = python_cmd('return S.true if _ins[0] else S.false', x);
     return
-  elseif isinteger(x)
+  elseif isinteger(x) %%Handle integer vealues
     s = sym(num2str(x, '%ld'));
     return
   elseif isa(x, 'char')
 
   [x, flag] = magic_double_str(x, 'char');
-  x = strrep(x, '"', '\"');
+  x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-  if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag  %%Use Symbol for strings (No integers or floats - With words)
+%%Use Symbol          Not Numeric values                With words   Not octave symbol
+  if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
     cmd = { 'l = list(); d = dict()'
             'for i in _ins:'
             '    if isinstance(i, dict):'
@@ -292,7 +293,7 @@ function s = sym(x, varargin)
     [flag s] = python_cmd (strrep(cmd, '{s}', x));
     switch flag
       case 1
-        error (['You can not use var name "' s '" is a Python function']);
+        error (['You are using the "' s '" Python function, if do not was intentional please use other var name.']);
       case 2
         error (['You can not use var name "' s ' for a unknown error, please report it.']);
     end
