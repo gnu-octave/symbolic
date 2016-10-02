@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -190,7 +191,7 @@ function s = sym(x, varargin)
   %  s = x.sym;
   %  return
 
-  asm = [];
+  asm = {};
 
   if isa(x, 'sym')
     if nargin == 1
@@ -208,10 +209,11 @@ function s = sym(x, varargin)
 
   if nargin >= 2
     if ismatrix(varargin{1}) && ~isa(varargin{1}, 'char') && ~isstruct(varargin{1})  %%Handle MatrixSymbols
-      s = make_sym_matrix(x, varargin{:});
+      assert(nargin < 3, 'MatrixSymbol do not support assumptions')
+      s = make_sym_matrix(x, varargin{1});
       return
-    else  %%Check if exist assumptions
-      check_assumptions(varargin);
+    else
+      check_assumptions(varargin);  %%Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
@@ -222,10 +224,12 @@ function s = sym(x, varargin)
   if ~isscalar(x) && isnumber  %%Handle octave numeric matrix
     s = numeric_array_to_sym (x);
     return
+
   elseif isa(x, 'double')  %%Handle doubles
     if ~isreal(x)
-      s = sym(real(x)) + sym('I')*sym(imag(x));
+      s = sym(real(x)) + sym('i')*sym(imag(x));
       return
+
     else
       [s, flag] = magic_double_str(x, 'number');
       if (~flag)
@@ -246,57 +250,68 @@ function s = sym(x, varargin)
       end
       s = sym (s);
       return
+
     end
   elseif islogical(x) %%Handle logical values
     s = python_cmd('return S.true if _ins[0] else S.false', x);
     return
+
   elseif isinteger(x) %%Handle integer vealues
     s = sym(num2str(x, '%ld'));
     return
+
   elseif isa(x, 'char')
 
-  [x, flag] = magic_double_str(x, 'char');
-  x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
+    [x, flag] = magic_double_str(x, 'char');
+    x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-%%Use Symbol          Not Numeric values                With words   Not octave symbol
-  if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
-    cmd = { 'l = list(); d = dict()'
-            'for i in _ins:'
-            '    if isinstance(i, dict):'
-            '        d.update(i)'
-            '    if isinstance(i, list):'
-            '        d.update(dict((k,True) for k in i))'
-            'return Symbol("{s}", **d)' };
-    s = python_cmd (strrep(cmd, '{s}', x), asm);
-    return
-  else   %%Use S for other cases.
-    assert(isequal(asm, []), 'You can not mix non symbols or functions with assumptions.')
-    if isempty (strfind (x, '(')) && ~isempty(strfind(x, '.'))
-      warning('possibly unintended decimal point in constructor string');
-    end
-    cmd = {'x = "{s}"'
-           'try:'
-           '    return (0, S(x))'
-           'except:'
-           '    if "(" in x or ")" in x:'
-           '        x2 = re.split("\(|\)| |,", x)'
-           '        x2 = [p for p in x if p]'
-           '        for i in x2:'
-           '            try:'
-           '                if eval("callable(" + i + ")"):'
-           '                    return (1, i)' 
-           '            except:'
-           '                pass'
-           '    return (2, 0)'};
+%%Use Symbol            Not Numeric values                With words   Not octave symbol
+    if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
+      cmd = { 'd = dict()'
+              'for i in _ins:'
+              '    if isinstance(i, dict):'
+              '        d.update(i)'
+              '    elif isinstance(i, list):'
+              '        d.update(dict((k,True) for k in i))'
+              '    elif isinstance(i, (str, bytes)):'
+              '        d.update({i:True})'
+              'return Symbol("{s}", **d)' };
+      s = python_cmd (strrep(cmd, '{s}', x), asm{:});
+      return
+
+    else   %%Use S for other cases.
+      assert(isempty(asm), 'You can not mix non symbols or functions with assumptions.')
+      if isempty (strfind (x, '(')) && ~isempty(strfind(x, '.'))
+        warning('possibly unintended decimal point in constructor string');
+      end
+      cmd = {'x = "{s}"'
+             'try:'
+             '    return (0, S(x))'
+             'except:'
+             '    lis = set()'
+             '    if "(" in x or ")" in x:'
+             '        x2 = re.split("\(|\)| |,", x)'
+             '        x2 = [p for p in x2 if p]'
+             '        for i in x2:'
+             '            try:'
+             '                if eval("callable(" + i + ")"):'
+             '                    lis.add(i)' 
+             '            except:'
+             '                pass'
+             '    if len(lis) > 0:'
+             '        return (1, "\", \"".join(str(e) for e in lis))'
+             '    return (2, x)'};
            
-    [flag s] = python_cmd (strrep(cmd, '{s}', x));
-    switch flag
-      case 1
-        error (['Error using the "' s '" Python function, you write it correctly?, if do not was intentional please use other var name.']);
-      case 2
-        error (['You can not use var name "' s ' for a unknown error, please report it.']);
+      [flag s] = python_cmd (strrep(cmd, '{s}', x));
+      switch flag
+        case 1
+          disp (['Error using the "' s '" Python function, you write it correctly?']);
+          error ('if this do not was intentional please use other var name.');
+        case 2
+          error (['You can not use var name "' s ' for a unknown error, please report it.']);
+      end
+      return
     end
-    return
   end
 
   error ('Input not supported yet.')

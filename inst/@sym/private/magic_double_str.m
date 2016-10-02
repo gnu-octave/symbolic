@@ -32,19 +32,21 @@
 function [s, flag] = magic_double_str(x, in)
 
   persistent list %%format: number, octave string, python expression
+  persistent const %%Sympy constants
 
   if isempty(list)
-    list = {pi, 'pi', 'pi';inf, 'inf', 'oo';inf, 'Inf', 'oo';nan, 'nan', 'nan';i, 'i', 'I';e, 'e', 'E'};
+    list = {pi, 'pi', 'pi';inf, 'inf', 'oo';inf, 'Inf', 'oo';nan, 'nan', 'nan';nan, 'NaN', 'nan';i, 'i', 'I';e, 'e', 'E'};
+    const = {'zoo', 'oo'};
   end
 
   flag = 1;
 
   if strcmp(in, 'number')  %%Number comparison
     for j=1:length(list)
-      if x == list{j, 1}
+      if isequaln(x, list{j, 1})
         s = list{j, 2};
         return
-      elseif x == -list{j, 1}
+      elseif isequaln(x, -list{j, 1})
         s = ['-' list{j, 2}];
         return
       end
@@ -56,6 +58,15 @@ function [s, flag] = magic_double_str(x, in)
         return
       elseif strcmp(x, ['-' list{j, 2}])
         s = ['-' list{j, 3}];
+        return
+      end
+    end
+    for j=1:length(const)
+      if strcmp(x, const{j}) || strcmp(x, ['+' const{j}])
+        s = const{j};
+        return
+      elseif strcmp(x, ['-' const{j}])
+        s = ['-' const{j}];
         return
       end
     end

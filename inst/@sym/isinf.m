@@ -110,8 +110,6 @@ end
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
 %! oo = sym('Inf');
 %! assert (isempty( strfind(oo.pickle, 'Symbol') ))
-%! oo = sym('INF');
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
 
 %!test
 %! % ops with infinity shouldn't collapse

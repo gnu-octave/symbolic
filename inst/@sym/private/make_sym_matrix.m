@@ -1,5 +1,4 @@
 %% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,13 +16,35 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function A = make_sym_matrix(As, varargin)
+function A = make_sym_matrix(As, sz)
 % private helper function for making symbolic matrix
 
-  assert (ischar (As));
-  %%Wait Flatten
-  cmd = { 'As = _ins[0]; sz = _ins[1]'
-          'return sympy.MatrixSymbol(As, *sz),' };
-  A = python_cmd (cmd, As, varargin{:});
+  s = size(sz)(2);
+  assert (s <= 2, 'SymbolicMatrix actually only support max 2 dimesions');
+
+  sz = sym([sz zeros(1, 2-s)]);
+
+  if ~isempty(findsymbols(sz))
+    cmd = { 'As, sz = _ins'
+            'return sympy.MatrixSymbol(As, *sz),' };
+    A = python_cmd (cmd, As, sz);
+  else
+    cmd = { 'As, sz = _ins'
+            'if sz[0] == 0 or sz[1] == 0:'
+            '    return sympy.Matrix(sz[0], sz[1], []),'
+            '    #sympy.MatrixSymbol(As, sz[0], sz[1]),'  %%Probably linked to https://github.com/cbm755/octsympy/issues/159
+            'if sz[0] > 20 or sz[1] > 20:'  %%Limit to show the expression
+            '    return sympy.MatrixSymbol(As, *sz),'
+            'if sz[0] < 10 and sz[1] < 10:'
+            '    extra = ""'
+            'else:'
+            '    extra = "_"'
+            'L = [[Symbol("%s%d%s%d" % (As, i+1, extra, j+1)) \'
+            '      for j in range(0, sz[1])] \'
+            '      for i in range(0, sz[0])]'
+            'A = sympy.Matrix(L)'
+            'return A,' };
+    A = python_cmd (cmd, As, sz);
+  end
 
 end

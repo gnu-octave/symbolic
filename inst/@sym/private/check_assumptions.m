@@ -25,7 +25,16 @@
 %% @seealso{sym}
 %% @end deftypefun
 
-function [s, flag] = check_assumptions(varargin)
+function check_assumptions(varargin)
+
+  for n=1:length(varargin)
+%%  Helper function, we can't call the main private function from self.
+    check_assumptions_helper(varargin{n})
+  end
+
+end
+
+function check_assumptions_helper(varargin)
 
   persistent valid_asm
 
@@ -39,11 +48,11 @@ function [s, flag] = check_assumptions(varargin)
     elseif isstruct(varargin{n})
       fields = fieldnames(varargin{n});
       for j=1:numel(fields)
-         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
+         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
       end
     elseif iscell(varargin{n})
       for j=1:length(varargin{n})
-        check_assumptions(varargin{n}{j})
+        check_assumptions_helper(varargin{n}{j})
       end
     else
       error('sym: assumption must be a string or struct or cell')
