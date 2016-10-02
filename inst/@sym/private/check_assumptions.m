@@ -35,11 +35,11 @@ function [s, flag] = check_assumptions(varargin)
 
   for n=1:length(varargin)
     if isa(varargin{n}, 'char')
-      assert(ismember(varargin{n}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported')
+      assert(ismember(varargin{n}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
     elseif isstruct(varargin{n})
       fields = fieldnames(varargin{n});
       for j=1:numel(fields)
-         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported')
+         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
       end
     elseif iscell(varargin{n})
       for j=1:length(varargin{n})

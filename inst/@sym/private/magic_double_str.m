@@ -39,8 +39,8 @@ function [s, flag] = magic_double_str(x, in)
 
   flag = 1;
 
-  for j=1:length(list)
-    if strcmp(in, 'number')
+  if strcmp(in, 'number')  %%Number comparison
+    for j=1:length(list)
       if x == list{j, 1}
         s = list{j, 2};
         return
@@ -48,7 +48,9 @@ function [s, flag] = magic_double_str(x, in)
         s = ['-' list{j, 2}];
         return
       end
-    else
+    end
+  else  %%String comparison
+    for j=1:length(list)
       if strcmp(x, list{j, 2}) || strcmp(x, ['+' list{j, 2}])
         s = list{j, 3};
         return

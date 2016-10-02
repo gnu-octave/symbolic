@@ -265,14 +265,13 @@ function s = sym(x, varargin)
             '    if isinstance(i, dict):'
             '        d.update(i)'
             '    if isinstance(i, list):'
-            '        return str(_ins)'
             '        d.update(dict((k,True) for k in i))'
             'return Symbol("{s}", **d)' };
     s = python_cmd (strrep(cmd, '{s}', x), asm);
     return
   else   %%Use S for other cases.
-    assert(isequal(asm, []), 'You can not mix non symbols with assumptions.')
-    if (isempty (strfind (x, '(')) && ~isempty(strfind(x, '.')))
+    assert(isequal(asm, []), 'You can not mix non symbols or functions with assumptions.')
+    if isempty (strfind (x, '(')) && ~isempty(strfind(x, '.'))
       warning('possibly unintended decimal point in constructor string');
     end
     cmd = {'x = "{s}"'
@@ -293,7 +292,7 @@ function s = sym(x, varargin)
     [flag s] = python_cmd (strrep(cmd, '{s}', x));
     switch flag
       case 1
-        error (['You are using the "' s '" Python function, if do not was intentional please use other var name.']);
+        error (['Error using the "' s '" Python function, you write it correctly?, if do not was intentional please use other var name.']);
       case 2
         error (['You can not use var name "' s ' for a unknown error, please report it.']);
     end
@@ -594,13 +593,13 @@ end
 %!warning <heuristics for double-precision> sym(10.33);
 %!warning <heuristics for double-precision> sym(-5.23);
 
-%!error <assumption is not supported>
+%!error <is not supported>
 %! x = sym('x', 'positive2');
 
-%!error <assumption is not supported>
+%!error <is not supported>
 %! x = sym('x', 'integer', 'positive2');
 
-%!error <assumption is not supported>
+%!error <is not supported>
 %! x = sym('x', 'integer2', 'positive');
 
 %!error <can not mix>
