@@ -121,7 +121,7 @@ function s = assume(x, varargin)
       x = x.flat;    % we just want the string
     end
 
-    if nargout == 1, s = sym(x) end
+    if nargout == 1, s = sym(x); end
  
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -147,7 +147,12 @@ function s = assume(x, varargin)
     ca.(cond) = true;
   end
 
-  xstr = x.flat;
+  if isa(x, 'sym')
+    xstr = x.flat;
+  else
+    xstr = x;
+  end
+
   newx = sym(xstr, ca);
 
   if (nargout > 0)

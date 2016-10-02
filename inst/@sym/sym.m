@@ -207,24 +207,17 @@ function s = sym(x, varargin)
   end
 
   if nargin >= 2
-    if ismatrix(varargin{1}) && ~isa(varargin{1}, 'char')  %%Handle MatrixSymbols
+    if ismatrix(varargin{1}) && ~isa(varargin{1}, 'char') && ~isstruct(varargin{1})  %%Handle MatrixSymbols
       s = make_sym_matrix(x, varargin{:});
       return
-    else  %%Make and check assumptions list
-      valid_asm = assumptions('possible');
-      for n=1:length(varargin)
-        assert(ischar(varargin{n}), 'sym: assumption must be a string')
-        assert(ismember(varargin{n}, valid_asm), ...
-               'sym: that assumption is not supported')
-      end
+    else  %%Check if exist assumptions
+      check_assumptions(varargin);
       asm = varargin;
     end
   end
 
   isnumber = isnumeric(x) || islogical(x);
-  if ~isempty(asm) && isnumber
-    error('You can not mix non symbols with assumptions.')
-  end
+  assert(isempty(asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
 
   if ~isscalar(x) && isnumber
     s = numeric_array_to_sym (x);
@@ -255,14 +248,24 @@ function s = sym(x, varargin)
       return
     end
   elseif islogical(x)
-    s = python_cmd('return S.true if _ins[0] else S.false', x)
+    s = python_cmd('return S.true if _ins[0] else S.false', x);
+    return
+  elseif isinteger(x)
+    s = sym(num2str(x, '%ld'));
     return
   elseif isa(x, 'char')
 
   [x, flag] = magic_double_str(x, 'char');
+  x = strrep(x, '"', '\"');
 
   if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag  %%Use Symbol for strings (No integers or floats - With words)
-    cmd = { 'd = dict((k,True) for k in _ins[0])'
+    cmd = { 'l = list(); d = dict()'
+            'for i in _ins:'
+            '    if isinstance(i, dict):'
+            '        d.update(i)'
+            '    if isinstance(i, list):'
+            '        return str(_ins)'
+            '        d.update(dict((k,True) for k in i))'
             'return Symbol("{s}", **d)' };
     s = python_cmd (strrep(cmd, '{s}', x), asm);
     return
@@ -421,7 +424,7 @@ end
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
-%! x = assume('x', 'clear');
+%! assume('x', 'clear');
 %! asm = assumptions();
 %! assert ( isempty(asm))
 
@@ -431,7 +434,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! x = assume('x', 'clear');
+%! assume('x', 'clear');
 %! assert (logical(exist('x', 'var')))
 
 %!test
@@ -444,7 +447,7 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
-%! x = assume(x, 'clear');
+%! assume(x, 'clear');
 %! assert (isempty(assumptions(x)))
 %! assert (isempty(assumptions(f)))
 
@@ -599,10 +602,10 @@ end
 %!error <assumption is not supported>
 %! x = sym('x', 'integer2', 'positive');
 
-%!error <failed>
+%!error <can not mix>
 %! x = sym('-pi', 'positive')
 
-%!error <failed>
+%!error <can not mix>
 %! x = sym('pi', 'integer')
 
 %!test

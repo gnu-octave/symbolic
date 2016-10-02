@@ -22,7 +22,7 @@ function A = make_sym_matrix(As, varargin)
 
   assert (ischar (As));
   %%Wait Flatten
-  cmd = { 'As = _ins[0]; sz = _ins[1:]'
+  cmd = { 'As = _ins[0]; sz = _ins[1]'
           'return sympy.MatrixSymbol(As, *sz),' };
   A = python_cmd (cmd, As, varargin{:});
 

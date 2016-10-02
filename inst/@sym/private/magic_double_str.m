@@ -31,7 +31,7 @@
 
 function [s, flag] = magic_double_str(x, in)
 
-  persistent list %%format: number, octave string, python return format
+  persistent list %%format: number, octave string, python expression
 
   if isempty(list)
     list = {pi, 'pi', 'pi';inf, 'inf', 'oo';inf, 'Inf', 'oo';nan, 'nan', 'nan';i, 'i', 'I';e, 'e', 'E'};
