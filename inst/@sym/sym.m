@@ -421,7 +421,7 @@ end
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
-%! x = sym('x', 'clear');
+%! x = assume('x', 'clear');
 %! asm = assumptions();
 %! assert ( isempty(asm))
 
@@ -431,7 +431,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! x = sym('x', 'clear');
+%! x = assume('x', 'clear');
 %! assert (logical(exist('x', 'var')))
 
 %!test
@@ -444,7 +444,7 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
-%! x = sym(x, 'clear');
+%! x = assume(x, 'clear');
 %! assert (isempty(assumptions(x)))
 %! assert (isempty(assumptions(f)))
 

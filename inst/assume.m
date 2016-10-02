@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -105,7 +106,41 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assume(x, varargin)
+function s = assume(x, varargin)
+
+  if nargin == 0
+    error ('Send an argument.')
+  elseif nargin == 1
+    error ('Not supported yet.')
+  end
+
+  if isa(varargin{1}, 'char') && strcmp(varargin{1}, 'clear')
+
+    % special case for 'clear', because of side-effects
+    if (isa(x, 'sym'))
+      x = x.flat;    % we just want the string
+    end
+
+    if nargout == 1, s = sym(x) end
+ 
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    xstr = x;
+    newx = sym (x);
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    assignin(context, xstr, newx);
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
+    return
+  end
 
   for n=2:nargin
     cond = varargin{n-1};
@@ -116,7 +151,7 @@ function varargout = assume(x, varargin)
   newx = sym(xstr, ca);
 
   if (nargout > 0)
-    varargout{1} = newx;
+    s = newx;
     return
   end
 
