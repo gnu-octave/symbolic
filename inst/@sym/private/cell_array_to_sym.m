@@ -20,17 +20,17 @@ function s = cell_array_to_sym (L, varargin)
 %private helper for sym ctor
 %   convert a cell array to syms, recursively when nests cells found
 
-  assert(iscell(L))
+  assert (iscell (L))
 
-  s = cell(size(L));
+  s = cell (size (L));
 
-  for i = 1:numel(L)
+  for i = 1:numel (L)
     %s{i} = sym(L{i});
     % not strictly necessary if sym calls this but maybe neater this way:
     item = L{i};
-    if iscell(item)
+    if iscell (item)
       s{i} = cell_array_to_sym(item, varargin{:});
     else
-      s{i} = sym(item, varargin{:});
+      s{i} = sym (item, varargin{:});
     end
   end

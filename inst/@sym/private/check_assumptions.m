@@ -27,15 +27,6 @@
 
 function check_assumptions(varargin)
 
-  for n=1:length(varargin)
-%%  Helper function, we can't call the main private function from self.
-    check_assumptions_helper(varargin{n})
-  end
-
-end
-
-function check_assumptions_helper(varargin)
-
   persistent valid_asm
 
   if isempty(valid_asm)
@@ -43,19 +34,21 @@ function check_assumptions_helper(varargin)
   end
 
   for n=1:length(varargin)
-    if isa(varargin{n}, 'char')
-      assert(ismember(varargin{n}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
-    elseif isstruct(varargin{n})
-      fields = fieldnames(varargin{n});
-      for j=1:numel(fields)
-         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
+    if ~islogical(varargin{n})
+      if isa(varargin{n}, 'char')
+        assert(ismember(varargin{n}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
+      elseif isstruct(varargin{n})
+        fields = fieldnames(varargin{n});
+        for j=1:numel(fields)
+           assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
+        end
+      elseif iscell(varargin{n})
+        for j=1:length(varargin{n})
+          check_assumptions (varargin{n}{j})
+        end
+        else
+        error('sym: assumption must be a string or struct or cell')
       end
-    elseif iscell(varargin{n})
-      for j=1:length(varargin{n})
-        check_assumptions_helper(varargin{n}{j})
-      end
-    else
-      error('sym: assumption must be a string or struct or cell')
     end
   end
 

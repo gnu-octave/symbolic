@@ -208,7 +208,7 @@ function s = sym(x, varargin)
   end
 
   if nargin >= 2
-    if ismatrix(varargin{1}) && ~isa(varargin{1}, 'char') && ~isstruct(varargin{1})  %%Handle MatrixSymbols
+    if ismatrix(varargin{1}) && ~isa(varargin{1}, 'char') && ~isstruct(varargin{1}) && ~iscell(varargin{1}) %%Handle MatrixSymbols
       assert(nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix(x, varargin{1});
       return
