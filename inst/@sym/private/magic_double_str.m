@@ -44,10 +44,10 @@ function [s, flag] = magic_double_str(x, in)
   if strcmp(in, 'number')  %%Number comparison
     for j=1:length(list)
       if isequaln(x, list{j, 1})
-        s = list{j, 2}{1};
+        s = list{j, 3};
         return
       elseif isequaln(x, -list{j, 1})
-        s = ['-' list{j, 2}{1}];
+        s = ['-' list{j, 3}];
         return
       end
     end

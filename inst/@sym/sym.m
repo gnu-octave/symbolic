@@ -247,8 +247,10 @@ function s = sym(x, varargin)
         else
           s = sprintf('Rational(%s, %s)', num2str(N1), num2str(D1));
         end
+        s = sym (s);
+      else
+        s = python_cmd('return S(_ins[0])', s);
       end
-      s = sym (s);
       return
 
     end
