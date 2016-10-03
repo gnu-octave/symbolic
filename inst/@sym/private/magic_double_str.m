@@ -31,11 +31,11 @@
 
 function [s, flag] = magic_double_str(x, in)
 
-  persistent list %%format: number, octave string, python expression
+  persistent list %%format: number, {octave string}, python expression
   persistent const %%Sympy constants
 
   if isempty(list)
-    list = {pi, 'pi', 'pi';inf, 'inf', 'oo';inf, 'Inf', 'oo';nan, 'nan', 'nan';nan, 'NaN', 'nan';i, 'i', 'I';e, 'e', 'E'};
+    list = {pi {'pi'} 'pi';inf {'inf' 'Inf'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i'} 'I';e {'e'} 'E'};
     const = {'zoo', 'oo'};
   end
 
@@ -44,21 +44,23 @@ function [s, flag] = magic_double_str(x, in)
   if strcmp(in, 'number')  %%Number comparison
     for j=1:length(list)
       if isequaln(x, list{j, 1})
-        s = list{j, 2};
+        s = list{j, 2}{1};
         return
       elseif isequaln(x, -list{j, 1})
-        s = ['-' list{j, 2}];
+        s = ['-' list{j, 2}{1}];
         return
       end
     end
   else  %%String comparison
     for j=1:length(list)
-      if strcmp(x, list{j, 2}) || strcmp(x, ['+' list{j, 2}])
-        s = list{j, 3};
-        return
-      elseif strcmp(x, ['-' list{j, 2}])
-        s = ['-' list{j, 3}];
-        return
+      for n=1:length(list{j, 2})
+        if strcmp(x, list{j, 2}{n}) || strcmp(x, ['+' list{j, 2}{n}])
+          s = list{j, 3};
+          return
+        elseif strcmp(x, ['-' list{j, 2}{n}])
+          s = ['-' list{j, 3}];
+          return
+        end
       end
     end
     for j=1:length(const)
