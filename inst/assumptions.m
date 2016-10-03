@@ -111,10 +111,8 @@ function [A, B] = assumptions(F, outp)
       'd = x._assumptions.generator'
       'if d == {}:'
       '    astr = ""'
-      'elif all(d.values()):'  % all True so list them
-      '    astr = ", ".join(sorted([str(i) for i in d.keys()]))'
-      'else:'  % more complicated case, just the raw dict
-      '    astr = str(d)'
+      'else:'  % all True so list them
+      '    astr = ", ".join(sorted([(("" if d.values()[i] else "~") + str(d.keys()[i])) for i in range(len(d.keys()))]))'
       'if outputdict:'
       '    return (astr, d)'
       'else:'

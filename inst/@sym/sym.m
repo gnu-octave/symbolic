@@ -267,7 +267,7 @@ function s = sym(x, varargin)
     [x, flag] = magic_double_str(x, 'char');
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-%%Use Symbol            Not Numeric values                With words   Not octave symbol
+%%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
       cmd = { 'd = dict()'
               'for i in _ins:'

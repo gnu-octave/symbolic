@@ -80,8 +80,18 @@ function varargout = assumeAlso(x, varargin)
   end
 
   for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
+    if ~islogical(varargin{n - 1})
+      cond = varargin{n - 1};
+      if n < nargin && islogical(varargin{n})
+        ca.(cond) = varargin{n};
+      else
+        ca.(cond) = true;
+      end
+    else
+      if (n == 2 && islogical(varargin{1})) || islogical(varargin{n - 2})
+        print_usage();
+      end
+    end
   end
 
   xstr = x.flat;
