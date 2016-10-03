@@ -22,7 +22,7 @@ function A = make_sym_matrix(As, sz)
   s = size(sz)(2);
   assert (s <= 2, 'SymbolicMatrix actually only support max 2 dimesions');
 
-  sz = sym([sz zeros(1, 2-s)]);
+  sz = sym([sz ones(1, 2-s)]);
 
   if ~isempty(findsymbols(sz))
     cmd = { 'As, sz = _ins'
