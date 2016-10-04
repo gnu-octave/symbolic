@@ -201,7 +201,7 @@ end
 %! assert ( isempty(A))
 
 %!test
-%! %% matlab compat, syms x clear should add x to workspace
+%! % SMT compat, syms x clear should add x to workspace
 %! syms x real
 %! f = 2*x;
 %! clear x
