@@ -299,6 +299,19 @@ end
 %! assert(isa(x, 'sym'))
 
 %!test
+%! % SMT compat: symfun indep var overwrites existing var
+%! t = 6;
+%! syms f(t)
+%! assert (logical (t != 6))
+
+%!test
+%! % SMT compat: symfun indep var overwrites existing var, even if sym
+%! syms x
+%! t = x;
+%! syms f(t)
+%! assert (! logical (t == x))
+
+%!test
 %! syms x y
 %! f(x) = x^2;
 %! g(x,y) = sym('g(x,y)');
