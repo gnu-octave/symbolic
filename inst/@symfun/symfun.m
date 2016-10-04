@@ -121,6 +121,21 @@
 %% @end group
 %% @end example
 %%
+%% It is possible to compose one symfun inside another.  For example, to
+%% demonstrate the chain rule, we might do:
+%% @example
+%% @group
+%% syms f(t) g(t)
+%% F(t) = f(g(t))
+%%   @result{} F(t) = (symfun) f(g(t))
+%% diff(F, t)
+%%   @result{} ans(t) = (symfun)
+%%       d        ⎛ d        ⎞│
+%%       ──(g(t))⋅⎜───(f(ξ₁))⎟│
+%%       dt       ⎝dξ₁       ⎠│ξ₁=g(t)
+%% @end group
+%% @end example
+%%
 %% @seealso{sym, syms}
 %% @end deftypemethod
 
