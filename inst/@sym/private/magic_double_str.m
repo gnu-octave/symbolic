@@ -18,7 +18,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x}, @var{in})
+%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x})
 %% Recognize special double values.
 %%
 %% Private helper function.
@@ -29,19 +29,22 @@
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
-function [s, flag] = magic_double_str(x, in)
+function [s, flag] = magic_double_str(x)
+
+  assert(isa(x, 'double') || isa(x, 'char'), 'Format not supported.');
 
   persistent list %%format: number, {octave string}, python expression
   persistent const %%Sympy constants
+  %%{octave string} need contain the python expression for char function
 
   if isempty(list)
-    list = {pi {'pi'} 'pi';inf {'inf' 'Inf'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i'} 'I';e {'e'} 'E'};
-    const = {'zoo', 'oo'};
+    list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I';e {'e' 'E'} 'E'};
+    const = {'zoo'};
   end
 
   flag = 1;
 
-  if strcmp(in, 'number')  %%Number comparison
+  if isa(x, 'double')  %%Number comparison
     for j=1:length(list)
       if isequaln(x, list{j, 1})
         s = list{j, 3};
@@ -51,7 +54,7 @@ function [s, flag] = magic_double_str(x, in)
         return
       end
     end
-  else  %%String comparison
+  elseif isa(x, 'char')
     for j=1:length(list)
       for n=1:length(list{j, 2})
         if strcmp(x, list{j, 2}{n}) || strcmp(x, ['+' list{j, 2}{n}])
@@ -74,18 +77,18 @@ function [s, flag] = magic_double_str(x, in)
     end
   end
 
-  if strcmp(in, 'char')
+  if isa(x, 'char')
     flag = 0;
     s = x;
     return
-  end
-
-  if (abs(x) < 1e15) && (mod(x,1) == 0)
-    % special treatment for "small" integers
-    s = num2str(x);  % better than sprintf('%d', large)
-  else
-    s = '';
-    flag = 0;
+  elseif isa(x, 'double')
+    if (abs(x) < 1e15) && (mod(x,1) == 0)
+      % special treatment for "small" integers
+      s = num2str(x);  % better than sprintf('%d', large)
+    else
+      s = '';
+      flag = 0;
+    end
   end
 
 end
