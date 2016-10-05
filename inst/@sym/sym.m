@@ -220,6 +220,9 @@ function s = sym(x, varargin)
 
   isnumber = isnumeric(x) || islogical(x);
   assert(isempty(asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
+  if size(x) == [1 1]
+    symsnotfunc(x);
+  end
 
   if ~isscalar(x) && isnumber  %%Handle octave numeric matrix
     s = numeric_array_to_sym (x);
@@ -276,7 +279,10 @@ function s = sym(x, varargin)
               '    elif isinstance(_ins[i], list):'
               '        d.update(dict((i[k],(i[k+1] if k < len(i) and isinstance(i[k+1], bool) else True)) for k in range(len(i))))'
               '    elif isinstance(_ins[i], (str, bytes)):'
-              '        d.update({_ins[i]:_ins[i+1]} if i < len(_ins) and isinstance(_ins[i+1], bool) else {_ins[i]:True})'
+              '        if i < (len(_ins) - 1) and isinstance(_ins[i+1], bool):'
+              '            d.update({_ins[i]:_ins[i+1]})'
+              '        else:'
+              '            d.update({_ins[i]:True})'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep(cmd, '{s}', x), asm{:});
       return
