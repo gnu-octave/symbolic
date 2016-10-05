@@ -266,7 +266,6 @@ function s = sym(x, varargin)
 
     [x, flag] = magic_double_str(x);
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
-    symsnotfunc(x);
 
 %%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
