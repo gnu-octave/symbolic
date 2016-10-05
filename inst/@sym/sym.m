@@ -231,7 +231,7 @@ function s = sym(x, varargin)
       return
 
     else
-      [s, flag] = magic_double_str(x, 'number');
+      [s, flag] = magic_double_str(x);
       if (~flag)
         % Allow 1/3 and other "small" fractions.
         % Personally, I like a warning here so I can catch bugs.
@@ -264,9 +264,8 @@ function s = sym(x, varargin)
 
   elseif isa(x, 'char')
 
-    [x, flag] = magic_double_str(x, 'char');
+    [x, flag] = magic_double_str(x);
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
-    symsnotfunc(x);
 
 %%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
@@ -608,11 +607,6 @@ end
 %! assert (~isempty(regexp(char(Eq), '^Symbol')))
 %! assert (~isempty(regexp(char(Ei), '^Symbol')))
 
-%!test
-%! % E can be a sym not just exp(sym(1))
-%! syms E
-%! assert (~logical (E == exp(sym(1))))
-
 %!warning <heuristics for double-precision> sym(1e16);
 %!warning <heuristics for double-precision> sym(-1e16);
 %!warning <heuristics for double-precision> sym(10.33);
@@ -655,9 +649,3 @@ end
 %! else
 %!   delete([myfile '.mat'])
 %! end
-
-%!test
-%! a = sym(e);
-%! b = sym('e');
-%! assert (isequal (a, exp(sym(1))))
-%! assert (isequal (b, exp(sym(1))))
