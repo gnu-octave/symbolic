@@ -267,8 +267,12 @@ function s = sym(x, varargin)
     [x, flag] = magic_double_str(x);
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-%%Use Symbol with        Not Numeric values                With words   Not octave symbol
-    if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
+    if flag
+      s = python_cmd('return S(_ins[0])', x);
+      return
+
+%%Use Symbol with        Not Numeric values                With words
+    elseif isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$')
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
@@ -293,10 +297,10 @@ function s = sym(x, varargin)
       cmd = {'x = "{s}"'
              'try:'
              '    x = S(x)'
-             '    if len(x.free_symbols) == 0:'
+             '    if hasattr(x, "free_symbols") and len(x.free_symbols) == 0:'
              '        x = Rational(sp.re(x))+Rational(sp.im(x))*I'
-             '    return (0, x)'
-             'except:'
+             '    return (0, 0, x)'
+             'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
              '        x2 = re.split("\(|\)| |,", x)'
@@ -308,15 +312,17 @@ function s = sym(x, varargin)
              '            except:'
              '                pass'
              '    if len(lis) > 0:'
-             '        return (1, "\", \"".join(str(e) for e in lis))'
-             '    return (2, x)' };
+             '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
+             '    return (str(e), 2, x)' };
            
-      [flag s] = python_cmd (strrep(cmd, '{s}', x));
+      [err flag s] = python_cmd (strrep(cmd, '{s}', x));
       switch flag
         case 1
+          disp (err);
           disp (['Error using the "' s '" Python function, you write it correctly?']);
           error ('if this do not was intentional please use other var name.');
         case 2
+          disp (err);
           error (['You can not use var name "' s ' for a unknown error, please report it.']);
       end
       return
