@@ -22,7 +22,7 @@
 %%
 %% Private helper function.
 %%
-%% @seealso{sym, vpa}
+%% @seealso{sym}
 %% @end deftypefun
 
 function [s, flag] = symsnotfunc(varargin)
