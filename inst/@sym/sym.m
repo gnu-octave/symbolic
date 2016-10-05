@@ -271,6 +271,7 @@ function s = sym(x, varargin)
 %%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
       cmd = { 'd = dict()'
+              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
