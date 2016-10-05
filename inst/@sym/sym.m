@@ -220,9 +220,6 @@ function s = sym(x, varargin)
 
   isnumber = isnumeric(x) || islogical(x);
   assert(isempty(asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
-  if size(x) == [1 1]
-    symsnotfunc(x);
-  end
 
   if ~isscalar(x) && isnumber  %%Handle octave numeric matrix
     s = numeric_array_to_sym (x);
@@ -269,6 +266,7 @@ function s = sym(x, varargin)
 
     [x, flag] = magic_double_str(x, 'char');
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
+    symsnotfunc(x);
 
 %%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
