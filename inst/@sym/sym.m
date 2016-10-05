@@ -292,7 +292,10 @@ function s = sym(x, varargin)
       end
       cmd = {'x = "{s}"'
              'try:'
-             '    return (0, S(x))'
+             '    if x.replace(".", "").isdigit():'
+             '        return (0, Rational(x))'
+             '    else:'
+             '        return (0, S(x))'
              'except:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
