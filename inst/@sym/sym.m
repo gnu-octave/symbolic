@@ -270,13 +270,13 @@ function s = sym(x, varargin)
 %%Use Symbol with        Not Numeric values                With words   Not octave symbol
     if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
       cmd = { 'd = dict()'
-              'for i in _ins:'
-              '    if isinstance(i, dict):'
-              '        d.update(i)'
-              '    elif isinstance(i, list):'
-              '        d.update(dict((k,True) for k in i))'
-              '    elif isinstance(i, (str, bytes)):'
-              '        d.update({i:True})'
+              'for i in range(len(_ins)):'
+              '    if isinstance(_ins[i], dict):'
+              '        d.update(_ins[i])'
+              '    elif isinstance(_ins[i], list):'
+              '        d.update(dict((i[k],(i[k+1] if k < len(i) and isinstance(i[k+1], bool) else True)) for k in range(len(i))))'
+              '    elif isinstance(_ins[i], (str, bytes)):'
+              '        d.update({_ins[i]:_ins[i+1]} if i < len(_ins) and isinstance(_ins[i+1], bool) else {_ins[i]:True})'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep(cmd, '{s}', x), asm{:});
       return
