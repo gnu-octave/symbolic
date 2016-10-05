@@ -292,7 +292,7 @@ function s = sym(x, varargin)
       end
       cmd = {'x = "{s}"'
              'try:'
-             '    if x.replace(".", "").isdigit():'
+             '    if x.replace(".", "").replace("+", "").replace("-", "").isdigit():'
              '        return (0, Rational(x))'
              '    else:'
              '        return (0, S(x))'
