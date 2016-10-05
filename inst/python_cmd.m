@@ -162,7 +162,7 @@ function varargout = python_cmd(cmd, varargin)
         };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
-cmd
+
   if (~iscell(A))
     A={A};
   end

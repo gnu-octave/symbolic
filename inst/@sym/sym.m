@@ -294,7 +294,7 @@ function s = sym(x, varargin)
              'try:'
              '    x = S(x)'
              '    if len(x.free_symbols) == 0:'
-             '        x = Rational(re(x))+Rational(im(x))*I'
+             '        x = Rational(sp.re(x))+Rational(sp.im(x))*I'
              '    return (0, x)'
              'except:'
              '    lis = set()'
@@ -309,7 +309,7 @@ function s = sym(x, varargin)
              '                pass'
              '    if len(lis) > 0:'
              '        return (1, "\", \"".join(str(e) for e in lis))'
-             '    return (2, x)'};
+             '    return (2, x)' };
            
       [flag s] = python_cmd (strrep(cmd, '{s}', x));
       switch flag
