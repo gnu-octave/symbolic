@@ -39,7 +39,7 @@ function check_assumptions(x)
     elseif isstruct(x)
       fields = fieldnames(x);
       for j=1:numel(fields)
-         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
+        check_assumptions (fields{j})
       end
     elseif iscell(x)
       for j=1:length(x)

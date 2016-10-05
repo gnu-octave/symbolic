@@ -39,11 +39,7 @@ function s = norm_logic_strings(x)
     elseif isstruct(x)
       fields = fieldnames(x);
       for q=1:numel(fields)
-        if strcmp(x.(fields{q}), 'true')
-          x.(fields{q}) = true;
-        elseif strcmp(x.(fields{q}), 'false')
-          x.(fields{q}) = false;
-        end
+        x.(fields{q}) = norm_logic_strings(x.(fields{q}));
       end
     elseif ischar(x)
       if strcmp(x, 'true')

@@ -267,19 +267,20 @@ function s = sym(x, varargin)
     [x, flag] = magic_double_str(x);
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-    if flag
-      s = python_cmd('return S(_ins[0])', x);
-      return
-
-%%Use Symbol with        Not Numeric values                With words
-    elseif isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$')
+%%Use Symbol with        Not Numeric values                With words  Not Octave symbol
+    if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
               '    elif isinstance(_ins[i], list):'
-              '        d.update(dict((i[k],(i[k+1] if k < len(i) and isinstance(i[k+1], bool) else True)) for k in range(len(i))))'
+              '        for j in range(len(i)):'
+              '            if not isinstance(i[j], bool):'
+              '                if k < len(i) and isinstance(i[k+1], bool):'
+              '                    d.update({i[k]:i[k+1]})'
+              '                else:'
+              '                    d.update({i[k]:True})'
               '    elif isinstance(_ins[i], (str, bytes)):'
               '        if i < (len(_ins) - 1) and isinstance(_ins[i+1], bool):'
               '            d.update({_ins[i]:_ins[i+1]})'
@@ -291,14 +292,21 @@ function s = sym(x, varargin)
 
     else   %%Use S for other cases.
       assert(isempty(asm), 'You can not mix non symbols or functions with assumptions.')
+
+      if flag
+        s = python_cmd('return S(_ins[0])', x);
+        return
+      end
+
       if isempty (strfind (x, '(')) && ~isempty(strfind(x, '.'))
         warning('possibly unintended decimal point in constructor string');
       end
+
       cmd = {'x = "{s}"'
              'try:'
              '    x = S(x)'
-             '    if hasattr(x, "free_symbols") and len(x.free_symbols) == 0:'
-             '        x = Rational(sp.re(x))+Rational(sp.im(x))*I'
+             '    if str(x).replace(".", "").replace("-", "").replace("+", "").isdigit():'
+             '        x = (Rational(sp.re(x)) if sp.re(x).is_Number else sp.re(x)) + (Rational(sp.im(x)) if sp.im(x).is_Number else sp.im(x))*I'
              '    return (0, 0, x)'
              'except Exception as e:'
              '    lis = set()'
