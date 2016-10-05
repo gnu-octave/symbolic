@@ -114,6 +114,8 @@ function s = assume(x, varargin)
     error ('Not supported yet.')
   end
 
+  varargin = norm_logic_strings(varargin);
+
   if isa(varargin{1}, 'char') && strcmp(varargin{1}, 'clear')
 
     % special case for 'clear', because of side-effects
@@ -168,6 +170,8 @@ function s = assume(x, varargin)
   if (nargout > 0)
     s = newx;
     return
+  else
+    assignin('caller', x, xstr);
   end
 
   % ---------------------------------------------

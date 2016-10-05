@@ -91,27 +91,17 @@ function syms(varargin)
     return
   end
 
-
+  varargin = norm_logic_strings(varargin);
 
   %% Find assumptions
   valid_asm = assumptions('possible');
   last = -1;
   doclear = false;
   for n=1:nargin
-    assert(ischar(varargin{n}), 'syms: expected string inputs')
-    if (ismember(varargin{n}, valid_asm))
+    assert(ischar(varargin{n}) || islogical(varargin{n}), 'syms: expected string inputs')
+    if islogical(varargin{n}) || ismember(varargin{n}, valid_asm)
       if (last < 0)
         last = n - 1;
-      end
-    elseif (strcmp(varargin{n}, 'clear'))
-      doclear = true;
-      if (last < 0)
-        last = n - 1;
-      else
-        warning('syms: should not combine "clear" with other assumptions')
-      end
-      if (n ~= nargin)
-        error('syms: "clear" should be the final argument')
       end
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')

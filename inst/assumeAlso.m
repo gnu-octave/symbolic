@@ -66,7 +66,21 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assumeAlso(x, varargin)
+function s = assumeAlso(x, varargin)
+
+  if length(varargin) ~= 0
+    varargin = norm_logic_strings(varargin);
+  end
+
+  if ~isa(x, 'sym')
+    p = sym(x, varargin{:});
+    if nargout ~= 0
+      s = p;
+    else
+      assignin('caller', x, p);
+    end
+    return
+  end
 
   [tilde,ca] = assumptions(x, 'dict');
 
@@ -98,7 +112,7 @@ function varargout = assumeAlso(x, varargin)
   newx = sym(xstr, ca);
 
   if (nargout > 0)
-    varargout{1} = newx;
+    s = newx;
     return
   end
 

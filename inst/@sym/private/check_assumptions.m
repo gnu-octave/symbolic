@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun check_assumptions (@var{x}, @var{dot})
+%% @deftypefun check_assumptions (@var{x})
 %% Check if the input have valid assumptions.
 %%
 %% Private helper function.
@@ -25,7 +25,7 @@
 %% @seealso{sym}
 %% @end deftypefun
 
-function check_assumptions(varargin)
+function check_assumptions(x)
 
   persistent valid_asm
 
@@ -33,22 +33,20 @@ function check_assumptions(varargin)
     valid_asm = assumptions('possible');
   end
 
-  for n=1:length(varargin)
-    if ~islogical(varargin{n})
-      if isa(varargin{n}, 'char')
-        assert(ismember(varargin{n}, valid_asm), ['sym: the assumption "' varargin{n} '" is not supported'])
-      elseif isstruct(varargin{n})
-        fields = fieldnames(varargin{n});
-        for j=1:numel(fields)
-           assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
-        end
-      elseif iscell(varargin{n})
-        for j=1:length(varargin{n})
-          check_assumptions (varargin{n}{j})
-        end
-        else
-        error('sym: assumption must be a string or struct or cell')
+  if ~islogical(x)
+    if isa(x, 'char')
+      assert(ismember(x, valid_asm), ['sym: the assumption "' x '" is not supported'])
+    elseif isstruct(x)
+      fields = fieldnames(x);
+      for j=1:numel(fields)
+         assert(ismember(fields{j}, valid_asm), ['sym: the assumption "' fields{j} '" is not supported'])
       end
+    elseif iscell(x)
+      for j=1:length(x)
+        check_assumptions (x{j})
+      end
+      else
+      error('sym: assumption must be a string or struct or cell')
     end
   end
 
