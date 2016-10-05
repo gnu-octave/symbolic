@@ -40,9 +40,12 @@ function [s, flag] = symsnotfunc(varargin)
         symsnotfunc(varargin{i}{j});
       end
     elseif isa(varargin{i}, 'char')
-      k = exist(varargin{i});
-      if k == 5 || k == 8 || k == 2
-        error(['You can not transform "' varargin{i} '" to sym, its a system expression']);
+      [x, flag] = magic_double_str(varargin{i});
+      if ~flag
+        k = exist(varargin{i});
+        if k == 5 || k == 8 || k == 2
+          error(['You can not transform "' varargin{i} '" to sym, its a system expression']);
+        end
       end
     else
       error ('Input not supported yet.');
