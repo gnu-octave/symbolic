@@ -279,7 +279,7 @@ function s = sym(x, varargin)
               '    elif isinstance(_ins[i], (str, bytes)):'
               '        if i < (len(_ins) - 1) and isinstance(_ins[i+1], bool):'
               '            d.update({_ins[i]:_ins[i+1]})'
-              '        else:'
+              '        elif not isinstance(_ins[i], bool):'
               '            d.update({_ins[i]:True})'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep(cmd, '{s}', x), asm{:});

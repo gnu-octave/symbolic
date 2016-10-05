@@ -186,7 +186,7 @@ end
 %! f = {x {2*x}};
 %! A = assumptions();
 %! assert ( ~isempty(A))
-%! syms x clear
+%! assume x clear
 %! A = assumptions();
 %! assert ( isempty(A))
 
@@ -196,7 +196,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! syms x clear
+%! assume x clear
 %! assert (logical(exist('x', 'var')))
 
 %!error <symbols after assumptions>
@@ -206,12 +206,6 @@ end
 %! % this sometimes catches typos or errors in assumption names
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
-
-%!warning <should not combine>
-%! syms x positive clear
-
-%!error <should be the final argument>
-%! syms x clear y
 
 %!error <cannot have only assumptions>
 %! syms positive integer
