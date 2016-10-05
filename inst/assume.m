@@ -171,7 +171,7 @@ function s = assume(x, varargin)
     s = newx;
     return
   else
-    assignin('caller', x, xstr);
+    assignin('caller', xstr, newx);
   end
 
   % ---------------------------------------------
