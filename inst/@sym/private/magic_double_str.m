@@ -26,7 +26,7 @@
 %% Caution: there are two copies of this file for technical
 %% reasons: make sure you modify both of them!
 %%
-%% @seealso{sym, vpa}
+%% @seealso{sym}
 %% @end deftypefun
 
 function [s, flag] = magic_double_str(x)
