@@ -53,8 +53,8 @@ octsympy 2.5.0-dev
 
   * `isfinite` behaves correctly for variables (and is documented).
 
-  * New experimental Python communication using Pytave, due to
-    Abhinav Tripathi during Google Summer of Code 2016.
+  * New experimental Python communication using the native Python/C
+    interface, due to Abhinav Tripathi during Google Summer of Code 2016.
 
   * Bug fix: assign `[]` to row/column removes that that row/column.
 
