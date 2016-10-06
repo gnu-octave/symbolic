@@ -298,16 +298,12 @@ function s = sym(x, varargin)
         return
       end
 
-      if isempty (strfind (x, '(')) && ~isempty(strfind(x, '.'))
-        warning('possibly unintended decimal point in constructor string');
-      end
-
       cmd = {'x = "{s}"'
              'try:'
-             '    x = S(x)'
-             '    if str(x).replace(".", "").replace("-", "").replace("+", "").isdigit():'
-             '        x = (Rational(sp.re(x)) if sp.re(x).is_Number else sp.re(x)) + (Rational(sp.im(x)) if sp.im(x).is_Number else sp.im(x))*I'
-             '    return (0, 0, x)'
+             '    p = S(x)'
+             '    if str(p).replace(".", "").replace("-", "").replace("+", "").isdigit():'
+             '        p = Rational(x)'
+             '    return (0, 0, p)'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
