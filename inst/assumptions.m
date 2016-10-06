@@ -76,33 +76,33 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function [A, B] = assumptions(F, outp)
+function [A, B] = assumptions (F, outp)
 
-  if ((nargin == 1) && ischar(F) && strcmp(F, 'possible'))
+  if (nargin == 1) && ischar (F) && strcmp (F, 'possible')
     A = valid_sym_assumptions();
     return
   end
 
-  if ((nargin == 0) || isempty(F))
+  if (nargin == 0) || isempty (F)
     find_all_free_symbols = true;
   else
     find_all_free_symbols = false;
   end
-  if (nargin <= 1)
+  if nargin <= 1
     outp = 'no';
   end
 
-  if (find_all_free_symbols)
+  if find_all_free_symbols
     %% no input arguments
     % find all syms, check each for free symbols
     workspace = {};
     context = 'caller';
-    S = evalin(context, 'whos');
-    evalin(context, '[];');  % clear 'ans'
-    for i = 1:numel(S)
-      workspace{i} = evalin(context, S(i).name);
+    S = evalin (context, 'whos');
+    evalin (context, '[];');  % clear 'ans'
+    for i = 1:numel (S)
+      workspace{i} = evalin (context, S(i).name);
     end
-    F = findsymbols(workspace);
+    F = findsymbols (workspace);
   end
 
   cmd = {
@@ -120,25 +120,25 @@ function [A, B] = assumptions(F, outp)
       '    return astr,' };
 
   c = 0; A = {};
-  if strcmp(outp, 'dict')
+  if strcmp (outp, 'dict')
     B = {};
   end
-  if (isempty(F))
+  if isempty (F)
     return
   end
-  s = findsymbols(F);
-  for i=1:length(s)
+  s = findsymbols (F);
+  for i=1:length (s)
     x = s{i};
-    if strcmp(outp, 'dict')
-      [astr, adict] = python_cmd(cmd, x, true);
-      if ~isempty(astr)
+    if strcmp (outp, 'dict')
+      [astr, adict] = python_cmd (cmd, x, true);
+      if ~isempty (astr)
         c = c + 1;
         A{c} = x;
         B{c} = adict;
       end
     else
-      astr = python_cmd(cmd, x, false);
-      if ~isempty(astr)
+      astr = python_cmd (cmd, x, false);
+      if ~isempty (astr)
         c = c + 1;
         str = [x.flat ': ' astr];
         A{c} = str;
@@ -158,37 +158,37 @@ end
 
 %!test
 %! syms x
-%! assert(isempty(assumptions(x)))
+%! assert (isempty (assumptions (x)))
 
 %!test
-%! x = sym('x', 'positive');
-%! a = assumptions(x);
-%! assert(~isempty(strfind(a{1}, 'positive')))
+%! x = sym ('x', 'positive');
+%! a = assumptions (x);
+%! assert (~isempty (strfind (a{1}, 'positive')))
 
 %!test
 %! syms x
-%! assert(isempty(assumptions(x)))
+%! assert (isempty (assumptions (x)))
 
 %!test
 %! clear  % for matlab test script
 %! syms x positive
-%! assert(~isempty(assumptions()))
+%! assert (~isempty (assumptions()))
 %! clear
-%! assert(isempty(assumptions()))
+%! assert (isempty (assumptions()))
 
 %!test
 %! % make sure we have at least these possible assumptions
 %! A = {'real' 'positive' 'negative' 'integer' 'even' 'odd' 'rational'};
-%! B = assumptions('possible');
-%! assert (isempty (setdiff(A, B)))
+%! B = assumptions ('possible');
+%! assert (isempty (setdiff (A, B)))
 
 %!test
-%! A = assumptions('possible');
-%! for i = 1:length(A)
-%!   x = sym('x', A{i});
-%!   a = assumptions(x);
-%!   assert(strcmp(a{1}, ['x: ' A{i}] ))
-%!   s1 = char(x);
+%! A = assumptions ('possible');
+%! for i = 1:length (A)
+%!   x = sym ('x', A{i});
+%!   a = assumptions (x);
+%!   assert (strcmp (a{1}, ['x: ' A{i}] ))
+%!   s1 = char (x);
 %!   s2 = ['Symbol(''x'', ' A{i} '=True)'];
 %!   assert (strcmp (s1, s2))
 %! end
@@ -198,10 +198,10 @@ end
 %! syms y real
 %! syms z
 %! f = x*y*z;
-%! a = assumptions(f);
-%! assert(length(a) == 2)
-%! assert(~isempty(strfind(a{1}, 'positive')))
-%! assert(~isempty(strfind(a{2}, 'real')))
+%! a = assumptions (f);
+%! assert (length (a) == 2)
+%! assert (~isempty (strfind (a{1}, 'positive')))
+%! assert (~isempty (strfind (a{2}, 'real')))
 
 %!test
 %! % dict output
@@ -209,43 +209,43 @@ end
 %! syms y real
 %! syms z
 %! f = x*y*z;
-%! [v, d] = assumptions(f, 'dict');
-%! assert(length(v) == 2)
-%! assert(iscell(v))
-%! assert(isa(v{1}, 'sym'))
-%! assert(isa(v{2}, 'sym'))
-%! assert(length(d) == 2)
-%! assert(iscell(d))
-%! assert(isstruct(d{1}))
-%! assert(isstruct(d{2}))
+%! [v, d] = assumptions (f, 'dict');
+%! assert (length (v) == 2)
+%! assert (iscell (v))
+%! assert (isa (v{1}, 'sym'))
+%! assert (isa (v{2}, 'sym'))
+%! assert (length (d) == 2)
+%! assert (iscell (d))
+%! assert (isstruct (d{1}))
+%! assert (isstruct (d{2}))
 
 %!test
 %! %% assumptions on just the vars in an expression
 %! clear  % for matlab test script
 %! syms x y positive
 %! f = 2*x;
-%! assert(length(assumptions(f))==1)
-%! assert(length(assumptions())==2)
+%! assert (length (assumptions (f))==1)
+%! assert (length (assumptions ())==2)
 
 %!test
 %! %% assumptions in cell/struct
 %! clear  % for matlab test script
 %! syms x y z w positive
 %! f = {2*x [1 2 y] {1, {z}}};
-%! assert(length(assumptions())==4)
-%! assert(length(assumptions(f))==3)
+%! assert (length (assumptions ())==4)
+%! assert (length (assumptions (f))==3)
 %! clear x y z w
-%! assert(length(assumptions())==3)
-%! assert(length(assumptions(f))==3)
+%! assert (length (assumptions ())==3)
+%! assert (length (assumptions (f))==3)
 
 %!test
 %! % multiple assumptions
-%! n = sym('n', 'negative', 'even');
+%! n = sym ('n', 'negative', 'even');
 %! assert (logical (n < 0))
-%! assert (~(logical (n > 0)))
-%! assert (~(logical (n == -1)))
+%! assert (~logical (n > 0))
+%! assert (~logical (n == -1))
 
 %!test
 %! % multiple assumptions: eqn neither true nor false
-%! n = sym('n', 'negative', 'even');
-%! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
+%! n = sym ('n', 'negative', 'even');
+%! assert (~isequal (n, sym (true)) && ~isequal (n, sym (false)))

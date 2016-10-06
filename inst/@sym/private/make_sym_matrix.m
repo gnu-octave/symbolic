@@ -16,15 +16,15 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function A = make_sym_matrix(As, sz)
+function A = make_sym_matrix (As, sz)
 % private helper function for making symbolic matrix
 
-  s = size(sz)(2);
+  s = size (sz)(2);
   assert (s <= 2, 'SymbolicMatrix actually only support max 2 dimesions');
 
-  sz = sym([sz ones(1, 2-s)]);
+  sz = sym ([sz ones(1, 2-s)]);
 
-  if ~isempty(findsymbols(sz))
+  if ~isempty (findsymbols (sz))
     cmd = { 'As, sz = _ins'
             'return sympy.MatrixSymbol(As, *sz),' };
     A = python_cmd (cmd, As, sz);

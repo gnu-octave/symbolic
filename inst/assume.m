@@ -114,16 +114,16 @@ function s = assume(x, varargin)
     error ('Not supported yet.')
   end
 
-  varargin = norm_logic_strings(varargin);
+  varargin = norm_logic_strings (varargin);
 
-  if isa(varargin{1}, 'char') && strcmp(varargin{1}, 'clear')
+  if isa (varargin{1}, 'char') && strcmp (varargin{1}, 'clear')
 
     % special case for 'clear', because of side-effects
-    if (isa(x, 'sym'))
+    if isa (x, 'sym')
       x = x.flat;    % we just want the string
     end
 
-    if nargout == 1, s = sym(x); end
+    if nargout == 1, s = sym (x); end
  
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -132,46 +132,46 @@ function s = assume(x, varargin)
     newx = sym (x);
     context = 'caller';
     % ---------------------------------------------
-    S = evalin(context, 'whos');
-    evalin(context, '[];');  % clear 'ans'
-    assignin(context, xstr, newx);
-    for i = 1:numel(S)
-      obj = evalin(context, S(i).name);
-      [newobj, flag] = symreplace(obj, xstr, newx);
-      if flag, assignin(context, S(i).name, newobj); end
+    S = evalin (context, 'whos');
+    evalin (context, '[];');  % clear 'ans'
+    if nargout == 0, assignin (context, xstr, newx); end
+    for i = 1:numel (S)
+      obj = evalin (context, S(i).name);
+      [newobj, flag] = symreplace (obj, xstr, newx);
+      if flag, assignin (context, S(i).name, newobj); end
     end
     % ---------------------------------------------
     return
   end
 
   for n=2:nargin
-    if ~islogical(varargin{n - 1})
+    if ~islogical (varargin{n - 1})
       cond = varargin{n - 1};
-      if n < nargin && islogical(varargin{n})
+      if n < nargin && islogical (varargin{n})
         ca.(cond) = varargin{n};
       else
         ca.(cond) = true;
       end
     else
-      if (n == 2 && islogical(varargin{1})) || islogical(varargin{n - 2})
-        print_usage();
+      if (n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2})
+        print_usage ();
       end
     end
   end
 
-  if isa(x, 'sym')
+  if isa (x, 'sym')
     xstr = x.flat;
   else
     xstr = x;
   end
 
-  newx = sym(xstr, ca);
+  newx = sym (xstr, ca);
 
   if (nargout > 0)
     s = newx;
     return
   else
-    assignin('caller', xstr, newx);
+    assignin ('caller', xstr, newx);
   end
 
   % ---------------------------------------------
@@ -181,12 +181,12 @@ function s = assume(x, varargin)
   %newx =
   context = 'caller';
   % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
+  S = evalin (context, 'whos');
+  evalin (context, '[];');  % clear 'ans'
+  for i = 1:numel (S)
+    obj = evalin (context, S(i).name);
+    [newobj, flag] = symreplace (obj, xstr, newx);
+    if flag, assignin (context, S(i).name, newobj); end
   end
   % ---------------------------------------------
 
@@ -195,46 +195,46 @@ end
 
 %!test
 %! syms x
-%! x = assume(x, 'positive');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: positive'))
-%! x = assume(x, 'even');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: even'))
-%! x = assume(x, 'odd');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: odd'))
+%! x = assume (x, 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
+%! x = assume (x, 'even');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: even'))
+%! x = assume (x, 'odd');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: odd'))
 
 %!test
 %! % multiple assumptions
 %! syms x
-%! x = assume(x, 'positive', 'integer');
-%! [tilde, a] = assumptions(x, 'dict');
-%! assert(a{1}.integer)
-%! assert(a{1}.positive)
+%! x = assume (x, 'positive', 'integer');
+%! [tilde, a] = assumptions (x, 'dict');
+%! assert (a{1}.integer)
+%! assert (a{1}.positive)
 
 %!test
 %! % has output so avoids workspace
 %! syms x positive
 %! x2 = x;
-%! f = sin(x);
-%! x = assume(x, 'negative');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: negative'))
-%! a = assumptions(x2);
-%! assert(strcmp(a, 'x: positive'))
-%! a = assumptions(f);
-%! assert(strcmp(a, 'x: positive'))
+%! f = sin (x);
+%! x = assume (x, 'negative');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: negative'))
+%! a = assumptions (x2);
+%! assert (strcmp (a, 'x: positive'))
+%! a = assumptions (f);
+%! assert (strcmp (a, 'x: positive'))
 
 %!test
 %! % has no output so does workspace
 %! syms x positive
 %! x2 = x;
-%! f = sin(x);
-%! assume(x, 'negative');
+%! f = sin (x);
+%! assume (x, 'negative');
 %! a = assumptions(x);
-%! assert(strcmp(a, 'x: negative'))
+%! assert (strcmp(a, 'x: negative'))
 %! a = assumptions(x2);
-%! assert(strcmp(a, 'x: negative'))
+%! assert (strcmp(a, 'x: negative'))
 %! a = assumptions(f);
-%! assert(strcmp(a, 'x: negative'))
+%! assert (strcmp(a, 'x: negative'))

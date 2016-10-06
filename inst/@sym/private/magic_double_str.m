@@ -29,62 +29,62 @@
 %% @seealso{sym}
 %% @end deftypefun
 
-function [s, flag] = magic_double_str(x)
-
-  assert(isa(x, 'double') || isa(x, 'char'), 'Format not supported.');
+function [s, flag] = magic_double_str (x)
 
   persistent list %%format: number, {octave string}, python expression
   persistent const %%Sympy constants
   %%{octave string} need contain the python expression for char function
 
-  if isempty(list)
+  if isempty (list)
     list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I';e {'e' 'E'} 'E'};
     const = {'zoo'};
   end
 
   flag = 1;
 
-  if isa(x, 'double')  %%Number comparison
-    for j=1:length(list)
-      if isequaln(x, list{j, 1})
+  if isa (x, 'double')  %%Number comparison
+    for j=1:length (list)
+      if isequaln (x, list{j, 1})
         s = list{j, 3};
         return
-      elseif isequaln(x, -list{j, 1})
+      elseif isequaln (x, -list{j, 1})
         s = ['-' list{j, 3}];
         return
       end
     end
-  elseif isa(x, 'char')
-    for j=1:length(list)
-      for n=1:length(list{j, 2})
-        if strcmp(x, list{j, 2}{n}) || strcmp(x, ['+' list{j, 2}{n}])
+  elseif isa (x, 'char')
+    for j=1:length (list)
+      for n=1:length (list{j, 2})
+        if strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}])
           s = list{j, 3};
           return
-        elseif strcmp(x, ['-' list{j, 2}{n}])
+        elseif strcmp (x, ['-' list{j, 2}{n}])
           s = ['-' list{j, 3}];
           return
         end
       end
     end
-    for j=1:length(const)
-      if strcmp(x, const{j}) || strcmp(x, ['+' const{j}])
+    for j=1:length (const)
+      if strcmp (x, const{j}) || strcmp (x, ['+' const{j}])
         s = const{j};
         return
-      elseif strcmp(x, ['-' const{j}])
+      elseif strcmp (x, ['-' const{j}])
         s = ['-' const{j}];
         return
       end
     end
+  else
+    error ('Format not supported.')
   end
 
-  if isa(x, 'char')
+  if isa (x, 'char')
     flag = 0;
     s = x;
     return
-  elseif isa(x, 'double')
-    if (abs(x) < 1e15) && (mod(x,1) == 0)
+  elseif isa (x, 'double')
+    if (abs (x) < 1e15) && (mod (x,1) == 0)
       % special treatment for "small" integers
-      s = num2str(x);  % better than sprintf('%d', large)
+      s = num2str (x);  % better than sprintf('%d', large)
     else
       s = '';
       flag = 0;
