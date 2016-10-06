@@ -262,12 +262,14 @@ function s = sym(x, varargin)
 
   elseif isa(x, 'char')
 
+    xchange = false;
     [x, flag] = magic_double_str(x);
+    xc = x;  %%We need this to search opertators in the original string
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-    isnum = ~isempty(regexp(x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is number
+    isnum = ~isempty(regexp(x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is Number
 
-%%Use Symbol with -  With words  Not Octave symbols
+%%Use Symbol with -  Words       Not Octave symbols
     if ~isnum && regexp(x, '^\w+$') && ~flag
 
       cmd = { 'd = dict()'
@@ -301,17 +303,16 @@ function s = sym(x, varargin)
 
     else   %%Use S for other cases.
 
-      p = regexp(x, '^[-+]*', 'split');
+      p = regexp(xc, '^[-+]*', 'split');
       if length(p) == 2
         p = p{2};
       else
         p = p{1};
       end
 
-      operators = ['\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~|\' "'"];
-      if ~isempty(regexp(p, '\d|\.')) && ~isempty(regexp(p, operators))
+      if ~isempty(regexp(p, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
         warning('Please avoid execute operations from sym function.');
-        if ~isempty(regexp(p, '\.'))
+        if ~isempty(regexp(p, '\.')) && ~isempty(regexp(p, '\d|\.'))
           disp ('error: Execute operations with decimals can not be calculated correctly from sym.');
           error ('Please split the operation.');
         end
@@ -319,16 +320,7 @@ function s = sym(x, varargin)
 
       cmd = {'x = "{s}"'
              'try:'
-             '    x = S(x)'
-             '    if x.is_Rational and x.is_Number:'
-             '        x = Rational(x)'
-             '    elif sp.re(x).is_Rational and sp.re(x).is_Number and sp.im(x).is_Rational and sp.im(x).is_Number:'
-             '        x = Rational(sp.re(x))+Rational(sp.im(x))*I'
-             '    elif not (sp.re(x).is_Rational and sp.re(x).is_Number) and sp.im(x).is_Rational and sp.im(x).is_Number:'
-             '        x = sp.re(x) + Rational(sp.im(x))*I'
-             '    elif sp.re(x).is_Rational and sp.re(x).is_Number and not (sp.im(x).is_Rational and sp.im(x).is_Number):'
-             '        x = Rational(sp.re(x)) + sp.im(x)*I'
-             '    return (0, 0, x)'
+             '    return (0, 0, S(x))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
