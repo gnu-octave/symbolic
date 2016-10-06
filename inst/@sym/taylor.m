@@ -1,5 +1,6 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
-%% Copyright (C) 2016 Utkarsh Gautam, Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -135,15 +136,15 @@ function s = taylor(f, varargin)
     cmd = {'(f, x, a, n) = _ins'
            'dic = dict(zip(x, a))'
            'xa = list(x)'
-           'for i in xrange(len(x)):'
+           'for i in range(len(x)):'
            '    xa[i] = x[i]-a[i]'
            'expn = f.subs(dic)  # first constant term'
-           'for i in xrange(1,n):'
+           'for i in range(1,n):'
            '    tmp = S(0)'
            '    d = list(itertools.product(x, repeat=i))'
            '    for j in d:'
            '        tmp2 = S(1)'
-           '        for p in xrange(len(x)):'
+           '        for p in range(len(x)):'
            '            tmp2 = tmp2*xa[p]**j.count(x[p])'
            '        tmp = tmp + f.diff(*j).subs(dic)*tmp2' %%FIXME: In this case we should use a cache system to avoid
            '    expn = expn + tmp / factorial(i)'          %%       diff in all vars every time (more ram, less time).

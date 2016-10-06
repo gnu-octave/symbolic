@@ -15,10 +15,13 @@ octsympy 2.5.0-dev
           cosd
           dawson
           divisors
+          eye
           hilb
           invhilb
+          ones
           sind
           tand
+          zeros
 
   * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
@@ -32,6 +35,8 @@ octsympy 2.5.0-dev
 
   * The full set of assumptions implemented by Sympy can now be used.
     For example, `syms p prime` assumes `p` is prime.
+
+  * `solve` now works with inequalities.
 
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
@@ -48,8 +53,10 @@ octsympy 2.5.0-dev
 
   * `isfinite` behaves correctly for variables (and is documented).
 
-  * New experimental Python communication using Pytave, due to
-    Abhinav Tripathi during Google Summer of Code 2016.
+  * New experimental Python communication using the native Python/C
+    interface, due to Abhinav Tripathi during Google Summer of Code 2016.
+
+  * Bug fix: assign `[]` to row/column removes that that row/column.
 
 
 

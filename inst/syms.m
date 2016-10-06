@@ -54,8 +54,8 @@
 %% @example
 %% syms f(x)
 %% @end example
-%% If @code{x} does not exist in the callers workspace, it
-%% is created as a @strong{side effect} in that workspace.
+%% Here @code{x} is created in the callers workspace,
+%% as a @strong{side effect}.
 %%
 %% Called without arguments, @code{syms} displays a list of
 %% all symbolic functions defined in the current workspace.
@@ -166,7 +166,7 @@ end
 %! assert (isempty (A))
 
 %!test
-%! %% matlab compat, syms x clear should add x to workspace
+%! % SMT compat, syms x clear should add x to workspace
 %! syms x real
 %! f = 2*x;
 %! clear x

@@ -1,4 +1,5 @@
-%% Copyright (C) 2016 Utkarsh Gautam and Colin B. Macdonald
+%% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
