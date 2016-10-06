@@ -47,6 +47,8 @@ function s = norm_logic_strings (x)
       elseif strcmp (x, 'false')
         x = false;
       end
+    elseif isa (x, 'sym')
+      x = norm_logic_string (x.flat)
     end
 
   s = x;

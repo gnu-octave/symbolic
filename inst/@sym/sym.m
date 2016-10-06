@@ -302,6 +302,8 @@ function s = sym(x, varargin)
 
     else   %%Use S for other cases.
 
+      symsnotfunc(x);
+
       p = regexp (xc, '^[-+]*', 'split');
       if length (p) == 2
         p = p{2};
