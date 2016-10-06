@@ -269,6 +269,7 @@ function s = sym(x, varargin)
 
 %%Use Symbol with -  With words  Not Octave symbols
     if ~isnum && regexp(x, '^\w+$') && ~flag
+
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
@@ -310,6 +311,10 @@ function s = sym(x, varargin)
       operators = ['\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~|\' "'"];
       if ~isempty(regexp(p, '\d|\.')) && ~isempty(regexp(p, operators))
         warning('Please avoid execute operations from sym function.');
+        if ~isempty(regexp(p, '\.'))
+          disp ('error: Execute operations with decimals can not be calculated correctly from sym.');
+          error ('Please split the operation.');
+        end
       end
 
       cmd = {'x = "{s}"'
