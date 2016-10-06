@@ -288,8 +288,8 @@ function varargout = sympref(cmd, arg)
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] communication mechanism';
-          case 'pytave'
-            msg = 'Forcing the PyTave communication mechanism';
+          case 'native'
+            msg = 'Forcing the native Python/C API communication mechanism';
           case 'system'
             msg = 'Forcing the system() communication mechanism';
           case 'popen2'

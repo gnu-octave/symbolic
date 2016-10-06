@@ -18,7 +18,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_pytave (@dots{})
+%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_native (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -31,7 +31,7 @@
 %%
 %% @end deftypefn
 
-function [A, info] = python_ipc_pytave(what, cmd, varargin)
+function [A, info] = python_ipc_native(what, cmd, varargin)
 
   persistent show_msg
   persistent have_headers
@@ -53,7 +53,7 @@ function [A, info] = python_ipc_pytave(what, cmd, varargin)
   if (verbose && isempty(show_msg))
     fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
             sympref('version'))
-    disp('Using experimental PyTave communications with SymPy.')
+    disp('Using experimental native Python/C communications with SymPy.')
     show_msg = true;
   end
 
