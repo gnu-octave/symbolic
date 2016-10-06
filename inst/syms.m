@@ -126,32 +126,8 @@ function syms(varargin)
 
     % look for parenthesis: check if we're making a symfun
     if (isempty (strfind (expr, '(') ))  % no
-      assert(isvarname(expr)); % help prevent malicious strings
-      if (doclear)
-        % We do this here instead of calling sym() because sym()
-        % would modify this workspace instead of the caller's.
-        newx = sym(expr);
-        assignin('caller', expr, newx);
-        xstr = newx.flat;
-        % ---------------------------------------------
-        % Muck around in the caller's namespace, replacing syms
-        % that match 'xstr' (a string) with the 'newx' sym.
-        %xstr = x;
-        %newx = s;
-        context = 'caller';
-        % ---------------------------------------------
-        S = evalin(context, 'whos');
-        evalin(context, '[];');  % clear 'ans'
-        for i = 1:numel(S)
-          obj = evalin(context, S(i).name);
-          [newobj, flag] = symreplace(obj, xstr, newx);
-          if flag, assignin(context, S(i).name, newobj); end
-        end
-        % ---------------------------------------------
-      else
-        assignin('caller', expr, sym(expr, asm{:}))
-      end
-
+      assert(isvarname(expr));
+      assignin('caller', expr, sym(expr, asm{:}))
     else  % yes, this is a symfun
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
       % regex matches: abc(x,y), f(var), f(x, y, z), f(r2d2), f( x, y )

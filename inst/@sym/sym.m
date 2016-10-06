@@ -156,8 +156,6 @@
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, CAS
 
 function s = sym(x, varargin)
 
@@ -243,11 +241,11 @@ function s = sym(x, varargin)
         [N2, D2] = rat(x/pi);
         if (10*abs(D2) < abs(D1))
           % use frac*pi if demoninator significantly shorter
-          s = sprintf('Rational(%s, %s)*pi', num2str(N2), num2str(D2));
+          s = sprintf('return Rational(%s, %s)*pi', num2str(N2), num2str(D2));
         else
-          s = sprintf('Rational(%s, %s)', num2str(N1), num2str(D1));
+          s = sprintf('return Rational(%s, %s)', num2str(N1), num2str(D1));
         end
-        s = sym (s);
+        s = python_cmd (s);
       else
         s = python_cmd('return S(_ins[0])', s);
       end
@@ -267,8 +265,10 @@ function s = sym(x, varargin)
     [x, flag] = magic_double_str(x);
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
-%%Use Symbol with        Not Numeric values                With words  Not Octave symbol
-    if isempty(regexp(x, '^-?\d*\.?\d*(e-?\d+)?$')) && regexp(x, '^\w+$') && ~flag
+    isnum = ~isempty(regexp(x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is number
+
+%%Use Symbol with -  With words  Not Octave symbols
+    if ~isnum && regexp(x, '^\w+$') && ~flag
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
@@ -290,20 +290,40 @@ function s = sym(x, varargin)
       s = python_cmd (strrep(cmd, '{s}', x), asm{:});
       return
 
-    else   %%Use S for other cases.
-      assert(isempty(asm), 'You can not mix non symbols or functions with assumptions.')
+    end
 
-      if flag
-        s = python_cmd('return S(_ins[0])', x);
-        return
+    assert(isempty(asm), 'You can not mix non symbols or functions with assumptions.')
+
+    if isnum   %Use Rational for string numbers.
+      s = python_cmd ('return Rational(_ins[0])', x);
+      return
+
+    else   %%Use S for other cases.
+
+      p = regexp(x, '^[-+]*', 'split');
+      if length(p) == 2
+        p = p{2};
+      else
+        p = p{1};
+      end
+
+      operators = ['\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~|\' "'"];
+      if ~isempty(regexp(p, '\d|\.')) && ~isempty(regexp(p, operators))
+        warning('Please avoid execute operations from sym function.');
       end
 
       cmd = {'x = "{s}"'
              'try:'
-             '    p = S(x)'
-             '    if str(p).replace(".", "").replace("-", "").replace("+", "").isdigit():'
-             '        p = Rational(x)'
-             '    return (0, 0, p)'
+             '    x = S(x)'
+             '    if x.is_Rational and x.is_Number:'
+             '        x = Rational(x)'
+             '    elif sp.re(x).is_Rational and sp.re(x).is_Number and sp.im(x).is_Rational and sp.im(x).is_Number:'
+             '        x = Rational(sp.re(x))+Rational(sp.im(x))*I'
+             '    elif not (sp.re(x).is_Rational and sp.re(x).is_Number) and sp.im(x).is_Rational and sp.im(x).is_Number:'
+             '        x = sp.re(x) + Rational(sp.im(x))*I'
+             '    elif sp.re(x).is_Rational and sp.re(x).is_Number and not (sp.im(x).is_Rational and sp.im(x).is_Number):'
+             '        x = Rational(sp.re(x)) + sp.im(x)*I'
+             '    return (0, 0, x)'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -327,7 +347,7 @@ function s = sym(x, varargin)
           error ('if this do not was intentional please use other var name.');
         case 2
           disp (err);
-          error (['You can not use var name "' s ' for a unknown error, please report it.']);
+          error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
       end
       return
     end
