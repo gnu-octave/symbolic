@@ -1,5 +1,5 @@
-%% Copyright (C) 2015 Colin B. Macdonald
-%% Copyright (C) 2016 Colin B. Macdonald, Alex Vong
+%% Copyright (C) 2015-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%

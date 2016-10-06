@@ -400,7 +400,7 @@ end
 %!shared a, b, I
 %! b = [1:4]; b = [b; 3*b; 5*b];
 %! a = sym(b);
-%! I = rand(size(b)) > 0.5;
+%! I = mod (b, 5) > 1;
 
 %!test
 %! A = a;  A(I) = 2*b(I);
