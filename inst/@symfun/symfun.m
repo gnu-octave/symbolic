@@ -121,31 +121,12 @@
 %% @end group
 %% @end example
 %%
-%% If you eval the expression the return will be a sym.
-%% @example
-%% @group
-%% syms g(x) x(t)
-%% f(g) = exp(g)*x;
-%% f(x)                   % doctest: +SKIP
-%%   @result{} ans = (sym)
-%%             x(t)
-%%       x(t)⋅ℯ   
-%% @end group
-%% @end example
-%%
-%% But if you assign it as a symfun is transformed.
-%% @example
-%% @group
-%% syms g(x) x(t)
-%% f(g) = exp (g)*x;
-%% f(x) = f (x)               % doctest: +SKIP
-%%   @result{} f(x) = (symfun)
-%%             x(t)
-%%       x(t)⋅ℯ
-%% @end group
-%% @end example
 %% @seealso{sym, syms}
 %% @end deftypemethod
+
+
+%% Author: Colin B. Macdonald		
+%% Keywords: symbolic, symbols, CAS
 
 
 function f = symfun(expr, vars)
