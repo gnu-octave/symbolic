@@ -160,7 +160,7 @@
 function s = sym(x, varargin)
 
   if (nargin == 0)
-    s = sym(0);
+    s = sym (0);
     return
   end
 
