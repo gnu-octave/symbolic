@@ -22,7 +22,7 @@
 %% @defmethodx @@sym psi (@var{k}, @var{x})
 %% Symbolic polygamma function.
 %%
-%% The first polygamma (or "psi") function is the logarithmic
+%% The first polygamma (or ``psi'') function is the logarithmic
 %% derivative of the gamma function:
 %% @example
 %% @group
