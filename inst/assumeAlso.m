@@ -140,6 +140,12 @@ end
 %! assert (strcmp (a, 'x: positive'))
 
 %!test
+%! syms x
+%! x = assumeAlso (x, 'positive', false);
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: ~positive'))
+
+%!test
 %! syms x positive
 %! x = assumeAlso (x, 'integer');
 %! [tilde, a] = assumptions (x, 'dict');

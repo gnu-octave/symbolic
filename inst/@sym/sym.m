@@ -469,40 +469,11 @@ end
 %! assert (isequal (size (a{1}{1}), size (s{1}{1})))
 %! assert (isequal (size (a{1}{1}{1}), size (s{1}{1}{1})))
 
-
-%!test
-%! %% assumptions and clearing them
-%! clear  % for matlab test script
-%! x = sym ('x', 'real');
-%! f = {x {2*x}};
-%! asm = assumptions();
-%! assert (~isempty (asm))
-%! assume ('x', 'clear');
-%! asm = assumptions();
-%! assert (isempty (asm))
-
-%!test
-%! %% matlab compat, syms x clear should add x to workspace
-%! x = sym ('x', 'real');
-%! f = 2*x;
-%! clear x
-%! assert (~logical (exist ('x', 'var')))
-%! assume ('x', 'clear');
-%! assert (logical (exist ('x', 'var')))
-
 %!test
 %! %% assumptions should work if x is already a sym
 %! x = sym ('x');
 %! x = sym (x, 'real');
 %! assert (~isempty (assumptions (x)))
-
-%!test
-%! %% likewise for clear
-%! x = sym ('x', 'real');
-%! f = 2*x;
-%! assume (x, 'clear');
-%! assert (isempty (assumptions (x)))
-%! assert (isempty (assumptions (f)))
 
 %!test
 %! % bool
@@ -661,6 +632,12 @@ end
 %! n = sym ('n', 'negative', 'even');
 %! a = assumptions (n);
 %! assert (strcmp (a, 'n: negative, even') || strcmp (a, 'n: even, negative'))
+
+%!test
+%! % multiple assumptions
+%! n = sym ('n', 'negative', 'even', false);
+%! a = assumptions (n);
+%! assert (strcmp (a, 'n: negative, ~even') || strcmp (a, 'n: ~even, negative'))
 
 %!test
 %! % save/load sym objects

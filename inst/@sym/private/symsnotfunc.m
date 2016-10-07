@@ -39,7 +39,8 @@ function [s, flag] = symsnotfunc (varargin)
       if ~flag
         k = exist (p);
         if k == 5 || k == 8 || k == 2
-          warning (['The expression "' varargin{i} '" its a system expression, you are overloading it.']);
+          disp (['warning: The expression "' varargin{i} '" its a system expression.']);
+          warning ('You can without intention overload it.');
         end
       end
     elseif isa (varargin{i}, 'sym')

@@ -123,8 +123,6 @@ function s = assume(x, varargin)
       x = x.flat;    % we just want the string
     end
 
-    if nargout == 1, s = sym (x); end
- 
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
     % that match 'xstr' (a string) with the 'newx' sym.
@@ -134,7 +132,13 @@ function s = assume(x, varargin)
     % ---------------------------------------------
     S = evalin (context, 'whos');
     evalin (context, '[];');  % clear 'ans'
-    if nargout == 0, assignin (context, xstr, newx); end
+
+    if nargout == 0
+      assignin (context, xstr, newx);
+    else
+      s = newx
+    end
+
     for i = 1:numel (S)
       obj = evalin (context, S(i).name);
       [newobj, flag] = symreplace (obj, xstr, newx);
@@ -206,6 +210,18 @@ end
 %! assert (strcmp (a, 'x: odd'))
 
 %!test
+%! syms x
+%! x = assume (x, 'positive', false);
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: ~positive'))
+%! x = assume (x, 'even', false);
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: ~even'))
+%! x = assume (x, 'odd', false);
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: ~odd'))
+
+%!test
 %! % multiple assumptions
 %! syms x
 %! x = assume (x, 'positive', 'integer');
@@ -238,3 +254,41 @@ end
 %! assert (strcmp(a, 'x: negative'))
 %! a = assumptions(f);
 %! assert (strcmp(a, 'x: negative'))
+
+%!test
+%! %% likewise for clear
+%! x = sym ('x', 'real');
+%! f = 2*x;
+%! assume (x, 'clear');
+%! assert (isempty (assumptions (x)))
+%! assert (isempty (assumptions (f)))
+
+%!test
+%! %% matlab compat, syms x clear should add x to workspace
+%! x = sym ('x', 'real');
+%! f = 2*x;
+%! clear x
+%! assert (~logical (exist ('x', 'var')))
+%! assume ('x', 'clear');
+%! assert (logical (exist ('x', 'var')))
+
+%!test
+%! %% assumptions and clearing them
+%! clear  % for matlab test script
+%! x = sym ('x', 'real');
+%! f = {x {2*x}};
+%! asm = assumptions();
+%! assert (~isempty (asm))
+%! assume ('x', 'clear');
+%! asm = assumptions();
+%! assert (isempty (asm))
+
+%!test
+%! %% assumptions and clearing them
+%! syms x real
+%! f = {x {2*x}};
+%! A = assumptions();
+%! assert (~isempty (A))
+%! assume x clear
+%! A = assumptions();
+%! assert (isempty (A))

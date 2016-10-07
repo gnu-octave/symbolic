@@ -95,7 +95,6 @@ function syms(varargin)
   %% Find assumptions
   valid_asm = assumptions ('possible');
   last = -1;
-  doclear = false;
   for n=1:nargin
     assert (ischar (varargin{n}) || islogical (varargin{n}), 'syms: expected string inputs')
     if islogical (varargin{n}) || ismember (varargin{n}, valid_asm)
@@ -156,23 +155,16 @@ end
 %! assert (isequal (x, x2))
 
 %!test
-%! %% assumptions and clearing them
-%! syms x real
-%! f = {x {2*x}};
-%! A = assumptions();
-%! assert (~isempty (A))
-%! assume x clear
-%! A = assumptions();
-%! assert (isempty (A))
+%! %% assumptions
+%! syms x real false
+%! x2 = sym ('x', 'real', false);
+%! assert (isequal (x, x2))
 
 %!test
-%! % SMT compat, syms x clear should add x to workspace
-%! syms x real
-%! f = 2*x;
-%! clear x
-%! assert (~logical (exist ('x', 'var')))
-%! assume x clear
-%! assert (logical (exist ('x', 'var')))
+%! %% assumptions
+%! syms x real false
+%! x2 = sym ('x', 'real', 'false');
+%! assert (isequal (x, x2))
 
 %!error <symbols after assumptions>
 %! syms x positive y
