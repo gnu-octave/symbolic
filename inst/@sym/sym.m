@@ -341,11 +341,11 @@ function s = sym(x, varargin)
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
       switch flag
         case 1
-          disp (err);
-          disp (['Error using the "' s '" Python function, you write it correctly?']);
+          disp (['Python: ' err]);
+          disp (['error: Error using the "' s '" Python function, you write it correctly?']);
           error ('if this do not was intentional please use other var name.');
         case 2
-          disp (err);
+          disp (['Python: ' err]);
           error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
       end
       return
@@ -660,3 +660,17 @@ end
 %! a = sym ('2.1');
 %! b = sym (21) / 10;
 %! assert (isequal (vpa (a, 100), vpa (b, 100)))
+
+%!warning <avoid execute operations> sym ('1*2');
+%!warning <without intention overload> sym ('beta');
+
+%!error <split the operation> sym ('1*2.0');
+%!error <please use other var name> sym ('FF(w)');
+
+%!test
+%! q = sym ({'a', 'b', 'c'}, 'positive');
+%! t = {};
+%! t{1, 1} = 'a: positive';
+%! t{1, 2} = 'b: positive';
+%! t{1, 3} = 'c: positive';
+%! assert (isequal (t, assumptions(q)))
