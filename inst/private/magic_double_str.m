@@ -36,7 +36,7 @@ function [s, flag] = magic_double_str (x)
   %%{octave string} need contain the python expression for char function
 
   if isempty (list)
-    list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I';e {'e' 'E'} 'E'};
+    list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I'};
     const = {'zoo'};
   end
 
