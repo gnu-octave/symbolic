@@ -62,6 +62,45 @@
 %% @end group
 %% @end example
 %%
+%% You can negate an assumption with the false logical value:
+%% @example
+%% @group
+%% x1 = sym('x', 'prime', false)
+%%   @result{} x1 = (sym) x
+%% x2 = assume(x1, 'commutative', false, 'polar')
+%%   @result{} x2 = (sym) x
+%% assumptions(x1)
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: ~prime
+%%     @}
+%% assumptions(x2)        % doctest: +SKIP
+%%   @result{} ans =
+%%     @{
+%%       [1,1] = x: polar, ~commutative
+%%     @}
+%% @end group
+%% @end example
+%%
+%% To remove all assumptions of an expression use the 'clear' option
+%% if the symbol don't exist in the workspace or don't have an output
+%% it will be created in the workspace;
+%% @example
+%% @group
+%% assume('x', 'clear');
+%% x
+%%   @result{} x = (sym) x
+%% assumeAlso('x', 'positive');
+%% assumptions(x)
+%%   @result{} ans = 
+%%     @{
+%%         [1,1] = x: positive
+%%     @}
+%% assume('x', 'clear');
+%% assumptions(x)
+%%   @result{} ans = @{@}(0x0)
+%% @end group
+%% @end example
 %%
 %% The second form---with no output argument---is different; it
 %% attempts to find @strong{all} instances of symbols with the same name
