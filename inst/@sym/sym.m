@@ -211,6 +211,7 @@ function s = sym(x, varargin)
       s = make_sym_matrix (x, varargin{1});
       return
     else
+      varargin = norm_logic_strings(varargin);
       check_assumptions (varargin);  %%Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
@@ -262,6 +263,8 @@ function s = sym(x, varargin)
 
   elseif isa (x, 'char')
 
+    symsnotfunc(x);
+
     [x, flag] = magic_double_str (x);
     xc = x;  %%We need this to search opertators in the original string
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
@@ -301,8 +304,6 @@ function s = sym(x, varargin)
       return
 
     else   %%Use S for other cases.
-
-      symsnotfunc(x);
 
       p = regexp (xc, '^[-+]*', 'split');
       if length (p) == 2

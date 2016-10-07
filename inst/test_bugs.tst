@@ -223,3 +223,14 @@
 %! % FIXME: not same as an freshly created 5 x 6.
 %! C = sym('B', [5 6]);
 %! assert (isequal(B, C))
+
+%!test
+%! f1 = fileread ('private/magic_double_str.m');
+%! f2 = fileread ('@sym/private/magic_double_str.m');
+%! assert (strcmp (f1, f2))
+
+
+%!test
+%! f1 = fileread ('private/norm_logic_strings.m');
+%! f2 = fileread ('@sym/private/norm_logic_strings.m');
+%! assert (strcmp (f1, f2))
