@@ -655,3 +655,8 @@ end
 %! else
 %!   delete ([myfile '.mat'])
 %! end
+
+%!test
+%! a = sym ('2.1');
+%! b = sym (21) / 10;
+%! assert (isequal (vpa (a, 100), vpa (b, 100)))
