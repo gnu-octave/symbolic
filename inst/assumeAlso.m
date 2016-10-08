@@ -140,6 +140,15 @@ end
 %! assert (strcmp (a, 'x: positive'))
 
 %!test
+%! x = assumeAlso ('x', 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
+
+%!test
+%! assumeAlso ('x', 'positive');
+%! assert (isa (x, 'sym'))
+
+%!test
 %! syms x
 %! x = assumeAlso (x, 'positive', false);
 %! a = assumptions (x);

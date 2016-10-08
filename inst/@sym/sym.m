@@ -189,8 +189,6 @@ function s = sym(x, varargin)
   %  s = x.sym;
   %  return
 
-  asm = {};
-
   if isa (x, 'sym')
     if nargin == 1
       s = x;
@@ -204,6 +202,8 @@ function s = sym(x, varargin)
     s = cell_array_to_sym (x, varargin{:});
     return
   end
+
+  asm = {};
 
   if nargin >= 2
     if ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1}) %%Handle MatrixSymbols
@@ -263,10 +263,26 @@ function s = sym(x, varargin)
 
   elseif isa (x, 'char')
 
-    symsnotfunc(x);
+    symsnotfunc(x);  %%Warning if you try make a sym with the same name of a system function.
+
+    %% sym('--1') don't is handled in Rational
+    r = 1;
+    xc = '';  %%Used to check operators skipping first symbols
+    for i=1:length (x)
+      if strcmp (x (i), '-')
+        r = r*-1;
+      elseif ~strcmp (x (i), '+')
+        if r == -1
+          xc = x (i:end);
+          x = ['-' x(i:end)];
+        else
+          x = xc = x (i:end);
+        end
+        break
+      end
+    end
 
     [x, flag] = magic_double_str (x);
-    xc = x;  %%We need this to search opertators in the original string
     x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
 
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is Number
@@ -305,16 +321,10 @@ function s = sym(x, varargin)
 
     else   %%Use S for other cases.
 
-      p = regexp (xc, '^[-+]*', 'split');
-      if length (p) == 2
-        p = p{2};
-      else
-        p = p{1};
-      end
-
-      if ~isempty (regexp (p, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
+      %%Check if the user try to execute operations from sym
+      if ~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
         warning ('Please avoid execute operations from sym function.');
-        if ~isempty (regexp (p, '\.')) && ~isempty (regexp (p, '\d|\.'))
+        if ~isempty (regexp (xc, '\.')) && ~isempty (regexp (xc, '\d|\.'))  %%S("a*1.0") don't is calculated correctly
           disp ('error: Execute operations with decimals can not be calculated correctly from sym.');
           error ('Please split the operation.');
         end
@@ -340,11 +350,11 @@ function s = sym(x, varargin)
            
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
       switch flag
-        case 1
+        case 1  %%Bad call to python function
           disp (['Python: ' err]);
           disp (['error: Error using the "' s '" Python function, you write it correctly?']);
           error ('if this do not was intentional please use other var name.');
-        case 2
+        case 2  %%Something else
           disp (['Python: ' err]);
           error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
       end
@@ -674,3 +684,24 @@ end
 %! t{1, 2} = 'b: positive';
 %! t{1, 3} = 'c: positive';
 %! assert (isequal (t, assumptions(q)))
+
+%!test
+%! a = sym ('--1');
+%! b = sym ('---1');
+%! assert (isequal (a, sym (1)))
+%! assert (isequal (b, sym (-1)))
+
+%!test
+%! a = sym ('a', [1 2]);
+%! b = sym ('a', [21 21]);
+%! assert (~isequal (a, b))
+
+%!test
+%! a = sym ('a', sym([21 21]));
+%! b = sym ('a', [21 21]);
+%! assert (isequal (a, b))
+
+%!test
+%! a = sym ('a', sym ([1 2]));
+%! b = sym ('a', [1 2]);
+%! assert (isequal (a, b))

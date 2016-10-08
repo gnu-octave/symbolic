@@ -52,7 +52,7 @@ function [s, flag] = magic_double_str (x)
         return
       end
     end
-  elseif isa (x, 'char')
+  elseif isa (x, 'char')  %%Char comparison
     for j=1:length (list)
       for n=1:length (list{j, 2})
         if strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}])
@@ -64,7 +64,7 @@ function [s, flag] = magic_double_str (x)
         end
       end
     end
-    for j=1:length (const)
+    for j=1:length (const)   %%Check if is a python constant
       if strcmp (x, const{j}) || strcmp (x, ['+' const{j}])
         s = const{j};
         return

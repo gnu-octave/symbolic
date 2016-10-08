@@ -331,3 +331,13 @@ end
 %! assume x clear
 %! A = assumptions();
 %! assert (isempty (A))
+
+%!test
+%! x = assume ('x', 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
+
+%!test
+%! assume ('x', 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
