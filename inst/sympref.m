@@ -106,6 +106,10 @@
 %% @itemize
 %% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
 %% on Matlab were it would not be the default).
+%% @item @code{sympref ipc native}: use native Python/C interface to
+%% interact directly with an embedded Python interpreter.
+%% This is highly experimental and requires functions provided by the
+%% "pytave" project which have not yet been merged into Octave.
 %% @item @code{sympref ipc system}: construct a long string of
 %% the command and pass it directly to the python interpreter with
 %% the @code{system()} command.  This typically assembles a multiline
