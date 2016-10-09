@@ -324,7 +324,7 @@ function s = sym(x, varargin)
       %%Check if the user try to execute operations from sym
       if ~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
         warning ('Please avoid execute operations from sym function.');
-        if ~isempty (regexp (xc, '\.')) && ~isempty (regexp (xc, '\d|\.'))  %%S("a*1.0") don't is calculated correctly
+        if ~isempty (regexp (xc, '\.\d*(e-?\d+)?'))  %%S("a*1.0") don't is calculated correctly
           disp ('error: Execute operations with decimals can not be calculated correctly from sym.');
           error ('Please split the operation.');
         end
