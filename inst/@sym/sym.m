@@ -311,28 +311,18 @@ function s = sym(x, varargin)
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
       return
 
-    end
+    else %%S() in other case
 
-    assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
-
-    if isnum   %Use Rational for string numbers.
-      s = python_cmd ('return Rational(_ins[0])', x);
-      return
-
-    else   %%Use S for other cases.
+      assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
 
       %%Check if the user try to execute operations from sym
       if ~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
         warning ('Please avoid execute operations from sym function.');
-        if ~isempty (regexp (xc, '\.\d*(e-?\d+)?'))  %%S("a*1.0") don't is calculated correctly
-          disp ('error: Execute operations with decimals can not be calculated correctly from sym.');
-          error ('Please split the operation.');
-        end
       end
 
       cmd = {'x = "{s}"'
              'try:'
-             '    return (0, 0, S(x))'
+             '    return (0, 0, S(x, rational=True))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -674,7 +664,6 @@ end
 %!warning <avoid execute operations> sym ('1*2');
 %!warning <without intention overload> sym ('beta');
 
-%!error <split the operation> sym ('1*2.0');
 %!error <please use other var name> sym ('FF(w)');
 
 %!test
