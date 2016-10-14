@@ -322,7 +322,7 @@ function s = sym(x, varargin)
 
       cmd = {'x = "{s}"'
              'try:'
-             '    return (0, 0, S(x, rational=True))'
+             '    return (0, (0, 0), S(x, rational=True))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -335,14 +335,14 @@ function s = sym(x, varargin)
              '            except:'
              '                pass'
              '    if len(lis) > 0:'
-             '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
-             '    return (str(e), 2, x)' };
+             '        return (str(e), (1, "" if len(lis) == 1 else "s"), "\", \"".join(str(e) for e in lis))'
+             '    return (str(e), (2, 0), x)' };
            
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
-      switch flag
+      switch flag{1}
         case 1  %%Bad call to python function
           disp (['Python: ' err]);
-          disp (['error: Error using the "' s '" Python function, you write it correctly?']);
+          disp (['error: Error using the "' s '" Python function' flag{2} ', you write it correctly?']);
           error ('if this do not was intentional please use other var name.');
         case 2  %%Something else
           disp (['Python: ' err]);
