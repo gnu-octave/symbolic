@@ -659,7 +659,8 @@ end
 %!test
 %! a = sym ('2.1');
 %! b = sym (21) / 10;
-%! assert (isequal (vpa (a, 100), vpa (b, 100)))
+%! %% https://github.com/sympy/sympy/issues/11703
+%! assert (python_cmd ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
 
 %!warning <avoid execute operations> sym ('1*2');
 %!warning <without intention overload> sym ('beta');
