@@ -265,7 +265,7 @@ function s = sym(x, varargin)
 
     symsnotfunc(x);  %%Warning if you try make a sym with the same name of a system function.
 
-    %% sym('--1') don't is handled in Rational
+    %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
     r = 1;
     xc = '';  %%Used to check operators skipping first symbols
     for i=1:length (x)
@@ -287,7 +287,8 @@ function s = sym(x, varargin)
 
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is Number
 
-%%Use Symbol with -    Words     Not Octave symbols
+%%Use Symbol with
+%%   No Numbers        Words     Not Octave symbols
     if ~isnum && regexp (x, '^\w+$') && ~flag
 
       cmd = { 'd = dict()'
@@ -326,7 +327,7 @@ function s = sym(x, varargin)
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
-             '        x2 = re.split("\(|\)| |,", x)'
+             '        x2 = split("\(|\)| |,", x)'
              '        x2 = [p for p in x2 if p]'
              '        for i in x2:'
              '            try:'
@@ -342,7 +343,7 @@ function s = sym(x, varargin)
       switch flag{1}
         case 1  %%Bad call to python function
           disp (['Python: ' err]);
-          disp (['error: Error using the "' s '" Python function' flag{2} ', you write it correctly?']);
+          disp (['error: Error using the "' s '" Python function' flag{2} ', you wrote it correctly?']);
           error ('if this do not was intentional please use other var name.');
         case 2  %%Something else
           disp (['Python: ' err]);
