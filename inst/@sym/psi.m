@@ -59,7 +59,7 @@ function W = psi(k, x)
     print_usage ();
   end
 
-  W = binop_helper (k, x, 'polygamma');
+  W = op_helper ('polygamma', sym(k), sym(x));
 
 end
 

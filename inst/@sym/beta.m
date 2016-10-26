@@ -38,7 +38,7 @@ function r = beta(x, y)
     print_usage ();
   end
 
-  r = binop_helper(sym(x), sym(y), 'beta');
+  r = op_helper('beta', sym(x), sym(y));
 
 end
 

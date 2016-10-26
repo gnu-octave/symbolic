@@ -44,7 +44,7 @@ function y = asind(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: deg(asin(a))');
+  y = op_helper ('lambda a: deg(asin(a))', x);
 end
 
 

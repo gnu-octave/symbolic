@@ -44,7 +44,7 @@ function y = cosd(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: cos(rad(a))');
+  y = op_helper ('lambda a: cos(rad(a))', x);
 end
 
 

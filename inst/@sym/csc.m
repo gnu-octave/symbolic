@@ -40,7 +40,7 @@ function y = csc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'csc');
+  y = op_helper ('csc', x);
 end
 
 

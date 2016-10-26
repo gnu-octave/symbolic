@@ -40,7 +40,7 @@ function y = asinh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'asinh');
+  y = op_helper ('asinh', x);
 end
 
 

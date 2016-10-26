@@ -40,7 +40,7 @@ function y = floor(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'floor');
+  y = op_helper ('floor', x);
 end
 
 

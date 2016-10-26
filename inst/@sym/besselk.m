@@ -41,7 +41,7 @@ function K = besselk(n, x)
     print_usage ();
   end
 
-  K = binop_helper(n, x, 'besselk');
+  K = op_helper('besselk', sym(n), sym(x));
 
 end
 

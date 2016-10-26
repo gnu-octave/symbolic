@@ -39,7 +39,10 @@
 
 
 function y = frac(x)
-  y = uniop_helper (x, 'frac');
+  if nargin ~= 1
+    print_usage ();
+  end
+  y = op_helper ('frac', x);
 end
 
 

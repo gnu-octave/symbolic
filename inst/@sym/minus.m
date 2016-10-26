@@ -45,6 +45,12 @@ function z = minus(x, y)
     return
   end
 
+  % Note op_helper *prefers* element-wise operations, which may not
+  % be what we always want here (e.g., see MatrixExpr test below).
+  %z = op_helper('lambda x, y: x - y', x, y);
+
+  % Instead, we do broadcasting only in special cases (to match
+  % Octave behaviour) and otherwise leave it up to SymPy.
   cmd = { 'x, y = _ins'
           'if x is None or y is None:'
           '    return x - y'
@@ -76,3 +82,14 @@ end
 %! assert (isequal ( D - A , DZ  ))
 %! assert (isequal ( A - 2 , D - 2  ))
 %! assert (isequal ( 4 - A , 4 - D  ))
+
+%!test
+%! % ensure MatrixExpr can be manipulated somewhat
+%! syms n m integer
+%! A = sym('A', [n m]);
+%! B = subs(A, [n m], [5 6]);
+%! B = B - 1;
+%! assert (isa (B, 'sym'))
+%! C = B(1, 1);  % currently makes a MatrixElement
+%! C = C - 1;
+%! assert (isa (C, 'sym'))

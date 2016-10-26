@@ -232,7 +232,7 @@ function y = {NAME}(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, '{SPNAME}');
+  y = op_helper ('{SPNAME}', x);
 end
 
 

@@ -34,7 +34,10 @@
 
 
 function y = round(x)
-  y = uniop_helper (x, 'round');
+  if nargin ~= 1
+    print_usage ();
+  end
+  y = op_helper ('round', x);
 end
 
 

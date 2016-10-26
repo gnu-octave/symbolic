@@ -44,11 +44,7 @@
 
 function z = isconstant(x)
 
-  cmd = { '(x,) = _ins'
-          'if x is not None and x.is_Matrix:'
-          '    return x.applyfunc(lambda a: a.is_constant()),'
-          'return x.is_constant(),' };
-  z = python_cmd (cmd, sym(x));
+  z = op_helper ('lambda a: a.is_constant()', x);
   % Issue #27: Matrix of bools not converted to logical
   z = logical(z);
 

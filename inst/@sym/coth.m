@@ -40,7 +40,7 @@ function y = coth(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'coth');
+  y = op_helper ('coth', x);
 end
 
 

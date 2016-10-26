@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,24 +17,22 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function z = binop_helper(x, y, scalar_fcn)
-%binop_helper, private
+function z = op_helper(scalar_fcn, varargin)
+%op_helper, private
 %
 %   'scalar_fcn' can either be the name of a function or a lambda.
 %     example: 'lambda a,b: a % b');
+%     example: 'lambda a,b,c: a % b + c');
 %   It can also be the defn of a function called "_op"
 %     e.g., { 'def _op(a,b):' '    return a % b' }
+%     e.g., { 'def _op(a,b,c,d):' '    return a % c + d / b' }
 %
-%   Caution: Just because you are implementing a binary operation,
+%   Caution: Just because you are implementing an operation,
 %   does not mean you want to use this helper.  You shoudl use this
 %   helper when you by default want per-component calculations.
 %
 %   FIXME: even faster if move to python_header (load once)?
-
-  assert (nargin == 3)
 
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)
@@ -44,19 +43,17 @@ function z = binop_helper(x, y, scalar_fcn)
 
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
-          '(x, y) = _ins'
-          'if x.is_Matrix and y.is_Matrix:'
-          '    assert x.shape == y.shape'
-          '    A = sp.Matrix(x.shape[0], x.shape[1],'
-          '        lambda i,j: _op(x[i,j], y[i,j]))'
-          '    return A,'
-          'elif x.is_Matrix:'
-          '    return x.applyfunc(lambda a: _op(a, y)),'
-          'elif y.is_Matrix:'
-          '    return y.applyfunc(lambda a: _op(x, a)),'
-          'else:'
-          '    return _op(x, y),' ];
+          'q = Matrix([0])'
+          'for i in _ins:'
+          '    if isinstance(i, MatrixBase) and i:'
+          '        if q.shape == (1, 1):'
+          '            q = i'
+          '        else:'
+          '            assert q.shape == i.shape, "Matrices must have equal sizes"'
+          'for i in range(0, len(q)):'
+          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
+          'return q,' ];
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = python_cmd (cmd, varargin{:});
 
 end

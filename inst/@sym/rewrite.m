@@ -109,7 +109,7 @@ function F = rewrite(f, how)
 
   F = python_cmd(cmd, sym(f), how);
 
-  % maintainer note: binop_helper would sym(how)
+  % maintainer note: op_helper might sym(how)
 
 end
 

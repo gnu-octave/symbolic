@@ -63,10 +63,9 @@
 function L = laguerreL(n, alpha, x)
 
   if (nargin == 2)
-    x = alpha;
-    L = binop_helper(n, x, 'laguerre');
+    L = op_helper('laguerre', sym(n), sym(alpha));
   elseif (nargin == 3)
-    L = triop_helper(n, alpha, x, 'assoc_laguerre');
+    L = op_helper('assoc_laguerre', sym(n), sym(alpha), sym(x));
   else
     print_usage ();
   end

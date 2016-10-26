@@ -36,7 +36,12 @@
 %% @end defmethod
 
 function y = ssinint(x)
-  y = uniop_helper (x, 'Si') - sym(pi)/2;
+
+  if nargin ~= 1
+    print_usage ();
+  end
+
+  y = op_helper ('Si', x) - sym(pi)/2;
 end
 
 

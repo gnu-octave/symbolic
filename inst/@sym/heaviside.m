@@ -65,14 +65,14 @@
 %% @end defmethod
 
 
-function y = heaviside(x, h0)
-  if (nargin == 1)
-    y = uniop_helper (x, 'Heaviside');
-  elseif (nargin == 2)
-    y = binop_helper (x, h0, 'Heaviside');
-  else
+function y = heaviside(varargin)
+  if (nargin > 2)
     print_usage ();
   end
+
+  varargin = sym(varargin);
+  y = op_helper ('Heaviside', varargin{:});
+
 end
 
 

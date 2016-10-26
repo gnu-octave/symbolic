@@ -49,7 +49,7 @@ function y = real(z)
     print_usage ();
   end
 
-  y = uniop_helper (z, 're');
+  y = op_helper ('re', z);
 
 end
 

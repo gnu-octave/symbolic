@@ -47,8 +47,12 @@
 
 function z = isprime(x)
 
+  if nargin ~= 1
+    print_usage ();
+  end
+
   % this will give True/False/None
-  %z = uniop_helper(x, 'lambda x: x.is_prime');
+  %z = op_helper('lambda x: x.is_prime', x);
   %z = uniop_bool_helper(x, 'lambda x: x.is_prime', 'sym');
 
   sf = { 'def sf(x):'

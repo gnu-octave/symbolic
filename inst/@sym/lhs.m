@@ -50,7 +50,11 @@
 
 function L = lhs(f)
 
-  L = uniop_helper(f, 'lambda a: a.lhs');
+  if nargin ~= 1
+    print_usage ();
+  end
+
+  L = op_helper('lambda a: a.lhs', f);
 
 end
 

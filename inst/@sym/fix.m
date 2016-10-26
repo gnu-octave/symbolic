@@ -34,7 +34,10 @@
 
 
 function y = fix(x)
-  y = uniop_helper (x, 'Integer');
+  if nargin ~= 1
+    print_usage ();
+  end
+  y = op_helper ('Integer', x);
 end
 
 

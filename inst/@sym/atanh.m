@@ -40,7 +40,7 @@ function y = atanh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'atanh');
+  y = op_helper ('atanh', x);
 end
 
 

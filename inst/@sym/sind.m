@@ -44,7 +44,7 @@ function y = sind(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: sin(rad(a))');
+  y = op_helper ('lambda a: sin(rad(a))', x);
 end
 
 

@@ -40,7 +40,11 @@
 
 function R = rhs(f)
 
-  R = uniop_helper(f, 'lambda a: a.rhs');
+  if nargin ~= 1
+    print_usage ();
+  end
+
+  R = op_helper('lambda a: a.rhs', f);
 
 end
 

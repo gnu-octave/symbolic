@@ -44,7 +44,7 @@ function t = gt(x, y)
     print_usage ();
   end
 
-  t = ineq_helper('>', 'Gt', x, y);
+  t = ineq_helper('>', 'Gt', sym(x), sym(y));
 
 end
 

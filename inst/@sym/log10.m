@@ -41,9 +41,11 @@
 
 function z = log10(x)
 
-  sf = 'lambda x: sp.log(x, 10)';
+  if nargin ~= 1
+    print_usage ();
+  end
 
-  z = uniop_helper (x, sf);
+  z = op_helper ('lambda x: sp.log(x, 10)', x);
 
 end
 
