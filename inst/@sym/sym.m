@@ -198,7 +198,7 @@ function s = sym(x, varargin)
     return
   end
 
-  if iscell(x)  %%Handle Cells
+  if iscell (x)  % Handle Cells
     s = cell_array_to_sym (x, varargin{:});
     return
   end
@@ -206,13 +206,13 @@ function s = sym(x, varargin)
   asm = {};
 
   if nargin >= 2
-    if ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1}) %%Handle MatrixSymbols
+    if ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1}) % Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
     else
-      varargin = norm_logic_strings(varargin);
-      check_assumptions (varargin);  %%Check if assumptions exist - Sympy don't check this
+      varargin = norm_logic_strings (varargin);
+      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
@@ -220,11 +220,11 @@ function s = sym(x, varargin)
   isnumber = isnumeric (x) || islogical (x);
   assert (isempty (asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
 
-  if ~isscalar (x) && isnumber  %%Handle octave numeric matrix
+  if ~isscalar (x) && isnumber  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
     return
 
-  elseif isa (x, 'double')  %%Handle doubles
+  elseif isa (x, 'double')  % Handle doubles
     if ~isreal (x)
       s = sym (real (x)) + sym ('i')*sym (imag (x));
       return
@@ -253,22 +253,22 @@ function s = sym(x, varargin)
       return
 
     end
-  elseif islogical (x) %%Handle logical values
+  elseif islogical (x) % Handle logical values
     s = python_cmd ('return S.true if _ins[0] else S.false', x);
     return
 
-  elseif isinteger (x) %%Handle integer vealues
+  elseif isinteger (x) % Handle integer vealues
     s = sym (num2str (x, '%ld'));
     return
 
   elseif isa (x, 'char')
 
-    symsnotfunc(x);  %%Warning if you try make a sym with the same name of a system function.
+    symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
 
     %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
     r = 1;
-    xc = '';  %%Used to check operators skipping first symbols
-    for i=1:length (x)
+    xc = '';  % Used to check operators skipping first symbols
+    for i = 1:length (x)
       if strcmp (x (i), '-')
         r = r*-1;
       elseif ~strcmp (x (i), '+')
@@ -283,12 +283,12 @@ function s = sym(x, varargin)
     end
 
     [x, flag] = magic_double_str (x);
-    x = strrep(x, '"', '\"');   %%Avoid collision with S("x") and Symbol("x")
+    x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
 
-    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  %%Is Number
+    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
 
-%%Use Symbol with
-%%   No Numbers        Words     Not Octave symbols
+%% Use Symbol with
+%    No Numbers        Words     Not Octave symbols
     if ~isnum && regexp (x, '^\w+$') && ~flag
 
       cmd = { 'd = dict()'
@@ -312,11 +312,11 @@ function s = sym(x, varargin)
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
       return
 
-    else %%S() in other case
+    else % S() in other case
 
       assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
 
-      %%Check if the user try to execute operations from sym
+      % Check if the user try to execute operations from sym
       if ~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
         warning ('Please avoid execute operations from sym function.');
       end
@@ -341,11 +341,11 @@ function s = sym(x, varargin)
            
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
       switch flag{1}
-        case 1  %%Bad call to python function
+        case 1  % Bad call to python function
           disp (['Python: ' err]);
           disp (['error: Error using the "' s '" Python function' flag{2} ', you wrote it correctly?']);
           error ('if this do not was intentional please use other var name.');
-        case 2  %%Something else
+        case 2  % Something else
           disp (['Python: ' err]);
           error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
       end
@@ -353,7 +353,7 @@ function s = sym(x, varargin)
     end
   end
 
-  error ('Input not supported yet.')
+  error ('Conversion to symbolic with those arguments not (yet) supported')
 
 end
 
@@ -664,7 +664,7 @@ end
 %! assert (python_cmd ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
 
 %!warning <avoid execute operations> sym ('1*2');
-%!warning <without intention overload> sym ('beta');
+%!warning <You are overloading/hiding> sym ('beta');
 
 %!error <please use other var name> sym ('FF(w)');
 

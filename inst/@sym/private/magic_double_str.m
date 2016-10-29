@@ -31,9 +31,9 @@
 
 function [s, flag] = magic_double_str (x)
 
-  persistent list %%format: number, {octave string}, python expression
-  persistent const %%Sympy constants
-  %%{octave string} need contain the python expression for char function
+  persistent list % format: number, {octave string}, python expression
+  persistent const % Sympy constants
+  % {octave string} need contain the python expression for char function
 
   if isempty (list)
     list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I'};
@@ -42,8 +42,8 @@ function [s, flag] = magic_double_str (x)
 
   flag = 1;
 
-  if isa (x, 'double')  %%Number comparison
-    for j=1:length (list)
+  if isa (x, 'double')  % Number comparison
+    for j = 1:length (list)
       if isequaln (x, list{j, 1})
         s = list{j, 3};
         return
@@ -52,9 +52,9 @@ function [s, flag] = magic_double_str (x)
         return
       end
     end
-  elseif isa (x, 'char')  %%Char comparison
-    for j=1:length (list)
-      for n=1:length (list{j, 2})
+  elseif isa (x, 'char')  % Char comparison
+    for j = 1:length (list)
+      for n = 1:length (list{j, 2})
         if strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}])
           s = list{j, 3};
           return
@@ -64,7 +64,7 @@ function [s, flag] = magic_double_str (x)
         end
       end
     end
-    for j=1:length (const)   %%Check if is a python constant
+    for j = 1:length (const)   % Check if is a python constant
       if strcmp (x, const{j}) || strcmp (x, ['+' const{j}])
         s = const{j};
         return

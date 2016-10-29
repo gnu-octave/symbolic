@@ -78,7 +78,7 @@ function syms(varargin)
   if nargin == 0
     S = evalin ('caller', 'whos');
     disp ('Symbolic variables in current scope:')
-    for i=1:numel(S)
+    for i = 1:numel(S)
       %S(i)
       if strcmp (S(i).class, 'sym')
         disp (['  ' S(i).name])
@@ -95,7 +95,7 @@ function syms(varargin)
   %% Find assumptions
   valid_asm = assumptions ('possible');
   last = -1;
-  for n=1:nargin
+  for n = 1:nargin
     assert (ischar (varargin{n}) || islogical (varargin{n}), 'syms: expected string inputs')
     if islogical (varargin{n}) || ismember (varargin{n}, valid_asm)
       if (last < 0)

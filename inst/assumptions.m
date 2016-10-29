@@ -112,7 +112,7 @@ function [A, B] = assumptions (F, outp)
       'if d == {}:'
       '    astr = ""'
       'else:'  % all True so list them
-      '    val, key = list(d.values()), list(d.keys())' %%In Python3 d.values() don't support indexing
+      '    val, key = list(d.values()), list(d.keys())' % In Python3 d.values() don't support indexing
       '    astr = ", ".join(sorted([(("" if val[i] else "~") + str(key[i])) for i in range(len(d.keys()))]))'
       'if outputdict:'
       '    return (astr, d)'
@@ -127,7 +127,7 @@ function [A, B] = assumptions (F, outp)
     return
   end
   s = findsymbols (F);
-  for i=1:length (s)
+  for i = 1:length (s)
     x = s{i};
     if strcmp (outp, 'dict')
       [astr, adict] = python_cmd (cmd, x, true);

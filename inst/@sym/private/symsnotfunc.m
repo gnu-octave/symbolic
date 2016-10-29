@@ -27,10 +27,10 @@
 
 function [s, flag] = symsnotfunc (varargin)
 
-  for i=1:length (varargin)
+  for i = 1:length (varargin)
 
     if iscell (varargin{i})
-      for j=1:length (varargin{i})
+      for j = 1:length (varargin{i})
         symsnotfunc (varargin{i}{j});
       end
     elseif isa (varargin{i}, 'char')
@@ -40,7 +40,7 @@ function [s, flag] = symsnotfunc (varargin)
         k = exist (p);
         if k == 5 || k == 8 || k == 2
           disp (['warning: The expression "' varargin{i} '" its a system expression.']);
-          warning ('You can without intention overload it.');
+          warning ('You are overloading/hiding, if your function have the same number of args as the system expression.');
         end
       end
     elseif isa (varargin{i}, 'sym')

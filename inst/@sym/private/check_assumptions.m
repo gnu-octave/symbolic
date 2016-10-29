@@ -35,18 +35,18 @@ function check_assumptions (x)
 
   if ~islogical (x)
     if isa (x, 'char')
-      assert (ismember (x, valid_asm), ['sym: the assumption "' x '" is not supported'])
+      assert (ismember (x, valid_asm), ['sym: the assumption "' x '" is not supported in your Sympy version.'])
     elseif isstruct (x)
       fields = fieldnames (x);
-      for j=1:numel (fields)
+      for j = 1:numel (fields)
         check_assumptions (fields{j})
       end
     elseif iscell (x)
-      for j=1:length (x)
+      for j = 1:length (x)
         check_assumptions (x{j})
       end
-      else
-      error('sym: assumption must be a string or struct or cell')
+    else
+      error ('sym: assumption must be a string or struct or cell')
     end
   end
 

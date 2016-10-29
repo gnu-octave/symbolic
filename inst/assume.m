@@ -175,7 +175,7 @@ function s = assume(x, varargin)
     if nargout == 0
       assignin (context, xstr, newx);
     else
-      s = newx
+      s = newx;
     end
 
     for i = 1:numel (S)
@@ -187,7 +187,7 @@ function s = assume(x, varargin)
     return
   end
 
-  for n=2:nargin
+  for n = 2:nargin
     if ~islogical (varargin{n - 1})
       cond = varargin{n - 1};
       if n < nargin && islogical (varargin{n})
