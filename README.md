@@ -22,18 +22,6 @@ Status
 
 "Beta" quality at best!  Contributions welcome.
 
-How to install on Ubuntu
--------------------------
-
-1. Install Octave first. (Type 'sudo apt-get install octave' in terminal).
-2. Install the Debian package 'liboctave-dev' to get the mkoctfile command. (Type 'sudo apt-get install liboctave-dev' in terminal).
-3. Install other dependecies too like Python and sympy. ('sudo apt-get install python' && 'sudo apt-get install python-sympy').
-4. Now, open Octave and enter 'pkg install -forge symbolic' in its command window.
-5. At Octave prompt, type `pkg load octsympy`.
-6. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
-   `diff(f,x)`, etc.
-
-
 How to Install
 --------------
 
@@ -51,7 +39,13 @@ How to Install
 6. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
    `diff(f,x)`, etc.
 
+How to install on Ubuntu
+-------------------------
 
+1. If Octave not installed yet, use 'sudo apt-get install octave'.
+2. Fetch the Debian package 'liboctave-dev' to get the mkoctfile command. Use 'sudo apt-get install liboctave-dev' in terminal.
+3. If Python and SymPy not already installed, use 'sudo apt-get install python' && 'sudo apt-get install python-sympy'.
+4. In Octave promt, type 'pkg install -forge symbolic' followed by last two steps of above-menioned installation guide.
 
 How to Install on Windows
 -------------------------
