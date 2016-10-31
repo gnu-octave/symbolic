@@ -17,22 +17,52 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
+%% -*- texinfo -*-
+%% @documentencoding UTF-8
+%% @defmethod op_helper (@var{scalar_fcn}, @var{dor})
+%% Apply function element-by-element with the input vars in @var{scalar_fcn}
+%% Private helper
+%%
+%% Example:
+%% A = sym([3])
+%% B = sym([4 5 6;7 4 2])
+%% op_helper('lambda a,b: a % b', A, B)
+%%
+%% op_helper('round', B)
+%% 
+%% If you need use a complex function you can declare a _op
+%% python function in a cell and use it:
+%%
+%% scalar_fcn = { 'def _op(a,b,c,d):' '    return a % c + d / b' }
+%% A = 3
+%% B = [1 2;3 4]
+%% C = inv(B)
+%% D = 1
+%%
+%% op_helper(scalar_fcn, sym(A), sym(B), sym(C), sym(D))
+%%
+%% As you can see you need declare when you need a sym object,
+%% or the function will use it in a literal way.
+%%
+%% syms x
+%% A = [x -x sin(x)/x]
+%% B = x
+%% C = [-inf, 0, inf]
+%% D = '+'
+%% op_helper('lambda a, b, c, d: a.limit(b, c, d)', sym(A), sym(B), sym(C), D)
+%%
+%% This example will send D ('+') to the function without convert the string
+%% to a symbol.
+%%
+%% Notes:
+%%   This function don't actually works with MatrixSymbol
+%%   If you send matrices as arguments, all must have equal sizes
+%%   except if have a 1x1 size, in that case it always will ise that value.
+%%
+%% @end defmethod
+
 
 function z = op_helper(scalar_fcn, varargin)
-%op_helper, private
-%
-%   'scalar_fcn' can either be the name of a function or a lambda.
-%     example: 'lambda a,b: a % b');
-%     example: 'lambda a,b,c: a % b + c');
-%   It can also be the defn of a function called "_op"
-%     e.g., { 'def _op(a,b):' '    return a % b' }
-%     e.g., { 'def _op(a,b,c,d):' '    return a % c + d / b' }
-%
-%   Caution: Just because you are implementing an operation,
-%   does not mean you want to use this helper.  You shoudl use this
-%   helper when you by default want per-component calculations.
-%
-%   FIXME: even faster if move to python_header (load once)?
 
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)
