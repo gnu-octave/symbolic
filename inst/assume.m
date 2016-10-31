@@ -147,18 +147,18 @@
 
 function s = assume(x, varargin)
 
-  if nargin == 0
+  if (nargin == 0)
     error ('Send an argument.')
-  elseif nargin == 1
+  elseif (nargin == 1)
     error ('Not supported yet.')
   end
 
   varargin = norm_logic_strings (varargin);
 
-  if isa (varargin{1}, 'char') && strcmp (varargin{1}, 'clear')
+  if (isa (varargin{1}, 'char') && strcmp (varargin{1}, 'clear'))
 
     % special case for 'clear', because of side-effects
-    if isa (x, 'sym')
+    if (isa (x, 'sym'))
       x = x.flat;    % we just want the string
     end
 
@@ -172,7 +172,7 @@ function s = assume(x, varargin)
     S = evalin (context, 'whos');
     evalin (context, '[];');  % clear 'ans'
 
-    if nargout == 0
+    if (nargout == 0)
       assignin (context, xstr, newx);
     else
       s = newx;
@@ -188,21 +188,21 @@ function s = assume(x, varargin)
   end
 
   for n = 2:nargin
-    if ~islogical (varargin{n - 1})
+    if (~islogical (varargin{n - 1}))
       cond = varargin{n - 1};
-      if n < nargin && islogical (varargin{n})
+      if (n < nargin && islogical (varargin{n}))
         ca.(cond) = varargin{n};
       else
         ca.(cond) = true;
       end
     else
-      if (n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2})
+      if ((n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2}))
         print_usage ();
       end
     end
   end
 
-  if isa (x, 'sym')
+  if (isa (x, 'sym'))
     xstr = x.flat;
   else
     xstr = x;

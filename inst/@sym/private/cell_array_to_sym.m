@@ -28,7 +28,7 @@ function s = cell_array_to_sym (L, varargin)
     %s{i} = sym(L{i});
     % not strictly necessary if sym calls this but maybe neater this way:
     item = L{i};
-    if iscell (item)
+    if (iscell (item))
       s{i} = cell_array_to_sym (item, varargin{:});
     else
       s{i} = sym (item, varargin{:});

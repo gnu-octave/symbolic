@@ -75,14 +75,14 @@ function syms(varargin)
 
   %% No inputs
   %output names of symbolic vars
-  if nargin == 0
+  if (nargin == 0)
     S = evalin ('caller', 'whos');
     disp ('Symbolic variables in current scope:')
     for i = 1:numel(S)
       %S(i)
-      if strcmp (S(i).class, 'sym')
+      if (strcmp (S(i).class, 'sym'))
         disp (['  ' S(i).name])
-      elseif strcmp (S(i).class, 'symfun')
+      elseif (strcmp (S(i).class, 'symfun'))
         % FIXME improve display of symfun
         disp (['  ' S(i).name ' (symfun)'])
       end
@@ -97,7 +97,7 @@ function syms(varargin)
   last = -1;
   for n = 1:nargin
     assert (ischar (varargin{n}) || islogical (varargin{n}), 'syms: expected string inputs')
-    if islogical (varargin{n}) || ismember (varargin{n}, valid_asm)
+    if (islogical (varargin{n}) || ismember (varargin{n}, valid_asm))
       if (last < 0)
         last = n - 1;
       end
@@ -106,10 +106,10 @@ function syms(varargin)
     end
   end
 
-  if last < 0
+  if (last < 0)
     asm = {};
     exprs = varargin;
-  elseif last == 0
+  elseif (last == 0)
     error ('syms: cannot have only assumptions w/o symbols')
   else
     asm = varargin((last+1):end);
@@ -123,7 +123,7 @@ function syms(varargin)
     expr = exprs{i};
 
     % look for parenthesis: check if we're making a symfun
-    if isempty (strfind (expr, '(') )  % no
+    if (isempty (strfind (expr, '(') ))  % no
       assert (isvarname (expr));
       assignin ('caller', expr, sym(expr, asm{:}))
     else  % yes, this is a symfun

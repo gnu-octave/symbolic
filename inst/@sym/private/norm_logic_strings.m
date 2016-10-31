@@ -32,23 +32,23 @@
 
 function s = norm_logic_strings (x);
 
-  if iscell (x)
+  if (iscell (x))
     for i = 1:length (x)
       x{i} = norm_logic_strings (x{i});
     end
-  elseif isstruct (x)
+  elseif (isstruct (x))
     fields = fieldnames (x);
     for q = 1:numel (fields)
       x.(fields{q}) = norm_logic_strings (x.(fields{q}));
     end
-  elseif ischar (x)
+  elseif (ischar (x))
     w = lower (x);
-    if strcmp (w, 'true')
+    if (strcmp (w, 'true'))
       x = true;
-    elseif strcmp (w, 'false')
+    elseif (strcmp (w, 'false'))
       x = false;
     end
-  elseif isa (x, 'sym')
+  elseif (isa (x, 'sym'))
     x = norm_logic_strings (x.flat);
   end
 

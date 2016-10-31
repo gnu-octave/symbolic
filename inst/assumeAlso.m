@@ -70,9 +70,9 @@ function s = assumeAlso(x, varargin)
 
   varargin = norm_logic_strings (varargin);
 
-  if ~isa (x, 'sym')
+  if (~isa (x, 'sym'))
     p = sym (x, varargin{:});
-    if nargout ~= 0
+    if (nargout ~= 0)
       s = p;
     else
       assignin ('caller', x, p);
@@ -82,7 +82,7 @@ function s = assumeAlso(x, varargin)
 
   [tilde,ca] = assumptions (x, 'dict');
 
-  if isempty (ca)
+  if (isempty (ca))
     ca = [];
   elseif (length (ca) == 1)
     ca = ca{1};
@@ -92,15 +92,15 @@ function s = assumeAlso(x, varargin)
   end
 
   for n=2:nargin
-    if ~islogical (varargin{n - 1})
+    if (~islogical (varargin{n - 1}))
       cond = varargin{n - 1};
-      if n < nargin && islogical (varargin{n})
+      if (n < nargin && islogical (varargin{n}))
         ca.(cond) = varargin{n};
       else
         ca.(cond) = true;
       end
     else
-      if (n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2})
+      if ((n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2}))
         print_usage ();
       end
     end
@@ -109,7 +109,7 @@ function s = assumeAlso(x, varargin)
   xstr = x.flat;
   newx = sym (xstr, ca);
 
-  if nargout > 0
+  if (nargout > 0)
     s = newx;
     return
   end

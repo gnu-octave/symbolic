@@ -24,7 +24,7 @@ function A = make_sym_matrix (As, sz)
 
   sz = sym ([sz ones(1, 2-s)]);
 
-  if ~isempty (findsymbols (sz))
+  if (~isempty (findsymbols (sz)))
     cmd = { 'As, sz = _ins'
             'return sympy.MatrixSymbol(As, *sz),' };
     A = python_cmd (cmd, As, sz);

@@ -169,7 +169,7 @@ function s = sym(x, varargin)
   % this from the python ipc stuff: outside the class.  We identify
   % this non-user-facing usage by empty x and 6 inputs total.  Note
   % that "sym([])" is valid but "sym([], ...)" is otherwise not.
-  if isempty (x) && nargin == 6
+  if (isempty (x) && nargin == 6)
     s.pickle = varargin{1};
     s.size = varargin{2};
     s.flat = varargin{3};
@@ -189,8 +189,8 @@ function s = sym(x, varargin)
   %  s = x.sym;
   %  return
 
-  if isa (x, 'sym')
-    if nargin == 1
+  if (isa (x, 'sym'))
+    if (nargin == 1)
       s = x;
     else
       s = sym (x.flat, varargin{:});
@@ -198,15 +198,15 @@ function s = sym(x, varargin)
     return
   end
 
-  if iscell (x)  % Handle Cells
+  if (iscell (x))  % Handle Cells
     s = cell_array_to_sym (x, varargin{:});
     return
   end
 
   asm = {};
 
-  if nargin >= 2
-    if ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1}) % Handle MatrixSymbols
+  if (nargin >= 2)
+    if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
@@ -220,18 +220,18 @@ function s = sym(x, varargin)
   isnumber = isnumeric (x) || islogical (x);
   assert (isempty (asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
 
-  if ~isscalar (x) && isnumber  % Handle octave numeric matrix
+  if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
     return
 
-  elseif isa (x, 'double')  % Handle doubles
-    if ~isreal (x)
+  elseif (isa (x, 'double'))  % Handle doubles
+    if (~isreal (x))
       s = sym (real (x)) + sym ('i')*sym (imag (x));
       return
 
     else
       [s, flag] = magic_double_str (x);
-      if ~flag
+      if (~flag)
         % Allow 1/3 and other "small" fractions.
         % Personally, I like a warning here so I can catch bugs.
         % Matlab SMT does this (w/o warning).
@@ -240,7 +240,7 @@ function s = sym(x, varargin)
                 'Using rat() heuristics for double-precision input (is this what you wanted?)');
         [N1, D1] = rat (x);
         [N2, D2] = rat (x / pi);
-        if 10*abs (D2) < abs (D1)
+        if (10*abs (D2) < abs (D1))
           % use frac*pi if demoninator significantly shorter
           s = sprintf ('return Rational(%s, %s)*pi', num2str (N2), num2str (D2));
         else
@@ -253,15 +253,15 @@ function s = sym(x, varargin)
       return
 
     end
-  elseif islogical (x) % Handle logical values
+  elseif (islogical (x)) % Handle logical values
     s = python_cmd ('return S.true if _ins[0] else S.false', x);
     return
 
-  elseif isinteger (x) % Handle integer vealues
+  elseif (isinteger (x)) % Handle integer vealues
     s = sym (num2str (x, '%ld'));
     return
 
-  elseif isa (x, 'char')
+  elseif (isa (x, 'char'))
 
     symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
 
@@ -269,10 +269,10 @@ function s = sym(x, varargin)
     r = 1;
     xc = '';  % Used to check operators skipping first symbols
     for i = 1:length (x)
-      if strcmp (x (i), '-')
+      if (strcmp (x (i), '-'))
         r = r*-1;
-      elseif ~strcmp (x (i), '+')
-        if r == -1
+      elseif (~strcmp (x (i), '+'))
+        if (r == -1)
           xc = x (i:end);
           x = ['-' x(i:end)];
         else
@@ -288,8 +288,8 @@ function s = sym(x, varargin)
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
 
 %% Use Symbol with
-%    No Numbers        Words     Not Octave symbols
-    if ~isnum && regexp (x, '^\w+$') && ~flag
+%     No Numbers        Words     Not Octave symbols
+    if (~isnum && regexp (x, '^\w+$') && ~flag)
 
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
@@ -317,7 +317,7 @@ function s = sym(x, varargin)
       assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
 
       % Check if the user try to execute operations from sym
-      if ~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~'))
+      if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         warning ('Please avoid execute operations from sym function.');
       end
 
@@ -340,7 +340,7 @@ function s = sym(x, varargin)
              '    return (str(e), (2, 0), x)' };
            
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
-      switch flag{1}
+      switch (flag{1})
         case 1  % Bad call to python function
           disp (['Python: ' err]);
           disp (['error: Error using the "' s '" Python function' flag{2} ', you wrote it correctly?']);

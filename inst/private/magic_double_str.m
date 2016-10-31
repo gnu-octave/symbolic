@@ -35,40 +35,40 @@ function [s, flag] = magic_double_str (x)
   persistent const % Sympy constants
   % {octave string} need contain the python expression for char function
 
-  if isempty (list)
+  if (isempty (list))
     list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I'};
     const = {'zoo'};
   end
 
   flag = 1;
 
-  if isa (x, 'double')  % Number comparison
+  if (isa (x, 'double'))  % Number comparison
     for j = 1:length (list)
-      if isequaln (x, list{j, 1})
+      if (isequaln (x, list{j, 1}))
         s = list{j, 3};
         return
-      elseif isequaln (x, -list{j, 1})
+      elseif (isequaln (x, -list{j, 1}))
         s = ['-' list{j, 3}];
         return
       end
     end
-  elseif isa (x, 'char')  % Char comparison
+  elseif (isa (x, 'char'))  % Char comparison
     for j = 1:length (list)
       for n = 1:length (list{j, 2})
-        if strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}])
+        if (strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}]))
           s = list{j, 3};
           return
-        elseif strcmp (x, ['-' list{j, 2}{n}])
+        elseif (strcmp (x, ['-' list{j, 2}{n}]))
           s = ['-' list{j, 3}];
           return
         end
       end
     end
     for j = 1:length (const)   % Check if is a python constant
-      if strcmp (x, const{j}) || strcmp (x, ['+' const{j}])
+      if (strcmp (x, const{j}) || strcmp (x, ['+' const{j}]))
         s = const{j};
         return
-      elseif strcmp (x, ['-' const{j}])
+      elseif (strcmp (x, ['-' const{j}]))
         s = ['-' const{j}];
         return
       end
@@ -77,12 +77,12 @@ function [s, flag] = magic_double_str (x)
     error ('Format not supported.')
   end
 
-  if isa (x, 'char')
+  if (isa (x, 'char'))
     flag = 0;
     s = x;
     return
-  elseif isa (x, 'double')
-    if (abs (x) < 1e15) && (mod (x,1) == 0)
+  elseif (isa (x, 'double'))
+    if ((abs (x) < 1e15) && (mod (x,1) == 0))
       % special treatment for "small" integers
       s = num2str (x);  % better than sprintf('%d', large)
     else

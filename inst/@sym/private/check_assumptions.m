@@ -29,19 +29,19 @@ function check_assumptions (x)
 
   persistent valid_asm
 
-  if isempty (valid_asm)
+  if (isempty (valid_asm))
     valid_asm = assumptions ('possible');
   end
 
-  if ~islogical (x)
-    if isa (x, 'char')
+  if (~islogical (x))
+    if (isa (x, 'char'))
       assert (ismember (x, valid_asm), ['sym: the assumption "' x '" is not supported in your Sympy version.'])
-    elseif isstruct (x)
+    elseif (isstruct (x))
       fields = fieldnames (x);
       for j = 1:numel (fields)
         check_assumptions (fields{j})
       end
-    elseif iscell (x)
+    elseif (iscell (x))
       for j = 1:length (x)
         check_assumptions (x{j})
       end

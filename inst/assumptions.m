@@ -78,21 +78,21 @@
 
 function [A, B] = assumptions (F, outp)
 
-  if (nargin == 1) && ischar (F) && strcmp (F, 'possible')
+  if ((nargin == 1) && ischar (F) && strcmp (F, 'possible'))
     A = valid_sym_assumptions();
     return
   end
 
-  if (nargin == 0) || isempty (F)
+  if ((nargin == 0) || isempty (F))
     find_all_free_symbols = true;
   else
     find_all_free_symbols = false;
   end
-  if nargin <= 1
+  if (nargin <= 1)
     outp = 'no';
   end
 
-  if find_all_free_symbols
+  if (find_all_free_symbols)
     %% no input arguments
     % find all syms, check each for free symbols
     workspace = {};
@@ -120,25 +120,25 @@ function [A, B] = assumptions (F, outp)
       '    return astr,' };
 
   c = 0; A = {};
-  if strcmp (outp, 'dict')
+  if (strcmp (outp, 'dict'))
     B = {};
   end
-  if isempty (F)
+  if (isempty (F))
     return
   end
   s = findsymbols (F);
   for i = 1:length (s)
     x = s{i};
-    if strcmp (outp, 'dict')
+    if (strcmp (outp, 'dict'))
       [astr, adict] = python_cmd (cmd, x, true);
-      if ~isempty (astr)
+      if (~isempty (astr))
         c = c + 1;
         A{c} = x;
         B{c} = adict;
       end
     else
       astr = python_cmd (cmd, x, false);
-      if ~isempty (astr)
+      if (~isempty (astr))
         c = c + 1;
         str = [x.flat ': ' astr];
         A{c} = str;
