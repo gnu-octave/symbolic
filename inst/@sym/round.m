@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% y = round(sym(-27)/10)
-%%   @result{} y = -3
+%%   @result{} y = (sym) -3
 %% @end group
 %% @end example
 %%
@@ -34,13 +34,20 @@
 
 
 function y = round(x)
-  y = uniop_helper (x, 'round');
+  y = uniop_helper (x, 'lambda a: Integer(a.round())');
 end
 
 
 %!test
 %! d = 3/2;
 %! x = sym('3/2');
+%! f1 = round(x);
+%! f2 = round(d);
+%! assert (isequal (f1, f2))
+
+%!test
+%! d = 5/2;
+%! x = sym('5/2');
 %! f1 = round(x);
 %! f2 = round(d);
 %! assert (isequal (f1, f2))
