@@ -43,9 +43,9 @@ How to install on Ubuntu
 -------------------------
 
 1. If you've not installed Octave yet, use `sudo apt-get install octave`.
-2. Fetch the Debian package liboctave-dev to get the mkoctfile command. Use `sudo apt-get install liboctave-dev` in terminal.
-3. If Python and SymPy not already installed, use `sudo apt-get install python` && `sudo apt-get install python-sympy`.
-4. In Octave prompt, type `pkg install -forge symbolic` followed by last two steps of above-menioned installation guide.
+2. Fetch the Debian package liboctave-dev to get the mkoctfile command. Use `sudo apt-get install liboctave-dev`.
+3. If you've not installed python-sympy yet, use `sudo apt-get install python-sympy`.
+4. In Octave prompt, type `pkg install -forge symbolic` followed by last two steps of previous section.
 
 How to Install on Windows
 -------------------------
