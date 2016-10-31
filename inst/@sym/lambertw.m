@@ -52,12 +52,17 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function W = lambertw(varargin)
-  if (nargin > 2)
+function W = lambertw(k, x)
+  if (nargin == 1)
+    x = sym(k);
+    W = uniop_helper (x, 'LambertW');
+  elseif (nargin == 2)
+    x = sym(x);
+    k = sym(k);
+    W = binop_helper (x, k, 'LambertW');
+  else
     print_usage ();
   end
-  varargin = sym(varargin);
-  W = op_helper ('lambda a: LambertW(*reversed(a))', varargin);
 end
 
 

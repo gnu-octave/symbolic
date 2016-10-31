@@ -83,7 +83,14 @@ function L = limit(f, x, a, dir)
       print_usage ();
   end
 
-  L = op_helper('lambda a, b, c, d: a.limit(b, c, d)', sym(f), sym(x), sym(a), pdir);
+  cmd = { '(f, x, a, pdir) = _ins'
+          '# note, not MatrixExpr'
+          'if isinstance(f, sp.MatrixBase):'
+          '    g = f.applyfunc(lambda b: b.limit(x, a, dir=pdir))'
+          'else:'
+          '    g = f.limit(x, a, dir=pdir)'
+          'return g,' };
+  L = python_cmd (cmd, sym(f), sym(x), sym(a), pdir);
 
 end
 

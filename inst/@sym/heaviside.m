@@ -65,14 +65,14 @@
 %% @end defmethod
 
 
-function y = heaviside(varargin)
-  if (nargin > 2)
+function y = heaviside(x, h0)
+  if (nargin == 1)
+    y = op_helper ('Heaviside', x);
+  elseif (nargin == 2)
+    y = op_helper ('Heaviside', sym(x), sym(h0));
+  else
     print_usage ();
   end
-
-  varargin = sym(varargin);
-  y = op_helper ('Heaviside', varargin{:});
-
 end
 
 

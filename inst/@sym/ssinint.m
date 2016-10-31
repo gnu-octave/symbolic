@@ -36,11 +36,6 @@
 %% @end defmethod
 
 function y = ssinint(x)
-
-  if nargin ~= 1
-    print_usage ();
-  end
-
   y = op_helper ('Si', x) - sym(pi)/2;
 end
 

@@ -50,10 +50,6 @@
 
 function L = lhs(f)
 
-  if nargin ~= 1
-    print_usage ();
-  end
-
   L = op_helper('lambda a: a.lhs', f);
 
 end

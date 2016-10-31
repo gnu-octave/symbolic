@@ -41,10 +41,6 @@
 
 function z = log10(x)
 
-  if nargin ~= 1
-    print_usage ();
-  end
-
   z = op_helper ('lambda x: sp.log(x, 10)', x);
 
 end
