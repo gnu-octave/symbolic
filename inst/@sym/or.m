@@ -46,7 +46,7 @@ function r = or(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'Or');
+  r = op_helper('Or', sym(x), sym(y));
 
 end
 

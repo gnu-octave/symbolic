@@ -60,7 +60,7 @@ function y = chebyshevT(n, x)
   if (nargin ~= 2)
     print_usage ();
   end
-  y = binop_helper(sym(n), sym(x), 'chebyshevt');
+  y = op_helper('chebyshevt', sym(n), sym(x));
 end
 
 

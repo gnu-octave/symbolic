@@ -40,7 +40,7 @@ function y = erf(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'erf');
+  y = op_helper ('erf', x);
 end
 
 

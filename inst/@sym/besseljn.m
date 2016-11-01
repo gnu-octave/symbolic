@@ -43,7 +43,7 @@ function Y = besseljn(n, x)
   if (nargin ~= 2)
     print_usage ();
   end
-  Y = binop_helper(n, x, 'jn');
+  Y = op_helper('jn', sym(n), sym(x));
 end
 
 

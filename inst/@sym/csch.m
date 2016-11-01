@@ -40,7 +40,7 @@ function y = csch(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'csch');
+  y = op_helper ('csch', x);
 end
 
 

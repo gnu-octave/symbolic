@@ -44,7 +44,7 @@ function y = acsch(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acsch');
+  y = op_helper ('acsch', x);
 end
 
 

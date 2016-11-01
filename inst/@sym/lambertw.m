@@ -55,11 +55,11 @@
 function W = lambertw(k, x)
   if (nargin == 1)
     x = sym(k);
-    W = uniop_helper (x, 'LambertW');
+    W = op_helper ('LambertW', x);
   elseif (nargin == 2)
     x = sym(x);
     k = sym(k);
-    W = binop_helper (x, k, 'LambertW');
+    W = op_helper ('LambertW', x, k);
   else
     print_usage ();
   end

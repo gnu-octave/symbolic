@@ -42,7 +42,7 @@ function y = dawson(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: exp(-a**2)*erfi(a)*(sqrt(S(pi))/2)');
+  y = op_helper ('lambda a: exp(-a**2)*erfi(a)*(sqrt(S(pi))/2)', x);
 end
 
 

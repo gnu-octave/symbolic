@@ -44,7 +44,7 @@ function t = ge(x, y)
     print_usage ();
   end
 
-  t = ineq_helper('>=', 'Ge', x, y);
+  t = ineq_helper('>=', 'Ge', sym(x), sym(y));
 
 end
 

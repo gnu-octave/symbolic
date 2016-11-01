@@ -45,7 +45,7 @@ function t = ne(x, y)
 
   % nanspecial is (python) 'True' here b/c nan is not equal
   % to everything, even itself.
-  t = ineq_helper('[donotuse]', 'Ne', x, y, 'S.true');
+  t = ineq_helper('[donotuse]', 'Ne', sym(x), sym(y), 'S.true');
 
 end
 

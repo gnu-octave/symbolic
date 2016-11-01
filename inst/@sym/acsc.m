@@ -40,7 +40,7 @@ function y = acsc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acsc');
+  y = op_helper ('acsc', x);
 end
 
 

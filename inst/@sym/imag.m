@@ -53,7 +53,7 @@ function y = imag(z)
     print_usage ();
   end
 
-  y = uniop_helper (z, 'im');
+  y = op_helper ('im', z);
 
 end
 

@@ -60,7 +60,6 @@ end
 %! a = sym ([1 2]);
 %!assert (~isempty (sym (1)))
 %!assert (isempty (sym (se)))
-%!assert (isempty (se == []))
 %!test
 % assert (isempty (a([])))
 % assert (isempty (a([se])))

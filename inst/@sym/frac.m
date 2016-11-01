@@ -39,7 +39,7 @@
 
 
 function y = frac(x)
-  y = uniop_helper (x, 'frac');
+  y = op_helper ('frac', x);
 end
 
 

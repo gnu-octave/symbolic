@@ -103,7 +103,7 @@ function y = expint(n, x)
     print_usage ();
   end
 
-  y = binop_helper (n, x, 'expint');
+  y = op_helper ('expint', sym(n), sym(x));
 end
 
 

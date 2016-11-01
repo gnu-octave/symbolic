@@ -40,7 +40,7 @@ function y = acoth(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acoth');
+  y = op_helper ('acoth', x);
 end
 
 

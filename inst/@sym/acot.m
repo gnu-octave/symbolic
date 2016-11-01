@@ -40,7 +40,7 @@ function y = acot(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acot');
+  y = op_helper ('acot', x);
 end
 
 

@@ -56,7 +56,7 @@ function L = polylog(s, z)
     print_usage ();
   end
 
-  L = binop_helper (s, z, 'polylog');
+  L = op_helper ('polylog', sym(s), sym(z));
 end
 
 

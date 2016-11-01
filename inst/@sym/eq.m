@@ -88,7 +88,7 @@ function t = eq(x, y)
     print_usage ();
   end
 
-  t = ineq_helper('[donotuse]', 'Eq', x, y);
+  t = ineq_helper('[donotuse]', 'Eq', sym(x), sym(y));
 
 end
 

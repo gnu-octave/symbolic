@@ -38,13 +38,10 @@
 
 function y = nextprime(x)
 
-  %y = uniop_helper (x, 'nextprime');
+  %y = op_helper ('nextprime', x);
 
   % workaround as upstream SymPy returns int, not sym
-  sf = { 'def sf(x):'
-         '    return S(nextprime(x))' };
-
-  y = uniop_helper (x, sf);
+  y = op_helper ('lambda a: S(nextprime(a))', x);
 
 end
 

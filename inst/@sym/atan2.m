@@ -46,7 +46,7 @@ function a = atan2(y, x)
     print_usage ();
   end
 
-  a = binop_helper (y, x, 'atan2');
+  a = op_helper ('atan2', sym(y), sym(x));
 
 end
 

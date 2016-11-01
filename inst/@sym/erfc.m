@@ -40,7 +40,7 @@ function y = erfc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'erfc');
+  y = op_helper ('erfc', x);
 end
 
 

@@ -34,7 +34,7 @@
 
 
 function y = round(x)
-  y = uniop_helper (x, 'lambda a: Integer(a.round())');
+  y = op_helper ('lambda a: Integer(a.round())', x);
 end
 
 

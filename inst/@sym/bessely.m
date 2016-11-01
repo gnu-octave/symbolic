@@ -41,7 +41,7 @@ function Y = bessely(n, x)
     print_usage ();
   end
 
-  Y = binop_helper(n, x, 'bessely');
+  Y = op_helper('bessely', sym(n), sym(x));
 
 end
 

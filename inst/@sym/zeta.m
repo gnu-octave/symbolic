@@ -40,7 +40,7 @@ function y = zeta(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'zeta');
+  y = op_helper ('zeta', x);
 end
 
 

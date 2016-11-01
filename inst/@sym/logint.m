@@ -40,7 +40,7 @@ function y = logint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'li');
+  y = op_helper ('li', x);
 end
 
 

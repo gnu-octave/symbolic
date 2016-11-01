@@ -40,7 +40,7 @@ function y = gammaln(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'loggamma');
+  y = op_helper ('loggamma', x);
 end
 
 

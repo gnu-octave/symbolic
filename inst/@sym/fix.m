@@ -34,7 +34,7 @@
 
 
 function y = fix(x)
-  y = uniop_helper (x, 'Integer');
+  y = op_helper ('Integer', x);
 end
 
 

@@ -63,7 +63,7 @@ function r = not(x)
     print_usage ();
   end
 
-  r = uniop_helper (x, 'Not');
+  r = op_helper ('Not', x);
 
 end
 

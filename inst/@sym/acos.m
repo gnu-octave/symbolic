@@ -40,7 +40,7 @@ function y = acos(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acos');
+  y = op_helper ('acos', x);
 end
 
 
