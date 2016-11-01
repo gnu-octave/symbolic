@@ -304,7 +304,12 @@ function varargout = sympref(cmd, arg)
             msg = 'Forcing sysoneline ipc: warning: this is for debugging';
           otherwise
             msg = '';
-            warning('Unsupported IPC mechanism: hope you know what you''re doing')
+            if (~ ischar (arg))
+              arg = num2str (arg);
+            end
+            warning('OctSymPy:sympref:invalidarg', ...
+                    'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
+                    arg)
         end
         if (verbose)
           disp(msg)
