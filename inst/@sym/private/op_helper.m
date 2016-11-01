@@ -55,9 +55,10 @@
 %% to a symbol.
 %%
 %% Notes:
-%%   This function don't actually works with MatrixSymbol
+%%   This function don't actually works with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
 %%   except if have a 1x1 size, in that case it always will ise that value.
+%%   Empty arrays are treated as elements.
 %%
 %% @end defmethod
 
@@ -74,12 +75,12 @@ function z = op_helper(scalar_fcn, varargin)
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
           'q = Matrix([0])'
-          'for i in _ins:'
-          '    if isinstance(i, MatrixBase) and i:'
+          'for A in _ins:'
+          '    if isinstance(A, MatrixBase) and A:'
           '        if q.shape == (1, 1):'
-          '            q = i'
+          '            q = A'
           '        else:'
-          '            assert q.shape == i.shape, "Matrices must have equal sizes"'
+          '            assert q.shape == A.shape, "Matrices must have equal sizes"'
           'for i in range(0, len(q)):'
           '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
           'return q,' ];
