@@ -61,11 +61,15 @@
 %% op_helper('lambda a, b: a == b', sym(A), {sym(B)})
 %%
 %% This example will compare every element of A with the entire matrix B.
+%% You can send more expressions in {} in various dimensions.
+%% Be careful with this, actually we don't have a safe way to check if
+%% the cell have regular dimensions, so the actual behavior will use
+%% the first found dimensions in the cell, others will be ignored.
 %%
 %% Notes:
 %%   This function don't actually works with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
-%%   except if have a 1x1 size, in that case it always will ise that value.
+%%   except if have a 1x1 size, in that case always will use that value.
 %%
 %% @end defmethod
 
@@ -82,15 +86,21 @@ function z = op_helper(scalar_fcn, varargin)
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
           'q = Matrix([0])'
+          'shape = lambda a: a.shape if isinstance(a, MatrixBase) else ((len(a),) + shape(a[0]) if isinstance(a, list) else ())'
+          'get = lambda a, b: (a[b[0]] if len(b) == 1 else get(a[b[0]], b[1:])) if isinstance(a, list) else a[b]'
+          'def get1(a, b):'
+          '    q = shape(a)'
+          '    return a[0] if q.count(1) == len(q) else get(a,b)'
           'for A in _ins:'
-          '    if isinstance(A, MatrixBase):'
-          '        if q.shape == (1, 1):'
+          '    if isinstance(A, (MatrixBase, list)):'
+          '        tmp = shape(q)'
+          '        if tmp.count(1) == len(tmp):'
           '            q = A'
           '        else:'
-          '            assert q.shape == A.shape, "Matrices must have equal sizes"'
-          'for i in range(0, len(q)):'
-          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
-          'return q,' ];
+          '            assert shape(q) == shape(A), "Matrices must have equal sizes"'
+          'for i in itertools.product(*map(Range, shape(q))):'
+          '    q[i] = _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins])'
+          'return (Matrix(q) if isinstance(q, list) else q),' ];
 
   z = python_cmd (cmd, varargin{:});
 
