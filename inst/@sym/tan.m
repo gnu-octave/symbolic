@@ -40,7 +40,7 @@ function y = tan(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('tan', x);
+  y = elementwise_op ('tan', x);
 end
 
 

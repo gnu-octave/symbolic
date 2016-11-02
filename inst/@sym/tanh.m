@@ -40,7 +40,7 @@ function y = tanh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('tanh', x);
+  y = elementwise_op ('tanh', x);
 end
 
 

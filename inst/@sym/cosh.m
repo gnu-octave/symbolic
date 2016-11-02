@@ -40,7 +40,7 @@ function y = cosh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('cosh', x);
+  y = elementwise_op ('cosh', x);
 end
 
 
