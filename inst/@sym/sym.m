@@ -160,8 +160,7 @@
 function s = sym(x, varargin)
 
   if (nargin == 0)
-    s = sym (0);
-    return
+    x = 0;
   end
 
   %% The actual class constructor
@@ -192,10 +191,10 @@ function s = sym(x, varargin)
   if (isa (x, 'sym'))
     if (nargin == 1)
       s = x;
+      return
     else
-      s = sym (x.flat, varargin{:});
+      x = x.flat;
     end
-    return
   end
 
   if (iscell (x))  % Handle Cells
@@ -226,11 +225,15 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'double'))  % Handle doubles
     if (~isreal (x))
-      s = sym (real (x)) + sym ('i')*sym (imag (x));
-      return
-
+      xx = {real(x); imag(x)};
     else
-      [s, flag] = magic_double_str (x);
+      xx = {x};
+    end
+    ss = cell(2,1);
+
+    for n = 1:numel(xx)
+      tmpx = xx{n};
+      [ss{n}, flag] = magic_double_str (tmpx);
       if (~flag)
         % Allow 1/3 and other "small" fractions.
         % Personally, I like a warning here so I can catch bugs.
@@ -238,30 +241,37 @@ function s = sym(x, varargin)
         % FIXME: could have sympy do this?  Or just make symbolic floats?
         warning('OctSymPy:sym:rationalapprox', ...
                 'Using rat() heuristics for double-precision input (is this what you wanted?)');
-        [N1, D1] = rat (x);
-        [N2, D2] = rat (x / pi);
+        [N1, D1] = rat (tmpx);
+        [N2, D2] = rat (tmpx / pi);
         if (10*abs (D2) < abs (D1))
           % use frac*pi if demoninator significantly shorter
-          s = sprintf ('return Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+          ss{n} = sprintf ('return Rational(%s, %s)*pi', num2str (N2), num2str (D2));
         else
-          s = sprintf ('return Rational(%s, %s)', num2str (N1), num2str (D1));
+          ss{n} = sprintf ('return Rational(%s, %s)', num2str (N1), num2str (D1));
         end
-        s = python_cmd (s);
+        ss{n} = python_cmd (ss{n});
       else
-        s = python_cmd ('return S(_ins[0])', s);
+        ss{n} = python_cmd ('return S(_ins[0])', ss{n});
       end
-      return
-
     end
+
+    if (~isreal (x))
+      sym_i = create_sym_with_s ('I');
+      s = ss{1} + sym_i*ss{2};
+    else
+      s = ss{1};
+    end
+    return
+
   elseif (islogical (x)) % Handle logical values
     s = python_cmd ('return S.true if _ins[0] else S.false', x);
     return
 
   elseif (isinteger (x)) % Handle integer vealues
-    s = sym (num2str (x, '%ld'));
-    return
+    x = num2str (x, '%ld');
+  end
 
-  elseif (isa (x, 'char'))
+  if (isa (x, 'char'))
 
     symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
 
@@ -321,34 +331,7 @@ function s = sym(x, varargin)
         warning ('Please avoid execute operations from sym function.');
       end
 
-      cmd = {'x = "{s}"'
-             'try:'
-             '    return (0, (0, 0), S(x, rational=True))'
-             'except Exception as e:'
-             '    lis = set()'
-             '    if "(" in x or ")" in x:'
-             '        x2 = split("\(|\)| |,", x)'
-             '        x2 = [p for p in x2 if p]'
-             '        for i in x2:'
-             '            try:'
-             '                if eval("callable(" + i + ")"):'
-             '                    lis.add(i)' 
-             '            except:'
-             '                pass'
-             '    if len(lis) > 0:'
-             '        return (str(e), (1, "" if len(lis) == 1 else "s"), "\", \"".join(str(e) for e in lis))'
-             '    return (str(e), (2, 0), x)' };
-           
-      [err flag s] = python_cmd (strrep (cmd, '{s}', x));
-      switch (flag{1})
-        case 1  % Bad call to python function
-          disp (['Python: ' err]);
-          disp (['error: Error using the "' s '" Python function' flag{2} ', you wrote it correctly?']);
-          error ('if this do not was intentional please use other var name.');
-        case 2  % Something else
-          disp (['Python: ' err]);
-          error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
-      end
+      s = create_sym_with_s (x);
       return
     end
   end
