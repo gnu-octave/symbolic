@@ -224,7 +224,8 @@ function s = sym(x, varargin)
     return
 
   elseif (isa (x, 'double'))  % Handle doubles
-    if (~isreal (x))
+    ima = ~isreal (x);
+    if (ima)
       xx = {real(x); imag(x)};
     else
       xx = {x};
@@ -255,7 +256,7 @@ function s = sym(x, varargin)
       end
     end
 
-    if (~isreal (x))
+    if (ima)
       sym_i = create_sym_with_s ('I');
       s = ss{1} + sym_i*ss{2};
     else
