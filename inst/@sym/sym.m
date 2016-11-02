@@ -203,6 +203,7 @@ function s = sym(x, varargin)
   end
 
   asm = {};
+  check = true;
 
   if (nargin >= 2)
     if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
@@ -224,6 +225,7 @@ function s = sym(x, varargin)
     return
 
   elseif (isa (x, 'double'))  % Handle doubles
+    check = false;
     ima = ~isreal (x);
     if (ima)
       xx = {real(x); imag(x)};
@@ -246,27 +248,28 @@ function s = sym(x, varargin)
         [N2, D2] = rat (tmpx / pi);
         if (10*abs (D2) < abs (D1))
           % use frac*pi if demoninator significantly shorter
-          ss{n} = sprintf ('return Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+          ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
         else
-          ss{n} = sprintf ('return Rational(%s, %s)', num2str (N1), num2str (D1));
+          ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
         end
-        ss{n} = python_cmd (ss{n});
       else
-        ss{n} = python_cmd ('return S(_ins[0])', ss{n});
+        ss{n} = sprintf ('S(%s)', ss{n});
       end
     end
 
     if (ima)
-      sym_i = create_sym_with_s ('I');
-      s = ss{1} + sym_i*ss{2};
+      x = sprintf('%s + I*%s', ss{1}, ss{2});
     else
-      s = ss{1};
+      x = ss{1};
     end
-    return
 
   elseif (islogical (x)) % Handle logical values
-    s = python_cmd ('return S.true if _ins[0] else S.false', x);
-    return
+    check = false;
+    if (x)
+      x = 'S.true';
+    else
+      x = 'S.false';
+    end
 
   elseif (isinteger (x)) % Handle integer vealues
     x = num2str (x, '%ld');
@@ -274,33 +277,35 @@ function s = sym(x, varargin)
 
   if (isa (x, 'char'))
 
-    symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
+    if (check)
+      symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
 
-    %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
-    r = 1;
-    xc = '';  % Used to check operators skipping first symbols
-    for i = 1:length (x)
-      if (strcmp (x (i), '-'))
-        r = r*-1;
-      elseif (~strcmp (x (i), '+'))
-        if (r == -1)
-          xc = x (i:end);
-          x = ['-' x(i:end)];
-        else
-          x = xc = x (i:end);
+      %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
+      r = 1;
+      xc = '';  % Used to check operators skipping first symbols
+      for i = 1:length (x)
+        if (strcmp (x (i), '-'))
+          r = r*-1;
+        elseif (~strcmp (x (i), '+'))
+          if (r == -1)
+            xc = x (i:end);
+            x = ['-' x(i:end)];
+          else
+            x = xc = x (i:end);
+          end
+          break
         end
-        break
       end
+
+      [x, flag] = magic_double_str (x);
+      x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
+
+      isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
     end
-
-    [x, flag] = magic_double_str (x);
-    x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
-    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
 
 %% Use Symbol with
 %     No Numbers        Words     Not Octave symbols
-    if (~isnum && regexp (x, '^\w+$') && ~flag)
+    if (check && ~isnum && regexp (x, '^\w+$') && ~flag)
 
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
@@ -327,9 +332,11 @@ function s = sym(x, varargin)
 
       assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
 
-      % Check if the user try to execute operations from sym
-      if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
-        warning ('Please avoid execute operations from sym function.');
+      if (check)
+        % Check if the user try to execute operations from sym
+        if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
+          warning ('Please avoid execute operations from sym function.');
+        end
       end
 
       s = create_sym_with_s (x);
