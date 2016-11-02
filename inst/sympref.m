@@ -382,6 +382,15 @@ end
 %!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
 %!error <line 3> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
+%% Test for correct line error in Python exceptions.
+%!error <raise ValueError> python_cmd('raise ValueError');
+%!error <raise ValueError> python_cmd('raise ValueError', sym('x'));
+%!error <raise ValueError> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <raise ValueError> python_cmd('raise ValueError', {1; 1; 1});
+%!error <raise ValueError> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <raise ValueError> python_cmd( {'x = 1' 'raise ValueError'} );
+%!error <1/0> python_cmd( {'x = 1' 'pass' '1/0'} );
+%!error <raise ValueError> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
