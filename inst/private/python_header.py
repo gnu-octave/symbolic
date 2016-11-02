@@ -37,6 +37,9 @@ try:
     from sympy.matrices.expressions.matexpr import MatrixElement
     # for hypergeometric
     from sympy.functions.special.hyper import TupleArg
+    # for sets
+    from sympy.sets.fancysets import *
+    from sympy.sets.sets import *
     from sympy.utilities.iterables import uniq
     import copy
     import binascii
