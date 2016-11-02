@@ -44,7 +44,7 @@ function r = and(x, y)
     print_usage ();
   end
 
-  r = op_helper('And', sym(x), sym(y));
+  r = elementwise_op ('And', sym(x), sym(y));
 
 end
 

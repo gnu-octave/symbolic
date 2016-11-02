@@ -45,9 +45,9 @@ function z = plus(x, y)
     return
   end
 
-  % Note op_helper *prefers* element-wise operations, which may not
+  % Note elementwise_op *prefers* element-wise operations, which may not
   % be what we always want here (e.g., see MatrixExpr test below).
-  %z = op_helper('lambda x, y: x + y', x, y);
+  %z = elementwise_op ('lambda x, y: x + y', x, y);
 
   % Instead, we do broadcasting only in special cases (to match
   % Octave behaviour) and otherwise leave it up to SymPy.

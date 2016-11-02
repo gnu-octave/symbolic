@@ -63,13 +63,13 @@ function A = airy(k, x)
   assert(isscalar(k))
 
   if (logical(k == 0))
-    A = op_helper('airyai', sym(x));
+    A = elementwise_op ('airyai', sym(x));
   elseif (logical(k == 1))
-    A = op_helper('airyaiprime', sym(x));
+    A = elementwise_op ('airyaiprime', sym(x));
   elseif (logical(k == 2))
-    A = op_helper('airybi', sym(x));
+    A = elementwise_op ('airybi', sym(x));
   elseif (logical(k == 3))
-    A = op_helper('airybiprime', sym(x));
+    A = elementwise_op ('airybiprime', sym(x));
   else
     error('airy: expecting K = 0, 1, 2, or 3')
   end

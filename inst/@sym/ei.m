@@ -61,7 +61,7 @@ function y = ei(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('Ei', x);
+  y = elementwise_op ('Ei', x);
 end
 
 

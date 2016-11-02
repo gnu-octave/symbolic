@@ -56,7 +56,7 @@ function L = polylog(s, z)
     print_usage ();
   end
 
-  L = op_helper ('polylog', sym(s), sym(z));
+  L = elementwise_op ('polylog', sym(s), sym(z));
 end
 
 

@@ -40,7 +40,7 @@ function y = gammaln(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('loggamma', x);
+  y = elementwise_op ('loggamma', x);
 end
 
 

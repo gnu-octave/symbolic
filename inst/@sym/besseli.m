@@ -41,7 +41,7 @@ function I = besseli(n, x)
     print_usage ();
   end
 
-  I = op_helper('besseli', sym(n), sym(x));
+  I = elementwise_op ('besseli', sym(n), sym(x));
 
 end
 

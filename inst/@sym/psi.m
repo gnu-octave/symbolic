@@ -59,7 +59,7 @@ function W = psi(k, x)
     print_usage ();
   end
 
-  W = op_helper ('polygamma', sym(k), sym(x));
+  W = elementwise_op ('polygamma', sym(k), sym(x));
 
 end
 

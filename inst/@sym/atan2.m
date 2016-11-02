@@ -46,7 +46,7 @@ function a = atan2(y, x)
     print_usage ();
   end
 
-  a = op_helper ('atan2', sym(y), sym(x));
+  a = elementwise_op ('atan2', sym(y), sym(x));
 
 end
 

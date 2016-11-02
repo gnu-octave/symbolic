@@ -46,9 +46,9 @@ function y = gammainc(z, a, which)
   end
 
   if (strcmp(which, 'lower'))
-    y = op_helper ('lowergamma', sym(a), sym(z));
+    y = elementwise_op ('lowergamma', sym(a), sym(z));
   elseif (strcmp(which, 'upper'))
-    y = op_helper ('uppergamma', sym(a), sym(z));
+    y = elementwise_op ('uppergamma', sym(a), sym(z));
   else
     print_usage ();
   end
