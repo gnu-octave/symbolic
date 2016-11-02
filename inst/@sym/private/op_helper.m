@@ -86,11 +86,22 @@ function z = op_helper(scalar_fcn, varargin)
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
           'q = Matrix([0])'
-          'shape = lambda a: a.shape if isinstance(a, MatrixBase) else ((len(a),) + shape(a[0]) if isinstance(a, list) else ())'
+          'shapeL = lambda a: (len(a),) + shapeL(a[0]) if isinstance(a, list) else ()'
+          'shape = lambda a: a.shape if isinstance(a, MatrixBase) else shapeL(a)'
           'get = lambda a, b: (a[b[0]] if len(b) == 1 else get(a[b[0]], b[1:])) if isinstance(a, list) else a[b]'
           'def get1(a, b):'
           '    q = shape(a)'
           '    return a[0] if q.count(1) == len(q) else get(a,b)'
+          'def setL(f, i, val):'
+          '    if len(i) == 1:'
+          '        f[i[0]] = val'
+          '    else:'
+          '        a(f[i[0]], i[1:], val)'
+          'def set(f, i, val):'
+          '    if isinstance(f, MatrixBase):'
+          '        f[i] = val'
+          '    else:'
+          '        setL(f, i, val)'
           'for A in _ins:'
           '    if isinstance(A, (MatrixBase, list)):'
           '        tmp = shape(q)'
@@ -99,8 +110,8 @@ function z = op_helper(scalar_fcn, varargin)
           '        else:'
           '            assert shape(q) == shape(A), "Matrices must have equal sizes"'
           'for i in itertools.product(*map(Range, shape(q))):'
-          '    q[i] = _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins])'
-          'return (Matrix(q) if isinstance(q, list) else q),' ];
+          '    set(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins]))'
+          'return q if isinstance(q, MatrixBase) else Matrix(q)' ];
 
   z = python_cmd (cmd, varargin{:});
 
