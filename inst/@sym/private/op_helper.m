@@ -54,11 +54,18 @@
 %% This example will send D ('+') to the function without convert the string
 %% to a symbol.
 %%
+%% If you need use a matrix as element, you can send is in a cell:
+%%
+%% A = [1, 2; 3, 4]
+%% B = [1, 1; 1, 1]
+%% op_helper('lambda a, b: a == b', sym(A), {sym(B)})
+%%
+%% This example will compare every element of A with the entire matrix B.
+%%
 %% Notes:
 %%   This function don't actually works with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
 %%   except if have a 1x1 size, in that case it always will ise that value.
-%%   Empty arrays are treated as elements.
 %%
 %% @end defmethod
 
@@ -76,13 +83,13 @@ function z = op_helper(scalar_fcn, varargin)
   cmd = [ cmd
           'q = Matrix([0])'
           'for A in _ins:'
-          '    if isinstance(A, MatrixBase) and A:'
+          '    if isinstance(A, MatrixBase):'
           '        if q.shape == (1, 1):'
           '            q = A'
           '        else:'
           '            assert q.shape == A.shape, "Matrices must have equal sizes"'
           'for i in range(0, len(q)):'
-          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
+          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
           'return q,' ];
 
   z = python_cmd (cmd, varargin{:});
