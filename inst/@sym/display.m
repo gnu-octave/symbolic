@@ -136,11 +136,13 @@ function display(x)
   s = [s1 s2];
   n = ustr_length (s);
   %fputs (1, s);  % only in octave, not matlab
-  disp (s)
+
   if (display_snippet)
     % again, fputs safer, but not in matlab
-    fprintf (snippet_of_sympy (x, 7, term_width - n, unicode_dec))
+    s = [s snippet_of_sympy(x, 7, term_width - n, unicode_dec)];
   end
+
+  disp (s)
 
   if (toobig)
     if (loose), fprintf ('\n'); end

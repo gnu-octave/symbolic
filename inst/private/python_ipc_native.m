@@ -65,8 +65,6 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'import sympy as sp'
                     'from sympy import __version__ as spver'
                     'from sympy import *'
-                    'from sympy.sets.fancysets import *'
-                    'from sympy.sets.sets import *'
                     'from sympy.logic.boolalg import Boolean, BooleanFunction'
                     'from sympy.core.relational import Relational'
                     '# temporary? for piecewise support'
@@ -75,6 +73,9 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'from sympy.matrices.expressions.matexpr import MatrixElement'
                     '# for hypergeometric'
                     'from sympy.functions.special.hyper import TupleArg'
+                    '# for sets
+                    'from sympy.sets.fancysets import *'
+                    'from sympy.sets.sets import *'
                     'from sympy.utilities.iterables import uniq'
                     'import copy'
                     'import struct'
