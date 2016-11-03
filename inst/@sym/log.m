@@ -40,7 +40,7 @@ function y = log(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('log', x);
+  y = elementwise_op ('log', x);
 end
 
 

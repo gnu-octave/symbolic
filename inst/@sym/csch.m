@@ -40,7 +40,7 @@ function y = csch(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('csch', x);
+  y = elementwise_op ('csch', x);
 end
 
 

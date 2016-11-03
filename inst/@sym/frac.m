@@ -39,7 +39,10 @@
 
 
 function y = frac(x)
-  y = op_helper ('frac', x);
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('frac', x);
 end
 
 

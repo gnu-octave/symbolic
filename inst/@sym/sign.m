@@ -40,7 +40,7 @@ function y = sign(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('sign', x);
+  y = elementwise_op ('sign', x);
 end
 
 

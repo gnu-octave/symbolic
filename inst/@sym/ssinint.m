@@ -36,7 +36,7 @@
 %% @end defmethod
 
 function y = ssinint(x)
-  y = op_helper ('Si', x) - sym(pi)/2;
+  y = elementwise_op ('Si', x) - sym(pi)/2;
 end
 
 

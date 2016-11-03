@@ -40,7 +40,7 @@ function y = factorial(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('factorial', x);
+  y = elementwise_op ('factorial', x);
 end
 
 

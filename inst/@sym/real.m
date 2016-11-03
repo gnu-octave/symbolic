@@ -49,7 +49,7 @@ function y = real(z)
     print_usage ();
   end
 
-  y = op_helper ('re', z);
+  y = elementwise_op ('re', z);
 
 end
 

@@ -40,7 +40,7 @@ function y = sinh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('sinh', x);
+  y = elementwise_op ('sinh', x);
 end
 
 

@@ -50,7 +50,7 @@
 
 function L = lhs(f)
 
-  L = op_helper('lambda a: a.lhs', f);
+  L = elementwise_op ('lambda a: a.lhs', f);
 
 end
 

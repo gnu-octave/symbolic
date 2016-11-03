@@ -40,7 +40,7 @@ function y = logint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('li', x);
+  y = elementwise_op ('li', x);
 end
 
 

@@ -48,7 +48,7 @@
 function z = isprime(x)
 
   % this will give True/False/None
-  %z = op_helper('lambda x: x.is_prime', x);
+  %z = elementwise_op ('lambda x: x.is_prime', x);
   %z = uniop_bool_helper(x, 'lambda x: x.is_prime', 'sym');
 
   sf = { 'def sf(x):'

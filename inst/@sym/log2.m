@@ -42,7 +42,7 @@
 
 function z = log2(x)
 
-  z = op_helper ('lambda x: sp.log(x, 2)', x);
+  z = elementwise_op ('lambda x: sp.log(x, 2)', x);
 
 end
 

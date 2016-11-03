@@ -55,11 +55,11 @@
 function W = lambertw(k, x)
   if (nargin == 1)
     x = sym(k);
-    W = op_helper ('LambertW', x);
+    W = elementwise_op ('LambertW', x);
   elseif (nargin == 2)
     x = sym(x);
     k = sym(k);
-    W = op_helper ('LambertW', x, k);
+    W = elementwise_op ('LambertW', x, k);
   else
     print_usage ();
   end

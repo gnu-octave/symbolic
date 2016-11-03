@@ -40,7 +40,7 @@ function y = acsc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('acsc', x);
+  y = elementwise_op ('acsc', x);
 end
 
 

@@ -41,7 +41,7 @@ function J = besselj(n, x)
     print_usage ();
   end
 
-  J = op_helper('besselj', sym(n), sym(x));
+  J = elementwise_op ('besselj', sym(n), sym(x));
 
 end
 

@@ -67,9 +67,9 @@
 
 function y = heaviside(x, h0)
   if (nargin == 1)
-    y = op_helper ('Heaviside', x);
+    y = elementwise_op ('Heaviside', x);
   elseif (nargin == 2)
-    y = op_helper ('Heaviside', sym(x), sym(h0));
+    y = elementwise_op ('Heaviside', sym(x), sym(h0));
   else
     print_usage ();
   end

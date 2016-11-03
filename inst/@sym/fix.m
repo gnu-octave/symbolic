@@ -34,7 +34,10 @@
 
 
 function y = fix(x)
-  y = op_helper ('Integer', x);
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('Integer', x);
 end
 
 

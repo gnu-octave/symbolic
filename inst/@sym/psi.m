@@ -59,7 +59,7 @@ function W = psi(k, x)
     print_usage ();
   end
 
-  W = op_helper ('polygamma', sym(k), sym(x));
+  W = elementwise_op ('polygamma', sym(k), sym(x));
 
 end
 
@@ -119,10 +119,12 @@ end
 %!test
 %! % round trip
 %! if (exist ('psi','builtin'))
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! f = psi (x);
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = psi (1.1);
 %! assert (A, B)
+%! end
 %! end

@@ -40,7 +40,7 @@ function y = acot(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('acot', x);
+  y = elementwise_op ('acot', x);
 end
 
 
