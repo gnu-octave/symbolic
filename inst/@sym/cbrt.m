@@ -42,7 +42,7 @@ function y = cbrt(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('cbrt', x);
+  y = elementwise_op ('cbrt', x);
 end
 
 

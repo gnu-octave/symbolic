@@ -40,7 +40,7 @@ function y = coshint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('Chi', x);
+  y = elementwise_op ('Chi', x);
 end
 
 

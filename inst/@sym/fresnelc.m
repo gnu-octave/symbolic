@@ -43,7 +43,7 @@ function J = fresnelc (x)
   if (nargin ~= 1)
     print_usage ();
   end
-  J = op_helper('fresnelc', x);
+  J = elementwise_op ('fresnelc', x);
 end
 
 

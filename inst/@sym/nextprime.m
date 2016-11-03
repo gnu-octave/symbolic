@@ -38,10 +38,10 @@
 
 function y = nextprime(x)
 
-  %y = op_helper ('nextprime', x);
+  %y = elementwise_op ('nextprime', x);
 
   % workaround as upstream SymPy returns int, not sym
-  y = op_helper ('lambda a: S(nextprime(a))', x);
+  y = elementwise_op ('lambda a: S(nextprime(a))', x);
 
 end
 

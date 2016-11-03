@@ -40,7 +40,7 @@ function y = atanh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('atanh', x);
+  y = elementwise_op ('atanh', x);
 end
 
 

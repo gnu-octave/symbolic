@@ -40,7 +40,7 @@ function y = sin(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('sin', x);
+  y = elementwise_op ('sin', x);
 end
 
 

@@ -43,7 +43,7 @@ function Y = besseljn(n, x)
   if (nargin ~= 2)
     print_usage ();
   end
-  Y = op_helper('jn', sym(n), sym(x));
+  Y = elementwise_op ('jn', sym(n), sym(x));
 end
 
 

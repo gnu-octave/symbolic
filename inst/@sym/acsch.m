@@ -44,7 +44,7 @@ function y = acsch(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('acsch', x);
+  y = elementwise_op ('acsch', x);
 end
 
 

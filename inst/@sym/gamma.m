@@ -40,7 +40,7 @@ function y = gamma(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('gamma', x);
+  y = elementwise_op ('gamma', x);
 end
 
 

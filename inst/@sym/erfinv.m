@@ -40,7 +40,7 @@ function y = erfinv(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('erfinv', x);
+  y = elementwise_op ('erfinv', x);
 end
 
 

@@ -34,7 +34,10 @@
 
 
 function y = round(x)
-  y = op_helper ('lambda a: Integer(a.round())', x);
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('lambda a: Integer(a.round())', x);
 end
 
 

@@ -40,7 +40,7 @@ function y = ceil(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('ceiling', x);
+  y = elementwise_op ('ceiling', x);
 end
 
 

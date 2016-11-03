@@ -77,7 +77,7 @@ function z = conj(x)
          '        return x'
          '    return x.conjugate()' };
 
-  z = op_helper (sf, x);
+  z = elementwise_op (sf, x);
 
 end
 
