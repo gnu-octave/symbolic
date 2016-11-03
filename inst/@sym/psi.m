@@ -119,10 +119,12 @@ end
 %!test
 %! % round trip
 %! if (exist ('psi','builtin'))
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! f = psi (x);
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = psi (1.1);
 %! assert (A, B)
+%! end
 %! end
