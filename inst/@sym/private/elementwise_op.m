@@ -92,32 +92,23 @@ function z = elementwise_op(scalar_fcn, varargin)
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
           'q = Matrix([0])'
-          'shapeL = lambda a: (len(a),) + shapeL(a[0]) if isinstance(a, list) else ()'
-          'shape = lambda a: a.shape if isinstance(a, MatrixBase) else shapeL(a)'
-          'get = lambda a, b: (a[b[0]] if len(b) == 1 else get(a[b[0]], b[1:])) if isinstance(a, list) else a[b]'
-          'def get1(a, b):'
-          '    q = shape(a)'
-          '    return a[0] if q.count(1) == len(q) else get(a,b)'
-          'def setL(f, i, val):'
-          '    if len(i) == 1:'
-          '        f[i[0]] = val'
-          '    else:'
-          '        a(f[i[0]], i[1:], val)'
-          'def set(f, i, val):'
-          '    if isinstance(f, MatrixBase):'
-          '        f[i] = val'
-          '    else:'
-          '        setL(f, i, val)'
+          's = (1, 1)'
           'for A in _ins:'
+  #       '    if isinstance(A, (MatrixBase, list, NDimArray)):'
           '    if isinstance(A, (MatrixBase, list)):'
-          '        tmp = shape(q)'
-          '        if tmp.count(1) == len(tmp):'
+          '        if s.count(1) == len(s):'
           '            q = A'
+          '            s = shapeM(q)'
           '        else:'
-          '            assert shape(q) == shape(A), "Matrices must have equal sizes"'
-          'for i in itertools.product(*map(Range, shape(q))):'
-          '    set(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins]))'
-          'return q if isinstance(q, MatrixBase) else Matrix(q)' ];
+          '            assert shapeM(q) == shapeM(A), "Matrices must have equal sizes"'
+          'for i in itertools.product(*map(Range, s)):'
+  #       '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list, NDimArray)) else k for k in _ins]))'
+          '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins]))'
+  #       'return (Matrix(q) if len(s) <= 2 else MutableDenseNDimArray(q)) if isinstance(q, list) else q'
+          'return Matrix(q) if isinstance(q, list) else q' ];
+
+  %% FIXME:Notes for Tensor
+  % Dear hacker from the distant future, can you replace with the right lines?
 
   z = python_cmd (cmd, varargin{:});
 

@@ -92,7 +92,30 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'def Version(v):'
                     '    # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
                     '    return LooseVersion(v.replace(".dev", ""))'
-                  }, newl))
+                    '# Specific shape of List'
+                    'shapeL = lambda a: (len(a),) + shapeL(a[0]) if isinstance(a, list) else ()'
+                    '# Shape of List or MatrixBase or Array'
+                    'shapeM = lambda a: shapeL(a) if isinstance(a, list) else a.shape'
+                    '# Get multidim element of List'
+                    'getL = lambda a, b: a[b[0]] if len(b) == 1 else getL(a[b[0]], b[1:])'
+                    '# Get multidim element of List or MatrixBase or Array'
+                    'getM = lambda a, b: getL(a, b) if isinstance(a, list) else a[b]'
+                    '# Get first element if only exist 1, else return the specified element.'
+                    'def get1(a, b):'
+                    '    q = shapeM(a)'
+                    '    return a[0] if q.count(1) == len(q) else getM(a,b)'
+                    '# Set multidim List element'
+                    'def setL(f, i, val):'
+                    '    if len(i) == 1:'
+                    '        f[i[0]] = val'
+                    '    else:'
+                    '        setL(f[i[0]], i[1:], val)'
+                    '# Set multidim element of List or MatrixBase or Array'
+                    'def setM(f, i, val):'
+                    '    if isinstance(f, list):'
+                    '        setL(f, i, val)'
+                    '    else:'
+                    '        f[i] = val' }, newl))
     have_headers = true;
   end
 
