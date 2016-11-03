@@ -1,5 +1,12 @@
 SHELL   = /bin/bash
 
+## Copyright 2016 Colin B. Macdonald
+##
+## Copying and distribution of this file, with or without modification,
+## are permitted in any medium without royalty provided the copyright
+## notice and this notice are preserved.  This file is offered as-is,
+## without any warranty.
+
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 BUILD_DIR = tmp
@@ -13,21 +20,20 @@ HTML_TARBALL_COMPRESSED = ${HTML_DIR}.tar.gz
 OCTAVE ?= octave
 MATLAB ?= matlab
 
-TEST_CODE=success = doctest({'doctest', 'test/', 'test/examples/'}); exit(~success);
-
-
-.PHONY: help clean install test test-interactive matlab_test matlab_pkg octave_pkg octave_html
+.PHONY: help clean install test doctest pkg html matlab_test matlab_pkg
 
 help:
 	@echo Available rules:
 	@echo "  clean              clean all temporary files"
 	@echo "  install            install package in Octave"
 	@echo "  test               run tests with Octave"
-	@echo "  test-interactive   run tests with Octave in interactive mode"
+	@echo "  doctest            run doctests with Octave"
+	@echo "  pkg                create Octave package (${OCTAVE_RELEASE_TARBALL_COMPRESSED})"
+	@echo "  html               create Octave Forge website"
+	@echo
 	@echo "  matlab_test        run tests with Matlab"
 	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_DIR}.zip)"
-	@echo "  octave_pkg         create Octave package (${OCTAVE_RELEASE_TARBALL_COMPRESSED})"
-	@echo "  octave_html        create Octave Forge website"
+
 
 
 ${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private:
@@ -35,16 +41,31 @@ ${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private:
 
 clean:
 	rm -rf "${BUILD_DIR}"
+	@#rm -f fntests.log
+	rm -f octsympy_tests.log
 
 test:
-	${OCTAVE} --path ${PWD}/inst --eval "${TEST_CODE}"
+	@echo "Testing package in GNU Octave ..."
+	@$(OCTAVE) --no-gui --silent --path "${PWD}/inst" \
+		--eval "set (0, 'defaultfigurevisible', 'off'); \
+		 octsympy_tests; \
+		 sympref reset"
+	@! grep '!!!!! test failed' octsympy_tests.log
+	@echo
 
-test-interactive:
-	script --quiet --command "${OCTAVE} --path ${PWD}/inst --eval \"${TEST_CODE}\"" /dev/null
+doctest:
+	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
+	@# Otherwise, it will make the doctests fail
+	@echo "Testing documentation strings ..."
+	@$(OCTAVE) --no-gui --silent --path "${PWD}/inst" \
+		--eval "pkg load doctest; \
+		 sym ('x'); \
+		 set (0, 'defaultfigurevisible', 'off'); \
+		 success = doctest('inst/'); \
+		 sympref reset; \
+		 exit (!success)"
+	@echo
 
-
-matlab_test:
-	${MATLAB} -nojvm -nodisplay -nosplash -r "addpath('inst'); ${TEST_CODE}"
 
 ## Install in Octave (locally)
 install: ${INSTALLED_PACKAGE}
@@ -55,12 +76,12 @@ ${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 ${OCTAVE_RELEASE_TARBALL}: .git/index | ${BUILD_DIR}
 	git archive --output="$@" --prefix=${PACKAGE}-${VERSION}/ HEAD
 	tar --delete --file "$@" ${PACKAGE}-${VERSION}/README.matlab.md
-octave_pkg: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
+pkg: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 ${OCTAVE_RELEASE_TARBALL_COMPRESSED}: ${OCTAVE_RELEASE_TARBALL}
 	(cd "${BUILD_DIR}" && gzip --best -f -k "../$<")
 
 ## HTML Documentation for Octave Forge
-octave_html: ${HTML_TARBALL_COMPRESSED}
+html: ${HTML_TARBALL_COMPRESSED}
 ${HTML_TARBALL_COMPRESSED}: ${INSTALLED_PACKAGE} | ${BUILD_DIR}
 	rm -rf "${HTML_DIR}"
 	$(OCTAVE) --silent --eval \
@@ -69,6 +90,7 @@ ${HTML_TARBALL_COMPRESSED}: ${INSTALLED_PACKAGE} | ${BUILD_DIR}
 		 generate_package_html ('${PACKAGE}', '${HTML_DIR}', options)"
 	tar --create --auto-compress --transform="s!^${BUILD_DIR}/!!" --file "$@" "${HTML_DIR}"
 
+## Matlab packaging
 matlab_pkg: | ${BUILD_DIR}/${MATLAB_PKG_DIR}/private
 	$(OCTAVE) --path ${PWD}/util --silent --eval \
 		"convert_comments('inst/', '', '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
@@ -78,3 +100,6 @@ matlab_pkg: | ${BUILD_DIR}/${MATLAB_PKG_DIR}/private
 	cp -ra NEWS ${BUILD_DIR}/${MATLAB_PKG_DIR}/
 	cp -ra README.matlab.md ${BUILD_DIR}/${MATLAB_PKG_DIR}/
 	pushd ${BUILD_DIR}; zip -r ${MATLAB_PKG_DIR}.zip ${MATLAB_PKG_DIR}; popd
+
+matlab_test:
+	${MATLAB} -nojvm -nodisplay -nosplash -r "addpath('inst'); octsympy_tests_matlab"
