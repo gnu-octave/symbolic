@@ -40,7 +40,7 @@ function y = sinhint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('Shi', x);
+  y = elementwise_op ('Shi', x);
 end
 
 

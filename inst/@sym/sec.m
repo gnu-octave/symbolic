@@ -40,7 +40,7 @@ function y = sec(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('sec', x);
+  y = elementwise_op ('sec', x);
 end
 
 

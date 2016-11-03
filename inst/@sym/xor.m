@@ -45,7 +45,7 @@ function r = xor(x, y)
     print_usage ();
   end
 
-  r = op_helper('Xor', sym(x), sym(y));
+  r = elementwise_op ('Xor', sym(x), sym(y));
 
 end
 

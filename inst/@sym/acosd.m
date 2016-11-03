@@ -44,7 +44,7 @@ function y = acosd(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('lambda a: deg(acos(a))', x);
+  y = elementwise_op ('lambda a: deg(acos(a))', x);
 end
 
 

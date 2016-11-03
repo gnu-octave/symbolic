@@ -63,7 +63,7 @@ function r = not(x)
     print_usage ();
   end
 
-  r = op_helper ('Not', x);
+  r = elementwise_op ('Not', x);
 
 end
 

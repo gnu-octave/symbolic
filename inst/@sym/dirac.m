@@ -40,7 +40,7 @@ function y = dirac(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('DiracDelta', x);
+  y = elementwise_op ('DiracDelta', x);
 end
 
 

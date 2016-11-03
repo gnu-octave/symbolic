@@ -64,9 +64,9 @@ function L = laguerreL(n, alpha, x)
 
   if (nargin == 2)
     x = alpha;
-    L = op_helper('laguerre', sym(n), sym(x));
+    L = elementwise_op ('laguerre', sym(n), sym(x));
   elseif (nargin == 3)
-    L = op_helper('assoc_laguerre', sym(n), sym(alpha), sym(x));
+    L = elementwise_op ('assoc_laguerre', sym(n), sym(alpha), sym(x));
   else
     print_usage ();
   end

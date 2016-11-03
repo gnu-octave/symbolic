@@ -40,7 +40,7 @@ function y = sech(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('sech', x);
+  y = elementwise_op ('sech', x);
 end
 
 

@@ -40,7 +40,7 @@
 
 function R = rhs(f)
 
-  R = op_helper('lambda a: a.rhs', f);
+  R = elementwise_op ('lambda a: a.rhs', f);
 
 end
 

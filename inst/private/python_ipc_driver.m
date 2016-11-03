@@ -43,9 +43,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   if (strcmp(lower(which_ipc), 'default'))
-    if ((exist('pyeval') > 1) && (exist('pyexec') > 1))
-      which_ipc = 'native';
-    elseif (exist('popen2') > 1)
+    if (exist('popen2') > 1)
       which_ipc = 'popen2';
     else
       which_ipc = 'system';

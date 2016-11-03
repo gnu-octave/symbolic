@@ -42,7 +42,7 @@ function y = dawson(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('lambda a: exp(-a**2)*erfi(a)*(sqrt(S(pi))/2)', x);
+  y = elementwise_op ('lambda a: exp(-a**2)*erfi(a)*(sqrt(S(pi))/2)', x);
 end
 
 

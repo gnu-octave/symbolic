@@ -60,7 +60,7 @@ function y = chebyshevU(n, x)
   if (nargin ~= 2)
     print_usage ();
   end
-  y = op_helper('chebyshevu', sym(n), sym(x));
+  y = elementwise_op ('chebyshevu', sym(n), sym(x));
 end
 
 

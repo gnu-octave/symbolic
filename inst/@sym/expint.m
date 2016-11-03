@@ -103,7 +103,7 @@ function y = expint(n, x)
     print_usage ();
   end
 
-  y = op_helper ('expint', sym(n), sym(x));
+  y = elementwise_op ('expint', sym(n), sym(x));
 end
 
 

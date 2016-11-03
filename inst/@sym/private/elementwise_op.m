@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -19,40 +19,46 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod op_helper (@var{scalar_fcn}, @var{dor})
-%% Apply function element-by-element with the input vars in @var{scalar_fcn}
-%% Private helper
+%% @defmethod  elementwise_op (@var{scalar_fcn}, @var{A})
+%% @defmethodx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B})
+%% @defmethodx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B}, @dots{})
+%% Apply a scalar function element-by-element to the inputs.
 %%
-%% Example:
-%% A = sym([3])
-%% B = sym([4 5 6;7 4 2])
-%% op_helper('lambda a,b: a % b', A, B)
+%% Examples:
+%% @example
+%% A = sym(3)
+%% B = sym([4 5 6; 7 4 2])
+%% elementwise_op('lambda a, b: a % b', A, B)
 %%
-%% op_helper('round', B)
-%% 
-%% If you need use a complex function you can declare a _op
-%% python function in a cell and use it:
+%% elementwise_op('round', B)
+%% @end example
 %%
-%% scalar_fcn = { 'def _op(a,b,c,d):' '    return a % c + d / b' }
-%% A = 3
-%% B = [1 2;3 4]
-%% C = inv(B)
-%% D = 1
+%% If you need use a complicated function you can declare an @code{_op}
+%% python function in a cell array and use it:
 %%
-%% op_helper(scalar_fcn, sym(A), sym(B), sym(C), sym(D))
+%% @example:
+%% scalar_fcn = @{ 'def _op(a,b,c,d):' '    return a % c + d / b' @};
+%% A = 3;
+%% B = [1 2;3 4];
+%% C = inv(B);
+%% D = 1;
+%% elementwise_op(scalar_fcn, sym(A), sym(B), sym(C), sym(D))
+%% @end example
 %%
 %% As you can see you need declare when you need a sym object,
 %% or the function will use it in a literal way.
 %%
+%% @example
 %% syms x
-%% A = [x -x sin(x)/x]
-%% B = x
-%% C = [-inf, 0, inf]
-%% D = '+'
-%% op_helper('lambda a, b, c, d: a.limit(b, c, d)', sym(A), sym(B), sym(C), D)
+%% A = [x -x sin(x)/x];
+%% B = x;
+%% C = [-inf, 0, inf];
+%% D = '+';
+%% elementwise_op('lambda a, b, c, d: a.limit(b, c, d)', sym(A), sym(B), sym(C), D)
+%% @end example
 %%
-%% This example will send D ('+') to the function without convert the string
-%% to a symbol.
+%% This example will send @code{D} (@qcode{'+'}) to the function without
+%% converting the string to a symbol.
 %%
 %% If you need use a matrix as element, you can send is in a cell:
 %%
@@ -67,14 +73,14 @@
 %% the first found dimensions in the cell, others will be ignored.
 %%
 %% Notes:
-%%   This function don't actually works with MatrixSymbol.
+%%   This function doesn't work with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
 %%   except if have a 1x1 size, in that case always will use that value.
 %%
 %% @end defmethod
 
 
-function z = op_helper(scalar_fcn, varargin)
+function z = elementwise_op(scalar_fcn, varargin)
 
   if (iscell(scalar_fcn))
     %assert strncmp(scalar_fcn_str, 'def ', 4)

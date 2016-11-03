@@ -43,7 +43,7 @@ function J = fresnels (x)
   if (nargin ~= 1)
     print_usage ();
   end
-  J = op_helper('fresnels', x);
+  J = elementwise_op ('fresnels', x);
 end
 
 

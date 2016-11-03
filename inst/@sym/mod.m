@@ -74,7 +74,7 @@ function z = mod(x, n, canpoly)
   isconst = isempty (findsymbols (x));
 
   if (~canpoly || isconst)
-    z = op_helper('lambda a,b: a % b', sym(x), sym(n));
+    z = elementwise_op ('lambda a,b: a % b', sym(x), sym(n));
 
   else
     %% its not constant, assume everything is poly and mod the coefficients

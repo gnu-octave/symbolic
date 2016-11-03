@@ -38,7 +38,7 @@ function r = beta(x, y)
     print_usage ();
   end
 
-  r = op_helper('beta', sym(x), sym(y));
+  r = elementwise_op ('beta', sym(x), sym(y));
 
 end
 

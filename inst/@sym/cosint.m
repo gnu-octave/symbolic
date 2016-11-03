@@ -40,7 +40,7 @@ function y = cosint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('Ci', x);
+  y = elementwise_op ('Ci', x);
 end
 
 

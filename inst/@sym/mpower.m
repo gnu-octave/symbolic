@@ -42,14 +42,14 @@
 %%       ⎢    ⎥
 %%       ⎣0  x⎦
 %% A^2
-%%   @result{} ans = (sym 2×2 matrix)
+%%   @result{} (sym 2×2 matrix)
 %%       ⎡ 2           ⎤
 %%       ⎢π   2⋅x + 2⋅π⎥
 %%       ⎢             ⎥
 %%       ⎢        2    ⎥
 %%       ⎣0      x     ⎦
 %% A^2 == A*A
-%%   @result{} ans = (sym 2×2 matrix)
+%%   @result{} (sym 2×2 matrix)
 %%       ⎡True  True⎤
 %%       ⎢          ⎥
 %%       ⎣True  True⎦
@@ -59,8 +59,6 @@
 %% @seealso{@@sym/power}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mpower(x, y)
 
@@ -78,6 +76,7 @@ function z = mpower(x, y)
   z = python_cmd (cmd, sym(x), sym(y));
 
 end
+
 
 %!test
 %! syms x

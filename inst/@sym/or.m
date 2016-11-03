@@ -46,7 +46,7 @@ function r = or(x, y)
     print_usage ();
   end
 
-  r = op_helper('Or', sym(x), sym(y));
+  r = elementwise_op ('Or', sym(x), sym(y));
 
 end
 

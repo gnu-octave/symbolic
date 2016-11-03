@@ -40,7 +40,7 @@ function y = erfc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('erfc', x);
+  y = elementwise_op ('erfc', x);
 end
 
 

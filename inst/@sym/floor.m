@@ -40,7 +40,7 @@ function y = floor(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = op_helper ('floor', x);
+  y = elementwise_op ('floor', x);
 end
 
 

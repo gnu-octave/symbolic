@@ -53,7 +53,7 @@ function y = imag(z)
     print_usage ();
   end
 
-  y = op_helper ('im', z);
+  y = elementwise_op ('im', z);
 
 end
 
