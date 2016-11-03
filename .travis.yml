@@ -27,8 +27,7 @@ install:
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
-        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
-        mv pytave_main pytave;
+        hg clone https://bitbucket.org/genuinelucifer/pytave_main pytave;
         pushd pytave;
         hg checkout travis;
         pwd;
@@ -43,7 +42,6 @@ script:
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
   - stty cols $COLUMNS rows 40
   - tput cols; stty size
-  - pushd src; make; popd
   - pushd inst
   - octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "r = octsympy_tests; exit(r)"
   - cat octsympy_tests.log
