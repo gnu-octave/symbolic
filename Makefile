@@ -49,9 +49,9 @@ test:
 	@echo "Testing package in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --path "${PWD}/inst" \
 		--eval "set (0, 'defaultfigurevisible', 'off'); \
-		 octsympy_tests; \
-		 sympref reset"
-	@! grep '!!!!! test failed' octsympy_tests.log
+		 anyfail = octsympy_tests; \
+		 sympref reset; \
+		 exit (anyfail)"
 	@echo
 
 doctest:
