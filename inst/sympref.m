@@ -369,6 +369,9 @@ function r = tf_from_input(s)
 end
 
 
+%!shared sympref_orig
+%! sympref_orig = sympref ();
+
 %!test
 %! % test quiet, side effect of making following tests a bit less noisy!
 %! sympref quiet on
@@ -428,7 +431,8 @@ end
 %!test
 %! syms x
 %! r = sympref('reset');
+%! % restore original sympref settings
+%! sympref ('ipc',   sympref_orig.ipc);
+%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
-%! % ok, can be noisy again
-%! sympref('quiet', 'default')
