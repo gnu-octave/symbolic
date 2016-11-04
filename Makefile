@@ -77,9 +77,18 @@ ${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 ${OCTAVE_RELEASE_TARBALL}: .git/index | ${BUILD_DIR}
 	git archive --output="$@" --prefix=${PACKAGE}-${VERSION}/ HEAD
 	tar --delete --file "$@" ${PACKAGE}-${VERSION}/README.matlab.md
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/HOWTO-release.md
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/README.bundled.md
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/TODO.md
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/testing
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/util
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/.gitignore
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/.mailmap
+	tar --delete --file "$@" ${PACKAGE}-${VERSION}/screenshot*.png
 pkg: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 ${OCTAVE_RELEASE_TARBALL_COMPRESSED}: ${OCTAVE_RELEASE_TARBALL}
 	(cd "${BUILD_DIR}" && gzip --best -f -k "../$<")
+## TODO: make zip file
 
 ## HTML Documentation for Octave Forge
 html: ${HTML_TARBALL_COMPRESSED}
