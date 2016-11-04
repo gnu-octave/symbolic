@@ -5,25 +5,29 @@ language: generic
 
 matrix:
   include:
-    - env: PYTHON=python2 PYTHON_VER="" PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER="3" PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 before_install:
   - if [ "x$OCT_PPA" = "xyes" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
     fi
-  - sudo apt-get update -y;
-  - sudo apt-get install -y octave liboctave-dev;
-  - sudo apt-get install -y python$PYTHON_VER-pip;
-  - "pip$PYTHON_VER install --user sympy==$SYMPY_VER"
+  - sudo apt-get update -qq
+  - sudo apt-get install -y liboctave-dev
+  - sudo apt-get install -y octave
+  - sudo apt-get install -y python$PYTHON_VER-pip
+  - if [ "x$PYTAVE" = "xyes" ]; then
+        sudo apt-get install -y libboost-python-dev python$PYTHON_VER-numpy;
+    fi
+
+install:
+  - pip$PYTHON_VER install --user sympy==$SYMPY_VER
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave -W --no-gui --eval "pkg install -forge doctest";
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
-        sudo apt-get install -qq -y libboost-python-dev python$PYTHON_VER-numpy;
-        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
-        mv pytave_main pytave;
+        hg clone https://bitbucket.org/genuinelucifer/pytave_main pytave;
         pushd pytave;
         hg checkout travis;
         pwd;
@@ -32,12 +36,11 @@ before_install:
         popd;
     fi
 
-
 # all commands here must have exit code 0 for the build to be called "passing"
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
-  - stty cols 80 rows 40
+  - stty cols $COLUMNS rows 40
   - tput cols; stty size
   - pushd inst
   - octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "r = octsympy_tests; exit(r)"
