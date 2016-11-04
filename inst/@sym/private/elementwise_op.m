@@ -87,8 +87,8 @@ function z = elementwise_op(scalar_fcn, varargin)
           'shape = shapes[0] if len(shapes) > 0 else (1, 1)'
           'q = zeros(*shape)'
           'for i in range(0, len(q)):'
-          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
-          'return q,' ];
+          '    q[i] = _op(*[A[i] if isinstance(A, MatrixBase) else A for A in _ins])'
+          'return q' ];
 
   z = python_cmd (cmd, varargin{:});
 
