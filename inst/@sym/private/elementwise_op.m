@@ -80,13 +80,12 @@ function z = elementwise_op(scalar_fcn, varargin)
 
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
-          'q = Matrix([0])'
-          'for A in _ins:'
-          '    if isinstance(A, MatrixBase) and A:'
-          '        if q.shape == (1, 1):'
-          '            q = A'
-          '        else:'
-          '            assert q.shape == A.shape, "Matrices must have equal sizes"'
+          'shapes = [A.shape for A in _ins if isinstance(A, MatrixBase)]'
+          'sameshape = all([s == shapes[0] for s in shapes])'
+          'assert sameshape, "Matrices in input must all have the same shape"'
+          '# could be no matrices in the input'
+          'shape = shapes[0] if len(shapes) > 0 else (1, 1)'
+          'q = zeros(*shape)'
           'for i in range(0, len(q)):'
           '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
           'return q,' ];
