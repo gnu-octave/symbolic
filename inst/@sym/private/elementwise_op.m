@@ -37,7 +37,7 @@
 %% python function in a cell array and use it:
 %%
 %% @example:
-%% scalar_fcn = @{ 'def _op(a,b,c,d):' '    return a % c + d / b' @};
+%% scalar_fcn = @{ 'def _op(a,b,c,d):'; '    return a % c + d / b' @};
 %% A = 3;
 %% B = [1 2;3 4];
 %% C = inv(B);
