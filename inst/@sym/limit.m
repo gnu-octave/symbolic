@@ -83,6 +83,10 @@ function L = limit(f, x, a, dir)
       print_usage ();
   end
 
+  if (isempty (x))
+    x = sym('x');
+  end
+
   cmd = { '(f, x, a, pdir) = _ins'
           '# note, not MatrixExpr'
           'if isinstance(f, sp.MatrixBase):'
@@ -128,7 +132,12 @@ end
 %!test
 %! % omitting arguments
 %! syms a
+%! assert (isequal (limit(a), 0))
 %! assert (isequal (limit(a*x+a+2), a+2))
 %! assert (isequal (limit(a*x+a+2, 6), 7*a+2))
+
+%!test
+%! % constants
 %! assert (isequal (limit(sym(6)), 6))
 %! assert (isequal (limit(sym(6), 7), 6))
+%! assert (isequal (limit([sym(6) sym(2)], 7), [6 2]))
