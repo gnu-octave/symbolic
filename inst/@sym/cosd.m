@@ -44,7 +44,7 @@ function y = cosd(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: cos(rad(a))');
+  y = elementwise_op ('lambda a: cos(rad(a))', x);
 end
 
 

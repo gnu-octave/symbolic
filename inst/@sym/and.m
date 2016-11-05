@@ -44,7 +44,7 @@ function r = and(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'And');
+  r = elementwise_op ('And', sym(x), sym(y));
 
 end
 

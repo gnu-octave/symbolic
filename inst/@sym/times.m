@@ -33,7 +33,7 @@
 %% @end group
 %% @end example
 %%
-%% For "matrix expressions" such as matrices with symbolic size,
+%% For ``matrix expressions'' such as matrices with symbolic size,
 %% the product may not be evaluated:
 %% @example
 %% @group

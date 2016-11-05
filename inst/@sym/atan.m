@@ -40,7 +40,7 @@ function y = atan(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'atan');
+  y = elementwise_op ('atan', x);
 end
 
 

@@ -40,7 +40,7 @@ function y = abs(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'Abs');
+  y = elementwise_op ('Abs', x);
 end
 
 

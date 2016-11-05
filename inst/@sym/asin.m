@@ -40,7 +40,7 @@ function y = asin(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'asin');
+  y = elementwise_op ('asin', x);
 end
 
 

@@ -106,6 +106,10 @@
 %% @itemize
 %% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
 %% on Matlab were it would not be the default).
+%% @item @code{sympref ipc native}: use native Python/C interface to
+%% interact directly with an embedded Python interpreter.
+%% This is highly experimental and requires functions provided by the
+%% ``pytave'' project which have not yet been merged into Octave.
 %% @item @code{sympref ipc system}: construct a long string of
 %% the command and pass it directly to the python interpreter with
 %% the @code{system()} command.  This typically assembles a multiline
@@ -300,7 +304,12 @@ function varargout = sympref(cmd, arg)
             msg = 'Forcing sysoneline ipc: warning: this is for debugging';
           otherwise
             msg = '';
-            warning('Unsupported IPC mechanism: hope you know what you''re doing')
+            if (~ ischar (arg))
+              arg = num2str (arg);
+            end
+            warning('OctSymPy:sympref:invalidarg', ...
+                    'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
+                    arg)
         end
         if (verbose)
           disp(msg)
@@ -359,6 +368,9 @@ function r = tf_from_input(s)
   end
 end
 
+
+%!shared sympref_orig
+%! sympref_orig = sympref ();
 
 %!test
 %! % test quiet, side effect of making following tests a bit less noisy!
@@ -419,7 +431,8 @@ end
 %!test
 %! syms x
 %! r = sympref('reset');
+%! % restore original sympref settings
+%! sympref ('ipc',   sympref_orig.ipc);
+%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
-%! % ok, can be noisy again
-%! sympref('quiet', 'default')

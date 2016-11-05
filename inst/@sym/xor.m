@@ -45,7 +45,7 @@ function r = xor(x, y)
     print_usage ();
   end
 
-  r = binop_helper(x, y, 'Xor');
+  r = elementwise_op ('Xor', sym(x), sym(y));
 
 end
 

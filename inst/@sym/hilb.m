@@ -47,6 +47,6 @@ end
 
 
 %!test
-%! A = hilb(sym(3))
-%! B = [sym(1) sym(1)/2 sym(1)/3;sym(1)/2 sym(1)/3 sym(1)/4;sym(1)/3 sym(1)/4 sym(1)/5];
-%! assert( isequal( A, B))
+%! A = hilb (sym(3));
+%! B = [sym(1) sym(1)/2 sym(1)/3; sym(1)/2 sym(1)/3 sym(1)/4; sym(1)/3 sym(1)/4 sym(1)/5];
+%! assert (isequal (A, B))

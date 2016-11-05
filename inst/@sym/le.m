@@ -44,7 +44,7 @@ function t = le(x, y)
     print_usage ();
   end
 
-  t = ineq_helper('<=', 'Le', x, y);
+  t = ineq_helper('<=', 'Le', sym(x), sym(y));
 
 end
 

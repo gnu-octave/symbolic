@@ -44,7 +44,7 @@ function y = tand(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: tan(rad(a))');
+  y = elementwise_op ('lambda a: tan(rad(a))', x);
 end
 
 

@@ -39,7 +39,7 @@ function y = angle(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: sympy.log(a).as_real_imag()[1]');
+  y = elementwise_op ('lambda a: sympy.log(a).as_real_imag()[1]', x);
 end
 
 

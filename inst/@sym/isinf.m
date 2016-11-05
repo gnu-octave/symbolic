@@ -50,8 +50,8 @@
 %% @end example
 %% Here SymPy would have said @code{None} as it does not know whether
 %% x is finite or not.  However, currently @code{isinf} returns
-%% false, which perhaps should be interpreted as "x cannot be shown to
-%% be infinite" (as opposed to "x is not infinite").
+%% false, which perhaps should be interpreted as ``x cannot be shown to
+%% be infinite'' (as opposed to ``x is not infinite'').
 %%
 %% FIXME: this is behaviour might change in a future version; come
 %% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.

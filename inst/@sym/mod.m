@@ -74,10 +74,7 @@ function z = mod(x, n, canpoly)
   isconst = isempty (findsymbols (x));
 
   if (~canpoly || isconst)
-    z = binop_helper(x, n, 'lambda a,b: a % b');
-
-    %z = binop_helper(x, n, {'def _op(a, b):' ...
-    %                        '    return a % b' });
+    z = elementwise_op ('lambda a,b: a % b', sym(x), sym(n));
 
   else
     %% its not constant, assume everything is poly and mod the coefficients

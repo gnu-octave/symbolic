@@ -42,7 +42,7 @@ function y = exp(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'exp');
+  y = elementwise_op ('exp', x);
 end
 
 

@@ -46,9 +46,9 @@ function y = gammainc(z, a, which)
   end
 
   if (strcmp(which, 'lower'))
-    y = binop_helper (a, z, 'lowergamma');
+    y = elementwise_op ('lowergamma', sym(a), sym(z));
   elseif (strcmp(which, 'upper'))
-    y = binop_helper (a, z, 'uppergamma');
+    y = elementwise_op ('uppergamma', sym(a), sym(z));
   else
     print_usage ();
   end

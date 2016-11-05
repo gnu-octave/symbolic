@@ -40,7 +40,7 @@ function y = asec(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'asec');
+  y = elementwise_op ('asec', x);
 end
 
 
