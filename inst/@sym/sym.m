@@ -272,6 +272,7 @@ function s = sym(x, varargin)
     end
 
   elseif (isinteger (x)) % Handle integer vealues
+    check = false;
     x = num2str (x, '%ld');
   end
 
