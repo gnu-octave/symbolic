@@ -60,11 +60,22 @@
 %% This example will send @code{D} (@qcode{'+'}) to the function without
 %% converting the string to a symbol.
 %%
+%% If you need use a matrix as element, you can send is in a cell:
+%%
+%% A = [1, 2; 3, 4]
+%% B = [1, 1; 1, 1]
+%% op_helper('lambda a, b: a == b', sym(A), {sym(B)})
+%%
+%% This example will compare every element of A with the entire matrix B.
+%% You can send more expressions in {} in various dimensions.
+%% Be careful with this, actually we don't have a safe way to check if
+%% the cell have regular dimensions, so the actual behavior will use
+%% the first found dimensions in the cell, others will be ignored.
+%%
 %% Notes:
 %%   This function doesn't work with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
-%%   except if have a 1x1 size, in that case it always will ise that value.
-%%   Empty arrays are treated as elements.
+%%   except if have a 1x1 size, in that case always will use that value.
 %%
 %% @end defmethod
 
@@ -81,15 +92,23 @@ function z = elementwise_op(scalar_fcn, varargin)
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
           'q = Matrix([0])'
+          's = (1, 1)'
           'for A in _ins:'
-          '    if isinstance(A, MatrixBase) and A:'
-          '        if q.shape == (1, 1):'
+  #       '    if isinstance(A, (MatrixBase, list, NDimArray)):'
+          '    if isinstance(A, (MatrixBase, list)):'
+          '        if s.count(1) == len(s):'
           '            q = A'
+          '            s = shapeM(q)'
           '        else:'
-          '            assert q.shape == A.shape, "Matrices must have equal sizes"'
-          'for i in range(0, len(q)):'
-          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) and k else k for k in _ins])'
-          'return q,' ];
+          '            assert s == shapeM(A), "Matrices must have equal sizes"'
+          'for i in itertools.product(*map(Range, s)):'
+  #       '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list, NDimArray)) else k for k in _ins]))'
+          '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins]))'
+  #       'return (Matrix(q) if len(s) <= 2 else MutableDenseNDimArray(q)) if isinstance(q, list) else q'
+          'return Matrix(q) if isinstance(q, list) else q' ];
+
+  %% FIXME:Notes for Tensor
+  % Dear hacker from the distant future, can you replace with the right lines?
 
   z = python_cmd (cmd, varargin{:});
 
