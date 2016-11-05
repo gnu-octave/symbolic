@@ -442,3 +442,17 @@ end
 %! % complex output
 %! z = python_cmd ('return 3+2j');
 %! assert (z, 3+2i)
+
+%!test
+%! % multirow char arrays are a thing!
+%! % https://github.com/cbm755/octsympy/issues/664
+%! % expected behaviour: each row padded, only first row is kept
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! s = ['abc'; 'defgh'; '12345'];
+%! q = python_cmd ('return len(_ins)', s);
+%! assert (q, 1)
+%! q = python_cmd ('return len(_ins[0])', s);
+%! assert (q, 5)
+%! s2 = python_cmd ('return _ins[0]', s);
+%! assert (strcmp (s2, 'abc  '))
+%! end
