@@ -100,7 +100,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           '            q = A'
           '            s = shapeM(q)'
           '        else:'
-          '            assert shapeM(q) == shapeM(A), "Matrices must have equal sizes"'
+          '            assert s == shapeM(A), "Matrices must have equal sizes"'
           'for i in itertools.product(*map(Range, s)):'
   #       '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list, NDimArray)) else k for k in _ins]))'
           '    setM(q, i, _op(*[get1(k,i) if isinstance(k, (MatrixBase, list)) else k for k in _ins]))'
