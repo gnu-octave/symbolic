@@ -85,11 +85,9 @@ function z = elementwise_op(scalar_fcn, varargin)
           'assert sameshape, "Matrices in input must all have the same shape"'
           '# could be no matrices in the input'
           'shape = shapes[0] if len(shapes) > 0 else (1, 1)'
-          'L = []'
-          'for i in range(prod(shape)):'
-          '    L.append(_op(*[A[i] if isinstance(A, MatrixBase) else A for A in _ins]))'
           'assert len(shape) == 2, "Dims > 2 not implemented yet"'
-          'return Matrix(shape[0], shape[1], L)' ];
+          'return Matrix(shape[0], shape[1], lambda i, j:'
+          '              _op(*[A[i,j] if isinstance(A, MatrixBase) else A for A in _ins]))' ];
 
   z = python_cmd (cmd, varargin{:});
 
