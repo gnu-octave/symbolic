@@ -62,6 +62,7 @@ function L = limit(f, x, a, dir)
     print_usage ();
   end
 
+  f = sym(f);
   if (nargin < 4)
     dir= 'right';
   end
@@ -141,3 +142,9 @@ end
 %! assert (isequal (limit(sym(6)), 6))
 %! assert (isequal (limit(sym(6), 7), 6))
 %! assert (isequal (limit([sym(6) sym(2)], 7), [6 2]))
+
+%!test
+%! % double constant, with sym limit
+%! a = limit (6, sym(0));
+%! assert (isa (a, 'sym'))
+%! assert (isequal (a, sym(6)))
