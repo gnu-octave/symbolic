@@ -85,7 +85,8 @@ function L = limit(f, x, a, dir)
   end
 
   if (isempty (x))
-    x = sym('x');
+    L = f;
+    return
   end
 
   cmd = { '(f, x, a, pdir) = _ins'
