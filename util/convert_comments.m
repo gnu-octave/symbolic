@@ -205,7 +205,11 @@ function success = convert_oct_2_ml (fname, foutname)
 
 
   %% Output
-  f = fopen(foutname, 'w');
+  [f, msg] = fopen(foutname, 'w');
+  if (f < 0)
+    msg
+    error('failed to open file for writing')
+  end
 
   fdisp(f, fcn_line)
 
