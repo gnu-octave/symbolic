@@ -89,15 +89,8 @@ function L = limit(f, x, a, dir)
     return
   end
 
-  cmd = { '(f, x, a, pdir) = _ins'
-          '# note, not MatrixExpr'
-          'if isinstance(f, sp.MatrixBase):'
-          '    g = f.applyfunc(lambda b: b.limit(x, a, dir=pdir))'
-          'else:'
-          '    g = f.limit(x, a, dir=pdir)'
-          'return g,' };
-  L = python_cmd (cmd, sym(f), sym(x), sym(a), pdir);
-
+  L = elementwise_op ('lambda f, x, a, dir: f.limit(x, a, dir=dir)', ...
+                      sym(f), sym(x), sym(a), pdir);
 end
 
 
