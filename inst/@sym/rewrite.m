@@ -100,16 +100,7 @@ function F = rewrite(f, how)
     print_usage ();
   end
 
-  cmd = { '(f, how) = _ins'
-          '# note, not for MatrixExpr'
-          'if isinstance(f, sp.MatrixBase):'
-          '    return f.applyfunc(lambda a: a.rewrite(how)),'
-          'else:'
-          '    return f.rewrite(how),' };
-
-  F = python_cmd(cmd, sym(f), how);
-
-  % maintainer note: elementwise_op might sym(how)
+  F = elementwise_op ('lambda f, how: f.rewrite(how)', sym(f), how);
 
 end
 
