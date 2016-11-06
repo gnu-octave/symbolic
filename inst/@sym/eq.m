@@ -167,3 +167,10 @@ end
 %! e = a' == b';
 %! eexp = eexp.';  % is/was bug here with '
 %! assert (isequal (e, eexp))
+
+%!test
+%! % empty matrices compare to correct empty size
+%! a = zeros (sym(3), 0);
+%! assert (size (a == a), [3, 0])
+%! a = zeros (sym(0), 2);
+%! assert (size (a == a), [0, 2])
