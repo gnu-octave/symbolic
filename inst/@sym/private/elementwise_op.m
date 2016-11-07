@@ -64,7 +64,6 @@
 %%   This function doesn't work with MatrixSymbol.
 %%   If you send matrices as arguments, all must have equal sizes
 %%   except if have a 1x1 size, in that case it always will ise that value.
-%%   Empty arrays are treated as elements.
 %%
 %% @end defmethod
 
@@ -80,14 +79,24 @@ function z = elementwise_op(scalar_fcn, varargin)
 
   % note: cmd is already cell array, hence [ concatenates with it
   cmd = [ cmd
-          'shapes = [A.shape for A in _ins if isinstance(A, MatrixBase)]'
-          'sameshape = all([s == shapes[0] for s in shapes])'
-          'assert sameshape, "Matrices in input must all have the same shape"'
-          '# could be no matrices in the input'
-          'shape = shapes[0] if len(shapes) > 0 else (1, 1)'
-          'assert len(shape) == 2, "Dims > 2 not implemented yet"'
-          'return Matrix(shape[0], shape[1], lambda i, j:'
-          '              _op(*[A[i,j] if isinstance(A, MatrixBase) else A for A in _ins]))' ];
+          # Make sure all matrices in the input are the same size, and set q to one of them
+          'q = None'
+          'for A in _ins:'
+  #       '    if isinstance(A, (MatrixBase, NDimArray)):'
+          '    if isinstance(A, MatrixBase):'
+          '        if q == None:'
+          '            q = A'
+          '        else:'
+          '            assert q.shape == A.shape, "Matrices in input must all have the same shape"'
+          # in case all inputs were scalars:
+          'if q is None:'
+          '    q = Matrix([0])'
+          'for i in range(0, len(q)):'
+  #       '    q[i] = _op(*[k[i] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins])'
+          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
+          'return q,' ];
+
+  % Dear hacker from the distant future... you can use the comments lines to enable Tensor support.
 
   z = python_cmd (cmd, varargin{:});
 
