@@ -19,9 +19,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  elementwise_op (@var{scalar_fcn}, @var{A})
-%% @defmethodx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B})
-%% @defmethodx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B}, @dots{})
+%% @defun  elementwise_op (@var{scalar_fcn}, @var{A})
+%% @defunx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B})
+%% @defunx elementwise_op (@var{scalar_fcn}, @var{A}, @var{B}, @dots{})
 %% Apply a scalar function element-by-element to the inputs.
 %%
 %% Examples:
@@ -62,10 +62,9 @@
 %%
 %% Notes:
 %%   This function doesn't work with MatrixSymbol.
-%%   If you send matrices as arguments, all must have equal sizes
-%%   except if have a 1x1 size, in that case it always will ise that value.
+%%   Matrix arguments must all have equal sizes.
 %%
-%% @end defmethod
+%% @end defun
 
 
 function z = elementwise_op(scalar_fcn, varargin)
