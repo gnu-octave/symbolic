@@ -410,6 +410,8 @@ end
 %!error <line 1> python_cmd('raise ValueError', sym('x'))
 %!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
 
+%!error <c=1; raise ValueError> python_cmd ({'a=1' 'b=1' 'c=1; raise ValueError' 'd=1'});
+
 
 %!test
 %! % sysoneline should work on all systems
