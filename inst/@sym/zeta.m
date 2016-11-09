@@ -62,7 +62,9 @@ function y = zeta(z, n)
   end
 
   cmd = {'def _op(a, b):'
-         '    x = Symbol("x")'
+         '    x = Symbol("alpha")'
+         '    assert x not in a.free_symbols, "You can not use alpha symbol in this function"'
+         '    assert x not in b.free_symbols, "You can not use alpha symbol in this function"'
          '    return Derivative(zeta(x), x, a).subs(x, b)'};
 
   y = elementwise_op (cmd, sym (z), sym (n));
