@@ -73,8 +73,8 @@ function r = vpa(x, n)
         '    return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (isfloat(x) && ~isreal (x))
-    r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);
-  elseif (isfloat(x) && isscalar(x) == 1)
+    r = vpa(real(x),  n) + sym('i')*vpa(imag(x), n);
+  elseif (isfloat(x) && isscalar(x))
     [s, flag] = magic_double_str(x);
     if (flag)
       r = vpa(s, n);
@@ -84,7 +84,7 @@ function r = vpa(x, n)
           'return sympy.Float(x, n),' };
       r = python_cmd (cmd, x, n);
     end
-  elseif (isinteger(x) && isscalar(x) == 1)
+  elseif (isinteger(x) && isscalar(x))
     cmd = {
         'x, n = _ins'
         'return sympy.N(x, n),' };
@@ -196,10 +196,8 @@ end
 %! a = vpa(sym(i));
 %! b = vpa(i);
 %! c = vpa('i');
-%! d = vpa('I');
 %! assert (isequal (a, b))
 %! assert (isequal (a, c))
-%! assert (isequal (a, d))
 
 %!test
 %! % inf/-inf do not become symbol('inf')

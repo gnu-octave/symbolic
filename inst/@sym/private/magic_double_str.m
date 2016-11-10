@@ -1,4 +1,5 @@
 %% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -28,32 +29,66 @@
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
-function [s, flag] = magic_double_str(x)
+function [s, flag] = magic_double_str (x)
+
+  persistent list % format: number, {octave string}, python expression
+  persistent const % Sympy constants
+  % {octave string} need contain the python expression for char function
+
+  if (isempty (list))
+    list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I'};
+    const = {'zoo'};
+  end
 
   flag = 1;
 
-  if (~isa(x, 'double') || ~isreal(x))
-    error('OctSymPy:magic_double_str:notrealdouble', ...
-          'Expected a real double precision number');
+  if (isa (x, 'double'))  % Number comparison
+    for j = 1:length (list)
+      if (isequaln (x, list{j, 1}))
+        s = list{j, 3};
+        return
+      elseif (isequaln (x, -list{j, 1}))
+        s = ['-' list{j, 3}];
+        return
+      end
+    end
+  elseif (isa (x, 'char'))  % Char comparison
+    for j = 1:length (list)
+      for n = 1:length (list{j, 2})
+        if (strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}]))
+          s = list{j, 3};
+          return
+        elseif (strcmp (x, ['-' list{j, 2}{n}]))
+          s = ['-' list{j, 3}];
+          return
+        end
+      end
+    end
+    for j = 1:length (const)   % Check if is a python constant
+      if (strcmp (x, const{j}) || strcmp (x, ['+' const{j}]))
+        s = const{j};
+        return
+      elseif (strcmp (x, ['-' const{j}]))
+        s = ['-' const{j}];
+        return
+      end
+    end
+  else
+    error ('Format not supported.')
   end
 
-  % NOTE: yes, these are floating point equality checks!
-  if (x == pi)
-    s = 'pi';
-  elseif (x == -pi)
-    s = '-pi';
-  elseif ((isinf(x)) && (x > 0))
-    s = 'inf';
-  elseif ((isinf(x)) && (x < 0))
-    s = '-inf';
-  elseif (isnan(x))
-    s = 'nan';
-  elseif (isreal(x) && (abs(x) < 1e15) && (mod(x,1) == 0))
-    % special treatment for "small" integers
-    s = num2str(x);  % better than sprintf('%d', large)
-  else
-    s = '';
+  if (isa (x, 'char'))
     flag = 0;
+    s = x;
+    return
+  elseif (isa (x, 'double'))
+    if ((abs (x) < 1e15) && (mod (x,1) == 0))
+      % special treatment for "small" integers
+      s = num2str (x);  % better than sprintf('%d', large)
+    else
+      s = '';
+      flag = 0;
+    end
   end
 
 end

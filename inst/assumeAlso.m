@@ -66,13 +66,25 @@
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
 
-function varargout = assumeAlso(x, varargin)
+function s = assumeAlso(x, varargin)
 
-  [tilde,ca] = assumptions(x, 'dict');
+  varargin = norm_logic_strings (varargin);
 
-  if isempty(ca)
+  if (~isa (x, 'sym'))
+    p = sym (x, varargin{:});
+    if (nargout ~= 0)
+      s = p;
+    else
+      assignin ('caller', x, p);
+    end
+    return
+  end
+
+  [tilde,ca] = assumptions (x, 'dict');
+
+  if (isempty (ca))
     ca = [];
-  elseif (length(ca)==1)
+  elseif (length (ca) == 1)
     ca = ca{1};
   else
     ca
@@ -80,15 +92,25 @@ function varargout = assumeAlso(x, varargin)
   end
 
   for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
+    if (~islogical (varargin{n - 1}))
+      cond = varargin{n - 1};
+      if (n < nargin && islogical (varargin{n}))
+        ca.(cond) = varargin{n};
+      else
+        ca.(cond) = true;
+      end
+    else
+      if ((n == 2 && islogical (varargin{1})) || islogical (varargin{n - 2}))
+        print_usage ();
+      end
+    end
   end
 
   xstr = x.flat;
-  newx = sym(xstr, ca);
+  newx = sym (xstr, ca);
 
   if (nargout > 0)
-    varargout{1} = newx;
+    s = newx;
     return
   end
 
@@ -99,12 +121,12 @@ function varargout = assumeAlso(x, varargin)
   %newx =
   context = 'caller';
   % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
+  S = evalin (context, 'whos');
+  evalin (context, '[];');  % clear 'ans'
+  for i = 1:numel (S)
+    obj = evalin (context, S(i).name);
+    [newobj, flag] = symreplace (obj, xstr, newx);
+    if flag, assignin (context, S(i).name, newobj); end
   end
   % ---------------------------------------------
 
@@ -113,48 +135,63 @@ end
 
 %!test
 %! syms x
-%! x = assumeAlso(x, 'positive');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: positive'))
+%! x = assumeAlso (x, 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
+
+%!test
+%! x = assumeAlso ('x', 'positive');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive'))
+
+%!test
+%! assumeAlso ('x', 'positive');
+%! assert (isa (x, 'sym'))
+
+%!test
+%! syms x
+%! x = assumeAlso (x, 'positive', false);
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: ~positive'))
 
 %!test
 %! syms x positive
-%! x = assumeAlso(x, 'integer');
-%! [tilde, a] = assumptions(x, 'dict');
-%! assert(a{1}.integer)
-%! assert(a{1}.positive)
+%! x = assumeAlso (x, 'integer');
+%! [tilde, a] = assumptions (x, 'dict');
+%! assert (a{1}.integer)
+%! assert (a{1}.positive)
 
 %!test
 %! % multiple assumptions
 %! syms x positive
-%! x = assumeAlso(x, 'integer', 'even');
-%! [tilde, a] = assumptions(x, 'dict');
-%! assert(a{1}.integer)
-%! assert(a{1}.positive)
-%! assert(a{1}.even)
+%! x = assumeAlso (x, 'integer', 'even');
+%! [tilde, a] = assumptions (x, 'dict');
+%! assert (a{1}.integer)
+%! assert (a{1}.positive)
+%! assert (a{1}.even)
 
 %!test
 %! % has output so avoids workspace
 %! syms x positive
 %! x2 = x;
-%! f = sin(x);
-%! assumeAlso(x, 'integer');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! f = sin (x);
+%! assumeAlso (x, 'integer');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))
 %! a = assumptions(x2);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
-%! a = assumptions(f);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))
+%! a = assumptions (f);
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))
 
 %!test
 %! % has no output so does workspace
 %! syms x positive
 %! x2 = x;
-%! f = sin(x);
-%! assumeAlso(x, 'integer');
-%! a = assumptions(x);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
-%! a = assumptions(x2);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
-%! a = assumptions(f);
-%! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+%! f = sin (x);
+%! assumeAlso (x, 'integer');
+%! a = assumptions (x);
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))
+%! a = assumptions (x2);
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))
+%! a = assumptions (f);
+%! assert (strcmp (a, 'x: positive, integer') || strcmp (a, 'x: integer, positive'))

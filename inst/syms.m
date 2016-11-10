@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -69,52 +70,39 @@
 %% @seealso{sym}
 %% @end deffn
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, CAS
 
 function syms(varargin)
 
   %% No inputs
   %output names of symbolic vars
   if (nargin == 0)
-    S = evalin('caller', 'whos');
-    disp('Symbolic variables in current scope:')
-    for i=1:numel(S)
+    S = evalin ('caller', 'whos');
+    disp ('Symbolic variables in current scope:')
+    for i = 1:numel(S)
       %S(i)
-      if strcmp(S(i).class, 'sym')
-        disp(['  ' S(i).name])
-      elseif strcmp(S(i).class, 'symfun')
+      if (strcmp (S(i).class, 'sym'))
+        disp (['  ' S(i).name])
+      elseif (strcmp (S(i).class, 'symfun'))
         % FIXME improve display of symfun
-        disp(['  ' S(i).name ' (symfun)'])
+        disp (['  ' S(i).name ' (symfun)'])
       end
     end
     return
   end
 
-
+  varargin = norm_logic_strings (varargin);
 
   %% Find assumptions
-  valid_asm = assumptions('possible');
+  valid_asm = assumptions ('possible');
   last = -1;
-  doclear = false;
-  for n=1:nargin
-    assert(ischar(varargin{n}), 'syms: expected string inputs')
-    if (ismember(varargin{n}, valid_asm))
+  for n = 1:nargin
+    assert (ischar (varargin{n}) || islogical (varargin{n}), 'syms: expected string inputs')
+    if (islogical (varargin{n}) || ismember (varargin{n}, valid_asm))
       if (last < 0)
         last = n - 1;
-      end
-    elseif (strcmp(varargin{n}, 'clear'))
-      doclear = true;
-      if (last < 0)
-        last = n - 1;
-      else
-        warning('syms: should not combine "clear" with other assumptions')
-      end
-      if (n ~= nargin)
-        error('syms: "clear" should be the final argument')
       end
     elseif (last > 0)
-      error('syms: cannot have symbols after assumptions')
+      error ('syms: cannot have symbols after assumptions')
     end
   end
 
@@ -122,7 +110,7 @@ function syms(varargin)
     asm = {};
     exprs = varargin;
   elseif (last == 0)
-    error('syms: cannot have only assumptions w/o symbols')
+    error ('syms: cannot have only assumptions w/o symbols')
   else
     asm = varargin((last+1):end);
     exprs = varargin(1:last);
@@ -131,53 +119,29 @@ function syms(varargin)
 
 
   % loop over each input
-  for i = 1:length(exprs)
+  for i = 1:length (exprs)
     expr = exprs{i};
 
     % look for parenthesis: check if we're making a symfun
     if (isempty (strfind (expr, '(') ))  % no
-      assert(isvarname(expr)); % help prevent malicious strings
-      if (doclear)
-        % We do this here instead of calling sym() because sym()
-        % would modify this workspace instead of the caller's.
-        newx = sym(expr);
-        assignin('caller', expr, newx);
-        xstr = newx.flat;
-        % ---------------------------------------------
-        % Muck around in the caller's namespace, replacing syms
-        % that match 'xstr' (a string) with the 'newx' sym.
-        %xstr = x;
-        %newx = s;
-        context = 'caller';
-        % ---------------------------------------------
-        S = evalin(context, 'whos');
-        evalin(context, '[];');  % clear 'ans'
-        for i = 1:numel(S)
-          obj = evalin(context, S(i).name);
-          [newobj, flag] = symreplace(obj, xstr, newx);
-          if flag, assignin(context, S(i).name, newobj); end
-        end
-        % ---------------------------------------------
-      else
-        assignin('caller', expr, sym(expr, asm{:}))
-      end
-
+      assert (isvarname (expr));
+      assignin ('caller', expr, sym(expr, asm{:}))
     else  % yes, this is a symfun
-      assert(isempty(asm), 'mixing symfuns and assumptions not supported')
+      assert (isempty (asm), 'mixing symfuns and assumptions not supported')
       % regex matches: abc(x,y), f(var), f(x, y, z), f(r2d2), f( x, y )
       % should not match: Rational(2, 3), f(2br02b)
-      assert(~isempty(regexp(expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
+      assert (~isempty (regexp (expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
              'invalid symfun expression')
-      s = sym(expr);
+      s = sym (expr);
       %vars = symvar(s)  % might re-order the inputs, instead:
       cmd = { 'f = _ins[0]'
               'return (f.func.__name__, f.args)' };
       [name, vars] = python_cmd (cmd, s);
-      sf = symfun(s, vars);
-      assignin('caller', name, sf);
-      for i = 1:length(vars)
+      sf = symfun (s, vars);
+      assignin ('caller', name, sf);
+      for i = 1:length (vars)
         v = vars{i};
-        assignin('caller', v.flat, v);
+        assignin ('caller', v.flat, v);
       end
     end
   end
@@ -187,27 +151,20 @@ end
 %!test
 %! %% assumptions
 %! syms x real
-%! x2 = sym('x', 'real');
+%! x2 = sym ('x', 'real');
 %! assert (isequal (x, x2))
 
 %!test
-%! %% assumptions and clearing them
-%! syms x real
-%! f = {x {2*x}};
-%! A = assumptions();
-%! assert ( ~isempty(A))
-%! syms x clear
-%! A = assumptions();
-%! assert ( isempty(A))
+%! %% assumptions
+%! syms x real false
+%! x2 = sym ('x', 'real', false);
+%! assert (isequal (x, x2))
 
 %!test
-%! % SMT compat, syms x clear should add x to workspace
-%! syms x real
-%! f = 2*x;
-%! clear x
-%! assert (~logical(exist('x', 'var')))
-%! syms x clear
-%! assert (logical(exist('x', 'var')))
+%! %% assumptions
+%! syms x real false
+%! x2 = sym ('x', 'real', 'false');
+%! assert (isequal (x, x2))
 
 %!error <symbols after assumptions>
 %! syms x positive y
@@ -217,17 +174,11 @@ end
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
 
-%!warning <should not combine>
-%! syms x positive clear
-
-%!error <should be the final argument>
-%! syms x clear y
-
 %!error <cannot have only assumptions>
 %! syms positive integer
 
 %!test
 %! % does not create a variable called positive
 %! syms x positive integer
-%! assert (logical(exist('x', 'var')))
-%! assert (~logical(exist('positive', 'var')))
+%! assert (logical (exist ('x', 'var')))
+%! assert (~logical (exist ('positive', 'var')))
