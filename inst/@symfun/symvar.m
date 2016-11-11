@@ -129,7 +129,7 @@ function a = remove_dupes(symvars, vars)
   keep = logical(ones(1, length(symvars)));
   for j = 1:length(symvars)
     for i = 1:M
-      if (strcmp(char(symvars(j)), char(vars(i))))
+      if (strcmp (symvars(j).pickle, vars(i).pickle))
         keep(j) = false;
         break
       end
