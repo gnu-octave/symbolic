@@ -15,6 +15,7 @@ octsympy 2.5.0-dev
           cosd
           dawson
           divisors
+          equationsToMatrix
           eye
           hilb
           invhilb
