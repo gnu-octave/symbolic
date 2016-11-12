@@ -174,6 +174,15 @@ end
 %! assert (isequal (B, b))
 
 %!test
+%! % override symvar order
+%! syms x y
+%! [A, B] = equationsToMatrix ([3*x + 9*y - 5 == 0, -8*x - 3*y == -2], [y x]);
+%! a = sym ([9 3; -3 -8]);
+%! b = sym ([5; -2]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
+
+%!test
 %! syms x y z
 %! [A, B] = equationsToMatrix ([x - 9*y + z == -5, -9*y*z == -5], [y, x]);
 %! a = sym ([[-9 1]; -9*z 0]);
