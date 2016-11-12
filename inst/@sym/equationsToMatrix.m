@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,32 +19,63 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym equationsToMatrix (@var{eqns}, @var{vars})
+%% @deftypemethod  @@sym {[@var{A}, @var{b}] =} equationsToMatrix (@var{eqns}, @var{vars})
+%% @deftypemethodx @@sym {[@var{A}, @var{b}] =} equationsToMatrix (@var{eqns})
+%% @deftypemethodx @@sym {[@var{A}, @var{b}] =} equationsToMatrix (@var{eq1}, @var{eq2}, @dots{})
+%% @deftypemethodx @@sym {[@var{A}, @var{b}] =} equationsToMatrix (@var{eq1}, @dots{}, @var{v1}, @var{v2}, @dots{})
 %% Convert set of linear equations to matrix form.
-%% Where @var{eqns} and @var{vars} can be a list or matrix of expressions.
 %%
-%% Example:
+%% In its simplest form, equations @var{eq1}, @var{eq2}, etc can be
+%% passed as inputs:
 %% @example
 %% @group
 %% syms x y z
-%% [A b] = equationsToMatrix (x + y == 1, x - y + 1, x, y)
+%% [A, b] = equationsToMatrix (x + y == 1, x - y + 1 == 0)
 %%   @result{} A = (sym 2×2 matrix)
+%%
 %%       ⎡1  1 ⎤
 %%       ⎢     ⎥
 %%       ⎣1  -1⎦
 %%
-%%   b = (sym 2×1 matrix)
+%%   @result{} b = (sym 2×1 matrix)
 %%
 %%       ⎡1 ⎤
 %%       ⎢  ⎥
 %%       ⎣-1⎦
+%% @end group
+%% @end example
+%% In this case, appropriate variables @emph{and their ordering} will be
+%% determined automatically using @code{symvar} (@pxref{@@sym/symvar}).
 %%
+%% In some cases it is important to specify the variables as additional
+%% inputs @var{v1}, @var{v2}, etc:
+%% @example
+%% @group
+%% syms a
+%% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a)
+%%   @print{} ??? Cannot convert to matrix; system may not be linear.
+%%
+%% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a, x, y)
+%%   @result{} A = (sym 2×2 matrix)
+%%
+%%       ⎡a   1⎤
+%%       ⎢     ⎥
+%%       ⎣-1  1⎦
+%%
+%%   @result{} b = (sym 2×1 matrix)
+%%
+%%       ⎡1⎤
+%%       ⎢ ⎥
+%%       ⎣a⎦
 %% @end group
 %% @end example
 %%
+%% The equations and variables can also be passed as vectors @var{eqns}
+%% and @var{vars}:
 %% @example
 %% @group
-%% [A, B] = equationsToMatrix ([x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0], [x, y])
+%% eqns = [x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0];
+%% [A, B] = equationsToMatrix (eqns, [x y])
 %%   @result{} A = (sym 3×2 matrix)
 %%
 %%       ⎡1  1⎤
@@ -59,11 +91,10 @@
 %%       ⎢-z + 1⎥
 %%       ⎢      ⎥
 %%       ⎣z - 5 ⎦
-%%
 %% @end group
 %% @end example
-%%
-%% @end defmethod
+%% @seealso{@@sym/solve}
+%% @end deftypemethod
 
 
 function [A b] = equationsToMatrix(varargin)
@@ -114,7 +145,7 @@ function [A b] = equationsToMatrix(varargin)
 
 
   if ~s
-    error('Cannot convert to matrix form because the system does not seem to be linear.');
+    error('Cannot convert to matrix; system may not be linear.');
   end
 
 end
@@ -166,6 +197,6 @@ end
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
-%!error <system does not seem to be linear>
+%!error <system may not be linear>
 %! syms x y
 %! [A, B] = equationsToMatrix (x^2 + y^2 == 1, x - y + 1, x, y);
