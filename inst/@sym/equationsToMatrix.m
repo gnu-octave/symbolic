@@ -102,6 +102,8 @@ function [A, b] = equationsToMatrix(varargin)
   s = symvar ([varargin{:}]);
 
   cmd = {'L, symvars = _ins'
+	 'if isinstance(symvars, Symbol):'
+	 '    symvars = [symvars]'
          'if not isinstance(L[-1], MatrixBase):'
          '    if isinstance(L[-1], Symbol):'  % Symbol given, fill vars...
          '        vars = list()'
@@ -209,3 +211,21 @@ end
 %!error <system may not be linear>
 %! syms x y
 %! [A, B] = equationsToMatrix (x^2 + y^2 == 1, x - y + 1, x, y);
+
+%!test
+%! % single equation
+%! syms x
+%! [A, B] = equationsToMatrix (3*x == 2, x);
+%! a = sym (3);
+%! b = sym (2);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
+
+%!test
+%! % single equation w/ symvar
+%! syms x
+%! [A, B] = equationsToMatrix (3*x == 2);
+%! a = sym (3);
+%! b = sym (2);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
