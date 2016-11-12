@@ -123,7 +123,8 @@ function [A b] = equationsToMatrix(varargin)
          '        del _ins[-1]'
          '        del _ins[-1]'
          'vars = list(collections.OrderedDict.fromkeys(vars))' %% Never repeat elements
-         '_ins = list(flatten(_ins))' %% Unpack eqs
+         'if len(_ins) == 1 and isinstance(_ins[0], MatrixBase):'
+         '    _ins = [a for a in _ins[0]]'
          'if len(_ins) == 0 or len(vars) == 0:'
          '    return True, Matrix([]), Matrix([])'
          'A = zeros(len(_ins), len(vars)); b = zeros(len(_ins), 1)'
