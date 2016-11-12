@@ -82,6 +82,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'import codecs'
                     'from distutils.version import LooseVersion'
                     'import itertools'
+                    'import collections'
                     'def dictdiff(a, b):'
                     '    """ keys from a that are not in b, used by evalpy() """'
                     '    n = dict()'
