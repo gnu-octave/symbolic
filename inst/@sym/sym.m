@@ -643,8 +643,8 @@ end
 %!test
 %! % symbols with special sympy names
 %! syms Ei Eq
-%! assert (~isempty(regexp(Eq.pickle, '^Symbol')))
-%! assert (~isempty(regexp(Ei.pickle, '^Symbol')))
+%! assert (~isempty (regexp (sympy (Eq), '^Symbol')))
+%! assert (~isempty (regexp (sympy (Ei), '^Symbol')))
 
 %!test
 %! % E can be a sym not just exp(sym(1))

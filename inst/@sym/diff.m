@@ -83,8 +83,8 @@ function z = diff(f, varargin)
     return
   else
     q = varargin{1};
-    % Note: pickle: to avoid double() overhead for common diff(f,x)
-    isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
+    % Note: access sympy srepr to avoid double() overhead for common diff(f,x)
+    isnum2 = isnumeric (q) || (isa (q, 'sym') && strncmpi (sympy (q), 'Integer', 7));
     if ((nargin == 2) && isnum2)  % diff(f,2) -> symvar
       x = symvar(f, 1);
       if (isempty(x))

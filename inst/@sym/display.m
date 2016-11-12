@@ -134,7 +134,7 @@ function [s1 s2] = sym_describe(x, unicode_dec)
   end
 
   s1 = class (x);
-  srepr = x.pickle;
+  srepr = sympy (x);
   d = size (x);
 
   % sort of isinstance(x, MatrixExpr) but cheaper

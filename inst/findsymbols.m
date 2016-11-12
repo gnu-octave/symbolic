@@ -101,7 +101,7 @@ function L = findsymbols(obj, dosort)
   if dosort
     Ls = {};
     for i=1:length(L)
-      Ls{i} = L{i}.pickle;
+      Ls{i} = sympy (L{i});
     end
     [tilde, I] = unique(Ls);
     L = L(I);

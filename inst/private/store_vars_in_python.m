@@ -22,7 +22,7 @@ function var_pyobj = store_vars_in_python (L)
   for i = 1:numel(L)
     x = L{i};
     if (isa(x, 'sym'))
-      var_pyobj.append (pyeval (x.pickle))
+      var_pyobj.append (pyeval (sympy (x)))
     elseif (iscell (x))
       var_pyobj.append (store_vars_in_python (x))
     else
