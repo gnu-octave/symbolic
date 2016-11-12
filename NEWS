@@ -58,6 +58,9 @@ octsympy 2.5.0-dev
 
   * Bug fix: assign `[]` to row/column removes that that row/column.
 
+  * `char(x)` now gives a more-human readable output, useful for example
+    in labelling a figure.
+
 
 
 octsympy 2.4.1-dev

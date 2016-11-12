@@ -93,7 +93,7 @@ end
 %! syms x
 %! e = ~(x == 4);
 %! assert (isa (e, 'sym'))
-%! assert (strncmp(char(e), 'Unequality', 10))
+%! assert (strncmp (e.pickle, 'Unequality', 10))
 
 %!test
 %! % output is sym even for scalar t/f (should match other bool fcns)

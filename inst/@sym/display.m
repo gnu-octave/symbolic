@@ -159,7 +159,7 @@ function [s1 s2] = sym_describe(x, unicode_dec)
   end
 
   s1 = class (x);
-  srepr = char (x);
+  srepr = x.pickle;
   d = size (x);
 
   % sort of isinstance(x, MatrixExpr) but cheaper
@@ -215,7 +215,7 @@ function snip = snippet_of_sympy(x, padw, width, unicode)
   pad = repmat(' ', 1, padw);
 
   % trim newlines (if there are any)
-  s = regexprep (char (x), '\n', '\\n');
+  s = regexprep (x.pickle, '\n', '\\n');
   snip = [pad lquot s rquot];
   if (ustr_length (snip) > width)
     n = width - rightpad - padw - ustr_length ([lquot rquot ell]);

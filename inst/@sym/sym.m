@@ -150,7 +150,7 @@
 %% needed in the usual way with the @code{save} and @code{load} commands.
 %%
 %% The underlying SymPy string representation (``srepr'') can also be passed
-%% directly to @code{sym}: @pxref{@@sym/char} for details.
+%% directly to @code{sym}: @pxref{@@sym/char} for discussion of the details.
 %%
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
@@ -643,8 +643,8 @@ end
 %!test
 %! % symbols with special sympy names
 %! syms Ei Eq
-%! assert (~isempty(regexp(char(Eq), '^Symbol')))
-%! assert (~isempty(regexp(char(Ei), '^Symbol')))
+%! assert (~isempty(regexp(Eq.pickle, '^Symbol')))
+%! assert (~isempty(regexp(Ei.pickle, '^Symbol')))
 
 %!test
 %! % E can be a sym not just exp(sym(1))

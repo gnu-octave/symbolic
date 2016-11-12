@@ -19,25 +19,56 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @defmethod @@sym char (@var{x})
-%% Return underlying string representation of a symbolic expression.
+%% Return string representation of a symbolic expression.
 %%
-%% Although not intended for general use, the underlying SymPy string
-%% representation (“srepr”) can be recovered with this command:
+%% Example:
 %% @example
 %% @group
-%% syms x positive
-%% srepr = char (x)
-%%   @result{} srepr = Symbol('x', positive=True)
+%% f = [sym(pi)/2 ceil(sym('x')/3); sym('alpha') sym(3)/2]
+%%   @result{} f = (sym 2×2 matrix)
+%%
+%%       ⎡π  ⎡x⎤⎤
+%%       ⎢─  ⎢─⎥⎥
+%%       ⎢2  ⎢3⎥⎥
+%%       ⎢      ⎥
+%%       ⎣α  3/2⎦
+%%
+%% char(f)
+%%   @result{} Matrix([[pi/2, ceiling(x/3)], [alpha, 3/2]])
 %% @end group
 %% @end example
 %%
-%% It can then be passed directly to sym:
+%% This command generally gives a human-readable string but it may not be
+%% sufficient for perfect reconstruction of the symbolic expression.
+%% For example @code{char(x)} does not display assumptions:
 %% @example
 %% @group
-%% x2 = sym (srepr)
-%%   @result{} x2 = (sym) x
-%% x2 == x
-%%   @result{} (sym) True
+%% syms x positive
+%% char (x)
+%%   @result{} x
+%% @end group
+%% @end example
+%% And because of this, passing the output of @code{char} to @code{sym}
+%% loses information:
+%% @example
+%% @group
+%% x2 = sym (char (x));
+%%
+%% assumptions (x2)
+%%   @result{} ans =
+%%       @{@}(0x0)
+%% @end group
+%% @end example
+%%
+%%
+%% if you need a more precise
+%% string representation of a symbolic object, the underlying SymPy string
+%% representation (“srepr”) can be recovered, although this is not supported or
+%% intended for general use:
+%% @example
+%% @group
+%% x.pickle
+%%   @result{} ans = Symbol('x', positive=True)
 %% @end group
 %% @end example
 %%
@@ -47,13 +78,20 @@
 
 function s = char(x)
 
-  s = x.pickle;
+  s = x.flat;
 
 end
 
 
 %!test
 %! % issue #91: expose as string
-%! syms x
-%! s = char(x);
-%! assert (strcmp (s, 'Symbol(''x'')'))
+%! a = sym(pi);
+%! assert (strcmp (char (a), 'pi'))
+
+%!shared x
+%! x = sym('x');
+
+%!assert (strcmp (char (x), 'x'))
+%!assert (strcmp (char (2*x), '2*x'))
+%!assert (strcmp (char ([2*x x]), 'Matrix([[2*x, x]])'))
+%!assert (strcmp (char ([2*x 2; 1 x]), 'Matrix([[2*x, 2], [1, x]])'))
