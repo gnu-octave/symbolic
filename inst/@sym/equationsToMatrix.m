@@ -97,41 +97,36 @@
 %% @end deftypemethod
 
 
-function [A b] = equationsToMatrix(varargin)
+function [A, b] = equationsToMatrix(varargin)
 
   s = symvar ([varargin{:}]);
 
-  cmd = {'vars = list()'
-         'if not isinstance(_ins[-2], MatrixBase):'
-         '    if isinstance(_ins[-2], Symbol):'
-         '        del _ins[-1]'
-         '        for i in reversed(range(len(_ins))):'
-         '            if isinstance(_ins[i], Symbol):'
-         '                vars = [_ins[i]] + vars'
-         '                del _ins[-1]'
-         '            else:'
+  cmd = {'L, symvars = _ins'
+         'if not isinstance(L[-1], MatrixBase):'
+         '    if isinstance(L[-1], Symbol):'  % Symbol given, fill vars...
+         '        vars = list()'
+         '        for i in reversed(range(len(L))):'
+         '            if isinstance(L[i], Symbol):'
+         '                vars = [L.pop(i)] + vars'
+         '            else:'  % ... until we find a non-Symbol
          '                break'
          '    else:'
-         '        vars = _ins[-1]'
-         '        del _ins[-1]'
+         '        vars = symvars'
          'else:'
-         '    if len(_ins) == 2:'
-         '        vars = _ins[-1]'
-         '        del _ins[-1]'
+         '    if len(L) == 1:'  % we have only a list of equations
+         '        vars = symvars'
          '    else:'
-         '        vars = _ins[-2]'
-         '        del _ins[-1]'
-         '        del _ins[-1]'
+         '        vars = L.pop(-1)'
          'vars = list(collections.OrderedDict.fromkeys(vars))' %% Never repeat elements
-         'if len(_ins) == 1 and isinstance(_ins[0], MatrixBase):'
-         '    _ins = [a for a in _ins[0]]'
-         'if len(_ins) == 0 or len(vars) == 0:'
+         'if len(L) == 1 and isinstance(L[0], MatrixBase):'
+         '    L = [a for a in L[0]]'
+         'if len(L) == 0 or len(vars) == 0:'
          '    return True, Matrix([]), Matrix([])'
-         'A = zeros(len(_ins), len(vars)); b = zeros(len(_ins), 1)'
-         'for i in range(len(_ins)):' 
-         '    q = _ins[i]'
+         'A = zeros(len(L), len(vars)); b = zeros(len(L), 1)'
+         'for i in range(len(L)):'
+         '    q = L[i]'
          '    for j in range(len(vars)):'
-         '        p = Matrix(Poly.from_expr(_ins[i], vars[j]).all_coeffs())'
+         '        p = Matrix(Poly.from_expr(L[i], vars[j]).all_coeffs())'
          '        q = Poly.from_expr(q, vars[j]).all_coeffs()'
          '        over = True if len(p) > 2 else False'
          '        p = p[0] if len(p) == 2 else S(0)'
@@ -142,7 +137,11 @@ function [A b] = equationsToMatrix(varargin)
          '    b[i] = -q'
          'return True, A, b' };
 
-  [s A b] = python_cmd (cmd, sym (varargin){:}, s);
+  for i = 1:length(varargin)
+    varargin{i} = sym (varargin{i});
+  end
+
+  [s, A, b] = python_cmd (cmd, varargin, s);
 
 
   if ~s
