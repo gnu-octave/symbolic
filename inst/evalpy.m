@@ -24,7 +24,7 @@
 %%
 %% @strong{Note} this function is @emph{deprecated}.
 %% @example
-%% s = warning ('off', 'OctSymPy:deprecated');
+%% s = warning ('off', 'OctSymPy:deprecated', 'local');
 %% @end example
 %%
 %% Examples:
