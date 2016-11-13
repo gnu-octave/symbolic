@@ -15,8 +15,6 @@ Checklist
 
       - update version number (remove "-dev", check if bump needed).
 
-      - Make sure snippet defaults to false.
-
   * Update DESCRIPTION file (version number and date).
 
   * Update NEWS file (date, version number, reformat).
@@ -65,5 +63,3 @@ AFTER release
 
   * Leave old version in DESCRIPTION ("-dev" not supported here).  We
     will bump it at the next release.  FIXME: this is unfortunate.
-
-  * Snippets could default to true in sympref.m

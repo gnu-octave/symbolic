@@ -75,7 +75,6 @@ function display(x)
   else
     unicode_dec = false;
   end
-  display_snippet = sympref('snippet');
   if (exist('OCTAVE_VERSION', 'builtin') && ...
       compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
     % Octave 4.1 dropped (temporarily?) the get(0,...) approach
@@ -83,20 +82,6 @@ function display(x)
   else
     % Matlab and Octave < 4
     loose = strcmp(get(0, 'FormatSpacing'), 'loose');
-  end
-
-  %% Get terminal width, mainly for snippets
-  % works in matlab gui & -nodesktop but not the most up-to-date
-  % approach
-  [term_width] = get(0, 'CommandWindowSize');
-  if (isequal(term_width, [0 0]))
-    % octave gives [0 0], at least as of August 2014.
-    [term_width] = terminal_size();
-    % octave has [height width]
-    term_width = term_width(2);
-  else
-    % matlab has [width height]
-    term_width = term_width(1);
   end
 
   % weird hack to support "ans(x) = " output for @symfun
@@ -108,12 +93,8 @@ function display(x)
 
   [desc_start, desc_end] = sym_describe (x, unicode_dec);
 
-  if display_snippet
-    toobig = true;
-  else
-    toobig = hasnewlines;
-    %toobig = hasnewlines || ~(isempty(x) || isscalar(x));
-  end
+  toobig = hasnewlines;
+  %toobig = hasnewlines || ~(isempty(x) || isscalar(x));
 
   s1 = '';
   if (~isempty(name))
@@ -134,12 +115,6 @@ function display(x)
     end
   end
   s = [s1 s2];
-  n = ustr_length (s);
-
-  if (display_snippet)
-    s = [s snippet_of_sympy(x, 7, term_width - n, unicode_dec)];
-  end
-
   disp (s)
 
   if (toobig)
@@ -199,31 +174,6 @@ function [s1 s2] = sym_describe(x, unicode_dec)
     s2 = sprintf ('%s%g%s%g matrix', estr, d(1), timesstr, d(2));
   else
     s2 = sprintf ('%d-dim array', length (d))
-  end
-end
-
-
-function snip = snippet_of_sympy(x, padw, width, unicode)
-  if (unicode)
-    ell = '…';
-    lquot = '“'; rquot = '”';
-  else
-    ell = '...';
-    lquot = '"'; rquot = lquot;
-  end
-  rightpad = 1;
-  pad = repmat(' ', 1, padw);
-
-  % trim newlines (if there are any)
-  s = regexprep (x.pickle, '\n', '\\n');
-  snip = [pad lquot s rquot];
-  if (ustr_length (snip) > width)
-    n = width - rightpad - padw - ustr_length ([lquot rquot ell]);
-    if (n < 8)
-      snip = '';
-    else
-      snip = sprintf ([pad lquot '%s' ell rquot], s(1:n));
-    end
   end
 end
 

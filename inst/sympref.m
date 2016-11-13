@@ -135,24 +135,6 @@
 %% @end example
 %%
 %%
-%% @strong{Snippets}: when displaying a sym object, we can optionally
-%% quote a small part of the SymPy representation:
-%%
-%% @example
-%% @group
-%% syms x;  y = [pi x];
-%% sympref snippet on
-%% y
-%%   @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
-%%       [π  x]
-%% sympref snippet off
-%% y
-%%   @result{} y = (sym) [π  x]  (1×2 matrix)
-%% sympref snippet default
-%% @end group
-%% @end example
-%%
-%%
 %% @strong{Default precision}: control the number of digits used by
 %% variable-precision arithmetic (see also the @ref{digits} command).
 %%
@@ -209,7 +191,6 @@ function varargout = sympref(cmd, arg)
       settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
-      sympref ('snippet', 'default')
       sympref ('quiet', 'default')
 
     case 'version'
@@ -250,15 +231,8 @@ function varargout = sympref(cmd, arg)
       end
 
     case 'snippet'
-      if (nargin == 1)
-        varargout{1} = settings.snippet;
-      else
-        if (strcmpi(arg, 'default'))
-          settings.snippet = false;  % Should be false for a release
-        else
-          settings.snippet = tf_from_input(arg);
-        end
-      end
+      warning ('OctSymPy:deprecated', ...
+               'Debugging mode "snippet" has been removed');
 
     case 'quiet'
       if (nargin == 1)
