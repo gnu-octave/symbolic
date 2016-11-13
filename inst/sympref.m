@@ -230,6 +230,10 @@ function varargout = sympref(cmd, arg)
         settings.digits = arg;
       end
 
+    case 'snippet'
+      warning ('OctSymPy:deprecated', ...
+               'Debugging mode "snippet" has been removed');
+
     case 'quiet'
       if (nargin == 1)
         varargout{1} = settings.quiet;
