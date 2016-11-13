@@ -14,6 +14,7 @@ BUILD_DIR = tmp
 MATLAB_PKG_DIR=${MATLAB_PACKAGE}-matlab-${VERSION}
 OCTAVE_RELEASE_TARBALL = ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar
 OCTAVE_RELEASE_TARBALL_COMPRESSED = ${OCTAVE_RELEASE_TARBALL}.gz
+OCTAVE_RELEASE_ZIP = ${BUILD_DIR}/${PACKAGE}-${VERSION}.zip
 INSTALLED_PACKAGE = ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
 HTML_DIR = ${BUILD_DIR}/${PACKAGE}-html
 HTML_TARBALL_COMPRESSED = ${HTML_DIR}.tar.gz
@@ -75,20 +76,24 @@ ${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 
 ## Package release for Octave
 ${OCTAVE_RELEASE_TARBALL}: .git/index | ${BUILD_DIR}
-	git archive --output="$@" --prefix=${PACKAGE}-${VERSION}/ HEAD
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/README.matlab.md
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/HOWTO-release.md
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/README.bundled.md
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/TODO.md
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/testing
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/util
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/.gitignore
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/.mailmap
-	tar --delete --file "$@" ${PACKAGE}-${VERSION}/screenshot*.png
-pkg: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
+	git archive --format=tar --output="$@" --prefix=${PACKAGE}-${VERSION}/ HEAD
+	tar -xf "$@"
+	rm -rf "$@"
+	rm ${PACKAGE}-${VERSION}/README.matlab.md
+	rm ${PACKAGE}-${VERSION}/HOWTO-release.md
+	rm ${PACKAGE}-${VERSION}/README.bundled.md
+	rm ${PACKAGE}-${VERSION}/TODO.md
+	rm -rf ${PACKAGE}-${VERSION}/testing
+	rm -rf ${PACKAGE}-${VERSION}/util
+	rm ${PACKAGE}-${VERSION}/.gitignore
+	rm ${PACKAGE}-${VERSION}/.mailmap
+	rm ${PACKAGE}-${VERSION}/screenshot*.png
+	tar -cf "$@" ${PACKAGE}-${VERSION}/
+pkg: ${OCTAVE_RELEASE_TARBALL_COMPRESSED} ${OCTAVE_RELEASE_ZIP}
 ${OCTAVE_RELEASE_TARBALL_COMPRESSED}: ${OCTAVE_RELEASE_TARBALL}
 	(cd "${BUILD_DIR}" && gzip --best -f -k "../$<")
-## TODO: make zip file
+${OCTAVE_RELEASE_ZIP}: ${OCTAVE_RELEASE_TARBALL}
+	(zip -qr "$@" ${PACKAGE}-${VERSION}/ && rm -rf ${PACKAGE}-${VERSION}/)
 
 ## HTML Documentation for Octave Forge
 html: ${HTML_TARBALL_COMPRESSED}
