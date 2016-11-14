@@ -15,6 +15,7 @@ BUILD_DIR := tmp
 MATLAB_PKG_DIR := ${MATLAB_PACKAGE}-matlab-${VERSION}
 OCTAVE_RELEASE := ${BUILD_DIR}/${PACKAGE}-${VERSION}
 OCTAVE_RELEASE_TARBALL := ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar.gz
+OCTAVE_RELEASE_ZIP := ${BUILD_DIR}/${PACKAGE}-${VERSION}.zip
 
 INSTALLED_PACKAGE := ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
 HTML_DIR := ${BUILD_DIR}/${PACKAGE}-html
@@ -39,6 +40,9 @@ help:
 
 %.tar.gz: %
 	tar -c -f - --posix -C "$(BUILD_DIR)/" "$(notdir $<)" | gzip -9n > "$@"
+
+%.zip: %
+	cd "$(BUILD_DIR)" ; zip -9qr - "$(notdir $<)" > "$(notdir $@)"
 
 $(OCTAVE_RELEASE): .git/index | $(BUILD_DIR)
 	@echo "Creating package version $(VERSION) release ..."
@@ -67,6 +71,7 @@ $(HTML_DIR): install | $(BUILD_DIR)
 	chmod -R a+rX,u+w,go-w $@
 
 dist: $(OCTAVE_RELEASE_TARBALL)
+zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
 ${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical:
@@ -104,8 +109,6 @@ doctest:
 install: ${INSTALLED_PACKAGE}
 ${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
 	$(OCTAVE) --silent --eval "pkg install $<"
-
-## TODO: make zip file
 
 ## Matlab packaging
 matlab_pkg: ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ml_extract_tests
