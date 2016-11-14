@@ -1,4 +1,4 @@
-SHELL   = /bin/bash
+SHELL   := /bin/bash
 
 ## Copyright 2016 Colin B. Macdonald
 ##
@@ -7,16 +7,16 @@ SHELL   = /bin/bash
 ## notice and this notice are preserved.  This file is offered as-is,
 ## without any warranty.
 
-PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
-VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
-MATLAB_PACKAGE = octsympy
-BUILD_DIR = tmp
-MATLAB_PKG_DIR=${MATLAB_PACKAGE}-matlab-${VERSION}
-OCTAVE_RELEASE_TARBALL = ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar
-OCTAVE_RELEASE_TARBALL_COMPRESSED = ${OCTAVE_RELEASE_TARBALL}.gz
-INSTALLED_PACKAGE = ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
-HTML_DIR = ${BUILD_DIR}/${PACKAGE}-html
-HTML_TARBALL_COMPRESSED = ${HTML_DIR}.tar.gz
+PACKAGE := $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
+VERSION := $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
+MATLAB_PACKAGE := octsympy
+BUILD_DIR := tmp
+MATLAB_PKG_DIR := ${MATLAB_PACKAGE}-matlab-${VERSION}
+OCTAVE_RELEASE_TARBALL := ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar
+OCTAVE_RELEASE_TARBALL_COMPRESSED := ${OCTAVE_RELEASE_TARBALL}.gz
+INSTALLED_PACKAGE := ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
+HTML_DIR := ${BUILD_DIR}/${PACKAGE}-html
+HTML_TARBALL_COMPRESSED := ${HTML_DIR}.tar.gz
 
 OCTAVE ?= octave
 MATLAB ?= matlab
