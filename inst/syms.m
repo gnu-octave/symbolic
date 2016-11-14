@@ -91,7 +91,7 @@ function syms(varargin)
     return
   end
 
-
+  varargin = expr_to_str (varargin);
 
   %% Find assumptions
   valid_asm = assumptions('possible');

@@ -68,6 +68,8 @@
 
 function varargout = assumeAlso(x, varargin)
 
+  varargin = expr_to_str (varargin);
+
   [tilde,ca] = assumptions(x, 'dict');
 
   if isempty(ca)
