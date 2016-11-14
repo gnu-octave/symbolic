@@ -279,7 +279,7 @@ function s = sym(x, varargin)
   if (isa (x, 'char'))
 
     if (check)
-      symsnotfunc (x);  % Warning if you try make a sym with the same name of a system function.
+      sym_is_not_func (x);  % Warning if you try make a sym with the same name of a system function.
 
       %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
       r = 1;
