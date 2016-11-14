@@ -75,7 +75,7 @@ function r = vpa(x, n)
   elseif (isfloat(x) && ~isreal (x))
     r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);
   elseif (isfloat(x) && isscalar(x) == 1)
-    [s, flag] = magic_double_str(x);
+    [s, flag] = const_to_python_str(x);
     if (flag)
       r = vpa(s, n);
     else
