@@ -223,3 +223,13 @@
 %! % FIXME: not same as an freshly created 5 x 6.
 %! C = sym('B', [5 6]);
 %! assert (isequal(B, C))
+
+%!test
+%! f1 = fileread ('private/expr_to_str.m');
+%! f2 = fileread ('@sym/private/expr_to_str.m');
+%! assert (strcmp (f1, f2))
+
+%!test
+%! f1 = fileread ('private/const_to_python_str.m');
+%! f2 = fileread ('@sym/private/const_to_python_str.m');
+%! assert (strcmp (f1, f2))
