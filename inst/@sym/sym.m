@@ -151,7 +151,7 @@
 %% needed in the usual way with the @code{save} and @code{load} commands.
 %%
 %% The underlying SymPy string representation (``srepr'') can also be passed
-%% directly to @code{sym}: @pxref{@@sym/char} for details.
+%% directly to @code{sym}: @pxref{@@sym/char} for discussion of the details.
 %%
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
@@ -211,7 +211,7 @@ function s = sym(x, varargin)
       s = make_sym_matrix (x, varargin{1});
       return
     else
-      varargin = norm_logic_strings (varargin);
+      varargin = expr_to_str (varargin);
       check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
@@ -626,8 +626,8 @@ end
 %!test
 %! % symbols with special sympy names
 %! syms Ei Eq
-%! assert (~isempty (regexp (char (Eq), '^Symbol')))
-%! assert (~isempty (regexp (char (Ei), '^Symbol')))
+%! assert (~isempty (regexp (Eq.pickle, '^Symbol')))
+%! assert (~isempty (regexp (Ei.pickle, '^Symbol')))
 
 %!warning <heuristics for double-precision> sym (1e16);
 %!warning <heuristics for double-precision> sym (-1e16);
@@ -654,12 +654,6 @@ end
 %! n = sym ('n', 'negative', 'even');
 %! a = assumptions (n);
 %! assert (strcmp (a, 'n: negative, even') || strcmp (a, 'n: even, negative'))
-
-%!test
-%! % multiple assumptions
-%! n = sym ('n', 'negative', 'even', false);
-%! a = assumptions (n);
-%! assert (strcmp (a, 'n: negative, ~even') || strcmp (a, 'n: ~even, negative'))
 
 %!test
 %! % save/load sym objects
@@ -702,18 +696,3 @@ end
 %! b = sym ('---1');
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
-
-%!test
-%! a = sym ('a', [1 2]);
-%! b = sym ('a', [21 21]);
-%! assert (~isequal (a, b))
-
-%!test
-%! a = sym ('a', sym([21 21]));
-%! b = sym ('a', [21 21]);
-%! assert (isequal (a, b))
-
-%!test
-%! a = sym ('a', sym ([1 2]));
-%! b = sym ('a', [1 2]);
-%! assert (isequal (a, b))
