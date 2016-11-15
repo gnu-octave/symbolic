@@ -26,7 +26,8 @@
 %% @group
 %% syms x
 %% y = dirac (x)
-%%   @result{} y = (sym) DiracDelta(x)
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
+%%   @result{} y = (sym) δ(x)
 %% @end group
 %% @end example
 %%
