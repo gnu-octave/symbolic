@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,11 +27,7 @@
 %% @group
 %% syms z
 %% imag(z)
-%%   @result{} ans = (sym)
-%%          ⎛    _⎞
-%%       -ⅈ⋅⎝z - z⎠
-%%       ───────────
-%%            2
+%%   @result{} ans = (sym) im(z)
 %% @end group
 %%
 %% @group
@@ -50,25 +47,30 @@
 %% @seealso{@@sym/real, @@sym/conj, @@sym/ctranspose}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = imag(z)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = (z - conj(z))/2i;
+
+  y = elementwise_op ('im', z);
+
 end
 
 
-%!assert(isequal(imag(sym(4)+3i),3))
+%!assert (isequal (imag (sym (4) + 3i),3))
 
 %!test
 %! syms x y real
 %! z = x + 1i*y;
-%! assert(isequal(imag(z),y))
+%! assert (isequal (imag (z),y))
 
 %!test
 %! syms x y real
-%! Z = [4  x + 1i*y; 1i*y 4+3i];
-%! assert(isequal(imag(Z),[0 y; y 3]))
+%! Z = [4  x + 1i*y; 1i*y 4 + 3i];
+%! assert (isequal (imag (Z),[0 y; y 3]))
+
+%!test
+%! syms x real
+%! d = exp (x*i);
+%! assert (isequal (imag (d), sin (x)))

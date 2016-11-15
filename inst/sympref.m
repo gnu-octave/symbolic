@@ -106,6 +106,10 @@
 %% @itemize
 %% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
 %% on Matlab were it would not be the default).
+%% @item @code{sympref ipc native}: use native Python/C interface to
+%% interact directly with an embedded Python interpreter.
+%% This is highly experimental and requires functions provided by the
+%% ``pytave'' project which have not yet been merged into Octave.
 %% @item @code{sympref ipc system}: construct a long string of
 %% the command and pass it directly to the python interpreter with
 %% the @code{system()} command.  This typically assembles a multiline
@@ -127,24 +131,6 @@
 %% @example
 %% @group
 %% sympref reset                              % doctest: +SKIP
-%% @end group
-%% @end example
-%%
-%%
-%% @strong{Snippets}: when displaying a sym object, we can optionally
-%% quote a small part of the SymPy representation:
-%%
-%% @example
-%% @group
-%% syms x;  y = [pi x];
-%% sympref snippet on
-%% y
-%%   @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
-%%       [π  x]
-%% sympref snippet off
-%% y
-%%   @result{} y = (sym) [π  x]  (1×2 matrix)
-%% sympref snippet default
 %% @end group
 %% @end example
 %%
@@ -205,7 +191,6 @@ function varargout = sympref(cmd, arg)
       settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
-      sympref ('snippet', 'default')
       sympref ('quiet', 'default')
 
     case 'version'
@@ -246,15 +231,8 @@ function varargout = sympref(cmd, arg)
       end
 
     case 'snippet'
-      if (nargin == 1)
-        varargout{1} = settings.snippet;
-      else
-        if (strcmpi(arg, 'default'))
-          settings.snippet = false;  % Should be false for a release
-        else
-          settings.snippet = tf_from_input(arg);
-        end
-      end
+      warning ('OctSymPy:deprecated', ...
+               'Debugging mode "snippet" has been removed');
 
     case 'quiet'
       if (nargin == 1)
@@ -288,6 +266,8 @@ function varargout = sympref(cmd, arg)
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] communication mechanism';
+          case 'native'
+            msg = 'Forcing the native Python/C API communication mechanism';
           case 'system'
             msg = 'Forcing the system() communication mechanism';
           case 'popen2'
@@ -298,7 +278,12 @@ function varargout = sympref(cmd, arg)
             msg = 'Forcing sysoneline ipc: warning: this is for debugging';
           otherwise
             msg = '';
-            warning('Unsupported IPC mechanism: hope you know what you''re doing')
+            if (~ ischar (arg))
+              arg = num2str (arg);
+            end
+            warning('OctSymPy:sympref:invalidarg', ...
+                    'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
+                    arg)
         end
         if (verbose)
           disp(msg)
@@ -358,6 +343,9 @@ function r = tf_from_input(s)
 end
 
 
+%!shared sympref_orig
+%! sympref_orig = sympref ();
+
 %!test
 %! % test quiet, side effect of making following tests a bit less noisy!
 %! sympref quiet on
@@ -376,6 +364,15 @@ end
 %!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
 %!error <line 3> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
+%% Test for correct line error in Python exceptions.
+%!error <raise ValueError> python_cmd('raise ValueError');
+%!error <raise ValueError> python_cmd('raise ValueError', sym('x'));
+%!error <raise ValueError> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <raise ValueError> python_cmd('raise ValueError', {1; 1; 1});
+%!error <raise ValueError> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <raise ValueError> python_cmd( {'x = 1' 'raise ValueError'} );
+%!error <1/0> python_cmd( {'x = 1' 'pass' '1/0'} );
+%!error <raise ValueError> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
@@ -386,6 +383,8 @@ end
 %!error <line 1> python_cmd('raise ValueError')
 %!error <line 1> python_cmd('raise ValueError', sym('x'))
 %!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+
+%!error <c=1; raise ValueError> python_cmd ({'a=1' 'b=1' 'c=1; raise ValueError' 'd=1'});
 
 
 %!test
@@ -417,7 +416,8 @@ end
 %!test
 %! syms x
 %! r = sympref('reset');
+%! % restore original sympref settings
+%! sympref ('ipc',   sympref_orig.ipc);
+%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
-%! % ok, can be noisy again
-%! sympref('quiet', 'default')

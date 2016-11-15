@@ -40,7 +40,7 @@ function y = sin(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'sin');
+  y = elementwise_op ('sin', x);
 end
 
 

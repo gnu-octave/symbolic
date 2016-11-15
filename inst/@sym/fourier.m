@@ -1,6 +1,6 @@
-%% Copyright (C) 2014 Colin B. Macdonald
-%% Copyright (C) 2015 Andrés Prieto, Alexander Misel, Colin B. Macdonald
-%% Copyright (C) 2016 Andrés Prieto, Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2015-2016 Andrés Prieto
+%% Copyright (C) 2015 Alexander Misel
 %%
 %% This file is part of OctSymPy.
 %%

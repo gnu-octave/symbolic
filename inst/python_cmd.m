@@ -159,8 +159,6 @@ function varargout = python_cmd(cmd, varargin)
           '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
           '        _outs = ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
           '    return _outs' ...
-          '' ...
-          '_outs = _fcn(_ins)'
         };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
@@ -172,8 +170,9 @@ function varargout = python_cmd(cmd, varargin)
   %% Error reporting
   % ipc drivers are supposed to give back these specially formatting error strings
   if (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
+    errcmdlineno = A{3} - db.prelines;
+    errlineno = errcmdlineno - LinesBeforeCmdBlock;
+    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', A{2}, errlineno, strtrim (cmd{errcmdlineno})));
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
     error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
   end
@@ -426,7 +425,8 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!error <octoutput does not know how to export type>
+%!xtest error <octoutput does not know how to export type>
+%! % This command does not fail with native interface and '@pyobject'
 %! python_cmd({'return type(int)'});
 %!test
 %! % ...and after the above test, the pipe should still work
@@ -443,3 +443,17 @@ end
 %! % complex output
 %! z = python_cmd ('return 3+2j');
 %! assert (z, 3+2i)
+
+%!test
+%! % multirow char arrays are a thing!
+%! % https://github.com/cbm755/octsympy/issues/664
+%! % expected behaviour: each row padded, only first row is kept
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! s = ['abc'; 'defgh'; '12345'];
+%! q = python_cmd ('return len(_ins)', s);
+%! assert (q, 1)
+%! q = python_cmd ('return len(_ins[0])', s);
+%! assert (q, 5)
+%! s2 = python_cmd ('return _ins[0]', s);
+%! assert (strcmp (s2, 'abc  '))
+%! end

@@ -219,8 +219,8 @@ end
 %! % these should *not* be the same
 %! a = vpa(2.3, 40);
 %! b = vpa('2.3', 40);
-%! sa = char(a);
-%! sb = char(b);
+%! sa = a.pickle;
+%! sb = b.pickle;
 %! assert (~isequal (a, b))
 %! assert (abs(double(a - b)) > 1e-20)
 %! assert (abs(double(a - b)) < 1e-15)

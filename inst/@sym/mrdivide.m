@@ -107,7 +107,7 @@ end
 %! % I/A: either invert A or leave unevaluated: not bothered which
 %! A = sym([1 2; 3 4]);
 %! B = sym(eye(2)) / A;
-%! assert (isequal (B, inv(A))  ||  strncmpi(char(B), 'MatPow', 6))
+%! assert (isequal (B, inv(A))  ||  strncmpi (B.pickle, 'MatPow', 6))
 
 %!test
 %! % A = C/B is C = A*B

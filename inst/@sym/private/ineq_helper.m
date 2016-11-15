@@ -32,7 +32,7 @@ function t = ineq_helper(op, fop, lhs, rhs, nanspecial)
         ['        return ' nanspecial]
         ['    return ' fop '(lhs, rhs)'] };
 
-  t = binop_helper(lhs, rhs, op);
+  t = elementwise_op (op, lhs, rhs);
 
 end
 

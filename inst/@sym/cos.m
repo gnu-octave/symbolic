@@ -40,7 +40,7 @@ function y = cos(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'cos');
+  y = elementwise_op ('cos', x);
 end
 
 

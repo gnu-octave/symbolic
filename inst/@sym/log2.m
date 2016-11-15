@@ -42,9 +42,7 @@
 
 function z = log2(x)
 
-  sf = 'lambda x: sp.log(x, 2)';
-
-  z = uniop_helper (x, sf);
+  z = elementwise_op ('lambda x: sp.log(x, 2)', x);
 
 end
 

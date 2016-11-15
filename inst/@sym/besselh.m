@@ -54,9 +54,9 @@ function A = besselh(alpha, k, x)
   assert(isscalar(k))
 
   if (logical(k == 1))
-    A = binop_helper(alpha, x, 'hankel1');
+    A = elementwise_op ('hankel1', sym(alpha), sym(x));
   elseif (logical(k == 2))
-    A = binop_helper(alpha, x, 'hankel2');
+    A = elementwise_op ('hankel2', sym(alpha), sym(x));
   else
     error('besselh: expecting k = 1 or 2')
   end

@@ -44,7 +44,7 @@ function y = atand(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'lambda a: deg(atan(a))');
+  y = elementwise_op ('lambda a: deg(atan(a))', x);
 end
 
 

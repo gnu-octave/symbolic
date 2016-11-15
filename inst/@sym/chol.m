@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,22 +16,26 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function s = def_each_elem_binary(x, n)
-%private
+%% -*- texinfo -*-
+%% @documentencoding UTF-8
+%% @defmethod @@sym chol (@var{A})
+%% Cholesky factorization of symbolic matrix.
+%% @end defmethod
 
-  % FIXME: Deprecated? use binop_helper
+%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
 
-  s = { 'def _each_elem_binary(x, y, f):' ...
-        '    if x.is_Matrix and y.is_Matrix:' ...
-        '        z = x.copy()' ...
-        '        for i in range(0, len(x)):' ...
-        '            z[i] = f(x[i], y[i])' ...
-        '        return z,' ...
-        '    if x.is_Matrix and not y.is_Matrix:' ...
-        '        return x.applyfunc(lambda a: f(a, y)),' ...
-        '    if not x.is_Matrix and y.is_Matrix:' ...
-        '        return n.applyfunc(lambda a: f(x, a)),' ...
-        '    else:' ...
-        '        return f(x, y),' };
 
+function y = chol(x)
+  if (nargin == 2)
+    error('Operation not supported yet.');
+  elseif (nargin > 2)
+    print_usage ();
+  end
+  y = python_cmd('return _ins[0].cholesky(),', x);
 end
+
+
+%!test
+%! A = chol(hilb(sym(2)));
+%! B = [[1 0]; sym(1)/2 sqrt(sym(3))/6];
+%! assert( isequal( A, B ))

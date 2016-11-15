@@ -1,4 +1,13 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+# Copyright 2014-2016 Colin B. Macdonald
+#
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+
 """generate_functions.py
 
 Yo dawg, I heard you like code generation so I wrote a code
@@ -232,7 +241,7 @@ function y = {NAME}(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, '{SPNAME}');
+  y = elementwise_op ('{SPNAME}', x);
 end
 
 

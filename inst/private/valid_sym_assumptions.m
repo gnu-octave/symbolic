@@ -22,10 +22,23 @@
 %%
 %% @end defun
 
+%% Reference: http://docs.sympy.org/dev/modules/core.html
+
+%% FIXME: Maybe in the future remove this file and replace with something else.
+
+
 function L = valid_sym_assumptions()
 
-  L = {'real', 'positive', 'negative', 'integer', 'even', 'odd', ...
-       'rational', 'finite'};
+  persistent List
+
+  if (isempty(List))
+
+    cmd = {'from sympy.core.assumptions import _assume_defined'
+           'return list(_assume_defined),'};
+    List = python_cmd(cmd);
+
+  end
+
+  L = List;
 
 end
-

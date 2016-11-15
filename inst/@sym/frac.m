@@ -1,4 +1,5 @@
-%% Copyright (C) 2016 Lagu and Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -38,7 +39,10 @@
 
 
 function y = frac(x)
-  y = uniop_helper (x, 'frac');
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('frac', x);
 end
 
 

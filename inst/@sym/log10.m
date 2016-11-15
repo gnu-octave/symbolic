@@ -41,9 +41,7 @@
 
 function z = log10(x)
 
-  sf = 'lambda x: sp.log(x, 10)';
-
-  z = uniop_helper (x, sf);
+  z = elementwise_op ('lambda x: sp.log(x, 10)', x);
 
 end
 

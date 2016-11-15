@@ -121,6 +121,21 @@
 %% @end group
 %% @end example
 %%
+%% It is possible to compose one symfun inside another.  For example, to
+%% demonstrate the chain rule, we might do:
+%% @example
+%% @group
+%% syms f(t) g(t)
+%% F(t) = f(g(t))
+%%   @result{} F(t) = (symfun) f(g(t))
+%% diff(F, t)
+%%   @result{} ans(t) = (symfun)
+%%       d        ⎛ d        ⎞│
+%%       ──(g(t))⋅⎜───(f(ξ₁))⎟│
+%%       dt       ⎝dξ₁       ⎠│ξ₁=g(t)
+%% @end group
+%% @end example
+%%
 %% @seealso{sym, syms}
 %% @end deftypemethod
 
@@ -282,6 +297,19 @@ end
 %! syms f(x)
 %! assert(isa(f, 'symfun'))
 %! assert(isa(x, 'sym'))
+
+%!test
+%! % SMT compat: symfun indep var overwrites existing var
+%! t = 6;
+%! syms f(t)
+%! assert (logical (t != 6))
+
+%!test
+%! % SMT compat: symfun indep var overwrites existing var, even if sym
+%! syms x
+%! t = x;
+%! syms f(t)
+%! assert (! logical (t == x))
 
 %!test
 %! syms x y

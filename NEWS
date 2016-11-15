@@ -3,9 +3,26 @@ octsympy 2.5.0-dev
 
   * New symbolic commands:
 
-          acosd         cosd
-          asind         sind
-          atand         tand
+          acosd
+          adjoint
+          angle
+          asind
+          atand
+          beta
+          cell2sym
+          charpoly
+          chol
+          cosd
+          dawson
+          divisors
+          equationsToMatrix
+          eye
+          hilb
+          invhilb
+          ones
+          sind
+          tand
+          zeros
 
   * Add more `@double` numerical functions.  For now these are simply
     wrappers around SymPy, so they are slower than native floating
@@ -16,6 +33,11 @@ octsympy 2.5.0-dev
           dilog         sinhint
           fresnelc      sinint
           fresnels      zeta
+
+  * The full set of assumptions implemented by Sympy can now be used.
+    For example, `syms p prime` assumes `p` is prime.
+
+  * `solve` now works with inequalities.
 
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
@@ -31,6 +53,14 @@ octsympy 2.5.0-dev
   * `heaviside` accepts a second argument for its value at zero.
 
   * `isfinite` behaves correctly for variables (and is documented).
+
+  * New experimental Python communication using the native Python/C
+    interface, due to Abhinav Tripathi during Google Summer of Code 2016.
+
+  * Bug fix: assign `[]` to row/column removes that that row/column.
+
+  * `char(x)` now gives a more-human readable output, useful for example
+    in labelling a figure.
 
 
 

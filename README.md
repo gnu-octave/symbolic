@@ -1,6 +1,8 @@
 OctSymPy
 ========
 
+[![Build Status](https://travis-ci.org/cbm755/octsympy.svg?branch=master)](https://travis-ci.org/cbm755/octsympy)
+
 An implementation of a symbolic toolbox using SymPy.
 
 [https://github.com/cbm755/octsympy]
@@ -22,8 +24,6 @@ Status
 
 "Beta" quality at best!  Contributions welcome.
 
-
-
 How to Install
 --------------
 
@@ -41,7 +41,13 @@ How to Install
 6. At Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
    `diff(f,x)`, etc.
 
+How to install on Ubuntu
+-------------------------
 
+1. If you've not installed Octave yet, use `sudo apt-get install octave`.
+2. Fetch the Debian package liboctave-dev to get the mkoctfile command. Use `sudo apt-get install liboctave-dev`.
+3. If you've not installed python-sympy yet, use `sudo apt-get install python-sympy`.
+4. In Octave prompt, type `pkg install -forge symbolic` followed by last two steps of previous section.
 
 How to Install on Windows
 -------------------------

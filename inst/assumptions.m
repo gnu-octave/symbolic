@@ -65,8 +65,8 @@
 %% @example
 %% @group
 %% A = assumptions('possible');
-%% sprintf('%s ', A@{:@})
-%%   @result{} ans = real positive negative integer even odd rational finite
+%% strjoin(sort(A), ', ')
+%%   @result{} ans = ..., finite, ..., positive, ..., zero
 %% @end group
 %% @end example
 %%
@@ -189,7 +189,7 @@ end
 %!   x = sym('x', A{i});
 %!   a = assumptions(x);
 %!   assert(strcmp(a{1}, ['x: ' A{i}] ))
-%!   s1 = char(x);
+%!   s1 = x.pickle;
 %!   s2 = ['Symbol(''x'', ' A{i} '=True)'];
 %!   assert (strcmp (s1, s2))
 %! end

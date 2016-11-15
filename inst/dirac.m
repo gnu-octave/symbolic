@@ -19,7 +19,7 @@
 %% @defun dirac (@var{x})
 %% Compute the Dirac delta (generalized) function.
 %%
-%% The Dirac delta "function" is a generalized function (or distribution)
+%% The Dirac delta ``function'' is a generalized function (or distribution)
 %% which is zero almost everywhere, except at the origin where it is
 %% infinite.
 %%
