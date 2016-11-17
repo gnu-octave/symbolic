@@ -24,6 +24,7 @@ before_install:
 install:
   - pip$PYTHON_VER install --user sympy==$SYMPY_VER
   - if [ "x$DOCTEST" = "xyes" ]; then
+        mkdir ${HOME}/octave;
         wget https://github.com/catch22/octave-doctest/releases/download/v0.5.0/doctest-0.5.0.tar.gz;
         octave -W --no-gui --eval "pkg install doctest-0.5.0.tar.gz";
     fi
