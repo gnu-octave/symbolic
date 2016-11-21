@@ -316,7 +316,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     otherwise
-      print_usage ();
+      error ('sympref: invalid preference or command ''%s''', lower (cmd));
   end
 end
 
@@ -421,3 +421,6 @@ end
 %! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
+
+%!error <invalid preference or command> sympref ('nosuchsetting')
+%!error <invalid preference or command> sympref ('nosuchsetting', true)

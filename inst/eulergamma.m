@@ -24,8 +24,7 @@
 %%
 %% @example
 %% @group
-%% @c doctest: +SKIP
-%% @c FIXME: will pass on SymPy-1.0.1-dev
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% eulergamma
 %%   @result{} (sym) γ
 %%
