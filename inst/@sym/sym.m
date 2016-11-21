@@ -212,7 +212,14 @@ function s = sym(x, varargin)
       return
     else
       varargin = expr_to_str (varargin);
-      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+      if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
+        sclear = true;
+        varargin(1) = [];
+        warning ('deprecated: sym(x, ''clear'') will be removed in 2.6.0');
+      else
+        sclear = false;
+        check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+      end
       asm = varargin;
     end
   end
@@ -327,6 +334,20 @@ function s = sym(x, varargin)
               '            d.update({_ins[i]:True})'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
+
+      if (nargin == 2 && sclear)
+
+        context = 'caller';
+        S = evalin(context, 'whos');
+        evalin(context, '[];');  % clear 'ans'
+        for i = 1:numel(S)
+          obj = evalin(context, S(i).name);
+          [newobj, flag] = symreplace(obj, x, s);
+          if flag, assignin(context, S(i).name, newobj); end
+        end
+
+      end
+
       return
 
     else % S() in other case
@@ -696,3 +717,37 @@ end
 %! b = sym ('---1');
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
+
+%!test
+%! %% assumptions and clearing them
+%! clear  % for matlab test script
+%! x = sym('x', 'real');
+%! f = {x {2*x}};
+%! asm = assumptions();
+%! assert ( ~isempty(asm))
+%! x = sym('x', 'clear');
+%! asm = assumptions();
+%! assert ( isempty(asm))
+
+%!test
+%! %% matlab compat, syms x clear should add x to workspace
+%! x = sym('x', 'real');
+%! f = 2*x;
+%! clear x
+%! assert (~logical(exist('x', 'var')))
+%! x = sym('x', 'clear');
+%! assert (logical(exist('x', 'var')))
+
+%!test
+%! %% assumptions should work if x is already a sym
+%! x = sym('x');
+%! x = sym(x, 'real');
+%! assert (~isempty(assumptions(x)))
+
+%!test
+%! %% likewise for clear
+%! x = sym('x', 'real');
+%! f = 2*x;
+%! x = sym(x, 'clear');
+%! assert (isempty(assumptions(x)))
+%! assert (isempty(assumptions(f)))
