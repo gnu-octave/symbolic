@@ -322,16 +322,9 @@ function s = sym(x, varargin)
               '        d.update(_ins[i])'
               '    elif isinstance(_ins[i], list):'
               '        for j in range(len(i)):'
-              '            if not isinstance(i[j], bool):'
-              '                if k < len(i) and isinstance(i[k+1], bool):'
-              '                    d.update({i[k]:i[k+1]})'
-              '                else:'
-              '                    d.update({i[k]:True})'
+              '            d.update({i[k]:True})'
               '    elif isinstance(_ins[i], (str, bytes)):'
-              '        if i < (len(_ins) - 1) and isinstance(_ins[i+1], bool):'
-              '            d.update({_ins[i]:_ins[i+1]})'
-              '        elif not isinstance(_ins[i], bool):'
-              '            d.update({_ins[i]:True})'
+              '        d.update({_ins[i]:True})'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
 
