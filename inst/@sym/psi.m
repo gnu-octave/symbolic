@@ -90,7 +90,7 @@ end
 %! assert (psi (-1.5),  double (psi (sym (-3)/2)),  -3*eps)
 %! assert (psi (2i),    double (psi (sym (2i))),    -3*eps)
 %! assert (psi (10i+3), double (psi (sym (10i)+3)), -3*eps)
-%! assert (psi (-8.3),  double (psi (sym (-83)/10)),-3*eps)
+%! assert (psi (-8.3),  double (psi (sym (-83)/10)),-4*eps)
 %! end
 
 %!test
