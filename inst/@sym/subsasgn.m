@@ -507,11 +507,11 @@ end
 %! assert( isequal( a, sym([])))
 
 %!test
-%! % Dissamble Matrix
-%! a = sym([1, 2; 3, 4; 5 6]);
-%! b = sym([3, 5, 2, 4, 6]);
+%! % Disassemble matrix
+%! a = sym([1 2; 3 4; 5 6]);
+%! b = sym([3 5 2 4 6]);
 %! a(1) = [];
-%! assert( isequal( a, b));
+%! assert (isequal (a, b));
 
 %!error <null assignment>
 %! a = sym([1, 2; 3, 4]);
