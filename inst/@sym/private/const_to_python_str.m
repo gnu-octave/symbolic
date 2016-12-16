@@ -31,12 +31,17 @@
 
 function [s, flag] = const_to_python_str (x)
 
-  persistent list % format: number, {octave string}, python expression
-  persistent const % Sympy constants
-  % {octave string} need contain the python expression for char function
+  persistent list
+  persistent const
 
   if (isempty (list))
-    list = {pi {'pi'} 'pi';inf {'inf' 'Inf' 'oo'} 'oo';nan {'nan' 'NaN'} 'nan';i {'i' 'I'} 'I'};
+    % Table of special doubles and special strings
+    % format: number, {octave strings}, resulting python expression
+    list = {pi {'pi'} 'pi'; ...
+            inf {'inf' 'Inf' 'oo'} 'oo'; ...
+            nan {'nan' 'NaN'} 'nan'; ...
+            i {'i' 'I'} 'I'};
+    % Special Sympy constants to recognize
     const = {'zoo'};
   end
 
