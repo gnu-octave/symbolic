@@ -224,7 +224,7 @@ function s = sym(x, varargin)
   end
 
   isnumber = isnumeric (x) || islogical (x);
-  assert (isempty (asm) || ~isnumber, 'You can not mix non symbols with assumptions.')
+  assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
@@ -347,7 +347,7 @@ function s = sym(x, varargin)
 
     else % S() in other case
 
-      assert (isempty (asm), 'You can not mix non symbols or functions with assumptions.')
+      assert (isempty (asm), 'Only symbols can have assumptions.')
 
       if (check)
         % Check if the user try to execute operations from sym
@@ -693,10 +693,10 @@ end
 %!error <is not supported>
 %! x = sym ('x', 'integer2', 'positive');
 
-%!error <can not mix>
+%!error <Only symbols can have assumptions>
 %! x = sym ('-pi', 'positive')
 
-%!error <can not mix>
+%!error <Only symbols can have assumptions>
 %! x = sym ('pi', 'integer')
 
 %!test
