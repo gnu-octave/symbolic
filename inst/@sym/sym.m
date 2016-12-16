@@ -349,12 +349,13 @@ function s = sym(x, varargin)
 
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
-      if (check)
+      % TODO: figure version might warn on expression strings
+      %if (check)
         % Check if the user try to execute operations from sym
-        if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
-          warning ('Please avoid execute operations from sym function.');
-        end
-      end
+        %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
+        %  warning ('Please avoid execute operations from sym function.');
+        %end
+      %end
 
       cmd = {'x = "{s}"'
              'try:'
@@ -728,7 +729,8 @@ end
 %! %% https://github.com/sympy/sympy/issues/11703
 %! assert (python_cmd ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
 
-%!warning <avoid execute operations> sym ('1*2');
+% TODO: test that might be used in the future
+%%!warning <avoid execute operations> sym ('1*2');
 
 % TODO: test that might be used in the future
 %%!warning <You are overloading/hiding> sym ('beta');
