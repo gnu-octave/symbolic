@@ -522,6 +522,14 @@ end
 %% Tests from mat_replace
 
 %!test
+%! % 2D indexing with length in one dimension more than 2
+%! a = sym ([1 2; 3 4; 5 6]);
+%! indices = [1 4; 2 5; 3 6];
+%! b = [10 11; 12 13; 14 15];
+%! a(indices) = b;
+%! assert (isequal (a, sym (b)));
+
+%!test
 %! A = sym ([0 0 0]);
 %! indices = [false true false];
 %! A(indices) = 1;

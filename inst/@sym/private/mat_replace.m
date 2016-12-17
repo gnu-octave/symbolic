@@ -94,6 +94,9 @@ function z = mat_replace(A, subs, b)
     else
       % linear indices into 2D array
       [r, c] = ind2sub (size(A), subs{1});
+      % keep all the indices in a row vector
+      r = reshape (r, 1, []);
+      c = reshape (c, 1, []);
     end
 
   elseif (length(subs) == 2)
