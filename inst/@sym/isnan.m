@@ -104,5 +104,3 @@ end
 %! assert (isempty( strfind(y.pickle, 'Symbol') ))
 %! y = sym('NaN');
 %! assert (isempty( strfind(y.pickle, 'Symbol') ))
-%! y = sym('NAN');
-%! assert (isempty( strfind(y.pickle, 'Symbol') ))

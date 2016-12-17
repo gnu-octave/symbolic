@@ -91,7 +91,7 @@ function syms(varargin)
     return
   end
 
-
+  varargin = expr_to_str (varargin);
 
   %% Find assumptions
   valid_asm = assumptions('possible');
@@ -105,6 +105,7 @@ function syms(varargin)
       end
     elseif (strcmp(varargin{n}, 'clear'))
       doclear = true;
+      warning ('deprecated: syms x clear; will be removed in 2.6.0')
       if (last < 0)
         last = n - 1;
       else

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,43 +17,48 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {[@var{s}, @var{flag}] =} magic_double_str (@var{x})
-%% Recognize special double values.
+%% @deftypefun @var{s} = expr_to_str (@var{x})
+%% Convert the input into possibles original types
+%% Symbols to strings, and the strings 'true' and 'false' to bool.
+%% Basically normalize the input.
 %%
 %% Private helper function.
 %%
 %% Caution: there are two copies of this file for technical
 %% reasons: make sure you modify both of them!
 %%
-%% @seealso{sym, vpa}
+%% @seealso{sym}
 %% @end deftypefun
 
-function [s, flag] = magic_double_str(x)
 
-  flag = 1;
+function s = expr_to_str (x)
 
-  if (~isa(x, 'double') || ~isreal(x))
-    error('OctSymPy:magic_double_str:notrealdouble', ...
-          'Expected a real double precision number');
+  s = ets_helper (x);
+
+end
+
+function s = ets_helper (x)
+
+  if (iscell (x))
+    for i = 1:length (x)
+      x{i} = ets_helper (x{i});
+    end
+  elseif (isstruct (x))
+    fields = fieldnames (x);
+    for q = 1:numel (fields)
+      x.(fields{q}) = ets_helper (x.(fields{q}));
+    end
+  elseif (ischar (x))
+    w = lower (x);
+    if (strcmp (w, 'true'))
+      x = true;
+    elseif (strcmp (w, 'false'))
+      x = false;
+    end
+  elseif (isa (x, 'sym'))
+    x = ets_helper (x.flat);
   end
 
-  % NOTE: yes, these are floating point equality checks!
-  if (x == pi)
-    s = 'pi';
-  elseif (x == -pi)
-    s = '-pi';
-  elseif ((isinf(x)) && (x > 0))
-    s = 'inf';
-  elseif ((isinf(x)) && (x < 0))
-    s = '-inf';
-  elseif (isnan(x))
-    s = 'nan';
-  elseif (isreal(x) && (abs(x) < 1e15) && (mod(x,1) == 0))
-    % special treatment for "small" integers
-    s = num2str(x);  % better than sprintf('%d', large)
-  else
-    s = '';
-    flag = 0;
-  end
+  s = x;
 
 end

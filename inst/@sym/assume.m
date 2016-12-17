@@ -107,6 +107,8 @@
 
 function varargout = assume(x, varargin)
 
+  varargin = expr_to_str (varargin);
+
   for n=2:nargin
     cond = varargin{n-1};
     ca.(cond) = true;
