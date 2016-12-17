@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -28,6 +29,18 @@
 
 function z = mat_replace(A, subs, b)
 
+  if (length (subs) == 1 && islogical (subs{1}))
+    %% A(logical) = B
+    subs{1} = find (subs{1});
+    if isempty (subs{1})
+      z = A;
+      return;
+    end
+    if (~ isscalar (b) && ~ isvector (b) && ~ isempty (b))
+      warning ('OctSymPy:subsagn:rhs_shape', ...
+            'B neither vector nor scalar in indexed A(I)=B: unusual, did you intend this?')
+    end
+  end
   %% Check when b is []
   if (isempty(b))
     switch length(subs)
@@ -66,12 +79,7 @@ function z = mat_replace(A, subs, b)
     end
   end
 
-  if (length(subs) == 1 && islogical(subs{1}))
-    %% A(logical) = B
-    z = mat_mask_asgn(A, subs{1}, b);
-    return
-
-  elseif (length(subs) == 1 && strcmp(subs{1}, ':') && length(b) == 1)
+  if (length(subs) == 1 && strcmp(subs{1}, ':') && length(b) == 1)
     z = python_cmd('return ones(_ins[0], _ins[1])*_ins[2],', A.size(1), A.size(2), sym(b));
     return
 
@@ -86,6 +94,9 @@ function z = mat_replace(A, subs, b)
     else
       % linear indices into 2D array
       [r, c] = ind2sub (size(A), subs{1});
+      % keep all the indices in a row vector
+      r = reshape (r, 1, []);
+      c = reshape (c, 1, []);
     end
 
   elseif (length(subs) == 2)

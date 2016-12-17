@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -516,5 +517,72 @@ end
 %!error <null assignment>
 %! a = sym([1, 2; 3, 4]);
 %! a(1, 2) = [];
+
+
+%% Tests from mat_replace
+
+%!test
+%! % 2D indexing with length in one dimension more than 2
+%! a = sym ([1 2; 3 4; 5 6]);
+%! indices = [1 4; 2 5; 3 6];
+%! b = [10 11; 12 13; 14 15];
+%! a(indices) = b;
+%! assert (isequal (a, sym (b)));
+
+%!test
+%! A = sym ([0 0 0]);
+%! indices = [false true false];
+%! A(indices) = 1;
+%! assert (isequal (A, sym ([0 1 0])));
+%! A(indices) = [];
+%! assert (isequal (A, sym ([0 0])));
+%! indices = [false false];
+%! A(indices) = [];
+%! assert (isequal (A, sym ([0 0])));
+
+%!shared a, b
+%! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
+%! b = sym (a);
+
+%!function test_bool (a, b, c)
+%!  a(c) = 0;
+%!  b(c) = 0;
+%!  assert (isequal (a, b))
+%!endfunction
+
+%!test
+%! c = false;
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+
+%!test
+%! c = [false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true; true false true false; false true false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false; true; false; true; false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true; false true; true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
 
 %% End of mat_* tests
