@@ -46,8 +46,9 @@
 %% third argument:
 %% @example
 %% @group
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% q = mod(x, 3, false)
-%%   @result{} q = (sym) Mod(x, 3)
+%%   @result{} q = (sym) x mod 3
 %% subs(q, x, 10)
 %%   @result{} ans = (sym) 1
 %%

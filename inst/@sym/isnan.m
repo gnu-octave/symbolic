@@ -103,6 +103,4 @@ end
 %! y = sym('nan');
 %! assert (isempty (strfind (sympy (y), 'Symbol')))
 %! y = sym('NaN');
-%! assert (isempty (strfind (sympy (y), 'Symbol')))
-%! y = sym('NAN');
-%! assert (isempty (strfind (sympy (y), 'Symbol')))
+%! assert (isempty( strfind (sympy (y), 'Symbol')))

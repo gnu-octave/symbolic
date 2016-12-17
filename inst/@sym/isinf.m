@@ -101,17 +101,15 @@ end
 %! % actual infinity.  Actually a ctor test, not isinf.
 %! % IIRC, SMT in Matlab 2013b fails.
 %! oo = sym(inf);
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym(-inf);
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('inf');
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('-inf');
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('Inf');
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
-%! oo = sym('INF');
-%! assert (isempty (strfind (sympy (oo), 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 
 %!test
 %! % ops with infinity shouldn't collapse
