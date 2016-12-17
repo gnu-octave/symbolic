@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -155,8 +156,6 @@
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, CAS
 
 function s = sym(x, varargin)
 
@@ -170,14 +169,14 @@ function s = sym(x, varargin)
   % this from the python ipc stuff: outside the class.  We identify
   % this non-user-facing usage by empty x and 6 inputs total.  Note
   % that "sym([])" is valid but "sym([], ...)" is otherwise not.
-  if (isempty(x) && (nargin == 6))
+  if (isempty (x) && nargin == 6)
     s.pickle = varargin{1};
     s.size = varargin{2};
     s.flat = varargin{3};
     s.ascii = varargin{4};
     s.unicode = varargin{5};
     s.extra = [];
-    s = class(s, 'sym');
+    s = class (s, 'sym');
     return
   end
 
@@ -369,60 +368,60 @@ end
 
 %!test
 %! % integers
-%! x = sym('2');
-%! y = sym(2);
-%! assert (isa(x, 'sym'))
-%! assert (isa(y, 'sym'))
-%! assert (isequal(x, y))
+%! x = sym ('2');
+%! y = sym (2);
+%! assert (isa (x, 'sym'))
+%! assert (isa (y, 'sym'))
+%! assert (isequal (x, y))
 
 %!test
 %! % infinity
 %! for x = {'inf', '-inf', inf, -inf, 'Inf'}
-%!   y = sym(x{1});
-%!   assert (isa(y, 'sym'))
-%!   assert (isinf(double(y)))
-%!   assert (isinf(y))
+%!   y = sym (x{1});
+%!   assert (isa (y, 'sym'))
+%!   assert (isinf (double (y)))
+%!   assert (isinf (y))
 %! end
 
 %!test
 %! % pi
-%! x = sym('pi');
+%! x = sym ('pi');
 %! assert (isa (x, 'sym'))
-%! assert (isequal (sin(x), sym(0)))
-%! assert (abs(double(x) - pi) < 2*eps )
-%! x = sym(pi);
-%! assert ( isa (x, 'sym'))
-%! assert ( isequal (sin(x), sym(0)))
-%! assert ( abs(double(x) - pi) < 2*eps )
+%! assert (isequal (sin (x), sym (0)))
+%! assert (abs (double (x) - pi) < 2*eps )
+%! x = sym (pi);
+%! assert (isa (x, 'sym'))
+%! assert (isequal (sin (x), sym (0)))
+%! assert (abs (double (x) - pi) < 2*eps )
 
 %!test
 %! % rationals
 %! x = sym(1) / 3;
 %! assert (isa (x, 'sym'))
-%! assert (isequal (3*x - 1, sym(0)))
-%! x = 1 / sym(3);
+%! assert (isequal (3*x - 1, sym (0)))
+%! x = 1 / sym (3);
 %! assert (isa (x, 'sym'))
-%! assert (isequal (3*x - 1, sym(0)))
-%! x = sym('1/3');
+%! assert (isequal (3*x - 1, sym (0)))
+%! x = sym ('1/3');
 %! assert (isa (x, 'sym'))
-%! assert (isequal (3*x - 1, sym(0)))
+%! assert (isequal (3*x - 1, sym (0)))
 
 %!test
 %! % passing small rationals
-%! x = sym('1/2');
-%! assert( double(x) == 1/2 )
-%! assert( isequal( 2*x, sym(1)))
+%! x = sym ('1/2');
+%! assert (double (x) == 1/2 )
+%! assert (isequal (2*x, sym (1)))
 
-%!warning <heuristic> x = sym(1/2);
+%!warning <heuristic> x = sym (1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
 %! % it should work
 %! s = warning ('off', 'OctSymPy:sym:rationalapprox');
-%! x = sym(1/2);
+%! x = sym (1/2);
 %! warning (s)
-%! assert( double(x) == 1/2 )
-%! assert( isequal( 2*x, sym(1)))
+%! assert (double (x) == 1/2 )
+%! assert (isequal (2*x, sym (1)))
 
 %!test
 %! assert (isa (sym (pi), 'sym'))
@@ -432,52 +431,52 @@ end
 %! % sym from array
 %! D = [0 1; 2 3];
 %! A = [sym(0) 1; sym(2) 3];
-%! assert (isa (sym(D), 'sym'))
-%! assert (isequal ( size(sym(D)) , size(D) ))
-%! assert (isequal ( sym(D) , A ))
+%! assert (isa (sym (D), 'sym'))
+%! assert (isequal (size (sym (D)), size (D)))
+%! assert (isequal (sym (D), A))
 
 %!test
 %! % more sym from array
 %! syms x
 %! A = [x x];
-%! assert (isequal ( sym(A), A ))
+%! assert (isequal (sym (A), A))
 %! A = [1 x];
-%! assert (isequal ( sym(A), A ))
+%! assert (isequal (sym (A), A))
 
 %!test
 %! % Cell array lists to syms
 %! % (these tests are pretty weak, doens't recursively compare two
 %! % cells, but just running this is a good test.
-%! x = sym('x');
+%! x = sym ('x');
 %!
 %! a = {1 2};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
 %!
 %! a = {1 2 {3 4}};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
 %!
 %! a = {1 2; 3 4};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
 %!
 %! a = {1 2; 3 {4}};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
 %!
 %! a = {1 [1 2] x [sym(pi) x]};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
-%! assert (isequal( size(a{2}), size(s{2}) ))
-%! assert (isequal( size(a{4}), size(s{4}) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
+%! assert (isequal (size (a{2}), size (s{2})))
+%! assert (isequal (size (a{4}), size (s{4})))
 %!
 %! a = {{{[1 2; 3 4]}}};
-%! s = sym(a);
-%! assert (isequal( size(a), size(s) ))
-%! assert (isequal( size(a{1}), size(s{1}) ))
-%! assert (isequal( size(a{1}{1}), size(s{1}{1}) ))
-%! assert (isequal( size(a{1}{1}{1}), size(s{1}{1}{1}) ))
+%! s = sym (a);
+%! assert (isequal (size (a), size (s)))
+%! assert (isequal (size (a{1}), size (s{1})))
+%! assert (isequal (size (a{1}{1}), size (s{1}{1})))
+%! assert (isequal (size (a{1}{1}{1}), size (s{1}{1}{1})))
 
 
 %!test
@@ -516,21 +515,21 @@ end
 
 %!test
 %! % bool
-%! t = sym(false);
-%! t = sym(true);
+%! t = sym (false);
+%! t = sym (true);
 %! assert (logical (t))
 
 %!test
 %! % bool vec/mat
-%! a = sym(1);
-%! t = sym([true false]);
-%! assert (isequal (t, [a==1  a==0]))
-%! t = sym([true false; false true]);
-%! assert (isequal (t, [a==1  a==0;  a==0  a==1]))
+%! a = sym (1);
+%! t = sym ([true false]);
+%! assert (isequal (t, [a == 1  a == 0]))
+%! t = sym ([true false; false true]);
+%! assert (isequal (t, [a == 1  a == 0;  a == 0  a == 1]))
 
 %!test
 %! % symbolic matrix
-%! A = sym('A', [2 3]);
+%! A = sym ('A', [2 3]);
 %! assert (isa (A, 'sym'))
 %! assert (isequal (size (A), [2 3]))
 %! A(1, 1) = 7;
@@ -541,39 +540,39 @@ end
 %!test
 %! % symbolic matrix, subs in for size
 %! syms n m integer
-%! A = sym('A', [n m]);
-%! B = subs(A, [n m], [5 6]);
+%! A = sym ('A', [n m]);
+%! B = subs (A, [n m], [5 6]);
 %! assert (isa (B, 'sym'))
 %! assert (isequal (size (B), [5 6]))
 
 %!test
 %! % 50 shapes of empty
-%! a = sym(ones(0, 3));
+%! a = sym (ones (0, 3));
 %! assert (isa (a, 'sym'))
 %! assert (isequal (size (a), [0 3]))
-%! a = sym(ones(2, 0));
+%! a = sym (ones (2, 0));
 %! assert (isequal (size (a), [2 0]))
-%! a = sym([]);
+%! a = sym ([]);
 %! assert (isequal (size (a), [0 0]))
 
 %!test
 %! % moar empty
-%! a = sym('a', [0 3]);
+%! a = sym ('a', [0 3]);
 %! assert (isa (a, 'sym'))
 %! assert (isequal (size (a), [0 3]))
-%! a = sym('a', [2 0]);
+%! a = sym ('a', [2 0]);
 %! assert (isa (a, 'sym'))
 %! assert (isequal (size (a), [2 0]))
 
 %!test
 %! % embedded sympy commands, various quotes, issue #143
-%! a = sym('a');
-%! a1 = sym('Symbol("a")');
-%! a2 = sym('Symbol(''a'')');
+%! a = sym ('a');
+%! a1 = sym ('Symbol("a")');
+%! a2 = sym ('Symbol(''a'')');
 %! assert (isequal (a, a1))
 %! assert (isequal (a, a2))
 %! % Octave only, and eval to hide from Matlab parser
-%! if exist('OCTAVE_VERSION', 'builtin')
+%! if exist ('OCTAVE_VERSION', 'builtin')
 %!   eval( 'a3 = sym("Symbol(''a'')");' );
 %!   eval( 'a4 = sym("Symbol(\"a\")");' );
 %!   assert (isequal (a, a3))
@@ -583,50 +582,50 @@ end
 %!test
 %! % doubles bigger than int32 INTMAX should not fail
 %! d = 4294967295;
-%! a = sym(d);
-%! assert (isequal (double(a), d))
+%! a = sym (d);
+%! assert (isequal (double (a), d))
 %! d = d + 123456;
-%! a = sym(d);
-%! assert (isequal (double(a), d))
+%! a = sym (d);
+%! assert (isequal (double (a), d))
 
 %!test
 %! % int32 integer types
-%! a = sym(100);
-%! b = sym(int32(100));
+%! a = sym (100);
+%! b = sym (int32 (100));
 %! assert (isequal (a, b))
 
 %!test
 %! % int32 MAXINT integers
-%! a = sym('2147483647');
-%! b = sym(int32(2147483647));
+%! a = sym ('2147483647');
+%! b = sym (int32 (2147483647));
 %! assert (isequal (a, b))
-%! a = sym('-2147483647');
-%! b = sym(int32(-2147483647));
+%! a = sym ('-2147483647');
+%! b = sym (int32 (-2147483647));
 %! assert (isequal (a, b))
-%! a = sym('4294967295');
-%! b = sym(uint32(4294967295));
+%! a = sym ('4294967295');
+%! b = sym (uint32 (4294967295));
 %! assert (isequal (a, b))
 
 %!test
 %! % int64 integer types
-%! a = sym('123456789012345');
-%! b = sym(int64(123456789012345));
-%! c = sym(uint64(123456789012345));
+%! a = sym ('123456789012345');
+%! b = sym (int64(123456789012345));
+%! c = sym (uint64(123456789012345));
 %! assert (isequal (a, b))
 %! assert (isequal (a, c))
 
 %!test
 %! % integer arrays
-%! a = int64([1 2 100]);
-%! s = sym(a);
-%! assert (isequal (double(a), [1 2 100]))
+%! a = int64 ([1 2 100]);
+%! s = sym (a);
+%! assert (isequal (double (a), [1 2 100]))
 
 %!test
 %! % bigger int64 integer types
-%! q = int64(123456789012345);
+%! q = int64 (123456789012345);
 %! w = 10000*q + 123;
-%! a = sym('1234567890123450123');
-%! b = sym(w);
+%! a = sym ('1234567890123450123');
+%! b = sym (w);
 %! assert (isequal (a, b))
 
 %!test
@@ -643,27 +642,27 @@ end
 %!test
 %! % symbols with special sympy names
 %! syms Ei Eq
-%! assert (~isempty(regexp(Eq.pickle, '^Symbol')))
-%! assert (~isempty(regexp(Ei.pickle, '^Symbol')))
+%! assert (~isempty (regexp (Eq.pickle, '^Symbol')))
+%! assert (~isempty (regexp (Ei.pickle, '^Symbol')))
 
 %!test
 %! % E can be a sym not just exp(sym(1))
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
-%!warning <heuristics for double-precision> sym(1e16);
-%!warning <heuristics for double-precision> sym(-1e16);
-%!warning <heuristics for double-precision> sym(10.33);
-%!warning <heuristics for double-precision> sym(-5.23);
+%!warning <heuristics for double-precision> sym (1e16);
+%!warning <heuristics for double-precision> sym (-1e16);
+%!warning <heuristics for double-precision> sym (10.33);
+%!warning <heuristics for double-precision> sym (-5.23);
 
-%!error <assumption is not supported>
-%! x = sym('x', 'positive2');
+%!error <is not supported>
+%! x = sym ('x', 'positive2');
 
-%!error <assumption is not supported>
-%! x = sym('x', 'integer', 'positive2');
+%!error <is not supported>
+%! x = sym ('x', 'integer', 'positive2');
 
-%!error <assumption is not supported>
-%! x = sym('x', 'integer2', 'positive');
+%!error <is not supported>
+%! x = sym ('x', 'integer2', 'positive');
 
 %!error <failed>
 %! x = sym('-pi', 'positive')
@@ -673,23 +672,23 @@ end
 
 %!test
 %! % multiple assumptions
-%! n = sym('n', 'negative', 'even');
-%! a = assumptions(n);
-%! assert(strcmp(a, 'n: negative, even') || strcmp(a, 'n: even, negative'))
+%! n = sym ('n', 'negative', 'even');
+%! a = assumptions (n);
+%! assert (strcmp (a, 'n: negative, even') || strcmp (a, 'n: even, negative'))
 
 %!test
 %! % save/load sym objects
 %! syms x
 %! y = 2*x;
 %! a = 42;
-%! myfile = tempname();
-%! save(myfile, 'x', 'y', 'a')
+%! myfile = tempname ();
+%! save (myfile, 'x', 'y', 'a')
 %! clear x y a
-%! load(myfile)
-%! assert(isequal(y, 2*x))
-%! assert(a == 42)
+%! load (myfile)
+%! assert (isequal (y, 2*x))
+%! assert (a == 42)
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
-%!   assert(unlink(myfile) == 0)
+%!   assert (unlink (myfile) == 0)
 %! else
-%!   delete([myfile '.mat'])
+%!   delete ([myfile '.mat'])
 %! end
