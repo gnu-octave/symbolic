@@ -680,6 +680,13 @@ end
 %! assert (~isempty (regexp (Ei.pickle, '^Symbol')))
 
 %!test
+%! % more symbols with special sympy names
+%! x = sym('FF')
+%! assert (~isempty (regexp (x.pickle, '^Symbol')))
+%! x = sym('ff')
+%! assert (~isempty (regexp (x.pickle, '^Symbol')))
+
+%!test
 %! % E can be a sym not just exp(sym(1))
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
