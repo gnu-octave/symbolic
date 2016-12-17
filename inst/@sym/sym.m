@@ -288,22 +288,23 @@ function s = sym(x, varargin)
       % TODO: Warning if you try make a sym with the same name of a system function.
       %symsnotfunc (x);
 
+      % TODO: tests pass without this?  Is there a example where this is needed?
       %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
-      r = 1;
-      xc = '';  % Used to check operators skipping first symbols
-      for i = 1:length (x)
-        if (strcmp (x (i), '-'))
-          r = r*-1;
-        elseif (~strcmp (x (i), '+'))
-          if (r == -1)
-            xc = x (i:end);
-            x = ['-' x(i:end)];
-          else
-            x = xc = x (i:end);
-          end
-          break
-        end
-      end
+      %r = 1;
+      %xc = '';  % Used to check operators skipping first symbols
+      %for i = 1:length (x)
+      %  if (strcmp (x (i), '-'))
+      %    r = r*-1;
+      %  elseif (~strcmp (x (i), '+'))
+      %    if (r == -1)
+      %      xc = x (i:end);
+      %      x = ['-' x(i:end)];
+      %    else
+      %      x = xc = x (i:end);
+      %    end
+      %    break
+      %  end
+      %end
 
       [x, flag] = const_to_python_str (x);
       x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
