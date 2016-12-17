@@ -320,11 +320,13 @@ function s = sym(x, varargin)
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
-              '    elif isinstance(_ins[i], list):'
-              '        for j in range(len(i)):'
-              '            d.update({i[k]:True})'
+              '    #elif isinstance(_ins[i], list):'  % TODO: allow a list?
+              '    #    for j in range(len(_ins[i])):'
+              '    #        d.update({_ins[i][j]:True})'
               '    elif isinstance(_ins[i], (str, bytes)):'
               '        d.update({_ins[i]:True})'
+	      '    else:'
+	      '        raise ValueError("something unexpected in assumptions")'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
 
@@ -705,6 +707,16 @@ end
 %! n = sym ('n', 'negative', 'even');
 %! a = assumptions (n);
 %! assert (strcmp (a, 'n: negative, even') || strcmp (a, 'n: even, negative'))
+
+%!error <unexpected in assumptions>
+%! % multiple assumptions as a list
+%! % TODO: should this be allowed?
+%! n = sym ('n', {'negative', 'even'});
+%! a = assumptions (n);
+%! assert (strcmp (a, 'n: negative, even') || strcmp (a, 'n: even, negative'))
+
+%!error <unexpected in assumptions>
+%! n = sym ('n', {{'negative', 'even'}});
 
 %!test
 %! % save/load sym objects
