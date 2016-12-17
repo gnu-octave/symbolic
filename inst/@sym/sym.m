@@ -264,7 +264,7 @@ function s = sym(x, varargin)
     end
 
     if (ima)
-      x = sprintf('%s + I*%s', ss{1}, ss{2});
+      x = sprintf('%s + I*(%s)', ss{1}, ss{2});
     else
       x = ss{1};
     end
