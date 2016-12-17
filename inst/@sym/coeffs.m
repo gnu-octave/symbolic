@@ -78,18 +78,18 @@
 %% @end group
 %% @end example
 %%
-%% Omitting the second output gives only the coefficients:
+%% Omitting the second output is not recommended, especially for non-interactive
+%% code, because it gives only the non-zero coefficients, and additionally
+%% the output is in the ``wrong order'' compared to other polynomial-related
+%% commands:
 %% @example
 %% @group
 %% c = coeffs (x^6 + 3*x - 4)
-%%   @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%%   @result{} c = (sym) [-4  3  1]  (1×3 matrix)
 %% @end group
 %% @end example
-%% WARNING: Matlab's Symbolic Math Toolbox returns c = [-4 3 1]
-%% here (as of version 2014a).  I suspect they have a bug as its
-%% inconsistent with the rest of Matlab's polynomial routines.  We
-%% do not copy this bug.
-%%
+%% @strong{Warning:} Again, note the order is reversed from the two-output
+%% case; this is for compatibility with Matlab's Symbolic Math Toolbox.
 %% @seealso{@@sym/sym2poly}
 %% @end deftypemethod
 
@@ -126,11 +126,11 @@ function [c, t] = coeffs(p, x)
     [c, t] = python_cmd (cmd, sym(p), sym(x));
   end
 
-  %% matlab SMT bug?
-  % they seem to reverse the order if t is not output.
-  %if (nargout == 1)
-  %  c = fliplr(c);
-  %end
+  %% SMT compat:
+  % reverse the order if t is not output.
+  if (nargout <= 1) && (all == false)
+    c = fliplr(c);
+  end
 
   % if nargout == 1, here is a simplier implementation:
   %cmd = { 'f = _ins[0]'
@@ -169,15 +169,17 @@ end
 %! assert (isequal (c, 6*x + 27))
 %! assert (isequal (t, 1))
 
-%%!test
-%%! % weird SMT order
-%%! syms x
-%%! a1 = [27 6];
-%%! a2 = [6 27];
-%%! c = coeffs(6*x*x + 27);
-%%! assert (isequal (c, a1))
-%%! [c, t] = coeffs(6*x*x + 27);
-%%! assert (isequal (c, a2))
+%!test
+%! % weird SMT order
+%! syms x
+%! a1 = [27 6];
+%! a2 = [6 27];
+%! c = coeffs(6*x*x + 27);
+%! assert (isequal (c, a1))
+%! coeffs(6*x*x + 27);
+%! assert (isequal (ans, a1))
+%! [c, t] = coeffs(6*x*x + 27);
+%! assert (isequal (c, a2))
 
 %!test
 %! % multivariable array
@@ -202,7 +204,7 @@ end
 %! assert (isequal (t, s))
 
 %!test
-%! % empty same as no specifying
+%! % empty same as not specifying
 %! syms x y
 %! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {});
 %! a = [6  27  36];
