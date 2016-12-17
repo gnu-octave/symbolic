@@ -99,8 +99,8 @@ end
 %! % Must not contain string 'symbol'; these all should make an
 %! % actual nan.  Actually a ctor test, not isnan.
 %! y = sym(nan);
-%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (y), 'Symbol')))
 %! y = sym('nan');
-%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (y), 'Symbol')))
 %! y = sym('NaN');
-%! assert (isempty( strfind(y.pickle, 'Symbol') ))
+%! assert (isempty( strfind (sympy (y), 'Symbol')))

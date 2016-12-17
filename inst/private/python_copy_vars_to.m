@@ -48,12 +48,9 @@ function a = do_list(indent, in, varlist)
 
     if (isa(x,'sym'))
       c=c+1; a{c} = [sp '# sym'];
-      % need to be careful here: pickle might have escape codes
-      % .append(pickle.loads("""%s"""))', x.pickle)
-      % The extra printf around the pickle helps if it still has
+      % The extra printf around the srepr helps if it still has
       % escape codes (and seems harmless if it does not)
-      % Issue #107: .pickle may fail for matrices on Matlab
-      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(x.pickle));
+      c=c+1; a{c} = sprintf ('%s%s.append(%s)', sp, in, sprintf (sympy (x)));
 
     elseif (ischar(x))
       if (exist ('OCTAVE_VERSION', 'builtin'))

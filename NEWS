@@ -21,6 +21,7 @@ octsympy 2.5.0-dev
           invhilb
           ones
           sind
+          sympy
           tand
           zeros
 
