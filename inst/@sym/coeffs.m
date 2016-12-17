@@ -21,9 +21,11 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{c} =} coeffs (@var{p}, @var{x})
 %% @deftypemethodx @@sym {@var{c} =} coeffs (@var{p})
+%% @deftypemethodx @@sym {@var{c} =} coeffs (@dots{}, 'all')
 %% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
 %% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p})
-%% Return non-zero coefficients of symbolic polynomial.
+%% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@dots{}, 'all')
+%% Return non-zero (or all) coefficients of symbolic polynomial.
 %%
 %% @var{c} contains the coefficients and @var{t} the corresponding
 %% terms.
@@ -90,12 +92,42 @@
 %% @end example
 %% @strong{Warning:} Again, note the order is reversed from the two-output
 %% case; this is for compatibility with Matlab's Symbolic Math Toolbox.
+%%
+%% If the optional input keyword @qcode{'all'} is passed, the zero
+%% coefficients are returned as well, and in the familiar order.
+%% @example
+%% @group
+%% c = coeffs (x^6 + 3*x - 4, 'all')
+%%   @result{} c = (sym) [1  0  0  0  0  3  -4]  (1×7 matrix)
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/sym2poly}
 %% @end deftypemethod
 
-function [c, t] = coeffs(p, x)
+function [c, t] = coeffs(p, x, all)
 
-  if (nargin > 2)
+  if (nargin == 1)
+    % don't use symvar: if input has x, y we want both
+    x = {};
+    all = false;
+  elseif (nargin == 2)
+    if (ischar (x))
+      if (~ strcmp (x, 'all'))
+        error ('coeffs: invalid 2nd input: if string, should be "all"')
+      end
+      x = {};
+      all = true;
+    else
+      x = sym(x);
+      all = false;
+    end
+  elseif (nargin == 3)
+    if (~ strcmp (all, 'all'))
+      error ('coeffs: invalid 3rd input: should be string "all"')
+    end
+    all = true;
+  elseif (nargin > 3)
     print_usage ();
   end
 
@@ -103,8 +135,7 @@ function [c, t] = coeffs(p, x)
     error('coeffs: works for scalar input only');
   end
 
-  cmd = { 'f = _ins[0]'
-          'xx = _ins[1]'
+  cmd = { '(f, xx, all) = _ins'
           'if xx == [] and f.is_constant():'  % special case
           '    xx = sympy.S("x")'
           'try:'
@@ -112,19 +143,17 @@ function [c, t] = coeffs(p, x)
           'except TypeError:'
           '    xx = [xx]'
           'p = Poly.from_expr(f, *xx)'
-          'terms = p.terms()'
+	  'if all:'
+          '    terms = p.all_terms()'
+	  'else:'
+          '    terms = p.terms()'
           'cc = [q[1] for q in terms]'
           'tt = [1]*len(terms)'
           'for i, x in enumerate(p.gens):'
           '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
           'return (Matrix([cc]), Matrix([tt]))' };
 
-  % don't use symvar: if input has x, y we want both
-  if (nargin == 1)
-    [c, t] = python_cmd (cmd, sym(p), {});
-  else
-    [c, t] = python_cmd (cmd, sym(p), sym(x));
-  end
+  [c, t] = python_cmd (cmd, sym(p), x, all);
 
   %% SMT compat:
   % reverse the order if t is not output.
@@ -146,7 +175,9 @@ function [c, t] = coeffs(p, x)
 end
 
 
-%!error <Invalid> coeffs (sym(1), 2, 3)
+%!error <Invalid> coeffs (sym(1), 2, 3, 4)
+%!error <should be> coeffs (sym(1), 2, 'al')
+%!error <should be> coeffs (sym(1), 'al')
 
 %!test
 %! % simple
@@ -180,6 +211,19 @@ end
 %! assert (isequal (ans, a1))
 %! [c, t] = coeffs(6*x*x + 27);
 %! assert (isequal (c, a2))
+
+%!test
+%! % no weird order with "all"
+%! syms x
+%! c = coeffs(6*x*x + 27, 'all');
+%! assert (isequal (c, [6 0 27]))
+
+%!test
+%! % "all"
+%! syms x
+%! [c, t] = coeffs(6*x*x + 27, 'all');
+%! assert (isequal (c, [6 0 27]))
+%! assert (isequal (t, [x^2 x 1]))
 
 %!test
 %! % multivariable array
