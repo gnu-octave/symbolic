@@ -381,12 +381,13 @@ function s = sym(x, varargin)
 
       switch (flag{1})
         case 1  % Bad call to python function
-          disp (['Python: ' err]);
-          disp (['error: Error using the "' s '" Python function' flag{2} ', you wrote it correctly?']);
-          error ('if this do not was intentional please use other var name.');
+          error (['Python: %s\n' ...
+                  'Error occurred using "%s" Python function, perhaps use another variable name?'],
+                 err, s);
         case 2  % Something else
-          disp (['Python: ' err]);
-          error (['You can not use var name "' s '" for a error, if is a bug please report it.']);
+          error (['Python: %s\n' ...
+                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
+                 err);
       end
       return
 
@@ -747,7 +748,7 @@ end
 % TODO: test that might be used in the future
 %%!warning <You are overloading/hiding> sym ('beta');
 
-%!error <please use other var name> sym ('FF(w)');
+%!error <use another variable name> sym ('FF(w)');
 
 %!test
 %! q = sym ({'a', 'b', 'c'}, 'positive');
