@@ -39,8 +39,6 @@
 %% @seealso{@@sym/horzcat, @@sym/cat}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function h = vertcat(varargin)
 
@@ -56,7 +54,7 @@ function h = vertcat(varargin)
           '            pass'
           '        else:'
           '            _proc.append(i)'
-          'return sp.Matrix.vstack(*_proc),'
+          'return sp.MatrixBase.vstack(*_proc),'
           };
 
   varargin = sym(varargin);
@@ -148,3 +146,9 @@ end
 %! [[x x] x; x x x];
 %! [[x x] x; [x x] x];
 %! [x x x; [x x] x];
+
+%!test
+%! % issue #700
+%! A = sym ([1 2]);
+%! B = simplify (A);
+%! assert (isequal ([B; A], [A; B]))
