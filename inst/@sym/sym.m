@@ -283,6 +283,7 @@ function s = sym(x, varargin)
   end
 
   if (isa (x, 'char'))
+    % We now have a char; need to decide whether to use S() or Symbol() on it.
 
     if (check)
       % TODO: Warning if you try make a sym with the same name of a system function.
@@ -307,14 +308,16 @@ function s = sym(x, varargin)
       %end
 
       [x, flag] = const_to_python_str (x);
+      if (flag)
+        check = false;
+      end
       x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
 
       isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
     end
 
-%% Use Symbol with
-%     No Numbers        Words     Not Octave symbols
-    if (check && ~isnum && regexp (x, '^\w+$') && ~flag)
+    %% Use Symbol() for words, not numbers, not "f(x)".
+    if (check && ~isnum && regexp (x, '^\w+$'))
 
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
@@ -326,8 +329,8 @@ function s = sym(x, varargin)
               '    #        d.update({_ins[i][j]:True})'
               '    elif isinstance(_ins[i], (str, bytes)):'
               '        d.update({_ins[i]:True})'
-	      '    else:'
-	      '        raise ValueError("something unexpected in assumptions")'
+              '    else:'
+              '        raise ValueError("something unexpected in assumptions")'
               'return Symbol("{s}", **d)' };
       s = python_cmd (strrep (cmd, '{s}', x), asm{:});
 
@@ -360,6 +363,8 @@ function s = sym(x, varargin)
         %end
       %end
 
+      % Usually want rational output here (i.e., if input was "1.2").
+      % But if input has words and parentheses it might be raw Sympy code.
       if (isempty (regexp (x, '\w\(.*\)')))
         s = python_cmd (['return S("' x '", rational=True)']);
         return
@@ -686,9 +691,9 @@ end
 
 %!test
 %! % more symbols with special sympy names
-%! x = sym('FF')
+%! x = sym('FF');
 %! assert (~isempty (regexp (x.pickle, '^Symbol')))
-%! x = sym('ff')
+%! x = sym('ff');
 %! assert (~isempty (regexp (x.pickle, '^Symbol')))
 
 %!test
