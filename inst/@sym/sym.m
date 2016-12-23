@@ -150,7 +150,7 @@
 %% It is also possible to save sym objects to file and then load them when
 %% needed in the usual way with the @code{save} and @code{load} commands.
 %%
-%% The underlying SymPy string representation (``srepr'') can also be passed
+%% The underlying SymPy string representation (``srepr'') can usually be passed
 %% directly to @code{sym}: @pxref{@@sym/char} for discussion of the details.
 %%
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
