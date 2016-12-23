@@ -360,9 +360,14 @@ function s = sym(x, varargin)
         %end
       %end
 
+      if (isempty (regexp (x, '\w\(.*\)')))
+        s = python_cmd (['return S("' x '", rational=True)']);
+        return
+      end
+
       cmd = {'x = "{s}"'
              'try:'
-             '    return (0, (0, 0), S(x, rational=True))'
+             '    return (0, (0, 0), S(x))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -749,6 +754,11 @@ end
 %! b = sym (21) / 10;
 %! %% https://github.com/sympy/sympy/issues/11703
 %! assert (python_cmd ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
+
+%!test
+%! % issue #706
+%! a = sym('Float("1.23")');
+%! assert (~ isempty (strfind (char (a), '.')))
 
 % TODO: test that might be used in the future
 %%!warning <avoid execute operations> sym ('1*2');
