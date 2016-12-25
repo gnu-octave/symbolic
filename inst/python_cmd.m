@@ -180,6 +180,7 @@ function varargout = python_cmd(cmd, varargin)
               A{2}, errlineno, strtrim (cmd{errcmdlineno}));
     end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
+    % Here A{3} is the error msg and A{2} is more info about where it happened
     error ('Python exception: %s\n    occurred %s', A{3}, A{2});
   end
 
@@ -422,6 +423,7 @@ end
 
 %!error <AttributeError>
 %! % python exception while passing variables to python
+%! % This tests the "INTERNAL_PYTHON_ERROR" path.
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
 %! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
