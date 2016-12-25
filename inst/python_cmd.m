@@ -172,9 +172,15 @@ function varargout = python_cmd(cmd, varargin)
   if (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     errcmdlineno = A{3} - db.prelines;
     errlineno = errcmdlineno - LinesBeforeCmdBlock;
-    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', A{2}, errlineno, strtrim (cmd{errcmdlineno})));
+    if (errcmdlineno <= 0 || errcmdlineno > length (cmd))
+      error ('Python exception: %s\n    occurred at unexpected line number, maybe near line %d?', ...
+              A{2}, errlineno);
+    else
+      error ('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', ...
+              A{2}, errlineno, strtrim (cmd{errcmdlineno}));
+    end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
-    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
+    error ('Python exception: %s\n    occurred %s', A{3}, A{2});
   end
 
   M = length(A);
