@@ -181,7 +181,9 @@ function varargout = python_cmd(cmd, varargin)
     end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
     % Here A{3} is the error msg and A{2} is more info about where it happened
-    error ('Python exception: %s\n    occurred %s', A{3}, A{2});
+    error (['Python exception: %s\n    occurred %s.\n    Consider filing ' ...
+            'an issue at https://github.com/cbm755/octsympy/issues'], ...
+           A{3}, A{2});
   end
 
   M = length(A);
