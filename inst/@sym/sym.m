@@ -589,6 +589,15 @@ end
 %! assert (isa (B, 'sym'))
 %! assert (isequal (size (B), [5 6]))
 
+%!error <Cannot create symbolic matrix> sym('2*a', [2 3])
+%!error <Cannot create symbolic matrix> sym(2*sym('a'), [2 3])
+%!error <Cannot create symbolic matrix> sym('1', [2 3])
+%!error <Cannot create symbolic matrix> sym(1, [2 3])
+
+%!error <Cannot create symbolic matrix>
+%! % TODO: symbolic tensor, maybe supported someday
+%! sym('a', [2 3 4])
+
 %!test
 %! % 50 shapes of empty
 %! a = sym (ones (0, 3));
