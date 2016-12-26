@@ -398,7 +398,7 @@ function s = sym(x, varargin)
         case 2  % Something else
           error (['Python: %s\n' ...
                   'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
-                 err);
+                 err, x);
       end
       return
 
