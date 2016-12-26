@@ -372,7 +372,7 @@ function s = sym(x, varargin)
 
       cmd = {'x = "{s}"'
              'try:'
-             '    return (0, (0, 0), S(x))'
+             '    return (0, 0, S(x))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -385,12 +385,12 @@ function s = sym(x, varargin)
              '            except:'
              '                pass'
              '    if len(lis) > 0:'
-             '        return (str(e), (1, "" if len(lis) == 1 else "s"), "\", \"".join(str(e) for e in lis))'
-             '    return (str(e), (2, 0), x)' };
+             '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
+             '    return (str(e), 2, 0)' };
 
       [err flag s] = python_cmd (strrep (cmd, '{s}', x));
 
-      switch (flag{1})
+      switch (flag)
         case 1  % Bad call to python function
           error (['Python: %s\n' ...
                   'Error occurred using "%s" Python function, perhaps use another variable name?'],
