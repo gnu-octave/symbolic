@@ -35,11 +35,13 @@ function [s, flag] = const_to_python_str (x)
   persistent const
 
   if (isempty (list))
-    % Table of special doubles and special strings
-    % format: number, {octave strings}, resulting python expression
+    % Table of special doubles and special strings.  Format for each row is:
+    %    double value, {list of strings to recognize}, resulting python expr
+    % Note: case senstive
+    % Note: python expr should be in list for identity "sym(sympr(x)) == x"
     list = {pi {'pi'} 'pi'; ...
             inf {'inf' 'Inf' 'oo'} 'oo'; ...
-            nan {'nan' 'NaN'} 'nan'; ...
+            nan {'NaN' 'nan'} 'nan'; ...
             i {'i' 'I'} 'I'};
     % Special Sympy constants to recognize
     const = {'zoo'};
