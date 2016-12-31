@@ -237,9 +237,9 @@ function s = sym(x, varargin)
 
   elseif (islogical (x)  &&  isscalar(x)  &&  nargin==1)
     if (x)
-      cmd = 'z = sp.S.true';
+      cmd = {'z = sp.S.true'};
     else
-      cmd = 'z = sp.S.false';
+      cmd = {'z = sp.S.false'};
     end
 
   elseif (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
@@ -328,16 +328,20 @@ function s = sym(x, varargin)
         warning('possibly unintended decimal point in constructor string');
       end
       % x is raw sympy, could have various quotes in it
-      cmd = sprintf('z = sympy.S("%s")', strrep(x, '"', '\"'));
+      x = strrep(x, '"', '\"');
+      cmd = try_sym(x, sprintf('z = sympy.S("%s")', x));
 
     else % useSymbolNotS
       if (isempty(asm))
-        cmd = sprintf('z = sympy.Symbol("%s")', x);
+        cmd = try_sym(x, sprintf('z = sympy.Symbol("%s")', x));
 
       elseif (isscalar(asm) && isscalar(asm{1}) && isstruct(asm{1}))
         % we have an assumptions dict
-        cmd = sprintf('return sympy.Symbol("%s", **_ins[0]),', x);
-        s = python_cmd (cmd, asm{1});
+        cmd = try_sym(x, sprintf('return (sympy.Symbol("%s", **_ins[0]), True)', x));
+        [s, u] = python_cmd (cmd, asm{1});
+        if ~u
+          error(['Error making the symfun "' s '", you wrote correctly the symbol?, or its a Python function.']);
+        end
         return
 
       elseif (iscell(asm))
@@ -347,8 +351,8 @@ function s = sym(x, varargin)
           assert(ismember(asm{n}, valid_asm), ...
                  'sym: that assumption is not supported')
         end
-        cmd = ['z = sympy.Symbol("' x '"' ...
-               sprintf(', %s=True', asm{:}) ')'];
+        cmd = {['z = sympy.Symbol("' x '"' sprintf(', %s=True', asm{:}), ')']};
+        cmd = try_sym(x, cmd);
       else
         error('sym: invalid extra input, perhaps invalid assumptions?');
       end
@@ -361,7 +365,28 @@ function s = sym(x, varargin)
     error('conversion to symbolic with those arguments not (yet) supported');
   end
 
-  s = python_cmd ({cmd 'return z,'});
+  [s, u] = python_cmd ([cmd; 'return (z, True)']);
+  if ~u
+    error(['Error making the symfun "' s '", you wrote correctly the symbol?, or its a Python function.']);
+  end
+
+end
+
+
+function a = try_sym(x, y)
+
+  if ~iscell(y)
+    y = {y};
+  end
+
+  assert( isequal( length(y), 1), 'try_sym only works with a 1 line input.')
+
+  cmd = { 'try:'
+        [ '    ' y{:}]
+          'except:'
+          '    return (x, False)' };
+
+  a = [sprintf('x = "%s"', x); cmd];
 
 end
 
@@ -692,3 +717,7 @@ end
 %! else
 %!   delete ([myfile '.mat'])
 %! end
+
+%!error
+%! %% Bad python function.
+%! sym('FF(w)');
