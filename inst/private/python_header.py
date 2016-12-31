@@ -49,6 +49,7 @@ try:
     from distutils.version import LooseVersion
     import itertools
     import collections
+    from re import split
 except:
     echo_exception_stdout("in python_header import block")
     raise

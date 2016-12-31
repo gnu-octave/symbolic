@@ -40,6 +40,8 @@ octsympy 2.5.0-dev
 
   * `solve` now works with inequalities.
 
+  * `sym('1.3')` now creates the rational number 13/10.
+
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
 
