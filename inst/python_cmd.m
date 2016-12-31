@@ -172,9 +172,18 @@ function varargout = python_cmd(cmd, varargin)
   if (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
     errcmdlineno = A{3} - db.prelines;
     errlineno = errcmdlineno - LinesBeforeCmdBlock;
-    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', A{2}, errlineno, strtrim (cmd{errcmdlineno})));
+    if (errcmdlineno <= 0 || errcmdlineno > length (cmd))
+      error ('Python exception: %s\n    occurred at unexpected line number, maybe near line %d?', ...
+              A{2}, errlineno);
+    else
+      error ('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', ...
+              A{2}, errlineno, strtrim (cmd{errcmdlineno}));
+    end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
-    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
+    % Here A{3} is the error msg and A{2} is more info about where it happened
+    error (['Python exception: %s\n    occurred %s.\n    Consider filing ' ...
+            'an issue at https://github.com/cbm755/octsympy/issues'], ...
+           A{3}, A{2});
   end
 
   M = length(A);
@@ -416,6 +425,7 @@ end
 
 %!error <AttributeError>
 %! % python exception while passing variables to python
+%! % This tests the "INTERNAL_PYTHON_ERROR" path.
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
 %! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
