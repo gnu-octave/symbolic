@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -31,15 +32,24 @@ function z = mat_access(A, subs)
 
   if ((length(subs) == 1) && (islogical(subs{1})))
     %% A(logical)
-    z = mat_mask_access(A, subs{1});
-    return
+    if (~ is_same_shape (A, subs{1}))
+      % this is not an error, but quite likely reflects a user error
+      warning ('OctSymPy:subsref:index_matrix_not_same_shape', ...
+               'A and I in A(I) not same shape: no problem, but did you intend this?')
+    end
+    subs{1} = find (subs{1});
+    if (isempty (subs{1}))
+      z = sym (zeros (size (subs{1})));
+      return;
+    end
 
   elseif ( (length(subs) == 1) && strcmp(subs{1}, ':') )
     %% A(:)
     z = reshape(A, numel(A), 1);
     return
+  end
 
-  elseif (length(subs) == 1)
+  if (length (subs) == 1)
     %% linear index into a matrix/vector/scalar A
     i = subs{1};
     if strcmp(i, '')

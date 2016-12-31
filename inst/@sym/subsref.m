@@ -1,4 +1,6 @@
 %% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -289,3 +291,48 @@ end
 %! % issue #445
 %! A = sym([1 2; 3 4]);
 %! A(1, sym(4)/3)
+
+%!shared a, b
+%! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
+%! b = sym (a);
+
+%!function test_bool (a, b, c)
+%!  s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%!  assert (isequal (a(c), b(c)))
+%!  warning (s)
+%!endfunction
+
+%!test
+%! c = false;
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+
+%!test
+%! c = [false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true; true false true false; false true false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false; true; false; true; false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true; false true; true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
