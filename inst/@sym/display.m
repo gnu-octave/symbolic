@@ -76,6 +76,10 @@ function display(x)
     unicode_dec = false;
   end
   if (exist('OCTAVE_VERSION', 'builtin') && ...
+      compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
+    [fmt, spacing] = format();
+    loose = strcmp (spacing, 'loose');
+  elseif (exist('OCTAVE_VERSION', 'builtin') && ...
       compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
     % Octave 4.1 dropped (temporarily?) the get(0,...) approach
     loose = eval('! __compactformat__ ()');
