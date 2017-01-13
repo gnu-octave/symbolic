@@ -20,7 +20,9 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
-%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond})
+%% @deftypemethodx @@sym {@var{x} =} assume (@var{x}, 'clear')
+%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond1}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {} assume (@var{x}, 'clear')
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% This function has two different behaviours depending on whether
@@ -91,7 +93,18 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Warning}: this second form operates on the caller's
+%% To clear assumptions on a variable use @code{assume(x, 'clear')}, for example:
+%% @example
+%% @group
+%% syms x positive
+%% f = sin (x);
+%% assume (x, 'clear')
+%% isempty (assumptions (f))
+%%   @result{} ans = 1
+%% @end group
+%% @end example
+%%
+%% @strong{Warning}: the second form operates on the caller's
 %% workspace via evalin/assignin.  So if you call this from other
 %% functions, it will operate in your function's workspace (and not
 %% the @code{base} workspace).  This behaviour is for compatibility
