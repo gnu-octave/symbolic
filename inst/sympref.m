@@ -183,6 +183,21 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct (cmd))
+    % Means we need to copy it
+    s = sympref();
+
+    assert (isequal (fieldnames (s)', ...
+      {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
+      'sympref: Type of fields of the structure is not correct')
+    settings = [];
+    sympref ('ipc', cmd.ipc)
+    settings.whichpython = cmd.whichpython;
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('quiet', cmd.quiet)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
@@ -424,3 +439,12 @@ end
 
 %!error <invalid preference or command> sympref ('nosuchsetting')
 %!error <invalid preference or command> sympref ('nosuchsetting', true)
+
+%!test
+%! syms x
+%! old = sympref();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! sympref (old);
+%! new = sympref();
+%! assert(isequal(old, new))
