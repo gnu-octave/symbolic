@@ -179,6 +179,13 @@ end
 %! assert(strcmp(a, 'x: positive'))
 
 %!test
+%! % clear: has output so avoids workspace
+%! syms x positive
+%! f = 2*x;
+%! x2 = assume(x, 'clear');
+%! assert (~ isempty (assumptions (f)));
+
+%!test
 %! % has no output so does workspace
 %! syms x positive
 %! x2 = x;
@@ -190,6 +197,14 @@ end
 %! assert(strcmp(a, 'x: negative'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: negative'))
+
+%!test
+%! % clear: has not output so does workspace
+%! syms x positive
+%! f = 2*x;
+%! assume(x, 'clear');
+%! assert (isempty (assumptions (f)));
+%! assert (isempty (assumptions ()));
 
 %!test
 %! syms x positive
