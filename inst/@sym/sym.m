@@ -156,257 +156,312 @@
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
 
-
-function s = sym(x, varargin)
-
-  if (nargin == 0)
-    x = 0;
+classdef sym < handle
+  properties
+    symsize
   end
 
-  %% The actual class constructor
-  % Tempting to make a 'private constructor' but we need to access
-  % this from the python ipc stuff: outside the class.  We identify
-  % this non-user-facing usage by empty x and 6 inputs total.  Note
-  % that "sym([])" is valid but "sym([], ...)" is otherwise not.
-  if (isempty (x) && nargin == 6)
-    s.pickle = varargin{1};
-    s.size = varargin{2};
-    s.flat = varargin{3};
-    s.ascii = varargin{4};
-    s.unicode = varargin{5};
-    s.extra = [];
-    s = class (s, 'sym');
-    return
+  properties (Access = private)
+    pickle
+    flat
+    ascii
+    unicode
+    extra
   end
 
-  %% User interface for defining sym
-  % sym(1), sym('x'), etc.
-
-  %if (strcmp (class (x), 'symfun')  &&  nargin==1)
-  %  % FIXME: pass a symfun to sym() ctor; convert to pure sym
-  %  % (SMT does not do this in 2014a).  bad idea?
-  %  s = x.sym;
-  %  return
-
-  if (isa (x, 'sym'))
-    if (nargin == 1)
-      s = x;
-      return
-    else
-      x = x.flat;
-    end
+  methods (Static, Access = private)
+    assert_same_shape (x, y);
+    cell2nosyms (x);
+    cell_array_to_sym (L);
+    check_assumptions (x);
+    codegen (varargin);
+    const_to_python_str (x);
+    elementwise_op(scalar_fcn, varargin);
+    ineq_helper (op, fop, lhs, rhs, nanspecial);
+    is_same_shape (x, y);
+    is_valid_index (x);
+    make_sym_matrix (As, sz);
+    mat_access (A, subs);
+    mat_rccross_access (A, r, c);
+    mat_rclist_access (A, r, c);
+    mat_rclist_asgn (A, r, c, B);
+    mat_replace (A, subs, b);
+    numeric_array_to_sym (A);
+    uniop_bool_helper (x, scalar_fcn, opt, varargin);
   end
 
-  if (iscell (x))  % Handle Cells
-    s = cell_array_to_sym (x, varargin{:});
-    return
-  end
+  methods
+    function s = sym(x, varargin)
 
-  asm = {};
-  check = true;
-
-  if (nargin >= 2)
-    if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
-      assert (nargin < 3, 'MatrixSymbol do not support assumptions')
-      s = make_sym_matrix (x, varargin{1});
-      return
-    else
-      if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
-        sclear = true;
-        varargin(1) = [];
-        %warning ('deprecated: "sym(x, ''clear'')" will be removed in future version');
-      else
-        sclear = false;
-        check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
-      end
-      asm = varargin;
-    end
-  end
-
-  isnumber = isnumeric (x) || islogical (x);
-  assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
-
-  if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
-    s = numeric_array_to_sym (x);
-    return
-
-  elseif (isa (x, 'double'))  % Handle doubles
-    check = false;
-    ima = ~isreal (x);
-    if (ima)
-      xx = {real(x); imag(x)};
-    else
-      xx = {x};
-    end
-    ss = cell(2,1);
-
-    for n = 1:numel(xx)
-      tmpx = xx{n};
-      [ss{n}, flag] = const_to_python_str (tmpx);
-      if (~flag)
-        % Allow 1/3 and other "small" fractions.
-        % Personally, I like a warning here so I can catch bugs.
-        % Matlab SMT does this (w/o warning).
-        % FIXME: could have sympy do this?  Or just make symbolic floats?
-        warning('OctSymPy:sym:rationalapprox', ...
-                'Using rat() heuristics for double-precision input (is this what you wanted?)');
-        [N1, D1] = rat (tmpx);
-        [N2, D2] = rat (tmpx / pi);
-        if (10*abs (D2) < abs (D1))
-          % use frac*pi if demoninator significantly shorter
-          ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
-        else
-          ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
-        end
-      else
-        ss{n} = sprintf ('S(%s)', ss{n});
-      end
-    end
-
-    if (ima)
-      x = sprintf('%s + I*(%s)', ss{1}, ss{2});
-    else
-      x = ss{1};
-    end
-
-  elseif (islogical (x)) % Handle logical values
-    check = false;
-    if (x)
-      x = 'S.true';
-    else
-      x = 'S.false';
-    end
-
-  elseif (isinteger (x)) % Handle integer vealues
-    check = false;
-    x = num2str (x, '%ld');
-  end
-
-  if (isa (x, 'char'))
-    % We now have a char; need to decide whether to use S() or Symbol() on it.
-
-    if (check)
-      % TODO: Warning if you try make a sym with the same name of a system function.
-      %symsnotfunc (x);
-
-      % TODO: tests pass without this?  Is there a example where this is needed?
-      %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
-      %r = 1;
-      %xc = '';  % Used to check operators skipping first symbols
-      %for i = 1:length (x)
-      %  if (strcmp (x (i), '-'))
-      %    r = r*-1;
-      %  elseif (~strcmp (x (i), '+'))
-      %    if (r == -1)
-      %      xc = x (i:end);
-      %      x = ['-' x(i:end)];
-      %    else
-      %      x = xc = x (i:end);
-      %    end
-      %    break
-      %  end
-      %end
-
-      [x, flag] = const_to_python_str (x);
-      if (flag)
-        check = false;
-      end
-      x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
-      isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
-    end
-
-    %% Use Symbol() for words, not numbers, not "f(x)".
-    if (check && ~isnum && regexp (x, '^\w+$'))
-
-      cmd = { 'd = dict()'
-              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
-              'for i in range(len(_ins)):'
-              '    if isinstance(_ins[i], dict):'
-              '        d.update(_ins[i])'
-              '    #elif isinstance(_ins[i], list):'  % TODO: allow a list?
-              '    #    for j in range(len(_ins[i])):'
-              '    #        d.update({_ins[i][j]:True})'
-              '    elif isinstance(_ins[i], (str, bytes)):'
-              '        d.update({_ins[i]:True})'
-              '    else:'
-              '        raise ValueError("something unexpected in assumptions")'
-              'return Symbol("{s}", **d)' };
-      s = python_cmd (strrep (cmd, '{s}', x), asm{:});
-
-      if (nargin == 2 && sclear)
-        % ---------------------------------------------
-        % Muck around in the caller's namespace, replacing syms
-        % that match 'xstr' (a string) with the 'newx' sym.
-        context = 'caller';
-        S = evalin(context, 'whos');
-        evalin(context, '[];');  % clear 'ans'
-        for i = 1:numel(S)
-          obj = evalin(context, S(i).name);
-          [newobj, flag] = symreplace(obj, x, s);
-          if flag, assignin(context, S(i).name, newobj); end
-        end
-        % ---------------------------------------------
+      if (nargin == 0)
+        x = 0;
       end
 
-      return
-
-    else % S() in other case
-
-      assert (isempty (asm), 'Only symbols can have assumptions.')
-
-      % TODO: figure version might warn on expression strings
-      %if (check)
-        % Check if the user try to execute operations from sym
-        %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
-        %  warning ('Please avoid execute operations from sym function.');
-        %end
-      %end
-
-      % Usually want rational output here (i.e., if input was "1.2").
-      % But if input has words and parentheses it might be raw Sympy code.
-      if (isempty (regexp (x, '\w\(.*\)')))
-        s = python_cmd (['return S("' x '", rational=True)']);
+      %% The actual class constructor
+      % Tempting to make a 'private constructor' but we need to access
+      % this from the python ipc stuff: outside the class.  We identify
+      % this non-user-facing usage by empty x and 6 inputs total.  Note
+      % that "sym([])" is valid but "sym([], ...)" is otherwise not.
+      if (isempty (x) && nargin == 6)
+        s.pickle = varargin{1};
+        s.symsize = varargin{2};
+        s.flat = varargin{3};
+        s.ascii = varargin{4};
+        s.unicode = varargin{5};
+        s.extra = [];
         return
       end
 
-      cmd = {'x = "{s}"'
-             'try:'
-             '    return (0, 0, S(x))'
-             'except Exception as e:'
-             '    lis = set()'
-             '    if "(" in x or ")" in x:'
-             '        x2 = split("\(|\)| |,", x)'
-             '        x2 = [p for p in x2 if p]'
-             '        for i in x2:'
-             '            try:'
-             '                if eval("callable(" + i + ")"):'
-             '                    lis.add(i)'
-             '            except:'
-             '                pass'
-             '    if len(lis) > 0:'
-             '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
-             '    return (str(e), 2, 0)' };
+      %% User interface for defining sym
+      % sym(1), sym('x'), etc.
 
-      [err flag s] = python_cmd (strrep (cmd, '{s}', x));
+      %if (strcmp (class (x), 'symfun')  &&  nargin==1)
+      %  % FIXME: pass a symfun to sym() ctor; convert to pure sym
+      %  % (SMT does not do this in 2014a).  bad idea?
+      %  s = x.sym;
+      %  return
 
-      switch (flag)
-        case 1  % Bad call to python function
-          error (['Python: %s\n' ...
-                  'Error occurred using "%s" Python function, perhaps use another variable name?'],
-                 err, s);
-        case 2  % Something else
-          error (['Python: %s\n' ...
-                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
-                 err, x);
+      if (isa (x, 'sym'))
+        if (nargin == 1)
+          s = x;
+          return
+        else
+          x = x.flat;
+        end
       end
-      return
+
+      if (iscell (x))  % Handle Cells
+        error ('conversion to cell array of symbols from the constructor is no longer supported. Use sym.symarray instead.');
+        return
+      end
+
+      asm = {};
+      check = true;
+
+      if (nargin >= 2)
+        if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
+          error ('conversion to matrix of symbols from the constructor is no longer supported. Use sym.symarray instead.');
+          return
+        else
+          if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
+            sclear = true;
+            varargin(1) = [];
+            %warning ('deprecated: "sym(x, ''clear'')" will be removed in future version');
+          else
+            sclear = false;
+            check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+          end
+          asm = varargin;
+        end
+      end
+
+      isnumber = isnumeric (x) || islogical (x);
+      assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
+
+      if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
+        error ('conversion to numeric array of symbols from the constructor is no longer supported. Use sym.symarray instead.');
+        return
+
+      elseif (isa (x, 'double'))  % Handle doubles
+        check = false;
+        ima = ~isreal (x);
+        if (ima)
+          xx = {real(x); imag(x)};
+        else
+          xx = {x};
+        end
+        ss = cell(2,1);
+
+        for n = 1:numel(xx)
+          tmpx = xx{n};
+          [ss{n}, flag] = sym.const_to_python_str (tmpx);
+          if (~flag)
+            % Allow 1/3 and other "small" fractions.
+            % Personally, I like a warning here so I can catch bugs.
+            % Matlab SMT does this (w/o warning).
+            % FIXME: could have sympy do this?  Or just make symbolic floats?
+            warning('OctSymPy:sym:rationalapprox', ...
+                    'Using rat() heuristics for double-precision input (is this what you wanted?)');
+            [N1, D1] = rat (tmpx);
+            [N2, D2] = rat (tmpx / pi);
+            if (10*abs (D2) < abs (D1))
+              % use frac*pi if demoninator significantly shorter
+              ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+            else
+              ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+            end
+          else
+            ss{n} = sprintf ('S(%s)', ss{n});
+          end
+        end
+
+        if (ima)
+          x = sprintf('%s + I*(%s)', ss{1}, ss{2});
+        else
+          x = ss{1};
+        end
+
+      elseif (islogical (x)) % Handle logical values
+        check = false;
+        if (x)
+          x = 'S.true';
+        else
+          x = 'S.false';
+        end
+
+      elseif (isinteger (x)) % Handle integer vealues
+        check = false;
+        x = num2str (x, '%ld');
+      end
+
+      if (isa (x, 'char'))
+        % We now have a char; need to decide whether to use S() or Symbol() on it.
+
+        if (check)
+          % TODO: Warning if you try make a sym with the same name of a system function.
+          %symsnotfunc (x);
+
+          % TODO: tests pass without this?  Is there a example where this is needed?
+          %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
+          %r = 1;
+          %xc = '';  % Used to check operators skipping first symbols
+          %for i = 1:length (x)
+          %  if (strcmp (x (i), '-'))
+          %    r = r*-1;
+          %  elseif (~strcmp (x (i), '+'))
+          %    if (r == -1)
+          %      xc = x (i:end);
+          %      x = ['-' x(i:end)];
+          %    else
+          %      x = xc = x (i:end);
+          %    end
+          %    break
+          %  end
+          %end
+
+          [x, flag] = sym.const_to_python_str (x);
+          if (flag)
+            check = false;
+          end
+          x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
+
+          isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
+        end
+
+        %% Use Symbol() for words, not numbers, not "f(x)".
+        if (check && ~isnum && regexp (x, '^\w+$'))
+
+          cmd = { 'd = dict()'
+                  '_ins = [_ins] if isinstance(_ins, dict) else _ins'
+                  'for i in range(len(_ins)):'
+                  '    if isinstance(_ins[i], dict):'
+                  '        d.update(_ins[i])'
+                  '    #elif isinstance(_ins[i], list):'  % TODO: allow a list?
+                  '    #    for j in range(len(_ins[i])):'
+                  '    #        d.update({_ins[i][j]:True})'
+                  '    elif isinstance(_ins[i], (str, bytes)):'
+                  '        d.update({_ins[i]:True})'
+                  '    else:'
+                  '        raise ValueError("something unexpected in assumptions")'
+                  'return Symbol("{s}", **d)' };
+          s = python_cmd (strrep (cmd, '{s}', x), asm{:});
+
+          if (nargin == 2 && sclear)
+            % ---------------------------------------------
+            % Muck around in the caller's namespace, replacing syms
+            % that match 'xstr' (a string) with the 'newx' sym.
+            context = 'caller';
+            S = evalin(context, 'whos');
+            evalin(context, '[];');  % clear 'ans'
+            for i = 1:numel(S)
+              obj = evalin(context, S(i).name);
+              [newobj, flag] = symreplace(obj, x, s);
+              if flag, assignin(context, S(i).name, newobj); end
+            end
+            % ---------------------------------------------
+          end
+
+          return
+
+        else % S() in other case
+
+          assert (isempty (asm), 'Only symbols can have assumptions.')
+
+          % TODO: figure version might warn on expression strings
+          %if (check)
+            % Check if the user try to execute operations from sym
+            %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
+            %  warning ('Please avoid execute operations from sym function.');
+            %end
+          %end
+
+          % Usually want rational output here (i.e., if input was "1.2").
+          % But if input has words and parentheses it might be raw Sympy code.
+          if (isempty (regexp (x, '\w\(.*\)')))
+            s = python_cmd (['return S("' x '", rational=True)']);
+            return
+          end
+
+          cmd = {'x = "{s}"'
+                 'try:'
+                 '    return (0, 0, S(x))'
+                 'except Exception as e:'
+                 '    lis = set()'
+                 '    if "(" in x or ")" in x:'
+                 '        x2 = split("\(|\)| |,", x)'
+                 '        x2 = [p for p in x2 if p]'
+                 '        for i in x2:'
+                 '            try:'
+                 '                if eval("callable(" + i + ")"):'
+                 '                    lis.add(i)'
+                 '            except:'
+                 '                pass'
+                 '    if len(lis) > 0:'
+                 '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
+                 '    return (str(e), 2, 0)' };
+
+          [err flag s] = python_cmd (strrep (cmd, '{s}', x));
+
+          switch (flag)
+            case 1  % Bad call to python function
+              error (['Python: %s\n' ...
+                      'Error occurred using "%s" Python function, perhaps use another variable name?'],
+                     err, s);
+            case 2  % Something else
+              error (['Python: %s\n' ...
+                      'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
+                     err, x);
+          end
+          return
+
+        end
+      end
+
+      error ('Conversion to symbolic with those arguments not (yet) supported')
 
     end
   end
 
-  error ('Conversion to symbolic with those arguments not (yet) supported')
-
+  methods (Static)
+    function symout = symarray(x, varargin)
+      if (nargin == 1)
+        if (iscell (x))
+          symout = sym.cell_array_to_sym (x);
+        elseif (~isscalar (x) && (isnumeric (x) || islogical (x)))
+          symout = sym.numeric_array_to_sym (x);
+        else
+          symout = sym(x);
+        end
+      elseif (nargin >= 2)
+        if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
+          assert (nargin < 3, 'MatrixSymbol do not support assumptions')
+          s = make_sym_matrix (x, varargin{1});
+        else
+          symout = sym (x, varargin);
+        end
+      end
+    end
+  end
 end
 
 
