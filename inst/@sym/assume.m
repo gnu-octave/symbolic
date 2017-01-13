@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2017 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -110,18 +111,13 @@ function varargout = assume(x, varargin)
   xstr = x.flat;
 
   if (nargin > 1 && strcmp(varargin{1}, 'clear'))
-
     newx = sym(xstr);
-
   else
-
-  for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
-  end
-
-  newx = sym(xstr, ca);
-
+    for n = 2:nargin
+      cond = varargin{n-1};
+      ca.(cond) = true;
+    end
+    newx = sym(xstr, ca);
   end
 
   if (nargout > 0)
@@ -196,5 +192,5 @@ end
 
 %!test
 %! syms x positive
-%! assume(x, 'clear')
-%! assert(assumptions, {})
+%! assume (x, 'clear')
+%! assert (isempty (assumptions ()))
