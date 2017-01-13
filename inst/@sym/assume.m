@@ -111,6 +111,7 @@ function varargout = assume(x, varargin)
   xstr = x.flat;
 
   if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+    assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
     newx = sym(xstr);
   else
     for n = 2:nargin
@@ -194,3 +195,7 @@ end
 %! syms x positive
 %! assume (x, 'clear')
 %! assert (isempty (assumptions ()))
+
+%!error <cannot be combined>
+%! syms x
+%! x2 = assume (x, 'clear', 'real');
