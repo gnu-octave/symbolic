@@ -107,13 +107,22 @@
 
 function varargout = assume(x, varargin)
 
+  xstr = x.flat;
+
+  if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+
+    newx = sym(xstr);
+
+  else
+
   for n=2:nargin
     cond = varargin{n-1};
     ca.(cond) = true;
   end
 
-  xstr = x.flat;
   newx = sym(xstr, ca);
+
+  end
 
   if (nargout > 0)
     varargout{1} = newx;
@@ -184,3 +193,8 @@ end
 %! assert(strcmp(a, 'x: negative'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: negative'))
+
+%!test
+%! syms x positive
+%! assume(x, 'clear')
+%! assert(assumptions, {})
