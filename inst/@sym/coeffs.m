@@ -114,7 +114,7 @@ function [c, t] = coeffs(p, x, all)
     all = false;
   elseif (nargin == 2)
     if (ischar (x))
-      if (~ strcmp (x, 'all'))
+      if (~ strcmpi (x, 'all'))
         error ('coeffs: invalid 2nd input: if string, should be "all"')
       end
       x = {};
@@ -124,7 +124,7 @@ function [c, t] = coeffs(p, x, all)
       all = false;
     end
   elseif (nargin == 3)
-    if (~ strcmp (all, 'all'))
+    if (~ strcmpi (all, 'all'))
       error ('coeffs: invalid 3rd input: should be string "all"')
     end
     all = true;
@@ -215,6 +215,13 @@ end
 %! [c, t] = coeffs(6*x*x + 27, 'all');
 %! assert (isequal (c, [6 0 27]))
 %! assert (isequal (t, [x^2 x 1]))
+
+%!test
+%! % "All"
+%! syms x
+%! [c, t] = coeffs(6*x, 'All');
+%! assert (isequal (c, [6 0]))
+%! assert (isequal (t, [x 1]))
 
 %!test
 %! % multivariable array
