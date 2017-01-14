@@ -100,6 +100,8 @@
 %%   @result{} c = (sym) [1  0  0  0  0  3  -4]  (1×7 matrix)
 %% @end group
 %% @end example
+%% @strong{Note:} The @qcode{'all'} feature does not yet work with
+%% multivariate polynomials (https://github.com/cbm755/octsympy/issues/720).
 %%
 %% @seealso{@@sym/sym2poly}
 %% @end deftypemethod
