@@ -162,17 +162,7 @@ function [c, t] = coeffs(p, x, all)
     c = fliplr(c);
   end
 
-  % if nargout == 1, here is a simplier implementation:
-  %cmd = { 'f = _ins[0]'
-  %        'xx = _ins[1]'
-  %        'try:'
-  %        '    xx = list(xx)'
-  %        'except TypeError:'
-  %        '    xx = [xx]'
-  %        'p = Poly.from_expr(f, *xx)'
-  %        'c = p.coeffs()'
-  %        'return Matrix([c]),' };
-
+  % if nargout == 1, its simplier to use 'p.coeffs()'
 end
 
 
