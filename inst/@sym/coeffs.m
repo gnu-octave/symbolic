@@ -246,7 +246,8 @@ end
 %! assert (isequal (t, s))
 
 %!test
-%! % empty same as not specifying
+%! % empty same as not specifying; maybe not SMT compatible:
+%! % https://github.com/cbm755/octsympy/pull/708#discussion_r94292831
 %! syms x y
 %! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {});
 %! a = [6  27  36];
