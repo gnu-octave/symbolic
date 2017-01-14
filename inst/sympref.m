@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
 %%
 %% This file is part of OctSymPy.
 %%
@@ -184,18 +185,16 @@ function varargout = sympref(cmd, arg)
   end
 
   if (isstruct(cmd))
-    % Means we need to copy it
-    s = sympref();
 
-    assert (isequal (fieldnames (s)', ...
+    assert (isequal (fieldnames (cmd)', ...
       {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
       'sympref: Type of fields of the structure is not correct')
     settings = [];
-    sympref ('ipc', cmd.ipc)
+    sympref ('quiet', cmd.quiet)
     settings.whichpython = cmd.whichpython;
     sympref ('display', cmd.display)
     sympref ('digits', cmd.digits)
-    sympref ('quiet', cmd.quiet)
+    sympref ('ipc', cmd.ipc)
     return
   end
 
@@ -429,6 +428,19 @@ end
 %! sympref('quiet', 'on')
 
 %!test
+%! old = sympref();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! sympref (old);
+%! new = sympref();
+%! assert(isequal(old, new))
+
+%!test
+%! s.a = "hello";
+%! s.b = "world";
+%!error sympref(s)
+
+%!test
 %! syms x
 %! r = sympref('reset');
 %! % restore original sympref settings
@@ -439,12 +451,3 @@ end
 
 %!error <invalid preference or command> sympref ('nosuchsetting')
 %!error <invalid preference or command> sympref ('nosuchsetting', true)
-
-%!test
-%! syms x
-%! old = sympref();
-%! sympref ('display', 'ascii');
-%! sympref ('digits', 64);
-%! sympref (old);
-%! new = sympref();
-%! assert(isequal(old, new))
