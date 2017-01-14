@@ -191,7 +191,7 @@ classdef sym < handle
   end
 
   methods
-    function s = sym(x, varargin)
+    function s = sym (x, varargin)
 
       if (nargin == 0)
         x = 0;
@@ -240,7 +240,8 @@ classdef sym < handle
 
       if (nargin >= 2)
         if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
-          error ('conversion to matrix of symbols from the constructor is no longer supported. Use sym.symarray instead.');
+          assert (nargin < 3, 'MatrixSymbol do not support assumptions')
+          s = sym.make_sym_matrix (x, varargin{1});
           return
         else
           if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
@@ -249,7 +250,7 @@ classdef sym < handle
             %warning ('deprecated: "sym(x, ''clear'')" will be removed in future version');
           else
             sclear = false;
-            check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+            sym.check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
           end
           asm = varargin;
         end
@@ -259,7 +260,7 @@ classdef sym < handle
       assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
 
       if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
-        error ('conversion to numeric array of symbols from the constructor is no longer supported. Use sym.symarray instead.');
+        s = sym.numeric_array_to_sym (x);
         return
 
       elseif (isa (x, 'double'))  % Handle doubles
@@ -443,23 +444,8 @@ classdef sym < handle
   end
 
   methods (Static)
-    function symout = symarray(x, varargin)
-      if (nargin == 1)
-        if (iscell (x))
-          symout = sym.cell_array_to_sym (x);
-        elseif (~isscalar (x) && (isnumeric (x) || islogical (x)))
-          symout = sym.numeric_array_to_sym (x);
-        else
-          symout = sym(x);
-        end
-      elseif (nargin >= 2)
-        if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
-          assert (nargin < 3, 'MatrixSymbol do not support assumptions')
-          s = make_sym_matrix (x, varargin{1});
-        else
-          symout = sym (x, varargin);
-        end
-      end
+    function symout = symarray (x)
+      symout = sym.cell_array_to_sym (x);
     end
   end
 end

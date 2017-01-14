@@ -57,7 +57,7 @@ function h = vertcat(varargin)
           'return sp.MatrixBase.vstack(*_proc),'
           };
 
-  varargin = sym(varargin);
+  varargin = sym.symarray (varargin);
   h = python_cmd (cmd, varargin{:});
 
 end
