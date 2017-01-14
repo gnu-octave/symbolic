@@ -50,11 +50,11 @@ function y = ones(varargin)
   end
 
   if (isa (varargin{nargin}, 'char'))
-    y = ones (cell2nosyms (varargin){:});
+    y = ones (sym.cell2nosyms (varargin){:});
     return
   end
 
-  y = python_cmd ('return ones(*_ins)', sym(varargin){:});
+  y = python_cmd ('return ones(*_ins)', sym.symarray (varargin){:});
 
 end
 

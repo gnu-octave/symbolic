@@ -123,7 +123,7 @@ function [c, t] = coeffs(p, x)
   if (nargin == 1)
     [c, t] = python_cmd (cmd, sym(p), {});
   else
-    [c, t] = python_cmd (cmd, sym(p), sym(x));
+    [c, t] = python_cmd (cmd, sym(p), sym.symarray (x));
   end
 
   %% matlab SMT bug?

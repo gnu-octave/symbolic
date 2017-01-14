@@ -96,7 +96,7 @@ function F = hypergeom(a, b, z)
           '    return z.applyfunc(lambda x: hyper(a, b, x))'
           'return hyper(a, b, z)' };
 
-  F = python_cmd (cmd, sym(a), sym(b), sym(z));
+  F = python_cmd (cmd, sym.symarray (a), sym.symarray (b), sym(z));
 
 end
 

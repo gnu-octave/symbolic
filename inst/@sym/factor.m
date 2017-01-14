@@ -98,7 +98,7 @@
 function [p, m] = factor(f, varargin)
 
   f = sym(f);
-  varargin = sym(varargin);
+  varargin = sym.symarray (varargin);
 
   if ((nargin > 1) || (~isempty (findsymbols (f))))
     %% have symbols, do polynomial factorization
