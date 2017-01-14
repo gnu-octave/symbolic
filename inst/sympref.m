@@ -186,7 +186,6 @@ function varargout = sympref(cmd, arg)
   if (isstruct(cmd))
     % Means we need to copy it
     s = sympref();
-    names = fieldnames (s);
 
     assert (isequal (fieldnames (s)', ...
       {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
