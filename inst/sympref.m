@@ -185,7 +185,6 @@ function varargout = sympref(cmd, arg)
   end
 
   if (isstruct(cmd))
-
     assert (isequal (fieldnames (cmd)', ...
       {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
       'sympref: Type of fields of the structure is not correct')
