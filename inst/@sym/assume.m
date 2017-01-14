@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2017 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,7 +20,9 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
-%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond})
+%% @deftypemethodx @@sym {@var{x} =} assume (@var{x}, 'clear')
+%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond1}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {} assume (@var{x}, 'clear')
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% This function has two different behaviours depending on whether
@@ -90,7 +93,18 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Warning}: this second form operates on the caller's
+%% To clear assumptions on a variable use @code{assume(x, 'clear')}, for example:
+%% @example
+%% @group
+%% syms x positive
+%% f = sin (x);
+%% assume (x, 'clear')
+%% isempty (assumptions (f))
+%%   @result{} ans = 1
+%% @end group
+%% @end example
+%%
+%% @strong{Warning}: the second form operates on the caller's
 %% workspace via evalin/assignin.  So if you call this from other
 %% functions, it will operate in your function's workspace (and not
 %% the @code{base} workspace).  This behaviour is for compatibility
@@ -107,13 +121,18 @@
 
 function varargout = assume(x, varargin)
 
-  for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
-  end
-
   xstr = x.flat;
-  newx = sym(xstr, ca);
+
+  if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+    assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
+    newx = sym(xstr);
+  else
+    for n = 2:nargin
+      cond = varargin{n-1};
+      ca.(cond) = true;
+    end
+    newx = sym(xstr, ca);
+  end
 
   if (nargout > 0)
     varargout{1} = newx;
@@ -173,6 +192,13 @@ end
 %! assert(strcmp(a, 'x: positive'))
 
 %!test
+%! % clear: has output so avoids workspace
+%! syms x positive
+%! f = 2*x;
+%! x2 = assume(x, 'clear');
+%! assert (~ isempty (assumptions (f)));
+
+%!test
 %! % has no output so does workspace
 %! syms x positive
 %! x2 = x;
@@ -184,3 +210,20 @@ end
 %! assert(strcmp(a, 'x: negative'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: negative'))
+
+%!test
+%! % clear: has not output so does workspace
+%! syms x positive
+%! f = 2*x;
+%! assume(x, 'clear');
+%! assert (isempty (assumptions (f)));
+%! assert (isempty (assumptions ()));
+
+%!test
+%! syms x positive
+%! assume (x, 'clear')
+%! assert (isempty (assumptions ()))
+
+%!error <cannot be combined>
+%! syms x
+%! x2 = assume (x, 'clear', 'real');
