@@ -188,157 +188,151 @@ function varargout = sympref(cmd, arg)
     s = sympref();
     names = fieldnames (s);
 
-    if (sum(isfield(cmd, names)) == numfields(s))
-      if (typeinfo(cmd.ipc) == typeinfo(s.ipc) && ...
-        typeinfo(cmd.whichpython) == typeinfo(s.whichpython))
-        settings = [];
-        settings.ipc = cmd.ipc;
-        settings.whichpython = cmd.whichpython;
-        sympref ('display', cmd.display)
-        sympref ('digits', cmd.digits)
-        sympref ('quiet', cmd.quiet)
+    assert (isequal (fieldnames (s)', ...
+      {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
+      'sympref: Type of fields of the structure is not correct')
+    settings = [];
+    sympref ('ipc', cmd.ipc)
+    settings.whichpython = cmd.whichpython;
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('quiet', cmd.quiet)
+    return
+  end
+
+  switch lower(cmd)
+    case 'defaults'
+      settings = [];
+      settings.ipc = 'default';
+      settings.whichpython = '';
+      sympref ('display', 'default')
+      sympref ('digits', 'default')
+      sympref ('quiet', 'default')
+
+    case 'version'
+      assert (nargin == 1)
+      varargout{1} = '2.5.0-dev';
+
+    case 'display'
+      if (nargin == 1)
+        varargout{1} = settings.display;
       else
-        error ('sympref: Type of fields of the structure is not correct');
+        arg = lower (arg);
+        if (strcmp (arg, 'default'))
+          arg = 'unicode';
+          if (ispc () && (~isunix ()))
+            % Unicode not working on Windows, Issue #83.
+            arg = 'ascii';
+          end
+        end
+        assert(strcmp(arg, 'flat') || strcmp(arg, 'ascii') || ...
+               strcmp(arg, 'unicode'))
+        settings.display = arg;
       end
-    else
-      error ('sympref: invalid structure, cannot copy');
-    end
 
-  else
-    switch lower(cmd)
-      case 'defaults'
-        settings = [];
-        settings.ipc = 'default';
-        settings.whichpython = '';
-        sympref ('display', 'default')
-        sympref ('digits', 'default')
-        sympref ('quiet', 'default')
-
-      case 'version'
-        assert (nargin == 1)
-        varargout{1} = '2.5.0-dev';
-
-      case 'display'
-        if (nargin == 1)
-          varargout{1} = settings.display;
-        else
-          arg = lower (arg);
-          if (strcmp (arg, 'default'))
-            arg = 'unicode';
-            if (ispc () && (~isunix ()))
-              % Unicode not working on Windows, Issue #83.
-              arg = 'ascii';
-            end
-          end
-          assert(strcmp(arg, 'flat') || strcmp(arg, 'ascii') || ...
-                 strcmp(arg, 'unicode'))
-          settings.display = arg;
-        end
-
-      case 'digits'
-        if (nargin == 1)
-          varargout{1} = settings.digits;
-        else
-          if (ischar(arg))
-            if (strcmpi(arg, 'default'))
-              arg = 32;
-            else
-              arg = str2double(arg);
-            end
-          end
-          arg = int32(arg);
-          assert(arg > 0, 'precision must be positive')
-          settings.digits = arg;
-        end
-
-      case 'snippet'
-        warning ('OctSymPy:deprecated', ...
-                 'Debugging mode "snippet" has been removed');
-
-      case 'quiet'
-        if (nargin == 1)
-          varargout{1} = settings.quiet;
-        else
+    case 'digits'
+      if (nargin == 1)
+        varargout{1} = settings.digits;
+      else
+        if (ischar(arg))
           if (strcmpi(arg, 'default'))
-            settings.quiet = false;
+            arg = 32;
           else
-            settings.quiet = tf_from_input(arg);
+            arg = str2double(arg);
           end
         end
+        arg = int32(arg);
+        assert(arg > 0, 'precision must be positive')
+        settings.digits = arg;
+      end
 
-      case 'python'
-        if (nargin ~= 1)
-  	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
-        end
-        DEFAULTPYTHON = 'python';
-        pyexec = getenv('PYTHON');
-        if (isempty(pyexec))
-          pyexec = DEFAULTPYTHON;
-        end
-        varargout{1} = pyexec;
+    case 'snippet'
+      warning ('OctSymPy:deprecated', ...
+               'Debugging mode "snippet" has been removed');
 
-      case 'ipc'
-        if (nargin == 1)
-          varargout{1} = settings.ipc;
+    case 'quiet'
+      if (nargin == 1)
+        varargout{1} = settings.quiet;
+      else
+        if (strcmpi(arg, 'default'))
+          settings.quiet = false;
         else
-          verbose = ~sympref('quiet');
-          sympref('reset')
-          settings.ipc = arg;
-          switch arg
-            case 'default'
-              msg = 'Choosing the default [autodetect] communication mechanism';
-            case 'native'
-              msg = 'Forcing the native Python/C API communication mechanism';
-            case 'system'
-              msg = 'Forcing the system() communication mechanism';
-            case 'popen2'
-              msg = 'Forcing the popen2() communication mechanism';
-            case 'systmpfile'
-              msg = 'Forcing systmpfile ipc: warning: this is for debugging';
-            case 'sysoneline'
-              msg = 'Forcing sysoneline ipc: warning: this is for debugging';
-            otherwise
-              msg = '';
-              if (~ ischar (arg))
-                arg = num2str (arg);
-              end
-              warning('OctSymPy:sympref:invalidarg', ...
-                      'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
-                      arg)
-          end
-          if (verbose)
-            disp(msg)
-          end
+          settings.quiet = tf_from_input(arg);
         end
+      end
 
-      case 'reset'
+    case 'python'
+      if (nargin ~= 1)
+	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+      end
+      DEFAULTPYTHON = 'python';
+      pyexec = getenv('PYTHON');
+      if (isempty(pyexec))
+        pyexec = DEFAULTPYTHON;
+      end
+      varargout{1} = pyexec;
+
+    case 'ipc'
+      if (nargin == 1)
+        varargout{1} = settings.ipc;
+      else
         verbose = ~sympref('quiet');
+        sympref('reset')
+        settings.ipc = arg;
+        switch arg
+          case 'default'
+            msg = 'Choosing the default [autodetect] communication mechanism';
+          case 'native'
+            msg = 'Forcing the native Python/C API communication mechanism';
+          case 'system'
+            msg = 'Forcing the system() communication mechanism';
+          case 'popen2'
+            msg = 'Forcing the popen2() communication mechanism';
+          case 'systmpfile'
+            msg = 'Forcing systmpfile ipc: warning: this is for debugging';
+          case 'sysoneline'
+            msg = 'Forcing sysoneline ipc: warning: this is for debugging';
+          otherwise
+            msg = '';
+            if (~ ischar (arg))
+              arg = num2str (arg);
+            end
+            warning('OctSymPy:sympref:invalidarg', ...
+                    'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
+                    arg)
+        end
         if (verbose)
-          disp('Resetting the communication mechanism');
+          disp(msg)
         end
-        r = python_ipc_driver('reset', []);
+      end
 
-        if (nargout == 0)
-          if (~r)
-            disp('Problem resetting');
-          end
-        else
-          varargout{1} = r;
+    case 'reset'
+      verbose = ~sympref('quiet');
+      if (verbose)
+        disp('Resetting the communication mechanism');
+      end
+      r = python_ipc_driver('reset', []);
+
+      if (nargout == 0)
+        if (~r)
+          disp('Problem resetting');
         end
+      else
+        varargout{1} = r;
+      end
 
-      %case 'path'
-        %pkg_path = fileparts (mfilename ('fullpath'));
-        % or
-        %pkg_l = pkg ('list');
-        %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, "UniformOutput", false));
-        %if (~ any (idx))
-        %  error ('the package %s is not installed', your_pkg);
-        %end
-        %pkg_path = pkg_l{idx}.dir
+    %case 'path'
+      %pkg_path = fileparts (mfilename ('fullpath'));
+      % or
+      %pkg_l = pkg ('list');
+      %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, "UniformOutput", false));
+      %if (~ any (idx))
+      %  error ('the package %s is not installed', your_pkg);
+      %end
+      %pkg_path = pkg_l{idx}.dir
 
-      otherwise
-        error ('sympref: invalid preference or command ''%s''', lower (cmd));
-    end
+    otherwise
+      error ('sympref: invalid preference or command ''%s''', lower (cmd));
   end
 end
 
@@ -446,3 +440,12 @@ end
 
 %!error <invalid preference or command> sympref ('nosuchsetting')
 %!error <invalid preference or command> sympref ('nosuchsetting', true)
+
+%!test
+%! syms x
+%! old = sympref();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! sympref (old);
+%! new = sympref();
+%! assert(isequal(old, new))
