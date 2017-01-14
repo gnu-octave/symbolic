@@ -38,6 +38,10 @@ octsympy 2.5.0-dev
   * The full set of assumptions implemented by Sympy can now be used.
     For example, `syms p prime` assumes `p` is prime.
 
+  * `assume(x, 'clear')` can be used to clear assumptions on variables.
+    Previously undocumented commands such as `sym(x, 'clear')` and
+    `syms x clear` will be deprecated in a future version.
+
   * `solve` now works with inequalities.
 
   * `sym('1.3')` now creates the rational number 13/10.
