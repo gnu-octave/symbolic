@@ -1,12 +1,11 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy.
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -143,9 +142,9 @@ function [c, t] = coeffs(p, x, all)
           'except TypeError:'
           '    xx = [xx]'
           'p = Poly.from_expr(f, *xx)'
-	  'if all:'
+          'if all:'
           '    terms = p.all_terms()'
-	  'else:'
+          'else:'
           '    terms = p.terms()'
           'cc = [q[1] for q in terms]'
           'tt = [1]*len(terms)'
