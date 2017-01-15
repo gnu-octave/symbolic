@@ -121,6 +121,8 @@
 
 function varargout = assume(x, varargin)
 
+  assert (nargin > 1, 'General algebraic assumptions are not supported');
+
   xstr = x.flat;
 
   if (nargin > 1 && strcmp(varargin{1}, 'clear'))
@@ -227,3 +229,7 @@ end
 %!error <cannot be combined>
 %! syms x
 %! x2 = assume (x, 'clear', 'real');
+
+%!error <General algebraic assumptions are not supported>
+%! syms a
+%! assume (a>0)
