@@ -114,9 +114,8 @@ function [c, t] = coeffs(p, x, all)
     all = false;
   elseif (nargin == 2)
     if (ischar (x))
-      if (~ strcmpi (x, 'all'))
-        error ('coeffs: invalid 2nd input: if string, should be "all"')
-      end
+      assert (strcmpi (x, 'all'), ...
+              'coeffs: invalid 2nd input: if string, should be "all"')
       x = {};
       all = true;
     else
@@ -124,17 +123,14 @@ function [c, t] = coeffs(p, x, all)
       all = false;
     end
   elseif (nargin == 3)
-    if (~ strcmpi (all, 'all'))
-      error ('coeffs: invalid 3rd input: should be string "all"')
-    end
+    assert (strcmpi (all, 'all'), ...
+            'coeffs: invalid 3rd input: should be string "all"')
     all = true;
   elseif (nargin > 3)
     print_usage ();
   end
 
-  if ~(isscalar(p))
-    error('coeffs: works for scalar input only');
-  end
+  assert (isscalar (p), 'coeffs: works for scalar input only')
 
   cmd = { '(f, xx, all) = _ins'
           'if xx == [] and f.is_constant():'  % special case
