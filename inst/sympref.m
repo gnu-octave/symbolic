@@ -185,8 +185,8 @@ function varargout = sympref(cmd, arg)
   end
 
   if (isstruct (cmd))
-    assert (isequal (fieldnames (cmd)', ...
-      {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
+    assert (isequal (sort (fieldnames (cmd)), ...
+      sort ({'ipc'; 'whichpython'; 'display'; 'digits'; 'quiet'})), ...
       'sympref: structure has incorrect field names')
     settings = [];
     sympref ('quiet', cmd.quiet)
@@ -427,9 +427,11 @@ end
 %! sympref('quiet', 'on')
 
 %!test
+%! % restore sympref from structure
 %! old = sympref ();
 %! sympref ('display', 'ascii');
 %! sympref ('digits', 64);
+%! old = orderfields (old);  % re-ordering the fields should be ok
 %! sympref (old);
 %! new = sympref ();
 %! assert (isequal (old, new))
