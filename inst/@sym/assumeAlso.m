@@ -68,6 +68,8 @@
 
 function varargout = assumeAlso(x, varargin)
 
+  assert (nargin > 1, 'General algebraic assumptions are not supported');
+
   [tilde,ca] = assumptions(x, 'dict');
 
   if isempty(ca)
@@ -158,3 +160,7 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+
+%!error <General algebraic assumptions are not supported>
+%! syms a
+%! assumeAlso (a>0)
