@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
 %%
 %% This file is part of OctSymPy.
 %%
@@ -183,6 +184,18 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct (cmd))
+    assert (isequal (sort (fieldnames (cmd)), ...
+      sort ({'ipc'; 'whichpython'; 'display'; 'digits'; 'quiet'})), ...
+      'sympref: structure has incorrect field names')
+    settings = [];
+    sympref ('quiet', cmd.quiet)
+    settings.whichpython = cmd.whichpython;
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('ipc', cmd.ipc)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
@@ -412,6 +425,21 @@ end
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
 %! sympref('quiet', 'on')
+
+%!test
+%! % restore sympref from structure
+%! old = sympref ();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! old = orderfields (old);  % re-ordering the fields should be ok
+%! sympref (old);
+%! new = sympref ();
+%! assert (isequal (old, new))
+
+%!error <incorrect field names>
+%! s.a = 'hello';
+%! s.b = 'world';
+%! sympref (s)
 
 %!test
 %! syms x
