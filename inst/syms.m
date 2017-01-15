@@ -105,6 +105,7 @@ function syms(varargin)
       end
     elseif (strcmp(varargin{n}, 'clear'))
       doclear = true;
+      %warning ('deprecated: "syms x clear"; will be removed in future version')
       if (last < 0)
         last = n - 1;
       else

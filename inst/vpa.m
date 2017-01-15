@@ -75,7 +75,7 @@ function r = vpa(x, n)
   elseif (isfloat(x) && ~isreal (x))
     r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);
   elseif (isfloat(x) && isscalar(x) == 1)
-    [s, flag] = magic_double_str(x);
+    [s, flag] = const_to_python_str(x);
     if (flag)
       r = vpa(s, n);
     else
@@ -219,8 +219,8 @@ end
 %! % these should *not* be the same
 %! a = vpa(2.3, 40);
 %! b = vpa('2.3', 40);
-%! sa = a.pickle;
-%! sb = b.pickle;
+%! sa = sympy (a);
+%! sb = sympy (b);
 %! assert (~isequal (a, b))
 %! assert (abs(double(a - b)) > 1e-20)
 %! assert (abs(double(a - b)) < 1e-15)

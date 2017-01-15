@@ -40,11 +40,13 @@ function r = do_highbyte_escapes(s)
   end
 
   % get the two-char hex numbers make them into bytes
-  if (exist ('OCTAVE_VERSION', 'builtin'))
+  if (exist ('OCTAVE_VERSION', 'builtin') && ...
+      compare_versions (OCTAVE_VERSION (), '4.3.0', '<'))
+    % Bug on old Octave: https://savannah.gnu.org/bugs/?49659
     dec = char(hex2dec(NM.hex));
   else
-    % Matlab:
-    dec = arrayfun(@(s) char(hex2dec(s.hex)), NM);
+    % roughly 3-4 times slower than the above
+    dec = char (hex2dec (struct2cell (NM)));
   end
   % faster:
   %d = uint8('ee');

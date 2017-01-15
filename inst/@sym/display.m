@@ -76,6 +76,10 @@ function display(x)
     unicode_dec = false;
   end
   if (exist('OCTAVE_VERSION', 'builtin') && ...
+      compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
+    [fmt, spacing] = format();
+    loose = strcmp (spacing, 'loose');
+  elseif (exist('OCTAVE_VERSION', 'builtin') && ...
       compare_versions (OCTAVE_VERSION (), '4.0.0', '>='))
     % Octave 4.1 dropped (temporarily?) the get(0,...) approach
     loose = eval('! __compactformat__ ()');
@@ -134,7 +138,7 @@ function [s1 s2] = sym_describe(x, unicode_dec)
   end
 
   s1 = class (x);
-  srepr = x.pickle;
+  srepr = sympy (x);
   d = size (x);
 
   % sort of isinstance(x, MatrixExpr) but cheaper
