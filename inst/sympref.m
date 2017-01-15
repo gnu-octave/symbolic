@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
 %%
 %% This file is part of OctSymPy.
 %%
@@ -183,6 +184,18 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct(cmd))
+    assert (isequal (fieldnames (cmd)', ...
+      {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
+      'sympref: fields of the structure is not correct')
+    settings = [];
+    sympref ('quiet', cmd.quiet)
+    settings.whichpython = cmd.whichpython;
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('ipc', cmd.ipc)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
@@ -412,6 +425,19 @@ end
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
 %! sympref('quiet', 'on')
+
+%!test
+%! old = sympref();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! sympref (old);
+%! new = sympref();
+%! assert(isequal(old, new))
+
+%!test
+%! s.a = "hello";
+%! s.b = "world";
+%!error sympref(s)
 
 %!test
 %! syms x
