@@ -187,7 +187,7 @@ function varargout = sympref(cmd, arg)
   if (isstruct (cmd))
     assert (isequal (fieldnames (cmd)', ...
       {'ipc', 'whichpython', 'display', 'digits', 'quiet'}), ...
-      'sympref: fields of the structure is not correct')
+      'sympref: structure has incorrect field names')
     settings = [];
     sympref ('quiet', cmd.quiet)
     settings.whichpython = cmd.whichpython;
@@ -434,10 +434,10 @@ end
 %! new = sympref ();
 %! assert (isequal (old, new))
 
-%!test
-%! s.a = "hello";
-%! s.b = "world";
-%!error sympref(s)
+%!error <incorrect field names>
+%! s.a = 'hello';
+%! s.b = 'world';
+%! sympref (s)
 
 %!test
 %! syms x
