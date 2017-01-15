@@ -32,7 +32,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/isprime}
+%% @seealso{@@sym/isprime, @@sym/prevprime}
 %% @end defmethod
 
 
