@@ -38,7 +38,9 @@
 
 function y = prevprime(x)
 
-  if (nargin ~= 1) print_usage () end
+  if (nargin ~= 1)
+    print_usage ()
+  end
 
   %y = elementwise_op ('prevprime', x);
 
@@ -52,8 +54,8 @@ end
 %!assert (isequal (prevprime(sym(20)), 19));
 %!assert (isequal (prevprime(sym([3 5 10])), [2 3 7]));
 
-%!error(prevprime(sym(2)))
-%!error(prevprime(sym(-2)))
+%!error prevprime(sym(2))
+%!error prevprime(sym(-2))
 
 %!test
 %! % result is a sym
