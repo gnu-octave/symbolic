@@ -20,6 +20,7 @@ octsympy 2.5.0-dev
           hilb
           invhilb
           ones
+          prevprime
           sind
           sympy
           tand
