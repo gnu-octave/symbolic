@@ -186,11 +186,10 @@ function varargout = sympref(cmd, arg)
 
   if (isstruct (cmd))
     assert (isequal (sort (fieldnames (cmd)), ...
-      sort ({'ipc'; 'whichpython'; 'display'; 'digits'; 'quiet'})), ...
+      sort ({'ipc'; 'display'; 'digits'; 'quiet'})), ...
       'sympref: structure has incorrect field names')
     settings = [];
     sympref ('quiet', cmd.quiet)
-    settings.whichpython = cmd.whichpython;
     sympref ('display', cmd.display)
     sympref ('digits', cmd.digits)
     sympref ('ipc', cmd.ipc)
@@ -201,7 +200,6 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('quiet', 'default')
