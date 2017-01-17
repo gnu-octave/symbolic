@@ -214,7 +214,9 @@ function s = sym(x, varargin)
       if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
         sclear = true;
         varargin(1) = [];
-        %warning ('deprecated: "sym(x, ''clear'')" will be removed in future version');
+        warning ('OctSymPy:deprecated', ...
+              ['"sym(x, ''clear'')" is deprecated and will be removed in future version;\n' ...
+               '         use "assume(x, ''clear'')" instead.'])
       else
         sclear = false;
         check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
@@ -530,7 +532,9 @@ end
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! x = sym('x', 'clear');
+%! warning (s)
 %! asm = assumptions();
 %! assert ( isempty(asm))
 
@@ -540,7 +544,9 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! x = sym('x', 'clear');
+%! warning (s)
 %! assert (logical(exist('x', 'var')))
 
 %!test
@@ -553,7 +559,9 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! x = sym(x, 'clear');
+%! warning (s)
 %! assert (isempty(assumptions(x)))
 %! assert (isempty(assumptions(f)))
 
