@@ -241,6 +241,11 @@ end
 %! assert (isequal (c, a))
 %! assert (isequal (t, s))
 
+%!error <multivariate polynomials not supported>
+%! % TODO: multivariate all not working (https://github.com/cbm755/octsympy/issues/720)
+%! syms x y
+%! [c, t] = coeffs(6*x^2 + 7*y + 19, [x y], 'all');
+
 %!test
 %! % empty same as not specifying; maybe not SMT compatible:
 %! % https://github.com/cbm755/octsympy/pull/708#discussion_r94292831
