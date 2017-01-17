@@ -47,6 +47,9 @@ octsympy 2.5.0-dev
 
   * `sym('1.3')` now creates the rational number 13/10.
 
+  * A new keyword option `coeffs(f, x, 'all')` returns both zero and
+    non-zero coefficients.
+
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.
 

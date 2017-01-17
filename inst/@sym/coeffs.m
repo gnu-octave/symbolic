@@ -1,12 +1,11 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
-%% This file is part of Octave-Symbolic-SymPy
+%% This file is part of OctSymPy.
 %%
-%% Octave-Symbolic-SymPy is free software; you can redistribute
-%% it and/or modify it under the terms of the GNU General Public
-%% License as published by the Free Software Foundation;
-%% either version 3 of the License, or (at your option) any
-%% later version.
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
 %%
 %% This software is distributed in the hope that it will be useful,
 %% but WITHOUT ANY WARRANTY; without even the implied warranty
@@ -21,9 +20,11 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{c} =} coeffs (@var{p}, @var{x})
 %% @deftypemethodx @@sym {@var{c} =} coeffs (@var{p})
+%% @deftypemethodx @@sym {@var{c} =} coeffs (@dots{}, 'all')
 %% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p}, @var{x})
 %% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@var{p})
-%% Return non-zero coefficients of symbolic polynomial.
+%% @deftypemethodx @@sym {[@var{c}, @var{t}] =} coeffs (@dots{}, 'all')
+%% Return non-zero (or all) coefficients of symbolic polynomial.
 %%
 %% @var{c} contains the coefficients and @var{t} the corresponding
 %% terms.
@@ -78,33 +79,60 @@
 %% @end group
 %% @end example
 %%
-%% Omitting the second output gives only the coefficients:
+%% Omitting the second output is not recommended, especially for non-interactive
+%% code, because it gives only the non-zero coefficients, and additionally
+%% the output is in the ``wrong order'' compared to other polynomial-related
+%% commands:
 %% @example
 %% @group
 %% c = coeffs (x^6 + 3*x - 4)
-%%   @result{} c = (sym) [1  3  -4]  (1×3 matrix)
+%%   @result{} c = (sym) [-4  3  1]  (1×3 matrix)
 %% @end group
 %% @end example
-%% WARNING: Matlab's Symbolic Math Toolbox returns c = [-4 3 1]
-%% here (as of version 2014a).  I suspect they have a bug as its
-%% inconsistent with the rest of Matlab's polynomial routines.  We
-%% do not copy this bug.
+%% @strong{Warning:} Again, note the order is reversed from the two-output
+%% case; this is for compatibility with Matlab's Symbolic Math Toolbox.
+%%
+%% If the optional input keyword @qcode{'all'} is passed, the zero
+%% coefficients are returned as well, and in the familiar order.
+%% @example
+%% @group
+%% c = coeffs (x^6 + 3*x - 4, 'all')
+%%   @result{} c = (sym) [1  0  0  0  0  3  -4]  (1×7 matrix)
+%% @end group
+%% @end example
+%% @strong{Note:} The @qcode{'all'} feature does not yet work with
+%% multivariate polynomials (https://github.com/cbm755/octsympy/issues/720).
 %%
 %% @seealso{@@sym/sym2poly}
 %% @end deftypemethod
 
-function [c, t] = coeffs(p, x)
+function [c, t] = coeffs(p, x, all)
 
-  if (nargin > 2)
+  if (nargin == 1)
+    % don't use symvar: if input has x, y we want both
+    x = {};
+    all = false;
+  elseif (nargin == 2)
+    if (ischar (x))
+      assert (strcmpi (x, 'all'), ...
+              'coeffs: invalid 2nd input: if string, should be "all"')
+      x = {};
+      all = true;
+    else
+      x = sym(x);
+      all = false;
+    end
+  elseif (nargin == 3)
+    assert (strcmpi (all, 'all'), ...
+            'coeffs: invalid 3rd input: should be string "all"')
+    all = true;
+  elseif (nargin > 3)
     print_usage ();
   end
 
-  if ~(isscalar(p))
-    error('coeffs: works for scalar input only');
-  end
+  assert (isscalar (p), 'coeffs: works for scalar input only')
 
-  cmd = { 'f = _ins[0]'
-          'xx = _ins[1]'
+  cmd = { '(f, xx, all) = _ins'
           'if xx == [] and f.is_constant():'  % special case
           '    xx = sympy.S("x")'
           'try:'
@@ -112,41 +140,31 @@ function [c, t] = coeffs(p, x)
           'except TypeError:'
           '    xx = [xx]'
           'p = Poly.from_expr(f, *xx)'
-          'terms = p.terms()'
+          'if all:'
+          '    terms = p.all_terms()'
+          'else:'
+          '    terms = p.terms()'
           'cc = [q[1] for q in terms]'
           'tt = [1]*len(terms)'
           'for i, x in enumerate(p.gens):'
           '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
           'return (Matrix([cc]), Matrix([tt]))' };
 
-  % don't use symvar: if input has x, y we want both
-  if (nargin == 1)
-    [c, t] = python_cmd (cmd, sym(p), {});
-  else
-    [c, t] = python_cmd (cmd, sym(p), sym(x));
+  [c, t] = python_cmd (cmd, sym(p), x, all);
+
+  %% SMT compat:
+  % reverse the order if t is not output.
+  if (nargout <= 1) && (all == false)
+    c = fliplr(c);
   end
 
-  %% matlab SMT bug?
-  % they seem to reverse the order if t is not output.
-  %if (nargout == 1)
-  %  c = fliplr(c);
-  %end
-
-  % if nargout == 1, here is a simplier implementation:
-  %cmd = { 'f = _ins[0]'
-  %        'xx = _ins[1]'
-  %        'try:'
-  %        '    xx = list(xx)'
-  %        'except TypeError:'
-  %        '    xx = [xx]'
-  %        'p = Poly.from_expr(f, *xx)'
-  %        'c = p.coeffs()'
-  %        'return Matrix([c]),' };
-
+  % if nargout == 1, its simplier to use 'p.coeffs()'
 end
 
 
-%!error <Invalid> coeffs (sym(1), 2, 3)
+%!error <Invalid> coeffs (sym(1), 2, 3, 4)
+%!error <should be> coeffs (sym(1), 2, 'al')
+%!error <should be> coeffs (sym(1), 'al')
 
 %!test
 %! % simple
@@ -169,15 +187,37 @@ end
 %! assert (isequal (c, 6*x + 27))
 %! assert (isequal (t, 1))
 
-%%!test
-%%! % weird SMT order
-%%! syms x
-%%! a1 = [27 6];
-%%! a2 = [6 27];
-%%! c = coeffs(6*x*x + 27);
-%%! assert (isequal (c, a1))
-%%! [c, t] = coeffs(6*x*x + 27);
-%%! assert (isequal (c, a2))
+%!test
+%! % weird SMT order
+%! syms x
+%! a1 = [27 6];
+%! a2 = [6 27];
+%! c = coeffs(6*x*x + 27);
+%! assert (isequal (c, a1))
+%! coeffs(6*x*x + 27);
+%! assert (isequal (ans, a1))
+%! [c, t] = coeffs(6*x*x + 27);
+%! assert (isequal (c, a2))
+
+%!test
+%! % no weird order with "all"
+%! syms x
+%! c = coeffs(6*x*x + 27, 'all');
+%! assert (isequal (c, [6 0 27]))
+
+%!test
+%! % "all"
+%! syms x
+%! [c, t] = coeffs(6*x*x + 27, 'all');
+%! assert (isequal (c, [6 0 27]))
+%! assert (isequal (t, [x^2 x 1]))
+
+%!test
+%! % "All"
+%! syms x
+%! [c, t] = coeffs(6*x, 'All');
+%! assert (isequal (c, [6 0]))
+%! assert (isequal (t, [x 1]))
 
 %!test
 %! % multivariable array
@@ -201,8 +241,14 @@ end
 %! assert (isequal (c, a))
 %! assert (isequal (t, s))
 
+%!error <multivariate polynomials not supported>
+%! % TODO: multivariate all not working (https://github.com/cbm755/octsympy/issues/720)
+%! syms x y
+%! [c, t] = coeffs(6*x^2 + 7*y + 19, [x y], 'all');
+
 %!test
-%! % empty same as no specifying
+%! % empty same as not specifying; maybe not SMT compatible:
+%! % https://github.com/cbm755/octsympy/pull/708#discussion_r94292831
 %! syms x y
 %! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {});
 %! a = [6  27  36];
