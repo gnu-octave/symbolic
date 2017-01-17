@@ -125,14 +125,14 @@ function g = subs(f, in, out)
 
   % ensure everything is sym
   if (iscell (in))
-    for i = 1:length(in)
+    for i = 1:numel(in)
       in{i} = sym(in{i});
     end
   else
     in = sym(in);
   end
   if (iscell (out))
-    for i = 1:length(out)
+    for i = 1:numel(out)
       out{i} = sym(out{i});
     end
   else

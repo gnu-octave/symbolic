@@ -114,12 +114,13 @@
 
 function S = finiteset(varargin)
 
+  % special case
   if (nargin == 1 && iscell(varargin{1}))
     varargin = varargin{1};
-    nargin == length(varargin);
+    nargin == numel (varargin);
   end
 
-  for i = 1:length(varargin)
+  for i = 1:numel(varargin)
     varargin{i} = sym(varargin{i});
   end
 
