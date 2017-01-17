@@ -111,10 +111,8 @@ function [A, B] = assumptions(F, outp)
       'd = x._assumptions.generator'
       'if d == {}:'
       '    astr = ""'
-      'elif all(d.values()):'  % all True so list them
-      '    astr = ", ".join(sorted([str(i) for i in d.keys()]))'
-      'else:'  % more complicated case, just the raw dict
-      '    astr = str(d)'
+      'else:'
+      '    astr = ", ".join(sorted([("" if v else "~") + str(k) for (k,v) in list(d.items())]))'
       'if outputdict:'
       '    return (astr, d)'
       'else:'
@@ -250,3 +248,8 @@ end
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
 %! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
+
+%!test
+%! %% TODO: rewrite later with https://github.com/cbm755/octsympy/issues/622
+%! a = python_cmd ('return Symbol("a", real=False)');
+%! assert (strcmp (assumptions (a), {'a: ~real'}))
