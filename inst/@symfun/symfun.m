@@ -146,7 +146,7 @@ classdef symfun < sym
 
   properties (Access = private)
     vars
-    sym
+    symbol
   end
 
   methods (Static, Access = private)
@@ -156,7 +156,7 @@ classdef symfun < sym
 
   methods
     function f = symfun(expr, vars)
-      class(f)
+
       if (nargin == 0)
         % octave docs say need a no-argument default for loading from files
         expr = sym(0);
@@ -208,8 +208,9 @@ classdef symfun < sym
         assert (isa (vars{i}, 'sym'))
       end
 
+      f@sym([], expr.pickle, expr.symsize, expr.flat, expr.ascii, expr.unicode);
+      f.symbol = sym(expr);
       f.vars = vars;
-      f.sym = expr;
     end
   end
 end

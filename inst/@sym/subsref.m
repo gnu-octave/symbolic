@@ -78,6 +78,8 @@ function out = subsref (f, idx)
         out = f.ascii;
       elseif (strcmp (fld, 'unicode'))
         out = f.unicode;
+      elseif (strcmp (fld, 'symsize'))
+        out = f.symsize;
       %elseif (strcmp (fld, 'extra'))
       %  out = f.extra;
       % not part of the interface

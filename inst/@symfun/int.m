@@ -64,7 +64,7 @@ function F = int(f, varargin)
     indefinite = false;
   end
 
-  F = int(f.sym, varargin{:});
+  F = int(f.symbol, varargin{:});
   if (indefinite)
     F = symfun(F, f.vars);
   end

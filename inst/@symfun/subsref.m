@@ -49,13 +49,13 @@ function out = subsref (f, idx)
       fld = idx.subs;
       if (strcmp (fld, 'vars'))
         out = f.vars;
-      elseif (strcmp (fld, 'sym'))
-        out = f.sym;
+      elseif (strcmp (fld, 'symbol'))
+        out = f.symbol;
       else
         %out = sym/subsref(f, idx);
         %out = f.sym.fld;
         %warning(' is there a better way to call the superclass fcn?')
-        out = subsref(f.sym,idx);
+        out = subsref(f.symbol,idx);
       end
 
     otherwise
