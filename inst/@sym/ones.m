@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -54,7 +55,10 @@ function y = ones(varargin)
     return
   end
 
-  y = python_cmd ('return ones(*_ins)', sym.symarray (varargin){:});
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
+  y = python_cmd ('return ones(*_ins)', varargin{:});
 
 end
 

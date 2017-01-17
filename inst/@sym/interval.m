@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -56,7 +56,9 @@ function I = interval(varargin)
     print_usage();
   end
 
-  varargin = sym.symarray (varargin);
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
 
   I = python_cmd ('return Interval(*_ins),', varargin{:});
 

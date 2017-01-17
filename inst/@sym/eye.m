@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -57,7 +58,10 @@ function y = eye(varargin)
   if nargin > 1 %%Sympy don't support eye(A, B)
     y = sym(eye (sym.cell2nosyms (varargin){:}));
   else
-    y = python_cmd ('return eye(*_ins)', sym.symarray (varargin){:});
+    for i = 1:length(varargin)
+      varargin{i} = sym(varargin{i});
+    end
+    y = python_cmd ('return eye(*_ins)', varargin{:});
   end
 
 end
