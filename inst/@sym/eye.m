@@ -55,14 +55,19 @@ function y = eye(varargin)
     return
   end
 
-  if nargin > 1 %%Sympy don't support eye(A, B)
-    y = sym(eye (cell2nosyms (varargin){:}));
-  else
-    for i = 1:length(varargin)
-      varargin{i} = sym(varargin{i});
-    end
-    y = python_cmd ('return eye(*_ins)', varargin{:});
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
   end
+
+  if nargin == 1
+    cmd = 'return eye(*_ins)';
+  else
+    %% Sympy don't support eye(A, B)
+    cmd = { 'n, m = _ins'
+            'return eye(max(n,m))[0:n,0:m]' };
+  end
+
+  y = python_cmd (cmd, varargin{:});
 
 end
 
