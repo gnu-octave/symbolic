@@ -36,6 +36,9 @@ octsympy 2.5.0-dev
           fresnelc      sinint
           fresnels      zeta
 
+  * Deprecation notice: `sym(cell)` will soon create a sym array
+    (currently it creates a cell array of sym objects.)
+
   * The full set of assumptions implemented by Sympy can now be used.
     For example, `syms p prime` assumes `p` is prime.
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -198,6 +198,9 @@ function s = sym(x, varargin)
   end
 
   if (iscell (x))  % Handle Cells
+    warning ('OctSymPy:deprecated', ...
+            ['creating a cell array of sym using "sym(cell)" is deprecated;\n' ...
+             '         future versions will instead create a sym array.']);
     s = cell_array_to_sym (x, varargin{:});
     return
   end
@@ -488,42 +491,6 @@ end
 %! assert (isequal (sym (A), A))
 
 %!test
-%! % Cell array lists to syms
-%! % (these tests are pretty weak, doens't recursively compare two
-%! % cells, but just running this is a good test.
-%! x = sym ('x');
-%!
-%! a = {1 2};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2 {3 4}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 4};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 {4}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 [1 2] x [sym(pi) x]};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{2}), size (s{2})))
-%! assert (isequal (size (a{4}), size (s{4})))
-%!
-%! a = {{{[1 2; 3 4]}}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{1}), size (s{1})))
-%! assert (isequal (size (a{1}{1}), size (s{1}{1})))
-%! assert (isequal (size (a{1}{1}{1}), size (s{1}{1}{1})))
-
-
-%!test
 %! %% assumptions and clearing them
 %! clear  % for matlab test script
 %! x = sym('x', 'real');
@@ -773,8 +740,14 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
+%!warning <deprecated> sym({1 2});
+
 %!test
+%! % multiple syms with assumptions
+%! % TODO: update this with #603
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! q = sym ({'a', 'b', 'c'}, 'positive');
+%! warning (s)
 %! t = {};
 %! t{1, 1} = 'a: positive';
 %! t{1, 2} = 'b: positive';
