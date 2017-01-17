@@ -104,7 +104,7 @@ function z = diff(f, varargin)
           'args = _ins[1:]'
           'return f.diff(*args),' };
 
-  varargin = sym(varargin);
+  varargin = sym.symarray (varargin);
   z = python_cmd (cmd, sym(f), varargin{:});
 
 end

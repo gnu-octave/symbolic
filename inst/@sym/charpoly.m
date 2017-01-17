@@ -91,7 +91,7 @@ function y = charpoly(varargin)
          'else:'
          '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
 
-  y = python_cmd(cmd , sym(varargin){:});
+  y = python_cmd(cmd , sym.symarray (varargin){:});
 
   if (nargin == 1)
     y = cell2sym(y);

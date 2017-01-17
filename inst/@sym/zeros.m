@@ -51,11 +51,11 @@ function y = zeros(varargin)
   end
 
   if (isa (varargin{nargin}, 'char'))
-    y = zeros (cell2nosyms (varargin){:});
+    y = zeros (sym.cell2nosyms (varargin){:});
     return
   end
 
-  y = python_cmd ('return zeros(*_ins)', sym(varargin){:});
+  y = python_cmd ('return zeros(*_ins)', sym.symarray (varargin){:});
 
 end
 

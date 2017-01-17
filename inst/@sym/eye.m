@@ -50,14 +50,14 @@ function y = eye(varargin)
   end
 
   if (isa (varargin{nargin}, 'char'))
-    y = eye (cell2nosyms (varargin){:});
+    y = eye (sym.cell2nosyms (varargin){:});
     return
   end
 
   if nargin > 1 %%Sympy don't support eye(A, B)
-    y = sym(eye (cell2nosyms (varargin){:}));
+    y = sym(eye (sym.cell2nosyms (varargin){:}));
   else
-    y = python_cmd ('return eye(*_ins)', sym(varargin){:});
+    y = python_cmd ('return eye(*_ins)', sym.symarray (varargin){:});
   end
 
 end
