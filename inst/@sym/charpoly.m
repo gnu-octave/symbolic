@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -91,7 +92,10 @@ function y = charpoly(varargin)
          'else:'
          '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
 
-  y = python_cmd(cmd , sym(varargin){:});
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
+  y = python_cmd(cmd, varargin{:});
 
   if (nargin == 1)
     y = cell2sym(y);

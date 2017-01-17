@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Lagu
 %%
@@ -104,7 +104,9 @@
 
 function varargout = solve(varargin)
 
-  varargin = sym(varargin);
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
 
   if (nargout == 0 || nargout == 1)
     cmd = { 'eqs = list(); symbols = list()'
