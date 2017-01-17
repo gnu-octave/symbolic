@@ -119,7 +119,6 @@ function [c, t] = coeffs(p, x, all)
       x = {};
       all = true;
     else
-      x = sym(x);
       all = false;
     end
   elseif (nargin == 3)
@@ -132,13 +131,19 @@ function [c, t] = coeffs(p, x, all)
 
   assert (isscalar (p), 'coeffs: works for scalar input only')
 
+  %% TODO: after #603, this can just be "x = sym(x)".
+  if (iscell (x))
+    x = cell2sym (x);
+  else
+    x = sym(x);
+  end
+
   cmd = { '(f, xx, all) = _ins'
-          'if xx == [] and f.is_constant():'  % special case
-          '    xx = sympy.S("x")'
-          'try:'
-          '    xx = list(xx)'
-          'except TypeError:'
-          '    xx = [xx]'
+          'if not xx.is_Matrix:'
+          '    xx = sp.Matrix([xx])'
+          'if 0 in xx.shape and f.is_constant():'  % special case
+          '    xx = sp.Matrix([sympy.S("x")])'
+          'xx = list(xx)'
           'p = Poly.from_expr(f, *xx)'
           'if all:'
           '    terms = p.all_terms()'
@@ -270,3 +275,7 @@ end
 %!test
 %! % constant input without x
 %! assert (isequal (coeffs(sym(6)), sym(6)))
+
+%!test
+%! % constant input without x
+%! assert (isequal (coeffs (sym(6), {}), sym(6)))
