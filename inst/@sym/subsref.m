@@ -336,3 +336,18 @@ end
 %! test_bool (a, b, c)
 %! test_bool (a, b, c | true)
 %! test_bool (a, b, c & false)
+
+%!test
+%! % Orientation of empty results of logical indexing on row or column vectors
+%! r = [1:6];
+%! c = r';
+%! ar = sym(r);
+%! ac = sym(c);
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%! assert (isequal (ar(false), r(false)))
+%! assert (isequal (ac(false), c(false)))
+%! assert (isequal (ar(false (1, 6)), r(false (1, 6))))
+%! assert (isequal (ac(false (1, 6)), c(false (1, 6))))
+%! assert (isequal (ar(false (6, 1)), r(false (6, 1))))
+%! assert (isequal (ac(false (6, 1)), c(false (6, 1))))
+%! warning (s)
