@@ -41,8 +41,6 @@ function out = subsasgn (val, idx, rhs)
 	end
         out = sym.mat_replace (val, idx.subs, sym(rhs));
       end
-      
-      disp('constructor called!');
 
     case '.'
       

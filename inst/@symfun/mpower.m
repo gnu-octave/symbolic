@@ -70,7 +70,7 @@ end
 %! f(x) = 2*x;
 %! h = f^f;
 %! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, (2*x)^(2*x)))
+%! assert( isequal(h.symbol, (2*x)^(2*x)))
 %! h = f^sym(2);
 %! assert( isa(h, 'symfun'))
-%! assert( isequal(h.sym, 4*x^2))
+%! assert( isequal(h.symbol, 4*x^2))

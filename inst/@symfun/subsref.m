@@ -43,7 +43,8 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
-      out = subs(f, f.vars, idx.subs);
+      out = subs (f.symbol, f.vars, idx.subs);
+      out = symfun (out, symvar (out));
 
     case '.'
       fld = idx.subs;

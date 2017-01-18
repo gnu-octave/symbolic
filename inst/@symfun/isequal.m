@@ -1,4 +1,4 @@
-function t = isequal(x, y, varargin)
+function t = isequal(x, y)
 
   if (isa (x, 'symfun'))
     x = x.symbol;
@@ -6,6 +6,6 @@ function t = isequal(x, y, varargin)
   if (isa (y, 'symfun'))
     y = y.symbol;
   end
-  
-  t = isequal(x, y, varargin);
+
+  t = isequal(x, y);
 end

@@ -74,14 +74,14 @@ end
 %! f(x) = x^2;
 %! g = x^2;
 %! s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
-%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
-%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
-%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))
-%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.sym, x / g))
-%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.sym, x ^ g))
-%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.sym, x .* g))
-%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.sym, x ./ g))
-%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.sym, x .^ g))
+%! h = f - x;  assert(isa(h, 'symfun') && isequal(h.symbol, g - x))
+%! h = f + x;  assert(isa(h, 'symfun') && isequal(h.symbol, g + x))
+%! h = f * x;  assert(isa(h, 'symfun') && isequal(h.symbol, g * x))
+%! h = f / x;  assert(isa(h, 'symfun') && isequal(h.symbol, g / x))
+%! h = f ^ x;  assert(isa(h, 'symfun') && isequal(h.symbol, g ^ x))
+%! h = f .* x; assert(isa(h, 'symfun') && isequal(h.symbol, g .* x))
+%! h = f ./ x; assert(isa(h, 'symfun') && isequal(h.symbol, g ./ x))
+%! h = f .^ x; assert(isa(h, 'symfun') && isequal(h.symbol, g .^ x))
 %! warning(s);
 
 %!test
@@ -92,12 +92,12 @@ end
 %! h = f - g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.sym, 2*x - sin(x)))
+%! assert( isequal (h.symbol, 2*x - sin(x)))
 %! % and even if rh-sym has a dummy variable:
 %! h = f - g(y);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames(f)))
-%! assert( isequal (h.sym, 2*x - sin(y)))
+%! assert( isequal (h.symbol, 2*x - sin(y)))
 
 %!test
 %! % different variables, f has more
@@ -107,4 +107,4 @@ end
 %! h = f - g(y) + g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.sym, 2*x*y - sin(y) + sin(x)))
+%! assert( isequal (h.symbol, 2*x*y - sin(y) + sin(x)))
