@@ -116,46 +116,48 @@
 %% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = assume(x, varargin)
 
   assert (nargin > 1, 'General algebraic assumptions are not supported');
 
-  xstr = x.flat;
+  for i = 1:length(x)
 
-  if (nargin > 1 && strcmp(varargin{1}, 'clear'))
-    assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
-    newx = sym(xstr);
-  else
-    for n = 2:nargin
-      cond = varargin{n-1};
-      ca.(cond) = true;
+    xstr = subsref(x, substruct('()', {i})).flat;
+
+    if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+      assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
+      newx = sym(xstr);
+    else
+      for n = 2:nargin
+        cond = varargin{n-1};
+        ca.(cond) = true;
+      end
+      newx = sym(xstr, ca);
     end
-    newx = sym(xstr, ca);
-  end
 
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
+    if (nargout > 0)
+      varargout{1} = newx;
+      return
+    end
 
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    %xstr =
+    %newx =
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
+
   end
-  % ---------------------------------------------
 
 end
 
@@ -233,3 +235,15 @@ end
 %!error <General algebraic assumptions are not supported>
 %! syms a
 %! assume (a>0)
+
+%!test
+%! syms x y
+%! assume ([x y], 'real')
+%! assert (strcmp (assumptions (x), 'x: real'))
+%! assert (strcmp (assumptions (y), 'y: real'))
+
+%!test
+%! syms x y
+%! assume ([x y], 'real', 'even')
+%! assert (strcmp (assumptions (x), 'x: real, even') || strcmp (assumptions (x), 'x: even, real'))
+%! assert (strcmp (assumptions (y), 'y: real, even') || strcmp (assumptions (y), 'y: even, real'))
