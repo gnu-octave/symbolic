@@ -116,14 +116,14 @@
 %% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function varargout = assume(x, varargin)
+function varargout = assume(xx, varargin)
 
   assert (nargin > 1, 'General algebraic assumptions are not supported');
 
-  xstr = x.flat;
+  for i = 1:length (xx)
+    x = subsref (xx, substruct('()', {i}));
+    xstr = x.flat;
 
   if (nargin > 1 && strcmp(varargin{1}, 'clear'))
     assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
@@ -156,6 +156,8 @@ function varargout = assume(x, varargin)
     if flag, assignin(context, S(i).name, newobj); end
   end
   % ---------------------------------------------
+
+  end
 
 end
 
@@ -233,3 +235,15 @@ end
 %!error <General algebraic assumptions are not supported>
 %! syms a
 %! assume (a>0)
+
+%!test
+%! syms x y
+%! assume ([x y], 'real')
+%! assert (strcmp (assumptions (x), 'x: real'))
+%! assert (strcmp (assumptions (y), 'y: real'))
+
+%!test
+%! syms x y
+%! assume ([x y], 'real', 'even')
+%! assert (strcmp (assumptions (x), 'x: real, even') || strcmp (assumptions (x), 'x: even, real'))
+%! assert (strcmp (assumptions (y), 'y: real, even') || strcmp (assumptions (y), 'y: even, real'))

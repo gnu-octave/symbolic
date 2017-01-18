@@ -64,12 +64,13 @@
 %% @seealso{@@sym/assume, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function varargout = assumeAlso(x, varargin)
+function varargout = assumeAlso(xx, varargin)
 
   assert (nargin > 1, 'General algebraic assumptions are not supported');
+
+  for i = 1:length (xx)
+    x = subsref (xx, substruct('()', {i}));
 
   [tilde,ca] = assumptions(x, 'dict');
 
@@ -110,6 +111,8 @@ function varargout = assumeAlso(x, varargin)
     if flag, assignin(context, S(i).name, newobj); end
   end
   % ---------------------------------------------
+
+  end
 
 end
 
@@ -165,3 +168,15 @@ end
 %!error <General algebraic assumptions are not supported>
 %! syms a
 %! assumeAlso (a>0)
+
+%!test
+%! syms x y
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even'))
+%! assert (strcmp (assumptions (y), 'y: even'))
+
+%!test
+%! syms x y positive
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even, positive') || strcmp (assumptions (x), 'x: positive, even'))
+%! assert (strcmp (assumptions (y), 'y: even, positive') || strcmp (assumptions (y), 'y: positive, even'))
