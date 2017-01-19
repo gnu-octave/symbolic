@@ -226,5 +226,5 @@
 
 %!test
 %! f1 = fileread ('private/const_to_python_str.m');
-%! f2 = fileread ('@sym/private/const_to_python_str.m');
+%! f2 = fileread ('@sym/const_to_python_str.m');
 %! assert (strcmp (f1, f2))

@@ -444,11 +444,19 @@ classdef sym < handle
   end
 
   methods (Static)
-    function symout = symarray (x)
+    function symout = symarray (x, varargin)
       if (iscell (x))
-        symout = sym.cell_array_to_sym (x);
+        if nargin == 1
+          symout = sym.cell_array_to_sym (x);
+        else
+          symout = sym.cell_array_to_sym (x, varargin);
+        end
       else
-        symout = sym (x);
+        if nargin == 1
+          symout = sym (x);
+        else
+          symout = sym (x, varargin);
+        end
       end
     end
   end
@@ -782,7 +790,7 @@ end
 %!error <unexpected in assumptions>
 %! n = sym ('n', {{'negative', 'even'}});
 
-%!test
+%!xtest
 %! % save/load sym objects
 %! syms x
 %! y = 2*x;
@@ -818,8 +826,8 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!test
-%! q = sym ({'a', 'b', 'c'}, 'positive');
+%!xtest
+%! q = sym.symarray ({'a', 'b', 'c'}, 'positive');
 %! t = {};
 %! t{1, 1} = 'a: positive';
 %! t{1, 2} = 'b: positive';

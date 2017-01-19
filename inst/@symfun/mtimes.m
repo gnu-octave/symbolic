@@ -58,8 +58,7 @@
 
 function h = mtimes(f, g)
   [vars, s1, s2] = helper_symfun_binops(f, g);
-  res = s1 * s2;
-  h = symfun(res, symvar(res));
+  h = symfun(s1 * s2, vars);
 end
 
 

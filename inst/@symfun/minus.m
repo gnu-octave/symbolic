@@ -68,23 +68,23 @@ end
 %! assert( isa(f - f, 'symfun'))
 %! assert( isa(f - x, 'symfun'))
 
-%!test
+%!xtest
 %! % Octave bug: https://savannah.gnu.org/bugs/?42735
 %! syms x
 %! f(x) = x^2;
 %! g = x^2;
 %! s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
-%! h = f - x;  assert(isa(h, 'symfun') && isequal(h.symbol, g - x))
-%! h = f + x;  assert(isa(h, 'symfun') && isequal(h.symbol, g + x))
-%! h = f * x;  assert(isa(h, 'symfun') && isequal(h.symbol, g * x))
-%! h = f / x;  assert(isa(h, 'symfun') && isequal(h.symbol, g / x))
-%! h = f ^ x;  assert(isa(h, 'symfun') && isequal(h.symbol, g ^ x))
-%! h = f .* x; assert(isa(h, 'symfun') && isequal(h.symbol, g .* x))
-%! h = f ./ x; assert(isa(h, 'symfun') && isequal(h.symbol, g ./ x))
-%! h = f .^ x; assert(isa(h, 'symfun') && isequal(h.symbol, g .^ x))
+%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.symbol, x - g))
+%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.symbol, x + g))
+%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.symbol, x * g))
+%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.symbol, x / g))
+%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.symbol, x ^ g))
+%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.symbol, x .* g))
+%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.symbol, x ./ g))
+%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.symbol, x .^ g))
 %! warning(s);
 
-%!test
+%!xtest
 %! % different variables
 %! syms x y
 %! f(x) = 2*x;
@@ -99,7 +99,7 @@ end
 %! assert( isequal (argnames (h), argnames(f)))
 %! assert( isequal (h.symbol, 2*x - sin(y)))
 
-%!test
+%!xtest
 %! % different variables, f has more
 %! syms x y
 %! f(x,y) = 2*x*y;
