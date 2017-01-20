@@ -74,17 +74,17 @@ end
 %! f(x) = x^2;
 %! g = x^2;
 %! s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
-%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.symbol, x - g))
-%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.symbol, x + g))
-%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.symbol, x * g))
-%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.symbol, x / g))
-%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.symbol, x ^ g))
-%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.symbol, x .* g))
-%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.symbol, x ./ g))
-%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.symbol, x .^ g))
+%! h = x - f;  assert (isa (h, 'symfun') && isequal (formula (h), x - g))
+%! h = x + f;  assert (isa (h, 'symfun') && isequal (formula (h), x + g))
+%! h = x * f;  assert (isa (h, 'symfun') && isequal (formula (h), x * g))
+%! h = x / f;  assert (isa (h, 'symfun') && isequal (formula (h), x / g))
+%! h = x ^ f;  assert (isa (h, 'symfun') && isequal (formula (h), x ^ g))
+%! h = x .* f; assert (isa (h, 'symfun') && isequal (formula (h), x .* g))
+%! h = x ./ f; assert (isa (h, 'symfun') && isequal (formula (h), x ./ g))
+%! h = x .^ f; assert (isa (h, 'symfun') && isequal (formula (h), x .^ g))
 %! warning(s);
 
-%!xtest
+%!test
 %! % different variables
 %! syms x y
 %! f(x) = 2*x;
@@ -92,14 +92,14 @@ end
 %! h = f - g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.symbol, 2*x - sin(x)))
+%! assert (isequal (formula (h), 2*x - sin(x)))
 %! % and even if rh-sym has a dummy variable:
 %! h = f - g(y);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames(f)))
-%! assert( isequal (h.symbol, 2*x - sin(y)))
+%! assert (isequal (formula (h), 2*x - sin(y)))
 
-%!xtest
+%!test
 %! % different variables, f has more
 %! syms x y
 %! f(x,y) = 2*x*y;
@@ -107,4 +107,4 @@ end
 %! h = f - g(y) + g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.symbol, 2*x*y - sin(y) + sin(x)))
+%! assert (isequal (formula (h), 2*x*y - sin(y) + sin(x)))

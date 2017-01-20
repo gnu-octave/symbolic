@@ -24,18 +24,18 @@ function [vars,s1,s2] = helper_symfun_binops(f, g)
       error('arithmetric operators on symfuns must have same vars')
     end
     vars = f.vars;
-    s1 = f.symbol;
-    s2 = g.symbol;
+    s1 = formula (f);
+    s2 = formula (g);
   elseif (isa(f,'symfun'))
     %disp('debug: symfun <op> sym')
     vars = f.vars;
-    s1 = f.symbol;
+    s1 = formula (f);
     s2 = g;
   elseif (isa(g, 'symfun'))
     %disp('debug: sym <op> symfun')
     vars = g.vars;
     s1 = f;
-    s2 = g.symbol;
+    s2 = formula (g);
   else
     error('Tertium Non Datur')
   end

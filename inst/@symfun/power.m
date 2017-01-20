@@ -54,12 +54,11 @@ end
 %! f(x) = 2*x;
 %! h = f.^f;
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.symbol, (2*x)^(2*x)))
+%! assert (isequal (formula (h), (2*x)^(2*x)))
 
 %!test
 %! syms x
 %! f(x) = [x 2*x];
 %! h = f.^[x 3];
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.symbol, [x^x 8*x^3]))
-
+%! assert (isequal (formula (h), [x^x 8*x^3]))
