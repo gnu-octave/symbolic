@@ -105,7 +105,9 @@ function syms(varargin)
       end
     elseif (strcmp(varargin{n}, 'clear'))
       doclear = true;
-      %warning ('deprecated: "syms x clear"; will be removed in future version')
+      warning ('OctSymPy:deprecated', ...
+              ['"syms x clear" is deprecated and will be removed in future version;\n' ...
+               '         use "assume(x, ''clear'')" instead.'])
       if (last < 0)
         last = n - 1;
       else
@@ -197,7 +199,9 @@ end
 %! f = {x {2*x}};
 %! A = assumptions();
 %! assert ( ~isempty(A))
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! syms x clear
+%! warning (s)
 %! A = assumptions();
 %! assert ( isempty(A))
 
@@ -207,7 +211,9 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
+%! s = warning ('off', 'OctSymPy:deprecated', 'local');
 %! syms x clear
+%! warning (s)
 %! assert (logical(exist('x', 'var')))
 
 %!error <symbols after assumptions>
