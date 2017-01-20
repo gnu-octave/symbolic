@@ -59,5 +59,4 @@ end
 %! f(x) = [x 2*x];
 %! h = f./[x 2];
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.sym, [1 x]))
-
+%! assert (isequal (formula (h), [1 x]))
