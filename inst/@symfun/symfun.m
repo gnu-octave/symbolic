@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%

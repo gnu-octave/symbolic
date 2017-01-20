@@ -101,9 +101,9 @@ function out = subsasgn (val, idx, rhs)
       end
 
     case '.'
-%      assert( isa(rhs, 'sym') || isa(rhs, 'symfun'))
-%      assert( ~isa(idx.subs, 'sym'))
-%      assert( ~isa(val, 'sym'))
+      assert( isa(rhs, 'sym'))
+      assert( ~isa(idx.subs, 'sym'))
+      assert( ~isa(val, 'sym'))
       val.(idx.subs) = rhs;
       out = val;
 
