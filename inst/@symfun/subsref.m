@@ -43,6 +43,8 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
+      % TODO: why isn't this allowed?
+      %out = subs@sym (f, f.vars, idx.subs);
       out = subs (formula (f), f.vars, idx.subs);
 
     case '.'
@@ -59,7 +61,7 @@ function out = subsref (f, idx)
         %out = sym/subsref(f, idx);
         %out = f.sym.fld;
         %warning(' is there a better way to call the superclass fcn?')
-        out = subsref(f.symbol,idx);
+        out = subsref@sym(f, idx);
       end
 
     otherwise
