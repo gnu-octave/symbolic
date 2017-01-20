@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -123,8 +123,21 @@ function g = subs(f, in, out)
   %% In general
   % We build a list of of pairs of substitutions.
 
-  in = sym(in);
-  out = sym(out);
+  % ensure everything is sym
+  if (iscell (in))
+    for i = 1:numel(in)
+      in{i} = sym(in{i});
+    end
+  else
+    in = sym(in);
+  end
+  if (iscell (out))
+    for i = 1:numel(out)
+      out{i} = sym(out{i});
+    end
+  else
+    out = sym(out);
+  end
 
 
 
