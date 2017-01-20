@@ -1,10 +1,10 @@
 function t = isequal(x, y)
 
   if (isa (x, 'symfun'))
-    x = x.symbol;
+    x = x.sym;
   end
   if (isa (y, 'symfun'))
-    y = y.symbol;
+    y = y.sym;
   end
 
   t = isequal(x, y);

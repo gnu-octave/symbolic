@@ -449,13 +449,13 @@ classdef sym < handle
         if nargin == 1
           symout = sym.cell_array_to_sym (x);
         else
-          symout = sym.cell_array_to_sym (x, varargin);
+          symout = sym.cell_array_to_sym (x, varargin{:});
         end
       else
         if nargin == 1
           symout = sym (x);
         else
-          symout = sym (x, varargin);
+          symout = sym (x, varargin{:});
         end
       end
     end
@@ -826,7 +826,7 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!xtest
+%!test
 %! q = sym.symarray ({'a', 'b', 'c'}, 'positive');
 %! t = {};
 %! t{1, 1} = 'a: positive';

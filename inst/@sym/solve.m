@@ -104,7 +104,7 @@
 
 function varargout = solve(varargin)
 
-  varargin = sym(varargin);
+  varargin = sym.symarray (varargin);
 
   if (nargout == 0 || nargout == 1)
     cmd = { 'eqs = list(); symbols = list()'
