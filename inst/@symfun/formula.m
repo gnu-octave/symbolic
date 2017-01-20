@@ -50,7 +50,7 @@
 %% @end defmethod
 
 function g = formula(f)
-  g = f.symbol;
+  g = sym(f);
 end
 
 

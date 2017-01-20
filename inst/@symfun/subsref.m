@@ -50,8 +50,12 @@ function out = subsref (f, idx)
       fld = idx.subs;
       if (strcmp (fld, 'vars'))
         out = f.vars;
-      elseif (strcmp (fld, 'symbol'))
-        out = f.symbol;
+      elseif (strcmp (fld, 'sym'))
+        % TODO: we previously supported a symfun.sym property/method/whatever
+        % which developers used to mean "cast to sym".  But that might not be
+        % correct and should probably be deprecated/removed.  In most cases,
+        % you probably want "formula(f)".
+        out = formula (f);
       else
         %out = sym/subsref(f, idx);
         %out = f.sym.fld;
