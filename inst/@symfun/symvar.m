@@ -100,7 +100,7 @@ function vars = symvar(F, Nout)
 
   if (nargin == 1)
     % Note: symvar(symfun) differs from SMT, see test below
-    vars = symvar([F.vars{:} F.symbol(:)]);
+    vars = symvar([F.vars{:} formula(F)(:)]);
 
   else
     assert(Nout >= 0, 'number of requested symbols should be positive')
@@ -147,7 +147,7 @@ end
 %! assert (isequal (symvar (f, 2), [t s]))
 %! assert (isequal (symvar (f, 3), [t s]))
 
-%!xtest
+%!test
 %! % note preference for vars of symfun, if n requested
 %! syms x f(y)
 %! assert (isequal (symvar(f*x, 1), y))
@@ -161,7 +161,7 @@ end
 %! assert (isequal (symvar(a), [x y]))
 %! assert (isequal (symvar(b), [x y]))
 
-%!xtest
+%!test
 %! % preference for the explicit variables
 %! syms a x f(t, s)
 %! h = f*a + x;
@@ -172,7 +172,7 @@ end
 %! assert (isequal (symvar (h, 5), [t s x a]))
 %! assert (isequal (symvar (h), [a s t x]))
 
-%!xtest
+%!test
 %! % symfun dep on some vars only, matches smt w/ n
 %! syms x s t
 %! f(s) = x;

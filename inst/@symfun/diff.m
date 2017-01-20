@@ -78,7 +78,7 @@
 
 function z = diff(f, varargin)
 
-  z = diff(f.symbol, varargin{:});
+  z = diff@sym(f, varargin{:});
   z = symfun(z, f.vars);
 
 end

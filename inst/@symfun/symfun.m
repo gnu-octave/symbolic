@@ -146,7 +146,7 @@ classdef symfun < sym
 
   properties (Access = private)
     vars
-    symbol
+    _symbol   % TODO: temporary hack?
   end
 
   methods (Static, Access = private)
@@ -209,8 +209,14 @@ classdef symfun < sym
       end
 
       f@sym([], expr.pickle, expr.symsize, expr.flat, expr.ascii, expr.unicode);
-      f.symbol = sym(expr);
+      f._symbol = sym(expr);
       f.vars = vars;
+    end
+    function g = sym(f)
+      % Cast a symfun to a sym.
+      % TODO: what is the correct way to cast to a superclass?
+      g = f._symbol;
+      %g = sym@sym(f);
     end
   end
 end

@@ -43,20 +43,25 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
-      out = subs (f.symbol, f.vars, idx.subs);
-      out = symfun (out, symvar (out));
+      % TODO: why isn't this allowed?
+      %out = subs@sym (f, f.vars, idx.subs);
+      out = subs (formula (f), f.vars, idx.subs);
 
     case '.'
       fld = idx.subs;
       if (strcmp (fld, 'vars'))
         out = f.vars;
-      elseif (strcmp (fld, 'symbol'))
-        out = f.symbol;
+      elseif (strcmp (fld, 'sym'))
+        % TODO: we previously supported a symfun.sym property/method/whatever
+        % which developers used to mean "cast to sym".  But that might not be
+        % correct and should probably be deprecated/removed.  In most cases,
+        % you probably want "formula(f)".
+        out = formula (f);
       else
         %out = sym/subsref(f, idx);
         %out = f.sym.fld;
         %warning(' is there a better way to call the superclass fcn?')
-        out = subsref(f.symbol,idx);
+        out = subsref@sym(f, idx);
       end
 
     otherwise
