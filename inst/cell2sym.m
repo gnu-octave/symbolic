@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -17,29 +18,28 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym cell2sym (@var{x})
+%% @defun @@sym cell2sym (@var{x})
 %% Convert cell array to symbolic array.
 %%
 %% Examples:
 %% @example
 %% @group
-%% syms x y
-%% cell2sym(@{x, y@})
+%% cell2sym(@{'x', 'y'@})
 %%   @result{} ans = (sym) [x  y]  (1×2 matrix)
 %% @end group
 %% @end example
 %%
 %% @example
 %% @group
-%% syms x y
 %% cell2sym(@{'x', 2; pi 'y'@})
 %%   @result{} ans = (sym 2×2 matrix)
-%%  ⎡x  2⎤
-%%  ⎢    ⎥
-%%  ⎣π  y⎦
+%%       ⎡x  2⎤
+%%       ⎢    ⎥
+%%       ⎣π  y⎦
 %% @end group
 %% @end example
-%% @end defmethod
+%% @seealso{sym, syms}
+%% @end defun
 
 function c = cell2sym(p)
 
@@ -65,6 +65,11 @@ end
 
 
 %!test
-%! A = {1, 2, 3; 4, 5, 6; 7, 8, 9};
-%! B = [1, 2, 3; 4, 5, 6; 7, 8, 9];
-%! assert( isequal( cell2sym(A), sym(B)))
+%! A = {1 2 3; 4 5 6};
+%! B = [1 2 3; 4 5 6];
+%! assert (isequal (cell2sym(A), sym(B)))
+
+%!test
+%! A = {'a' 'b'; 'c' 10};
+%! B = [sym('a') sym('b'); sym('c') sym(10)];
+%! assert (isequal (cell2sym(A), B))

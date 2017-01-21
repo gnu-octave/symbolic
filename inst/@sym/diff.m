@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,8 +83,8 @@ function z = diff(f, varargin)
     return
   else
     q = varargin{1};
-    % Note: pickle: to avoid double() overhead for common diff(f,x)
-    isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
+    % Note: access sympy srepr to avoid double() overhead for common diff(f,x)
+    isnum2 = isnumeric (q) || (isa (q, 'sym') && strncmpi (sympy (q), 'Integer', 7));
     if ((nargin == 2) && isnum2)  % diff(f,2) -> symvar
       x = symvar(f, 1);
       if (isempty(x))
@@ -104,7 +104,9 @@ function z = diff(f, varargin)
           'args = _ins[1:]'
           'return f.diff(*args),' };
 
-  varargin = sym(varargin);
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
   z = python_cmd (cmd, sym(f), varargin{:});
 
 end

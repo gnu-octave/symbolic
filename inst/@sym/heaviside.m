@@ -51,12 +51,12 @@
 %% @example
 %% @group
 %% @comment Needs SymPy > 1.0
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, sym(1)/2)
 %%   @result{} (sym) 1/2
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, [0 sym(1)/2 10])
-%%   @result{} [0  1/2  10]  (1×3 matrix)
+%%   @result{} (sym) [0  1/2  10]  (1×3 matrix)
 %% @end group
 %% @end example
 %% (As of June 2016, this requires a development release of SymPy).

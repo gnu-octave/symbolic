@@ -80,7 +80,7 @@ ${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DI
 clean:
 	rm -rf "${BUILD_DIR}"
 	@#rm -f fntests.log
-	rm -f octsympy_tests.log
+	rm -f inst/octsympy_tests.log
 
 test:
 	@echo "Testing package in GNU Octave ..."

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -39,8 +39,6 @@
 %% @seealso{@@sym/horzcat, @@sym/cat}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function h = vertcat(varargin)
 
@@ -56,10 +54,12 @@ function h = vertcat(varargin)
           '            pass'
           '        else:'
           '            _proc.append(i)'
-          'return sp.Matrix.vstack(*_proc),'
+          'return sp.MatrixBase.vstack(*_proc),'
           };
 
-  varargin = sym(varargin);
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
   h = python_cmd (cmd, varargin{:});
 
 end
@@ -148,3 +148,9 @@ end
 %! [[x x] x; x x x];
 %! [[x x] x; [x x] x];
 %! [x x x; [x x] x];
+
+%!test
+%! % issue #700
+%! A = sym ([1 2]);
+%! B = simplify (A);
+%! assert (isequal ([B; A], [A; B]))

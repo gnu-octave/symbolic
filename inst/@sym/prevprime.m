@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,41 +18,46 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym nextprime (@var{x})
-%% Return the next prime number.
+%% @defmethod @@sym prevprime (@var{x})
+%% Return the previous prime number.
 %%
 %% Example:
 %% @example
 %% @group
-%% nextprime(sym(2))
-%%   @result{} ans = (sym) 3
+%% prevprime(sym(3))
+%%   @result{} ans = (sym) 2
 %
-%% nextprime([sym(2) 10 0 -1 65530])
-%%   @result{} (sym) [3  11  2  2  65537]  (1×5 matrix)
+%% prevprime([sym(3) 10 100 1000 65530])
+%%   @result{} (sym) [2  7  97  997  65521]  (1×5 matrix)
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/isprime, @@sym/prevprime}
+%% @seealso{@@sym/isprime, @@sym/nextprime}
 %% @end defmethod
 
 
-function y = nextprime(x)
+function y = prevprime(x)
 
-  %y = elementwise_op ('nextprime', x);
+  if (nargin ~= 1)
+    print_usage ()
+  end
+
+  %y = elementwise_op ('prevprime', x);
 
   % workaround as upstream SymPy returns int, not sym
-  y = elementwise_op ('lambda a: S(nextprime(a))', x);
+  y = elementwise_op ('lambda a: S(prevprime(a))', x);
 
 end
 
 
-%!assert (isequal (nextprime(sym(2)), 3));
-%!assert (isequal (nextprime(sym(18)), 19));
-%!assert (isequal (nextprime(sym([1 2 3])), [2 3 5]));
+%!assert (isequal (prevprime(sym(3)), 2));
+%!assert (isequal (prevprime(sym(20)), 19));
+%!assert (isequal (prevprime(sym([3 5 10])), [2 3 7]));
 
-%!assert (isequal (nextprime(sym([-1 0])), [2 2]));
+%!error prevprime(sym(2))
+%!error prevprime(sym(-2))
 
 %!test
 %! % result is a sym
-%! p = nextprime(sym(2));
+%! p = prevprime(sym(3));
 %! assert (isa (p, 'sym'))

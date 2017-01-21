@@ -24,7 +24,8 @@
 %%
 %% @strong{Note} this function is @emph{deprecated}.
 %% @example
-%% s = warning ('off', 'OctSymPy:deprecated', 'local');
+%% @comment doctest: -TEXINFO_SKIP_BLOCKS_WO_OUTPUT
+%% s = warning ('off', 'OctSymPy:deprecated');
 %% @end example
 %%
 %% Examples:

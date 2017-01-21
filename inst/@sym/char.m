@@ -61,18 +61,17 @@
 %% @end example
 %%
 %%
-%% if you need a more precise
-%% string representation of a symbolic object, the underlying SymPy string
-%% representation (“srepr”) can be recovered, although this is not supported or
-%% intended for general use:
+%% If you need a more precise string representation of a symbolic object,
+%% the underlying SymPy string representation (“srepr”) can be found
+%% using @code{sympy}:
 %% @example
 %% @group
-%% x.pickle
+%% sympy (x)
 %%   @result{} ans = Symbol('x', positive=True)
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/disp, @@sym/pretty, sym}
+%% @seealso{@@sym/disp, @@sym/pretty, @@sym/sympy, sym}
 %% @end defmethod
 
 

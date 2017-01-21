@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
 %%
 %% This file is part of OctSymPy.
 %%
@@ -183,12 +184,22 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct (cmd))
+    assert (isequal (sort (fieldnames (cmd)), ...
+      sort ({'ipc'; 'display'; 'digits'; 'quiet'})), ...
+      'sympref: structure has incorrect field names')
+    settings = [];
+    sympref ('quiet', cmd.quiet)
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('ipc', cmd.ipc)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('quiet', 'default')
@@ -316,7 +327,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     otherwise
-      print_usage ();
+      error ('sympref: invalid preference or command ''%s''', lower (cmd));
   end
 end
 
@@ -414,6 +425,21 @@ end
 %! sympref('quiet', 'on')
 
 %!test
+%! % restore sympref from structure
+%! old = sympref ();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! old = orderfields (old);  % re-ordering the fields should be ok
+%! sympref (old);
+%! new = sympref ();
+%! assert (isequal (old, new))
+
+%!error <incorrect field names>
+%! s.a = 'hello';
+%! s.b = 'world';
+%! sympref (s)
+
+%!test
 %! syms x
 %! r = sympref('reset');
 %! % restore original sympref settings
@@ -421,3 +447,6 @@ end
 %! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
+
+%!error <invalid preference or command> sympref ('nosuchsetting')
+%!error <invalid preference or command> sympref ('nosuchsetting', true)

@@ -20,7 +20,9 @@ octsympy 2.5.0-dev
           hilb
           invhilb
           ones
+          prevprime
           sind
+          sympy
           tand
           zeros
 
@@ -34,10 +36,22 @@ octsympy 2.5.0-dev
           fresnelc      sinint
           fresnels      zeta
 
+  * Deprecation notice: `sym(cell)` will soon create a sym array
+    (currently it creates a cell array of sym objects.)
+
   * The full set of assumptions implemented by Sympy can now be used.
     For example, `syms p prime` assumes `p` is prime.
 
+  * `assume(x, 'clear')` can be used to clear assumptions on variables.
+    Previously undocumented commands such as `sym(x, 'clear')` and
+    `syms x clear` will be deprecated in a future version.
+
   * `solve` now works with inequalities.
+
+  * `sym('1.3')` now creates the rational number 13/10.
+
+  * A new keyword option `coeffs(f, x, 'all')` returns both zero and
+    non-zero coefficients.
 
   * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
     we can remove some crufty workarounds.

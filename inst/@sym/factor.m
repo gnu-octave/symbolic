@@ -98,7 +98,9 @@
 function [p, m] = factor(f, varargin)
 
   f = sym(f);
-  varargin = sym(varargin);
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
 
   if ((nargin > 1) || (~isempty (findsymbols (f))))
     %% have symbols, do polynomial factorization

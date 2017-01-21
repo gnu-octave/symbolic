@@ -1,4 +1,6 @@
 %% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -289,3 +291,63 @@ end
 %! % issue #445
 %! A = sym([1 2; 3 4]);
 %! A(1, sym(4)/3)
+
+%!shared a, b
+%! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
+%! b = sym (a);
+
+%!function test_bool (a, b, c)
+%!  s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%!  assert (isequal (a(c), b(c)))
+%!  warning (s)
+%!endfunction
+
+%!test
+%! c = false;
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+
+%!test
+%! c = [false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true; true false true false; false true false true];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true false true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false; true; false; true; false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! c = [false true; false true; true false];
+%! test_bool (a, b, c)
+%! test_bool (a, b, c | true)
+%! test_bool (a, b, c & false)
+
+%!test
+%! % Orientation of empty results of logical indexing on row or column vectors
+%! r = [1:6];
+%! c = r';
+%! ar = sym(r);
+%! ac = sym(c);
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%! assert (isequal (ar(false), r(false)))
+%! assert (isequal (ac(false), c(false)))
+%! assert (isequal (ar(false (1, 6)), r(false (1, 6))))
+%! assert (isequal (ac(false (1, 6)), c(false (1, 6))))
+%! assert (isequal (ar(false (6, 1)), r(false (6, 1))))
+%! assert (isequal (ac(false (6, 1)), c(false (6, 1))))
+%! warning (s)

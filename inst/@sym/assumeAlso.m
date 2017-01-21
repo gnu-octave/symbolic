@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -67,6 +68,8 @@
 %% Keywords: symbolic
 
 function varargout = assumeAlso(x, varargin)
+
+  assert (nargin > 1, 'General algebraic assumptions are not supported');
 
   [tilde,ca] = assumptions(x, 'dict');
 
@@ -158,3 +161,7 @@ end
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
+
+%!error <General algebraic assumptions are not supported>
+%! syms a
+%! assumeAlso (a>0)

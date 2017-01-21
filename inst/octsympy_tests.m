@@ -136,13 +136,13 @@ function print_pass_fail (p, n, xf, sk)
     printf (" PASS %3d/%-3d", p, n);
     nfail = n - p - xf;
     if (nfail > 0)
-      printf (" \033[1;40;31m%s %d\033[m", "FAIL", nfail);
+      printf (" \033[1;40;31m %s %d\033[m", "FAIL", nfail);
     endif
     if (sk > 0)
-      printf (" \033[1;40;33m%s %d\033[m", "SKIP", sk);
+      printf (" \033[1;40;33m %s %d\033[m", "SKIP", sk);
     endif
     if (xf > 0)
-      printf (" \033[1;40;33m%s %d\033[m", "XFAIL", xf);
+      printf (" \033[1;40;33m %s %d\033[m", "XFAIL", xf);
     endif
   endif
   puts ("\n");
