@@ -74,7 +74,7 @@ dist: $(OCTAVE_RELEASE_TARBALL)
 zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
-${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical:
+${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical ${BUILD_DIR}/${MATLAB_PKG_DIR}/@double:
 	mkdir -p "$@"
 
 clean:
@@ -139,10 +139,11 @@ ml_copy: ml_convert_comments
 	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/octsympy_tests.m
 
 ## Matlab: extract and convert comments to Matlab style
-ml_convert_comments: ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical
+ml_convert_comments: ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@double ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical
 	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '',         '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
 	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@symfun',  '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
 	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@sym',     '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@double',  '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
 	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
 
 
