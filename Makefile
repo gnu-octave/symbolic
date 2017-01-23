@@ -121,6 +121,7 @@ ml_extract_tests: ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ml_copy
 	cp -pR misc/octsympy_tests_matlab.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/
 	cd ${BUILD_DIR}/${MATLAB_PKG_DIR}/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
 	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/extract_tests_for_matlab.m
+	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab/tests__sympref.m  # temp
 
 ## Matlab: copy files
 ml_copy: ml_convert_comments
