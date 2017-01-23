@@ -131,11 +131,9 @@ function [c, t] = coeffs(p, x, all)
 
   assert (isscalar (p), 'coeffs: works for scalar input only')
 
-  %% TODO: after #603, this can just be "x = sym(x)".
+  %% TODO: remove after #603
   if (iscell (x))
     x = cell2sym (x);
-  else
-    x = sym(x);
   end
 
   cmd = { '(f, xx, all) = _ins'
@@ -155,7 +153,7 @@ function [c, t] = coeffs(p, x, all)
           '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
           'return (Matrix([cc]), Matrix([tt]))' };
 
-  [c, t] = python_cmd (cmd, sym(p), x, all);
+  [c, t] = python_cmd (cmd, sym(p), sym(x), all);
 
   %% SMT compat:
   % reverse the order if t is not output.
