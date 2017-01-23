@@ -127,7 +127,7 @@ function f = function_handle(varargin)
     file_to_write = fullfile(fcnpath, [fcnname '.m']);
     [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
-    fprintf(fid, '%s', M.code)
+    fprintf(fid, '%s', M.code);
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
 
