@@ -499,7 +499,7 @@ end
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
 %! warning (s)
 %! asm = assumptions();
@@ -511,7 +511,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
 %! warning (s)
 %! assert (logical(exist('x', 'var')))
@@ -526,7 +526,7 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym(x, 'clear');
 %! warning (s)
 %! assert (isempty(assumptions(x)))
@@ -762,7 +762,7 @@ end
 %!test
 %! % multiple syms with assumptions
 %! % TODO: update this with #603
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! q = sym ({'a', 'b', 'c'}, 'positive');
 %! warning (s)
 %! t = {};
