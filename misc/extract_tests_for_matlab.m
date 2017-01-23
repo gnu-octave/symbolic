@@ -1,7 +1,7 @@
 function extract_tests_for_matlab()
 
-  dirs = {'.', '@sym', '@symfun'};
-  dirstr = {'', 'sym', 'symfun'};
+  dirs = {'.', '@sym', '@symfun', '@double', '@logical'};
+  dirstr = {'', 'sym', 'symfun', 'double', 'logical'};
 
   outdir = 'tests_matlab';
 
