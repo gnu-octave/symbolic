@@ -47,7 +47,7 @@
 %% @end group
 %% @end example
 %% Here the curve is defined implicitly by @code{f(x, y) == 0},
-%% but we do not enter to the @code{== 0} part.
+%% but we do not enter the @code{== 0} part.
 %%
 %% See help for the (non-symbolic) @code{ezplot}, which this
 %% routine calls after trying to convert sym inputs to
