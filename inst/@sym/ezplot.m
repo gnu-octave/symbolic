@@ -111,7 +111,7 @@ function varargout = ezplot(varargin)
           if (isempty(firstsym))
             firstsym = thissym;
           else
-            assert(logical(thissym == firstsym), ...
+            assert (all (logical (thissym == firstsym)), ...
               'ezplot: all functions must be in terms of the same variables');
           end
           thisf = function_handle(varargin{i});
