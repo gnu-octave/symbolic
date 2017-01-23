@@ -45,7 +45,8 @@ end
 
 
 %!error <Invalid> sinhint (sym(1), 2)
-%!xtest assert (isequaln (sinhint (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (sinhint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
