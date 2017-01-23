@@ -176,8 +176,23 @@ end
 %! syms x y
 %! f = sqrt(x*x + y*y) - 1;
 %! h = ezplot(f);
-%! y = get(h, 'ydata');
-%! assert (max(y) - 1 <= 4*eps)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   xx = get (h, 'xdata');
+%!   yy = get (h, 'ydata');
+%! else
+%!   if (isempty (get (h, 'zdata')))
+%!     xx = get (h, 'xdata');
+%!     yy = get (h, 'ydata');
+%!   else
+%!     cm = get (h, 'ContourMatrix');
+%!     xx = cm(1, 2:end);
+%!     yy = cm(2, 2:end);
+%!     assert (cm(1, 1) == 0)
+%!     assert (cm(2, 1) == length (xx))
+%!   end
+%! end
+%! assert (abs (max (xx) - 1) <= 0.02)
+%! assert (abs (max (yy) - 1) <= 0.02)
 
 %!error
 %! % implicit plot supports single function
