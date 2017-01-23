@@ -302,14 +302,14 @@ end
 %! % SMT compat: symfun indep var overwrites existing var
 %! t = 6;
 %! syms f(t)
-%! assert (logical (t != 6))
+%! assert (logical (t ~= 6))
 
 %!test
 %! % SMT compat: symfun indep var overwrites existing var, even if sym
 %! syms x
 %! t = x;
 %! syms f(t)
-%! assert (! logical (t == x))
+%! assert (~ logical (t == x))
 
 %!test
 %! syms x y
