@@ -45,13 +45,13 @@
 function y = eye(varargin)
 
   % partial workaround for issue #13: delete when/if fixed properly
-  if (strcmp (varargin{nargin}, 'sym'))
-    nargin = nargin - 1;
-    varargin = varargin(1:nargin);
+  if ((isa (varargin{nargin}, 'char')) && (strcmp (varargin{nargin}, 'sym')))
+    varargin = varargin(1:(nargin-1));
   end
 
-  if (isa (varargin{nargin}, 'char'))
-    y = eye (cell2nosyms (varargin){:});
+  if (isa (varargin{end}, 'char'))
+    varargin = cell2nosyms (varargin);
+    y = eye (varargin{:});
     return
   end
 
@@ -59,7 +59,7 @@ function y = eye(varargin)
     varargin{i} = sym(varargin{i});
   end
 
-  if nargin == 1
+  if (length (varargin) == 1)
     cmd = 'return eye(*_ins)';
   else
     %% Sympy don't support eye(A, B)
