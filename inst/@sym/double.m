@@ -141,7 +141,7 @@ end
 %!test
 %! % don't want NaN+NaNi
 %! snan = sym(nan);
-%! assert (~iscomplex(double(snan)))
+%! assert (isreal (double (snan)))
 
 %!test
 %! % arrays
