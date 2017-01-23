@@ -265,6 +265,7 @@ end
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
@@ -289,6 +290,7 @@ end
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
@@ -327,6 +329,7 @@ end
 %! addpath(temp_path);
 %! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [t1,t2,t3] = h(1,2,3);
 %! assert(isequal(t1, [1 2 3]))
 %! assert(isequal(t2, [1 2; 3 16]))
