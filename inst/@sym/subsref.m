@@ -296,46 +296,63 @@ end
 %! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
 %! b = sym (a);
 
-%!function test_bool (a, b, c)
-%!  s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
-%!  assert (isequal (a(c), b(c)))
-%!  warning (s)
-%!endfunction
-
 %!test
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
+%! c = true;
+%! assert (isequal (a(c), b(c)))
 %! c = false;
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
+%! assert (isequal (a(c), b(c)))
+%! warning (s)
 
 %!test
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! assert (isequal (a(c), b(c)))
+%! d = c | true;
+%! assert (isequal (a(d), b(d)))
+%! d = c & false;
+%! assert (isequal (a(d), b(d)))
+%! warning (s)
 
 %!test
 %! c = [false true false true; true false true false; false true false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! assert (isequal (a(c), b(c)))
+%! d = c | true;
+%! assert (isequal (a(d), b(d)))
+%! d = c & false;
+%! assert (isequal (a(d), b(d)))
 
 %!test
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true false true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! assert (isequal (a(c), b(c)))
+%! d = c | true;
+%! assert (isequal (a(d), b(d)))
+%! d = c & false;
+%! assert (isequal (a(d), b(d)))
+%! warning (s)
 
 %!test
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false; true; false; true; false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! assert (isequal (a(c), b(c)))
+%! d = c | true;
+%! assert (isequal (a(d), b(d)))
+%! d = c & false;
+%! assert (isequal (a(d), b(d)))
+%! warning (s)
 
 %!test
+%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true; false true; true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! assert (isequal (a(c), b(c)))
+%! d = c | true;
+%! assert (isequal (a(d), b(d)))
+%! d = c & false;
+%! assert (isequal (a(d), b(d)))
+%! warning (s);
+
+%!shared
 
 %!test
 %! % Orientation of empty results of logical indexing on row or column vectors

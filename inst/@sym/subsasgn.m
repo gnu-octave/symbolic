@@ -544,45 +544,76 @@ end
 %! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
 %! b = sym (a);
 
-%!function test_bool (a, b, c)
-%!  a(c) = 0;
-%!  b(c) = 0;
-%!  assert (isequal (a, b))
-%!endfunction
+%!test
+%! A = a; B = b;
+%! A(true) = 0;
+%! B(true) = 0;
+%! assert (isequal (A, B))
 
 %!test
-%! c = false;
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
+%! A = a; B = b;
+%! A(false) = 0;
+%! B(false) = 0;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true false true; true false true false; false true false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true false true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false; true; false; true; false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true; false true; true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %% End of mat_* tests
