@@ -70,7 +70,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{sym, syms, @@sym/assume, @@sym/assumeAlso}
+%% @seealso{sym, syms, isassumption, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypefun
 
 %% Author: Colin B. Macdonald
