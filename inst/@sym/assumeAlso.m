@@ -64,52 +64,55 @@
 %% @seealso{@@sym/assume, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = assumeAlso(x, varargin)
 
   assert (nargin > 1, 'General algebraic assumptions are not supported');
 
-  [tilde,ca] = assumptions(x, 'dict');
+  for i = 1:length (x)
 
-  if isempty(ca)
-    ca = [];
-  elseif (length(ca)==1)
-    ca = ca{1};
-  else
-    ca
-    error('expected at most one dict')
+    xstr = subsref(x, substruct('()', {i}));
+    [tilde,ca] = assumptions(xstr, 'dict');
+
+    if isempty(ca)
+      ca = [];
+    elseif (length(ca)==1)
+      ca = ca{1};
+    else
+      ca
+      error('expected at most one dict')
+    end
+
+    for n=2:nargin
+      cond = varargin{n-1};
+      ca.(cond) = true;
+    end
+
+    xstr = xstr.flat;
+    newx = sym(xstr, ca);
+
+    if (nargout > 0)
+      varargout{1} = newx;
+      return
+    end
+
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    %xstr =	
+    %newx =
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
+
   end
-
-  for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
-  end
-
-  xstr = x.flat;
-  newx = sym(xstr, ca);
-
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
-
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
-  end
-  % ---------------------------------------------
 
 end
 
@@ -165,3 +168,15 @@ end
 %!error <General algebraic assumptions are not supported>
 %! syms a
 %! assumeAlso (a>0)
+
+%!test
+%! syms x y
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even'))
+%! assert (strcmp (assumptions (y), 'y: even'))
+
+%!test
+%! syms x y positive
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even, positive') || strcmp (assumptions (x), 'x: positive, even'))
+%! assert (strcmp (assumptions (y), 'y: even, positive') || strcmp (assumptions (y), 'y: positive, even'))
