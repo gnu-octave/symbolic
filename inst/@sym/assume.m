@@ -196,6 +196,14 @@ end
 %! assert(a{1}.positive)
 
 %!test
+%! % multiple assumptions
+%! syms x
+%! x = assume(x, 'even', 'positive');
+%! [tilde, a] = assumptions(x, 'dict');
+%! assert(a{1}.even)
+%! assert(a{1}.positive)
+
+%!test
 %! % has output so avoids workspace
 %! syms x positive
 %! x2 = x;
