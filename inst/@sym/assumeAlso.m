@@ -95,21 +95,21 @@ function varargout = assumeAlso(xx, varargin)
       varargout{i} = newx;
     else
 
-    % ---------------------------------------------
-    % Muck around in the caller's namespace, replacing syms
-    % that match 'xstr' (a string) with the 'newx' sym.
-    %xstr =
-    %newx =
-    context = 'caller';
-    % ---------------------------------------------
-    S = evalin(context, 'whos');
-    evalin(context, '[];');  % clear 'ans'
-    for i = 1:numel(S)
-      obj = evalin(context, S(i).name);
-      [newobj, flag] = symreplace(obj, xstr, newx);
-      if flag, assignin(context, S(i).name, newobj); end
-    end
-    % ---------------------------------------------
+      % ---------------------------------------------
+      % Muck around in the caller's namespace, replacing syms
+      % that match 'xstr' (a string) with the 'newx' sym.
+      %xstr =
+      %newx =
+      context = 'caller';
+      % ---------------------------------------------
+      S = evalin(context, 'whos');
+      evalin(context, '[];');  % clear 'ans'
+      for i = 1:numel(S)
+        obj = evalin(context, S(i).name);
+        [newobj, flag] = symreplace(obj, xstr, newx);
+        if flag, assignin(context, S(i).name, newobj); end
+      end
+      % ---------------------------------------------
 
     end
   end
