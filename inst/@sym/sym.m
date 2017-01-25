@@ -776,3 +776,14 @@ end
 %! b = sym ('---1');
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
+
+%!test
+%! % num2cell works on sym arrays
+%! syms x
+%! C1 = num2cell ([x 2 3; 4 5 6*x]);
+%! assert (iscell (C1))
+%! assert (isequal (size (C1), [2 3]))
+%! assert (isequal (C1{1,1}, x))
+%! assert (isequal (C1{2,3}, 6*x))
+%! assert (isequal (C1{1,3}, sym(3)))
+%! assert (isa (C1{1,3}, 'sym'))
