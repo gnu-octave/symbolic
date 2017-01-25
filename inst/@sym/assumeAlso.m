@@ -19,8 +19,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
+%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {[@var{x}, @var{y}] =} assumeAlso ([@var{x} @var{y}], @var{cond}, @dots{})
 %% @deftypemethodx @@sym {} assumeAlso (@var{x}, @var{cond})
+%% @deftypemethodx @@sym {} assumeAlso ([@var{x} @var{y}], @var{cond}, @dots{})
 %% Add additional assumptions on a symbolic variable.
 %%
 %% Behaviour is similar to @code{assume}; however @var{cond} is combined

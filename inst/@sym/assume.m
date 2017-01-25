@@ -21,8 +21,10 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypemethodx @@sym {@var{x} =} assume (@var{x}, 'clear')
-%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond1}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {[@var{x}, @var{y}] =} assume ([@var{x} @var{y}], @dots{})
+%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypemethodx @@sym {} assume (@var{x}, 'clear')
+%% @deftypemethodx @@sym {} assume ([@var{x} @var{y}], @dots{})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% This function has two different behaviours depending on whether
