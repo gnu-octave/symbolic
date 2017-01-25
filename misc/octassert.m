@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,22 +32,28 @@ function octassert (varargin)
     warning('why are you calling this on Octave?  No need...')
   end
 
-  if (nargin ~= 3)
-    assert(varargin{:});
-  else
-    a = varargin{1};
-    b = varargin{2};
+  if (nargin == 1)
+    assert(varargin{1});
+    return
+  elseif (nargin == 2)
+    tol = 0;
+  elseif (nargin == 3)
     tol = varargin{3};
-    a = a(:);
-    b = b(:);
-    assert (isscalar (tol))
-    if (tol < 0)
-      % rel error
-      assert (all (abs (a - b) <= abs (tol)*abs (b)))
-    else
-      % abs error
-      assert (all (abs (a - b) <= abs (tol)))
-    end
+  else
+    error('no such assert call with 4 inputs?')
+  end
+
+  a = varargin{1};
+  b = varargin{2};
+  a = a(:);
+  b = b(:);
+  assert (isscalar (tol))
+  if (tol < 0)
+    % rel error
+    assert (all (abs (a - b) <= abs (tol)*abs (b)))
+  else
+    % abs error
+    assert (all (abs (a - b) <= abs (tol)))
   end
 
 end

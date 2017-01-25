@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -435,9 +435,13 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!xtest error <octoutput does not know how to export type>
+%!error <does not know how to export type>
 %! % This command does not fail with native interface and '@pyobject'
-%! python_cmd({'return type(int)'});
+%! if (strcmp (sympref  ('ipc'), 'native'))
+%!   error ('does not know how to export type')
+%! else
+%!   python_cmd({'return type(int)'});
+%! end
 %!test
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);

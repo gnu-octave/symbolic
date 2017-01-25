@@ -322,7 +322,7 @@ function s = sym(x, varargin)
     end
 
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if (check && ~isnum && regexp (x, '^\w+$'))
+    if (check && (~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
@@ -398,11 +398,11 @@ function s = sym(x, varargin)
       switch (flag)
         case 1  % Bad call to python function
           error (['Python: %s\n' ...
-                  'Error occurred using "%s" Python function, perhaps use another variable name?'],
+                  'Error occurred using "%s" Python function, perhaps use another variable name?'], ...
                  err, s);
         case 2  % Something else
           error (['Python: %s\n' ...
-                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
+                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'], ...
                  err, x);
       end
       return
@@ -499,7 +499,7 @@ end
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
 %! warning (s)
 %! asm = assumptions();
@@ -511,7 +511,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
 %! warning (s)
 %! assert (logical(exist('x', 'var')))
@@ -526,7 +526,7 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym(x, 'clear');
 %! warning (s)
 %! assert (isempty(assumptions(x)))
@@ -762,7 +762,7 @@ end
 %!test
 %! % multiple syms with assumptions
 %! % TODO: update this with #603
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! q = sym ({'a', 'b', 'c'}, 'positive');
 %! warning (s)
 %! t = {};

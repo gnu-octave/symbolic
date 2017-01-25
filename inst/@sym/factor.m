@@ -173,8 +173,8 @@ end
 %!error [p, m] = factor(sym(42), sym('x'));
 
 %!test
-%! # if polynomial happens to be a constant, don't attempt integer
-%! # factorization if a variable is specified
+%! % if polynomial happens to be a constant, don't attempt integer
+%! % factorization if a variable is specified
 %! f = sym(42);
 %! q = factor(f, sym('x'));
 %! assert (isequal (f, q));

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -199,7 +199,7 @@ end
 %! f = {x {2*x}};
 %! A = assumptions();
 %! assert ( ~isempty(A))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
 %! warning (s)
 %! A = assumptions();
@@ -211,7 +211,7 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
-%! s = warning ('off', 'OctSymPy:deprecated', 'local');
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
 %! warning (s)
 %! assert (logical(exist('x', 'var')))

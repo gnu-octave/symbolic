@@ -224,7 +224,7 @@ end
 
 %!test
 %! syms x y
-%! f = exp(x**2+y**2);
+%! f = exp (x^2 + y^2);
 %! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
 %! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
@@ -240,7 +240,7 @@ end
 
 %!test
 %! syms x y
-%! f = sin(x**2+y**2);
+%! f = sin (x^2 + y^2);
 %! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
 
@@ -254,12 +254,12 @@ end
 
 %!test
 %! syms x y
-%! f = x**2 +y**2;
+%! f = x^2 + y^2;
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',0)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',1)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',2)== sym(0) ))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x**2+y**2)))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x**2+y**2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x^2 + y^2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x^2 + y^2)))
 
 %!test
 %! % expansion point

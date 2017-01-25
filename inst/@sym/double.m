@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -141,7 +141,7 @@ end
 %!test
 %! % don't want NaN+NaNi
 %! snan = sym(nan);
-%! assert (~iscomplex(double(snan)))
+%! assert (isreal (double (snan)))
 
 %!test
 %! % arrays
