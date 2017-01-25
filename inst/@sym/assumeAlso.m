@@ -72,45 +72,45 @@ function varargout = assumeAlso(xx, varargin)
   for i = 1:length (xx)
     x = subsref (xx, substruct('()', {i}));
 
-  [tilde,ca] = assumptions(x, 'dict');
+    [tilde,ca] = assumptions(x, 'dict');
 
-  if isempty(ca)
-    ca = [];
-  elseif (length(ca)==1)
-    ca = ca{1};
-  else
-    ca
-    error('expected at most one dict')
-  end
+    if isempty(ca)
+      ca = [];
+    elseif (length(ca)==1)
+      ca = ca{1};
+    else
+      ca
+      error('expected at most one dict')
+    end
 
-  for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
-  end
+    for n=2:nargin
+      cond = varargin{n-1};
+      ca.(cond) = true;
+    end
 
-  xstr = x.flat;
-  newx = sym(xstr, ca);
+    xstr = x.flat;
+    newx = sym(xstr, ca);
 
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
+    if (nargout > 0)
+      varargout{1} = newx;
+      return
+    end
 
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
-  end
-  % ---------------------------------------------
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    %xstr =
+    %newx =
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
 
   end
 

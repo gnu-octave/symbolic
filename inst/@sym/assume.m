@@ -125,37 +125,37 @@ function varargout = assume(xx, varargin)
     x = subsref (xx, substruct('()', {i}));
     xstr = x.flat;
 
-  if (nargin > 1 && strcmp(varargin{1}, 'clear'))
-    assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
-    newx = sym(xstr);
-  else
-    for n = 2:nargin
-      cond = varargin{n-1};
-      ca.(cond) = true;
+    if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+      assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
+      newx = sym(xstr);
+    else
+      for n = 2:nargin
+        cond = varargin{n-1};
+        ca.(cond) = true;
+      end
+      newx = sym(xstr, ca);
     end
-    newx = sym(xstr, ca);
-  end
 
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
+    if (nargout > 0)
+      varargout{1} = newx;
+      return
+    end
 
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
-  end
-  % ---------------------------------------------
+    % ---------------------------------------------
+    % Muck around in the caller's namespace, replacing syms
+    % that match 'xstr' (a string) with the 'newx' sym.
+    %xstr =
+    %newx =
+    context = 'caller';
+    % ---------------------------------------------
+    S = evalin(context, 'whos');
+    evalin(context, '[];');  % clear 'ans'
+    for i = 1:numel(S)
+      obj = evalin(context, S(i).name);
+      [newobj, flag] = symreplace(obj, xstr, newx);
+      if flag, assignin(context, S(i).name, newobj); end
+    end
+    % ---------------------------------------------
 
   end
 
