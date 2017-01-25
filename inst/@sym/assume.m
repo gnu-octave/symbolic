@@ -152,9 +152,9 @@ function varargout = assume(xx, varargin)
       S = evalin(context, 'whos');
       evalin(context, '[];');  % clear 'ans'
       for i = 1:numel(S)
-	obj = evalin(context, S(i).name);
-	[newobj, flag] = symreplace(obj, xstr, newx);
-	if flag, assignin(context, S(i).name, newobj); end
+        obj = evalin(context, S(i).name);
+        [newobj, flag] = symreplace(obj, xstr, newx);
+        if flag, assignin(context, S(i).name, newobj); end
       end
       % ---------------------------------------------
 
