@@ -243,15 +243,15 @@ end
 
 %!test
 %! syms x y
-%! assume ([x y], 'real', 'even')
-%! assert (strcmp (assumptions (x), 'x: real, even') || strcmp (assumptions (x), 'x: even, real'))
-%! assert (strcmp (assumptions (y), 'y: real, even') || strcmp (assumptions (y), 'y: even, real'))
+%! assume ([x y], 'positive', 'even')
+%! assert (strcmp (assumptions (x), 'x: positive, even') || strcmp (assumptions (x), 'x: even, positive'))
+%! assert (strcmp (assumptions (y), 'y: positive, even') || strcmp (assumptions (y), 'y: even, positive'))
 
 %!test
 %! % with output, original x and y are unchanged
 %! syms x y
-%! [p, q] = assume ([x y], 'real', 'even');
+%! [p, q] = assume ([x y], 'real');
 %! assert (isempty (assumptions (x)))
 %! assert (isempty (assumptions (y)))
-%! assert (strcmp (assumptions (p), 'x: real, even') || strcmp (assumptions (p), 'x: even, real'))
-%! assert (strcmp (assumptions (q), 'y: real, even') || strcmp (assumptions (q), 'y: even, real'))
+%! assert (strcmp (assumptions (p), 'x: real'))
+%! assert (strcmp (assumptions (q), 'y: real'))

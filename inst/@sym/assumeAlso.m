@@ -176,15 +176,19 @@ end
 
 %!test
 %! syms x y positive
+%! f = sin (2*x);
 %! assumeAlso ([x y], 'even')
 %! assert (strcmp (assumptions (x), 'x: even, positive') || strcmp (assumptions (x), 'x: positive, even'))
 %! assert (strcmp (assumptions (y), 'y: even, positive') || strcmp (assumptions (y), 'y: positive, even'))
+%! assert (strcmp (assumptions (f), 'x: even, positive') || strcmp (assumptions (f), 'x: positive, even'))
 
 %!test
 %! % with output, original x and y are unchanged
 %! syms x y positive
+%! f = sin (2*x);
 %! [p, q] = assumeAlso ([x y], 'even');
 %! assert (strcmp (assumptions (x), 'x: positive'))
 %! assert (strcmp (assumptions (y), 'y: positive'))
+%! assert (strcmp (assumptions (f), 'x: positive'))
 %! assert (strcmp (assumptions (p), 'x: even, positive') || strcmp (assumptions (p), 'x: positive, even'))
 %! assert (strcmp (assumptions (q), 'y: even, positive') || strcmp (assumptions (q), 'y: positive, even'))
