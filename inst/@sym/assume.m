@@ -121,7 +121,11 @@
 
 function varargout = assume(xx, varargin)
 
-  assert (nargin > 1, 'General algebraic assumptions are not supported');
+  assert (nargin > 1, 'assume: general algebraic assumptions are not supported');
+
+  for n = 2:nargin
+    assert (ischar (varargin{n-1}), 'assume: conditions should be specified as strings')
+  end
 
   for i = 1:length (xx)
     x = subsref (xx, substruct('()', {i}));
@@ -174,6 +178,14 @@ end
 %! x = assume(x, 'odd');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: odd'))
+
+%!error <strings>
+%! syms x
+%! x = assume (x, x);
+
+%!error <Only symbols>
+%! syms x
+%! x = assume (x/pi, 'integer')
 
 %!test
 %! % multiple assumptions
@@ -233,9 +245,9 @@ end
 %! syms x
 %! x2 = assume (x, 'clear', 'real');
 
-%!error <General algebraic assumptions are not supported>
+%!error <algebraic assumptions are not supported>
 %! syms a
-%! assume (a>0)
+%! assume (a > 0)
 
 %!test
 %! syms x y

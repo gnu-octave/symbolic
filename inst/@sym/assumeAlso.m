@@ -69,7 +69,11 @@
 
 function varargout = assumeAlso(xx, varargin)
 
-  assert (nargin > 1, 'General algebraic assumptions are not supported');
+  assert (nargin > 1, 'assumeAlso: general algebraic assumptions are not supported');
+
+  for n = 2:nargin
+    assert (ischar (varargin{n-1}), 'assumeAlso: conditions should be specified as strings')
+  end
 
   for i = 1:length (xx)
     x = subsref (xx, substruct('()', {i}));
@@ -124,6 +128,10 @@ end
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: positive'))
 
+%!error <strings>
+%! syms x
+%! x = assumeAlso (x, x);
+
 %!test
 %! syms x positive
 %! x = assumeAlso(x, 'integer');
@@ -166,9 +174,9 @@ end
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 
-%!error <General algebraic assumptions are not supported>
+%!error <algebraic assumptions are not supported>
 %! syms a
-%! assumeAlso (a>0)
+%! assumeAlso (a > 0)
 
 %!test
 %! syms x y
