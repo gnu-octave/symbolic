@@ -66,7 +66,7 @@
 %%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
 %%
-%% @seealso{sym}
+%% @seealso{sym, assume}
 %% @end deffn
 
 %% Author: Colin B. Macdonald
