@@ -137,9 +137,8 @@ function varargout = assume(xx, varargin)
     end
 
     if (nargout > 0)
-      varargout{1} = newx;
-      return
-    end
+      varargout{i} = newx;
+    else
 
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -157,8 +156,8 @@ function varargout = assume(xx, varargin)
     end
     % ---------------------------------------------
 
+    end
   end
-
 end
 
 
@@ -247,3 +246,12 @@ end
 %! assume ([x y], 'real', 'even')
 %! assert (strcmp (assumptions (x), 'x: real, even') || strcmp (assumptions (x), 'x: even, real'))
 %! assert (strcmp (assumptions (y), 'y: real, even') || strcmp (assumptions (y), 'y: even, real'))
+
+%!test
+%! % with output, original x and y are unchanged
+%! syms x y
+%! [p, q] = assume ([x y], 'real', 'even');
+%! assert (isempty (assumptions (x)))
+%! assert (isempty (assumptions (y)))
+%! assert (strcmp (assumptions (p), 'x: real, even') || strcmp (assumptions (p), 'x: even, real'))
+%! assert (strcmp (assumptions (q), 'y: real, even') || strcmp (assumptions (q), 'y: even, real'))

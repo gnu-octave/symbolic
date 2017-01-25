@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2017 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -92,9 +92,8 @@ function varargout = assumeAlso(xx, varargin)
     newx = sym(xstr, ca);
 
     if (nargout > 0)
-      varargout{1} = newx;
-      return
-    end
+      varargout{i} = newx;
+    else
 
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -112,8 +111,8 @@ function varargout = assumeAlso(xx, varargin)
     end
     % ---------------------------------------------
 
+    end
   end
-
 end
 
 
@@ -180,3 +179,12 @@ end
 %! assumeAlso ([x y], 'even')
 %! assert (strcmp (assumptions (x), 'x: even, positive') || strcmp (assumptions (x), 'x: positive, even'))
 %! assert (strcmp (assumptions (y), 'y: even, positive') || strcmp (assumptions (y), 'y: positive, even'))
+
+%!test
+%! % with output, original x and y are unchanged
+%! syms x y positive
+%! [p, q] = assumeAlso ([x y], 'even');
+%! assert (strcmp (assumptions (x), 'x: positive'))
+%! assert (strcmp (assumptions (y), 'y: positive'))
+%! assert (strcmp (assumptions (p), 'x: even, positive') || strcmp (assumptions (p), 'x: positive, even'))
+%! assert (strcmp (assumptions (q), 'y: even, positive') || strcmp (assumptions (q), 'y: positive, even'))
