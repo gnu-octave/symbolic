@@ -21,8 +21,10 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{x} =} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypemethodx @@sym {@var{x} =} assume (@var{x}, 'clear')
-%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond1}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {[@var{x}, @var{y}] =} assume ([@var{x} @var{y}], @dots{})
+%% @deftypemethodx @@sym {} assume (@var{x}, @var{cond}, @var{cond2}, @dots{})
 %% @deftypemethodx @@sym {} assume (@var{x}, 'clear')
+%% @deftypemethodx @@sym {} assume ([@var{x} @var{y}], @dots{})
 %% New assumptions on a symbolic variable (replace old if any).
 %%
 %% This function has two different behaviours depending on whether
@@ -116,47 +118,52 @@
 %% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function varargout = assume(x, varargin)
+function varargout = assume(xx, varargin)
 
-  assert (nargin > 1, 'General algebraic assumptions are not supported');
+  assert (nargin > 1, 'assume: general algebraic assumptions are not supported');
 
-  xstr = x.flat;
+  for n = 2:nargin
+    assert (ischar (varargin{n-1}), 'assume: conditions should be specified as strings')
+  end
 
-  if (nargin > 1 && strcmp(varargin{1}, 'clear'))
-    assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
-    newx = sym(xstr);
-  else
-    for n = 2:nargin
-      cond = varargin{n-1};
-      ca.(cond) = true;
+  for i = 1:length (xx)
+    x = subsref (xx, substruct('()', {i}));
+    xstr = x.flat;
+
+    if (nargin > 1 && strcmp(varargin{1}, 'clear'))
+      assert (nargin == 2, 'assume: clear cannot be combined with other assumptions')
+      newx = sym(xstr);
+    else
+      for n = 2:nargin
+        cond = varargin{n-1};
+        ca.(cond) = true;
+      end
+      newx = sym(xstr, ca);
     end
-    newx = sym(xstr, ca);
-  end
 
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
+    if (nargout > 0)
+      varargout{i} = newx;
+    else
 
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
-  end
-  % ---------------------------------------------
+      % ---------------------------------------------
+      % Muck around in the caller's namespace, replacing syms
+      % that match 'xstr' (a string) with the 'newx' sym.
+      %xstr =
+      %newx =
+      context = 'caller';
+      % ---------------------------------------------
+      S = evalin(context, 'whos');
+      evalin(context, '[];');  % clear 'ans'
+      for i = 1:numel(S)
+        obj = evalin(context, S(i).name);
+        [newobj, flag] = symreplace(obj, xstr, newx);
+        if flag, assignin(context, S(i).name, newobj); end
+      end
+      % ---------------------------------------------
 
+    end
+  end
 end
 
 
@@ -172,12 +179,28 @@ end
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: odd'))
 
+%!error <strings>
+%! syms x
+%! x = assume (x, x);
+
+%!error <Only symbols>
+%! syms x
+%! x = assume (x/pi, 'integer')
+
 %!test
 %! % multiple assumptions
 %! syms x
 %! x = assume(x, 'positive', 'integer');
 %! [tilde, a] = assumptions(x, 'dict');
 %! assert(a{1}.integer)
+%! assert(a{1}.positive)
+
+%!test
+%! % multiple assumptions
+%! syms x
+%! x = assume(x, 'even', 'positive');
+%! [tilde, a] = assumptions(x, 'dict');
+%! assert(a{1}.even)
 %! assert(a{1}.positive)
 
 %!test
@@ -230,6 +253,27 @@ end
 %! syms x
 %! x2 = assume (x, 'clear', 'real');
 
-%!error <General algebraic assumptions are not supported>
+%!error <algebraic assumptions are not supported>
 %! syms a
-%! assume (a>0)
+%! assume (a > 0)
+
+%!test
+%! syms x y
+%! assume ([x y], 'real')
+%! assert (strcmp (assumptions (x), 'x: real'))
+%! assert (strcmp (assumptions (y), 'y: real'))
+
+%!test
+%! syms x y
+%! assume ([x y], 'positive', 'even')
+%! assert (strcmp (assumptions (x), 'x: positive, even') || strcmp (assumptions (x), 'x: even, positive'))
+%! assert (strcmp (assumptions (y), 'y: positive, even') || strcmp (assumptions (y), 'y: even, positive'))
+
+%!test
+%! % with output, original x and y are unchanged
+%! syms x y
+%! [p, q] = assume ([x y], 'real');
+%! assert (isempty (assumptions (x)))
+%! assert (isempty (assumptions (y)))
+%! assert (strcmp (assumptions (p), 'x: real'))
+%! assert (strcmp (assumptions (q), 'y: real'))

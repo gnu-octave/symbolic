@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2017 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -19,8 +19,10 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, ...)
+%% @deftypemethod  @@sym {@var{x} =} assumeAlso (@var{x}, @var{cond}, @var{cond2}, @dots{})
+%% @deftypemethodx @@sym {[@var{x}, @var{y}] =} assumeAlso ([@var{x} @var{y}], @var{cond}, @dots{})
 %% @deftypemethodx @@sym {} assumeAlso (@var{x}, @var{cond})
+%% @deftypemethodx @@sym {} assumeAlso ([@var{x} @var{y}], @var{cond}, @dots{})
 %% Add additional assumptions on a symbolic variable.
 %%
 %% Behaviour is similar to @code{assume}; however @var{cond} is combined
@@ -64,53 +66,59 @@
 %% @seealso{@@sym/assume, assumptions, sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
-function varargout = assumeAlso(x, varargin)
+function varargout = assumeAlso(xx, varargin)
 
-  assert (nargin > 1, 'General algebraic assumptions are not supported');
+  assert (nargin > 1, 'assumeAlso: general algebraic assumptions are not supported');
 
-  [tilde,ca] = assumptions(x, 'dict');
-
-  if isempty(ca)
-    ca = [];
-  elseif (length(ca)==1)
-    ca = ca{1};
-  else
-    ca
-    error('expected at most one dict')
+  for n = 2:nargin
+    assert (ischar (varargin{n-1}), 'assumeAlso: conditions should be specified as strings')
   end
 
-  for n=2:nargin
-    cond = varargin{n-1};
-    ca.(cond) = true;
+  for i = 1:length (xx)
+    x = subsref (xx, substruct('()', {i}));
+
+    [tilde,ca] = assumptions(x, 'dict');
+
+    if isempty(ca)
+      ca = [];
+    elseif (length(ca)==1)
+      ca = ca{1};
+    else
+      ca
+      error('expected at most one dict')
+    end
+
+    for n=2:nargin
+      cond = varargin{n-1};
+      ca.(cond) = true;
+    end
+
+    xstr = x.flat;
+    newx = sym(xstr, ca);
+
+    if (nargout > 0)
+      varargout{i} = newx;
+    else
+
+      % ---------------------------------------------
+      % Muck around in the caller's namespace, replacing syms
+      % that match 'xstr' (a string) with the 'newx' sym.
+      %xstr =
+      %newx =
+      context = 'caller';
+      % ---------------------------------------------
+      S = evalin(context, 'whos');
+      evalin(context, '[];');  % clear 'ans'
+      for i = 1:numel(S)
+        obj = evalin(context, S(i).name);
+        [newobj, flag] = symreplace(obj, xstr, newx);
+        if flag, assignin(context, S(i).name, newobj); end
+      end
+      % ---------------------------------------------
+
+    end
   end
-
-  xstr = x.flat;
-  newx = sym(xstr, ca);
-
-  if (nargout > 0)
-    varargout{1} = newx;
-    return
-  end
-
-  % ---------------------------------------------
-  % Muck around in the caller's namespace, replacing syms
-  % that match 'xstr' (a string) with the 'newx' sym.
-  %xstr =
-  %newx =
-  context = 'caller';
-  % ---------------------------------------------
-  S = evalin(context, 'whos');
-  evalin(context, '[];');  % clear 'ans'
-  for i = 1:numel(S)
-    obj = evalin(context, S(i).name);
-    [newobj, flag] = symreplace(obj, xstr, newx);
-    if flag, assignin(context, S(i).name, newobj); end
-  end
-  % ---------------------------------------------
-
 end
 
 
@@ -119,6 +127,10 @@ end
 %! x = assumeAlso(x, 'positive');
 %! a = assumptions(x);
 %! assert(strcmp(a, 'x: positive'))
+
+%!error <strings>
+%! syms x
+%! x = assumeAlso (x, x);
 
 %!test
 %! syms x positive
@@ -135,6 +147,15 @@ end
 %! assert(a{1}.integer)
 %! assert(a{1}.positive)
 %! assert(a{1}.even)
+
+%!test
+%! % multiple assumptions
+%! syms x integer
+%! x = assumeAlso (x, 'even', 'positive');
+%! [tilde, a] = assumptions (x, 'dict');
+%! assert (a{1}.integer)
+%! assert (a{1}.even)
+%! assert (a{1}.positive)
 
 %!test
 %! % has output so avoids workspace
@@ -162,6 +183,31 @@ end
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: positive, integer') || strcmp(a, 'x: integer, positive'))
 
-%!error <General algebraic assumptions are not supported>
+%!error <algebraic assumptions are not supported>
 %! syms a
-%! assumeAlso (a>0)
+%! assumeAlso (a > 0)
+
+%!test
+%! syms x y
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even'))
+%! assert (strcmp (assumptions (y), 'y: even'))
+
+%!test
+%! syms x y positive
+%! f = sin (2*x);
+%! assumeAlso ([x y], 'even')
+%! assert (strcmp (assumptions (x), 'x: even, positive') || strcmp (assumptions (x), 'x: positive, even'))
+%! assert (strcmp (assumptions (y), 'y: even, positive') || strcmp (assumptions (y), 'y: positive, even'))
+%! assert (strcmp (assumptions (f), 'x: even, positive') || strcmp (assumptions (f), 'x: positive, even'))
+
+%!test
+%! % with output, original x and y are unchanged
+%! syms x y positive
+%! f = sin (2*x);
+%! [p, q] = assumeAlso ([x y], 'even');
+%! assert (strcmp (assumptions (x), 'x: positive'))
+%! assert (strcmp (assumptions (y), 'y: positive'))
+%! assert (strcmp (assumptions (f), 'x: positive'))
+%! assert (strcmp (assumptions (p), 'x: even, positive') || strcmp (assumptions (p), 'x: positive, even'))
+%! assert (strcmp (assumptions (q), 'y: even, positive') || strcmp (assumptions (q), 'y: positive, even'))

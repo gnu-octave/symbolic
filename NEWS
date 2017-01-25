@@ -46,6 +46,8 @@ octsympy 2.5.0-dev
     Previously undocumented commands such as `sym(x, 'clear')` and
     `syms x clear` will be deprecated in a future version.
 
+  * `assume` supports vector inputs.
+
   * `solve` now works with inequalities.
 
   * `sym('1.3')` now creates the rational number 13/10.
