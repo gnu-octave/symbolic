@@ -26,7 +26,7 @@
 %% @group
 %% a = interval (sym (0), 10);
 %% contains (5, a)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

@@ -27,7 +27,7 @@
 %% a = domain ('Reals');
 %% b = domain ('Complexes');
 %% iscomplement (b - a)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%
@@ -45,4 +45,4 @@ end
 %!test
 %! a = domain ('Reals');
 %! b = domain ('Integers');
-%! assert (iscomplement (a - b))
+%! assert (logical (iscomplement (a - b)))

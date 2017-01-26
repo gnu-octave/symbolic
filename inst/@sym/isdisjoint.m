@@ -27,7 +27,7 @@
 %% a = interval (sym (0), 10);
 %% b = interval (sym (11), 15);
 %% isdisjoint (a, b)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

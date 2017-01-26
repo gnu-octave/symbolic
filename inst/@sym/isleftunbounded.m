@@ -26,7 +26,7 @@
 %% @group
 %% a = interval (sym (-inf), 0);
 %% isleftunbounded (a)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%
@@ -34,7 +34,7 @@
 %% @group
 %% a = interval (sym (0), inf);
 %% isleftunbounded (a)
-%%   @result{} ans = 0
+%%   @result{} ans = (sym) False
 %% @end group
 %% @end example
 %%

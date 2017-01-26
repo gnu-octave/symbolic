@@ -34,8 +34,8 @@
 %% Example:
 %% @example
 %% @group
-%% rangeset (sym (10), 0, -2)       % doctest: +SKIP
-%%   @result{} ans = (sym) {10, 8, …, 2}
+%% rangeset (sym (10), 0, -2)
+%%   @result{} ans = (sym) @{2, 4, …, 10@}
 %% @end group
 %% @end example
 %%
@@ -57,12 +57,12 @@ function y = rangeset(varargin)
   %% Note, in Sympy 1.0 the negative steps produce a sorted
   %% output, over 1.0 don't is sorted.
 
-  varargin = cellfun(@sym, varargin, 'UniformOutput', false);
-
   if strcmp (varargin{nargin}, 'list')
-    y = python_cmd ('return list(Range(*_ins[:-1])),', varargin{:});
+    varargin = cellfun(@sym, varargin, 'UniformOutput', false);
+    y = python_cmd ('return list(Range(*_ins)),', varargin{1:3});
     y = cell2sym (y);
   else
+    varargin = cellfun(@sym, varargin, 'UniformOutput', false);
     y = python_cmd ('return Range(*_ins),', varargin{:});
   end
 

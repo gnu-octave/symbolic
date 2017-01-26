@@ -28,7 +28,7 @@
 %% a = interval (x, 1);
 %% b = interval (sym (-1), 3);
 %% isintersection (intersect (a, b))
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

@@ -48,7 +48,7 @@
 %% space = interval (sym (0), 7) * interval (sym (4), 9);
 %% p = point (sym (6), 7);
 %% contains (p, space)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

@@ -27,7 +27,7 @@
 %% a = interval (sym (0), 1);
 %% b = interval (sym (0), 1, true);
 %% issuperset (a, b)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

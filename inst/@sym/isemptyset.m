@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% isemptyset (domain ('EmptySet'))
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

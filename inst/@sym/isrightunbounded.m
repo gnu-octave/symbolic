@@ -26,14 +26,14 @@
 %% @group
 %% a = interval (0, sym (inf));
 %% isrightunbounded (a)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%
 %% @group
 %% a = interval (-inf, sym (0));
 %% isrightunbounded (a)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

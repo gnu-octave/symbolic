@@ -43,10 +43,10 @@
 %% syms y
 %% f = x^exp(y);
 %% imageset (f, [x y], domain ('Naturals0'))
-%%   @result{} ans = (sym)
-%%       ⎧ ⎛ y⎞            ⎫
-%%       ⎨ ⎝ℯ ⎠            ⎬
-%%       ⎩x     | x, y ∊ ℕ₀⎭
+%%   @result{} ans = (sym 1×2 matrix)
+%%       ⎡⎧ ⎛ y⎞         ⎫  ⎧ ⎛ y⎞         ⎫⎤
+%%       ⎢⎨ ⎝ℯ ⎠         ⎬  ⎨ ⎝ℯ ⎠         ⎬⎥
+%%       ⎣⎩x     | x ∊ ℕ₀⎭  ⎩x     | y ∊ ℕ₀⎭⎦
 %% @end group
 %% @end example
 %%

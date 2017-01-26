@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% isuniversalset (domain ('UniversalSet'))
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

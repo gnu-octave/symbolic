@@ -27,7 +27,7 @@
 %% a = interval (sym (0), sym (1)/2);
 %% b = interval (sym (0), 1);
 %% issubset (a, b)
-%%   @result{} ans = 1
+%%   @result{} ans = (sym) True
 %% @end group
 %% @end example
 %%

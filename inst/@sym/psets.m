@@ -29,21 +29,17 @@
 %% c = interval (sym (1), 7);
 %%
 %% psets (complexregion (a * b))
-%%   @result{} ans =
-%%     @{
-%%       (sym) [2, 3] × [4, 5]
-%%     @}
+%%   @result{} ans = (sym) [2, 3] × [4, 5]
 %% @end group
 %% @end example
 %%
 %% @example
 %% @group
 %% psets (complexregion (a * b + b * c))
-%%   @result{} ans = 
-%%     @{
-%%       (sym) [2, 3] × [4, 5]
-%%       (sym) [4, 5] × [1, 7]
-%%     @}
+%%   @result{} ans = (sym 2×1 matrix)
+%%       ⎡[2, 3] × [4, 5]⎤
+%%       ⎢               ⎥
+%%       ⎣[4, 5] × [1, 7]⎦
 %% @end group
 %% @end example
 %%
@@ -55,7 +51,7 @@ function varargout = psets(x)
     print_usage ();
   end
 
-  out = elementwise_op ('lambda x: x.psets', sym (x));
+  out = python_cmd ('return Matrix(_ins[0].psets)', sym (x));
 
   if nargout == 0 || nargout == 1
     varargout = {out};
