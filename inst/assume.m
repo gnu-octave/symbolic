@@ -67,19 +67,16 @@ function assume(varargin)
   %% Find symbol/assumptions boundary and verify input
   valid_asm = assumptions ('possible');
   lastvar = -1;
-  firstasm = -1;
   for n = 1:nargin
     assert (ischar (varargin{n}), 'assume: command form expects string inputs only')
     if (ismember (varargin{n}, valid_asm))
       if (lastvar < 0)
         lastvar = n - 1;
-        firstasm = n;
       end
     elseif (strcmp (varargin{n}, 'clear'))
       assert (n == nargin, 'assume: "clear" should be the final argument')
       assert (lastvar < 0, 'assume: should not combine "clear" with other assumptions')
       lastvar = n - 1;
-      firstasm = n + 1;
     elseif (lastvar > 0)
       error('assume: cannot have symbols after assumptions')
     else
@@ -94,13 +91,18 @@ function assume(varargin)
     error ('assume: cannot have only assumptions w/o symbols')
   end
 
-  asm = varargin(firstasm:end);
-  symbols = varargin(1:lastvar);
+  asm = varargin((lastvar+1):end);
+  vars = varargin(1:lastvar);
 
-  %% loop over each symbol
-  for n = 1:length (symbols)
-    newx = sym(symbols{n}, asm{:});
-    xstr = newx.flat;
+  %% loop over each variable
+  for n = 1:length (vars)
+    vals = evalin ('caller', vars{n});
+    newvals = cell(1, numel (vals));
+    [newvals{:}] = assume (vals, asm{:});
+
+    for i = 1:length (newvals)
+      newx = newvals{i};
+      xstr = newx.flat;
 
     % ---------------------------------------------
     % Muck around in the caller's namespace, replacing syms
@@ -116,6 +118,7 @@ function assume(varargin)
     end
     % ---------------------------------------------
 
+    end
   end
 end
 
@@ -168,16 +171,16 @@ end
 %! a = assumptions(f);
 %! assert(strcmp(a, 'x: negative'))
 
-%!test
-%! % no explicit variable named x
-%! f = 2*sym('x');
+%!error <undefined>
+%! % does not create new variable x
+%! clear x
 %! assume x real
 
-%!test
-%! % does not create new variable x.
-%! % FIXME: could go further and enforce pre-existence of x
+%!error <undefined>
+%! % no explicit variable named x
+%! clear x
+%! f = 2*sym('x');
 %! assume x real
-%! assert (isempty (assumptions ()))
 
 %!test
 %! % clear does workspace
@@ -202,3 +205,28 @@ end
 %! assert (strcmp (assumptions (x), 'x: positive, even') || strcmp (assumptions (x), 'x: even, positive'))
 %! assert (strcmp (assumptions (y), 'y: positive, even') || strcmp (assumptions (y), 'y: even, positive'))
 %! assert (strcmp (assumptions (f), 'x: positive, even') || strcmp (assumptions (f), 'x: even, positive'))
+
+%!test
+%! % works from variable names not symbols
+%! syms x y
+%! a = [x y];
+%! assume a real
+%! assert (strcmp (assumptions (x), 'x: real'))
+%! assert (strcmp (assumptions (y), 'y: real'))
+
+%!test
+%! % works from variable names not symbols
+%! y = sym('x');
+%! f = 2*y;
+%! assume y real
+%! assert (strcmp (assumptions (f), 'x: real'))
+
+%!test
+%! % matrix of symbols
+%! syms a b c d
+%! A = [a b; c d];
+%! assume A real
+%! assert (strcmp (assumptions (a), 'a: real'))
+%! assert (strcmp (assumptions (b), 'b: real'))
+%! assert (strcmp (assumptions (c), 'c: real'))
+%! assert (strcmp (assumptions (d), 'd: real'))
