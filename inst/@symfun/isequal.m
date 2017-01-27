@@ -50,16 +50,11 @@
 
 function t = isequal(x, y, varargin)
 
-  t = logical(1);
-  if isa (x, 'symfun') && isa (y, 'symfun')
-    t = isequal (argnames(x), argnames(y));
+  t = isequal(formula(x), formula(y)) && isequal(argnames(x), argnames(y));
 
-    if nargin >= 3 && t == 1
-      t = t & isequal(x, varargin{:});
-    end
+  if nargin >= 3 && t
+    t = t & isequal(x, varargin{:});
   end
-
-  t = t & isequal(formula(x), formula(y));
 end
 
 
