@@ -53,7 +53,7 @@ function t = isequal(x, y, varargin)
   t = isequal(formula(x), formula(y)) && isequal(argnames(x), argnames(y));
 
   if nargin >= 3 && t
-    t = t & isequal(x, varargin{:});
+    t = t && isequal(x, varargin{:});
   end
 end
 
