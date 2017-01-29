@@ -50,13 +50,19 @@
 
 function t = isequal(x, y, varargin)
 
+  if (nargin <= 1)
+    print_usage ();
+  end
+
   t = isequal(formula(x), formula(y)) && isequal(argnames(x), argnames(y));
 
   if nargin >= 3 && t
     t = t && isequal(x, varargin{:});
   end
+
 end
 
+%!error isequal (symfun('x + 1', x))
 
 %!test
 %! syms x y
