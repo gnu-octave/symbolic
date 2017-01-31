@@ -32,7 +32,7 @@ help:
 	@echo "  install            install package in Octave"
 	@echo "  test               run tests with Octave"
 	@echo "  doctest            run doctests with Octave"
-	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL_COMPRESSED})"
+	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL})"
 	@echo "  html               create Octave Forge website"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
@@ -107,7 +107,7 @@ doctest:
 
 ## Install in Octave (locally)
 install: ${INSTALLED_PACKAGE}
-${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL_COMPRESSED}
+${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL}
 	$(OCTAVE) --silent --eval "pkg install $<"
 
 ## Matlab packaging
