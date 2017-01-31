@@ -63,7 +63,7 @@
 %% functions.
 %%   In particular, if you shadow a function name, you may get
 %%   hard-to-track-down bugs.  For example, instead of writing
-%%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
+%%   @code{syms alpha} use @code{alpha = sym('alpha')} within functions.
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
 %%
 %% @seealso{sym, assume}
@@ -104,18 +104,13 @@ function syms(varargin)
         last = n - 1;
       end
     elseif (strcmp(varargin{n}, 'clear'))
-      doclear = true;
       warning ('OctSymPy:deprecated', ...
-              ['"syms x clear" is deprecated and will be removed in future version;\n' ...
-               '         use "assume(x, ''clear'')" instead.'])
-      if (last < 0)
-        last = n - 1;
-      else
-        warning('syms: should not combine "clear" with other assumptions')
-      end
-      if (n ~= nargin)
-        error('syms: "clear" should be the final argument')
-      end
+              ['"syms x clear" is deprecated and will be removed in a future version;\n' ...
+               '         use "assume x clear" or "assume(x, ''clear'')" instead.'])
+      assert (n == nargin, 'syms: "clear" should be the final argument')
+      assert (last < 0, 'syms: should not combine "clear" with other assumptions')
+      doclear = true;
+      last = n - 1;
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')
     end
@@ -224,7 +219,7 @@ end
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
 
-%!warning <should not combine>
+%!error <should not combine>
 %! syms x positive clear
 
 %!error <should be the final argument>
