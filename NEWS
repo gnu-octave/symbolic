@@ -29,7 +29,8 @@ octsympy 2.5.0-dev
     Previously undocumented commands such as `sym(x, 'clear')` and
     `syms x clear` are now deprecated.
 
-  * `assume` supports vector inputs.
+  * `assume` supports vector inputs.  Also supported are alternative
+    "command forms" such as `assume x y real` and `assume x y clear`.
 
   * `solve` now works with inequalities.
 

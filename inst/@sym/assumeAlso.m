@@ -75,7 +75,7 @@ function varargout = assumeAlso(xx, varargin)
     assert (ischar (varargin{n-1}), 'assumeAlso: conditions should be specified as strings')
   end
 
-  for i = 1:length (xx)
+  for i = 1:numel (xx)
     x = subsref (xx, substruct('()', {i}));
 
     [tilde,ca] = assumptions(x, 'dict');

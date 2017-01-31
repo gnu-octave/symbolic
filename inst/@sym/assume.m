@@ -115,7 +115,7 @@
 %% FIXME: idea of rewriting all sym vars is a bit of a hack, not
 %% well tested (for example, with global vars.)
 %%
-%% @seealso{@@sym/assumeAlso, assumptions, sym, syms}
+%% @seealso{@@sym/assumeAlso, assume, assumptions, sym, syms}
 %% @end deftypemethod
 
 
@@ -127,7 +127,7 @@ function varargout = assume(xx, varargin)
     assert (ischar (varargin{n-1}), 'assume: conditions should be specified as strings')
   end
 
-  for i = 1:length (xx)
+  for i = 1:numel (xx)
     x = subsref (xx, substruct('()', {i}));
     xstr = x.flat;
 
@@ -277,3 +277,12 @@ end
 %! assert (isempty (assumptions (y)))
 %! assert (strcmp (assumptions (p), 'x: real'))
 %! assert (strcmp (assumptions (q), 'y: real'))
+
+%!test
+%! % matrix input
+%! syms a b c d
+%! assume ([a b; c d], 'real')
+%! assert (strcmp (assumptions (a), 'a: real'))
+%! assert (strcmp (assumptions (b), 'b: real'))
+%! assert (strcmp (assumptions (c), 'c: real'))
+%! assert (strcmp (assumptions (d), 'd: real'))
