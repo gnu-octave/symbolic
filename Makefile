@@ -9,10 +9,11 @@ SHELL   := /bin/bash
 
 PACKAGE := $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION := $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
-MATLAB_PACKAGE := octsympy
+MATLAB_PACKAGE_NAME := octsympy
 
 BUILD_DIR := tmp
-MATLAB_PKG_DIR := ${MATLAB_PACKAGE}-matlab-${VERSION}
+MATLAB_PKG := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}
+MATLAB_PKG_ZIP := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}.zip
 OCTAVE_RELEASE := ${BUILD_DIR}/${PACKAGE}-${VERSION}
 OCTAVE_RELEASE_TARBALL := ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar.gz
 OCTAVE_RELEASE_ZIP := ${BUILD_DIR}/${PACKAGE}-${VERSION}.zip
@@ -37,7 +38,7 @@ help:
 	@echo "  html               create Octave Forge website"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
-	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_DIR}.zip)"
+	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_ZIP})"
 
 %.tar.gz: %
 	tar -c -f - --posix -C "$(BUILD_DIR)/" "$(notdir $<)" | gzip -9n > "$@"
@@ -75,7 +76,7 @@ dist: $(OCTAVE_RELEASE_TARBALL)
 dist_zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
-${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical ${BUILD_DIR}/${MATLAB_PKG_DIR}/@double:
+${BUILD_DIR} ${MATLAB_PKG}/private ${MATLAB_PKG}/tests_matlab ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@logical ${MATLAB_PKG}/@double:
 	mkdir -p "$@"
 
 clean:
@@ -112,42 +113,43 @@ ${INSTALLED_PACKAGE}: ${OCTAVE_RELEASE_TARBALL}
 	$(OCTAVE) --silent --eval "pkg install $<"
 
 ## Matlab packaging
-matlab_pkg: ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ml_extract_tests
-	pushd ${BUILD_DIR}; zip -r ${MATLAB_PKG_DIR}.zip ${MATLAB_PKG_DIR}; popd
+## TODO: should be written to properly use artfacts
+matlab_pkg: $(MATLAB_PKG_ZIP)
+
+${MATLAB_PKG}: $(BUILD_DIR) ${MATLAB_PKG}/private ml_extract_tests
 
 ## Matlab: extract unit tests from Octave files, place in separate files
-ml_extract_tests: ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ml_copy
-	cp -pR misc/octassert.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab/
-	cp -pR misc/extract_tests_for_matlab.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -pR misc/octsympy_tests_matlab.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cd ${BUILD_DIR}/${MATLAB_PKG_DIR}/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
-	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/extract_tests_for_matlab.m
-	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab/tests__sympref.m  # temp
+ml_extract_tests: ${MATLAB_PKG}/tests_matlab ml_copy
+	cp -pR misc/octassert.m ${MATLAB_PKG}/tests_matlab/
+	cp -pR misc/extract_tests_for_matlab.m ${MATLAB_PKG}/
+	cp -pR misc/octsympy_tests_matlab.m ${MATLAB_PKG}/
+	cd ${MATLAB_PKG}/; ${OCTAVE} -q --eval "extract_tests_for_matlab"
+	rm -f ${MATLAB_PKG}/extract_tests_for_matlab.m
+	rm -f ${MATLAB_PKG}/tests_matlab/tests__sympref.m  # temp
 
 ## Matlab: copy files
 ml_copy: ml_convert_comments
-	cp -pR inst/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -pR inst/@sym/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym/
-	cp -pR inst/@symfun/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun/
-	cp -pR misc/my_print_usage.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/private/print_usage.m
-	cp -pR misc/my_print_usage.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym/private/print_usage.m
-	cp -pR misc/my_print_usage.m ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun/private/print_usage.m
-	cp -fp CONTRIBUTORS ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -fp NEWS ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -fp COPYING ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -fp matlab_smt_differences.md ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -fp README.md ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	cp -fp README.matlab.md ${BUILD_DIR}/${MATLAB_PKG_DIR}/
-	rm -f ${BUILD_DIR}/${MATLAB_PKG_DIR}/octsympy_tests.m
+	cp -pR inst/private ${MATLAB_PKG}/
+	cp -pR inst/@sym/private ${MATLAB_PKG}/@sym/
+	cp -pR inst/@symfun/private ${MATLAB_PKG}/@symfun/
+	cp -pR misc/my_print_usage.m ${MATLAB_PKG}/private/print_usage.m
+	cp -pR misc/my_print_usage.m ${MATLAB_PKG}/@sym/private/print_usage.m
+	cp -pR misc/my_print_usage.m ${MATLAB_PKG}/@symfun/private/print_usage.m
+	cp -fp CONTRIBUTORS ${MATLAB_PKG}/
+	cp -fp NEWS ${MATLAB_PKG}/
+	cp -fp COPYING ${MATLAB_PKG}/
+	cp -fp matlab_smt_differences.md ${MATLAB_PKG}/
+	cp -fp README.md ${MATLAB_PKG}/
+	cp -fp README.matlab.md ${MATLAB_PKG}/
+	rm -f ${MATLAB_PKG}/octsympy_tests.m
 
 ## Matlab: extract and convert comments to Matlab style
-ml_convert_comments: ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@double ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '',         '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@symfun',  '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@sym',     '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@double',  '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${BUILD_DIR}/${MATLAB_PKG_DIR}/')"
-
+ml_convert_comments: ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@double ${MATLAB_PKG}/@logical
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '',         '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@symfun',  '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@sym',     '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@double',  '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${MATLAB_PKG}/')"
 
 matlab_test:
 	${MATLAB} -nojvm -nodisplay -nosplash -r "addpath('inst'); octsympy_tests_matlab"
