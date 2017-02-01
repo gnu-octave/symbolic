@@ -24,7 +24,7 @@ Checklist
 
   * Packages: need to run the following two scripts:
 
-      - Use the maintainer makefile: "make clean", "make pkg".
+      - Use the maintainer makefile: "make clean", "make dist".
 
       - make_windows_package.sh, use "day-to-day testing" mode.  I
         recommend testing them first without using the tag.  Then test

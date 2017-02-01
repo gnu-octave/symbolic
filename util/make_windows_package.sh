@@ -9,9 +9,9 @@ SYMPY=sympy-1.0
 MPMATH=mpmath-0.19
 
 # for day-to-day testing
-VER=2.4.1-dev
+VER=2.5.0-dev
 # for release
-#VER=2.4.1
+#VER=2.5.0
 #TAG=v${VER}
 
 
@@ -41,13 +41,6 @@ git clone https://github.com/cbm755/octsympy.git
 rm -rf ${WINDIR}
 rm -rf ${WINDIRTMP}
 
-
-cp -R octsympy ${WINDIRTMP}
-( cd ${WINDIRTMP}/src/
-  make distclean
-  ./bootstrap
-  ./configure
-  make )
 
 # copy things to the package
 mkdir ${WINDIR}
