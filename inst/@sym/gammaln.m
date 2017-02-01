@@ -71,7 +71,8 @@ end
 % should match @double/gammaln
 %!assert (gammaln (pi),    double (gammaln (sym (pi))),    -3*eps)
 %!assert (gammaln (100),   double (gammaln (sym (100))),   -3*eps)
-%!assert (gammaln (1e-3),  double (gammaln (1/sym (1e3))), -3*eps)
+% failed at -3*eps on one system: Windows 10, Atom 64bit.
+%!assert (gammaln (1e-3),  double (gammaln (1/sym (1e3))), -100*eps)
 
 %!test
 %! % round trip
