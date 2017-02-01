@@ -66,6 +66,7 @@ coshint|Chi|1,0.8378669409802082408947||2016
 sinhint|Shi|1,1.057250875375728514572||2016
 logint|li|2,1.045163780117492784845||2016
 zeta||2,pi^2/6||2016
+harmonic||||2017
 """
 
 
@@ -81,6 +82,7 @@ fresnelc
 fresnels
 logint|li
 zeta
+harmonic||2017
 """
 
 
