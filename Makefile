@@ -24,7 +24,7 @@ HTML_TARBALL := ${HTML_DIR}.tar.gz
 OCTAVE ?= octave
 MATLAB ?= matlab
 
-.PHONY: help clean install test doctest pkg html matlab_test matlab_pkg
+.PHONY: help clean install test doctest dist dist_zip html matlab_test matlab_pkg
 
 help:
 	@echo Available rules:
@@ -33,6 +33,7 @@ help:
 	@echo "  test               run tests with Octave"
 	@echo "  doctest            run doctests with Octave"
 	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL})"
+	@echo "  dist_zip           create Octave package (${OCTAVE_RELEASE_ZIP})"
 	@echo "  html               create Octave Forge website"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
@@ -71,7 +72,7 @@ $(HTML_DIR): install | $(BUILD_DIR)
 	chmod -R a+rX,u+w,go-w $@
 
 dist: $(OCTAVE_RELEASE_TARBALL)
-zip: $(OCTAVE_RELEASE_ZIP)
+dist_zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
 ${BUILD_DIR} ${BUILD_DIR}/${MATLAB_PKG_DIR}/private ${BUILD_DIR}/${MATLAB_PKG_DIR}/tests_matlab ${BUILD_DIR}/${MATLAB_PKG_DIR}/@sym ${BUILD_DIR}/${MATLAB_PKG_DIR}/@symfun ${BUILD_DIR}/${MATLAB_PKG_DIR}/@logical ${BUILD_DIR}/${MATLAB_PKG_DIR}/@double:
