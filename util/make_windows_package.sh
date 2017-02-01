@@ -41,6 +41,7 @@ git clone https://github.com/cbm755/octsympy.git
 rm -rf ${WINDIR}
 rm -rf ${WINDIRTMP}
 
+cp -R octsympy ${WINDIRTMP}
 
 # copy things to the package
 mkdir ${WINDIR}
