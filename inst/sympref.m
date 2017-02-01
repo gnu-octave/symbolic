@@ -163,7 +163,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.5.0-dev
+%%   @result{} 2.5.0
 %% @end group
 %% @end example
 %%
@@ -206,7 +206,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.5.0-dev';
+      varargout{1} = '2.5.0';
 
     case 'display'
       if (nargin == 1)
