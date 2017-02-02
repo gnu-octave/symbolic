@@ -1,6 +1,10 @@
 octsympy 2.5.1-dev
 ==================
 
+  * New symbolic commands:
+
+          kroneckerDelta
+
   * Bug fix: isequal(n) for symfun's correctly tests the argnames.
 
 
