@@ -5,6 +5,7 @@ octsympy 2.5.1-dev
 
           harmonic
           kroneckerDelta
+          pochhammer
 
   * New `@double` numerical functions; these are wrappers around SymPy, so
     they are slower than native floating point implementations.
