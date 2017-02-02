@@ -263,7 +263,7 @@ end
 %! f(5);
 %! assert (length (argnames (f)) == 1)
 %! assert (isequal (argnames (f), t))
-%! assert (isequal( diff(f,x), sym(0)))
+%! assert (isequal( formula(diff(f,x)), sym(0)))
 
 %!test
 %! % replace g with shorter and specific fcn
