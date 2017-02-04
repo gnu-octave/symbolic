@@ -1,6 +1,6 @@
 SHELL   := /bin/bash
 
-## Copyright 2016 Colin B. Macdonald
+## Copyright 2016-2017 Colin B. Macdonald
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright
@@ -40,8 +40,21 @@ help:
 	@echo "  matlab_test        run tests with Matlab"
 	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_ZIP})"
 
+
+GIT_DATE   := $(shell git show -s --format=\%ci)
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+define create_tarball
+$(shell cd $(dir $(1)) \
+    && find $(notdir $(1)) -print0 \
+    | LC_ALL=C sort -z \
+    | tar c --mtime="$(GIT_DATE)" \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
+    | gzip -9n > "$(2)")
+endef
+
 %.tar.gz: %
-	tar -c -f - --posix -C "$(BUILD_DIR)/" "$(notdir $<)" | gzip -9n > "$@"
+	$(call create_tarball,$<,$(notdir $@))
 
 %.zip: %
 	cd "$(BUILD_DIR)" ; zip -9qr - "$(notdir $<)" > "$(notdir $@)"
