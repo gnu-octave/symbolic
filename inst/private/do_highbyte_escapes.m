@@ -21,6 +21,7 @@ function r = do_highbyte_escapes(s)
 %   >> do_highbyte_escapes(s)
 %      ans = aaa \\⌈ bbb
 %
+%
 %   Copyright 2016-2017 Colin B. Macdonald
 %
 %   Copying and distribution of this file, with or without modification,
