@@ -150,6 +150,8 @@ function f = symfun(expr, vars)
     vars = sym('x');
   elseif (nargin == 1)
     print_usage ();
+  elseif (nargin > 2)
+    print_usage ();
   end
 
   % if the vars are in a sym array, put them in a cell array
@@ -201,6 +203,8 @@ function f = symfun(expr, vars)
 
 end
 
+
+%!error <Invalid> symfun (1, sym('x'), 3)
 
 %!test
 %! syms x y
