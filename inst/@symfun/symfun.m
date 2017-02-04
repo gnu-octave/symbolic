@@ -174,7 +174,7 @@ function f = symfun(expr, vars)
   if (ischar (expr))
     % FIXME: drop this later
     warning('symfun: deprecated: symfun(''f'', x) format not supported')
-    tok = mystrsplit(expr, {'(', ')', ','});
+    tok = strsplit(expr, {'(', ')', ','});
     fname = strtrim(tok{1});
     assert (isvarname (fname))
     cmd = {['_f = sp.Function("' fname '")(*_ins)'] ...

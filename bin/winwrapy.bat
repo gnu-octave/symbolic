@@ -1,5 +1,12 @@
 @echo OFF
 
+REM Copyright 2014-2017 Colin B. Macdonald
+REM
+REM Copying and distribution of this file, with or without modification,
+REM are permitted in any medium without royalty provided the copyright
+REM notice and this notice are preserved.  This file is offered as-is,
+REM without any warranty.
+
 REM This bat file discards stderr from the python executable.
 REM This is a workaround as Octave for Windows cannot tolerate stderr from a popen2
 REM subprocess: see [this bug report](https://savannah.gnu.org/bugs/?43036).
