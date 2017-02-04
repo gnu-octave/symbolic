@@ -16,7 +16,6 @@ MATLAB_PKG := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}
 MATLAB_PKG_ZIP := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}.zip
 OCTAVE_RELEASE := ${BUILD_DIR}/${PACKAGE}-${VERSION}
 OCTAVE_RELEASE_TARBALL := ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar.gz
-OCTAVE_RELEASE_ZIP := ${BUILD_DIR}/${PACKAGE}-${VERSION}.zip
 
 INSTALLED_PACKAGE := ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
 HTML_DIR := ${BUILD_DIR}/${PACKAGE}-html
@@ -34,7 +33,6 @@ help:
 	@echo "  test               run tests with Octave"
 	@echo "  doctest            run doctests with Octave"
 	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL})"
-	@echo "  dist_zip           create Octave package (${OCTAVE_RELEASE_ZIP})"
 	@echo "  html               create Octave Forge website"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
@@ -86,7 +84,6 @@ $(HTML_DIR): install | $(BUILD_DIR)
 	chmod -R a+rX,u+w,go-w $@
 
 dist: $(OCTAVE_RELEASE_TARBALL)
-dist_zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
 ${BUILD_DIR} ${MATLAB_PKG}/private ${MATLAB_PKG}/tests_matlab ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@logical ${MATLAB_PKG}/@double:
