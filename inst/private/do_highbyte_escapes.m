@@ -20,6 +20,13 @@ function r = do_highbyte_escapes(s)
 %   >> s = 'aaa \\\xe2\x8c\x88 bbb';
 %   >> do_highbyte_escapes(s)
 %      ans = aaa \\⌈ bbb
+%
+%   Copyright 2016-2017 Colin B. Macdonald
+%
+%   Copying and distribution of this file, with or without modification,
+%   are permitted in any medium without royalty provided the copyright
+%   notice and this notice are preserved.  This file is offered as-is,
+%   without any warranty.
 
 
   % pad the string with one char in case string starts with \x
