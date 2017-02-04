@@ -1,6 +1,6 @@
 SHELL   := /bin/bash
 
-## Copyright 2016 Colin B. Macdonald
+## Copyright 2016-2017 Colin B. Macdonald
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright
@@ -16,7 +16,6 @@ MATLAB_PKG := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}
 MATLAB_PKG_ZIP := ${BUILD_DIR}/${MATLAB_PACKAGE_NAME}-matlab-${VERSION}.zip
 OCTAVE_RELEASE := ${BUILD_DIR}/${PACKAGE}-${VERSION}
 OCTAVE_RELEASE_TARBALL := ${BUILD_DIR}/${PACKAGE}-${VERSION}.tar.gz
-OCTAVE_RELEASE_ZIP := ${BUILD_DIR}/${PACKAGE}-${VERSION}.zip
 
 INSTALLED_PACKAGE := ~/octave/${PACKAGE}-${VERSION}/packinfo/DESCRIPTION
 HTML_DIR := ${BUILD_DIR}/${PACKAGE}-html
@@ -34,14 +33,26 @@ help:
 	@echo "  test               run tests with Octave"
 	@echo "  doctest            run doctests with Octave"
 	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL})"
-	@echo "  dist_zip           create Octave package (${OCTAVE_RELEASE_ZIP})"
 	@echo "  html               create Octave Forge website"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
 	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_ZIP})"
 
+
+GIT_DATE   := $(shell git show -s --format=\%ci)
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+define create_tarball
+$(shell cd $(dir $(1)) \
+    && find $(notdir $(1)) -print0 \
+    | LC_ALL=C sort -z \
+    | tar c --mtime="$(GIT_DATE)" \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
+    | gzip -9n > "$(2)")
+endef
+
 %.tar.gz: %
-	tar -c -f - --posix -C "$(BUILD_DIR)/" "$(notdir $<)" | gzip -9n > "$@"
+	$(call create_tarball,$<,$(notdir $@))
 
 %.zip: %
 	cd "$(BUILD_DIR)" ; zip -9qr - "$(notdir $<)" > "$(notdir $@)"
@@ -73,7 +84,6 @@ $(HTML_DIR): install | $(BUILD_DIR)
 	chmod -R a+rX,u+w,go-w $@
 
 dist: $(OCTAVE_RELEASE_TARBALL)
-dist_zip: $(OCTAVE_RELEASE_ZIP)
 html: $(HTML_TARBALL)
 
 ${BUILD_DIR} ${MATLAB_PKG}/private ${MATLAB_PKG}/tests_matlab ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@logical ${MATLAB_PKG}/@double:
