@@ -33,8 +33,6 @@
 %%
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_rclist_asgn(A, r, c, B)
 

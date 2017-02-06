@@ -56,6 +56,7 @@
 %% @seealso{@@sym/subsref, @@sym/subindex, @@sym/end, symfun}
 %% @end deftypeop
 
+
 function out = subsasgn (val, idx, rhs)
 
   switch idx.type
@@ -76,7 +77,7 @@ function out = subsasgn (val, idx, rhs)
         all_Symbols = python_cmd (cmd, idx.subs);
       end
       if (all_syms && all_Symbols)
-	%% Make a symfun
+        %% Make a symfun
         if (~isa(rhs, 'sym'))
           % rhs is, e.g., a double, then we call the constructor
           rhs = sym(rhs);
@@ -91,12 +92,12 @@ function out = subsasgn (val, idx, rhs)
             idx.subs{i} = double(idx.subs{i});
           end
         end
-	for i = 1:length(idx.subs)
+        for i = 1:length(idx.subs)
           if (~ is_valid_index(idx.subs{i}))
             error('OctSymPy:subsref:invalidIndices', ...
                   'invalid indices: should be integers or boolean');
           end
-	end
+        end
         out = mat_replace(val, idx.subs, sym(rhs));
       end
 
