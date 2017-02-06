@@ -103,3 +103,19 @@ end
 %!assert (double (ellipticE (sym (-pi)/4)), 1.844349247, 10e-10)
 %!assert (double (ellipticE (sym (0))), 1.570796327, 10e-10)
 %!assert (double (ellipticE (sym (1))), 1, 10e-1)
+
+%!test
+%! % compare to Maple
+%! us = vpa (ellipticE (sym(7)/6, sym(13)/7), 40);
+%! % > evalf(EllipticE(sin(7/6), sqrt(13/7)), 40);
+%! maple = vpa ('0.6263078268598504591831743625971763209496', 40) + ...
+%!         vpa ('0.1775496232203171126975790989055865596501j', 40);
+%! assert (abs (double (maple - us)), 0, 2e-39)
+
+%!test
+%! % compare to Maple
+%! us = vpa (ellipticE (sym(8)/7), 40);
+%! % > evalf(EllipticE(sqrt(8/7)), 40);
+%! maple = vpa ('0.8717182992576322508542205614105802333270', 40) + ...
+%!         vpa ('0.1066754320328976949531350910798010526685j', 40);
+%! assert (abs (double (maple - us)), 0, 2e-39)

@@ -109,3 +109,19 @@ end
 %!xtest
 %! % FIXME: search/report upstream
 %! assert (double (ellipticPi (sym (-1), 0, sym (1))), 0)
+
+%!test
+%! % compare to Maple, complete
+%! us = vpa (ellipticPi (sym(1)/6, sym(4)/3), 40);
+%! % > evalf(EllipticPi(sin(1/6), sqrt(4/3)), 40);
+%! maple = vpa ('2.019271696236161760696477679310987869058', 40) - ...
+%!         vpa ('1.708165765120289929280805062355360570830j', 40);
+%! assert (abs (double (maple - us)), 0, 2e-39)
+
+%!test
+%! % compare to Maple, incomplete
+%! us = vpa (ellipticPi (sym(8)/7, sym(4)/3, sym(2)/7), 40);
+%! % > evalf(EllipticPi(sin(4/3), 8/7, sqrt(2/7)), 40);
+%! maple = vpa ('2.089415796799294830305265090302275542033', 40) - ...
+%!         vpa ('4.798862045930802761256228043192491271947j', 40);
+%! assert (abs (double (maple - us)), 0, 6e-39)

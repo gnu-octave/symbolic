@@ -111,8 +111,9 @@ end
 %! assert (double (ellipticE (ms)), E, -1e-15)
 
 %!test
-%! % compare to Maple: evalf(EllipticK(sqrt(7)), 40);
+%! % compare to Maple
+%! us = vpa (ellipticK (sym (7)), 40);
+%! % > evalf(EllipticK(sqrt(7)), 40);
 %! maple = vpa ('0.6168027921799632674669917683443602673441', 40) - ...
 %!         vpa ('0.9114898734184488922164103102629560336918j', 40);
-%! us = vpa (ellipticK (sym (7)), 40);
 %! assert (abs (double (maple - us)), 0, 1e-39)
