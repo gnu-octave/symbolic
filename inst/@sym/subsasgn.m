@@ -163,6 +163,20 @@ end
 %! assert(isequal( a, b ))
 
 %!test
+%! % grow from nothing
+%! clear a
+%! a(3) = sym (1);
+%! b = sym ([0 0 1]);
+%! assert (isequal (a, b))
+
+%!test
+%! % grow from nothing, 2D
+%! clear a
+%! a(2, 3) = sym (1);
+%! b = sym ([0 0 0; 0 0 1;]);
+%! assert (isequal (a, b))
+
+%!test
 %! % linear indices of 2D
 %! b = 1:4; b = [b; 2*b; 3*b];
 %! a = sym(b);
