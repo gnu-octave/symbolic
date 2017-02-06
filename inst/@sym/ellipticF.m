@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016-2017 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
