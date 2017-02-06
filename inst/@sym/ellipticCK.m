@@ -1,4 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,47 +22,42 @@
 %% @defmethod @@sym ellipticCK (@var{m})
 %% Complementary complete elliptic integral of the first kind.
 %%
-%% Example:
+%% This is the complete elliptic integral (of the first kind) with the
+%% complementary parameter @code{1 - @var{m}}:
 %% @example
 %% @group
 %% syms m
 %% ellipticCK (m)
-%%   @result{} ans = (sym) K(m)
-%% @end group
-%%
-%% @group
-%% rewrite (ans, 'Integral')         % doctest: +SKIP
-%%   @result{} ans = (sym)
-%%       π
-%%       ─
-%%       2
-%%       ⌠
-%%       ⎮          1
-%%       ⎮ ──────────────────── dα
-%%       ⎮    _________________
-%%       ⎮   ╱        2
-%%       ⎮ ╲╱  - m⋅sin (α) + 1
-%%       ⌡
-%%       0
-%% @end group
-%% @group
-%% double (ellipticCK (sym (1)/2))
-%%   @result{} ans =  1.8541
+%%   @result{} ans = (sym) K(-m + 1)
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ellipticF, @@sym/ellipticPi}
+%% Example:
+%% @example
+%% @group
+%% ellipticCK (sym (1)/4)
+%%   @result{} ans = (sym) K(3/4)
+%% double (ans)
+%%   @result{} ans = 2.1565
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/ellipticK}
 %% @end defmethod
 
 
-function y = ellipticCK(m)
-  if nargin > 1
-    print_usage();
+function y = ellipticCK (m)
+  if (nargin > 1)
+    print_usage ();
   end
 
-  y = ellipticF (sym (pi)/2, m);
+  y = ellipticK (1 - m);
 
 end
 
 
+%!error <Invalid> ellipticCK (sym (1), 2)
+
 %!assert (double (ellipticCK (sym (1)/2)), 1.8541, 10e-5)
+%!assert (double (ellipticCK (sym (101)/10)), 0.812691836806976, -3*eps)
+%!assert (isequal (ellipticCK (sym (1)), sym(pi)/2))

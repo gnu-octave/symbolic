@@ -1,4 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,32 +22,28 @@
 %% @defmethod @@sym ellipticCPi (@var{n}, @var{m})
 %% Complementary complete elliptic integral of the third kind.
 %%
-%% Example:
+%% This is the complete elliptic integral (of the third kind) with the
+%% complementary parameter @code{1 - @var{m}}:
 %% @example
 %% @group
 %% syms n m
 %% ellipticCPi (n, m)
-%%   @result{} ans = (sym) Π(n│m)
+%%   @result{} ans = (sym) Π(n│-m + 1)
+%% @end group
+%% @end example
+%%
+%% Example:
+%% @example
+%% @group
+%% ellipticCPi (n, sym(1)/4)
+%%   @result{} ans = (sym) Π(n│3/4)
 %% @end group
 %%
 %% @group
-%% rewrite (ans, 'Integral')         % doctest: +SKIP
-%%   @result{} ans = (sym)
-%%       π
-%%       ─
-%%       2
-%%       ⌠
-%%       ⎮                   1
-%%       ⎮ ────────────────────────────────────── dα
-%%       ⎮    _________________
-%%       ⎮   ╱        2         ⎛       2       ⎞
-%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- n⋅sin (α) + 1⎠
-%%       ⌡
-%%       0
-%% @end group
-%% @group
-%% double (ellipticCPi (sym (0), sym (1)/2))
-%%   @result{} ans =  1.8541
+%% ellipticCPi (sym(1)/2, sym(1)/4)
+%%   @result{} ans = (sym) Π(1/2│3/4)
+%% double (ans)
+%%   @result{} ans = 3.2348
 %% @end group
 %% @end example
 %%
@@ -55,13 +52,17 @@
 
 
 function y = ellipticCPi(n, m)
-  if nargin ~= 2
-    print_usage();
+  if (nargin ~= 2)
+    print_usage ();
   end
 
-  y = ellipticPi (n, sym (pi)/2, m);
+  y = ellipticPi (n, sym (pi)/2, 1 - m);
 
 end
 
+%!error <Invalid> ellipticCPi (sym (1))
+%!error <Invalid> ellipticCPi (sym (1), 2, 3)
 
 %!assert (double (ellipticCPi (0, sym (1)/2)), 1.854074677, 10e-10)
+
+%!assert (double (ellipticCPi (sym (6)/10, sym(71)/10)), 1.29469534336658, -20*eps)
