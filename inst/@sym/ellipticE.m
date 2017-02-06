@@ -79,7 +79,7 @@
 %% @end defmethod
 
 
-function y = ellipticE(phi, m)
+function y = ellipticE (phi, m)
 
   if (nargin == 1)
     m = phi;

@@ -52,9 +52,9 @@
 %% @end defmethod
 
 
-function y = ellipticF(phi, m)
+function y = ellipticF (phi, m)
 
-  if nargin ~= 2
+  if (nargin ~= 2)
     print_usage ();
   end
 

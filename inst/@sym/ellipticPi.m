@@ -84,7 +84,7 @@
 %% @end defmethod
 
 
-function y = ellipticPi(n, phi, m)
+function y = ellipticPi (n, phi, m)
 
   switch nargin
     case 2
@@ -103,5 +103,8 @@ end
 
 %!assert (double (ellipticPi (sym (-23)/10, sym (pi)/4, 0)), 0.5876852228, 10e-11)
 %!assert (double (ellipticPi (sym (1)/3, sym (pi)/3, sym (1)/2)), 1.285032276, 10e-11)
-%!xtest assert (double (ellipticPi (sym (-1), 0, sym (1))), 0)
 %!assert (double (ellipticPi (sym (2), sym (pi)/6, sym (2))), 0.7507322117, 10e-11)
+
+%!xtest
+%! % FIXME: search/report upstream
+%! assert (double (ellipticPi (sym (-1), 0, sym (1))), 0)

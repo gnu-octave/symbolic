@@ -74,9 +74,9 @@
 %% @end defmethod
 
 
-function y = ellipticK(m)
-  if nargin > 1
-    print_usage();
+function y = ellipticK (m)
+  if (nargin > 1)
+    print_usage ();
   end
 
   % y = ellipticF (sym (pi)/2, m);
