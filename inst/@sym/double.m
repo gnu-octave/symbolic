@@ -76,8 +76,8 @@ function y = double(x)
   end
 
   cmd = { '(x,) = _ins'
-          'if x == zoo:'
-          '    return (float(sp.oo), 0.0)'
+          'if x == zoo:'  % zoo -> Inf + Infi
+          '    return (float(sp.oo), float(sp.oo))'
           'if x == nan:'
           '    return (float(nan), 0.0)'
           'x = complex(x)'
@@ -86,7 +86,12 @@ function y = double(x)
 
   [A, B] = python_cmd (cmd, x);
 
-  y = A + B*i;
+  %y = A + B*i;  % not quite the same for Inf + InFi
+  if (B == 0.0)
+    y = A;
+  else
+    y = complex(A, B);
+  end
 
 end
 
@@ -123,14 +128,18 @@ end
 %! assert( abs(double(x) - pi) < 2*eps)
 
 %!test
-%! % various infinities
 %! oo = sym(inf);
-%! zoo = sym('zoo');
 %! assert( double(oo) == inf )
 %! assert( double(-oo) == -inf )
-%! assert( double(zoo) == inf )
-%! assert( double(-zoo) == inf )
 %! assert( isnan(double(0*oo)) )
+
+%!test
+%! zoo = sym('zoo');
+%! assert (double(zoo) == complex(inf, inf))
+
+%!test
+%! zoo = sym('zoo');
+%! assert (double(-zoo) == double(zoo) )
 %! assert( isnan(double(0*zoo)) )
 
 %!test
