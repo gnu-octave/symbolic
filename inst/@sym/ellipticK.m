@@ -22,7 +22,7 @@
 %% @defmethod @@sym ellipticK (@var{m})
 %% Complete elliptic integral of the first kind.
 %%
-%% Example:
+%% Example with parameter @var{m}:
 %% @example
 %% @group
 %% syms m

@@ -18,16 +18,17 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym y = ellipticPi (@var{n}, @var{m})
-%% @defmethodx @@sym y = ellipticPi (@var{n}, @var{phi}, @var{m})
+%% @defmethod  @@sym y = ellipticPi (@var{nu}, @var{m})
+%% @defmethodx @@sym y = ellipticPi (@var{nu}, @var{phi}, @var{m})
 %% Complete and incomplete elliptic integrals of the third kind.
 %%
-%% Incomplete elliptic integral of the third kind:
+%% Incomplete elliptic integral of the third kind with characteristic
+%% @var{nu}, amplitude @var{phi} and parameter @var{m}:
 %% @example
 %% @group
-%% syms n phi m
-%% ellipticPi (n, phi, m)
-%%   @result{} (sym) Π(n; φ│m)
+%% syms nu phi m
+%% ellipticPi (nu, phi, m)
+%%   @result{} (sym) Π(ν; φ│m)
 %% @end group
 %%
 %% @group
@@ -39,7 +40,7 @@
 %%       ⎮ ────────────────────────────────────── dα
 %%       ⎮    _________________
 %%       ⎮   ╱        2         ⎛       2       ⎞
-%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- n⋅sin (α) + 1⎠
+%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- ν⋅sin (α) + 1⎠
 %%       ⌡
 %%       0
 %% @end group
@@ -50,12 +51,12 @@
 %% @end group
 %% @end example
 %%
-%% Complete elliptic integral of the third kind:
+%% Complete elliptic integral of the third kind with characteristic
+%% @var{nu} and parameter @var{m}:
 %% @example
 %% @group
-%% syms n m
-%% ellipticPi (n, m)
-%%   @result{} ans = (sym) Π(n│m)
+%% ellipticPi (nu, m)
+%%   @result{} ans = (sym) Π(ν│m)
 %% @end group
 %%
 %% @group
@@ -69,7 +70,7 @@
 %%       ⎮ ────────────────────────────────────── dα
 %%       ⎮    _________________
 %%       ⎮   ╱        2         ⎛       2       ⎞
-%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- n⋅sin (α) + 1⎠
+%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- ν⋅sin (α) + 1⎠
 %%       ⌡
 %%       0
 %% @end group
@@ -84,13 +85,13 @@
 %% @end defmethod
 
 
-function y = ellipticPi (n, phi, m)
+function y = ellipticPi (nu, phi, m)
 
   switch nargin
     case 2
-      y = ellipticPi (n, sym (pi)/2, phi);
+      y = ellipticPi (nu, sym (pi)/2, phi);
     case 3
-      y = elementwise_op ('elliptic_pi', sym (n), sym (phi), sym (m));
+      y = elementwise_op ('elliptic_pi', sym (nu), sym (phi), sym (m));
     otherwise
       print_usage();
   end

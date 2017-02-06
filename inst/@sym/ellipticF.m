@@ -21,7 +21,7 @@
 %% @defmethod @@sym ellipticF (@var{phi}, @var{m})
 %% Incomplete elliptic integral of the first kind.
 %%
-%% Example:
+%% Example with amplitude @var{phi} and parameter @var{m}:
 %% @example
 %% @group
 %% syms phi m
