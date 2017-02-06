@@ -48,7 +48,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ellipticPi}
+%% @seealso{@@sym/ellipticE, @@sym/ellipticPi}
 %% @end defmethod
 
 
@@ -58,11 +58,14 @@ function y = ellipticF(phi, m)
     print_usage ();
   end
 
-% y = ellipticPi (0, phi, m);
-  y = elementwise_op ('elliptic_f', phi, m);
+  % y = ellipticPi (0, phi, m);
+  y = elementwise_op ('elliptic_f', sym (phi), sym (m));
 
 end
 
+
+%!error <Invalid> ellipticF (sym(1))
+%!error <Invalid> ellipticF (sym(1), 2, 3)
 
 %!assert (double (ellipticF (sym (pi)/3, sym (-105)/10)), 0.6184459461, 10e-11)
 %!assert (double (ellipticF (sym (pi)/4, sym (-pi))), 0.6485970495, 10e-11)

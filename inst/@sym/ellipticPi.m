@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym y = ellipticPi (@var{n}, @var{m})
+%% @defmethod  @@sym y = ellipticPi (@var{n}, @var{m})
 %% @defmethodx @@sym y = ellipticPi (@var{n}, @var{phi}, @var{m})
 %% Complete and incomplete elliptic integrals of the third kind.
 %%
@@ -27,6 +27,7 @@
 %% @group
 %% syms n phi m
 %% ellipticPi (n, phi, m)
+%%   @result{} (sym) Π(n; φ│m)
 %% @end group
 %%
 %% @group
@@ -42,11 +43,13 @@
 %%       ⌡
 %%       0
 %% @end group
+%%
 %% @group
 %% double (ellipticPi (sym (1), sym (1)/10, sym (1)/2))
 %%   @result{} ans =  0.10042
 %% @end group
 %% @end example
+%%
 %% Complete elliptic integral of the third kind:
 %% @example
 %% @group
@@ -70,12 +73,14 @@
 %%       ⌡
 %%       0
 %% @end group
+%%
 %% @group
 %% double (ellipticPi (sym (pi)/4, sym (pi)/8))
 %%   @result{} ans =  4.0068
 %% @end group
 %% @end example
 %%
+%% @seealso{@@sym/ellipticF, @@sym/ellipticK, @@sym/ellipticE}
 %% @end defmethod
 
 
@@ -92,6 +97,9 @@ function y = ellipticPi(n, phi, m)
 
 end
 
+
+%!error <Invalid> ellipticPi (sym (1))
+%!error <Invalid> ellipticPi (sym (1), 2, 3, 4)
 
 %!assert (double (ellipticPi (sym (-23)/10, sym (pi)/4, 0)), 0.5876852228, 10e-11)
 %!assert (double (ellipticPi (sym (1)/3, sym (pi)/3, sym (1)/2)), 1.285032276, 10e-11)

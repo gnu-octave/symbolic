@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ellipticF, @@sym/ellipticPi, ellipKE}
+%% @seealso{@@sym/ellipke, @@sym/ellipticF, @@sym/ellipticE, @@sym/ellipticPi}
 %% @end defmethod
 
 
@@ -61,11 +61,13 @@ function y = ellipticK(m)
     print_usage();
   end
 
-% y = ellipticF (sym (pi)/2, m);
+  % y = ellipticF (sym (pi)/2, m);
   y = elementwise_op ('elliptic_k', m);
 
 end
 
+
+%!error <Invalid> ellipticK (sym(1), 2)
 
 %!assert (isequal (ellipticK (sym (0)), sym (pi)/2))
 %!assert (isequal (ellipticK (sym (-inf)), sym (0)))

@@ -19,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym ellipticE (@var{m})
+%% @defmethod  @@sym ellipticE (@var{m})
 %% @defmethodx @@sym ellipticE (@var{phi}, @var{m})
 %% Complete and incomplete elliptic integrals of the second kind.
 %%
@@ -75,7 +75,7 @@
 %%   @result{} ans =  1.8443
 %% @end group
 %% @end example
-%% @seealso{@@sym/ellipticK, ellipke}
+%% @seealso{@@sym/ellipke, @@sym/ellipticK, @@sym/ellipticPi}
 %% @end defmethod
 
 
@@ -94,6 +94,8 @@ function y = ellipticE(phi, m)
 
 end
 
+
+%!error <Invalid> ellipticE (sym(1), 2, 3)
 
 %!assert (double (ellipticE (sym (-105)/10)), 3.70961391, 10e-9)
 %!assert (double (ellipticE (sym (-pi)/4)), 1.844349247, 10e-10)

@@ -18,14 +18,14 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym [K E] = ellipke (@var{m})
+%% @defmethod @@sym [@var{K}, @var{E}] = ellipke (@var{m})
 %% Complete elliptic integrals of the first and second kinds.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms m
-%% [K E] = ellipke (m)
+%% [K, E] = ellipke (m)
 %%   @result{}
 %%     K = (sym) K(m)
 %%     E = (sym) E(m)
@@ -56,21 +56,21 @@
 %%       ─
 %%       2
 %%       ⌠
-%%       ⎮
+%%       ⎮    _________________
 %%       ⎮   ╱        2
 %%       ⎮ ╲╱  - m⋅sin (α) + 1  dα
 %%       ⌡
 %%       0
 %% @end group
 %% @group
-%% [K E] = ellipke (sym (1)/10);
+%% [K, E] = ellipke (sym (1)/10);
 %% double ([K E])
 %%   @result{} ans =
 %%        1.6124   1.5308
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ellipticF, @@sym/ellipticE, @@sym/ellipticPi}
+%% @seealso{ellipke, @@sym/ellipticK, @@sym/ellipticE}
 %% @end defmethod
 
 
@@ -88,6 +88,8 @@ function varargout = ellipke(m)
 
 end
 
+
+%!error <Invalid> ellipke (sym(1), 2)
 
 %!test
 %! for i = 2:10
