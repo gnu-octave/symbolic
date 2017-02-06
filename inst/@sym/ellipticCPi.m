@@ -19,24 +19,24 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym ellipticCPi (@var{n}, @var{m})
+%% @defmethod @@sym ellipticCPi (@var{nu}, @var{m})
 %% Complementary complete elliptic integral of the third kind.
 %%
 %% This is the complete elliptic integral (of the third kind) with the
 %% complementary parameter @code{1 - @var{m}}:
 %% @example
 %% @group
-%% syms n m
-%% ellipticCPi (n, m)
-%%   @result{} ans = (sym) Π(n│-m + 1)
+%% syms nu m
+%% ellipticCPi (nu, m)
+%%   @result{} ans = (sym) Π(ν│-m + 1)
 %% @end group
 %% @end example
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
-%% ellipticCPi (n, sym(1)/4)
-%%   @result{} ans = (sym) Π(n│3/4)
+%% ellipticCPi (nu, sym(1)/4)
+%%   @result{} ans = (sym) Π(ν│3/4)
 %% @end group
 %%
 %% @group

@@ -23,8 +23,8 @@
 %% @defmethodx @@sym ellipticE (@var{phi}, @var{m})
 %% Complete and incomplete elliptic integrals of the second kind.
 %%
-%% Incomplete elliptic integral of the second kind with
-%% amplitude @var{phi} and parameter @var{m}:
+%% The incomplete elliptic integral of the second kind with
+%% amplitude @var{phi} and parameter @var{m} is given by:
 %% @example
 %% @group
 %% syms phi m
@@ -50,8 +50,8 @@
 %% @end group
 %% @end example
 %%
-%% Complete elliptic integral of the second kind with
-%% parameter @var{m}:
+%% The complete elliptic integral of the second kind with
+%% parameter @var{m} is given by:
 %% @example
 %% @group
 %% ellipticE (m)

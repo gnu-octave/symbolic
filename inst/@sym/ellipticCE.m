@@ -1,4 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,8 +22,8 @@
 %% @defmethod @@sym ellipticCE (@var{m})
 %% Complementary complete elliptic integral of the second kind.
 %%
-%% This is the complete elliptic integral (of the second kind) with the
-%% complementary parameter @code{1 - @var{m}}:
+%% The complete elliptic integral (of the second kind) with the
+%% complementary parameter @code{1 - @var{m}} is given by:
 %% @example
 %% @group
 %% syms m
@@ -31,7 +32,7 @@
 %% @end group
 %% @end example
 %%
-%% Example:
+%% Examples:
 %% @example
 %% @group
 %% ellipticCE (sym(1)/3)

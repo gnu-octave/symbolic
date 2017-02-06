@@ -22,7 +22,8 @@
 %% @defmethod @@sym ellipticK (@var{m})
 %% Complete elliptic integral of the first kind.
 %%
-%% Example with parameter @var{m}:
+%% The complete elliptic integral of the first kind
+%% with parameter @var{m} is defined by:
 %% @example
 %% @group
 %% syms m
@@ -44,6 +45,17 @@
 %%       ⎮ ╲╱  - m⋅sin (α) + 1
 %%       ⌡
 %%       0
+%% @end group
+%% @end example
+%%
+%% Examples:
+%% @example
+%% @group
+%% diff (ellipticK (m), m)
+%%   @result{} (sym)
+%%       -(-m + 1)⋅K(m) + E(m)
+%%       ─────────────────────
+%%            2⋅m⋅(-m + 1)
 %% @end group
 %%
 %% @group

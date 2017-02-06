@@ -22,8 +22,8 @@
 %% @defmethod @@sym ellipticCK (@var{m})
 %% Complementary complete elliptic integral of the first kind.
 %%
-%% This is the complete elliptic integral (of the first kind) with the
-%% complementary parameter @code{1 - @var{m}}:
+%% The complete elliptic integral (of the first kind) with the
+%% complementary parameter @code{1 - @var{m}} is given by:
 %% @example
 %% @group
 %% syms m
