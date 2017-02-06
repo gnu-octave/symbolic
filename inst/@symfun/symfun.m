@@ -293,7 +293,7 @@ end
 
 %!test
 %! % syms f(x) without defining x
-%! clear
+%! clear x
 %! syms f(x)
 %! assert(isa(f, 'symfun'))
 %! assert(isa(x, 'sym'))
