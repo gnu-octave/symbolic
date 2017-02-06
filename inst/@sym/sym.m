@@ -494,7 +494,7 @@ end
 
 %!test
 %! %% assumptions and clearing them
-%! clear  % for matlab test script
+%! clear variables  % for matlab test script
 %! x = sym('x', 'real');
 %! f = {x {2*x}};
 %! asm = assumptions();
