@@ -1,4 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,47 +27,8 @@
 %% @group
 %% syms m
 %% [K, E] = ellipke (m)
-%%   @result{}
-%%     K = (sym) K(m)
-%%     E = (sym) E(m)
-%% @end group
-%%
-%% @group
-%% rewrite (K, 'Integral')         % doctest: +SKIP
-%%   @result{}
-%%     K = (sym)
-%%       π
-%%       ─
-%%       2
-%%       ⌠
-%%       ⎮          1
-%%       ⎮ ──────────────────── dα
-%%       ⎮    _________________
-%%       ⎮   ╱        2
-%%       ⎮ ╲╱  - m⋅sin (α) + 1
-%%       ⌡
-%%       0
-%% @end group
-%%
-%% @group
-%% rewrite (E, 'Integral')         % doctest: +SKIP
-%%     E = (sym)
-%%
-%%       π
-%%       ─
-%%       2
-%%       ⌠
-%%       ⎮    _________________
-%%       ⎮   ╱        2
-%%       ⎮ ╲╱  - m⋅sin (α) + 1  dα
-%%       ⌡
-%%       0
-%% @end group
-%% @group
-%% [K, E] = ellipke (sym (1)/10);
-%% double ([K E])
-%%   @result{} ans =
-%%        1.6124   1.5308
+%%   @result{} K = (sym) K(m)
+%%   @result{} E = (sym) E(m)
 %% @end group
 %% @end example
 %%
