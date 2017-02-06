@@ -21,30 +21,23 @@
 %% @defmethod @@sym ellipticCE (@var{m})
 %% Complementary complete elliptic integral of the second kind.
 %%
-%% Example:
+%% This is the complete elliptic integral (of the second kind) with the
+%% complementary parameter @code{1 - @var{m}}:
 %% @example
 %% @group
 %% syms m
 %% ellipticCE (m)
 %%   @result{} ans = (sym) E(-m + 1)
 %% @end group
+%% @end example
 %%
+%% Example:
+%% @example
 %% @group
-%% rewrite (ans, 'Integral')         % doctest: +SKIP
-%%   @result{} ans = (sym)
-%%       π
-%%       ─
-%%       2
-%%       ⌠
-%%       ⎮    ________________________
-%%       ⎮   ╱               2
-%%       ⎮ ╲╱  - (-m + 1)⋅sin (α) + 1  dα
-%%       ⌡
-%%       0
-%% @end group
-%% @group
-%% double (ellipticCE (sym (pi)/4))
-%%   @result{} ans =  1.4828
+%% ellipticCE (sym(1)/3)
+%%   @result{} ans = (sym) E(2/3)
+%% double (ans)
+%%   @result{} ans = 1.2612
 %% @end group
 %% @end example
 %%
@@ -53,8 +46,8 @@
 
 
 function y = ellipticCE(m)
-  if nargin > 1
-    print_usage();
+  if (nargin > 1)
+    print_usage ();
   end
 
   y = ellipticE (sym (pi)/2, 1 - m);
@@ -62,7 +55,9 @@ function y = ellipticCE(m)
 end
 
 
-%!assert (double (ellipticCE (sym (0))), 1)
+%!error <Invalid> ellipticCE (sym (1), 2)
+
+%!assert (isequal (ellipticCE (sym (0)), sym (1)))
+%!assert (isequal (ellipticCE (sym (1)), sym (pi)/2))
 %!assert (double (ellipticCE (sym (pi)/4)), 1.482786927, 10e-10)
-%!assert (double (ellipticCE (sym (1))), 1.570796327, 10e-10)
-%!assert (double (ellipticCE (sym (pi)/2)), 1.775344699, 10e-1)
+%!assert (double (ellipticCE (sym (pi)/2)), 1.775344699, 10e-10)
