@@ -37,8 +37,8 @@
 %% @group
 %% ellipticCK (sym (1)/4)
 %%   @result{} ans = (sym) K(3/4)
-%% double (ans)
-%%   @result{} ans = 2.1565
+%% vpa (ans)
+%%   @result{} (sym) 2.1565156474996432354386749988003
 %% @end group
 %% @end example
 %%

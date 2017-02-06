@@ -42,8 +42,8 @@
 %% @group
 %% ellipticCPi (sym(1)/2, sym(1)/4)
 %%   @result{} ans = (sym) Π(1/2│3/4)
-%% double (ans)
-%%   @result{} ans = 3.2348
+%% vpa (ans)
+%%   @result{} (sym) 3.2347734712494648531580124982005
 %% @end group
 %% @end example
 %%

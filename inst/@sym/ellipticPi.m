@@ -45,11 +45,6 @@
 %%       ⌡
 %%       0
 %% @end group
-%%
-%% @group
-%% double (ellipticPi (sym (1), sym (1)/10, sym (1)/2))
-%%   @result{} ans =  0.10042
-%% @end group
 %% @end example
 %%
 %% Complete elliptic integral of the third kind with characteristic
@@ -75,10 +70,18 @@
 %%       ⌡
 %%       0
 %% @end group
+%% @end example
+%%
+%% Examples:
+%% @example
+%% @group
+%% vpa (ellipticPi (sym (1), sym (1)/10, sym (1)/2))
+%%   @result{} (sym) 0.10041852861527457424263837477419
+%% @end group
 %%
 %% @group
-%% double (ellipticPi (sym (pi)/4, sym (pi)/8))
-%%   @result{} ans =  4.0068
+%% vpa (ellipticPi (sym (pi)/4, sym (pi)/8))
+%%   @result{} (sym) 4.0068172051461721205075153294257
 %% @end group
 %% @end example
 %%

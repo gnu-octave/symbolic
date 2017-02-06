@@ -44,9 +44,13 @@
 %%       ⌡
 %%       0
 %% @end group
+%% @end example
+%%
+%% Example:
+%% @example
 %% @group
-%% double (ellipticF (sym (1), sym (-1)))
-%%   @result{} ans =  0.89639
+%% vpa (ellipticF (sym (1), sym (-1)))
+%%   @result{} (sym) 0.89639378946289458637047451642060
 %% @end group
 %% @end example
 %%

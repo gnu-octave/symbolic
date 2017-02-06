@@ -59,8 +59,8 @@
 %% @end group
 %%
 %% @group
-%% double (ellipticK (sym (pi)/4))
-%%   @result{} ans =  2.2253
+%% vpa (ellipticK (sym (pi)/4))
+%%   @result{} (sym) 2.2252536839853959577044373301346
 %% @end group
 %% @end example
 %%

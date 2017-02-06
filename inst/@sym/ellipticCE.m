@@ -37,8 +37,8 @@
 %% @group
 %% ellipticCE (sym(1)/3)
 %%   @result{} ans = (sym) E(2/3)
-%% double (ans)
-%%   @result{} ans = 1.2612
+%% vpa (ans)
+%%   @result{} (sym) 1.2611859497426054059627955614384
 %% @end group
 %% @end example
 %%

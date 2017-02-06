@@ -43,11 +43,6 @@
 %%       ⌡
 %%       0
 %% @end group
-%%
-%% @group
-%% double (ellipticE (sym (1), sym (1)/10))
-%%   @result{} ans =  0.98621
-%% @end group
 %% @end example
 %%
 %% The complete elliptic integral of the second kind with
@@ -71,10 +66,18 @@
 %%       ⌡
 %%       0
 %% @end group
+%% @end example
+%%
+%% Examples:
+%% @example
+%% @group
+%% vpa (ellipticE (sym (1), sym (1)/10))
+%%   @result{} (sym) 0.98620694978157550636951680164874
+%% @end group
 %%
 %% @group
-%% double (ellipticE (sym (-pi)/4))
-%%   @result{} ans =  1.8443
+%% vpa (ellipticE (sym (-pi)/4))
+%%   @result{} (sym) 1.8443492468732292114663773247580
 %% @end group
 %% @end example
 %%
