@@ -77,6 +77,10 @@
 %%   @result{} ans =  1.8443
 %% @end group
 %% @end example
+%%
+%% There are other conventions for the inputs of elliptic integrals,
+%% @pxref{@@sym/ellipticF}.
+%%
 %% @seealso{@@sym/ellipke, @@sym/ellipticK, @@sym/ellipticPi}
 %% @end defmethod
 

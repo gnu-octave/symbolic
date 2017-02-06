@@ -42,6 +42,9 @@
 %% @end group
 %% @end example
 %%
+%% There are other conventions for the inputs of elliptic integrals,
+%% @pxref{@@sym/ellipticF}.
+%%
 %% @seealso{@@sym/ellipticK}
 %% @end defmethod
 

@@ -49,7 +49,38 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ellipticE, @@sym/ellipticPi}
+%% For the complete elliptic integral (of the first kind), @pxref{@@sym/ellipticK}.
+%%
+%% @strong{Note:}
+%% this function (and other elliptic integrals in the Symbolic package)
+%% follow the Abramowitz and Stegun convention for the ``parameter''
+%% @iftex
+%% @math{m}.
+%% @end iftex
+%% @ifnottex
+%% @var{m}.
+%% @end ifnottex
+%% Other sources and software may use different conventions, such as
+%% @iftex
+%% the ``elliptic modulus'' @math{k}
+%% or the ``modular angle'' @math{\alpha},
+%% related by @math{m = k^2 = \sin^2(\alpha)}.
+%% @end iftex
+%% @ifnottex
+%% the ``elliptic modulus'' k
+%% or the ``modular angle'' α,
+%% related by @code{@var{m} = k^2 = sin^2(α)}.
+%% @end ifnottex
+%% They may define these functions in terms of the sine of the amplitude
+%% @iftex
+%% @math{\sin(\phi)}.
+%% @end iftex
+%% @ifnottex
+%% @code{sin(@var{phi})}.
+%% @end ifnottex
+%% For example, Maple uses the elliptic modulus and the sine of the amplitude.
+%%
+%% @seealso{@@sym/ellipticK, @@sym/ellipticE, @@sym/ellipticPi}
 %% @end defmethod
 
 

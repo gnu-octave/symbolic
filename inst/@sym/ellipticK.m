@@ -52,23 +52,8 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Note:}
-%% this function (and other elliptic integrals in the Symbolic package)
-%% follow the Abramowitz and Stegun convention for the parameter
-%% @iftex
-%% @math{m}.
-%% @end iftex
-%% @ifnottex
-%% @var{m}.
-%% @end ifnottex
-%% Other software may use other conventions (e.g.,
-%% Maple uses the elliptic modulus
-%% @iftex
-%% @math{k}, related by @math{m = k^2}).
-%% @end iftex
-%% @ifnottex
-%% @var{k}, related by @code{@var{m} = @var{k}^2}).
-%% @end ifnottex
+%% There are other conventions for the inputs of elliptic integrals,
+%% @pxref{@@sym/ellipticF}.
 %%
 %% @seealso{@@sym/ellipke, @@sym/ellipticF, @@sym/ellipticE, @@sym/ellipticPi}
 %% @end defmethod
