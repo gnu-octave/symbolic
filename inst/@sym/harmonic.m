@@ -45,7 +45,15 @@ end
 
 
 %!error <Invalid> harmonic (sym(1), 2)
-%!assert (isequaln (harmonic (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (harmonic (sym(nan)), sym(nan)))
+
+%!test
+%! % an indentity
+%! x = sym(13)/7;
+%! A = harmonic (x);
+%! B = psi (x + 1) + eulergamma ();
+%! assert (double (A), double (B), -eps)
 
 %!shared x, d
 %! d = 1;
@@ -63,7 +71,7 @@ end
 %! f2 = harmonic(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
 
-%!test
+%!xtest
 %! % round trip
 %! y = sym('y');
 %! A = harmonic (d);
