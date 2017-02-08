@@ -62,9 +62,7 @@ function a = kroneckerDelta (n, m)
 
   if (nargin == 1)
     m = sym(0);
-  elseif (nargin == 2)
-    %% no-op
-  else
+  elseif (nargin > 2)
     print_usage ();
   end
 
