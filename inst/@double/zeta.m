@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,12 +48,8 @@ function y = zeta (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(zeta(complex(x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell(x(:)));
-  assert (numel (c) == numel (x))
-  y = x;
-  for i = 1:numel (c)
-    y(i) = c{i};
-  end
+  c = python_cmd (cmd, num2cell (x(:)));
+  y = reshape (cell2mat (c), size (x));
 end
 
 

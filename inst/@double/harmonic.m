@@ -48,12 +48,8 @@ function y = harmonic (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(harmonic(complex(x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell(x(:)));
-  assert (numel (c) == numel (x))
-  y = x;
-  for i = 1:numel (c)
-    y(i) = c{i};
-  end
+  c = python_cmd (cmd, num2cell (x(:)));
+  y = reshape (cell2mat (c), size (x));
 end
 
 
