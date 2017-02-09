@@ -1,6 +1,17 @@
 octsympy 2.5.1-dev
 ==================
 
+  * New symbolic commands:
+
+          harmonic
+          kroneckerDelta
+          pochhammer
+
+  * New `@double` numerical functions; these are wrappers around SymPy, so
+    they are slower than native floating point implementations.
+
+          harmonic
+
   * Bug fix: isequal(n) for symfun's correctly tests the argnames.
 
 
