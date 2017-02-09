@@ -3,6 +3,14 @@ octsympy 2.5.1-dev
 
   * New symbolic commands:
 
+          ellipke
+          ellipticCE
+          ellipticCK
+          ellipticCPi
+          ellipticE
+          ellipticF
+          ellipticK
+          ellipticPi
           harmonic
           kroneckerDelta
           pochhammer
