@@ -72,8 +72,12 @@ function out = subsasgn (val, idx, rhs)
         all_syms = all_syms && isa(idx.subs{i}, 'sym');
       end
       if (all_syms)
-        cmd = { 'L, = _ins'
-                'return all([x is not None and x.is_Symbol for x in L])' };
+        % Waint for flatten function from https://github.com/cbm755/octsympy/pull/577
+        cmd = { 'for x in _ins[0]:'
+                '    if x is None or not x.free_symbols or any(i.isdigit() for i in str(x)):'
+                '        return False'
+                'return True' };
+
         all_Symbols = python_cmd (cmd, idx.subs);
       end
       if (all_syms && all_Symbols)

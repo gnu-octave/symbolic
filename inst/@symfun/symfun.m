@@ -136,11 +136,36 @@
 %% @end group
 %% @end example
 %%
+%% If you eval the expression the return will be a sym.
+%% @example
+%% @group
+%% syms g(x) x(t)
+%% f(g) = exp(g)*x;
+%% f(x)                   % doctest: +SKIP
+%%   @result{} ans = (sym)
+%%             x(t)
+%%       x(t)⋅ℯ   
+%% @end group
+%% @end example
+%%
+%% But if you assign it as a symfun is transformed.
+%% @example
+%% @group
+%% syms g(x) x(t)
+%% f(g) = exp (g)*x;
+%% f(x) = f (x)               % doctest: +SKIP
+%%   @result{} f(x) = (symfun)
+%%             x(t)
+%%       x(t)⋅ℯ
+%% @end group
+%% @end example
 %% @seealso{sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
+
+%% Author: Colin B. Macdonald		
 %% Keywords: symbolic, symbols, CAS
+
 
 function f = symfun(expr, vars)
 
@@ -164,10 +189,12 @@ function f = symfun(expr, vars)
   end
 
   % check that vars are unique Symbols
-  cmd = { 'L, = _ins'
-          'if not all([x is not None and x.is_Symbol for x in L]):'
-	  '    return False'
-	  'return len(set(L)) == len(L)' };
+  % Waint for flatten function from https://github.com/cbm755/octsympy/pull/577
+  cmd = { 'for x in _ins[0]:'
+          '    if x is None or any(i.isdigit() for i in str(x)) or not x.free_symbols:'
+          '        return False'
+	  'return len(set(_ins[0])) == len(_ins[0])' };
+
   if (~ python_cmd (cmd, vars))
     error('OctSymPy:symfun:argNotUniqSymbols', ...
           'symfun arguments must be unique symbols')
@@ -191,6 +218,7 @@ function f = symfun(expr, vars)
   end
 
   f.vars = vars;
+  f.flat = python_cmd ('return str(_ins[0]).split("(")[0]', expr);
   f = class(f, 'symfun', expr);
   superiorto ('sym');
 
@@ -357,20 +385,10 @@ end
 %! y = symfun(x, t);
 %! assert (isa (y, 'symfun'))
 
-%!error <unique symbols>
-%! % Issue #444: invalid args
-%! syms x
-%! f(x, x) = 2*x;
-
-%!error <unique symbols>
-%! % Issue #444: invalid args
-%! syms x y
-%! f(x, y, x) = x + y;
-
-%!error <unique symbols>
-%! % Issue #444: invalid args
-%! syms x y
-%! f(x, y, x) = x + y;
+%!test
+%! syms g(x) x(t)
+%! f(g) = g^2;
+%! assert (isa (f, 'symfun'))
 
 %!error
 %! % Issue #444: expression as arg
