@@ -36,10 +36,6 @@ function z = mat_replace(A, subs, b)
       z = A;
       return;
     end
-    if (~ isscalar (b) && ~ isvector (b) && ~ isempty (b))
-      warning ('OctSymPy:subsagn:rhs_shape', ...
-            'B neither vector nor scalar in indexed A(I)=B: unusual, did you intend this?')
-    end
   end
   %% Check when b is []
   if (isempty(b))
