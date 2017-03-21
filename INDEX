@@ -1,11 +1,19 @@
 symbolic >> Symbolic computing
-Constants
- catalan
- eulergamma
+Main functions
+ syms
+ @sym/sym
+ vpa
+ sympref
+ vpasolve
 Assumptions
  assume
  assumptions
-Basic methods
+ @sym/assume
+ @sym/assumeAlso
+Symbolic Constants
+ catalan
+ eulergamma
+Functions
  bernoulli
  cell2sym
  digits
@@ -18,13 +26,6 @@ Basic methods
  lambertw
  poly2sym
  python_cmd
- sympref
- syms
- vpa
- vpasolve
-Deprecated
- evalpy
- octsympy_tests
 Double-precision numerical functions
  @double/coshint
  @double/cosint
@@ -37,9 +38,7 @@ Double-precision numerical functions
  @double/sinhint
  @double/sinint
  @double/zeta
-Miscellaneous
- @logical/isAlways
-Class representing symbolic objects
+Mathematical methods for symbolic objects
  @sym/abs
  @sym/acosd
  @sym/acosh
@@ -50,18 +49,12 @@ Class representing symbolic objects
  @sym/acsc
  @sym/adjoint
  @sym/airy
- @sym/all
- @sym/and
  @sym/angle
- @sym/any
- @sym/argnames
  @sym/asech
  @sym/asec
  @sym/asind
  @sym/asinh
  @sym/asin
- @sym/assumeAlso
- @sym/assume
  @sym/atan2
  @sym/atand
  @sym/atanh
@@ -74,19 +67,12 @@ Class representing symbolic objects
  @sym/bessely
  @sym/besselyn
  @sym/beta
- @sym/cat
  @sym/cbrt
- @sym/ccode
  @sym/ceil
- @sym/char
  @sym/charpoly
  @sym/chebyshevT
  @sym/chebyshevU
- @sym/children
  @sym/chol
- @sym/coeffs
- @sym/colon
- @sym/columns
  @sym/cond
  @sym/conj
  @sym/cosd
@@ -108,12 +94,9 @@ Class representing symbolic objects
  @sym/diff
  @sym/dilog
  @sym/dirac
- @sym/display
- @sym/disp
  @sym/divergence
  @sym/divisors
  @sym/dot
- @sym/double
  @sym/dsolve
  @sym/eig
  @sym/ei
@@ -125,61 +108,150 @@ Class representing symbolic objects
  @sym/ellipticF
  @sym/ellipticK
  @sym/ellipticPi
- @sym/end
- @sym/eq
- @sym/equationsToMatrix
  @sym/erfcinv
  @sym/erfc
  @sym/erfi
  @sym/erfinv
  @sym/erf
- @sym/expand
  @sym/expint
  @sym/exp
  @sym/expm
  @sym/eye
- @sym/ezplot3
- @sym/ezplot
- @sym/ezsurf
  @sym/factorial
- @sym/factor
- @sym/findsym
  @sym/fix
- @sym/fliplr
- @sym/flipud
  @sym/floor
- @sym/formula
- @sym/fortran
  @sym/fourier
  @sym/frac
  @sym/fresnelc
  @sym/fresnels
- @sym/function_handle
  @sym/gammainc
  @sym/gammaln
  @sym/gamma
- @sym/ge
  @sym/gradient
- @sym/gt
  @sym/harmonic
- @sym/has
  @sym/heaviside
  @sym/hessian
  @sym/hilb
  @sym/horner
- @sym/horzcat
  @sym/hypergeom
  @sym/hypot
  @sym/ifourier
  @sym/igamma
  @sym/ilaplace
  @sym/imag
+ @sym/int
  @sym/intersect
  @sym/interval
- @sym/int
  @sym/invhilb
  @sym/inv
+ @sym/ismember
+ @sym/isprime
+ @sym/jacobian
+ @sym/jordan
+ @sym/kroneckerDelta
+ @sym/kron
+ @sym/laguerreL
+ @sym/lambertw
+ @sym/laplace
+ @sym/laplacian
+ @sym/lu
+ @sym/lgamma
+ @sym/limit
+ @sym/log10
+ @sym/log2
+ @sym/logint
+ @sym/log
+ @sym/max
+ @sym/min
+ @sym/mod
+ @sym/nchoosek
+ @sym/nextprime
+ @sym/nnz
+ @sym/norm
+ @sym/null
+ @sym/numden
+ @sym/orth
+ @sym/partfrac
+ @sym/pinv
+ @sym/pochhammer
+ @sym/polylog
+ @sym/potential
+ @sym/prevprime
+ @sym/prod
+ @sym/psi
+ @sym/qr
+ @sym/rank
+ @sym/real
+ @sym/round
+ @sym/rref
+ @sym/sech
+ @sym/sec
+ @sym/setdiff
+ @sym/setxor
+ @sym/signIm
+ @sym/sign
+ @sym/sind
+ @sym/sinhint
+ @sym/sinh
+ @sym/sinint
+ @sym/sin
+ @sym/solve
+ @sym/sqrt
+ @sym/ssinint
+ @sym/sum
+ @sym/svd
+ @sym/symprod
+ @sym/symsum
+ @sym/tand
+ @sym/tanh
+ @sym/tan
+ @sym/taylor
+ @sym/toeplitz
+ @sym/trace
+ @sym/transpose
+ @sym/tril
+ @sym/triu
+ @sym/union
+ @sym/unique
+ @sym/zeta
+Methods for manipulating symbolic objects:
+ @sym/argnames
+ @sym/char
+ @sym/children
+ @sym/coeffs
+ @sym/equationsToMatrix
+ @sym/expand
+ @sym/factor
+ @sym/findsym
+ @sym/fliplr
+ @sym/flipud
+ @sym/formula
+ @sym/has
  @sym/ipermute
+ @sym/lhs
+ @sym/permute
+ @sym/rhs
+ @sym/rewrite
+ @sym/subs
+ @sym/symreplace
+ @sym/symvar
+Methods for converting symbolic objects to other formats
+ @sym/ccode
+ @sym/double
+ @sym/fortran
+ @sym/function_handle
+ @sym/latex
+ @sym/matlabFunction
+ @sym/pretty
+ @sym/sym2poly
+ @sym/sympy
+Arithmetic and logical methods for symbolic objects
+ @sym/all
+ @sym/any
+ @sym/and
+ @sym/eq
+ @sym/ge
+ @sym/gt
  @sym/isallconstant
  @sym/isAlways
  @sym/iscolumn
@@ -190,131 +262,59 @@ Class representing symbolic objects
  @sym/isfinite
  @sym/isinf
  @sym/ismatrix
- @sym/ismember
  @sym/isna
  @sym/isnan
  @sym/isNone
- @sym/isprime
  @sym/isrow
  @sym/isscalar
  @sym/isvector
- @sym/jacobian
- @sym/jordan
- @sym/kroneckerDelta
- @sym/kron
- @sym/laguerreL
- @sym/lambertw
- @sym/laplace
- @sym/laplacian
- @sym/latex
  @sym/ldivide
  @sym/le
- @sym/length
- @sym/lgamma
- @sym/lhs
- @sym/limit
- @sym/linspace
- @sym/log10
- @sym/log2
- @sym/logical
- @sym/logint
- @sym/log
- @sym/logspace
  @sym/lt
- @sym/lu
- @sym/matlabFunction
- @sym/max
- @sym/min
  @sym/minus
  @sym/mldivide
- @sym/mod
  @sym/mpower
  @sym/mrdivide
  @sym/mtimes
- @sym/nchoosek
  @sym/ne
- @sym/nextprime
- @sym/nnz
- @sym/norm
  @sym/not
- @sym/null
- @sym/numden
+ @sym/or
+ @sym/plus
+ @sym/power
+ @sym/rdivide
+ @sym/times
+ @sym/uminus
+ @sym/uplus
+ @sym/xor
+Other methods for symbolic objects
+ @sym/cat
+ @sym/colon
+ @sym/columns
+ @sym/display
+ @sym/disp
+ @sym/end
+ @sym/ezplot3
+ @sym/ezplot
+ @sym/ezsurf
+ @sym/horzcat
+ @sym/length
+ @sym/linspace
+ @sym/logical
+ @sym/logspace
  @sym/numel
  @sym/ones
- @sym/or
- @sym/orth
- @sym/partfrac
- @sym/permute
- @sym/pinv
- @sym/plus
- @sym/pochhammer
- @sym/polylog
- @sym/potential
- @sym/power
- @sym/pretty
- @sym/prevprime
- @sym/prod
- @sym/psi
- @sym/qr
- @sym/rank
- @sym/rdivide
- @sym/real
  @sym/repmat
  @sym/reshape
  @sym/resize
- @sym/rewrite
- @sym/rhs
- @sym/round
  @sym/rows
- @sym/rref
- @sym/sech
- @sym/sec
- @sym/setdiff
- @sym/setxor
- @sym/signIm
- @sym/sign
  @sym/simplify
- @sym/sind
- @sym/sinhint
- @sym/sinh
- @sym/sinint
- @sym/sin
  @sym/size
- @sym/solve
  @sym/sort
- @sym/sqrt
- @sym/ssinint
  @sym/subsasgn
  @sym/subsindex
- @sym/subs
  @sym/subsref
- @sym/sum
- @sym/svd
- @sym/sym2poly
- @sym/sym
- @sym/symprod
- @sym/sympy
- @sym/symreplace
- @sym/symsum
- @sym/symvar
- @sym/tand
- @sym/tanh
- @sym/tan
- @sym/taylor
- @sym/times
- @sym/toeplitz
- @sym/trace
- @sym/transpose
- @sym/tril
- @sym/triu
- @sym/uminus
- @sym/union
- @sym/unique
- @sym/uplus
  @sym/vertcat
- @sym/xor
  @sym/zeros
- @sym/zeta
 Class for symbolic functions
  @symfun/argnames
  @symfun/diff
@@ -338,3 +338,8 @@ Class for symbolic functions
  @symfun/symvar
  @symfun/times
  @symfun/uminus
+Miscellaneous
+ @logical/isAlways
+Deprecated
+ evalpy
+ octsympy_tests
