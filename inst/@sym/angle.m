@@ -26,7 +26,7 @@
 %% @group
 %% x = sym(2+3*i);
 %% y = angle(x)
-%%   @result{} y = (sym) atan(3/2) 
+%%   @result{} y = (sym) atan(3/2)
 %% @end group
 %% @end example
 %% @seealso{@@sym/abs}
