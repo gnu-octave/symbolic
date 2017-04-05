@@ -91,7 +91,7 @@ function s = taylor(f, varargin)
     x = varargin{1};
     a = varargin{2};
     if length(a) ~= length(x) && length(a) == 1
-          a = a*ones(1, length(x));    
+          a = a*ones(1, length(x));
     end
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
@@ -279,16 +279,16 @@ end
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
 
-%!test		
-%! syms x y z		
-%! g = x^2 + 2*y + 3*z;		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = x^2 + 2*y + 3*z;
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == g)) ;
 
-%!test		
-%! syms x y z		
-%! g = sin(x*y*z);		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = sin(x*y*z);
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == x*y*z)) ;
 
 %!error <length>

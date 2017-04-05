@@ -258,7 +258,7 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');

@@ -52,8 +52,8 @@ function B = repmat(A, n, m)
   end
 
   cmd = { '(A, n, m) = _ins'
-	  'if n == 0 or m == 0:'
-	  '    return sp.Matrix(n, m, [])'
+          'if n == 0 or m == 0:'
+          '    return sp.Matrix(n, m, [])'
           'if A is None or not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'L = [A]*m'
