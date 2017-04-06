@@ -221,6 +221,12 @@ end
 %! assert (isinteger (r))
 
 %!test
+%! % long (on python2)
+%! r = python_cmd ('return 42 if sys.version_info >= (3,0) else long(42)');
+%! assert (r == 42)
+%! assert (isinteger (r))
+
+%!test
 %! % string
 %! x = 'octave';
 %! cmd = 's = _ins[0]; return s.capitalize(),';
