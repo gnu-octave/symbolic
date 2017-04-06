@@ -216,7 +216,9 @@ end
 
 %!test
 %! % int
-%! assert (python_cmd ('return 123456,') == 123456)
+%! r = python_cmd ('return 123456');
+%! assert (r == 123456)
+%! assert (isinteger (r))
 
 %!test
 %! % string
@@ -465,9 +467,9 @@ end
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
 %! s = ['abc'; 'defgh'; '12345'];
 %! q = python_cmd ('return len(_ins)', s);
-%! assert (q, 1)
+%! assert (q == 1)
 %! q = python_cmd ('return len(_ins[0])', s);
-%! assert (q, 5)
+%! assert (q == 5)
 %! s2 = python_cmd ('return _ins[0]', s);
 %! assert (strcmp (s2, 'abc  '))
 %! end
