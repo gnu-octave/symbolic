@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -23,6 +23,7 @@ function obj = check_and_convert(var_pyobj)
   persistent list_or_tuple
   persistent _sym
   persistent string_types
+  persistent integer_types
   if isempty(builtins)
     builtins = pyeval("__builtins__");
     list_or_tuple = py.tuple({builtins.list, builtins.tuple});
@@ -30,6 +31,7 @@ function obj = check_and_convert(var_pyobj)
     sp = py.sympy;
     _sym = py.tuple({sp.Basic, sp.MatrixBase});
     string_types = py.six.string_types;
+    integer_types = py.six.integer_types;
   end
 
 
@@ -56,9 +58,13 @@ function obj = check_and_convert(var_pyobj)
       % make sure values are converted to sym
       s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
       obj{i} = s;
-    elseif (py.isinstance(x, pyeval('int')))
+    elseif (py.isinstance(x, integer_types))
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
+      end
+      if (abs (r) > intmax ('int64'))
+        error ('precision would be lost converting integer larger than %ld', ...
+               intmax ('int64'))
       end
       obj{i} = int64 (x);
     else
