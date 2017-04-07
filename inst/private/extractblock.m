@@ -131,9 +131,6 @@ function r = process_item(item)
       assert(M == 1)
       % Note: is it possible to avoid converting to double first?
       r = str2double(C{2});
-      if (~ exist ('OCTAVE_VERSION', 'builtin'))
-        flintmax = 9007199254740992;
-      end
       if (abs (r) > flintmax)
         error ('precision would be lost converting integer larger than %ld', ...
                flintmax)
