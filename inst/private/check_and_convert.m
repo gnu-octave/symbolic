@@ -62,7 +62,7 @@ function obj = check_and_convert(var_pyobj)
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
       end
-      if (abs (r) > intmax ('int64'))
+      if (abs (double (x)) > intmax ('int64'))
         error ('precision would be lost converting integer larger than %ld', ...
                intmax ('int64'))
       end
