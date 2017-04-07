@@ -5,17 +5,27 @@ language: generic
 
 matrix:
   include:
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
+  allow_failures:
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 before_install:
-  - if [ "x$OCT_PPA" = "xyes" ]; then
+  - if [ "x$OCT" = "xppa" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
     fi
   - sudo apt-get update -qq
   - sudo apt-get install -y liboctave-dev
   - sudo apt-get install -y octave
+  - if [ "x$OCT" = "xdaily" ]; then
+        sudo apt-get install -y libarpack2-dev libgl2ps-dev libgraphicsmagick++-dev libqrupdate-dev libsuitesparse-dev;
+        wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
+        sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
+    fi
   - sudo apt-get install -y python$PYTHON_VER-pip
   - if [ "x$PYTAVE" = "xyes" ]; then
         sudo apt-get install -y libboost-python-dev python$PYTHON_VER-numpy;
