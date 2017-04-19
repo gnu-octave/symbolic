@@ -186,6 +186,10 @@ function varargout = python_cmd(cmd, varargin)
            A{3}, A{2});
   end
 
+  if (~iscell(A{1}) && (length(A) ~= 1))
+    A={A};
+  end
+
   M = length(A);
   varargout = cell(1,M);
   for i=1:M
