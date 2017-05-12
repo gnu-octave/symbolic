@@ -466,7 +466,7 @@ end
 %! z = python_cmd ('return 3+2j');
 %! assert (z, 3+2i)
 
-%!error <multirow char arrays cannot>
+%!error <multirow char array>
 %! s = char ('abc', 'defgh', '12345');
 %! r = python_cmd ('return _ins[0]', s);
 
