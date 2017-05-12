@@ -608,6 +608,11 @@ end
 %! end
 
 %!test
+%! % complex
+%! x = sym(1 + 2i);
+%! assert (isequal (x, sym(1)+sym(2)*1i))
+
+%!test
 %! % doubles bigger than int32 INTMAX should not fail
 %! d = 4294967295;
 %! a = sym (d);
