@@ -420,9 +420,10 @@ end
 %! delete('tmp_python_cmd.py')
 
 %!test
-%! warning ('off', 'OctSymPy:sympref:invalidarg', 'local');
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
 %! sympref ('ipc', 'bogus');
 %! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
 
 %!error <invalid ipc mechanism> syms ('x')
 
