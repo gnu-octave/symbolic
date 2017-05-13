@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -31,21 +31,16 @@
 
 function [s, flag] = const_to_python_str (x)
 
-  persistent list
-  persistent const
-
-  if (isempty (list))
-    % Table of special doubles and special strings.  Format for each row is:
-    %    double value, {list of strings to recognize}, resulting python expr
-    % Note: case senstive
-    % Note: python expr should be in list for identity "sym(sympr(x)) == x"
-    list = {pi {'pi'} 'pi'; ...
-            inf {'inf' 'Inf' 'oo'} 'oo'; ...
-            nan {'NaN' 'nan'} 'nan'; ...
-            i {'i' 'I'} 'I'};
-    % Special Sympy constants to recognize
-    const = {'zoo'};
-  end
+  % Table of special doubles and special strings.  Format for each row is:
+  %    double value, {list of strings to recognize}, resulting python expr
+  % Note: case sensitive
+  % Note: python expr should be in list for identity "sym(sympy(x)) == x"
+  list = {pi {'pi'} 'S.Pi'; ...
+          inf {'inf' 'Inf' 'oo'} 'S.Infinity'; ...
+          nan {'NaN' 'nan'} 'S.NaN'; ...
+          i {'i' 'I'} 'S.ImaginaryUnit'};
+  % Special Sympy constants to recognize
+  const = {'zoo'};
 
   flag = 1;
 

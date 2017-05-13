@@ -7,11 +7,11 @@ matrix:
   include:
     - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
     - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=no COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=no COLUMNS=80
   allow_failures:
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=no COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT=daily DOCTEST=no COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 before_install:
