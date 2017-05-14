@@ -64,16 +64,6 @@
 %% @end group
 %% @end example
 %%
-%% Boolean input, giving symbolic True/False:
-%% @example
-%% @group
-%% sym (true)
-%%   @result{} (sym) True
-%% sym (false)
-%%   @result{} (sym) False
-%% @end group
-%% @end example
-%%
 %% Some special double values are recognized but its all a
 %% bit heuristic/magical:
 %% @example
