@@ -23,6 +23,7 @@
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{ratflag})
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -145,6 +146,30 @@
 %% computations, @pxref{vpa}.
 %%
 %%
+%% If having read the above, you @emph{still} want to do something
+%% symbolic with floating-point inputs, you can use the @var{ratflag}
+%% argument; by setting it to @qcode{'f'}, you will obtain the precise
+%% rational number which is equal to the floating-point value:
+%% @example
+%% @group
+%% sym(0.1, 'f')
+%%   @result{} (sym)
+%%        3602879701896397
+%%       ─────────────────
+%%       36028797018963968
+%% @end group
+%% @end example
+%%
+%% The default heuristic rational behaviour can be obtained by passing
+%% @var{ratflag} as @qcode{'r'}; this avoids the floating-point warning:
+%% @example
+%% @group
+%% sym(0.1, 'r')
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%%
 %% For symbols, a second (and further) arguments can provide assumptions
 %% or restrictions on the type of the symbol:
 %% @example
@@ -263,6 +288,20 @@ function s = sym(x, varargin)
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
+    elseif (nargin == 2 && isnumber && ischar (varargin{1}) && isscalar (varargin{1}))
+      %% explicit ratflag given
+      sclear = false;
+      ratflag = varargin{1};
+      switch ratflag
+        case 'f'
+          ratwarn = false;
+        case 'r'
+          ratwarn = false;
+        case {'d' 'e'}
+          error ('sym: RATFLAG ''%s'' is not implemented', ratflag)
+        otherwise
+          error ('sym: invalid RATFLAG ''%s''', ratflag)
+      end
     elseif (nargin == 2 && ischar (varargin{1}) && strcmp (varargin{1}, 'clear'))
       sclear = true;
       varargin(1) = [];
@@ -285,6 +324,16 @@ function s = sym(x, varargin)
     check = false;
 
     switch ratflag
+      case 'f'
+        % TODO: need something like const_to_python_str (x) for inf, nan, not pi
+        if (isreal (x))
+          s = python_cmd ('return Rational(_ins[0])', x);
+        else
+          s = python_cmd ('return Rational(_ins[0]) + I*Rational(_ins[1])', ...
+                          real (x), imag (x));
+        end
+        return
+
       case 'r'
         iscmplx = ~isreal (x);
         if (iscmplx)
@@ -725,6 +774,36 @@ end
 %! x = sym(pi/123);
 %! assert (isequal (x/sym(pi), sym(1)/123))
 %! warning (s)
+
+%!test
+%! % sym(double) with 'r': no warning
+%! a = 0.1;
+%! x = sym(a, 'r');
+%! assert (isequal (x, sym(1)/10))
+
+%!test
+%! % sym(double, 'f')
+%! a = 0.1;
+%! x = sym(a, 'f');
+%! assert (~isequal (x, sym(1)/10))
+%! assert (isequal (x, sym('3602879701896397')/sym('36028797018963968')))
+
+%!test
+%! x = sym(pi, 'f');
+%! assert (~isequal (x, sym('pi')))
+%! assert (isequal (x, sym('884279719003555')/sym('281474976710656')))
+
+%!test
+%! q = sym('3602879701896397')/sym('36028797018963968');
+%! x = sym(1 + 0.1i, 'f');
+%! assert (isequal (x, 1 + 1i*q))
+%! x = sym(0.1 + 0.1i, 'f');
+%! assert (isequal (x, q + 1i*q))
+
+%!xtest
+%! assert (isequal (sym(inf, 'f'), sym(inf)))
+%! assert (isequal (sym(-inf, 'f'), sym(-inf)))
+%! assert (isequaln (sym(nan, 'f'), sym(nan)))
 
 %!test
 %! % symbols with special sympy names
