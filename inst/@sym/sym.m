@@ -55,7 +55,7 @@
 %% @end group
 %% @end example
 %%
-%% A matrix can be input:
+%% A matrix of integers can be input:
 %% @example
 %% @group
 %% sym ([1 2; 3 4])
@@ -66,21 +66,60 @@
 %% @end group
 %% @end example
 %%
-%% Some special double values are recognized but its all a
-%% bit heuristic/magical:
+%% However, if the entries are not simply integers, its better to call
+%% @code{sym} inside the matrix:
+%% @example
+%% @group
+%% [sym(pi) sym(3)/2; sym(1) 0]
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡π  3/2⎤
+%%       ⎢      ⎥
+%%       ⎣1   0 ⎦
+%% @end group
+%% @end example
+%% (Careful: at least one entry per row must be @code{sym} to workaround
+%% a GNU Octave bug @url{https://savannah.gnu.org/bugs/index.php?42152}.)
+%% @c @example
+%% @c [sym(pi) 2; 1 0]-
+%% @c   @print{} ??? octave_base_value::map_value(): wrong type argument 'scalar'
+%% @c @end example
+%%
+%% Passing double values to sym is not recommended and will give a warning:
+%% @example
+%% @group
+%% sym(0.1)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @result{} ans = (sym) 1/10
+%% @end group
+%% @end example
+%%
+%% In this particular case, the warning is easy to avoid:
+%% @example
+%% @group
+%% sym(1)/10
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%% The ``danger'' here is that typing @code{0.1} gives a double-precision
+%% floating-point value which differs slightly from the fraction
+%% @code{sym(1)/10} (and this is true for most decimal expressions).
+%% It is generally impossible to determine which exact symbolic value the
+%% user intended.
+%% The warning indicates that some heuristics have been applied,
+%% namely a preferance for ``small'' fractions (and small fractions
+%% of π).
+%% Further examples include:
 %% @example
 %% @group
 %% y = sym(pi/100)
-%%   @print{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
 %%   @result{} y = (sym)
 %%        π
 %%       ───
 %%       100
 %% @end group
-%% @end example
-%% While this works fine for ``small'' fractions, its safer to avoid
-%% the warning by using:
-%% @example
+%%
 %% @group
 %% y = sym(pi)/100
 %%   @result{} y = (sym)
@@ -89,9 +128,24 @@
 %%       100
 %% @end group
 %% @end example
+%% (@code{sym(pi)} is a special case; it does not raise the warning).
 %%
 %%
-%% A second (and further) arguments can provide assumptions
+%% There is an additional reason for the float-point warning,
+%% relevant if you are doing something like @code{sym(1.23456789012345678)}.
+%% In many cases, floating-point numbers should be thought of as
+%% approximations (with about 15 decimal digits of relative accuracy).
+%% This means that mixing floating-point values and symbolic computations
+%% with the goal of obtaining exact results is often a fool's errand.
+%% Compounding this, symbolic computations may not always use numerically
+%% stable algorithms (as their inputs are assumed exact) whereas a
+%% floating-point input is effectively perturbed in the 15th digit.
+%%
+%% If what you really want is higher-precision floating-point
+%% computations, @pxref{vpa}.
+%%
+%%
+%% For symbols, a second (and further) arguments can provide assumptions
 %% or restrictions on the type of the symbol:
 %% @example
 %% @group
@@ -246,7 +300,7 @@ function s = sym(x, varargin)
         % Matlab SMT does this (w/o warning).
         % FIXME: could have sympy do this?  Or just make symbolic floats?
         warning('OctSymPy:sym:rationalapprox', ...
-                'Using rat() heuristics for double-precision input (is this what you wanted?)');
+                'passing floating-point values to sym is dangerous, see "help sym"');
         [N1, D1] = rat (tmpx);
         [N2, D2] = rat (tmpx / pi);
         if (10*abs (D2) < abs (D1))
@@ -453,7 +507,7 @@ end
 %! assert (double (x) == 1/2 )
 %! assert (isequal (2*x, sym (1)))
 
-%!warning <heuristic> x = sym (1/2);
+%!warning <dangerous> x = sym (1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
@@ -682,10 +736,10 @@ end
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
-%!warning <heuristics for double-precision> sym (1e16);
-%!warning <heuristics for double-precision> sym (-1e16);
-%!warning <heuristics for double-precision> sym (10.33);
-%!warning <heuristics for double-precision> sym (-5.23);
+%!warning <dangerous> sym (1e16);
+%!warning <dangerous> sym (-1e16);
+%!warning <dangerous> sym (10.33);
+%!warning <dangerous> sym (-5.23);
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
