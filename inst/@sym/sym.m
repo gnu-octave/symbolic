@@ -253,29 +253,29 @@ function s = sym(x, varargin)
 
   asm = {};
   check = true;
+  isnumber = isnumeric (x) || islogical (x);
+  ratwarn = true;
+  ratflag = 'r';
 
   if (nargin >= 2)
-    if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
+    if (ismatrix (varargin{1}) && ~ischar (varargin{1}) && ~isstruct (varargin{1}) && ~iscell (varargin{1}))
+      %% Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
-    else
-      if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
-        sclear = true;
-        varargin(1) = [];
-        warning ('OctSymPy:deprecated', ...
+    elseif (nargin == 2 && ischar (varargin{1}) && strcmp (varargin{1}, 'clear'))
+      sclear = true;
+      varargin(1) = [];
+      warning ('OctSymPy:deprecated', ...
               ['"sym(x, ''clear'')" is deprecated and will be removed in a future version;\n' ...
                '         use "assume(x, ''clear'')" instead.'])
-      else
-        sclear = false;
-        check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
-      end
+    else
+      sclear = false;
+      assert (~isnumber, 'Only symbols can have assumptions.')
+      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
-
-  isnumber = isnumeric (x) || islogical (x);
-  assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
@@ -283,41 +283,49 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'double'))  % Handle doubles
     check = false;
-    ima = ~isreal (x);
-    if (ima)
-      xx = {real(x); imag(x)};
-    else
-      xx = {x};
-    end
-    ss = cell(2,1);
 
-    for n = 1:numel(xx)
-      tmpx = xx{n};
-      [ss{n}, flag] = const_to_python_str (tmpx);
-      if (~flag)
-        % Allow 1/3 and other "small" fractions.
-        % Personally, I like a warning here so I can catch bugs.
-        % Matlab SMT does this (w/o warning).
-        % FIXME: could have sympy do this?  Or just make symbolic floats?
-        warning('OctSymPy:sym:rationalapprox', ...
-                'passing floating-point values to sym is dangerous, see "help sym"');
-        [N1, D1] = rat (tmpx);
-        [N2, D2] = rat (tmpx / pi);
-        if (10*abs (D2) < abs (D1))
-          % use frac*pi if demoninator significantly shorter
-          ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+    switch ratflag
+      case 'r'
+        iscmplx = ~isreal (x);
+        if (iscmplx)
+          xx = {real(x); imag(x)};
         else
-          ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+          xx = {x};
         end
-      else
-        ss{n} = sprintf ('S(%s)', ss{n});
-      end
-    end
+        ss = cell(2, 1);
 
-    if (ima)
-      x = sprintf('%s + I*(%s)', ss{1}, ss{2});
-    else
-      x = ss{1};
+        for n = 1:numel (xx)
+          tmpx = xx{n};
+          [ss{n}, flag] = const_to_python_str (tmpx);
+          if (~flag)
+            % Allow 1/3 and other "small" fractions.
+            % Personally, I like a warning here so I can catch bugs.
+            % Matlab SMT does this (w/o warning).
+            if (ratwarn)
+              warning('OctSymPy:sym:rationalapprox', ...
+                      'passing floating-point values to sym is dangerous, see "help sym"');
+            end
+            [N1, D1] = rat (tmpx);
+            [N2, D2] = rat (tmpx / pi);
+            if (10*abs (D2) < abs (D1))
+              % use frac*pi if demoninator significantly shorter
+              ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+            else
+              ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+            end
+          else
+            ss{n} = sprintf ('S(%s)', ss{n});
+          end
+        end
+
+        if (iscmplx)
+          x = sprintf ('%s + I*(%s)', ss{1}, ss{2});
+        else
+          x = ss{1};
+        end
+
+      otherwise
+        error ('sym: this case should not be possible')
     end
 
   elseif (islogical (x)) % Handle logical values
