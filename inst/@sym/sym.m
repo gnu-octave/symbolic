@@ -42,6 +42,8 @@
 %%   @result{} y = (sym) ∞
 %% y = sym (pi)
 %%   @result{} y = (sym) π
+%% y = sym (1i)
+%%   @result{} y = (sym) ⅈ
 %% @end group
 %% @end example
 %%
