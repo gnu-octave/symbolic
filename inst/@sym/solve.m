@@ -40,6 +40,18 @@
 %% @end group
 %% @end example
 %%
+%% Sometimes its helpful to assume an unknown is real:
+%% @example
+%% @group
+%% syms x real
+%% solve(abs(x) == 1, x)
+%%   @result{} ans = (sym 2×1 matrix)
+%%       ⎡-1⎤
+%%       ⎢  ⎥
+%%       ⎣1 ⎦
+%% @end group
+%% @end example
+%%
 %% In general, the output will be a list of dictionaries.  Each
 %% entry of the list is one a solution, and the variables that make
 %% up that solutions are keys of the dictionary (fieldnames of the
