@@ -82,15 +82,21 @@ function r = vpa(x, n)
   elseif (isfloat (x) && ~isreal (x))
     r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
   elseif (isfloat(x) && isscalar(x) == 1)
-    [s, flag] = const_to_python_str(x);
-    if (flag)
-      r = vpa(s, n);
-    else
-      cmd = {
-          'x, n = _ins'
-          'return sympy.Float(x, n),' };
-      r = python_cmd (cmd, x, n);
+    if (isnan (x))
+      x = 'S.NaN';
+    elseif (isinf (x) && x < 0)
+      x = '-S.Infinity';
+    elseif (isinf (x))
+      x = 'S.Infinity';
+    elseif (isequal (x, pi))
+      x = 'S.Pi';
+    elseif (isequal (x, -pi))
+      x = '-S.Pi';
     end
+    cmd = {
+      'x, n = _ins'
+      'return sympy.N(x, n)' };
+    r = python_cmd (cmd, x, n);
   elseif (isinteger(x) && isscalar(x) == 1)
     cmd = {
         'x, n = _ins'

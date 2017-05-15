@@ -23,9 +23,6 @@
 %%
 %% Private helper function.
 %%
-%% Caution: there are two copies of this file for technical
-%% reasons: make sure you modify both of them!
-%%
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
