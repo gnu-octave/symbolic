@@ -26,6 +26,9 @@ octsympy 2.5.1-dev
     using `sym(0.1, 'f')`.  Passing `'r'` gives the current heuristic
     behaviour.  Neither raises a warning.
 
+  * `sym('i')` and `sym('I')` no longer create the imaginary unit: use
+    `sym(i)` or `sym(1i)`.
+
   * Bug fix: isequal(n) for symfun's correctly tests the argnames.
 
 
