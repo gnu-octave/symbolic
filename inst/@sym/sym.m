@@ -320,33 +320,52 @@ function s = sym(x, varargin)
     s = numeric_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double'))  % Handle doubles
+  elseif (isa (x, 'double'))  % Handle double/complex
     check = false;
 
-    switch ratflag
-      case 'f'
-        % TODO: need something like const_to_python_str (x) for inf, nan, not pi
-        if (isreal (x))
-          s = python_cmd ('return Rational(_ins[0])', x);
-        else
-          s = python_cmd ('return Rational(_ins[0]) + I*Rational(_ins[1])', ...
-                          real (x), imag (x));
-        end
-        return
+    iscmplx = ~isreal (x);
+    if (iscmplx && isequal (x, 1i))
+      s = python_cmd ('return S.ImaginaryUnit');
+      return
+    elseif (iscmplx)
+      xx = {real(x); imag(x)};
+    else
+      xx = {x};
+    end
+    yy = cell(2, 1);
 
-      case 'r'
-        iscmplx = ~isreal (x);
-        if (iscmplx)
-          xx = {real(x); imag(x)};
-        else
-          xx = {x};
-        end
-        ss = cell(2, 1);
+    for n = 1:numel (xx)
+      x = xx{n};
 
-        for n = 1:numel (xx)
-          tmpx = xx{n};
-          [ss{n}, flag] = const_to_python_str (tmpx);
-          if (~flag)
+      switch ratflag
+        case 'f'
+          if (isnan (x))
+            y = python_cmd ('return S.NaN');
+          elseif (isinf (x) && x > 0)
+            y = python_cmd ('return S.Infinity');
+          elseif (isinf (x))
+            y = python_cmd ('return -S.Infinity');
+          else
+            % Rational will exactly convert from a float
+            y = python_cmd ('return Rational(_ins[0])', x);
+          end
+
+        case 'r'
+          if (isnan (x))
+            y = python_cmd ('return S.NaN');
+          elseif (isinf (x) && x < 0)
+            y = python_cmd ('return -S.Infinity');
+          elseif (isinf (x))
+            y = python_cmd ('return S.Infinity');
+          elseif (isequal (x, pi))
+            % special case
+            y = python_cmd ('return S.Pi');
+          elseif (isequal (x, -pi))
+            % special case
+            y = python_cmd ('return -S.Pi');
+          elseif ((abs (x) < flintmax) && (mod (x, 1) == 0))
+            y = python_cmd ('return S(_ins[0])', int64 (x));
+          else
             % Allow 1/3 and other "small" fractions.
             % Personally, I like a warning here so I can catch bugs.
             % Matlab SMT does this (w/o warning).
@@ -354,28 +373,27 @@ function s = sym(x, varargin)
               warning('OctSymPy:sym:rationalapprox', ...
                       'passing floating-point values to sym is dangerous, see "help sym"');
             end
-            [N1, D1] = rat (tmpx);
-            [N2, D2] = rat (tmpx / pi);
+            [N1, D1] = rat (x);
+            [N2, D2] = rat (x / pi);
             if (10*abs (D2) < abs (D1))
               % use frac*pi if demoninator significantly shorter
-              ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+              y = python_cmd ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
             else
-              ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+              y = python_cmd ('return Rational(*_ins)', int64 (N1), int64 (D1));
             end
-          else
-            ss{n} = sprintf ('S(%s)', ss{n});
           end
-        end
 
-        if (iscmplx)
-          x = sprintf ('%s + I*(%s)', ss{1}, ss{2});
-        else
-          x = ss{1};
-        end
-
-      otherwise
-        error ('sym: this case should not be possible')
+        otherwise
+          error ('sym: this case should not be possible')
+      end
+      yy{n} = y;
     end
+    if (iscmplx)
+      s = yy{1} + yy{2}*1i;
+    else
+      s = yy{1};
+    end
+    return
 
   elseif (islogical (x)) % Handle logical values
     check = false;
@@ -804,6 +822,9 @@ end
 %! assert (isequal (sym(inf, 'f'), sym(inf)))
 %! assert (isequal (sym(-inf, 'f'), sym(-inf)))
 %! assert (isequaln (sym(nan, 'f'), sym(nan)))
+%! assert (isequal (sym(complex(inf, -inf), 'f'), sym(complex(inf, -inf))))
+%! assert (isequaln (sym(complex(nan, inf), 'f'), sym(complex(nan, inf))))
+%! assert (isequaln (sym(complex(-inf, nan), 'f'), sym(complex(-inf, nan))))
 
 %!test
 %! % symbols with special sympy names
