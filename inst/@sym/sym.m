@@ -23,6 +23,7 @@
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{ratflag})
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -42,6 +43,8 @@
 %%   @result{} y = (sym) ∞
 %% y = sym (pi)
 %%   @result{} y = (sym) π
+%% y = sym (1i)
+%%   @result{} y = (sym) ⅈ
 %% @end group
 %% @end example
 %%
@@ -53,7 +56,7 @@
 %% @end group
 %% @end example
 %%
-%% A matrix can be input:
+%% A matrix of integers can be input:
 %% @example
 %% @group
 %% sym ([1 2; 3 4])
@@ -64,31 +67,60 @@
 %% @end group
 %% @end example
 %%
-%% Boolean input, giving symbolic True/False:
+%% However, if the entries are not simply integers, its better to call
+%% @code{sym} inside the matrix:
 %% @example
 %% @group
-%% sym (true)
-%%   @result{} (sym) True
-%% sym (false)
-%%   @result{} (sym) False
+%% [sym(pi) sym(3)/2; sym(1) 0]
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡π  3/2⎤
+%%       ⎢      ⎥
+%%       ⎣1   0 ⎦
+%% @end group
+%% @end example
+%% (Careful: at least one entry per row must be @code{sym} to workaround
+%% a GNU Octave bug @url{https://savannah.gnu.org/bugs/?42152}.)
+%% @c @example
+%% @c [sym(pi) 2; 1 0]
+%% @c   @print{} ??? octave_base_value::map_value(): wrong type argument 'scalar'
+%% @c @end example
+%%
+%% Passing double values to sym is not recommended and will give a warning:
+%% @example
+%% @group
+%% sym(0.1)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @result{} ans = (sym) 1/10
 %% @end group
 %% @end example
 %%
-%% Some special double values are recognized but its all a
-%% bit heuristic/magical:
+%% In this particular case, the warning is easy to avoid:
+%% @example
+%% @group
+%% sym(1)/10
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%% The ``danger'' here is that typing @code{0.1} gives a double-precision
+%% floating-point value which differs slightly from the fraction
+%% @code{sym(1)/10} (and this is true for most decimal expressions).
+%% It is generally impossible to determine which exact symbolic value the
+%% user intended.
+%% The warning indicates that some heuristics have been applied,
+%% namely a preference for ``small'' fractions (and small fractions
+%% of π).
+%% Further examples include:
 %% @example
 %% @group
 %% y = sym(pi/100)
-%%   @print{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
 %%   @result{} y = (sym)
 %%        π
 %%       ───
 %%       100
 %% @end group
-%% @end example
-%% While this works fine for ``small'' fractions, its safer to avoid
-%% the warning by using:
-%% @example
+%%
 %% @group
 %% y = sym(pi)/100
 %%   @result{} y = (sym)
@@ -97,9 +129,48 @@
 %%       100
 %% @end group
 %% @end example
+%% (@code{sym(pi)} is a special case; it does not raise the warning).
 %%
 %%
-%% A second (and further) arguments can provide assumptions
+%% There is an additional reason for the float-point warning,
+%% relevant if you are doing something like @code{sym(1.23456789012345678)}.
+%% In many cases, floating-point numbers should be thought of as
+%% approximations (with about 15 decimal digits of relative accuracy).
+%% This means that mixing floating-point values and symbolic computations
+%% with the goal of obtaining exact results is often a fool's errand.
+%% Compounding this, symbolic computations may not always use numerically
+%% stable algorithms (as their inputs are assumed exact) whereas a
+%% floating-point input is effectively perturbed in the 15th digit.
+%%
+%% If what you really want is higher-precision floating-point
+%% computations, @pxref{vpa}.
+%%
+%%
+%% If having read the above, you @emph{still} want to do something
+%% symbolic with floating-point inputs, you can use the @var{ratflag}
+%% argument; by setting it to @qcode{'f'}, you will obtain the precise
+%% rational number which is equal to the floating-point value:
+%% @example
+%% @group
+%% sym(0.1, 'f')
+%%   @result{} (sym)
+%%        3602879701896397
+%%       ─────────────────
+%%       36028797018963968
+%% @end group
+%% @end example
+%%
+%% The default heuristic rational behaviour can be obtained by passing
+%% @var{ratflag} as @qcode{'r'}; this avoids the floating-point warning:
+%% @example
+%% @group
+%% sym(0.1, 'r')
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%%
+%% For symbols, a second (and further) arguments can provide assumptions
 %% or restrictions on the type of the symbol:
 %% @example
 %% @group
@@ -207,29 +278,43 @@ function s = sym(x, varargin)
 
   asm = {};
   check = true;
+  isnumber = isnumeric (x) || islogical (x);
+  ratwarn = true;
+  ratflag = 'r';
 
   if (nargin >= 2)
-    if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
+    if (ismatrix (varargin{1}) && ~ischar (varargin{1}) && ~isstruct (varargin{1}) && ~iscell (varargin{1}))
+      %% Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
-    else
-      if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
-        sclear = true;
-        varargin(1) = [];
-        warning ('OctSymPy:deprecated', ...
+    elseif (nargin == 2 && isnumber && ischar (varargin{1}) && isscalar (varargin{1}))
+      %% explicit ratflag given
+      sclear = false;
+      ratflag = varargin{1};
+      switch ratflag
+        case 'f'
+          ratwarn = false;
+        case 'r'
+          ratwarn = false;
+        case {'d' 'e'}
+          error ('sym: RATFLAG ''%s'' is not implemented', ratflag)
+        otherwise
+          error ('sym: invalid RATFLAG ''%s''', ratflag)
+      end
+    elseif (nargin == 2 && ischar (varargin{1}) && strcmp (varargin{1}, 'clear'))
+      sclear = true;
+      varargin(1) = [];
+      warning ('OctSymPy:deprecated', ...
               ['"sym(x, ''clear'')" is deprecated and will be removed in a future version;\n' ...
                '         use "assume(x, ''clear'')" instead.'])
-      else
-        sclear = false;
-        check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
-      end
+    else
+      sclear = false;
+      assert (~isnumber, 'Only symbols can have assumptions.')
+      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
-
-  isnumber = isnumeric (x) || islogical (x);
-  assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
@@ -237,41 +322,59 @@ function s = sym(x, varargin)
 
   elseif (isa (x, 'double'))  % Handle doubles
     check = false;
-    ima = ~isreal (x);
-    if (ima)
-      xx = {real(x); imag(x)};
-    else
-      xx = {x};
-    end
-    ss = cell(2,1);
 
-    for n = 1:numel(xx)
-      tmpx = xx{n};
-      [ss{n}, flag] = const_to_python_str (tmpx);
-      if (~flag)
-        % Allow 1/3 and other "small" fractions.
-        % Personally, I like a warning here so I can catch bugs.
-        % Matlab SMT does this (w/o warning).
-        % FIXME: could have sympy do this?  Or just make symbolic floats?
-        warning('OctSymPy:sym:rationalapprox', ...
-                'Using rat() heuristics for double-precision input (is this what you wanted?)');
-        [N1, D1] = rat (tmpx);
-        [N2, D2] = rat (tmpx / pi);
-        if (10*abs (D2) < abs (D1))
-          % use frac*pi if demoninator significantly shorter
-          ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+    switch ratflag
+      case 'f'
+        % TODO: need something like const_to_python_str (x) for inf, nan, not pi
+        if (isreal (x))
+          s = python_cmd ('return Rational(_ins[0])', x);
         else
-          ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+          s = python_cmd ('return Rational(_ins[0]) + I*Rational(_ins[1])', ...
+                          real (x), imag (x));
         end
-      else
-        ss{n} = sprintf ('S(%s)', ss{n});
-      end
-    end
+        return
 
-    if (ima)
-      x = sprintf('%s + I*(%s)', ss{1}, ss{2});
-    else
-      x = ss{1};
+      case 'r'
+        iscmplx = ~isreal (x);
+        if (iscmplx)
+          xx = {real(x); imag(x)};
+        else
+          xx = {x};
+        end
+        ss = cell(2, 1);
+
+        for n = 1:numel (xx)
+          tmpx = xx{n};
+          [ss{n}, flag] = const_to_python_str (tmpx);
+          if (~flag)
+            % Allow 1/3 and other "small" fractions.
+            % Personally, I like a warning here so I can catch bugs.
+            % Matlab SMT does this (w/o warning).
+            if (ratwarn)
+              warning('OctSymPy:sym:rationalapprox', ...
+                      'passing floating-point values to sym is dangerous, see "help sym"');
+            end
+            [N1, D1] = rat (tmpx);
+            [N2, D2] = rat (tmpx / pi);
+            if (10*abs (D2) < abs (D1))
+              % use frac*pi if demoninator significantly shorter
+              ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
+            else
+              ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
+            end
+          else
+            ss{n} = sprintf ('S(%s)', ss{n});
+          end
+        end
+
+        if (iscmplx)
+          x = sprintf ('%s + I*(%s)', ss{1}, ss{2});
+        else
+          x = ss{1};
+        end
+
+      otherwise
+        error ('sym: this case should not be possible')
     end
 
   elseif (islogical (x)) % Handle logical values
@@ -461,7 +564,7 @@ end
 %! assert (double (x) == 1/2 )
 %! assert (isequal (2*x, sym (1)))
 
-%!warning <heuristic> x = sym (1/2);
+%!warning <dangerous> x = sym (1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
@@ -673,6 +776,36 @@ end
 %! warning (s)
 
 %!test
+%! % sym(double) with 'r': no warning
+%! a = 0.1;
+%! x = sym(a, 'r');
+%! assert (isequal (x, sym(1)/10))
+
+%!test
+%! % sym(double, 'f')
+%! a = 0.1;
+%! x = sym(a, 'f');
+%! assert (~isequal (x, sym(1)/10))
+%! assert (isequal (x, sym('3602879701896397')/sym('36028797018963968')))
+
+%!test
+%! x = sym(pi, 'f');
+%! assert (~isequal (x, sym('pi')))
+%! assert (isequal (x, sym('884279719003555')/sym('281474976710656')))
+
+%!test
+%! q = sym('3602879701896397')/sym('36028797018963968');
+%! x = sym(1 + 0.1i, 'f');
+%! assert (isequal (x, 1 + 1i*q))
+%! x = sym(0.1 + 0.1i, 'f');
+%! assert (isequal (x, q + 1i*q))
+
+%!xtest
+%! assert (isequal (sym(inf, 'f'), sym(inf)))
+%! assert (isequal (sym(-inf, 'f'), sym(-inf)))
+%! assert (isequaln (sym(nan, 'f'), sym(nan)))
+
+%!test
 %! % symbols with special sympy names
 %! syms Ei Eq
 %! assert (~isempty (regexp (sympy (Eq), '^Symbol')))
@@ -690,10 +823,10 @@ end
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
-%!warning <heuristics for double-precision> sym (1e16);
-%!warning <heuristics for double-precision> sym (-1e16);
-%!warning <heuristics for double-precision> sym (10.33);
-%!warning <heuristics for double-precision> sym (-5.23);
+%!warning <dangerous> sym (1e16);
+%!warning <dangerous> sym (-1e16);
+%!warning <dangerous> sym (10.33);
+%!warning <dangerous> sym (-5.23);
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
