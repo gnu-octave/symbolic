@@ -79,9 +79,9 @@
 %% @end group
 %% @end example
 %% (Careful: at least one entry per row must be @code{sym} to workaround
-%% a GNU Octave bug @url{https://savannah.gnu.org/bugs/index.php?42152}.)
+%% a GNU Octave bug @url{https://savannah.gnu.org/bugs/?42152}.)
 %% @c @example
-%% @c [sym(pi) 2; 1 0]-
+%% @c [sym(pi) 2; 1 0]
 %% @c   @print{} ??? octave_base_value::map_value(): wrong type argument 'scalar'
 %% @c @end example
 %%
@@ -108,7 +108,7 @@
 %% It is generally impossible to determine which exact symbolic value the
 %% user intended.
 %% The warning indicates that some heuristics have been applied,
-%% namely a preferance for ``small'' fractions (and small fractions
+%% namely a preference for ``small'' fractions (and small fractions
 %% of π).
 %% Further examples include:
 %% @example
