@@ -375,11 +375,18 @@ function s = sym(x, varargin)
             end
             [N1, D1] = rat (x);
             [N2, D2] = rat (x / pi);
-            if (10*abs (D2) < abs (D1))
-              % use frac*pi if demoninator significantly shorter
-              y = python_cmd ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
+            N3 = round (x^2);
+            err1 = abs (N1 / D1 - x);
+            err2 = abs ((N2*pi) / D2 - x);
+            err3 = abs (sqrt (N3) - x);
+            if (err1 <= err3)
+              if (err1 <= err2)
+                y = python_cmd ('return Rational(*_ins)', int64 (N1), int64 (D1));
+              else
+                y = python_cmd ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
+              end
             else
-              y = python_cmd ('return Rational(*_ins)', int64 (N1), int64 (D1));
+              y = python_cmd ('return sqrt(Integer(*_ins))', int64 (N3));
             end
           end
 
@@ -827,6 +834,10 @@ end
 %! assert (isequaln (sym(complex(-inf, nan), 'f'), sym(complex(-inf, nan))))
 
 %!test
+%! assert (isequal (sym (sqrt(2), 'r'), sqrt (sym (2))))
+%! assert (isequal (sym (sqrt(12345), 'r'), sqrt (sym (12345))))
+
+%!test
 %! % symbols with special sympy names
 %! syms Ei Eq
 %! assert (~isempty (regexp (sympy (Eq), '^Symbol')))
@@ -848,6 +859,7 @@ end
 %!warning <dangerous> sym (-1e16);
 %!warning <dangerous> sym (10.33);
 %!warning <dangerous> sym (-5.23);
+%!warning <dangerous> sym (sqrt (1.4142135623731));
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
