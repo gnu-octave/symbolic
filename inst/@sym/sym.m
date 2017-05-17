@@ -321,8 +321,6 @@ function s = sym(x, varargin)
     return
 
   elseif (isa (x, 'double'))  % Handle double/complex
-    check = false;
-
     iscmplx = ~isreal (x);
     if (iscmplx && isequal (x, 1i))
       s = python_cmd ('return S.ImaginaryUnit');
@@ -333,63 +331,13 @@ function s = sym(x, varargin)
       xx = {x};
     end
     yy = cell(2, 1);
-
     for n = 1:numel (xx)
       x = xx{n};
-
       switch ratflag
         case 'f'
-          if (isnan (x))
-            y = python_cmd ('return S.NaN');
-          elseif (isinf (x) && x > 0)
-            y = python_cmd ('return S.Infinity');
-          elseif (isinf (x))
-            y = python_cmd ('return -S.Infinity');
-          else
-            % Rational will exactly convert from a float
-            y = python_cmd ('return Rational(_ins[0])', x);
-          end
-
+          y = double_to_sym_exact (x);
         case 'r'
-          if (isnan (x))
-            y = python_cmd ('return S.NaN');
-          elseif (isinf (x) && x < 0)
-            y = python_cmd ('return -S.Infinity');
-          elseif (isinf (x))
-            y = python_cmd ('return S.Infinity');
-          elseif (isequal (x, pi))
-            % special case
-            y = python_cmd ('return S.Pi');
-          elseif (isequal (x, -pi))
-            % special case
-            y = python_cmd ('return -S.Pi');
-          elseif ((abs (x) < flintmax) && (mod (x, 1) == 0))
-            y = python_cmd ('return S(_ins[0])', int64 (x));
-          else
-            % Allow 1/3 and other "small" fractions.
-            % Personally, I like a warning here so I can catch bugs.
-            % Matlab SMT does this (w/o warning).
-            if (ratwarn)
-              warning('OctSymPy:sym:rationalapprox', ...
-                      'passing floating-point values to sym is dangerous, see "help sym"');
-            end
-            [N1, D1] = rat (x);
-            [N2, D2] = rat (x / pi);
-            N3 = round (x^2);
-            err1 = abs (N1 / D1 - x);
-            err2 = abs ((N2*pi) / D2 - x);
-            err3 = abs (sqrt (N3) - x);
-            if (err1 <= err3)
-              if (err1 <= err2)
-                y = python_cmd ('return Rational(*_ins)', int64 (N1), int64 (D1));
-              else
-                y = python_cmd ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
-              end
-            else
-              y = python_cmd ('return sqrt(Integer(*_ins))', int64 (N3));
-            end
-          end
-
+          y = double_to_sym_heuristic (x, ratwarn, []);
         otherwise
           error ('sym: this case should not be possible')
       end
