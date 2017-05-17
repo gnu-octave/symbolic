@@ -38,7 +38,7 @@ function y = double_to_sym_heuristic (x, ratwarn, argnstr)
   elseif (isequal (x, -pi))
     y = python_cmd ('return -S.Pi');
   elseif ((abs (x) < flintmax) && (mod (x, 1) == 0))
-    y = python_cmd ('return S(_ins[0])', int64 (x));
+    y = python_cmd ('return Integer(_ins[0])', int64 (x));
   else
     %% Find the nearest rational, rational*pi or sqrt(integer)
     if (ratwarn)

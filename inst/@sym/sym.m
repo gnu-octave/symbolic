@@ -350,6 +350,10 @@ function s = sym(x, varargin)
     end
     return
 
+  elseif (isinteger (x)) % Handle integer vealues
+    s = python_cmd ('return Integer(*_ins)', x);
+    return
+
   elseif (islogical (x)) % Handle logical values
     check = false;
     if (x)
@@ -357,10 +361,6 @@ function s = sym(x, varargin)
     else
       x = 'S.false';
     end
-
-  elseif (isinteger (x)) % Handle integer vealues
-    check = false;
-    x = num2str (x, '%ld');
   end
 
   if (isa (x, 'char'))
