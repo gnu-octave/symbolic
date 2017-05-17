@@ -440,7 +440,7 @@ function s = sym(x, varargin)
       %  end
       %end
 
-      [x, flag] = const_to_python_str (x);
+      [x, flag] = detect_special_str (x);
       if (flag)
         check = false;
       end

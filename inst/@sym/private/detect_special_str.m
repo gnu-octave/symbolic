@@ -18,42 +18,42 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {[@var{s}, @var{flag}] =} const_to_python_str (@var{x})
-%% Recognize constant and return their python string equivalent.
+%% @deftypefun {[@var{s}, @var{flag}] =} detect_special_str (@var{x})
+%% Recognize special constants, return their sympy string equivalent.
 %%
 %% Private helper function.
 %%
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
-function [s, flag] = const_to_python_str (x)
+function [s, flag] = detect_special_str (x)
 
   % Table of special strings.  Format for each row is:
-  %    <unused> {list of strings to recognize}, resulting python expr
+  %    {list of strings to recognize}, resulting python expr
   % Note: case sensitive
   % Note: python expr should be in list for identity "sym(sympy(x)) == x"
-  list = {pi {'pi'} 'S.Pi'; ...
-          inf {'inf' 'Inf' 'oo'} 'S.Infinity'; ...
-          nan {'NaN' 'nan'} 'S.NaN'; ...
-          [] {'zoo'} 'S.ComplexInfinity'};
+  table = {{'pi'} 'S.Pi'; ...
+           {'inf' 'Inf' 'oo'} 'S.Infinity'; ...
+           {'NaN' 'nan'} 'S.NaN'; ...
+           {'zoo'} 'S.ComplexInfinity'};
 
-  flag = 1;
+  flag = 0;
+  s = x;
 
   assert (ischar (x))
 
-    for j = 1:length (list)
-      for n = 1:length (list{j, 2})
-        if (strcmp (x, list{j, 2}{n}) || strcmp (x, ['+' list{j, 2}{n}]))
-          s = list{j, 3};
-          return
-        elseif (strcmp (x, ['-' list{j, 2}{n}]))
-          s = ['-' list{j, 3}];
-          return
-        end
+  for j = 1:length (table)
+    for n = 1:length (table{j, 1})
+      if (strcmp (x, table{j, 1}{n}) || strcmp (x, ['+' table{j, 1}{n}]))
+        s = table{j, 2};
+        flag = 1;
+        return
+      elseif (strcmp (x, ['-' table{j, 1}{n}]))
+        s = ['-' table{j, 2}];
+        flag = 1;
+        return
       end
     end
-
-    flag = 0;
-    s = x;
+  end
 
 end
