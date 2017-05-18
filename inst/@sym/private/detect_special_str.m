@@ -18,15 +18,19 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {[@var{s}, @var{flag}] =} detect_special_str (@var{x})
+%% @deftypefun {@var{s} =} detect_special_str (@var{x})
 %% Recognize special constants, return their sympy string equivalent.
 %%
 %% Private helper function.
 %%
+%% This function should return a string @var{s} which can be instantiated
+%% directly in Python such as @code{['return' @var{s}]}.  If no special
+%% value is found, it returns the empty string.
+%%
 %% @seealso{sym, vpa}
 %% @end deftypefun
 
-function [s, flag] = detect_special_str (x)
+function s = detect_special_str (x)
 
   % Table of special strings.  Format for each row is:
   %    {list of strings to recognize}, resulting python expr
@@ -37,8 +41,7 @@ function [s, flag] = detect_special_str (x)
            {'NaN' 'nan'} 'S.NaN'; ...
            {'zoo'} 'S.ComplexInfinity'};
 
-  flag = 0;
-  s = x;
+  s = '';
 
   assert (ischar (x))
 
@@ -46,11 +49,9 @@ function [s, flag] = detect_special_str (x)
     for n = 1:length (table{j, 1})
       if (strcmp (x, table{j, 1}{n}) || strcmp (x, ['+' table{j, 1}{n}]))
         s = table{j, 2};
-        flag = 1;
         return
       elseif (strcmp (x, ['-' table{j, 1}{n}]))
         s = ['-' table{j, 2}];
-        flag = 1;
         return
       end
     end

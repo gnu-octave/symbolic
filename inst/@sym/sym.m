@@ -386,10 +386,10 @@ function s = sym(x, varargin)
       %  end
       %end
 
-    [x, flag] = detect_special_str (x);
-    if (flag)
+    y = detect_special_str (x);
+    if (~ isempty (y))
       assert (isempty (asm), 'Only symbols can have assumptions.')
-      s = python_cmd (['return ' x]);
+      s = python_cmd (['return ' y]);
       return
     end
 
