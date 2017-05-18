@@ -277,7 +277,6 @@ function s = sym(x, varargin)
   end
 
   asm = {};
-  check = true;
   isnumber = isnumeric (x) || islogical (x);
   ratwarn = true;
   ratflag = 'r';
@@ -355,18 +354,17 @@ function s = sym(x, varargin)
     return
 
   elseif (islogical (x)) % Handle logical values
-    check = false;
     if (x)
-      x = 'S.true';
+      s = python_cmd ('return S.true');
     else
-      x = 'S.false';
+      s = python_cmd ('return S.false');
     end
+    return
   end
 
   if (isa (x, 'char'))
-    % We now have a char; need to decide whether to use S() or Symbol() on it.
+    %% Need to decide whether to use S() or Symbol()
 
-    if (check)
       % TODO: Warning if you try make a sym with the same name of a system function.
       %symsnotfunc (x);
 
@@ -388,17 +386,19 @@ function s = sym(x, varargin)
       %  end
       %end
 
-      [x, flag] = detect_special_str (x);
-      if (flag)
-        check = false;
-      end
-      x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
-      isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
+    [x, flag] = detect_special_str (x);
+    if (flag)
+      assert (isempty (asm), 'Only symbols can have assumptions.')
+      s = python_cmd (['return ' x]);
+      return
     end
 
+    x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
+
+    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
+
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if (check && (~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
+    if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
               '_ins = [_ins] if isinstance(_ins, dict) else _ins'
@@ -437,12 +437,10 @@ function s = sym(x, varargin)
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
       % TODO: figure version might warn on expression strings
-      %if (check)
         % Check if the user try to execute operations from sym
         %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         %  warning ('Please avoid execute operations from sym function.');
         %end
-      %end
 
       % Usually want rational output here (i.e., if input was "1.2").
       % But if input has words and parentheses it might be raw Sympy code.
