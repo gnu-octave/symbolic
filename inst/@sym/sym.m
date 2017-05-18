@@ -428,7 +428,6 @@ function s = sym(x, varargin)
     if (check && (~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
-              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
