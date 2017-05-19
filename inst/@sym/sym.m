@@ -107,9 +107,9 @@
 %% @code{sym(1)/10} (and this is true for most decimal expressions).
 %% It is generally impossible to determine which exact symbolic value the
 %% user intended.
-%% The warning indicates that some heuristics have been applied,
-%% namely a preference for ``small'' fractions (and small fractions
-%% of π).
+%% The warning indicates that some heuristics have been applied
+%% (namely a preference for ``small'' fractions, small fractions
+%% of π and square roots of integers).
 %% Further examples include:
 %% @example
 %% @group
