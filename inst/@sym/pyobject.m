@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,31 +24,41 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(~strcmp(sympref('ipc'), 'native'))
 %% syms x
 %% f = 2*sin(x/2);
 %% pyobject(f)
-%%   @result{} ans = [pyobject ...]
+%%   @result{} ans = [Python object of type sympy.core.mul.Mul]
 %%
 %%       2*sin(x/2)
 %%
 %% @end group
 %% @end example
-%% @seealso{@@sym/char, py, @@pyobject/pyobject}
+%% @seealso{@@sym/sympy, py, @@pyobject/pyobject}
 %% @end defmethod
 
 
 function y = pyobject (x)
 
-  y = py.sympy.S (char (x));
+  y = py.sympy.S (sympy (x));
 
   % Above is nice because it needs no imports.  But downside is some
   % things like NonElementaryIntegral and MatrixElement will fail.  See
   % e.g., commit 51a80384d5caea0db211e452d39f0b4f6b3778cc
 
   % Alternatively, with many imports (see python_header.py), this works:
-  %y = pyeval (char (x));
+  %y = pyeval (sympy (x));
 
 end
 
 
-%!assert (isa (pyobject (sym ('x')), 'pyobject'))
+%!test
+%! try
+%!   q = py.int(7);
+%!   have_pytave = true;
+%! catch
+%!   have_pytave = false;
+%! end
+%! if (have_pytave)
+%!   assert (isa (pyobject (sym ('x')), 'pyobject'))
+%! end
