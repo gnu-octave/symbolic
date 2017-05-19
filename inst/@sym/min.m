@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2015, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,33 +18,31 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} min (@var{a})
-%% @deftypefnx {Function File} {@var{r} =} min (@var{a}, @var{b})
-%% @deftypefnx {Function File} {[@var{r}, @var{I}] =} min (@var{a})
-%% @deftypefnx {Function File} {@var{r} =} min (@var{a}, [], @var{dim})
+%% @deftypemethod  @@sym {} min (@var{a})
+%% @deftypemethodx @@sym {} min (@var{a}, @var{b})
+%% @deftypemethodx @@sym {} min (@var{a}, [], @var{dim})
+%% @deftypemethodx @@sym {[@var{r}, @var{I}] =} min (@dots{})
 %% Return minimum value of a symbolic vector or vectors.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> min(sym(1), sym(2))
-%%    @result{} (sym) 1
-%% >> m = min([1 sym(pi)/4 6])
-%%    @result{} m = (sym)
-%%        π
-%%        ─
-%%        4
-%% >> [m, I] = min([sym(1) 0 6])
-%%    @result{} m = (sym) 0
-%%    @result{} I = 2
+%% min(sym(1), sym(2))
+%%   @result{} (sym) 1
+%% m = min([1 sym(pi)/4 6])
+%%   @result{} m = (sym)
+%%       π
+%%       ─
+%%       4
+%% [m, I] = min([sym(1) 0 6])
+%%   @result{} m = (sym) 0
+%%   @result{} I = 2
 %% @end group
 %% @end example
 %%
-%% @seealso{max}
-%% @end deftypefn
+%% @seealso{@@sym/max}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [z, I] = min(A, B, dim)
 

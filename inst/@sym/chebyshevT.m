@@ -1,4 +1,5 @@
-%% Copyright (C) 2016, Abhinav Tripathi
+%% Copyright (C) 2016 Abhinav Tripathi
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} chebyshevT (@var{n}, @var{x})
+%% @defmethod @@sym chebyshevT (@var{n}, @var{x})
 %% Find the nth symbolic Chebyshev polynomial of the first kind.
 %%
 %% If @var{n} is a vector then it returns a vector with Chebyshev polynomials
@@ -51,15 +52,17 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{chebyshevU}
-%% @end deftypefn
+%% @seealso{@@sym/chebyshevU}
+%% @end defmethod
 
-%% Author: Abhinav Tripathi
-%% Keywords: symbolic
 
-function y = chebyshevT(n,x)
-  y = binop_helper(sym(n), sym(x), 'chebyshevt');
+function y = chebyshevT(n, x)
+  if (nargin ~= 2)
+    print_usage ();
+  end
+  y = elementwise_op ('chebyshevt', sym(n), sym(x));
 end
+
 
 %!shared x
 %! syms x

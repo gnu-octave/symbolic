@@ -18,27 +18,39 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} round (@var{x})
+%% @defmethod @@sym round (@var{x})
 %% Symbolic round function.
 %%
 %% Example:
 %% @example
 %% @group
 %% y = round(sym(-27)/10)
-%%   @result{} y = -3
+%%   @result{} y = (sym) -3
 %% @end group
 %% @end example
 %%
-%% @seealso{ceil, floor, fix, frac}
-%% @end deftypefn
+%% @seealso{@@sym/ceil, @@sym/floor, @@sym/fix, @@sym/frac}
+%% @end defmethod
+
 
 function y = round(x)
-  y = uniop_helper (x, 'round');
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('lambda a: Integer(a.round()) if isinstance(a, Number) else a.round()', x);
 end
+
 
 %!test
 %! d = 3/2;
 %! x = sym('3/2');
+%! f1 = round(x);
+%! f2 = round(d);
+%! assert (isequal (f1, f2))
+
+%!test
+%! d = 5/2;
+%! x = sym('5/2');
 %! f1 = round(x);
 %! f2 = round(d);
 %! assert (isequal (f1, f2))
@@ -59,3 +71,17 @@ end
 %! d = sym(-19)/10;
 %! c = -2;
 %! assert (isequal (round (d), c))
+
+%!test
+%! d = 5j/2;
+%! x = sym(5j)/2;
+%! f1 = round (x);
+%! f2 = round (d);
+%! assert (isequal (f1, f2))
+
+%!test
+%! d = 5/3 - 4j/7;
+%! x = sym(5)/3 - sym(4j)/7;
+%! f1 = round (x);
+%! f2 = round (d);
+%! assert (isequal (f1, f2))

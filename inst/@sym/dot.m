@@ -1,5 +1,5 @@
-%% Copyright (C) 2015 Colin B. Macdonald
-%% Copyright (C) 2016 Colin B. Macdonald, Alex Vong
+%% Copyright (C) 2015-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,10 +50,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{cross}
+%% @seealso{@@sym/cross}
 %% @end defmethod
 
+
 function c = dot(a, b)
+
+  if (nargin ~= 2)
+    print_usage ();
+  end
 
   % conjugate linear in the 1st slot to match the behavior of @double/dot
   cmd = { 'a, b = _ins'
@@ -64,6 +69,8 @@ function c = dot(a, b)
 
 end
 
+
+%!error <Invalid> dot (sym(1), 2, 3)
 
 %!test
 %! a = sym([1; 1; 0]);

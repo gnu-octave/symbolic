@@ -1,25 +1,104 @@
-octsympy 2.5.0-dev
+octsympy 2.5.1-dev
 ==================
 
-  * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
-    we can remove some crufty workarounds.
+  * New symbolic commands:
 
-  * Remove deprecated method for changing the Python executable using
-    `sympref`: instead use the environment variable `PYTHON`.
+          ellipke
+          ellipticCE
+          ellipticCK
+          ellipticCPi
+          ellipticE
+          ellipticF
+          ellipticK
+          ellipticPi
+          harmonic
+          kroneckerDelta
+          pochhammer
 
-  * Deprecation notice: `evalpy` will be removed in a future release.
+  * New `@double` numerical functions; these are wrappers around SymPy, so
+    they are slower than native floating point implementations.
+
+          harmonic
+
+  * Better warning for `sym(0.1)`, updated docs about floating point.
+
+  * Double values can now be converted to their exact rational value
+    using `sym(0.1, 'f')`.  Passing `'r'` gives the current heuristic
+    behaviour.  Neither raises a warning.
+
+  * Bug fix: isequal(n) for symfun's correctly tests the argnames.
+
+
+
+octsympy 2.5.0 (2017-02-01)
+===========================
+
+  * New symbolic commands:
+
+          acosd            chol                ones
+          adjoint          cosd                prevprime
+          angle            dawson              sind
+          asind            divisors            sympy
+          atand            equationsToMatrix   tand
+          beta             eye                 zeros
+          cell2sym         hilb
+          charpoly         invhilb
+
+  * Add more `@double` numerical functions.  For now these are simply
+    wrappers around SymPy, so they are slower than native floating
+    point implementations.
+
+          coshint         logint
+          cosint          polylog
+          dilog           sinhint
+          fresnelc        sinint
+          fresnels        zeta
+
+  * The full set of assumptions implemented by Sympy can now be used.
+    For example, `syms p prime` assumes `p` is prime.
+
+  * `assume(x, 'clear')` can be used to clear assumptions on variables.
+    Previously undocumented commands such as `sym(x, 'clear')` and
+    `syms x clear` are now deprecated.
+
+  * `assume` supports vector inputs.  Also supported are alternative
+    "command forms" such as `assume x y real` and `assume x y clear`.
+
+  * `solve` now works with inequalities.
+
+  * `sym('1.3')` now creates the rational number 13/10.
+
+  * A new keyword option `coeffs(f, x, 'all')` returns both zero and
+    non-zero coefficients.
 
   * Change (and document!) default matrix norm to the 2-norm (it was
     Frobenius).
 
+  * `heaviside` accepts a second argument for its value at zero.
+
   * `isfinite` behaves correctly for variables (and is documented).
 
+  * New experimental Python communication using the native Python/C
+    interface, due to Abhinav Tripathi during Google Summer of Code 2016.
 
+  * Bug fix: assign `[]` to row/column removes that that row/column.
 
-octsympy 2.4.1-dev
-==================
+  * `char(x)` now gives a more human-readable output, useful for example
+    in labelling a figure.
 
   * ezplot supports implicit plotting of f(x, y) == 0.
+
+  * Deprecation notice: `sym(cell)` will soon create a sym array
+    (currently it creates a cell array of sym objects, and issues a
+    warning).
+
+  * Deprecation notice: `evalpy` will be removed in a future release.
+
+  * Remove deprecated method for changing the Python executable using
+    `sympref`: instead use the environment variable `PYTHON`.
+
+  * Update minimum versions of SymPy to 1.0 and Octave to 4.0.0, so
+    we can remove some crufty workarounds.
 
 
 

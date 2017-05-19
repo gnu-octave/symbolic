@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +18,16 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} double (@var{x})
+%% @defmethod @@sym double (@var{x})
 %% Convert symbolic to doubles.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> x = sym(1) / 3
-%%    @result{} x = (sym) 1/3
-%% >> double (x)
-%%    @result{} ans =  0.33333
+%% x = sym(1) / 3
+%%   @result{} x = (sym) 1/3
+%% double (x)
+%%   @result{} ans =  0.33333
 %% @end group
 %% @end example
 %%
@@ -35,26 +35,24 @@
 %% floating point:
 %% @example
 %% @group
-%% >> z = sym(4i) - 3;
-%% >> double (z)
-%%    @result{} ans = -3 + 4i
+%% z = sym(4i) - 3;
+%% double (z)
+%%   @result{} ans = -3 + 4i
 %% @end group
 %% @end example
 %%
 %% If conversion fails, you get an error:
 %% @example
 %% @group
-%% >> syms x
-%% >> double (x)
-%%    @print{} ??? ... can't convert expression ...
+%% syms x
+%% double (x)
+%%   @print{} ??? ... can't convert expression ...
 %% @end group
 %% @end example
 %%
-%% @seealso{sym}
-%% @end deftypefn
+%% @seealso{sym, vpa}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = double(x)
 
@@ -78,8 +76,8 @@ function y = double(x)
   end
 
   cmd = { '(x,) = _ins'
-          'if x == zoo:'
-          '    return (float(sp.oo), 0.0)'
+          'if x == zoo:'  % zoo -> Inf + Infi
+          '    return (float(sp.oo), float(sp.oo))'
           'if x == nan:'
           '    return (float(nan), 0.0)'
           'x = complex(x)'
@@ -88,7 +86,12 @@ function y = double(x)
 
   [A, B] = python_cmd (cmd, x);
 
-  y = A + B*i;
+  %y = A + B*i;  % not quite the same for Inf + InFi
+  if (B == 0.0)
+    y = A;
+  else
+    y = complex(A, B);
+  end
 
 end
 
@@ -125,14 +128,18 @@ end
 %! assert( abs(double(x) - pi) < 2*eps)
 
 %!test
-%! % various infinities
 %! oo = sym(inf);
-%! zoo = sym('zoo');
 %! assert( double(oo) == inf )
 %! assert( double(-oo) == -inf )
-%! assert( double(zoo) == inf )
-%! assert( double(-zoo) == inf )
 %! assert( isnan(double(0*oo)) )
+
+%!test
+%! zoo = sym('zoo');
+%! assert (double(zoo) == complex(inf, inf))
+
+%!test
+%! zoo = sym('zoo');
+%! assert (double(-zoo) == double(zoo) )
 %! assert( isnan(double(0*zoo)) )
 
 %!test
@@ -143,7 +150,7 @@ end
 %!test
 %! % don't want NaN+NaNi
 %! snan = sym(nan);
-%! assert (~iscomplex(double(snan)))
+%! assert (isreal (double (snan)))
 
 %!test
 %! % arrays

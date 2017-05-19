@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = acoth(x)
+%% y = acoth (x)
 %%   @result{} y = (sym) acoth(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = acoth(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acoth');
+  y = elementwise_op ('acoth', x);
 end
 
+
+%!error <Invalid> acoth (sym(1), 2)
+%!assert (isequaln (acoth (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;
@@ -61,3 +62,12 @@ end
 %! f1 = acoth(A);
 %! f2 = acoth(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = acoth (d);
+%! f = acoth (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

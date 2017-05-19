@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{b} =} isvector (@var{x})
+%% @defmethod @@sym isvector (@var{x})
 %% Return true if this symbolic expression is a vector.
 %%
 %% Example:
@@ -36,13 +36,15 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{size, numel, isscalar}
-%% @end deftypefn
+%% @seealso{@@sym/size, @@sym/numel, @@sym/isscalar}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function b = isvector(x)
+
+  if (nargin ~= 1)
+    print_usage ();
+  end
 
   d = size(x);
   b = any(d == 1);

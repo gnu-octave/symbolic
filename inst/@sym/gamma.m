@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = gamma(x)
+%% y = gamma (x)
 %%   @result{} y = (sym) Γ(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = gamma(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'gamma');
+  y = elementwise_op ('gamma', x);
 end
 
+
+%!error <Invalid> gamma (sym(1), 2)
+%!assert (isequaln (gamma (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = gamma(A);
 %! f2 = gamma(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = gamma (d);
+%! f = gamma (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

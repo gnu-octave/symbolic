@@ -1,5 +1,5 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald, Andrés Prieto
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
 %%
@@ -169,7 +169,7 @@ function [soln,classify] = dsolve(ode,varargin)
   end
 
   % FIXME: the initial/boundary conditions admit parameters
-  %        but only on their values (not at the evaluation point) 
+  %        but only on their values (not at the evaluation point)
 
   % FIXME: it is not currently supported a list of boundary/initial conditions
   if (isscalar(ode) && nargin>=2)
@@ -199,7 +199,7 @@ function [soln,classify] = dsolve(ode,varargin)
 
     soln = python_cmd (cmd, ode, varargin{:});
 
-  % FIXME: only solve initial-value problems involving linear systems 
+  % FIXME: only solve initial-value problems involving linear systems
   %        of first order ODEs with constant coefficients (a unique
   %        solution is expected)
   elseif(~isscalar(ode) && nargin>=2)

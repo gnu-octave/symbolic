@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = erfcinv(x)
+%% y = erfcinv (x)
 %%   @result{} y = (sym) erfcinv(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = erfcinv(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'erfcinv');
+  y = elementwise_op ('erfcinv', x);
 end
 
+
+%!error <Invalid> erfcinv (sym(1), 2)
+%!assert (isequaln (erfcinv (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = erfcinv(A);
 %! f2 = erfcinv(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = erfcinv (d);
+%! f = erfcinv (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

@@ -1,4 +1,5 @@
-%% Copyright (C) 2016 Lagu and Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} frac (@var{x})
+%% @defmethod @@sym frac (@var{x})
 %% Return the fractional part of a symbolic expression.
 %%
 %% Examples:
@@ -33,12 +34,17 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ceil, floor, fix, round}
-%% @end deftypefn
+%% @seealso{@@sym/ceil, @@sym/floor, @@sym/fix, @@sym/round}
+%% @end defmethod
+
 
 function y = frac(x)
-  y = uniop_helper (x, 'frac');
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('frac', x);
 end
+
 
 %!test
 %! f1 = frac(sym(11)/10);

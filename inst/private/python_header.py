@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2016 Colin B. Macdonald
+# Copyright (C) 2014-2017 Colin B. Macdonald
 # Free Software without warranty, GPL-3.0+: see python_header.m
 
 # In some cases this code is fed into stdin: two blank lines between
@@ -37,6 +37,9 @@ try:
     from sympy.matrices.expressions.matexpr import MatrixElement
     # for hypergeometric
     from sympy.functions.special.hyper import TupleArg
+    # for sets
+    from sympy.sets.fancysets import *
+    from sympy.sets.sets import *
     from sympy.utilities.iterables import uniq
     import copy
     import binascii
@@ -44,6 +47,9 @@ try:
     import codecs
     import xml.etree.ElementTree as ET
     from distutils.version import LooseVersion
+    import itertools
+    import collections
+    from re import split
 except:
     echo_exception_stdout("in python_header import block")
     raise
@@ -123,6 +129,7 @@ try:
         OCTCODE_DOUBLE = 1002
         OCTCODE_STR = 1003
         OCTCODE_BOOL = 1005
+        OCTCODE_COMPLEX = 1006
         OCTCODE_DICT = 1010
         OCTCODE_SYM = 1020
         x = objectfilter(x)
@@ -170,7 +177,7 @@ try:
             c = ET.SubElement(et, "list")
             for y in x:
                 octoutput(y, c)
-        elif isinstance(x, int):
+        elif isinstance(x, sp.compatibility.integer_types):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
@@ -183,7 +190,15 @@ try:
             f.text = str(OCTCODE_DOUBLE)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x)
-        elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
+        elif isinstance(x, complex):
+            a = ET.SubElement(et, "item")
+            f = ET.SubElement(a, "f")
+            f.text = str(OCTCODE_COMPLEX)
+            f = ET.SubElement(a, "f")
+            f.text = d2hex(x.real)
+            f = ET.SubElement(a, "f")
+            f.text = d2hex(x.imag)
+        elif isinstance(x, sp.compatibility.string_types):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)

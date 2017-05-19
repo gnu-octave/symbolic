@@ -46,9 +46,9 @@ function y = gammainc(z, a, which)
   end
 
   if (strcmp(which, 'lower'))
-    y = binop_helper (a, z, 'lowergamma');
+    y = elementwise_op ('lowergamma', sym(a), sym(z));
   elseif (strcmp(which, 'upper'))
-    y = binop_helper (a, z, 'uppergamma');
+    y = elementwise_op ('uppergamma', sym(a), sym(z));
   else
     print_usage ();
   end
@@ -136,3 +136,25 @@ end
 %! P = gammainc([sym(pi) 2], 1);
 %! expected = [gammainc(pi, sym(1))  gammainc(2, sym(1))];
 %! assert (isequal (P, expected))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x a
+%! f = gammainc (x, a, 'upper');
+%! h = function_handle (f, 'vars', [x a]);
+%! A = h (1.1, 2.2);
+%! B = gammainc (1.1, 2.2, 'upper');
+%! assert (A, B)
+%! end
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x a
+%! f = gammainc (x, a, 'lower');
+%! h = function_handle (f, 'vars', [x a]);
+%! A = h (1.1, 2.2);
+%! B = gammainc (1.1, 2.2, 'lower');
+%! assert (A, B)
+%! end

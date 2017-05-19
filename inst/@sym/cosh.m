@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cosh(x)
+%% y = cosh (x)
 %%   @result{} y = (sym) cosh(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cosh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'cosh');
+  y = elementwise_op ('cosh', x);
 end
 
+
+%!error <Invalid> cosh (sym(1), 2)
+%!assert (isequaln (cosh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = cosh(A);
 %! f2 = cosh(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = cosh (d);
+%! f = cosh (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

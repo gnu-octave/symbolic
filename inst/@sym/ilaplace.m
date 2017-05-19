@@ -1,5 +1,5 @@
-%% Copyright (C) 2014 Andrés Prieto
-%% Copyright (C) 2015-2016 Andrés Prieto, Colin Macdonald
+%% Copyright (C) 2014-2016 Andrés Prieto
+%% Copyright (C) 2015-2016 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,9 +19,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{f} =} ilaplace (@var{G}, @var{s}, @var{t})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G})
-%% @deftypefnx {Function File} {@var{f} =} ilaplace (@var{G}, @var{t})
+%% @defmethod  @@sym ilaplace (@var{G}, @var{s}, @var{t})
+%% @defmethodx @@sym ilaplace (@var{G})
+%% @defmethodx @@sym ilaplace (@var{G}, @var{t})
 %% Inverse Laplace transform.
 %%
 %% The inverse Laplace transform of a function @var{G} of @var{s}
@@ -43,10 +43,10 @@
 %% Example:
 %% @example
 %% @group
-%% >> syms s
-%% >> F = 1/s^2;
-%% >> ilaplace(F)
-%%    @result{} (sym) t
+%% syms s
+%% F = 1/s^2;
+%% ilaplace(F)
+%%   @result{} (sym) t
 %% @end group
 %% @end example
 %%
@@ -55,18 +55,18 @@
 %% be overriden by specifying @var{t}.  For example:
 %% @example
 %% @group
-%% >> syms s t x
-%% >> ilaplace(1/s^2)
-%%    @result{} (sym) t
-%% >> ilaplace(1/t^2)
-%%    @result{} (sym) x
-%% >> ilaplace(1/s^2, x)
-%%    @result{} (sym) x
+%% syms s t x
+%% ilaplace(1/s^2)
+%%   @result{} (sym) t
+%% ilaplace(1/t^2)
+%%   @result{} (sym) x
+%% ilaplace(1/s^2, x)
+%%   @result{} (sym) x
 %% @end group
 %% @end example
 %%
-%% @seealso{laplace}
-%% @end deftypefn
+%% @seealso{@@sym/laplace}
+%% @end defmethod
 
 %% Author: Colin B. Macdonald, Andrés Prieto
 %% Keywords: symbolic, integral transforms

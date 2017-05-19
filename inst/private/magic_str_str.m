@@ -17,13 +17,13 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{s} =} magic_str_str (@var{x})
+%% @deftypefun {@var{s} =} magic_str_str (@var{x})
 %% Recognize special string values and substitute others.
 %%
 %% Private function.
 %%
 %% @seealso{sym, vpa}
-%% @end deftypefn
+%% @end deftypefun
 
 function s = magic_str_str(x, varargin)
 

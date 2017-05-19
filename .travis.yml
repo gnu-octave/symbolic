@@ -5,49 +5,69 @@ language: generic
 
 matrix:
   include:
-    - python: "2.7"
-      env: PYTAVE=yes SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - python: "2.7"
-      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - python: "3.5"
-      env: PYTAVE=no  SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+  allow_failures:
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
-install:
-  - if [ "x$OCT_PPA" = "xyes" ]; then
+before_install:
+  - if [ "x$OCT" = "xppa" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
     fi
-  - sudo apt-get update -qq -y;
-  - sudo apt-get install -qq -y octave liboctave-dev;
-  - sudo apt-get install -qq -y python;
-  - "pip install --user sympy==$SYMPY_VER"
-  - if [ "x$DOCTEST" = "xyes" ]; then
-        octave -W --no-gui --eval "pkg install -forge doctest";
+  - sudo apt-get update -qq
+  - sudo apt-get install -y liboctave-dev
+  - sudo apt-get install -y octave
+  - if [ "x$OCT" = "xdaily" ]; then
+        sudo apt-get install -y libarpack2-dev libgl2ps-dev libgraphicsmagick++-dev libqrupdate-dev libsuitesparse-dev;
+        wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
+        sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
     fi
+  - sudo apt-get install -y python$PYTHON_VER-pip
+# we need python-dev and python3-dev but we can drop numpy after https://bitbucket.org/mtmiller/pytave/issues/84 is resolved.
   - if [ "x$PYTAVE" = "xyes" ]; then
-        sudo apt-get install -qq -y libboost-python-dev python-numpy;
-        hg clone https://bitbucket.org/genuinelucifer/pytave_main;
-        cd pytave_main;
-        pwd;
-        autoreconf --install;
-        ./configure;
-        make;
-        cd ..;
+        sudo apt-get install -y python$PYTHON_VER-dev python$PYTHON_VER-numpy;
     fi
 
+install:
+  - pip$PYTHON_VER install --user sympy==$SYMPY_VER
+  - if [ "x$DOCTEST" = "xyes" ]; then
+        mkdir ${HOME}/octave;
+        wget https://github.com/catch22/octave-doctest/releases/download/v0.5.0/doctest-0.5.0.tar.gz;
+        octave -W --no-gui --eval "pkg install doctest-0.5.0.tar.gz";
+    fi
+  - if [ "x$PYTAVE" = "xyes" ]; then
+        hg clone https://bitbucket.org/mtmiller/pytave pytave;
+        pushd pytave;
+        pwd;
+        autoreconf --install || exit 1;
+        ./configure PYTHON_VERSION=$PYTHON_VER && make || exit 1;
+        popd;
+    fi
 
 # all commands here must have exit code 0 for the build to be called "passing"
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
-  - stty cols 80 rows 40
+  - stty cols $COLUMNS rows 40
   - tput cols; stty size
-  - pushd src; make; popd
   - pushd inst
-  - octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "r = octsympy_tests; exit(r)"
+  - if [ "x$PYTAVE" = "xyes" ]; then
+        export IPC=native;
+    else
+        export IPC=default;
+    fi
+  - octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --path=/home/travis/build/cbm755/octsympy/pytave_main -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "pkg load doctest; sympref ipc $IPC; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 

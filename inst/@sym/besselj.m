@@ -41,7 +41,7 @@ function J = besselj(n, x)
     print_usage ();
   end
 
-  J = binop_helper(n, x, 'besselj');
+  J = elementwise_op ('besselj', sym(n), sym(x));
 
 end
 

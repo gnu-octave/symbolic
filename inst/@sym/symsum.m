@@ -18,12 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} symsum (@var{f}, @var{n}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, @var{n}, [@var{a} @var{b}])
-%% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, @var{a}, @var{b})
-%% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, [@var{a} @var{b}])
-%% @deftypefnx {Function File} {@var{y} =} symsum (@var{f}, @var{n})
-%% @deftypefnx {Function File} {@var{y} =} symsum (@var{f})
+%% @defmethod  @@sym symsum (@var{f}, @var{n}, @var{a}, @var{b})
+%% @defmethodx @@sym symsum (@var{f}, @var{n}, [@var{a} @var{b}])
+%% @defmethodx @@sym symsum (@var{f}, @var{a}, @var{b})
+%% @defmethodx @@sym symsum (@var{f}, [@var{a} @var{b}])
+%% @defmethodx @@sym symsum (@var{f}, @var{n})
+%% @defmethodx @@sym symsum (@var{f})
 %% Symbolic summation.
 %%
 %% The sum of the expression @var{f} for @var{n} from @var{a} to
@@ -54,12 +54,14 @@
 %% @end example
 %%
 %% @seealso{@@sym/symprod, @@sym/sum}
-%% @end deftypefn
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function S = symsum(f, n, a, b)
+
+  if (nargin > 4)
+    print_usage ();
+  end
 
   idx1.type = '()';
   idx1.subs = {1};
@@ -118,6 +120,8 @@ function S = symsum(f, n, a, b)
 
 end
 
+
+%!error <Invalid> symsum (sym(1), 2, 3, 4, 5)
 
 %!test
 %! % finite sums

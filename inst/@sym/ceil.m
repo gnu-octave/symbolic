@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = ceil(x)
+%% y = ceil (x)
 %%   @result{} y = (sym) ⌈x⌉
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = ceil(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'ceiling');
+  y = elementwise_op ('ceiling', x);
 end
 
+
+%!error <Invalid> ceil (sym(1), 2)
+%!assert (isequaln (ceil (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 3/2;
@@ -61,3 +62,12 @@ end
 %! f1 = ceil(A);
 %! f2 = ceil(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = ceil (d);
+%! f = ceil (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

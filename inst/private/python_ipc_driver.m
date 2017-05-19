@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,14 +18,14 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{db}] =} python_ipc_driver (@dots{})
+%% @deftypefun {[@var{A}, @var{db}] =} python_ipc_driver (@dots{})
 %% Private function: run Python/SymPy command and return objects.
 %%
 %% @var{A} is the resulting object, which might be an error code.
 %%
 %% @var{db} usually contains diagnostics to help with debugging
 %% or error reporting.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, db] = python_ipc_driver(what, cmd, varargin)
 
@@ -43,9 +44,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   if (strcmp(lower(which_ipc), 'default'))
-    if ((exist('pyeval') > 1) && (exist('pyexec') > 1))
-      which_ipc = 'pytave';
-    elseif (exist('popen2') > 1)
+    if (exist('popen2') > 1)
       which_ipc = 'popen2';
     else
       which_ipc = 'system';
@@ -53,8 +52,8 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   switch lower(which_ipc)
-    case 'pytave'
-      [A, db] = python_ipc_pytave(what, cmd, varargin{:});
+    case 'native'
+      [A, db] = python_ipc_native(what, cmd, varargin{:});
 
     case 'popen2'
       [A, db] = python_ipc_popen2(what, cmd, varargin{:});
@@ -75,5 +74,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
 
     otherwise
-      error('invalid ipc mechanism')
+      if (strcmp (what, 'reset'))
+        A = true;
+        db = [];
+      else
+        error ('invalid ipc mechanism')
+      end
   end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -116,6 +116,7 @@ function r = process_item(item)
   OCTCODE_STR = 1003;
   OCTCODE_USTR = 1004;
   OCTCODE_BOOL = 1005;
+  OCTCODE_COMPLEX = 1006;
   OCTCODE_DICT = 1010;
   OCTCODE_SYM = 1020;
 
@@ -128,10 +129,19 @@ function r = process_item(item)
   switch wh
     case OCTCODE_INT
       assert(M == 1)
+      % Note: is it possible to avoid converting to double first?
       r = str2double(C{2});
+      if (abs (r) > flintmax)
+        error ('precision would be lost converting integer larger than %ld', ...
+               flintmax)
+      end
+      r = int64 (r);
     case OCTCODE_DOUBLE
       assert(M == 1)
       r = hex2num(C{2});
+    case OCTCODE_COMPLEX
+      assert(M == 2)
+      r = hex2num(C{2}) + hex2num(C{3})*1i;
     case OCTCODE_STR
       assert(M == 1)
       % did we escape all strings?

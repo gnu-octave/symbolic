@@ -56,7 +56,7 @@ function L = polylog(s, z)
     print_usage ();
   end
 
-  L = binop_helper (s, z, 'polylog');
+  L = elementwise_op ('polylog', sym(s), sym(z));
 end
 
 
@@ -74,3 +74,14 @@ end
 %!assert (isequal (double (polylog (-4, sym(3))), -15))
 
 %!assert (isequal (double (polylog (1, sym(1)/2)), log(2)))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms s z
+%! f = polylog (s, z);
+%! h = function_handle (f, 'vars', [s z]);
+%! A = h (1.1, 2.2);
+%! B = polylog (1.1, 2.2);
+%! assert (A, B)
+%! end

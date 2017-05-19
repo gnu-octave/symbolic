@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cbrt(x)
+%% y = cbrt (x)
 %%   @result{} y = (sym)
 %%       3 ___
 %%       ╲╱ x
@@ -37,16 +37,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cbrt(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'cbrt');
+  y = elementwise_op ('cbrt', x);
 end
 
+
+%!error <Invalid> cbrt (sym(1), 2)
+%!assert (isequaln (cbrt (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 2;
@@ -64,3 +65,17 @@ end
 %! f2 = 1.2599210498948731647;
 %! f2 = [f2 f2; f2 f2];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! if (exist ('OCTAVE_VERSION2', 'builtin'))
+%!   A = cbrt (d);
+%! else
+%!   % Issue #742
+%!   A = d^(1/3);
+%! end
+%! f = cbrt (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

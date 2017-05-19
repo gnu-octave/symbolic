@@ -41,9 +41,7 @@
 
 function z = log10(x)
 
-  sf = 'lambda x: sp.log(x, 10)';
-
-  z = uniop_helper (x, sf);
+  z = elementwise_op ('lambda x: sp.log(x, 10)', x);
 
 end
 
@@ -51,3 +49,12 @@ end
 %!assert (isequal (log10 (sym (1000)), sym (3)))
 
 %!assert (isequal (log10 (sym ([10 100])), sym ([1 2])))
+
+%!test
+%! % round-trip
+%! syms x
+%! f = log10 (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = log10 (1.1);
+%! assert (A, B, -eps)

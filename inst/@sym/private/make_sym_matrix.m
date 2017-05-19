@@ -19,8 +19,11 @@
 function A = make_sym_matrix(As, sz)
 % private helper function for making symbolic matrix
 
-  assert (ischar (As));
-  assert (isequal (size(sz), [1 2]));
+  assert (ischar (As), 'Cannot create symbolic matrix with non-string')
+  assert (isequal (size(sz), [1 2]), 'Cannot create symbolic matrix with that size')
+  % regexp: non-digit followed by any word
+  assert (~ isempty (regexp (As, '^\D\w*$')), 'Cannot create symbolic matrix with expression "%s"', As)
+
   if (isa(sz, 'sym'))
     cmd = { 'As, sz = _ins'
             'return sympy.MatrixSymbol(As, *sz),' };

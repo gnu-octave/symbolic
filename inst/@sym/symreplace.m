@@ -18,12 +18,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {} symreplace (@var{newx})
-%% @deftypefnx {Function File} {} symreplace (@var{x}, @var{newx})
-%% @deftypefnx {Function File} {} symreplace (@var{x}, @var{newx}, @var{context})
-%% @deftypefnx {Function File} {} symreplace (@var{xstr}, @var{newx})
-%% @deftypefnx {Function File} {} symreplace (@var{xstr}, @var{newx}, @var{context})
-%% @deftypefnx {Function File} {[@var{f}, @var{flag}] =} symreplace (@var{f}, @var{xstr}, @var{newx})
+%% @deftypemethod  @@sym {} symreplace (@var{newx})
+%% @deftypemethodx @@sym {} symreplace (@var{x}, @var{newx})
+%% @deftypemethodx @@sym {} symreplace (@var{x}, @var{newx}, @var{context})
+%% @deftypemethodx @@sym {} symreplace (@var{xstr}, @var{newx})
+%% @deftypemethodx @@sym {} symreplace (@var{xstr}, @var{newx}, @var{context})
+%% @deftypemethodx @@sym {[@var{f}, @var{flag}] =} symreplace (@var{f}, @var{xstr}, @var{newx})
 %% Replace symbols in caller's workspace or in syms/struct/cells.
 %%
 %% @strong{WARNING}: you probably do not need this for normal
@@ -120,10 +120,8 @@
 %% your function instead (see @code{assume} for example).
 %%
 %% @seealso{@@sym/assume, @@sym/assumeAlso, assumptions, sym, syms}
-%% @end deftypefn
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = symreplace(varargin)
 

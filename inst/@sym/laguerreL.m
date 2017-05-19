@@ -64,9 +64,9 @@ function L = laguerreL(n, alpha, x)
 
   if (nargin == 2)
     x = alpha;
-    L = binop_helper(n, x, 'laguerre');
+    L = elementwise_op ('laguerre', sym(n), sym(x));
   elseif (nargin == 3)
-    L = triop_helper(n, alpha, x, 'assoc_laguerre');
+    L = elementwise_op ('assoc_laguerre', sym(n), sym(alpha), sym(x));
   else
     print_usage ();
   end
@@ -142,3 +142,21 @@ end
 %! L = laguerreL(1, pi, [x y]);
 %! expected = [laguerreL(1, pi, x)  laguerreL(1, pi, y)];
 %! assert (isequal (L, expected))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! f = laguerreL (n, x);
+%! h = function_handle (f);
+%! A = h (1, 3.2);
+%! B = laguerreL (1, 3.2);
+%! assert (A, B)
+%! A = h ([1 2], [3.3 4.4]);
+%! B = laguerreL ([1 2], [3.3 4.4]);
+%! assert (A, B)
+%! end
+
+%!error <codegen failed>
+%! % round trip
+%! f = laguerreL (n, y, x);
+%! h = function_handle (f);

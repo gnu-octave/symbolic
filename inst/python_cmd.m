@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -159,8 +159,6 @@ function varargout = python_cmd(cmd, varargin)
           '        ers = type(e).__name__ + ": " + str(e) if str(e) else type(e).__name__' ...
           '        _outs = ("COMMAND_ERROR_PYTHON", ers, sys.exc_info()[-1].tb_lineno)' ...
           '    return _outs' ...
-          '' ...
-          '_outs = _fcn(_ins)'
         };
 
   [A, db] = python_ipc_driver('run', cmd, varargin{:});
@@ -172,10 +170,20 @@ function varargout = python_cmd(cmd, varargin)
   %% Error reporting
   % ipc drivers are supposed to give back these specially formatting error strings
   if (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'COMMAND_ERROR_PYTHON'))
-    errlineno = A{3} - db.prelines - LinesBeforeCmdBlock;
-    error(sprintf('Python exception: %s\n    occurred at line %d of the Python code block', A{2}, errlineno));
+    errcmdlineno = A{3} - db.prelines;
+    errlineno = errcmdlineno - LinesBeforeCmdBlock;
+    if (errcmdlineno <= 0 || errcmdlineno > length (cmd))
+      error ('Python exception: %s\n    occurred at unexpected line number, maybe near line %d?', ...
+              A{2}, errlineno);
+    else
+      error ('Python exception: %s\n    occurred at line %d of the Python code block:\n    %s', ...
+              A{2}, errlineno, strtrim (cmd{errcmdlineno}));
+    end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
-    error(sprintf('Python exception: %s\n    occurred %s', A{3}, A{2}));
+    % Here A{3} is the error msg and A{2} is more info about where it happened
+    error (['Python exception: %s\n    occurred %s.\n    Consider filing ' ...
+            'an issue at https://github.com/cbm755/octsympy/issues'], ...
+           A{3}, A{2});
   end
 
   M = length(A);
@@ -208,7 +216,15 @@ end
 
 %!test
 %! % int
-%! assert (python_cmd ('return 123456,') == 123456)
+%! r = python_cmd ('return 123456');
+%! assert (r == 123456)
+%! assert (isinteger (r))
+
+%!test
+%! % long (on python2)
+%! r = python_cmd ('return 42 if sys.version_info >= (3,0) else long(42)');
+%! assert (r == 42)
+%! assert (isinteger (r))
 
 %!test
 %! % string
@@ -415,9 +431,9 @@ end
 %! % return nothing (because no command)
 %! python_cmd({})
 
-%!xtest error <AttributeError>
-%! % Fails using pytave IPC due to #457 (Pytave returning python exceptions)
+%!error <AttributeError>
 %! % python exception while passing variables to python
+%! % This tests the "INTERNAL_PYTHON_ERROR" path.
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
 %! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
@@ -427,10 +443,33 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!xtest error <octoutput does not know how to export type>
-%! % This command does not fail with PyTave and '@pyobject'
-%! python_cmd({'return type(int)'});
+%!error <does not know how to export type>
+%! % This command does not fail with native interface and '@pyobject'
+%! if (strcmp (sympref  ('ipc'), 'native'))
+%!   error ('does not know how to export type')
+%! else
+%!   python_cmd({'return type(int)'});
+%! end
 %!test
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
+
+%!test
+%! % complex input
+%! [A, B] = python_cmd ('z = 2*_ins[0]; return (z.real,z.imag)', 3+4i);
+%! assert (A, 6)
+%! assert (B, 8)
+
+%!test
+%! % complex output
+%! z = python_cmd ('return 3+2j');
+%! assert (z, 3+2i)
+
+%!error <multirow char array>
+%! s = char ('abc', 'defgh', '12345');
+%! r = python_cmd ('return _ins[0]', s);
+
+%!test
+%! r = python_cmd ('return len(_ins[0])', '');
+%! assert (r == 0)

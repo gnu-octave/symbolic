@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = atanh(x)
+%% y = atanh (x)
 %%   @result{} y = (sym) atanh(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = atanh(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'atanh');
+  y = elementwise_op ('atanh', x);
 end
 
+
+%!error <Invalid> atanh (sym(1), 2)
+%!assert (isequaln (atanh (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1/2;
@@ -61,3 +62,12 @@ end
 %! f1 = atanh(A);
 %! f2 = atanh(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = atanh (d);
+%! f = atanh (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

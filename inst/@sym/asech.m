@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = asech(x)
+%% y = asech (x)
 %%   @result{} y = (sym) asech(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = asech(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'asech');
+  y = elementwise_op ('asech', x);
 end
 
+
+%!error <Invalid> asech (sym(1), 2)
+%!assert (isequaln (asech (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1/2;
@@ -61,3 +62,14 @@ end
 %! f1 = asech(A);
 %! f2 = asech(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = asech (d);
+%! f = asech (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

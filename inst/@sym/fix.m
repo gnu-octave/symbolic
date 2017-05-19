@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} fix (@var{x})
+%% @defmethod fix (@var{x})
 %% Symbolic fix function.
 %%
 %% Example:
@@ -29,12 +29,17 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ceil, floor, frac, round}
-%% @end deftypefn
+%% @seealso{@@sym/ceil, @@sym/floor, @@sym/frac, @@sym/round}
+%% @end defmethod
+
 
 function y = fix(x)
-  y = uniop_helper (x, 'Integer');
+  if (nargin ~= 1)
+    print_usage ();
+  end
+  y = elementwise_op ('Integer', x);
 end
+
 
 %!test
 %! d = 3/2;

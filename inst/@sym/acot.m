@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = acot(x)
+%% y = acot (x)
 %%   @result{} y = (sym) acot(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = acot(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acot');
+  y = elementwise_op ('acot', x);
 end
 
+
+%!error <Invalid> acot (sym(1), 2)
+%!assert (isequaln (acot (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = acot(A);
 %! f2 = acot(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = acot (d);
+%! f = acot (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

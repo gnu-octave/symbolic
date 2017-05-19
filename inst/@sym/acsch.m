@@ -24,9 +24,9 @@
 %% Example:
 %% @example
 %% @group
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% syms x
-%% y = acsch(x)
+%% y = acsch (x)
 %%   @result{} y = (sym) acsch(x)
 %% @end group
 %% @end example
@@ -37,16 +37,20 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = acsch(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'acsch');
+  y = elementwise_op ('acsch', x);
 end
 
+
+%!error <Invalid> acsch (sym(1), 2)
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! assert (isequaln (acsch (sym(nan)), sym(nan)))
+%! end
 
 %!shared x, d
 %! d = 1;
@@ -66,4 +70,15 @@ end
 %! f1 = acsch(A);
 %! f2 = acsch(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+%! end
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = acsch (d);
+%! f = acsch (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
 %! end

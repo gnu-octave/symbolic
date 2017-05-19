@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = sqrt(exp(x))
+%% y = sqrt (exp(x))
 %%   @result{} y = (sym)
 %%          ____
 %%         ╱  x
@@ -38,16 +38,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = sqrt(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'sqrt');
+  y = elementwise_op ('sqrt', x);
 end
 
+
+%!error <Invalid> sqrt (sym(1), 2)
+%!assert (isequaln (sqrt (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -64,3 +65,12 @@ end
 %! f1 = sqrt(A);
 %! f2 = sqrt(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = sqrt (d);
+%! f = sqrt (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

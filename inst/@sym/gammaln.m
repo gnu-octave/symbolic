@@ -40,7 +40,7 @@ function y = gammaln(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'loggamma');
+  y = elementwise_op ('loggamma', x);
 end
 
 
@@ -71,4 +71,16 @@ end
 % should match @double/gammaln
 %!assert (gammaln (pi),    double (gammaln (sym (pi))),    -3*eps)
 %!assert (gammaln (100),   double (gammaln (sym (100))),   -3*eps)
-%!assert (gammaln (1e-3),  double (gammaln (1/sym (1e3))), -3*eps)
+% failed at -3*eps on one system: Windows 10, Atom 64bit.
+%!assert (gammaln (1e-3),  double (gammaln (1/sym (1e3))), -100*eps)
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x
+%! f = gammaln (x);
+%! h = function_handle (f);
+%! A = h (1.1);
+%! B = gammaln (1.1);
+%! assert (A, B)
+%! end

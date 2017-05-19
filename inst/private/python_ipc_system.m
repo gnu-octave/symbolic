@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_system (@dots{})
+%% @deftypefun {[@var{A}, @var{info}] =} python_ipc_system (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -29,7 +29,7 @@
 %% before the command starts.
 %%
 %% @code{@var{info}.raw}: the raw output, for debugging.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
@@ -76,6 +76,7 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
   %% output, or perhaps a thrown error
   s_out = python_copy_vars_from('_outs');
 
+  cmd = [cmd '_outs = _fcn(_ins)'];
   % join all the cell arrays with newlines
   s = strjoin([s_in cmd s_out], newl);
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,60 +18,71 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{s} =} ccode (@var{f})
-%% @deftypefnx {Function File} {@var{s} =} ccode (@var{f1}, @dots{}, @var{fn})
-%% @deftypefnx {Function File} {} ccode (@dots{}, 'file', @var{filename})
-%% @deftypefnx {Function File} {[@var{c_stuff}, @var{h_stuff}] =} ccode (@dots{}, 'file', '')
+%% @deftypemethod  @@sym {@var{s} =} ccode (@var{f})
+%% @deftypemethodx @@sym {@var{s} =} ccode (@var{f1}, @dots{}, @var{fn})
+%% @deftypemethodx @@sym {} ccode (@dots{}, 'file', @var{filename})
+%% @deftypemethodx @@sym {[@var{c_stuff}, @var{h_stuff}] =} ccode (@dots{}, 'file', '')
 %% Convert symbolic expression into C code.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> syms x
-%% >> g = taylor(log(1 + x), x, 0, 'order', 5);
-%% >> g = horner(g)
-%%    @result{} g = (sym)
-%%          ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
-%%        x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
-%%          ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
-%% >> ccode(g)
-%%    @result{} x*(x*(x*(-1.0L/4.0L*x + 1.0L/3.0L) - 1.0L/2.0L) + 1)
+%% syms x
+%% g = taylor(log(1 + x), x, 0, 'order', 5);
+%% g = horner(g)
+%%   @result{} g = (sym)
+%%         ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
+%%       x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
+%%         ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
+%% ccode(g)
+%%   @result{} x*(x*(x*(-1.0L/4.0L*x + 1.0L/3.0L) - 1.0L/2.0L) + 1)
 %% @end group
 %% @end example
 %%
 %% We can write to a file or obtain the contents directly:
 %% @example
 %% @group
-%% >> [C, H] = ccode(g, 'file', '', 'show_header', false);
-%% >> H.name
-%%    @result{} file.h
-%% >> H.code
-%%    @result{}
-%%        #ifndef PROJECT__FILE__H
-%%        #define PROJECT__FILE__H
+%% [C, H] = ccode(g, 'file', '', 'show_header', false);
+%% C.name
+%%   @result{} file.c
+%% H.name
+%%   @result{} file.h
+%% @end group
 %%
-%%        double myfun(double x);
+%% @group
+%% disp(H.code)
+%%   @print{}  #ifndef PROJECT__FILE__H
+%%   @print{}  #define PROJECT__FILE__H
+%%   @print{}
+%%   @print{}  double myfun(double x);
+%%   @print{}
+%%   @print{}  #endif
+%% @end group
 %%
-%%        #endif
-%% >> C.name
-%%    @result{} file.c
-%% >> %C.code    % This would show the C code
+%% @group
+%% disp(C.code)
+%%   @print{}  #include "file.h"
+%%   @print{}  #include <math.h>
+%%   @print{}
+%%   @print{}  double myfun(double x) @{
+%%   @print{}
+%%   @print{}     double myfun_result;
+%%   @print{}     myfun_result = x*(x*(x*(-1.0L/4.0L*x + 1.0L/3.0L) - 1.0L/2.0L) + 1);
+%%   @print{}     return myfun_result;
+%%   @print{}
+%%   @print{}  @}
 %% @end group
 %% @end example
-%% FIXME: show C code here after the following doctest bug is fixed:
-%%    https://github.com/catch22/octave-doctest/issues/42
 %%
-%% FIXME: This doesn't write "optimized" code like Matlab's
-%% Symbolic Math Toolbox; it doesn't do "Common Subexpression
-%% Elimination".  Presumably the compiler would do that for us
-%% anyway.  Sympy has a "cse" module that will do it.  See:
+%% FIXME: This doesn't write ``optimized'' code like Matlab's
+%% Symbolic Math Toolbox; it doesn't do ``Common Subexpression
+%% Elimination''.  Presumably the compiler would do that for us
+%% anyway.  Sympy has a ``cse'' module that will do it.  See:
 %% http://stackoverflow.com/questions/22665990/optimize-code-generated-by-sympy
 %%
-%% @seealso{fortran, latex, function_handle}
-%% @end deftypefn
+%% @seealso{@@sym/fortran, @@sym/latex, @@ssym/function_handle}
+%% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function varargout = ccode(varargin)
 

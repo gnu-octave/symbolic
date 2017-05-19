@@ -24,6 +24,7 @@
 %%
 %% @strong{Note} this function is @emph{deprecated}.
 %% @example
+%% @comment doctest: -TEXINFO_SKIP_BLOCKS_WO_OUTPUT
 %% s = warning ('off', 'OctSymPy:deprecated');
 %% @end example
 %%
@@ -92,7 +93,7 @@
 %% @itemize
 %% @item if you assign to @var{x} but don't change its value,
 %%   it will not be assigned to and will not appear in the
-%%   Variables effected:" list.
+%%   ``Variables effected'' list.
 %% @item using print is probably a bad idea.  For now, use
 %%   @code{dbout(x)} to print @code{x} to stderr which should
 %%   appear in the terminal (FIXME: currently broken on windows).

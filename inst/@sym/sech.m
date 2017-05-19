@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = sech(x)
+%% y = sech (x)
 %%   @result{} y = (sym) sech(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = sech(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'sech');
+  y = elementwise_op ('sech', x);
 end
 
+
+%!error <Invalid> sech (sym(1), 2)
+%!assert (isequaln (sech (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,14 @@ end
 %! f1 = sech(A);
 %! f2 = sech(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! y = sym('y');
+%! A = sech (d);
+%! f = sech (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)
+%! end

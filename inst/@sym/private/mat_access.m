@@ -1,4 +1,5 @@
 %% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,12 +18,12 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_access (@var{A}, @var{subs})
+%% @defun mat_access (@var{A}, @var{subs})
 %% Private helper routine for symbolic array access.
 %%
 %% Big piece of spaghetti code :(
 %%
-%% @end deftypefn
+%% @end defun
 
 %% Author: Colin B. Macdonald
 %% Keywords: symbolic
@@ -31,15 +32,28 @@ function z = mat_access(A, subs)
 
   if ((length(subs) == 1) && (islogical(subs{1})))
     %% A(logical)
-    z = mat_mask_access(A, subs{1});
-    return
+    subs{1} = find (subs{1});
+    idx = subs{1};
+    if (isempty (idx))
+      % fix the dimensions when both A and idx are vectors
+      if (max (size (idx)) > 0)
+        if (iscolumn (A))
+          idx = idx(:);
+        elseif (isrow (A))
+          idx = idx(:)';
+        end
+      end
+      z = sym (zeros (size (idx)));
+      return;
+    end
 
   elseif ( (length(subs) == 1) && strcmp(subs{1}, ':') )
     %% A(:)
     z = reshape(A, numel(A), 1);
     return
+  end
 
-  elseif (length(subs) == 1)
+  if (length (subs) == 1)
     %% linear index into a matrix/vector/scalar A
     i = subs{1};
     if strcmp(i, '')

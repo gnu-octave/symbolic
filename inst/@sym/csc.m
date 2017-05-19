@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = csc(x)
+%% y = csc (x)
 %%   @result{} y = (sym) csc(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = csc(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'csc');
+  y = elementwise_op ('csc', x);
 end
 
+
+%!error <Invalid> csc (sym(1), 2)
+%!assert (isequaln (csc (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = csc(A);
 %! f2 = csc(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = csc (d);
+%! f = csc (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

@@ -1,7 +1,7 @@
 function extract_tests_for_matlab()
 
-  dirs = {'.', '@sym', '@symfun'};
-  dirstr = {'', 'sym', 'symfun'};
+  dirs = {'.', '@sym', '@symfun', '@double', '@logical'};
+  dirstr = {'', 'sym', 'symfun', 'double', 'logical'};
 
   outdir = 'tests_matlab';
 
@@ -62,6 +62,8 @@ function r = proc_file(base, basestr, nm, outdir)
   body = regexprep(body, '^xtest\n( [^\n]*\n)*', [nl dskip nl '%xtest' ...
                       ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
   body = regexprep(body, '^error [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%error' ...
+                      ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
+  body = regexprep(body, '^error\n( [^\n]*\n)*', [nl dskip nl '%error' ...
                       ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
   body = regexprep(body, '^warning [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%warning' ...
                       ' (**WARNING TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');

@@ -25,8 +25,9 @@
 %% @example
 %% @group
 %% syms x
-%% y = dirac(x)
-%%   @result{} y = (sym) DiracDelta(x)
+%% y = dirac (x)
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
+%%   @result{} y = (sym) δ(x)
 %% @end group
 %% @end example
 %%
@@ -35,16 +36,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = dirac(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'DiracDelta');
+  y = elementwise_op ('DiracDelta', x);
 end
 
+
+%!error <Invalid> dirac (sym(1), 2)
+%!assert (isequaln (dirac (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +63,12 @@ end
 %! f1 = dirac(A);
 %! f2 = dirac(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = dirac (d);
+%! f = dirac (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

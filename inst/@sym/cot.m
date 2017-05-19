@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% y = cot(x)
+%% y = cot (x)
 %%   @result{} y = (sym) cot(x)
 %% @end group
 %% @end example
@@ -35,16 +35,17 @@
 %%
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = cot(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'cot');
+  y = elementwise_op ('cot', x);
 end
 
+
+%!error <Invalid> cot (sym(1), 2)
+%!assert (isequaln (cot (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -61,3 +62,12 @@ end
 %! f1 = cot(A);
 %! f2 = cot(D);
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
+
+%!test
+%! % round trip
+%! y = sym('y');
+%! A = cot (d);
+%! f = cot (y);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B, -eps)

@@ -68,7 +68,7 @@ function t = lt(x, y)
     print_usage ();
   end
 
-  t = ineq_helper('<', 'Lt', x, y);
+  t = ineq_helper('<', 'Lt', sym(x), sym(y));
 
 end
 
