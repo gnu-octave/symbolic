@@ -801,6 +801,28 @@ end
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
+%!test
+%! % e can be a symbol, not exp(sym(1))
+%! syms e
+%! assert (~ logical (e == exp(sym(1))))
+
+%!test
+%! % double e
+%! x = sym (exp (1));
+%! y = exp (sym (1));
+%! assert (isequal (x, y))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   x = sym (e);
+%!   assert (isequal (x, y))
+%! end
+
+%!test
+%! x = sym (-exp (1));
+%! y = -exp (sym (1));
+%! assert (isequal (x, y))
+
+%!assert (~ isequal (sym (exp(1)), sym (exp(1), 'f')))
+
 %!warning <dangerous> sym (1e16);
 %!warning <dangerous> sym (-1e16);
 %!warning <dangerous> sym (10.33);
