@@ -63,3 +63,7 @@ end
 %!assert (strcmp (sympy (sym(1)), 'Integer(1)'))
 %!assert (strcmp (sympy (sym(2)/3), 'Rational(2, 3)'))
 %!assert (strcmp (sympy (sym('x')), 'Symbol(''x'')'))
+
+%!test
+%! x = sym('x');
+%! assert (isequal (sym(sympy(x)), x))

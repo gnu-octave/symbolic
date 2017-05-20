@@ -393,15 +393,14 @@ function s = sym(x, varargin)
       return
     end
 
-    x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
 
     %% Use Symbol() for words, not numbers, not "f(x)".
     if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
-              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
+              'x = _ins[0]'
+              '_ins = _ins[1:]'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
@@ -412,8 +411,8 @@ function s = sym(x, varargin)
               '        d.update({_ins[i]:True})'
               '    else:'
               '        raise ValueError("something unexpected in assumptions")'
-              'return Symbol("{s}", **d)' };
-      s = python_cmd (strrep (cmd, '{s}', x), asm{:});
+              'return Symbol(x, **d)' };
+      s = python_cmd (cmd, x, asm{:});
 
       if (nargin == 2 && sclear)
         % ---------------------------------------------
@@ -449,7 +448,7 @@ function s = sym(x, varargin)
         return
       end
 
-      cmd = {'x = "{s}"'
+      cmd = {'x = _ins[0]'
              'try:'
              '    return (0, 0, S(x))'
              'except Exception as e:'
@@ -467,7 +466,7 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (strrep (cmd, '{s}', x));
+      [err flag s] = python_cmd (cmd, x);
 
       switch (flag)
         case 1  % Bad call to python function
