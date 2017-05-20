@@ -55,10 +55,11 @@ end
 %!test
 %! try
 %!   q = py.int(7);
-%!   have_pytave = true;
+%!   have_py = true;
 %! catch
-%!   have_pytave = false;
+%!   have_py = false;
 %! end
-%! if (have_pytave)
+%! if (have_py)
 %!   assert (isa (pyobject (sym ('x')), 'pyobject'))
+%!   assert (regexp (char (class (pyobject (sym ('x')))), 'py\..*\.Symbol'))
 %! end
