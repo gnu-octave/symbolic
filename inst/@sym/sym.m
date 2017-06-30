@@ -268,11 +268,10 @@ function s = sym(x, varargin)
     end
   end
 
-  if (iscell (x))  % Handle Cells
-    warning ('OctSymPy:deprecated', ...
-            ['creating a cell array of sym using "sym(cell)" is deprecated;\n' ...
-             '         future versions will instead create a sym array.']);
-    s = cell_array_to_sym (x, varargin{:});
+  if (iscell (x))
+    %% Cell arrays are converted to sym arrays
+    assert (isempty (varargin));
+    s = cell2sym (x);
     return
   end
 
@@ -895,19 +894,10 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!warning <deprecated> sym({1 2});
+%!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
 
-%!test
-%! % multiple syms with assumptions
-%! % TODO: update this with #603
-%! s = warning ('off', 'OctSymPy:deprecated');
-%! q = sym ({'a', 'b', 'c'}, 'positive');
-%! warning (s)
-%! t = {};
-%! t{1, 1} = 'a: positive';
-%! t{1, 2} = 'b: positive';
-%! t{1, 3} = 'c: positive';
-%! assert (isequal (t, assumptions(q)))
+%!error sym({1 2 'a'}, 'positive');
+%!error sym({'a' 'b'}, 'positive');
 
 %!test
 %! a = sym ('--1');
