@@ -47,22 +47,55 @@
 %%       ⎡ 2   2⋅π⎤
 %%       ⎢        ⎥
 %%       ⎣4⋅π   π ⎦
-%%
 %% @end group
 %% @end example
 %%
-%% Note: There are many possibilities that we don't support (FIXME)
+%% @strong{Warning}: A common task is to numerically evaluate a symbolic
+%% expression at a large set of double-precision numerical values.
+%% @code{subs} is not appropriate for this because it substitutes
+%% symbolic values @var{y} for @var{x}.
+%% Instead convert the expression to a @code{function_handle} which can be
+%% efficiently numerically evaluated:
+%% @example
+%% @group
+%% f = exp(sin(x))
+%%   @result{} f = (sym)
+%%
+%%        sin(x)
+%%       ℯ
+%%
+%% fh = function_handle(f)
+%%   @result{} fh =
+%%
+%%       @@(x) exp (sin (x))
+%% @end group
+%%
+%% @group
+%% fh(linspace(0, 2*pi, 700)')
+%%   @result{} ans =
+%%       ...
+%%       1.0745
+%%       1.0842
+%%       1.0939
+%%       1.1038
+%%       1.1137
+%%       ...
+%% @end group
+%% @end example
+%%
+%% @strong{Note}: There are many possibilities that we don't support
 %% if you start mixing scalars and matrices.  We support one simple
-%% case of subbing a matrix in for a scalar in a scalar expression:
+%% case of subbing a symbolic matrix in for a symbolic scalar,
+%% within a scalar expression:
 %% @example
 %% @group
 %% f = sin(x);
-%% g = subs(f, x, [1 2; 3 4])
+%% g = subs(f, x, [1 sym('a'); pi sym('b')])
 %%   @result{} g = (sym 2×2 matrix)
 %%
-%%       ⎡sin(1)  sin(2)⎤
+%%       ⎡sin(1)  sin(a)⎤
 %%       ⎢              ⎥
-%%       ⎣sin(3)  sin(4)⎦
+%%       ⎣  0     sin(b)⎦
 %%
 %% @end group
 %% @end example
