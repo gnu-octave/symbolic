@@ -62,8 +62,15 @@ function r = vpa(x, n)
         'x, n = _ins'
         'return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
-  elseif (ischar(x))
-    x = magic_str_str(x);
+  elseif (ischar (x))
+    if (strcmp (x, 'inf') || strcmp (x, 'Inf') || strcmp (x, '+inf') || ...
+        strcmp (x, '+Inf'))
+      x = 'S.Infinity';
+    elseif (strcmp (x, '-inf') || strcmp (x, '-Inf'))
+      x = '-S.Infinity';
+    elseif (strcmp (x, 'I'))
+      x = 'Symbol("I")';
+    end
     % Want Float if its '2.3' but N if its 'pi'
     cmd = {
         'x, n = _ins'
@@ -72,18 +79,24 @@ function r = vpa(x, n)
         'except ValueError:'
         '    return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
-  elseif (isfloat(x) && ~isreal (x))
-    r = vpa(real(x),  n) + sym('I')*vpa(imag(x), n);
+  elseif (isfloat (x) && ~isreal (x))
+    r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
   elseif (isfloat(x) && isscalar(x) == 1)
-    [s, flag] = const_to_python_str(x);
-    if (flag)
-      r = vpa(s, n);
-    else
-      cmd = {
-          'x, n = _ins'
-          'return sympy.Float(x, n),' };
-      r = python_cmd (cmd, x, n);
+    if (isnan (x))
+      x = 'S.NaN';
+    elseif (isinf (x) && x < 0)
+      x = '-S.Infinity';
+    elseif (isinf (x))
+      x = 'S.Infinity';
+    elseif (isequal (x, pi))
+      x = 'S.Pi';
+    elseif (isequal (x, -pi))
+      x = '-S.Pi';
     end
+    cmd = {
+      'x, n = _ins'
+      'return sympy.N(x, n)' };
+    r = python_cmd (cmd, x, n);
   elseif (isinteger(x) && isscalar(x) == 1)
     cmd = {
         'x, n = _ins'
@@ -195,11 +208,14 @@ end
 %! % can pass i directly to vpa
 %! a = vpa(sym(i));
 %! b = vpa(i);
-%! c = vpa('i');
-%! d = vpa('I');
-%! assert (isequal (a, b))
-%! assert (isequal (a, c))
-%! assert (isequal (a, d))
+
+%!test
+%! % 'i' and 'I' just make vars
+%! a = vpa(sym(1i));
+%! b = vpa('i');
+%! c = vpa('I');
+%! assert (~isequal (a, b))
+%! assert (~isequal (a, c))
 
 %!test
 %! % inf/-inf do not become symbol('inf')
