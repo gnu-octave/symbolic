@@ -107,9 +107,9 @@
 %% @code{sym(1)/10} (and this is true for most decimal expressions).
 %% It is generally impossible to determine which exact symbolic value the
 %% user intended.
-%% The warning indicates that some heuristics have been applied,
-%% namely a preference for ``small'' fractions (and small fractions
-%% of π).
+%% The warning indicates that some heuristics have been applied
+%% (namely a preference for ``small'' fractions, small fractions
+%% of π and square roots of integers).
 %% Further examples include:
 %% @example
 %% @group
@@ -268,16 +268,14 @@ function s = sym(x, varargin)
     end
   end
 
-  if (iscell (x))  % Handle Cells
-    warning ('OctSymPy:deprecated', ...
-            ['creating a cell array of sym using "sym(cell)" is deprecated;\n' ...
-             '         future versions will instead create a sym array.']);
-    s = cell_array_to_sym (x, varargin{:});
+  if (iscell (x))
+    %% Cell arrays are converted to sym arrays
+    assert (isempty (varargin));
+    s = cell2sym (x);
     return
   end
 
   asm = {};
-  check = true;
   isnumber = isnumeric (x) || islogical (x);
   ratwarn = true;
   ratflag = 'r';
@@ -320,80 +318,52 @@ function s = sym(x, varargin)
     s = numeric_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double'))  % Handle doubles
-    check = false;
-
-    switch ratflag
-      case 'f'
-        % TODO: need something like const_to_python_str (x) for inf, nan, not pi
-        if (isreal (x))
-          s = python_cmd ('return Rational(_ins[0])', x);
-        else
-          s = python_cmd ('return Rational(_ins[0]) + I*Rational(_ins[1])', ...
-                          real (x), imag (x));
-        end
-        return
-
-      case 'r'
-        iscmplx = ~isreal (x);
-        if (iscmplx)
-          xx = {real(x); imag(x)};
-        else
-          xx = {x};
-        end
-        ss = cell(2, 1);
-
-        for n = 1:numel (xx)
-          tmpx = xx{n};
-          [ss{n}, flag] = const_to_python_str (tmpx);
-          if (~flag)
-            % Allow 1/3 and other "small" fractions.
-            % Personally, I like a warning here so I can catch bugs.
-            % Matlab SMT does this (w/o warning).
-            if (ratwarn)
-              warning('OctSymPy:sym:rationalapprox', ...
-                      'passing floating-point values to sym is dangerous, see "help sym"');
-            end
-            [N1, D1] = rat (tmpx);
-            [N2, D2] = rat (tmpx / pi);
-            if (10*abs (D2) < abs (D1))
-              % use frac*pi if demoninator significantly shorter
-              ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
-            else
-              ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
-            end
-          else
-            ss{n} = sprintf ('S(%s)', ss{n});
-          end
-        end
-
-        if (iscmplx)
-          x = sprintf ('%s + I*(%s)', ss{1}, ss{2});
-        else
-          x = ss{1};
-        end
-
-      otherwise
-        error ('sym: this case should not be possible')
-    end
-
-  elseif (islogical (x)) % Handle logical values
-    check = false;
-    if (x)
-      x = 'S.true';
+  elseif (isa (x, 'double'))  % Handle double/complex
+    iscmplx = ~isreal (x);
+    if (iscmplx && isequal (x, 1i))
+      s = python_cmd ('return S.ImaginaryUnit');
+      return
+    elseif (iscmplx)
+      xx = {real(x); imag(x)};
     else
-      x = 'S.false';
+      xx = {x};
     end
+    yy = cell(2, 1);
+    for n = 1:numel (xx)
+      x = xx{n};
+      switch ratflag
+        case 'f'
+          y = double_to_sym_exact (x);
+        case 'r'
+          y = double_to_sym_heuristic (x, ratwarn, []);
+        otherwise
+          error ('sym: this case should not be possible')
+      end
+      yy{n} = y;
+    end
+    if (iscmplx)
+      s = yy{1} + yy{2}*1i;
+    else
+      s = yy{1};
+    end
+    return
 
   elseif (isinteger (x)) % Handle integer vealues
-    check = false;
-    x = num2str (x, '%ld');
+    s = python_cmd ('return Integer(*_ins)', x);
+    return
+
+  elseif (islogical (x)) % Handle logical values
+    if (x)
+      s = python_cmd ('return S.true');
+    else
+      s = python_cmd ('return S.false');
+    end
+    return
   end
 
   if (isa (x, 'char'))
-    % We now have a char; need to decide whether to use S() or Symbol() on it.
+    %% Need to decide whether to use S() or Symbol()
 
-    if (check)
       % TODO: Warning if you try make a sym with the same name of a system function.
       %symsnotfunc (x);
 
@@ -415,16 +385,17 @@ function s = sym(x, varargin)
       %  end
       %end
 
-      [x, flag] = const_to_python_str (x);
-      if (flag)
-        check = false;
-      end
-
-      isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
+    y = detect_special_str (x);
+    if (~ isempty (y))
+      assert (isempty (asm), 'Only symbols can have assumptions.')
+      s = python_cmd (['return ' y]);
+      return
     end
 
+    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
+
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if (check && (~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
+    if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
               'x = _ins[0]'
@@ -464,12 +435,10 @@ function s = sym(x, varargin)
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
       % TODO: figure version might warn on expression strings
-      %if (check)
         % Check if the user try to execute operations from sym
         %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         %  warning ('Please avoid execute operations from sym function.');
         %end
-      %end
 
       % Usually want rational output here (i.e., if input was "1.2").
       % But if input has words and parentheses it might be raw Sympy code.
@@ -804,6 +773,13 @@ end
 %! assert (isequal (sym(inf, 'f'), sym(inf)))
 %! assert (isequal (sym(-inf, 'f'), sym(-inf)))
 %! assert (isequaln (sym(nan, 'f'), sym(nan)))
+%! assert (isequal (sym(complex(inf, -inf), 'f'), sym(complex(inf, -inf))))
+%! assert (isequaln (sym(complex(nan, inf), 'f'), sym(complex(nan, inf))))
+%! assert (isequaln (sym(complex(-inf, nan), 'f'), sym(complex(-inf, nan))))
+
+%!test
+%! assert (isequal (sym (sqrt(2), 'r'), sqrt (sym (2))))
+%! assert (isequal (sym (sqrt(12345), 'r'), sqrt (sym (12345))))
 
 %!test
 %! % symbols with special sympy names
@@ -827,6 +803,7 @@ end
 %!warning <dangerous> sym (-1e16);
 %!warning <dangerous> sym (10.33);
 %!warning <dangerous> sym (-5.23);
+%!warning <dangerous> sym (sqrt (1.4142135623731));
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
@@ -895,19 +872,10 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!warning <deprecated> sym({1 2});
+%!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
 
-%!test
-%! % multiple syms with assumptions
-%! % TODO: update this with #603
-%! s = warning ('off', 'OctSymPy:deprecated');
-%! q = sym ({'a', 'b', 'c'}, 'positive');
-%! warning (s)
-%! t = {};
-%! t{1, 1} = 'a: positive';
-%! t{1, 2} = 'b: positive';
-%! t{1, 3} = 'c: positive';
-%! assert (isequal (t, assumptions(q)))
+%!error sym({1 2 'a'}, 'positive');
+%!error sym({'a' 'b'}, 'positive');
 
 %!test
 %! a = sym ('--1');
