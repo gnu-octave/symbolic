@@ -83,7 +83,7 @@ end
 %! assert (isequal (size(L), [2 1]))
 %! dif1 = abs (double(L) - K);
 %! dif2 = abs (double(L) + K);
-%! assert (all (dif1 < 1e-16) || all (dif2 < 1e-16))
+%! assert (all (dif1 < 1e-15) || all (dif2 < 1e-15))
 
 %!test
 %! A = [1; 3];

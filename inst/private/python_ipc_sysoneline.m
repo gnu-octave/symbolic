@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_sysoneline (@dots{})
+%% @deftypefun {[@var{A}, @var{info}] =} python_ipc_sysoneline (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -29,7 +29,7 @@
 %% before the command starts.
 %%
 %% @code{@var{info}.raw}: the raw output, for debugging.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
@@ -69,8 +69,9 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   % Windows.  We have a 8000 char budget, and the header uses all
   % of it.
   mydir = fileparts (mfilename ('fullpath'));
+  mydir = strrep ([mydir filesep()], '\', '\\');
   % execfile() only works on python 2
-  headers = ['exec(open(\"' mydir filesep() 'python_header.py\").read()); '];
+  headers = ['exec(open(\"' mydir 'python_header.py\").read()); '];
   %s = python_header_embed2();
   %headers = ['exec(\"' s '\"); '];
 
@@ -89,8 +90,10 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   info.prelines = 0;
 
   %% The actual command
-  % cmd will be a snippet of python code that does something
-  % with _ins and produce _outs.
+  % cmd is a snippet of python code defining a function '_fcn'.
+  cmd = [cmd '_outs = _fcn(_ins)'];
+  % now we have a snippet of python code that does something
+  % with _ins and produces _outs.
   s = myesc(cmd);
   s = strjoin(s, '\\n');
   s2 = ['exec(\"' s '\"); '];

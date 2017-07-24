@@ -9,9 +9,10 @@ temp_sym_python_cmd.py
 inlog.txt
 outlog.txt
 octsympy_tests.log
+fntests.log
 
-# matlab package subdir
-matlab/
+# packaging subdir
+tmp/
 
 # autoconf
 src/configure

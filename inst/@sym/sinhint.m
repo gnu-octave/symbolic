@@ -40,12 +40,13 @@ function y = sinhint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'Shi');
+  y = elementwise_op ('Shi', x);
 end
 
 
 %!error <Invalid> sinhint (sym(1), 2)
-%!xtest assert (isequaln (sinhint (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (sinhint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

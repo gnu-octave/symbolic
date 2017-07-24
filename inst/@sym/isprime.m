@@ -41,14 +41,14 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/nextprime}
+%% @seealso{@@sym/nextprime, @@sym/prevprime}
 %% @end defmethod
 
 
 function z = isprime(x)
 
   % this will give True/False/None
-  %z = uniop_helper(x, 'lambda x: x.is_prime');
+  %z = elementwise_op ('lambda x: x.is_prime', x);
   %z = uniop_bool_helper(x, 'lambda x: x.is_prime', 'sym');
 
   sf = { 'def sf(x):'

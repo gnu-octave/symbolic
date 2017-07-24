@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,8 +20,11 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym diff (@var{f})
 %% @defmethodx @@sym diff (@var{f}, @var{x})
-%% @defmethodx @@sym diff (@var{f}, @var{x}, @dots{})
-%% @defmethodx @@sym diff (@var{f}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{y})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{x}, @var{y}, @var{y}, @dots{})
+%% @defmethodx @@sym diff (@var{f}, @var{x}, @var{n}, @var{y}, @var{m}, @dots{})
 %% Symbolic differentiation.
 %%
 %% Examples:
@@ -59,11 +62,10 @@
 %%   @result{} (sym) 0
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/int}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, differentiation
 
 function z = diff(f, varargin)
 
@@ -79,10 +81,10 @@ function z = diff(f, varargin)
     end
     z = diff(f, x);
     return
-  elseif (nargin >= 2)
+  else
     q = varargin{1};
-    % Note: pickle: to avoid double() overhead for common diff(f,x)
-    isnum2 = isnumeric(q) || (isa(q, 'sym') && strncmpi(q.pickle, 'Integer', 7));
+    % Note: access sympy srepr to avoid double() overhead for common diff(f,x)
+    isnum2 = isnumeric (q) || (isa (q, 'sym') && strncmpi (sympy (q), 'Integer', 7));
     if ((nargin == 2) && isnum2)  % diff(f,2) -> symvar
       x = symvar(f, 1);
       if (isempty(x))
@@ -102,7 +104,9 @@ function z = diff(f, varargin)
           'args = _ins[1:]'
           'return f.diff(*args),' };
 
-  varargin = sym(varargin);
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
   z = python_cmd (cmd, sym(f), varargin{:});
 
 end
@@ -143,12 +147,19 @@ end
 %! f = sin(x);
 %! g = diff(f,x,2);
 %! assert (isequal (diff(f,2), g))
-%! assert (isequal (diff(f,2,x), g))
 %! assert (isequal (diff(f,sym(2)), g))
-%! assert (isequal (diff(f,sym(2),x), g))
 %! g = diff(f,x);
 %! assert (isequal (diff(f), g))
 %! assert (isequal (diff(f,1), g))
+
+%!test
+%! % old SMT supported (still does?) the 'n' before the 'x'
+%! % we might remove this someday, no longer seems documented in SMT
+%! f = sin(x);
+%! g = diff(f,x,2);
+%! assert (isequal (diff(f,2,x), g))
+%! assert (isequal (diff(f,sym(2),x), g))
+%! g = diff(f,x);
 %! assert (isequal (diff(f,1,x), g))
 
 %!test

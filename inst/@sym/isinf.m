@@ -50,8 +50,8 @@
 %% @end example
 %% Here SymPy would have said @code{None} as it does not know whether
 %% x is finite or not.  However, currently @code{isinf} returns
-%% false, which perhaps should be interpreted as "x cannot be shown to
-%% be infinite" (as opposed to "x is not infinite").
+%% false, which perhaps should be interpreted as ``x cannot be shown to
+%% be infinite'' (as opposed to ``x is not infinite'').
 %%
 %% FIXME: this is behaviour might change in a future version; come
 %% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.
@@ -101,29 +101,27 @@ end
 %! % actual infinity.  Actually a ctor test, not isinf.
 %! % IIRC, SMT in Matlab 2013b fails.
 %! oo = sym(inf);
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym(-inf);
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('inf');
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('-inf');
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 %! oo = sym('Inf');
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
-%! oo = sym('INF');
-%! assert (isempty( strfind(oo.pickle, 'Symbol') ))
+%! assert (isempty (strfind (sympy (oo), 'Symbol')))
 
 %!test
 %! % ops with infinity shouldn't collapse
 %! syms x oo zoo
 %! y = x + oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! assert (~isempty (strfind (lower (sympy (y)), 'add') ))
 %! y = x - oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! assert (~isempty (strfind (lower (sympy (y)), 'add') ))
 %! y = x - zoo;
-%! assert(~isempty( strfind(lower(y.pickle), 'add') ))
+%! assert (~isempty (strfind (lower (sympy (y)), 'add') ))
 %! y = x*oo;
-%! assert(~isempty( strfind(lower(y.pickle), 'mul') ))
+%! assert (~isempty (strfind (lower (sympy (y)), 'mul') ))
 
 %!test
 %! % ops with infinity are not necessarily infinite

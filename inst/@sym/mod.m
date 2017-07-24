@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,15 +18,15 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File}  {@var{y} =} mod (@var{x}, @var{n})
-%% @deftypefnx {Function File}  {@var{y} =} mod (@var{x}, @var{n}, false)
+%% @defmethod  @@sym mod (@var{x}, @var{n})
+%% @defmethodx @@sym mod (@var{x}, @var{n}, false)
 %% Element-wise modular arithmetic on symbolic arrays and polynomials.
 %%
 %% Example:
 %% @example
 %% @group
-%% >> mod([10 3 1], sym(3))
-%%    @result{} ans = (sym) [1  0  1]  (1×3 matrix)
+%% mod([10 3 1], sym(3))
+%%   @result{} ans = (sym) [1  0  1]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
@@ -35,48 +35,47 @@
 %% @var{n}:
 %% @example
 %% @group
-%% >> syms x
-%% >> mod(5*x + 7, 3)
-%%    @result{} (sym) 2⋅x + 1
-%% >> mod(x, 3)  % (coefficient is 1 mod 3)
-%%    @result{} (sym) x
+%% syms x
+%% mod(5*x + 7, 3)
+%%   @result{} (sym) 2⋅x + 1
+%% mod(x, 3)   % (coefficient is 1 mod 3)
+%%   @result{} (sym) x
 %% @end group
 %% @end example
 %% You can disable this behaviour by passing @code{false} as the
 %% third argument:
 %% @example
 %% @group
-%% >> syms x
-%% >> q = mod(x, 3, false)
-%%    @result{} q = (sym) Mod(x, 3)
-%% >> subs(q, x, 10)
-%%    @result{} ans = (sym) 1
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
+%% q = mod(x, 3, false)
+%%   @result{} q = (sym) x mod 3
+%% subs(q, x, 10)
+%%   @result{} ans = (sym) 1
 %%
-%% >> syms n integer
-%% >> mod(3*n + 2, 3, false)
-%%    @result{} (sym) 2
+%% syms n integer
+%% mod(3*n + 2, 3, false)
+%%   @result{} (sym) 2
 %% @end group
 %% @end example
 %%
-%% @seealso{coeffs}
-%% @end deftypefn
+%% @seealso{@@sym/coeffs}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mod(x, n, canpoly)
 
+  if (nargin > 3)
+    print_usage ();
+  end
+
   if (nargin < 3)
-     canpoly = true;
+    canpoly = true;
   end
 
   isconst = isempty (findsymbols (x));
 
   if (~canpoly || isconst)
-    z = binop_helper(x, n, 'lambda a,b: a % b');
-
-    %z = binop_helper(x, n, {'def _op(a, b):' ...
-    %                        '    return a % b' });
+    z = elementwise_op ('lambda a,b: a % b', sym(x), sym(n));
 
   else
     %% its not constant, assume everything is poly and mod the coefficients
@@ -101,6 +100,8 @@ function z = mod(x, n, canpoly)
 
 end
 
+
+%!error <Invalid> mod (sym(1), 2, 3 ,4)
 
 %!assert (isequal (mod (sym(5), 4), sym(1)))
 %!assert (isequal (mod ([sym(5) 8], 4), [1 0] ))

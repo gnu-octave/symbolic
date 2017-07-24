@@ -43,7 +43,7 @@ function y = sqrt(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'sqrt');
+  y = elementwise_op ('sqrt', x);
 end
 
 

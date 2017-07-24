@@ -40,12 +40,13 @@ function y = coshint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'Chi');
+  y = elementwise_op ('Chi', x);
 end
 
 
 %!error <Invalid> coshint (sym(1), 2)
-%!xtest assert (isequaln (coshint (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (coshint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

@@ -1,5 +1,6 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
-%% Copyright (C) 2016 Utkarsh Gautam, Colin B. Macdonald
+%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,12 +20,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{g} =} taylor (@var{f})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, @var{x}, @var{a})
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}])
-%% @deftypefnx {Function File} {@var{g} =} taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
-%% @deftypefnx {Function File} {@var{g} =} taylor (@dots{}, @var{key}, @var{value})
+%% @defmethod  @@sym taylor (@var{f})
+%% @defmethodx @@sym taylor (@var{f}, @var{x})
+%% @defmethodx @@sym taylor (@var{f}, @var{x}, @var{a})
+%% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}])
+%% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
+%% @defmethodx @@sym taylor (@dots{}, @var{key}, @var{value})
 %% Symbolic Taylor series.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
@@ -66,8 +67,9 @@
 %%           6            2
 %% @end group
 %% @end example
-%% @seealso{diff}
-%% @end deftypefn
+%%
+%% @seealso{@@sym/diff}
+%% @end defmethod
 
 %% Author: Utkarsh Gautam, Colin B. Macdonald
 %% Keywords: symbolic, differentiation, multivariable
@@ -88,6 +90,9 @@ function s = taylor(f, varargin)
     % taylor(f, [x,y], [a,b], 'param', ...)
     x = varargin{1};
     a = varargin{2};
+    if length(a) ~= length(x) && length(a) == 1
+          a = a*ones(1, length(x));
+    end
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
     % taylor(f, x, 'param', ...)
@@ -120,24 +125,32 @@ function s = taylor(f, varargin)
     n = int32(n);
   end
 
+  assert( isequal( length(x), length(a)), 'The length of the expansion point must be the same as the input variables.')
+
   if (numel(x) == 1)
     cmd = { '(f, x, a, n) = _ins'
         's = f.series(x, a, n).removeO()'
         'return s,' };
-  elseif (numel(x) == 2)
-    cmd = {'(f, x, a, n) = _ins'
-      'expn = f.subs(zip(x, a))  # first constant term'
-      'for k in range(1, n):'
-      '    bin = [binomial(k, m) for m in range(k+1)]  # binomial constants'
-      '    fact = sp.factorial(k)'
-      '    for (i, y) in enumerate(bin):'
-      '        j = k - i'
-      '        fterm = f.diff(x[0], i, x[1], j).subs(zip(x, a))'
-      '        expn = expn + y*(S.One/fact)*fterm*((x[0]-a[0])**i)*((x[1]-a[1])**j)'
-      'return simplify(expn)'
-    };
   else
-    error('Only 2d expansions supported.');
+
+    cmd = {'(f, x, a, n) = _ins'
+           'dic = dict(zip(x, a))'
+           'xa = list(x)'
+           'for i in range(len(x)):'
+           '    xa[i] = x[i]-a[i]'
+           'expn = f.subs(dic)  # first constant term'
+           'for i in range(1,n):'
+           '    tmp = S(0)'
+           '    d = list(itertools.product(x, repeat=i))'
+           '    for j in d:'
+           '        tmp2 = S(1)'
+           '        for p in range(len(x)):'
+           '            tmp2 = tmp2*xa[p]**j.count(x[p])'
+           '        tmp = tmp + f.diff(*j).subs(dic)*tmp2' %%FIXME: In this case we should use a cache system to avoid
+           '    expn = expn + tmp / factorial(i)'          %%       diff in all vars every time (more ram, less time).
+           'return simplify(expn)'
+    };
+
   end
 
   s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
@@ -211,7 +224,7 @@ end
 
 %!test
 %! syms x y
-%! f = exp(x**2+y**2);
+%! f = exp (x^2 + y^2);
 %! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
 %! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
@@ -227,7 +240,7 @@ end
 
 %!test
 %! syms x y
-%! f = sin(x**2+y**2);
+%! f = sin (x^2 + y^2);
 %! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
 
@@ -241,12 +254,12 @@ end
 
 %!test
 %! syms x y
-%! f = x**2 +y**2;
+%! f = x^2 + y^2;
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',0)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',1)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',2)== sym(0) ))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x**2+y**2)))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x**2+y**2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x^2 + y^2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x^2 + y^2)))
 
 %!test
 %! % expansion point
@@ -266,8 +279,18 @@ end
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
 
-%!error<Only 2d expansions supported.>
+%!test
 %! syms x y z
 %! g = x^2 + 2*y + 3*z;
 %! h = taylor (g, [x,y,z], 'order', 4);
-%! assert (isAlways(h == 27)) ;
+%! assert (isAlways(h == g)) ;
+
+%!test
+%! syms x y z
+%! g = sin(x*y*z);
+%! h = taylor (g, [x,y,z], 'order', 4);
+%! assert (isAlways(h == x*y*z)) ;
+
+%!error <length>
+%! syms x y
+%! taylor(0, [x, y], [1, 2, 3]);

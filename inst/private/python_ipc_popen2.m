@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File}  {[@var{A}, @var{info}] =} python_ipc_popen2 (@dots{})
+%% @deftypefun {[@var{A}, @var{info}] =} python_ipc_popen2 (@dots{})
 %% Private helper function for Python IPC.
 %%
 %% @var{A} is the resulting object, which might be an error code.
@@ -29,7 +29,7 @@
 %% before the command starts.
 %%
 %% @code{@var{info}.raw}: the raw output, for debugging.
-%% @end deftypefn
+%% @end deftypefun
 
 function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
@@ -174,9 +174,8 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   % code for output, or perhaps a thrown error
   output_code = python_copy_vars_from('_outs');
 
-  % cmd is a snippet of python code, does something with _ins and
-  % produce _outs.  If an exception occurs, it should be caught and
-  % stored in _outs.
+  % cmd is a snippet of python code defining a function '_fcn'
+  cmd = [cmd {''} '_outs = _fcn(_ins)'];
   write_lines(fin, cmd, true)
 
   write_lines(fin, output_code, true)

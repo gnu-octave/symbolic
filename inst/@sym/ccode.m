@@ -74,10 +74,10 @@
 %% @end group
 %% @end example
 %%
-%% FIXME: This doesn't write "optimized" code like Matlab's
-%% Symbolic Math Toolbox; it doesn't do "Common Subexpression
-%% Elimination".  Presumably the compiler would do that for us
-%% anyway.  Sympy has a "cse" module that will do it.  See:
+%% FIXME: This doesn't write ``optimized'' code like Matlab's
+%% Symbolic Math Toolbox; it doesn't do ``Common Subexpression
+%% Elimination''.  Presumably the compiler would do that for us
+%% anyway.  Sympy has a ``cse'' module that will do it.  See:
 %% http://stackoverflow.com/questions/22665990/optimize-code-generated-by-sympy
 %%
 %% @seealso{@@sym/fortran, @@sym/latex, @@ssym/function_handle}

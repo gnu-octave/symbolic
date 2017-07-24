@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{y} =} sum (@var{x})
-%% @deftypefnx {Function File} {@var{y} =} sum (@var{x}, @var{n})
+%% @defmethod  @@sym sum (@var{x})
+%% @defmethodx @@sym sum (@var{x}, @var{n})
 %% Sum of symbolic expressions.
 %%
 %% Sum over the rows or columns of an expression.  By default, sum
@@ -43,17 +43,14 @@
 %%       ⎣x + z⎦
 %% @end group
 %% @end example
+%%
 %% @seealso{@@sym/prod, @@sym/symsum}
-%% @end deftypefn
+%% @end defmethod
+
 
 function y = sum(x, n)
 
   x = sym(x);
-
-  if (isscalar(x))
-    y = x;
-    return
-  end
 
   if (nargin == 1)
     if (isrow(x))
@@ -63,16 +60,19 @@ function y = sum(x, n)
     else
       n = 1;
     end
-  else
+  elseif (nargin == 2)
     n = double(n);
+  else
+    print_usage ();
   end
 
-  %y = python_cmd ({'return sp.prod(_ins[0]),'}, x);
   cmd = { 'A = _ins[0]'
+          'if not isinstance(A, sympy.MatrixBase):'
+          '    A = Matrix([A])'
           'B = sp.Matrix.zeros(A.rows, 1)'
           'for i in range(0, A.rows):'
-          '   B[i] = sum(A.row(i))'
-          'return B,' };
+          '    B[i] = sum(A.row(i))'
+          'return B' };
   if (n == 1)
     y = python_cmd (cmd, transpose(x));
     y = transpose(y);
@@ -83,6 +83,9 @@ function y = sum(x, n)
   end
 end
 
+
+%!error <Invalid> sum (sym(1), 2, 3)
+%!error <Invalid> sum (sym(1), 42)
 
 %!shared x,y,z
 %! syms x y z

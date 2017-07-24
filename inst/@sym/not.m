@@ -63,7 +63,7 @@ function r = not(x)
     print_usage ();
   end
 
-  r = uniop_helper (x, 'Not');
+  r = elementwise_op ('Not', x);
 
 end
 
@@ -93,7 +93,7 @@ end
 %! syms x
 %! e = ~(x == 4);
 %! assert (isa (e, 'sym'))
-%! assert (strncmp(char(e), 'Unequality', 10))
+%! assert (strncmp (sympy(e), 'Unequality', 10))
 
 %!test
 %! % output is sym even for scalar t/f (should match other bool fcns)
@@ -110,6 +110,6 @@ end
 %! syms x
 %! y = ~x;
 %! s = disp(y, 'flat');
-%! assert (strcmpi(strtrim(s), 'Not(x)'))
+%! assert (strcmp (strtrim (s), '~x') || strcmpi (strtrim (s), 'Not(x)'))
 
 %!error not (sym(1), 2)

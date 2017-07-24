@@ -55,11 +55,11 @@
 function W = lambertw(k, x)
   if (nargin == 1)
     x = sym(k);
-    W = uniop_helper (x, 'LambertW');
+    W = elementwise_op ('LambertW', x);
   elseif (nargin == 2)
     x = sym(x);
     k = sym(k);
-    W = binop_helper (x, k, 'LambertW');
+    W = elementwise_op ('LambertW', x, k);
   else
     print_usage ();
   end
@@ -96,3 +96,20 @@ end
 %!assert (abs (lambertw(pi) - double(lambertw(sym(pi)))) < 5*eps)
 %!assert (abs (lambertw(-1, 5) - double(lambertw(-1, sym(5)))) < 5*eps)
 %!assert (abs (lambertw(2, 2) - double(lambertw(2, sym(2)))) < 5*eps)
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x k
+%! A = lambertw (5);
+%! f = lambertw (x);
+%! h = function_handle (f);
+%! B = h (5);
+%! assert (A, B)
+%!
+%! A = lambertw (3, 5);
+%! f = lambertw (k, x);
+%! h = function_handle (f);
+%! B = h (3, 5);
+%! assert (A, B)
+%! end

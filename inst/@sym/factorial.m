@@ -40,12 +40,13 @@ function y = factorial(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'factorial');
+  y = elementwise_op ('factorial', x);
 end
 
 
 %!error <Invalid> factorial (sym(1), 2)
-%!xtest assert (isequaln (factorial (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (factorial (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

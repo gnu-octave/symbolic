@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2016 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{B} =} inv (@var{A})
+%% @defmethod @@sym inv (@var{A})
 %% Symbolic inverse of a matrix.
 %%
 %% Examples:
@@ -42,11 +42,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{ldivide, rdivide}
-%% @end deftypefn
+%% @seealso{@@sym/ldivide, @@sym/rdivide}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = inv(x)
 

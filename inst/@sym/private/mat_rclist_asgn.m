@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,7 +17,7 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefn  {Function File} {@var{z} =} mat_rclist_asgn (@var{A}, @var{r}, @var{c}, @var{B})
+%% @defun mat_rclist_asgn (@var{A}, @var{r}, @var{c}, @var{B})
 %% Private helper routine for sym array assigment using lists.
 %%
 %% @code{(R(i),C(i))} specify entries of the matrix @var{A}.
@@ -31,10 +31,8 @@
 %%        with zeros.
 %% @end itemize
 %%
-%% @end deftypefn
+%% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_rclist_asgn(A, r, c, B)
 
@@ -58,7 +56,7 @@ function z = mat_rclist_asgn(A, r, c, B)
           '    B = sp.Matrix([[B]])'
           'BT = B.T'
           '# copy of A, expanded and padded with zeros'
-          'if not A.is_Matrix:'
+          'if not A or not A.is_Matrix:'
           '    n = max( max(r)+1, 1 )'
           '    m = max( max(c)+1, 1 )'
           'else:'

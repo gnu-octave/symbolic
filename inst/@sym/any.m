@@ -35,7 +35,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@sym/all}
+%% @seealso{@@sym/all}
 %% @end defmethod
 
 

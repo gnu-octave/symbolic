@@ -15,48 +15,38 @@ Checklist
 
       - update version number (remove "-dev", check if bump needed).
 
-      - Make sure snippet defaults to false.
-
   * Update DESCRIPTION file (version number and date).
 
   * Update NEWS file (date, version number, reformat).
 
-  * Update version in src/configure.ac.  Test the bootstrap script (note
-    the scripts below will run bootstrap for the packages).
+  * Check minimum sympy version is consistent: its in
+    DESCRIPTION, assert_have_python_and_sympy.m
 
-  * Check minimum sympy version is consistent: its in:
-    configure.ac, DESCRIPTION, assert_have_python_and_sympy.m
+  * Packages: need to run the following two scripts:
 
-  * Packages: need to run the following two scripts.  I recommend
-    testing them first without using the tag.  Then test the packages
-    by running the test suite.
+      - Use the maintainer makefile: "make clean", "make dist".
 
-      - make_release_packages.sh, use "day-to-day testing" mode instead
-        of tag.
+      - make_windows_package.sh, use "day-to-day testing" mode.  I
+        recommend testing them first without using the tag.  Then test
+        the packages by running the test suite.
 
-      - make_windows_package.sh, use "day-to-day testing" mode.
-
-  * Test regenerating the html documentation.  Needs version >= 0.1.7.
-      - pkg load generate_html
-      - options = get_html_options ("octave-forge");
-      - generate_package_html ("symbolic", "html", options)
+  * Test regenerating html documentation: "make html"
 
   * If packages seem ok, then tag the repo with:
 
-    `git tag -a v2.0.0 -m "Version 2.0.0"`
+    `git tag -a v2.x.y -m "Version 2.x.y"`
 
   * `git push --tags origin master`.  If messed up and want to change
     anything after this, need to bump version number (tag is public).
 
   * Push and push tags to sourceforge.
 
-  * Then redo the packages using the "tag" mode.
+  * Then redo the packages (Windows bundle will need "tag" mode).
 
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.
 
-      - regenerate the html documentation.  It will create a directory
-        called "html".  Then "tar -zcvf symbolic-html.tar.gz html".
+      - regenerate the html documentation.
 
       - create ticket for binaries and doc tarball on sourceforge.
 
@@ -69,11 +59,7 @@ AFTER release
     in sympref.m.  See
     [PEP 440](https://www.python.org/dev/peps/pep-0440).
 
-  * Update the version in src/configure.ac: -dev seems ok there.
-
-  * Optionally, update the make_*releases* scripts.
+  * Optionally, update the make_windows_bundle script.
 
   * Leave old version in DESCRIPTION ("-dev" not supported here).  We
     will bump it at the next release.  FIXME: this is unfortunate.
-
-  * Snippets could default to true in sympref.m

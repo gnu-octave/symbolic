@@ -40,12 +40,13 @@ function y = cosint(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'Ci');
+  y = elementwise_op ('Ci', x);
 end
 
 
 %!error <Invalid> cosint (sym(1), 2)
-%!xtest assert (isequaln (cosint (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (cosint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;

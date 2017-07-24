@@ -1,4 +1,5 @@
-%% Copyright (C) 2016 Colin B. Macdonald and Lagu
+%% Copyright (C) 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,9 +19,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefn  {Function File} {@var{r} =} interval (@var{A}, @var{B})
-%% @deftypefnx {Function File} {@var{r} =} interval (@var{A}, @var{B}, @var{lopen})
-%% @deftypefnx {Function File} {@var{r} =} interval (@var{A}, @var{B}, @var{lopen}, @var{ropen})
+%% @defmethod  @@sym interval (@var{A}, @var{B})
+%% @defmethodx @@sym interval (@var{A}, @var{B}, @var{lopen})
+%% @defmethodx @@sym interval (@var{A}, @var{B}, @var{lopen}, @var{ropen})
 %% Return an interval.
 %%
 %% Examples:
@@ -45,11 +46,9 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{finiteset, union, intersect, setdiff, unique, ismember}
-%% @end deftypefn
+%% @seealso{finiteset, @@sym/union, @@sym/intersect, @@sym/setdiff, @@sym/unique, @@sym/ismember}
+%% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function I = interval(varargin)
 
@@ -57,7 +56,9 @@ function I = interval(varargin)
     print_usage();
   end
 
-  varargin = sym(varargin);
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
 
   I = python_cmd ('return Interval(*_ins),', varargin{:});
 

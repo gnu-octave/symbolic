@@ -46,7 +46,7 @@ function r = is_valid_index(x)
     return
   end
 
-  if (isbool (x))
+  if (islogical (x))
     r = true;
     return
   end

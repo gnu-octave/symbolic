@@ -1,4 +1,6 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -106,6 +108,10 @@
 %% @itemize
 %% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
 %% on Matlab were it would not be the default).
+%% @item @code{sympref ipc native}: use native Python/C interface to
+%% interact directly with an embedded Python interpreter.
+%% This is highly experimental and requires functions provided by the
+%% ``pytave'' project which have not yet been merged into Octave.
 %% @item @code{sympref ipc system}: construct a long string of
 %% the command and pass it directly to the python interpreter with
 %% the @code{system()} command.  This typically assembles a multiline
@@ -127,24 +133,6 @@
 %% @example
 %% @group
 %% sympref reset                              % doctest: +SKIP
-%% @end group
-%% @end example
-%%
-%%
-%% @strong{Snippets}: when displaying a sym object, we can optionally
-%% quote a small part of the SymPy representation:
-%%
-%% @example
-%% @group
-%% syms x;  y = [pi x];
-%% sympref snippet on
-%% y
-%%   @result{} y = (sym 1×2 matrix)       “...([[pi, Symbol('x')]])”
-%%       [π  x]
-%% sympref snippet off
-%% y
-%%   @result{} y = (sym) [π  x]  (1×2 matrix)
-%% sympref snippet default
 %% @end group
 %% @end example
 %%
@@ -176,7 +164,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.5.0-dev
+%%   @result{} 2.5.1-dev
 %% @end group
 %% @end example
 %%
@@ -197,20 +185,29 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct (cmd))
+    assert (isequal (sort (fieldnames (cmd)), ...
+      sort ({'ipc'; 'display'; 'digits'; 'quiet'})), ...
+      'sympref: structure has incorrect field names')
+    settings = [];
+    sympref ('quiet', cmd.quiet)
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('ipc', cmd.ipc)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
-      sympref ('snippet', 'default')
       sympref ('quiet', 'default')
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.5.0-dev';
+      varargout{1} = '2.5.1-dev';
 
     case 'display'
       if (nargin == 1)
@@ -246,15 +243,8 @@ function varargout = sympref(cmd, arg)
       end
 
     case 'snippet'
-      if (nargin == 1)
-        varargout{1} = settings.snippet;
-      else
-        if (strcmpi(arg, 'default'))
-          settings.snippet = false;  % Should be false for a release
-        else
-          settings.snippet = tf_from_input(arg);
-        end
-      end
+      warning ('OctSymPy:deprecated', ...
+               'Debugging mode "snippet" has been removed');
 
     case 'quiet'
       if (nargin == 1)
@@ -269,7 +259,7 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
@@ -288,6 +278,8 @@ function varargout = sympref(cmd, arg)
         switch arg
           case 'default'
             msg = 'Choosing the default [autodetect] communication mechanism';
+          case 'native'
+            msg = 'Forcing the native Python/C API communication mechanism';
           case 'system'
             msg = 'Forcing the system() communication mechanism';
           case 'popen2'
@@ -298,7 +290,12 @@ function varargout = sympref(cmd, arg)
             msg = 'Forcing sysoneline ipc: warning: this is for debugging';
           otherwise
             msg = '';
-            warning('Unsupported IPC mechanism: hope you know what you''re doing')
+            if (~ ischar (arg))
+              arg = num2str (arg);
+            end
+            warning('OctSymPy:sympref:invalidarg', ...
+                    'Unsupported IPC mechanism ''%s'': hope you know what you''re doing', ...
+                    arg)
         end
         if (verbose)
           disp(msg)
@@ -331,7 +328,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     otherwise
-      print_usage ();
+      error ('sympref: invalid preference or command ''%s''', lower (cmd));
   end
 end
 
@@ -358,6 +355,9 @@ function r = tf_from_input(s)
 end
 
 
+%!shared sympref_orig
+%! sympref_orig = sympref ();
+
 %!test
 %! % test quiet, side effect of making following tests a bit less noisy!
 %! sympref quiet on
@@ -376,6 +376,15 @@ end
 %!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
 %!error <line 3> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
+%% Test for correct line error in Python exceptions.
+%!error <raise ValueError> python_cmd('raise ValueError');
+%!error <raise ValueError> python_cmd('raise ValueError', sym('x'));
+%!error <raise ValueError> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <raise ValueError> python_cmd('raise ValueError', {1; 1; 1});
+%!error <raise ValueError> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <raise ValueError> python_cmd( {'x = 1' 'raise ValueError'} );
+%!error <1/0> python_cmd( {'x = 1' 'pass' '1/0'} );
+%!error <raise ValueError> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
@@ -386,6 +395,8 @@ end
 %!error <line 1> python_cmd('raise ValueError')
 %!error <line 1> python_cmd('raise ValueError', sym('x'))
 %!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+
+%!error <c=1; raise ValueError> python_cmd ({'a=1' 'b=1' 'c=1; raise ValueError' 'd=1'});
 
 
 %!test
@@ -410,14 +421,41 @@ end
 %! delete('tmp_python_cmd.py')
 
 %!test
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
+%! sympref ('ipc', 'bogus');
+%! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
+
+%!error <invalid ipc mechanism> syms ('x')
+
+%!test
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
 %! sympref('quiet', 'on')
 
 %!test
+%! % restore sympref from structure
+%! old = sympref ();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! old = orderfields (old);  % re-ordering the fields should be ok
+%! sympref (old);
+%! new = sympref ();
+%! assert (isequal (old, new))
+
+%!error <incorrect field names>
+%! s.a = 'hello';
+%! s.b = 'world';
+%! sympref (s)
+
+%!test
 %! syms x
 %! r = sympref('reset');
+%! % restore original sympref settings
+%! sympref ('ipc',   sympref_orig.ipc);
+%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
 %! assert(r)
-%! % ok, can be noisy again
-%! sympref('quiet', 'default')
+
+%!error <invalid preference or command> sympref ('nosuchsetting')
+%!error <invalid preference or command> sympref ('nosuchsetting', true)

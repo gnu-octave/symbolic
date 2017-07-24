@@ -40,7 +40,7 @@
 
 function R = rhs(f)
 
-  R = uniop_helper(f, 'lambda a: a.rhs');
+  R = elementwise_op ('lambda a: a.rhs', f);
 
 end
 

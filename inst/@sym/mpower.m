@@ -42,14 +42,14 @@
 %%       ⎢    ⎥
 %%       ⎣0  x⎦
 %% A^2
-%%   @result{} ans = (sym 2×2 matrix)
+%%   @result{} (sym 2×2 matrix)
 %%       ⎡ 2           ⎤
 %%       ⎢π   2⋅x + 2⋅π⎥
 %%       ⎢             ⎥
 %%       ⎢        2    ⎥
 %%       ⎣0      x     ⎦
 %% A^2 == A*A
-%%   @result{} ans = (sym 2×2 matrix)
+%%   @result{} (sym 2×2 matrix)
 %%       ⎡True  True⎤
 %%       ⎢          ⎥
 %%       ⎣True  True⎦
@@ -59,8 +59,6 @@
 %% @seealso{@@sym/power}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mpower(x, y)
 
@@ -78,6 +76,7 @@ function z = mpower(x, y)
   z = python_cmd (cmd, sym(x), sym(y));
 
 end
+
 
 %!test
 %! syms x
@@ -131,11 +130,18 @@ end
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
 
-%!error <NotImplementedError>
-%! % scalar^array not implemented
+%!test
+%! % scalar^array works in SymPy > 1.0.0, otherwise not implemented
 %! syms x
 %! A = [1 2; 3 4];
-%! B = x^A;
+%! try
+%!   B = x^A;
+%!   waserr = false;
+%! catch
+%!   waserr = true;
+%!   notimpl = any (strfind (lasterr (), 'NotImplementedError'));
+%! end
+%! assert ((~ waserr && strcmp (regexprep (disp (B, 'flat'), '\s+', ''), 'x**Matrix([[1,2],[3,4]])')) || (waserr && notimpl))
 
 %!error
 %! A = sym([1 2; 3 4]);

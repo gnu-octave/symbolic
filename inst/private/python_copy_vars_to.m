@@ -32,7 +32,7 @@ function L = python_copy_vars_to(in, te, varargin)
           L{:} ...
           '    octoutput_drv("PYTHON: successful variable import")' ...
           'except:' ...
-          '    echo_exception_stdout("while copying vars to Python")' ...
+          '    echo_exception_stdout("while copying variables to Python")' ...
           '    raise'
         };
   end
@@ -48,14 +48,13 @@ function a = do_list(indent, in, varlist)
 
     if (isa(x,'sym'))
       c=c+1; a{c} = [sp '# sym'];
-      % need to be careful here: pickle might have escape codes
-      % .append(pickle.loads("""%s"""))', x.pickle)
-      % The extra printf around the pickle helps if it still has
+      % The extra printf around the srepr helps if it still has
       % escape codes (and seems harmless if it does not)
-      % Issue #107: x.pickle fails for matrices, use char() as workaround
-      c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(char(x)));
+      c=c+1; a{c} = sprintf ('%s%s.append(%s)', sp, in, sprintf (sympy (x)));
 
     elseif (ischar(x))
+      assert (strcmp (x, '') || isrow (x), ...
+	      'multirow char arrays cannot be converted to Python strings')
       if (exist ('OCTAVE_VERSION', 'builtin'))
         x = undo_string_escapes(x);
       else
@@ -95,7 +94,7 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
                             sp, in, num2hex(x));
 
-    elseif (isfloat(x) && isscalar(x) && iscomplex(x))
+    elseif (isfloat(x) && isscalar(x))  % iscomplex(x)
       if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end

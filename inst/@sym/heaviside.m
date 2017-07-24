@@ -51,12 +51,12 @@
 %% @example
 %% @group
 %% @comment Needs SymPy > 1.0
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, sym(1)/2)
 %%   @result{} (sym) 1/2
-%% @comment doctest: +SKIP
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, [0 sym(1)/2 10])
-%%   @result{} [0  1/2  10]  (1×3 matrix)
+%%   @result{} (sym) [0  1/2  10]  (1×3 matrix)
 %% @end group
 %% @end example
 %% (As of June 2016, this requires a development release of SymPy).
@@ -67,9 +67,9 @@
 
 function y = heaviside(x, h0)
   if (nargin == 1)
-    y = uniop_helper (x, 'Heaviside');
+    y = elementwise_op ('Heaviside', x);
   elseif (nargin == 2)
-    y = binop_helper (x, h0, 'Heaviside');
+    y = elementwise_op ('Heaviside', sym(x), sym(h0));
   else
     print_usage ();
   end
@@ -90,7 +90,7 @@ end
 
 %!test
 %! if (python_cmd ('return Version(spver) <= Version("1.0")'))
-%! print ('skipping test, sympy too old')
+%! disp ('skipping test, sympy too old')
 %! else
 %! H0 = sym([1 -2 0; 3 0 pi]);
 %! A = heaviside (sym(0), H0);

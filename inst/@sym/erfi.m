@@ -40,7 +40,7 @@ function y = erfi(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = uniop_helper (x, 'erfi');
+  y = elementwise_op ('erfi', x);
 end
 
 

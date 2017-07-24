@@ -42,9 +42,7 @@
 
 function z = log2(x)
 
-  sf = 'lambda x: sp.log(x, 2)';
-
-  z = uniop_helper (x, sf);
+  z = elementwise_op ('lambda x: sp.log(x, 2)', x);
 
 end
 
@@ -60,4 +58,4 @@ end
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = log2 (1.1);
-%! assert (A, B, -eps)
+%! assert (A, B, -5*eps)
