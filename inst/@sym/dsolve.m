@@ -378,7 +378,9 @@ end
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
 
 %!test
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms f(x) a b
 %! de = diff(f, x) == 4*f;
 %! s = dsolve(de, f(a) == b);
 %! assert (isequal (subs(rhs(s), x, a), b))
+%! end
