@@ -256,13 +256,19 @@ end
 %! g2 = C2*exp(-2*x) + C1*exp(2*x);
 %! assert (isequal (rhs(f), g1) || isequal (rhs(f), g2))
 
-%!xtest
+%!test
 %! % Not enough initial conditions
 %! syms y(x) C1
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3);
 %! g = 3*cos(2*x) + C1*sin(2*x);
-%! assert (isequal (rhs(f), g))
+%! try
+%!   f = dsolve(de, y(0) == 3);
+%!   waserr = false;
+%! catch
+%!   waserr = true;
+%!   expectederr = regexp (lasterr (), 'Perhaps.*under-specified');
+%! end
+%! assert ((waserr && expectederr) || isequal (rhs(f), g))
 
 %!test
 %! % Solution in implicit form
