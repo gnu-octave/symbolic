@@ -26,6 +26,9 @@ octsympy 2.5.1-dev
     using `sym(0.1, 'f')`.  Passing `'r'` gives the current heuristic
     behaviour.  Neither raises a warning.
 
+  * Calling `sym(cell)` now creates a sym array instead of a cell array.
+    Old behaviour of creating a cell array was deprecated in 2.5.0.
+
   * Bug fix: isequal(n) for symfun's correctly tests the argnames.
 
 
