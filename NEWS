@@ -20,6 +20,8 @@ octsympy 2.5.1-dev
 
           harmonic
 
+  * `solve` now supports vectors of equations and vectors of variables.
+
   * Better warning for `sym(0.1)`, updated docs about floating point.
 
   * Double values can now be converted to their exact rational value
