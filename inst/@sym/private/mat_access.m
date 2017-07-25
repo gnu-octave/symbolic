@@ -32,11 +32,6 @@ function z = mat_access(A, subs)
 
   if ((length(subs) == 1) && (islogical(subs{1})))
     %% A(logical)
-    if (~ is_same_shape (A, subs{1}))
-      % this is not an error, but quite likely reflects a user error
-      warning ('OctSymPy:subsref:index_matrix_not_same_shape', ...
-               'A and I in A(I) not same shape: no problem, but did you intend this?')
-    end
     subs{1} = find (subs{1});
     idx = subs{1};
     if (isempty (idx))

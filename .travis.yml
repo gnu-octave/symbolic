@@ -5,20 +5,35 @@ language: generic
 
 matrix:
   include:
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no SYMPY_VER=1.0 OCT_PPA=yes DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+  allow_failures:
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.0 OCT=daily DOCTEST=no  COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 before_install:
-  - if [ "x$OCT_PPA" = "xyes" ]; then
+  - if [ "x$OCT" = "xppa" ]; then
         sudo apt-add-repository -y ppa:octave/stable;
     fi
   - sudo apt-get update -qq
   - sudo apt-get install -y liboctave-dev
   - sudo apt-get install -y octave
+  - if [ "x$OCT" = "xdaily" ]; then
+        sudo apt-get install -y libarpack2-dev libgl2ps-dev libgraphicsmagick++-dev libqrupdate-dev libsuitesparse-dev;
+        wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
+        sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
+    fi
   - sudo apt-get install -y python$PYTHON_VER-pip
+# we need python-dev and python3-dev but we can drop numpy after https://bitbucket.org/mtmiller/pytave/issues/84 is resolved.
   - if [ "x$PYTAVE" = "xyes" ]; then
-        sudo apt-get install -y libboost-python-dev python$PYTHON_VER-numpy;
+        sudo apt-get install -y python$PYTHON_VER-dev python$PYTHON_VER-numpy;
     fi
 
 install:
@@ -29,12 +44,11 @@ install:
         octave -W --no-gui --eval "pkg install doctest-0.5.0.tar.gz";
     fi
   - if [ "x$PYTAVE" = "xyes" ]; then
-        hg clone https://bitbucket.org/genuinelucifer/pytave_main pytave;
+        hg clone https://bitbucket.org/mtmiller/pytave pytave;
         pushd pytave;
-        hg checkout travis;
         pwd;
         autoreconf --install || exit 1;
-        ./configure && make || exit 1;
+        ./configure PYTHON_VERSION=$PYTHON_VER && make || exit 1;
         popd;
     fi
 
@@ -45,10 +59,15 @@ script:
   - stty cols $COLUMNS rows 40
   - tput cols; stty size
   - pushd inst
-  - octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "r = octsympy_tests; exit(r)"
+  - if [ "x$PYTAVE" = "xyes" ]; then
+        export IPC=native;
+    else
+        export IPC=default;
+    fi
+  - octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
   - cat octsympy_tests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --path=/home/travis/build/cbm755/octsympy/pytave -W --no-gui --eval "pkg load doctest; syms x; r = doctest('.'); exit(~r)";
+        octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "pkg load doctest; sympref ipc $IPC; syms x; r = doctest('.'); exit(~r)";
     fi
   - popd
 

@@ -221,31 +221,11 @@ end
 %! I = rand(size(b)) > 0.5;
 %! assert (isequal (a(I), b(I)))
 %! I = I(:);
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! assert (isequal (a(I), b(I)))
 %! I = I';
 %! assert (isequal (a(I), b(I)))
-%! warning (s)
 %! I = logical(zeros(size(b)));
 %! assert (isequal (a(I), b(I)))
-
-%!warning <not same shape>
-%! % some warnings when I is wrong shape
-%! r = [1:6];
-%! ar = sym(r);
-%! c = r';
-%! ac = sym(c);
-%! Ir = rand(size(r)) > 0.5;
-%! temp = ac(Ir);
-
-%!warning <not same shape>
-%! % some warnings when I is wrong shape
-%! r = [1:6];
-%! ar = sym(r);
-%! c = r';
-%! ac = sym(c);
-%! Ic = rand(size(c)) > 0.5;
-%! temp = ar(Ic);
 
 %!test
 %! % 1D arrays, does right with despite warning
@@ -257,10 +237,8 @@ end
 %! Ic = rand(size(c)) > 0.5;
 %! assert (isequal (ar(Ir), r(Ir)))
 %! assert (isequal (ac(Ic), c(Ic)))
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! assert (isequal (ar(Ic), r(Ic)))
 %! assert (isequal (ac(Ir), c(Ir)))
-%! warning (s)
 
 %!test
 %! % rccross tests
@@ -297,22 +275,18 @@ end
 %! b = sym (a);
 
 %!test
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = true;
 %! assert (isequal (a(c), b(c)))
 %! c = false;
 %! assert (isequal (a(c), b(c)))
-%! warning (s)
 
 %!test
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true];
 %! assert (isequal (a(c), b(c)))
 %! d = c | true;
 %! assert (isequal (a(d), b(d)))
 %! d = c & false;
 %! assert (isequal (a(d), b(d)))
-%! warning (s)
 
 %!test
 %! c = [false true false true; true false true false; false true false true];
@@ -323,34 +297,28 @@ end
 %! assert (isequal (a(d), b(d)))
 
 %!test
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true false true false];
 %! assert (isequal (a(c), b(c)))
 %! d = c | true;
 %! assert (isequal (a(d), b(d)))
 %! d = c & false;
 %! assert (isequal (a(d), b(d)))
-%! warning (s)
 
 %!test
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false; true; false; true; false];
 %! assert (isequal (a(c), b(c)))
 %! d = c | true;
 %! assert (isequal (a(d), b(d)))
 %! d = c & false;
 %! assert (isequal (a(d), b(d)))
-%! warning (s)
 
 %!test
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! c = [false true; false true; true false];
 %! assert (isequal (a(c), b(c)))
 %! d = c | true;
 %! assert (isequal (a(d), b(d)))
 %! d = c & false;
 %! assert (isequal (a(d), b(d)))
-%! warning (s);
 
 %!shared
 
@@ -360,11 +328,9 @@ end
 %! c = r';
 %! ar = sym(r);
 %! ac = sym(c);
-%! s = warning ('off', 'OctSymPy:subsref:index_matrix_not_same_shape');
 %! assert (isequal (ar(false), r(false)))
 %! assert (isequal (ac(false), c(false)))
 %! assert (isequal (ar(false (1, 6)), r(false (1, 6))))
 %! assert (isequal (ac(false (1, 6)), c(false (1, 6))))
 %! assert (isequal (ar(false (6, 1)), r(false (6, 1))))
 %! assert (isequal (ac(false (6, 1)), c(false (6, 1))))
-%! warning (s)

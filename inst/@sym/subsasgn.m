@@ -425,23 +425,14 @@ end
 %! B = b;  B(I) = 17;
 %! assert (isequal (A, B))
 
-%!warning <unusual>
-%! % strange non-vector (matrix) RHS ("rhs2"), should be warning
-%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
-%! rhs2 = reshape(2*b(I), 2, 3);  % strange bit
-%! A = a;
-%! A(I) = rhs2;
-
 %!test
 %! % nonetheless, above strange case should give right answer
 %! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
 %! rhs = 2*b(I);
 %! rhs2 = reshape(rhs, 2, 3);
-%! s = warning ('off', 'OctSymPy:subsagn:rhs_shape');
 %! A0 = a; A1 = a;
 %! A0(I) = rhs;
 %! A1(I) = rhs2;
-%! warning (s)
 %! assert (isequal (A0, A1))
 
 

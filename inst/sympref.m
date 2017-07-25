@@ -1,5 +1,6 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -258,7 +259,7 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
@@ -418,6 +419,14 @@ end
 %!test
 %! % (just to cleanup after the error tests)
 %! delete('tmp_python_cmd.py')
+
+%!test
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
+%! sympref ('ipc', 'bogus');
+%! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
+
+%!error <invalid ipc mechanism> syms ('x')
 
 %!test
 %! sympref('defaults')

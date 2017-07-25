@@ -130,11 +130,18 @@ end
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
 
-%!error <NotImplementedError>
-%! % scalar^array not implemented
+%!test
+%! % scalar^array works in SymPy > 1.0.0, otherwise not implemented
 %! syms x
 %! A = [1 2; 3 4];
-%! B = x^A;
+%! try
+%!   B = x^A;
+%!   waserr = false;
+%! catch
+%!   waserr = true;
+%!   notimpl = any (strfind (lasterr (), 'NotImplementedError'));
+%! end
+%! assert ((~ waserr && strcmp (regexprep (disp (B, 'flat'), '\s+', ''), 'x**Matrix([[1,2],[3,4]])')) || (waserr && notimpl))
 
 %!error
 %! A = sym([1 2; 3 4]);

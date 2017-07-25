@@ -166,8 +166,8 @@ function f = symfun(expr, vars)
   % check that vars are unique Symbols
   cmd = { 'L, = _ins'
           'if not all([x is not None and x.is_Symbol for x in L]):'
-	  '    return False'
-	  'return len(set(L)) == len(L)' };
+          '    return False'
+          'return len(set(L)) == len(L)' };
   if (~ python_cmd (cmd, vars))
     error('OctSymPy:symfun:argNotUniqSymbols', ...
           'symfun arguments must be unique symbols')
