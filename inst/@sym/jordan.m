@@ -19,7 +19,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod @@sym {@var{J} =} jordan (@var{A})
+%% @deftypemethod  @@sym {@var{J} =} jordan (@var{A})
 %% @deftypemethodx @@sym {[@var{V}, @var{J}] =} jordan (@var{A})
 %% Symbolic Jordan canonical form of a matrix.
 %%
@@ -122,16 +122,18 @@
 %% Keywords: symbolic
 
 function [V, J] = jordan (A)
-  cmd = {'(A,) = _ins'
-         'if A.is_Matrix:'
+  cmd = {'(A, calctrans) = _ins'
+         'if not A.is_Matrix:'
+         '    A = sp.Matrix([A])'
+         'if Version(spver) < Version("1.1"):'
          '    (V, J) = A.jordan_form()'
-         'else:'
-         '    (V, J) = sp.Matrix([A]).jordan_form()'};
+         '    return (V, J) if calctrans else J'
+         'return A.jordan_form(calctrans)'};
 
   if (nargout <= 1)
-    V = python_cmd ([cmd; {'return (J,)'}], sym (A));
+    V = python_cmd (cmd, sym (A), false);
   else
-    [V, J] = python_cmd ([cmd; {'return (V, J)'}], sym (A));
+    [V, J] = python_cmd (cmd, sym (A), true);
   end
 end
 
