@@ -100,6 +100,14 @@ end
 %! assert (double (ellipticE (ms)), E, -1e-15)
 
 %!test
+%! % compare to double ellipke
+%! m = -10.3;
+%! ms = -sym(103)/10;
+%! [K, E] = ellipke (m);
+%! assert (double (ellipticK (ms)), K, -1e-15)
+%! assert (double (ellipticE (ms)), E, -1e-15)
+
+%!test
 %! % compare to Maple
 %! us = vpa (ellipticK (sym (7)), 40);
 %! % > evalf(EllipticK(sqrt(7)), 40);
