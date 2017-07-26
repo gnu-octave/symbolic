@@ -15,10 +15,12 @@ octsympy 2.5.1-dev
           kroneckerDelta
           pochhammer
 
-  * New `@double` numerical functions; these are wrappers around SymPy, so
-    they are slower than native floating point implementations.
+  * New `@double` numerical functions; these are wrappers around SymPy,
+    so they are slower than native floating-point implementations.
 
           harmonic
+
+  * `solve` now supports vectors of equations and vectors of variables.
 
   * Better warning for `sym(0.1)`, updated docs about floating point.
 
@@ -34,6 +36,9 @@ octsympy 2.5.1-dev
 
   * `sym` now accepts function handles such as anonymous functions as
     inputs.
+
+  * `subs` is not approriate for numerical evaluation; add an example in
+    `help subs` which shows how to do this with `function_handle`.
 
   * Calling `sym(cell)` now creates a sym array instead of a cell array.
     Old behaviour of creating a cell array was deprecated in 2.5.0.
