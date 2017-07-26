@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Alex Vong
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -40,16 +41,17 @@
 %%
 %% We can also compute the generalized eigenvectors:
 %% @example
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% @group
 %% [V, J] = jordan (A)
 %%   @result{} V = (sym 4×4 matrix)
-%%       ⎡12  1  -26  -2⎤
-%%       ⎢              ⎥
-%%       ⎢-6  2  18   -3⎥
-%%       ⎢              ⎥
-%%       ⎢0   1  -10  0 ⎥
-%%       ⎢              ⎥
-%%       ⎣6   0   2   1 ⎦
+%%       ⎡4   1  5   0⎤
+%%       ⎢            ⎥
+%%       ⎢-3  0  -3  1⎥
+%%       ⎢            ⎥
+%%       ⎢2   0  1   0⎥
+%%       ⎢            ⎥
+%%       ⎣-1  0  1   0⎦
 %%   @result{} J = (sym 4×4 matrix)
 %%       ⎡2  1  0  0⎤
 %%       ⎢          ⎥
@@ -59,39 +61,48 @@
 %%       ⎢          ⎥
 %%       ⎣0  0  0  2⎦
 %% @end group
+%%
+%% @group
+%% A*V - V*J
+%%   @result{} ans = (sym 4×4 matrix)
+%%       ⎡0  0  0  0⎤
+%%       ⎢          ⎥
+%%       ⎢0  0  0  0⎥
+%%       ⎢          ⎥
+%%       ⎢0  0  0  0⎥
+%%       ⎢          ⎥
+%%       ⎣0  0  0  0⎦
+%% @end group
 %% @end example
+%%
 %% The generalized eigenvectors are the columns of @var{V}.
 %% Those corresponding to a Jordan block form a cycle.
 %% We can check those columns corresponding to the leftmost Jordan block:
 %% @example
 %% @group
-%% B = A - J(2, 2) * eye (4)
-%%   @result{} B = (sym 4×4 matrix)
-%%       ⎡4   5   -2  -3⎤
-%%       ⎢              ⎥
-%%       ⎢-3  -3  3   3 ⎥
-%%       ⎢              ⎥
-%%       ⎢2   1   -4  -3⎥
-%%       ⎢              ⎥
-%%       ⎣-1  1   5   3 ⎦
+%% lambda = J(2, 2)
+%%   @result{} lambda = (sym) 2
+%% B = A - lambda*eye (4);
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% v2 = V(:, 2)
 %%   @result{} v2 = (sym 4×1 matrix)
 %%       ⎡1⎤
 %%       ⎢ ⎥
-%%       ⎢2⎥
+%%       ⎢0⎥
 %%       ⎢ ⎥
-%%       ⎢1⎥
+%%       ⎢0⎥
 %%       ⎢ ⎥
 %%       ⎣0⎦
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% v1 = B * v2
 %%   @result{} v1 = (sym 4×1 matrix)
-%%       ⎡12⎤
+%%       ⎡4 ⎤
 %%       ⎢  ⎥
-%%       ⎢-6⎥
+%%       ⎢-3⎥
 %%       ⎢  ⎥
-%%       ⎢0 ⎥
+%%       ⎢2 ⎥
 %%       ⎢  ⎥
-%%       ⎣6 ⎦
+%%       ⎣-1⎦
 %% v0 = B * v1
 %%   @result{} v0 = (sym 4×1 matrix)
 %%       ⎡0⎤
