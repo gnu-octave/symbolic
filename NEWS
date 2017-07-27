@@ -20,6 +20,8 @@ octsympy 2.6.0 (2017-07-27)
 
           harmonic
 
+  * Support for the new SymPy 1.1.1.
+
   * `solve` now supports vectors of equations and vectors of variables.
 
   * Better warning for `sym(0.1)`, updated docs about floating point.
