@@ -295,5 +295,5 @@ end
 
 %!xtest
 %! % returns Eq, probably minor upstream problem?
-%! A = solve([2*x == 4*y, 2 == 2], x)
+%! A = solve([2*x == 4*y, 2 == 2], x);
 %! assert (isequal (A, 2*y))
