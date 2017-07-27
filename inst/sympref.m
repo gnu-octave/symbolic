@@ -1,5 +1,6 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -163,7 +164,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.5.1-dev
+%%   @result{} 2.6.0
 %% @end group
 %% @end example
 %%
@@ -206,7 +207,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.5.1-dev';
+      varargout{1} = '2.6.0';
 
     case 'display'
       if (nargin == 1)
@@ -418,6 +419,14 @@ end
 %!test
 %! % (just to cleanup after the error tests)
 %! delete('tmp_python_cmd.py')
+
+%!test
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
+%! sympref ('ipc', 'bogus');
+%! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
+
+%!error <invalid ipc mechanism> syms ('x')
 
 %!test
 %! sympref('defaults')

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -36,6 +36,43 @@
 %% @end group
 %% @end example
 %%
+%% Systems of equations are supported:
+%% @example
+%% @group
+%% syms x y
+%% eqns = [y*exp(x) == 16; x^5 == x + x*y^2]
+%%   @result{} eqns = (sym 2×1 matrix)
+%%
+%%       ⎡     x       ⎤
+%%       ⎢  y⋅ℯ  = 16  ⎥
+%%       ⎢             ⎥
+%%       ⎢ 5      2    ⎥
+%%       ⎣x  = x⋅y  + x⎦
+%% @end group
+%%
+%% @group
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
+%% vpasolve(eqns, [x; y], [1; 1])
+%%   @result{} (sym 2×1 matrix)
+%%
+%%       ⎡1.7324062670465659633407456995303⎤
+%%       ⎢                                 ⎥
+%%       ⎣2.8297332667835974266598942031498⎦
+%% @end group
+%% @end example
+%%
+%% Complex roots can be found but you must provide a complex initial
+%% guess:
+%% @example
+%% @group
+%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
+%% vpasolve(x^2 + 2 == 0, x, 1i)
+%%   @result{} (sym) 1.4142135623730950488016887242097⋅ⅈ
+%% @end group
+%% @end example
+%%
+%% Some of the examples above require SymPy version 1.1 or later.
+%%
 %% @seealso{vpa}
 %% @end defun
 
@@ -54,15 +91,45 @@ function r = vpasolve(e, x, x0)
 
   n = digits();
 
-  % nsolve gives back mpf object: https://github.com/sympy/sympy/issues/6092
+  % everything to column vector
+  e = e(:);
+  x = x(:);
+  x0 = x0(:);
+
+  if (isscalar (x0)) && (numel (x) >= 2)
+    x0 = x0 * ones (size (x));
+  end
+
+  % IPC cannot pass double matrices yet
+  if (isnumeric (x0) && (numel (x0) > 1))
+    x0 = num2cell (x0);
+  end
+
+  if (python_cmd ('return Version(spver) > Version("1.0")'))
+    cmd = {
+      '(e, x, x0, n) = _ins'
+      'import mpmath'
+      'mpmath.mp.dps = n'
+      'e = list(e) if isinstance(e, Matrix) else e'
+      'x = list(x) if isinstance(x, Matrix) else x'
+      'x0 = list(x0) if isinstance(x0, Matrix) else x0'
+      'r = nsolve(e, x, x0)'
+      'return r' };
+    r = python_cmd (cmd, sym(e), x, x0, n);
+    return
+  end
+
+
+  %% Older SymPy had lots of problems with nsolve:
+  % https://github.com/sympy/sympy/issues/6092
+  % https://github.com/sympy/sympy/issues/8564
+  % (can drop all this when we stop supporting 1.0)
 
   cmd = {
     '(e, x, x0, n) = _ins'
     'import mpmath'
     'mpmath.mp.dps = n'
     'findroot = mpmath.findroot'
-    '#r = nsolve(e, x, x0)'  % https://github.com/sympy/sympy/issues/8564
-    '#r = sympy.N(r, n)'  % deal with mpf
     'if isinstance(e, Equality):'
     '    e = e.lhs - e.rhs'
     'e = e.evalf(n)'
@@ -115,10 +182,63 @@ end
 
 %!test
 %! % very accurate sqrt pi
-%! % fails: https://github.com/sympy/sympy/issues/8564
+%! % (used to fail https://github.com/sympy/sympy/issues/8564)
 %! syms x
 %! e = x*x == sym(pi);
 %! m = digits(256);
 %! q = vpasolve(e, x, 3);
 %! assert (double(abs(sin(q*q))) < 1e-256)
 %! digits(m);
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x
+%! r = vpasolve(x^2 + 2 == 0, x, 1i);
+%! assert (double (imag(r)^2 - 2), 0, 1e-32)
+%! assert (double (real(r)^2), 0, 1e-32)
+%! r = vpasolve(x^2 + 2 == 0, x, -3i + 5);
+%! assert (double (imag(r)^2 - 2), 0, 1e-32)
+%! assert (double (real(r)^2), 0, 1e-32)
+%! end
+
+%!test
+%! % system
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x y
+%! f = 3*x^2 - 2*y^2 - 1;
+%! g = x^2 - 2*x + y^2 + 2*y - 8;
+%! r = vpasolve([f; g], [x; y], sym([-1; 1]));
+%! assert (isa (r, 'sym'))
+%! assert (numel (r) == 2)
+%! end
+
+%!test
+%! % system, double guess
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x y
+%! f = 3*x^2 - 2*y^2 - 1;
+%! g = x^2 - 2*x + y^2 + 2*y - 8;
+%! r = vpasolve([f; g], [x; y], [-1.1 1.2]);
+%! end
+
+%!test
+%! % system, double guess
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x y
+%! f = 3*x^2 - 2*y^2 - 1;
+%! g = x^2 - 2*x + y^2 + 2*y - 8;
+%! r1 = vpasolve([f; g], [x; y], [-1.1]);
+%! r2 = vpasolve([f; g], [x; y], [-1.1 -1.1]);
+%! assert (isequal (r1, r2))
+%! end
+
+%!test
+%! % system, more eqns than unknowns
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
+%! syms x y
+%! eqns = [x^3 - x - y == 0; y*exp(x) == 16; log(y) + x == 4*log(sym(2))];
+%! r = vpasolve (eqns, [x; y], [1; 1]);
+%! A = subs (lhs (eqns), [x; y], r);
+%! err = A - [0; 16; 4*log(sym(2))];
+%! assert (double (err), zeros (size (err)), 1e-31)
+%! end

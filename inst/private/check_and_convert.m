@@ -30,8 +30,8 @@ function obj = check_and_convert(var_pyobj)
 
     sp = py.sympy;
     _sym = py.tuple({sp.Basic, sp.MatrixBase});
-    string_types = py.six.string_types;
-    integer_types = py.six.integer_types;
+    string_types = sp.compatibility.string_types;
+    integer_types = sp.compatibility.integer_types;
   end
 
 
