@@ -33,7 +33,8 @@ help:
 	@echo "  test               run tests with Octave"
 	@echo "  doctest            run doctests with Octave"
 	@echo "  dist               create Octave package (${OCTAVE_RELEASE_TARBALL})"
-	@echo "  html               create Octave Forge website"
+	@echo "  html               create Octave Forge website (${HTML_TARBALL})"
+	@echo "  release            create both tarballs and md5 sums"
 	@echo
 	@echo "  matlab_test        run tests with Matlab"
 	@echo "  matlab_pkg         create Matlab package (${MATLAB_PKG_ZIP})"
@@ -85,6 +86,14 @@ $(HTML_DIR): install | $(BUILD_DIR)
 
 dist: $(OCTAVE_RELEASE_TARBALL)
 html: $(HTML_TARBALL)
+md5: $(OCTAVE_RELEASE_TARBALL) $(HTML_TARBALL)
+	@md5sum $^
+
+release: md5
+	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
+	@echo "*After review*, an Octave-Forge admin will tag this with:"
+	@echo "    git tag -a v$(VERSION) -m \"Version $(VERSION)\""
+
 
 ${BUILD_DIR} ${MATLAB_PKG}/private ${MATLAB_PKG}/tests_matlab ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@logical ${MATLAB_PKG}/@double:
 	mkdir -p "$@"
