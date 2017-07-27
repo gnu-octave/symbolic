@@ -92,6 +92,10 @@ function r = vpa(x, n)
       x = 'S.Pi';
     elseif (isequal (x, -pi))
       x = '-S.Pi';
+    elseif (isequal (x, exp (1)))
+      x = exp (sym (1));
+    elseif (isequal (x, -exp (1)))
+      x = -exp (sym (1));
     end
     cmd = {
       'x, n = _ins'
@@ -196,6 +200,12 @@ end
 %! % can pass pi directly to vpa
 %! a = vpa(sym(pi), 128);
 %! b = vpa(pi, 128);
+%! assert (isequal (a, b))
+
+%!test
+%! % if sym does sth special for e so should vpa
+%! a = vpa(sym(exp(1)), 64);
+%! b = vpa(exp(1), 64);
 %! assert (isequal (a, b))
 
 %!test

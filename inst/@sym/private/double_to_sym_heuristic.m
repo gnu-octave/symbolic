@@ -37,6 +37,11 @@ function y = double_to_sym_heuristic (x, ratwarn, argnstr)
     y = python_cmd ('return S.Pi');
   elseif (isequal (x, -pi))
     y = python_cmd ('return -S.Pi');
+  elseif (isequal (x, exp (1)))
+    %% Special case for e
+    y = python_cmd ('return sympy.exp(1)');
+  elseif (isequal (x, -exp (1)))
+    y = python_cmd ('return -sympy.exp(1)');
   elseif ((abs (x) < flintmax) && (mod (x, 1) == 0))
     y = python_cmd ('return Integer(_ins[0])', int64 (x));
   else
