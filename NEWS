@@ -34,6 +34,9 @@ octsympy 2.6.0 (2017-07-27)
   * `sym('i')` and `sym('I')` no longer create the imaginary unit: use
     `sym(i)` or `sym(1i)`.
 
+  * `sym(e)` now gives the same as `exp(sym(1))`.  However, `sym('e')`
+    and `syms e` continue to create a variable named `e`.
+
   * `sym` now accepts function handles such as anonymous functions as
     inputs.
 
