@@ -162,4 +162,4 @@ ml_convert_comments: ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@dou
 	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${MATLAB_PKG}/')"
 
 matlab_test:
-	${MATLAB} -nojvm -nodisplay -nosplash -r "addpath('inst'); octsympy_tests_matlab"
+	cd "${MATLAB_PKG}"; ${MATLAB} -nojvm -nodisplay -nosplash -r "${MATLAB_STARTUP_CMD}; octsympy_tests_matlab"

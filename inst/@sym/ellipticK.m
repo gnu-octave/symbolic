@@ -101,11 +101,13 @@ end
 
 %!test
 %! % compare to double ellipke
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %! m = -10.3;
 %! ms = -sym(103)/10;
 %! [K, E] = ellipke (m);
 %! assert (double (ellipticK (ms)), K, -1e-15)
 %! assert (double (ellipticE (ms)), E, -1e-15)
+%! end
 
 %!test
 %! % compare to Maple
