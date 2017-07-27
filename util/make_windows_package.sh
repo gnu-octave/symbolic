@@ -5,13 +5,13 @@ PYEXE=py27910.exe
 PYEXEREADME=py27910.readme.txt   # from the src package
 
 # download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.0
+SYMPY=sympy-1.1.1
 MPMATH=mpmath-0.19
 
 # for day-to-day testing
-VER=2.5.1-dev
+VER=2.6.0-dev
 # for release
-#VER=2.5.1
+#VER=2.6.0
 #TAG=v${VER}
 
 

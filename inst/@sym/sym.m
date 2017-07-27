@@ -24,6 +24,7 @@
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{ratflag})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{handle})
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -218,6 +219,22 @@
 %% @end group
 %% @end example
 %%
+%% Anonymous functions can be converted to symbolic expressions by
+%% passing their function handle:
+%% @example
+%% @group
+%% f = @@(n, x) sin (pi*besselj (n, x)/2)
+%%   @result{} f = @@(n, x) sin (pi * besselj (n, x) / 2)
+%% class (f)
+%%   @result{} function_handle
+%% sym(f)
+%%   @result{} (sym)
+%%          ⎛π⋅besselj(n, x)⎞
+%%       sin⎜───────────────⎟
+%%          ⎝       2       ⎠
+%% @end group
+%% @end example
+%%
 %% It is also possible to save sym objects to file and then load them when
 %% needed in the usual way with the @code{save} and @code{load} commands.
 %%
@@ -268,11 +285,28 @@ function s = sym(x, varargin)
     end
   end
 
-  if (iscell (x))  % Handle Cells
-    warning ('OctSymPy:deprecated', ...
-            ['creating a cell array of sym using "sym(cell)" is deprecated;\n' ...
-             '         future versions will instead create a sym array.']);
-    s = cell_array_to_sym (x, varargin{:});
+  if (iscell (x))
+    %% Cell arrays are converted to sym arrays
+    assert (isempty (varargin));
+    s = cell2sym (x);
+    return
+  end
+
+  if (isa (x, 'function_handle'))
+    assert (nargin == 1)
+    %% Need argnames of the handle.  TODO: can do better than regex?
+    T = regexp (func2str (x), '^\@\((?:(\w+)(?:, ))*(\w+)?\).*', 'tokens');
+    assert (length (T) == 1)
+    T = T{1};
+    v = cell (size (T));
+    for i = 1:length (T)
+      v{i} = sym (sprintf ('Symbol("%s")', T{i}));
+    end
+    %% call the function with those arguments as symbolic inputs
+    s = x (v{:});
+    if (~ isa (s, 'sym'))  % e.g., for "@(x) 7"
+      s = sym (s);
+    end
     return
   end
 
@@ -393,15 +427,14 @@ function s = sym(x, varargin)
       return
     end
 
-    x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
 
     %% Use Symbol() for words, not numbers, not "f(x)".
     if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
-              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
+              'x = _ins[0]'
+              '_ins = _ins[1:]'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
@@ -412,8 +445,8 @@ function s = sym(x, varargin)
               '        d.update({_ins[i]:True})'
               '    else:'
               '        raise ValueError("something unexpected in assumptions")'
-              'return Symbol("{s}", **d)' };
-      s = python_cmd (strrep (cmd, '{s}', x), asm{:});
+              'return Symbol(x, **d)' };
+      s = python_cmd (cmd, x, asm{:});
 
       if (nargin == 2 && sclear)
         % ---------------------------------------------
@@ -449,7 +482,7 @@ function s = sym(x, varargin)
         return
       end
 
-      cmd = {'x = "{s}"'
+      cmd = {'x = _ins[0]'
              'try:'
              '    return (0, 0, S(x))'
              'except Exception as e:'
@@ -467,7 +500,7 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (strrep (cmd, '{s}', x));
+      [err flag s] = python_cmd (cmd, x);
 
       switch (flag)
         case 1  % Bad call to python function
@@ -896,19 +929,10 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!warning <deprecated> sym({1 2});
+%!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
 
-%!test
-%! % multiple syms with assumptions
-%! % TODO: update this with #603
-%! s = warning ('off', 'OctSymPy:deprecated');
-%! q = sym ({'a', 'b', 'c'}, 'positive');
-%! warning (s)
-%! t = {};
-%! t{1, 1} = 'a: positive';
-%! t{1, 2} = 'b: positive';
-%! t{1, 3} = 'c: positive';
-%! assert (isequal (t, assumptions(q)))
+%!error sym({1 2 'a'}, 'positive');
+%!error sym({'a' 'b'}, 'positive');
 
 %!test
 %! a = sym ('--1');
@@ -926,3 +950,18 @@ end
 %! assert (isequal (C1{2,3}, 6*x))
 %! assert (isequal (C1{1,3}, sym(3)))
 %! assert (isa (C1{1,3}, 'sym'))
+
+%!test
+%! % function_handle
+%! f = @(x, y) y*sin(x);
+%! syms x y
+%! assert (isequal (sym (f), y*sin(x)));
+%! f = @(x) 42;
+%! assert (isequal (sym (f), sym (42)));
+%! f = @() 42;
+%! assert (isequal (sym (f), sym (42)));
+
+%!error <ndefined>
+%! % function_handle
+%! f = @(x) A*sin(x);
+%! sym (f)
