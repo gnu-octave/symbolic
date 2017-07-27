@@ -668,6 +668,12 @@ end
 %! assert (isa (A, 'sym'))
 
 %!test
+%! % symbolic matrix, symbolic but Integer size
+%! A = sym ('A', sym([2 3]));
+%! assert (isa (A, 'sym'))
+%! assert (isequal (size (A), [2 3]))
+
+%!test
 %! % symbolic matrix, subs in for size
 %! syms n m integer
 %! A = sym ('A', [n m]);
