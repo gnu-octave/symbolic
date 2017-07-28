@@ -295,15 +295,19 @@ function s = sym(x, varargin)
   if (isa (x, 'function_handle'))
     assert (nargin == 1)
     %% Need argnames of the handle.  TODO: can do better than regex?
-    T = regexp (func2str (x), '^\@\((?:(\w+)(?:, ))*(\w+)?\).*', 'tokens');
-    assert (length (T) == 1)
-    T = T{1};
-    v = cell (size (T));
-    for i = 1:length (T)
-      v{i} = sym (sprintf ('Symbol("%s")', T{i}));
+    vars = regexp (func2str (x), '^\@\(([\w,\s]*)\)', 'tokens', 'once');
+    assert (length (vars) == 1)
+    vars = vars{1};
+    if (isempty (vars))
+      vars = {};  % empty char to empty cell
+    else
+      vars = strsplit (vars, {',' ' '});
+    end
+    for i = 1:length (vars)
+      vars{i} = sym (sprintf ('Symbol("%s")', vars{i}));
     end
     %% call the function with those arguments as symbolic inputs
-    s = x (v{:});
+    s = x (vars{:});
     if (~ isa (s, 'sym'))  % e.g., for "@(x) 7"
       s = sym (s);
     end
