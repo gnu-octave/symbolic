@@ -9,9 +9,9 @@ SYMPY=sympy-1.1.1
 MPMATH=mpmath-0.19
 
 # for day-to-day testing
-VER=2.6.0-dev
+VER=2.6.1-dev
 # for release
-#VER=2.6.0
+#VER=2.6.1
 #TAG=v${VER}
 
 
