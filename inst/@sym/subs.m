@@ -158,113 +158,35 @@ function g = subs(f, in, out)
   %  return
   %end
 
-  %% cast everything to cell, and other processing
   if (~ iscell (in) && isscalar (in))
     in = {in};
-    if (~ iscell (out))
-      out = {out};
-    end
-  elseif (~ iscell (in))
-    assert (numel (out) == numel (in), 'number of outputs must match inputs')
-    myin = cell (size (in));
-    for i = 1:numel(in)
-      % Issue #17
-      idx.type = '()';
-      idx.subs = {i};
-      myin{i} = subsref (in, idx);
-    end
-    in = myin;
-    if (~ iscell (out))
-      myout = cell (size (out));
-      for i = 1:numel(out)
-        % Issue #17
-        idx.type = '()';
-        idx.subs = {i};
-        myout{i} = subsref (out, idx);
-      end
-      out = myout;
-    end
-  elseif (iscell (in) && isscalar (in))
-    if (iscell (out))
-      assert (numel (out) == numel (in), 'number of outputs must match inputs')
-    end
-    if (~ iscell (out))
-      out = {out};
-    end
-  else
-    % "in" is a cell
-    assert (numel (out) == numel (in), 'number of outputs must match inputs')
-    if (~ iscell (out))
-      myout = cell (size (out));
-      for i = 1:numel(out)
-        % Issue #17
-        idx.type = '()';
-        idx.subs = {i};
-        myout{i} = subsref (out, idx);
-      end
-      out = myout;
-    end
+  end
+  if (iscell (in) && isscalar (in) && ~ iscell (out))
+    out = {out};
   end
 
+  % "zip" will silently truncate
+  assert (numel (in) == 1 || numel (in) == numel (out),
+          'subs: number of outputs must match inputs')
 
-  %% matrix/vector output: if scalar f and cell array in, then each out must
-  % be the same size or scalar.
-  have_vec_sub = false;
-  %if (iscell (in) && iscell (out))
-  %if (iscell (in))
-    assert (numel(out) == numel(in))
-    for i = 1:numel(in)
-      % TODO: careful, sym('a', [n m]) identifies as scalar...
-      assert (isscalar(in{i}), 'all variables to be substituted for must be scalar')
-      sz = size(out{i});
-      if (~ isequal (sz, [1 1]))
-        if (have_vec_sub)
-          assert (isequal(sz, vecsz), 'all subs must be same dim or scalar')
-        else
-          vecsz = sz;
-          have_vec_sub = true;
-        end
-      end
-    end
-  %end
-
-  %% Scalars in, vectors out
-  % A workaround for Issue #10, also upstream Sympy Issue #2962
-  % (github.com/sympy/sympy/issues/2962).  There are probably more more complicated
-  % cases that still fail.
-  if (isscalar (f) && have_vec_sub)
-    assert (iscell (out), 'wtf?');
-    assert (iscell (in), 'todo, in was supposed to be cell');
-    % g = zeros(vecsz, 'sym);  # TODO issue #xyz
-    g = sym (zeros (vecsz));
-    for i = 1:prod(vecsz)
-      myout = cell (size (out));
-      for j = 1:numel(out)
-        thisout = out{j};
-        if (numel (thisout) == 1)
-          myout{j} = thisout;
-        else
-          % f$#k Issue #17: myout{j} = thisout(i);
-          idx.type = '()'; idx.subs = {i};
-          temp = subsref(thisout, idx);
-          myout{j} = temp;
-        end
-      end
-      temp = subs(f, in, myout);
-      % f$#k Issue #17: g(i) = temp;
-      idx.type = '()'; idx.subs = {i};
-      g = subsasgn(g, idx, temp);
-    end
-    return
-  end
-
-
-  % simultaneous=True is important so we can do subs(f,[x y], [y x])
-
-  cmd = { '(f, xx, yy) = _ins'
-          'sublist = zip(xx, yy)'
-          'g = f.subs(sublist, simultaneous=True).doit()'
-          'return g,' };
+  cmd = {
+    '(f, xx, yy) = _ins'
+    'has_vec_sub = any(y.is_Matrix for y in yy)'
+    'if not has_vec_sub:'
+    '    sublist = zip(xx, yy)'
+    '    g = f.subs(sublist, simultaneous=True).doit()'
+    '    return g'
+    '# more complicated when dealing with matrix/vector'
+    'sizes = {(a.shape if a.is_Matrix else (1, 1)) for a in yy}'
+    'sizes.discard((1, 1))'
+    'assert len(sizes) == 1, "all substitions must be same size or scalar"'
+    'g = zeros(*sizes.pop())'
+    'for i in range(len(g)):'
+    '    yyy = [y[i] if y.is_Matrix else y for y in yy]'
+    '    sublist = zip(xx, yyy)'
+    '    g[i] = f.subs(sublist, simultaneous=True).doit()'
+    'return g'
+  };
 
   g = python_cmd (cmd, f, in, out);
 
