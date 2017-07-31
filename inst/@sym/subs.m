@@ -83,10 +83,9 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Note}: There are many possibilities that we don't support
-%% if you start mixing scalars and matrices.  We support one simple
-%% case of subbing a symbolic matrix in for a symbolic scalar,
-%% within a scalar expression:
+%% @strong{Note}: Mixing scalars and matrices may lead to trouble.
+%% We support the case of substituting one or more symbolic matrices
+%% in for symbolic scalars, within a scalar expression:
 %% @example
 %% @group
 %% f = sin(x);
@@ -96,12 +95,22 @@
 %%       ⎡sin(1)  sin(a)⎤
 %%       ⎢              ⎥
 %%       ⎣  0     sin(b)⎦
-%%
 %% @end group
 %% @end example
-%% If you want to extend support to more cases, a good place to
-%% start, as of July 2014, is the Sympy Issue #2962
-%% [https://github.com/sympy/sympy/issues/2962].
+%%
+%% When using multiple variables and matrix substitions, it may be
+%% helpful to use cell arrays:
+%% @example
+%% @group
+%% subs(y*sin(x), @{x, y@}, @{3, [2 sym('a')]@})
+%%   @result{} ans = (sym) [2⋅sin(3)  a⋅sin(3)]  (1×2 matrix)
+%% @end group
+%%
+%% @group
+%% subs(y*sin(x), @{x, y@}, @{[2 3], [2 sym('a')]@})
+%%   @result{} ans = (sym) [2⋅sin(2)  a⋅sin(3)]  (1×2 matrix)
+%% @end group
+%% @end example
 %%
 %% @seealso{@@sym/symfun}
 %% @end defmethod
@@ -124,39 +133,8 @@ function g = subs(f, in, out)
     end
   end
 
-  %% special case: scalar f, scalar in, vector out
-  % A workaround for Issue #10, also upstream Sympy Issue @2962
-  % (github.com/sympy/sympy/issues/2962).  There are more complicated
-  % cases that will also fail but this one must be pretty common.
-  if (isscalar(f) && ~iscell(in) && ~iscell(out) && isscalar(in) && ~isscalar(out))
-    g = sym(out);  % a symarray of same size-shape as out, whether
-                   % out is sym or double
-    for i = 1:numel(out)
-      % f$#k Issue #17
-      %g(i) = subs(f, in, sym(out(i)))
-      idx.type = '()'; idx.subs = {i};
-      temp = subsref(out, idx);
-      temp2 = subs(f, in, temp);
-      g = subsasgn(g, idx, temp2);
-    end
-    return
-  end
-
-  %% Simple code for scalar x
-  % The more general code would work fine, but maybe this makes some
-  % debugging easier, e.g., without simultaneous mode?
-  if (isscalar(in) && ~iscell(in) && ~iscell(out))
-    cmd = { '(f, x, y) = _ins'
-            'return f.subs(x, y).doit(),' };
-    g = python_cmd (cmd, sym(f), sym(in), sym(out));
-    return
-  end
-
-
-  %% In general
-  % We build a list of of pairs of substitutions.
-
   % ensure everything is sym
+  f = sym(f);
   if (iscell (in))
     for i = 1:numel(in)
       in{i} = sym(in{i});
@@ -172,38 +150,123 @@ function g = subs(f, in, out)
     out = sym(out);
   end
 
+  %% Simpler code for scalar x
+  %if (isscalar(in) && isscalar(in) && isscalar(out))
+  %  cmd = { '(f, x, y) = _ins'
+  %          'return f.subs(x, y).doit(),' };
+  %  g = python_cmd (cmd, sym(f), sym(in), sym(out));
+  %  return
+  %end
 
-
-  if ( (iscell(in))  ||  (numel(in) >= 2) )
-    assert_same_shape(in,out)
-    sublist = cell(1, numel(in));
-    for i = 1:numel(in)
-      % not really Bug #17, but I doubt if I'd have done it this
-      % way w/o that bug.
-      if (iscell(in)),  idx1.type = '{}'; else idx1.type = '()'; end
-      if (iscell(out)), idx2.type = '{}'; else idx2.type = '()'; end
-      idx1.subs = {i};
-      idx2.subs = {i};
-      sublist{i} = { subsref(in, idx1), subsref(out, idx2) };
+  %% cast everything to cell, and other processing
+  if (~ iscell (in) && isscalar (in))
+    in = {in};
+    if (~ iscell (out))
+      out = {out};
     end
-
-  elseif (numel(in) == 1)  % scalar, non-cell input
-    assert(~iscell(out))
-    % out could be an array (although this doesn't work b/c of
-    % Issue #10)
-    sublist = { {in, out} };
-
+  elseif (~ iscell (in))
+    assert (numel (out) == numel (in), 'number of outputs must match inputs')
+    myin = cell (size (in));
+    for i = 1:numel(in)
+      % Issue #17
+      idx.type = '()';
+      idx.subs = {i};
+      myin{i} = subsref (in, idx);
+    end
+    in = myin;
+    if (~ iscell (out))
+      myout = cell (size (out));
+      for i = 1:numel(out)
+        % Issue #17
+        idx.type = '()';
+        idx.subs = {i};
+        myout{i} = subsref (out, idx);
+      end
+      out = myout;
+    end
+  elseif (iscell (in) && isscalar (in))
+    if (iscell (out))
+      assert (numel (out) == numel (in), 'number of outputs must match inputs')
+    end
+    if (~ iscell (out))
+      out = {out};
+    end
   else
-    error('not a valid sort of subs input');
+    % "in" is a cell
+    assert (numel (out) == numel (in), 'number of outputs must match inputs')
+    if (~ iscell (out))
+      myout = cell (size (out));
+      for i = 1:numel(out)
+        % Issue #17
+        idx.type = '()';
+        idx.subs = {i};
+        myout{i} = subsref (out, idx);
+      end
+      out = myout;
+    end
   end
+
+
+  %% matrix/vector output: if scalar f and cell array in, then each out must
+  % be the same size or scalar.
+  have_vec_sub = false;
+  %if (iscell (in) && iscell (out))
+  %if (iscell (in))
+    assert (numel(out) == numel(in))
+    for i = 1:numel(in)
+      % TODO: careful, sym('a', [n m]) identifies as scalar...
+      assert (isscalar(in{i}), 'all variables to be substituted for must be scalar')
+      sz = size(out{i});
+      if (~ isequal (sz, [1 1]))
+        if (have_vec_sub)
+          assert (isequal(sz, vecsz), 'all subs must be same dim or scalar')
+        else
+          vecsz = sz;
+          have_vec_sub = true;
+        end
+      end
+    end
+  %end
+
+  %% Scalars in, vectors out
+  % A workaround for Issue #10, also upstream Sympy Issue #2962
+  % (github.com/sympy/sympy/issues/2962).  There are probably more more complicated
+  % cases that still fail.
+  if (isscalar (f) && have_vec_sub)
+    assert (iscell (out), 'wtf?');
+    assert (iscell (in), 'todo, in was supposed to be cell');
+    % g = zeros(vecsz, 'sym);  # TODO issue #xyz
+    g = sym (zeros (vecsz));
+    for i = 1:prod(vecsz)
+      myout = cell (size (out));
+      for j = 1:numel(out)
+        thisout = out{j};
+        if (numel (thisout) == 1)
+          myout{j} = thisout;
+        else
+          % f$#k Issue #17: myout{j} = thisout(i);
+          idx.type = '()'; idx.subs = {i};
+          temp = subsref(thisout, idx);
+          myout{j} = temp;
+        end
+      end
+      temp = subs(f, in, myout);
+      % f$#k Issue #17: g(i) = temp;
+      idx.type = '()'; idx.subs = {i};
+      g = subsasgn(g, idx, temp);
+    end
+    return
+  end
+
 
   % simultaneous=True is important so we can do subs(f,[x y], [y x])
 
-  cmd = { '(f, sublist) = _ins'
+  cmd = { '(f, xx, yy) = _ins'
+          'sublist = zip(xx, yy)'
           'g = f.subs(sublist, simultaneous=True).doit()'
           'return g,' };
 
-  g = python_cmd (cmd, sym(f), sublist);
+  g = python_cmd (cmd, f, in, out);
 
 end
 
@@ -282,6 +345,20 @@ end
 %!test
 %! % Issue #10, subbing matrices in for scalars
 %! syms y
+%! a = sym([1 2]);
+%! g = subs(sin(y), {y}, {a});
+%! assert (isequal (g, sin(a)))
+
+%!test
+%! % Issue #10, subbing matrices in for scalars
+%! syms y
+%! a = sym([1; 2]);
+%! g = subs(sin(y), {y}, a);
+%! assert (isequal (g, sin(a)))
+
+%!test
+%! % Issue #10, subbing matrices in for scalars
+%! syms y
 %! a = [10 20 30];
 %! f = 2*y;
 %! g = subs(f, y, a);
@@ -289,9 +366,42 @@ end
 %! assert (isa (g, 'sym'))
 
 %!test
+%! % Issue #10, sub matrices in for two scalars
+%! syms x y
+%! a = [10 20 30];
+%! f = x^2*y;
+%! g = subs(f, {x y}, {a a+1});
+%! h = a.^2.*(a+1);
+%! assert (isequal (g, h))
+
+%!test
+%! % Issue #10, sub matrices in for two scalars
+%! syms x y z
+%! a = [10 20 30];
+%! f = x^2*y;
+%! g = subs(f, {x y}, {a z});
+%! h = a.^2*z;
+%! assert (isequal (g, h))
+%! g = subs(f, {x y}, {a 6});
+%! h = a.^2*6;
+%! assert (isequal (g, h))
+
+%!error <same.*or scalar>
+%! syms x y
+%! a = [10 20 30];
+%! f = x^2*y;
+%! g = subs(f, {x y}, {[10 20 30] [10 20]});
+
+%!test
 %! % two inputs
 %! syms x y
-%! assert (isequal (subs(sym(2)*x, 6), 12))
-%! assert (isequal (subs(sym(2)*x*y^2, 6), 12*y^2))
-%! assert (isequal (subs(sym(2)*y, 6), 12))
-%! assert (isequal (subs(sym(2), 6), 2))
+%! assert (isequal (subs (2*x, 6), sym(12)))
+%! assert (isequal (subs (2*x*y^2, 6), 12*y^2))
+%! assert (isequal (subs (2*y, 6), sym(12)))
+%! assert (isequal (subs (sym(2), 6), sym(2)))
+
+%!test
+%! % only two inputs, vector
+%! syms x
+%! assert (isequal (subs (2*x, [3 5]), sym([6 10])))
+%! assert (isequal (subs (sym(2), [3 5]), sym([2 2])))
