@@ -173,7 +173,7 @@ function g = subs(f, in, out)
     '(f, xx, yy) = _ins'
     'has_vec_sub = any(y.is_Matrix for y in yy)'
     'if not has_vec_sub:'
-    '    sublist = zip(xx, yy)'
+    '    sublist = list(zip(xx, yy))'
     '    g = f.subs(sublist, simultaneous=True).doit()'
     '    return g'
     '# more complicated when dealing with matrix/vector'
@@ -183,7 +183,7 @@ function g = subs(f, in, out)
     'g = zeros(*sizes.pop())'
     'for i in range(len(g)):'
     '    yyy = [y[i] if y.is_Matrix else y for y in yy]'
-    '    sublist = zip(xx, yyy)'
+    '    sublist = list(zip(xx, yyy))'
     '    g[i] = f.subs(sublist, simultaneous=True).doit()'
     'return g'
   };
