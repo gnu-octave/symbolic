@@ -83,14 +83,6 @@ function F = hypergeom(a, b, z)
     print_usage ();
   end
 
-  % TODO: should be unnecessary after Issue #603
-  if (iscell (a))
-    a = cell2sym(a);
-  end
-  if (iscell (b))
-    b = cell2sym(b);
-  end
-
   cmd = { '(a, b, z) = _ins'
           'try:'
           '   iter(a)'

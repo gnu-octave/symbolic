@@ -131,11 +131,6 @@ function [c, t] = coeffs(p, x, all)
 
   assert (isscalar (p), 'coeffs: works for scalar input only')
 
-  %% TODO: remove after #603
-  if (iscell (x))
-    x = cell2sym (x);
-  end
-
   cmd = { '(f, xx, all) = _ins'
           'if not xx.is_Matrix:'
           '    xx = sp.Matrix([xx])'
