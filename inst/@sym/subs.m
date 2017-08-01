@@ -50,12 +50,10 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Warning}: A common task is to numerically evaluate a symbolic
-%% expression at a large set of double-precision numerical values.
-%% @code{subs} is not appropriate for this because it substitutes
-%% symbolic values @var{y} for @var{x}.
-%% Instead convert the expression to a @code{function_handle} which can be
-%% efficiently numerically evaluated:
+%% @strong{Warning}: @code{subs} cannot be easily used to substitute a
+%% @code{double} matrix; it will cast @var{y} to a @code{sym}.  Instead,
+%% create a ``function handle'' from the symbolic expression, which can
+%% be efficiently evaluated numerically.  For example:
 %% @example
 %% @group
 %% f = exp(sin(x))
