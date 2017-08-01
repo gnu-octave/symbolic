@@ -99,7 +99,7 @@
 %% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
 %%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
 %%
-%% dsolve (DE, y(0)==1, y(sym(pi)/2) == 2)
+%% dsolve (DE, y(0) == 1, y(sym(pi)/2) == 2)
 %%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
 %% @end group
 %% @end example
@@ -144,6 +144,8 @@
 %% are unlikely to support this so you will need to assemble a symbolic
 %% equation instead.
 %%
+%% FIXME: should we support a cell array list input for ICs/BCs?
+%%
 %% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
 %% @end deftypemethod
 
@@ -167,6 +169,20 @@ function [soln,classify] = dsolve(ode,varargin)
     warning('Classification of systems of ODEs is currently not supported')
     classify='';
   end
+
+  % Newer Sympy can do IC/BC itself
+  if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+    cmd = { 'ode=_ins[0]; ics=_ins[1:]'
+            '# convert our input to a dict'
+            'ics2 = {}'
+            'for s in ics:'
+            '    ics2[s.lhs] = s.rhs'
+            'sol = sp.dsolve(ode, ics=ics2)'
+            'return sol,' };
+    soln = python_cmd (cmd, ode, varargin{:});
+    return
+  end
+
 
   % FIXME: the initial/boundary conditions admit parameters
   %        but only on their values (not at the evaluation point)
@@ -244,9 +260,15 @@ end
 %! % Not enough initial conditions
 %! syms y(x) C1
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3);
 %! g = 3*cos(2*x) + C1*sin(2*x);
-%! assert (isequal (rhs(f), g))
+%! try
+%!   f = dsolve(de, y(0) == 3);
+%!   waserr = false;
+%! catch
+%!   waserr = true;
+%!   expectederr = regexp (lasterr (), 'Perhaps.*under-specified');
+%! end
+%! assert ((waserr && expectederr) || isequal (rhs(f), g))
 
 %!test
 %! % Solution in implicit form
@@ -354,3 +376,11 @@ end
 %! Y = rhs(soln{2});
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms f(x) a b
+%! de = diff(f, x) == 4*f;
+%! s = dsolve(de, f(a) == b);
+%! assert (isequal (subs(rhs(s), x, a), b))
+%! end
