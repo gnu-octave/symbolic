@@ -45,12 +45,15 @@
 %%   @result{} ans = python
 %% @end example
 %%
-%% This value can be changed by setting the environment variable
+%% Changing the Python executable might help if you've installed
+%% a local Python interpreter somewhere else on your system.
+%% The value can be changed by setting the environment variable
 %% @code{PYTHON}, which can be configured in the OS, or it can be
 %% set within Octave using:
 %% @example
 %% @comment doctest: +SKIP
-%% setenv PYTHON /usr/bin/python
+%% setenv PYTHON python3
+%% setenv PYTHON $@{HOME@}/.local/bin/python
 %% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
