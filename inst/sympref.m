@@ -31,6 +31,12 @@
 %% configurations.  The various choices for @var{cmd} and
 %% @var{args} are documented below.
 %%
+%% Run @strong{diagnostics} on your system:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref diagnose
+%%   @print{} ...
+%% @end example
 %%
 %% Get the name of the @strong{Python executable}:
 %% @example
@@ -326,6 +332,9 @@ function varargout = sympref(cmd, arg)
       %  error ('the package %s is not installed', your_pkg);
       %end
       %pkg_path = pkg_l{idx}.dir
+
+    case 'diagnose'
+      octsympy_diagnose
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));
