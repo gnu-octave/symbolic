@@ -130,13 +130,6 @@ function [c, t] = coeffs(p, x, all)
 
   assert (isscalar (p), 'coeffs: works for scalar input only')
 
-  %% TODO: after #603, this can just be "x = sym(x)".
-  if (iscell (x))
-    x = cell2sym (x);
-  else
-    x = sym(x);
-  end
-
   p = sym(p);
 
   if (isempty (x))
@@ -145,6 +138,8 @@ function [c, t] = coeffs(p, x, all)
       x = sym('x');  % any symbol
     end
   end
+
+  x = sym(x);
 
   cmd = { '(f, xx, all) = _ins'
           'if not xx.is_Matrix:'
