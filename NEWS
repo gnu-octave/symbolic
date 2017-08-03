@@ -8,17 +8,10 @@ octsympy 2.6.0 (2017-07-27)
 
   * New symbolic commands:
 
-          ellipke
-          ellipticCE
-          ellipticCK
-          ellipticCPi
-          ellipticE
-          ellipticF
-          ellipticK
-          ellipticPi
-          harmonic
-          kroneckerDelta
-          pochhammer
+          ellipke         ellipticE       harmonic
+          ellipticCE      ellipticF       kroneckerDelta
+          ellipticCK      ellipticK       pochhammer
+          ellipticCPi     ellipticPi
 
   * New `@double` numerical functions; these are wrappers around SymPy,
     so they are slower than native floating-point implementations.
