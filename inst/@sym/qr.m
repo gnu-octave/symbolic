@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod @@sym {[@var{Q}, @var{R}] =} qr (@var{A})
+%% @deftypemethod  @@sym {[@var{Q}, @var{R}] =} qr (@var{A})
+%% @deftypemethodx @@sym {[@var{Q}, @var{R}] =} qr (@var{A}, 0)
 %% Symbolic QR factorization of a matrix.
 %%
 %% Example:
@@ -46,11 +47,12 @@
 %%       ⎢    √2⎥
 %%       ⎢0   ──⎥
 %%       ⎣    2 ⎦
-%%
 %% @end group
 %% @end example
 %%
-%% FIXME: The sympy QR routine could probably be improved.
+%% Passing an extra argument of @code{0} gives an ``economy-sized''
+%% factorization.  This is currently the default behaviour even without
+%% the extra argument.
 %%
 %% @seealso{qr, @@sym/lu}
 %% @end deftypemethod
@@ -59,10 +61,20 @@
 function [Q, R] = qr(A, ord)
 
   if (nargin == 2)
-    warning('OctSymPy:NotImplemented', 'economy-size not implemented')
+    assert (ord == 0, 'OctSymPy:NotImplemented', 'Matrix "B" form not implemented')
   elseif (nargin ~= 1)
     print_usage ();
   end
+
+  if (nargout == 3)
+    error ('OctSymPy:NotImplemented', 'permutation output form not implemented')
+  end
+
+  %% TODO: sympy QR routine could be improved, as of 2017:
+  % * it assumes full rank
+  % * it doesn't work with short fat matrices
+  % * does not give permutation matrix
+  % * probably numerically unstable for Float matrices
 
   cmd = { 'A = _ins[0]' ...
           'if not A.is_Matrix:' ...
@@ -98,8 +110,17 @@ end
 %! %assert ( max(max(double(Q)-QA)) <= 10*eps)
 %! %assert ( max(max(double(Q)-QA)) <= 10*eps)
 
-%%!xtest
-%%! % non square matrix
-%%! assert (false)
+%!test
+%! % non square: tall skinny
+%! A = sym([1 2; 3 4; 5 6]);
+%! [Q, R] = qr (A, 0);
+%! assert (size (Q), [3 2])
+%! assert (size (R), [2 2])
+%! assert (isequal (Q*R, A))
 
+%!error <Python exception>
+%! % non square: short fat: not yet implemented upstream
+%! [Q, R] = qr (sym([1 2]), 0);
 
+%!error <not implemented>
+%! [Q, R, P] = qr (sym(1))
