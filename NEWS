@@ -1,6 +1,12 @@
 octsympy 2.6.1-dev
 ==================
 
+  * `subs` allows multiple scalar variables to be replaced with symbolic
+    matrix expressions.
+
+  * symfun can be evaluated at symbolic matrices: `f(sym([1 2; 3 4]))`
+    now works where `f(x)` is a symfun.
+
 
 
 octsympy 2.6.0 (2017-07-27)
