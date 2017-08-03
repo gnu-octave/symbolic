@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,7 +60,9 @@ function h = horzcat(varargin)
           'return sp.MatrixBase.hstack(*_proc),'
           };
 
-  varargin = sym(varargin);
+  for i = 1:nargin
+    varargin{i} = sym(varargin{i});
+  end
   h = python_cmd (cmd, varargin{:});
 
 end

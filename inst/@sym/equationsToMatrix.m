@@ -102,8 +102,8 @@ function [A, b] = equationsToMatrix(varargin)
   s = symvar ([varargin{:}]);
 
   cmd = {'L, symvars = _ins'
-	 'if isinstance(symvars, Symbol):'
-	 '    symvars = [symvars]'
+         'if isinstance(symvars, Symbol):'
+         '    symvars = [symvars]'
          'if not isinstance(L[-1], MatrixBase):'
          '    if isinstance(L[-1], Symbol):'  % Symbol given, fill vars...
          '        vars = list()'

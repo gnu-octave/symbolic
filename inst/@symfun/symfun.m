@@ -150,6 +150,8 @@ function f = symfun(expr, vars)
     vars = sym('x');
   elseif (nargin == 1)
     print_usage ();
+  elseif (nargin > 2)
+    print_usage ();
   end
 
   % if the vars are in a sym array, put them in a cell array
@@ -164,22 +166,15 @@ function f = symfun(expr, vars)
   % check that vars are unique Symbols
   cmd = { 'L, = _ins'
           'if not all([x is not None and x.is_Symbol for x in L]):'
-	  '    return False'
-	  'return len(set(L)) == len(L)' };
+          '    return False'
+          'return len(set(L)) == len(L)' };
   if (~ python_cmd (cmd, vars))
     error('OctSymPy:symfun:argNotUniqSymbols', ...
           'symfun arguments must be unique symbols')
   end
 
   if (ischar (expr))
-    % FIXME: drop this later
-    warning('symfun: deprecated: symfun(''f'', x) format not supported')
-    tok = mystrsplit(expr, {'(', ')', ','});
-    fname = strtrim(tok{1});
-    assert (isvarname (fname))
-    cmd = {['_f = sp.Function("' fname '")(*_ins)'] ...
-            'return (_f,)' };
-    expr = python_cmd (cmd, vars{:});
+    error ('symfun(<string>, x) is not supported, see "help symfun" for options')
   end
 
   if (isa(expr, 'symfun'))
@@ -201,6 +196,10 @@ function f = symfun(expr, vars)
 
 end
 
+
+%!error <Invalid> symfun (1, sym('x'), 3)
+
+%!error <not supported> symfun ('f', sym('x'))
 
 %!test
 %! syms x y
@@ -263,7 +262,7 @@ end
 %! f(5);
 %! assert (length (argnames (f)) == 1)
 %! assert (isequal (argnames (f), t))
-%! assert (isequal( diff(f,x), sym(0)))
+%! assert (isequal( formula(diff(f,x)), sym(0)))
 
 %!test
 %! % replace g with shorter and specific fcn
@@ -293,7 +292,7 @@ end
 
 %!test
 %! % syms f(x) without defining x
-%! clear
+%! clear x
 %! syms f(x)
 %! assert(isa(f, 'symfun'))
 %! assert(isa(x, 'sym'))
@@ -302,14 +301,14 @@ end
 %! % SMT compat: symfun indep var overwrites existing var
 %! t = 6;
 %! syms f(t)
-%! assert (logical (t != 6))
+%! assert (logical (t ~= 6))
 
 %!test
 %! % SMT compat: symfun indep var overwrites existing var, even if sym
 %! syms x
 %! t = x;
 %! syms f(t)
-%! assert (! logical (t == x))
+%! assert (~ logical (t == x))
 
 %!test
 %! syms x y

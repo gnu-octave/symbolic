@@ -65,8 +65,8 @@ end
 %!assert (isequal (hypot (sym(3), 4), sym(5)))
 
 %!test
-%! % compare to @double
-%! A = hypot ([1 2 3], [4 5 6], [7 8 9]);
+%! % compare to @double (note Matlab hypot only takes 2 inputs)
+%! A = hypot (hypot ([1 2 3], [4 5 6]), [7 8 9]);
 %! B = double (hypot (sym([1 2 3]), [4 5 6], [7 8 9]));
 %! assert (A, B, -eps)
 

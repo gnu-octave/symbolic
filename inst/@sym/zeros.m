@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -45,17 +45,20 @@
 function y = zeros(varargin)
 
   % partial workaround for issue #13: delete when/if fixed properly
-  if (strcmp (varargin{nargin}, 'sym'))
-    nargin = nargin - 1;
-    varargin = varargin(1:nargin);
+  if ((isa (varargin{nargin}, 'char')) && (strcmp (varargin{nargin}, 'sym')))
+    varargin = varargin(1:(nargin-1));
   end
 
-  if (isa (varargin{nargin}, 'char'))
-    y = zeros (cell2nosyms (varargin){:});
+  if (isa (varargin{end}, 'char'))
+    varargin = cell2nosyms (varargin);
+    y = zeros (varargin{:});
     return
   end
 
-  y = python_cmd ('return zeros(*_ins)', sym(varargin){:});
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
+  y = python_cmd ('return zeros(*_ins)', varargin{:});
 
 end
 

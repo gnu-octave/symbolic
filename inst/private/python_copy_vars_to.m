@@ -53,6 +53,8 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf ('%s%s.append(%s)', sp, in, sprintf (sympy (x)));
 
     elseif (ischar(x))
+      assert (strcmp (x, '') || isrow (x), ...
+	      'multirow char arrays cannot be converted to Python strings')
       if (exist ('OCTAVE_VERSION', 'builtin'))
         x = undo_string_escapes(x);
       else
@@ -92,7 +94,7 @@ function a = do_list(indent, in, varlist)
       c=c+1; a{c} = sprintf('%s%s.append(hex2d("%s"))  # double', ...
                             sp, in, num2hex(x));
 
-    elseif (isfloat(x) && isscalar(x) && iscomplex(x))
+    elseif (isfloat(x) && isscalar(x))  % iscomplex(x)
       if (isa(x, 'single'))
         x = double(x);  % don't hate, would happen in Python anyway
       end

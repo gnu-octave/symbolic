@@ -1,5 +1,6 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -163,7 +164,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.5.0-dev
+%%   @result{} 2.6.1-dev
 %% @end group
 %% @end example
 %%
@@ -186,11 +187,10 @@ function varargout = sympref(cmd, arg)
 
   if (isstruct (cmd))
     assert (isequal (sort (fieldnames (cmd)), ...
-      sort ({'ipc'; 'whichpython'; 'display'; 'digits'; 'quiet'})), ...
+      sort ({'ipc'; 'display'; 'digits'; 'quiet'})), ...
       'sympref: structure has incorrect field names')
     settings = [];
     sympref ('quiet', cmd.quiet)
-    settings.whichpython = cmd.whichpython;
     sympref ('display', cmd.display)
     sympref ('digits', cmd.digits)
     sympref ('ipc', cmd.ipc)
@@ -201,14 +201,13 @@ function varargout = sympref(cmd, arg)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('quiet', 'default')
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.5.0-dev';
+      varargout{1} = '2.6.1-dev';
 
     case 'display'
       if (nargin == 1)
@@ -260,7 +259,7 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
       DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
@@ -420,6 +419,14 @@ end
 %!test
 %! % (just to cleanup after the error tests)
 %! delete('tmp_python_cmd.py')
+
+%!test
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
+%! sympref ('ipc', 'bogus');
+%! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
+
+%!error <invalid ipc mechanism> syms ('x')
 
 %!test
 %! sympref('defaults')

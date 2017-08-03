@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,10 +63,10 @@
 %% functions.
 %%   In particular, if you shadow a function name, you may get
 %%   hard-to-track-down bugs.  For example, instead of writing
-%%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
+%%   @code{syms alpha} use @code{alpha = sym('alpha')} within functions.
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
 %%
-%% @seealso{sym}
+%% @seealso{sym, assume}
 %% @end deffn
 
 %% Author: Colin B. Macdonald
@@ -104,16 +104,13 @@ function syms(varargin)
         last = n - 1;
       end
     elseif (strcmp(varargin{n}, 'clear'))
+      warning ('OctSymPy:deprecated', ...
+              ['"syms x clear" is deprecated and will be removed in a future version;\n' ...
+               '         use "assume x clear" or "assume(x, ''clear'')" instead.'])
+      assert (n == nargin, 'syms: "clear" should be the final argument')
+      assert (last < 0, 'syms: should not combine "clear" with other assumptions')
       doclear = true;
-      %warning ('deprecated: "syms x clear"; will be removed in future version')
-      if (last < 0)
-        last = n - 1;
-      else
-        warning('syms: should not combine "clear" with other assumptions')
-      end
-      if (n ~= nargin)
-        error('syms: "clear" should be the final argument')
-      end
+      last = n - 1;
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')
     end
@@ -197,7 +194,9 @@ end
 %! f = {x {2*x}};
 %! A = assumptions();
 %! assert ( ~isempty(A))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
+%! warning (s)
 %! A = assumptions();
 %! assert ( isempty(A))
 
@@ -207,7 +206,9 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
+%! warning (s)
 %! assert (logical(exist('x', 'var')))
 
 %!error <symbols after assumptions>
@@ -218,7 +219,7 @@ end
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
 
-%!warning <should not combine>
+%!error <should not combine>
 %! syms x positive clear
 
 %!error <should be the final argument>

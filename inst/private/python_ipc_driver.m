@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -73,5 +74,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
 
     otherwise
-      error('invalid ipc mechanism')
+      if (strcmp (what, 'reset'))
+        A = true;
+        db = [];
+      else
+        error ('invalid ipc mechanism')
+      end
   end

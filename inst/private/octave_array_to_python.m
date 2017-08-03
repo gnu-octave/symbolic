@@ -17,17 +17,19 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 function r = octave_array_to_python(a)
-  t='';
+  t = '';
 
-  if rows(a) == 0
+  [numrows, numcols] = size (a);
+
+  if (numrows == 0)
     r = mat2str([]);
     return;
 
-  elseif rows(a) > 1
+  elseif (numrows > 1)
     t = strcat('[', t);
     t = strcat(t, octave_array_to_python(a(1, :)));
 
-    for i = 2:rows(a)
+    for i = 2:numrows
       t = strcat(t, ', ');
       t = strcat(t, octave_array_to_python(a(i, :)));
     end
@@ -38,7 +40,7 @@ function r = octave_array_to_python(a)
     t = strcat('[', t);
     t = strcat(t, mat2str(a(1, 1)));
 
-    for i = 2:columns(a)
+    for i = 2:numcols
       t = strcat(t, ', ');
       t = strcat(t, mat2str(a(1, i)));
     end

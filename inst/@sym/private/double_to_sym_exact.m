@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,29 +17,22 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {@var{s} =} magic_str_str (@var{x})
-%% Recognize special string values and substitute others.
+%% @deftypefun {@var{y} =} double_to_sym_exact (@var{x})
+%% Convert a double value to the equivalent rational sym
 %%
-%% Private function.
+%% Private helper function.
 %%
-%% @seealso{sym, vpa}
 %% @end deftypefun
 
-function s = magic_str_str(x, varargin)
-
-  if (~ischar(x))
-    error('OctSymPy:magic_str_str:notstring', ...
-          'Expected a string');
-  end
-
-  if (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
-    s = 'oo';
-  elseif (strcmpi(x, '-inf'))
-    s = '-oo';
-  elseif (strcmpi(x, 'i'))
-    s = 'I';
+function y = double_to_sym_exact (x)
+  if (isnan (x))
+    y = python_cmd ('return S.NaN');
+  elseif (isinf (x) && x < 0)
+    y = python_cmd ('return -S.Infinity');
+  elseif (isinf (x))
+    y = python_cmd ('return S.Infinity');
   else
-    s = x;
+    %% Rational will exactly convert from a float
+    y = python_cmd ('return Rational(_ins[0])', x);
   end
-
 end

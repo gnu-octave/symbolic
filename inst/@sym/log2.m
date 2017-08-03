@@ -58,4 +58,4 @@ end
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = log2 (1.1);
-%! assert (A, B, -eps)
+%! assert (A, B, -5*eps)

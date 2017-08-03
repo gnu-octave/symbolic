@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,21 +45,29 @@
 function y = eye(varargin)
 
   % partial workaround for issue #13: delete when/if fixed properly
-  if (strcmp (varargin{nargin}, 'sym'))
-    nargin = nargin - 1;
-    varargin = varargin(1:nargin);
+  if ((isa (varargin{nargin}, 'char')) && (strcmp (varargin{nargin}, 'sym')))
+    varargin = varargin(1:(nargin-1));
   end
 
-  if (isa (varargin{nargin}, 'char'))
-    y = eye (cell2nosyms (varargin){:});
+  if (isa (varargin{end}, 'char'))
+    varargin = cell2nosyms (varargin);
+    y = eye (varargin{:});
     return
   end
 
-  if nargin > 1 %%Sympy don't support eye(A, B)
-    y = sym(eye (cell2nosyms (varargin){:}));
-  else
-    y = python_cmd ('return eye(*_ins)', sym(varargin){:});
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
   end
+
+  if (length (varargin) == 1)
+    cmd = 'return eye(*_ins)';
+  else
+    %% Sympy don't support eye(A, B)
+    cmd = { 'n, m = _ins'
+            'return eye(max(n,m))[0:n,0:m]' };
+  end
+
+  y = python_cmd (cmd, varargin{:});
 
 end
 

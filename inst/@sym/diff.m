@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -104,7 +104,9 @@ function z = diff(f, varargin)
           'args = _ins[1:]'
           'return f.diff(*args),' };
 
-  varargin = sym(varargin);
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
   z = python_cmd (cmd, sym(f), varargin{:});
 
 end

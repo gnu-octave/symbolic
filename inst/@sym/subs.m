@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,22 +47,53 @@
 %%       ⎡ 2   2⋅π⎤
 %%       ⎢        ⎥
 %%       ⎣4⋅π   π ⎦
-%%
 %% @end group
 %% @end example
 %%
-%% Note: There are many possibilities that we don't support (FIXME)
+%% @strong{Warning}: @code{subs} cannot be easily used to substitute a
+%% @code{double} matrix; it will cast @var{y} to a @code{sym}.  Instead,
+%% create a ``function handle'' from the symbolic expression, which can
+%% be efficiently evaluated numerically.  For example:
+%% @example
+%% @group
+%% f = exp(sin(x))
+%%   @result{} f = (sym)
+%%
+%%        sin(x)
+%%       ℯ
+%%
+%% fh = function_handle(f)
+%%   @result{} fh =
+%%
+%%       @@(x) exp (sin (x))
+%% @end group
+%%
+%% @group
+%% fh(linspace(0, 2*pi, 700)')
+%%   @result{} ans =
+%%       ...
+%%       1.00903
+%%       1.01814
+%%       1.02733
+%%       1.03660
+%%       1.04595
+%%       ...
+%% @end group
+%% @end example
+%%
+%% @strong{Note}: There are many possibilities that we don't support
 %% if you start mixing scalars and matrices.  We support one simple
-%% case of subbing a matrix in for a scalar in a scalar expression:
+%% case of subbing a symbolic matrix in for a symbolic scalar,
+%% within a scalar expression:
 %% @example
 %% @group
 %% f = sin(x);
-%% g = subs(f, x, [1 2; 3 4])
+%% g = subs(f, x, [1 sym('a'); pi sym('b')])
 %%   @result{} g = (sym 2×2 matrix)
 %%
-%%       ⎡sin(1)  sin(2)⎤
+%%       ⎡sin(1)  sin(a)⎤
 %%       ⎢              ⎥
-%%       ⎣sin(3)  sin(4)⎦
+%%       ⎣  0     sin(b)⎦
 %%
 %% @end group
 %% @end example
@@ -123,8 +154,21 @@ function g = subs(f, in, out)
   %% In general
   % We build a list of of pairs of substitutions.
 
-  in = sym(in);
-  out = sym(out);
+  % ensure everything is sym
+  if (iscell (in))
+    for i = 1:numel(in)
+      in{i} = sym(in{i});
+    end
+  else
+    in = sym(in);
+  end
+  if (iscell (out))
+    for i = 1:numel(out)
+      out{i} = sym(out{i});
+    end
+  else
+    out = sym(out);
+  end
 
 
 

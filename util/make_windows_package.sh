@@ -1,17 +1,24 @@
 #!/bin/sh
 
+# Copyright 2016-2017 Colin B. Macdonald
+#
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+
 # download py.exe from http://www.orbitals.com/programs/pyexe.html
 PYEXE=py27910.exe
 PYEXEREADME=py27910.readme.txt   # from the src package
 
 # download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.0
+SYMPY=sympy-1.1.1
 MPMATH=mpmath-0.19
 
 # for day-to-day testing
-VER=2.4.1-dev
+VER=2.6.1-dev
 # for release
-#VER=2.4.1
+#VER=2.6.1
 #TAG=v${VER}
 
 
@@ -41,13 +48,7 @@ git clone https://github.com/cbm755/octsympy.git
 rm -rf ${WINDIR}
 rm -rf ${WINDIRTMP}
 
-
 cp -R octsympy ${WINDIRTMP}
-( cd ${WINDIRTMP}/src/
-  make distclean
-  ./bootstrap
-  ./configure
-  make )
 
 # copy things to the package
 mkdir ${WINDIR}

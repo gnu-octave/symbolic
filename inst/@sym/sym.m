@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -23,6 +23,8 @@
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{assumestr1}, @var{assumestr2}, @dots{})
 %% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{A}, [@var{n}, @var{m}])
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{y}, @var{ratflag})
+%% @deftypeopx Constructor @@sym {@var{x} =} sym (@var{handle})
 %% Define symbols and numbers as symbolic expressions.
 %%
 %% @var{y} can be an integer, a string or one of several special
@@ -42,6 +44,8 @@
 %%   @result{} y = (sym) ∞
 %% y = sym (pi)
 %%   @result{} y = (sym) π
+%% y = sym (1i)
+%%   @result{} y = (sym) ⅈ
 %% @end group
 %% @end example
 %%
@@ -53,7 +57,7 @@
 %% @end group
 %% @end example
 %%
-%% A matrix can be input:
+%% A matrix of integers can be input:
 %% @example
 %% @group
 %% sym ([1 2; 3 4])
@@ -64,31 +68,60 @@
 %% @end group
 %% @end example
 %%
-%% Boolean input, giving symbolic True/False:
+%% However, if the entries are not simply integers, its better to call
+%% @code{sym} inside the matrix:
 %% @example
 %% @group
-%% sym (true)
-%%   @result{} (sym) True
-%% sym (false)
-%%   @result{} (sym) False
+%% [sym(pi) sym(3)/2; sym(1) 0]
+%%   @result{} (sym 2×2 matrix)
+%%       ⎡π  3/2⎤
+%%       ⎢      ⎥
+%%       ⎣1   0 ⎦
+%% @end group
+%% @end example
+%% (Careful: at least one entry per row must be @code{sym} to workaround
+%% a GNU Octave bug @url{https://savannah.gnu.org/bugs/?42152}.)
+%% @c @example
+%% @c [sym(pi) 2; 1 0]
+%% @c   @print{} ??? octave_base_value::map_value(): wrong type argument 'scalar'
+%% @c @end example
+%%
+%% Passing double values to sym is not recommended and will give a warning:
+%% @example
+%% @group
+%% sym(0.1)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @result{} ans = (sym) 1/10
 %% @end group
 %% @end example
 %%
-%% Some special double values are recognized but its all a
-%% bit heuristic/magical:
+%% In this particular case, the warning is easy to avoid:
+%% @example
+%% @group
+%% sym(1)/10
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%% The ``danger'' here is that typing @code{0.1} gives a double-precision
+%% floating-point value which differs slightly from the fraction
+%% @code{sym(1)/10} (and this is true for most decimal expressions).
+%% It is generally impossible to determine which exact symbolic value the
+%% user intended.
+%% The warning indicates that some heuristics have been applied
+%% (namely a preference for ``small'' fractions, small fractions
+%% of π and square roots of integers).
+%% Further examples include:
 %% @example
 %% @group
 %% y = sym(pi/100)
-%%   @print{} warning: Using rat() heuristics for double-precision input (is this what you wanted?)
+%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
 %%   @result{} y = (sym)
 %%        π
 %%       ───
 %%       100
 %% @end group
-%% @end example
-%% While this works fine for ``small'' fractions, its safer to avoid
-%% the warning by using:
-%% @example
+%%
 %% @group
 %% y = sym(pi)/100
 %%   @result{} y = (sym)
@@ -97,9 +130,48 @@
 %%       100
 %% @end group
 %% @end example
+%% (@code{sym(pi)} is a special case; it does not raise the warning).
 %%
 %%
-%% A second (and further) arguments can provide assumptions
+%% There is an additional reason for the float-point warning,
+%% relevant if you are doing something like @code{sym(1.23456789012345678)}.
+%% In many cases, floating-point numbers should be thought of as
+%% approximations (with about 15 decimal digits of relative accuracy).
+%% This means that mixing floating-point values and symbolic computations
+%% with the goal of obtaining exact results is often a fool's errand.
+%% Compounding this, symbolic computations may not always use numerically
+%% stable algorithms (as their inputs are assumed exact) whereas a
+%% floating-point input is effectively perturbed in the 15th digit.
+%%
+%% If what you really want is higher-precision floating-point
+%% computations, @pxref{vpa}.
+%%
+%%
+%% If having read the above, you @emph{still} want to do something
+%% symbolic with floating-point inputs, you can use the @var{ratflag}
+%% argument; by setting it to @qcode{'f'}, you will obtain the precise
+%% rational number which is equal to the floating-point value:
+%% @example
+%% @group
+%% sym(0.1, 'f')
+%%   @result{} (sym)
+%%        3602879701896397
+%%       ─────────────────
+%%       36028797018963968
+%% @end group
+%% @end example
+%%
+%% The default heuristic rational behaviour can be obtained by passing
+%% @var{ratflag} as @qcode{'r'}; this avoids the floating-point warning:
+%% @example
+%% @group
+%% sym(0.1, 'r')
+%%   @result{} (sym) 1/10
+%% @end group
+%% @end example
+%%
+%%
+%% For symbols, a second (and further) arguments can provide assumptions
 %% or restrictions on the type of the symbol:
 %% @example
 %% @group
@@ -144,6 +216,22 @@
 %% syms m n positive integer
 %% B = sym('B', [m n])
 %%   @result{} B = (sym) B  (m×n matrix expression)
+%% @end group
+%% @end example
+%%
+%% Anonymous functions can be converted to symbolic expressions by
+%% passing their function handle:
+%% @example
+%% @group
+%% f = @@(n, x) sin (pi*besselj (n, x)/2)
+%%   @result{} f = @@(n, x) sin (pi * besselj (n, x) / 2)
+%% class (f)
+%%   @result{} function_handle
+%% sym(f)
+%%   @result{} (sym)
+%%          ⎛π⋅besselj(n, x)⎞
+%%       sin⎜───────────────⎟
+%%          ⎝       2       ⎠
 %% @end group
 %% @end example
 %%
@@ -197,95 +285,120 @@ function s = sym(x, varargin)
     end
   end
 
-  if (iscell (x))  % Handle Cells
-    s = cell_array_to_sym (x, varargin{:});
+  if (iscell (x))
+    %% Cell arrays are converted to sym arrays
+    assert (isempty (varargin));
+    s = cell2sym (x);
+    return
+  end
+
+  if (isa (x, 'function_handle'))
+    assert (nargin == 1)
+    %% Need argnames of the handle.  TODO: can do better than regex?
+    T = regexp (func2str (x), '^\@\((?:(\w+)(?:, ))*(\w+)?\).*', 'tokens');
+    assert (length (T) == 1)
+    T = T{1};
+    v = cell (size (T));
+    for i = 1:length (T)
+      v{i} = sym (sprintf ('Symbol("%s")', T{i}));
+    end
+    %% call the function with those arguments as symbolic inputs
+    s = x (v{:});
+    if (~ isa (s, 'sym'))  % e.g., for "@(x) 7"
+      s = sym (s);
+    end
     return
   end
 
   asm = {};
-  check = true;
+  isnumber = isnumeric (x) || islogical (x);
+  ratwarn = true;
+  ratflag = 'r';
 
   if (nargin >= 2)
-    if (ismatrix (varargin{1}) && ~isa (varargin{1}, 'char') && ~isstruct (varargin{1}) && ~iscell (varargin{1})) % Handle MatrixSymbols
+    if (ismatrix (varargin{1}) && ~ischar (varargin{1}) && ~isstruct (varargin{1}) && ~iscell (varargin{1}))
+      %% Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
       s = make_sym_matrix (x, varargin{1});
       return
-    else
-      if (nargin == 2 && ischar(varargin{1}) && strcmp(varargin{1},'clear'))
-        sclear = true;
-        varargin(1) = [];
-        %warning ('deprecated: "sym(x, ''clear'')" will be removed in future version');
-      else
-        sclear = false;
-        check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+    elseif (nargin == 2 && isnumber && ischar (varargin{1}) && isscalar (varargin{1}))
+      %% explicit ratflag given
+      sclear = false;
+      ratflag = varargin{1};
+      switch ratflag
+        case 'f'
+          ratwarn = false;
+        case 'r'
+          ratwarn = false;
+        case {'d' 'e'}
+          error ('sym: RATFLAG ''%s'' is not implemented', ratflag)
+        otherwise
+          error ('sym: invalid RATFLAG ''%s''', ratflag)
       end
+    elseif (nargin == 2 && ischar (varargin{1}) && strcmp (varargin{1}, 'clear'))
+      sclear = true;
+      varargin(1) = [];
+      warning ('OctSymPy:deprecated', ...
+              ['"sym(x, ''clear'')" is deprecated and will be removed in a future version;\n' ...
+               '         use "assume(x, ''clear'')" instead.'])
+    else
+      sclear = false;
+      assert (~isnumber, 'Only symbols can have assumptions.')
+      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
-
-  isnumber = isnumeric (x) || islogical (x);
-  assert (isempty (asm) || ~isnumber, 'Only symbols can have assumptions.')
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
     s = numeric_array_to_sym (x);
     return
 
-  elseif (isa (x, 'double'))  % Handle doubles
-    check = false;
-    ima = ~isreal (x);
-    if (ima)
+  elseif (isa (x, 'double'))  % Handle double/complex
+    iscmplx = ~isreal (x);
+    if (iscmplx && isequal (x, 1i))
+      s = python_cmd ('return S.ImaginaryUnit');
+      return
+    elseif (iscmplx)
       xx = {real(x); imag(x)};
     else
       xx = {x};
     end
-    ss = cell(2,1);
-
-    for n = 1:numel(xx)
-      tmpx = xx{n};
-      [ss{n}, flag] = const_to_python_str (tmpx);
-      if (~flag)
-        % Allow 1/3 and other "small" fractions.
-        % Personally, I like a warning here so I can catch bugs.
-        % Matlab SMT does this (w/o warning).
-        % FIXME: could have sympy do this?  Or just make symbolic floats?
-        warning('OctSymPy:sym:rationalapprox', ...
-                'Using rat() heuristics for double-precision input (is this what you wanted?)');
-        [N1, D1] = rat (tmpx);
-        [N2, D2] = rat (tmpx / pi);
-        if (10*abs (D2) < abs (D1))
-          % use frac*pi if demoninator significantly shorter
-          ss{n} = sprintf ('Rational(%s, %s)*pi', num2str (N2), num2str (D2));
-        else
-          ss{n} = sprintf ('Rational(%s, %s)', num2str (N1), num2str (D1));
-        end
-      else
-        ss{n} = sprintf ('S(%s)', ss{n});
+    yy = cell(2, 1);
+    for n = 1:numel (xx)
+      x = xx{n};
+      switch ratflag
+        case 'f'
+          y = double_to_sym_exact (x);
+        case 'r'
+          y = double_to_sym_heuristic (x, ratwarn, []);
+        otherwise
+          error ('sym: this case should not be possible')
       end
+      yy{n} = y;
     end
-
-    if (ima)
-      x = sprintf('%s + I*(%s)', ss{1}, ss{2});
+    if (iscmplx)
+      s = yy{1} + yy{2}*1i;
     else
-      x = ss{1};
+      s = yy{1};
     end
-
-  elseif (islogical (x)) % Handle logical values
-    check = false;
-    if (x)
-      x = 'S.true';
-    else
-      x = 'S.false';
-    end
+    return
 
   elseif (isinteger (x)) % Handle integer vealues
-    check = false;
-    x = num2str (x, '%ld');
+    s = python_cmd ('return Integer(*_ins)', x);
+    return
+
+  elseif (islogical (x)) % Handle logical values
+    if (x)
+      s = python_cmd ('return S.true');
+    else
+      s = python_cmd ('return S.false');
+    end
+    return
   end
 
   if (isa (x, 'char'))
-    % We now have a char; need to decide whether to use S() or Symbol() on it.
+    %% Need to decide whether to use S() or Symbol()
 
-    if (check)
       % TODO: Warning if you try make a sym with the same name of a system function.
       %symsnotfunc (x);
 
@@ -307,20 +420,21 @@ function s = sym(x, varargin)
       %  end
       %end
 
-      [x, flag] = const_to_python_str (x);
-      if (flag)
-        check = false;
-      end
-      x = strrep (x, '"', '\"');   % Avoid collision with S("x") and Symbol("x")
-
-      isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));  % Is Number
+    y = detect_special_str (x);
+    if (~ isempty (y))
+      assert (isempty (asm), 'Only symbols can have assumptions.')
+      s = python_cmd (['return ' y]);
+      return
     end
 
+    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
+
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if (check && ~isnum && regexp (x, '^\w+$'))
+    if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
 
       cmd = { 'd = dict()'
-              '_ins = [_ins] if isinstance(_ins, dict) else _ins'
+              'x = _ins[0]'
+              '_ins = _ins[1:]'
               'for i in range(len(_ins)):'
               '    if isinstance(_ins[i], dict):'
               '        d.update(_ins[i])'
@@ -331,8 +445,8 @@ function s = sym(x, varargin)
               '        d.update({_ins[i]:True})'
               '    else:'
               '        raise ValueError("something unexpected in assumptions")'
-              'return Symbol("{s}", **d)' };
-      s = python_cmd (strrep (cmd, '{s}', x), asm{:});
+              'return Symbol(x, **d)' };
+      s = python_cmd (cmd, x, asm{:});
 
       if (nargin == 2 && sclear)
         % ---------------------------------------------
@@ -356,12 +470,10 @@ function s = sym(x, varargin)
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
       % TODO: figure version might warn on expression strings
-      %if (check)
         % Check if the user try to execute operations from sym
         %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         %  warning ('Please avoid execute operations from sym function.');
         %end
-      %end
 
       % Usually want rational output here (i.e., if input was "1.2").
       % But if input has words and parentheses it might be raw Sympy code.
@@ -370,7 +482,7 @@ function s = sym(x, varargin)
         return
       end
 
-      cmd = {'x = "{s}"'
+      cmd = {'x = _ins[0]'
              'try:'
              '    return (0, 0, S(x))'
              'except Exception as e:'
@@ -388,16 +500,16 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (strrep (cmd, '{s}', x));
+      [err flag s] = python_cmd (cmd, x);
 
       switch (flag)
         case 1  % Bad call to python function
           error (['Python: %s\n' ...
-                  'Error occurred using "%s" Python function, perhaps use another variable name?'],
+                  'Error occurred using "%s" Python function, perhaps use another variable name?'], ...
                  err, s);
         case 2  % Something else
           error (['Python: %s\n' ...
-                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'],
+                  'Seems you cannot use "%s" for a variable name; perhaps this is a bug?'], ...
                  err, x);
       end
       return
@@ -456,7 +568,7 @@ end
 %! assert (double (x) == 1/2 )
 %! assert (isequal (2*x, sym (1)))
 
-%!warning <heuristic> x = sym (1/2);
+%!warning <dangerous> x = sym (1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
@@ -488,49 +600,15 @@ end
 %! assert (isequal (sym (A), A))
 
 %!test
-%! % Cell array lists to syms
-%! % (these tests are pretty weak, doens't recursively compare two
-%! % cells, but just running this is a good test.
-%! x = sym ('x');
-%!
-%! a = {1 2};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2 {3 4}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 4};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 {4}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 [1 2] x [sym(pi) x]};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{2}), size (s{2})))
-%! assert (isequal (size (a{4}), size (s{4})))
-%!
-%! a = {{{[1 2; 3 4]}}};
-%! s = sym (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{1}), size (s{1})))
-%! assert (isequal (size (a{1}{1}), size (s{1}{1})))
-%! assert (isequal (size (a{1}{1}{1}), size (s{1}{1}{1})))
-
-
-%!test
 %! %% assumptions and clearing them
-%! clear  % for matlab test script
+%! clear variables  % for matlab test script
 %! x = sym('x', 'real');
 %! f = {x {2*x}};
 %! asm = assumptions();
 %! assert ( ~isempty(asm))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
+%! warning (s)
 %! asm = assumptions();
 %! assert ( isempty(asm))
 
@@ -540,7 +618,9 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym('x', 'clear');
+%! warning (s)
 %! assert (logical(exist('x', 'var')))
 
 %!test
@@ -553,7 +633,9 @@ end
 %! %% likewise for clear
 %! x = sym('x', 'real');
 %! f = 2*x;
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! x = sym(x, 'clear');
+%! warning (s)
 %! assert (isempty(assumptions(x)))
 %! assert (isempty(assumptions(f)))
 
@@ -589,6 +671,15 @@ end
 %! assert (isa (B, 'sym'))
 %! assert (isequal (size (B), [5 6]))
 
+%!error <Cannot create symbolic matrix> sym('2*a', [2 3])
+%!error <Cannot create symbolic matrix> sym(2*sym('a'), [2 3])
+%!error <Cannot create symbolic matrix> sym('1', [2 3])
+%!error <Cannot create symbolic matrix> sym(1, [2 3])
+
+%!error <Cannot create symbolic matrix>
+%! % TODO: symbolic tensor, maybe supported someday
+%! sym('a', [2 3 4])
+
 %!test
 %! % 50 shapes of empty
 %! a = sym (ones (0, 3));
@@ -622,6 +713,11 @@ end
 %!   assert (isequal (a, a3))
 %!   assert (isequal (a, a4))
 %! end
+
+%!test
+%! % complex
+%! x = sym(1 + 2i);
+%! assert (isequal (x, sym(1)+sym(2)*1i))
 
 %!test
 %! % doubles bigger than int32 INTMAX should not fail
@@ -684,6 +780,43 @@ end
 %! warning (s)
 
 %!test
+%! % sym(double) with 'r': no warning
+%! a = 0.1;
+%! x = sym(a, 'r');
+%! assert (isequal (x, sym(1)/10))
+
+%!test
+%! % sym(double, 'f')
+%! a = 0.1;
+%! x = sym(a, 'f');
+%! assert (~isequal (x, sym(1)/10))
+%! assert (isequal (x, sym('3602879701896397')/sym('36028797018963968')))
+
+%!test
+%! x = sym(pi, 'f');
+%! assert (~isequal (x, sym('pi')))
+%! assert (isequal (x, sym('884279719003555')/sym('281474976710656')))
+
+%!test
+%! q = sym('3602879701896397')/sym('36028797018963968');
+%! x = sym(1 + 0.1i, 'f');
+%! assert (isequal (x, 1 + 1i*q))
+%! x = sym(0.1 + 0.1i, 'f');
+%! assert (isequal (x, q + 1i*q))
+
+%!xtest
+%! assert (isequal (sym(inf, 'f'), sym(inf)))
+%! assert (isequal (sym(-inf, 'f'), sym(-inf)))
+%! assert (isequaln (sym(nan, 'f'), sym(nan)))
+%! assert (isequal (sym(complex(inf, -inf), 'f'), sym(complex(inf, -inf))))
+%! assert (isequaln (sym(complex(nan, inf), 'f'), sym(complex(nan, inf))))
+%! assert (isequaln (sym(complex(-inf, nan), 'f'), sym(complex(-inf, nan))))
+
+%!test
+%! assert (isequal (sym (sqrt(2), 'r'), sqrt (sym (2))))
+%! assert (isequal (sym (sqrt(12345), 'r'), sqrt (sym (12345))))
+
+%!test
 %! % symbols with special sympy names
 %! syms Ei Eq
 %! assert (~isempty (regexp (sympy (Eq), '^Symbol')))
@@ -701,10 +834,33 @@ end
 %! syms E
 %! assert (~logical (E == exp(sym(1))))
 
-%!warning <heuristics for double-precision> sym (1e16);
-%!warning <heuristics for double-precision> sym (-1e16);
-%!warning <heuristics for double-precision> sym (10.33);
-%!warning <heuristics for double-precision> sym (-5.23);
+%!test
+%! % e can be a symbol, not exp(sym(1))
+%! syms e
+%! assert (~ logical (e == exp(sym(1))))
+
+%!test
+%! % double e
+%! x = sym (exp (1));
+%! y = exp (sym (1));
+%! assert (isequal (x, y))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   x = sym (e);
+%!   assert (isequal (x, y))
+%! end
+
+%!test
+%! x = sym (-exp (1));
+%! y = -exp (sym (1));
+%! assert (isequal (x, y))
+
+%!assert (~ isequal (sym (exp(1)), sym (exp(1), 'f')))
+
+%!warning <dangerous> sym (1e16);
+%!warning <dangerous> sym (-1e16);
+%!warning <dangerous> sym (10.33);
+%!warning <dangerous> sym (-5.23);
+%!warning <dangerous> sym (sqrt (1.4142135623731));
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
@@ -773,16 +929,39 @@ end
 
 %!error <use another variable name> sym ('FF(w)');
 
-%!test
-%! q = sym ({'a', 'b', 'c'}, 'positive');
-%! t = {};
-%! t{1, 1} = 'a: positive';
-%! t{1, 2} = 'b: positive';
-%! t{1, 3} = 'c: positive';
-%! assert (isequal (t, assumptions(q)))
+%!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
+
+%!error sym({1 2 'a'}, 'positive');
+%!error sym({'a' 'b'}, 'positive');
 
 %!test
 %! a = sym ('--1');
 %! b = sym ('---1');
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
+
+%!test
+%! % num2cell works on sym arrays
+%! syms x
+%! C1 = num2cell ([x 2 3; 4 5 6*x]);
+%! assert (iscell (C1))
+%! assert (isequal (size (C1), [2 3]))
+%! assert (isequal (C1{1,1}, x))
+%! assert (isequal (C1{2,3}, 6*x))
+%! assert (isequal (C1{1,3}, sym(3)))
+%! assert (isa (C1{1,3}, 'sym'))
+
+%!test
+%! % function_handle
+%! f = @(x, y) y*sin(x);
+%! syms x y
+%! assert (isequal (sym (f), y*sin(x)));
+%! f = @(x) 42;
+%! assert (isequal (sym (f), sym (42)));
+%! f = @() 42;
+%! assert (isequal (sym (f), sym (42)));
+
+%!error <ndefined>
+%! % function_handle
+%! f = @(x) A*sin(x);
+%! sym (f)

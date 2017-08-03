@@ -104,19 +104,22 @@ end
 %! % basic test
 %! f = x*sin(y) + abs(z);
 %! source = fortran(f);
-%! expected = '      x*sin(y) + Abs(z)';
-%! assert(strcmp(source, expected))
+%! expected = '      x*sin(y) + abs(z)';
+%! s1 = strrep (expected, 'abs', 'Abs');
+%! assert (strcmp (source, expected) || strcmp (source, s1))
 
 %!test
 %! % output test
 %! f = x*sin(y) + abs(z);
 %! [F,H] = fortran(f, 'file', '', 'show_header', false);
 %! expected_h_code = sprintf('\ninterface\nREAL*8 function myfun(x, y, z)\nimplicit none\nREAL*8, intent(in) :: x\nREAL*8, intent(in) :: y\nREAL*8, intent(in) :: z\nend function\nend interface\n\n');
-%! expected_f_code = sprintf('\nREAL*8 function myfun(x, y, z)\nimplicit none\nREAL*8, intent(in) :: x\nREAL*8, intent(in) :: y\nREAL*8, intent(in) :: z\n\nmyfun = x*sin(y) + Abs(z)\n\nend function\n');
+%! expected_f_code = sprintf('\nREAL*8 function myfun(x, y, z)\nimplicit none\nREAL*8, intent(in) :: x\nREAL*8, intent(in) :: y\nREAL*8, intent(in) :: z\n\nmyfun = x*sin(y) + abs(z)\n\nend function\n');
 %! assert(strcmp(F.name, 'file.f90'))
 %! assert(strcmp(H.name, 'file.h'))
 %! %disp(expected_f_code); disp(F.code)
-%! s1 = strrep(expected_f_code, sprintf('\n'), sprintf('\r\n'));
-%! s2 = strrep(expected_h_code, sprintf('\n'), sprintf('\r\n'));
-%! assert (strcmp (F.code, expected_f_code) || strcmp (F.code, s1))
-%! assert (strcmp (H.code, expected_h_code) || strcmp (H.code, s2))
+%! s1 = strrep (expected_f_code, 'abs', 'Abs');
+%! s2 = strrep (expected_f_code, sprintf ('\n'), sprintf ('\r\n'));
+%! s3 = strrep (s2, 'abs', 'Abs');
+%! s4 = strrep (expected_h_code, sprintf ('\n'), sprintf ('\r\n'));
+%! assert (strcmp (F.code, expected_f_code) || strcmp (F.code, s1) || strcmp (F.code, s2) || strcmp (F.code, s3))
+%! assert (strcmp (H.code, expected_h_code) || strcmp (H.code, s4))

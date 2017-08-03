@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %% Copyright (C) 2016 Lagu
 %%
@@ -91,7 +91,7 @@ function s = taylor(f, varargin)
     x = varargin{1};
     a = varargin{2};
     if length(a) ~= length(x) && length(a) == 1
-          a = a*ones(1, length(x));    
+          a = a*ones(1, length(x));
     end
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
@@ -224,7 +224,7 @@ end
 
 %!test
 %! syms x y
-%! f = exp(x**2+y**2);
+%! f = exp (x^2 + y^2);
 %! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
 %! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
@@ -240,7 +240,7 @@ end
 
 %!test
 %! syms x y
-%! f = sin(x**2+y**2);
+%! f = sin (x^2 + y^2);
 %! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
 
@@ -254,12 +254,12 @@ end
 
 %!test
 %! syms x y
-%! f = x**2 +y**2;
+%! f = x^2 + y^2;
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',0)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',1)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',2)== sym(0) ))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x**2+y**2)))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x**2+y**2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x^2 + y^2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x^2 + y^2)))
 
 %!test
 %! % expansion point
@@ -271,24 +271,26 @@ end
 %! g = taylor(f,x,a);
 %! assert (isequal (simplify(g), f))
 
-%!xtest
+%!test
 %! % wrong order-1 series with nonzero expansion pt:
 %! % upstream bug https://github.com/sympy/sympy/issues/9351
+%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
+%! end
 
-%!test		
-%! syms x y z		
-%! g = x^2 + 2*y + 3*z;		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = x^2 + 2*y + 3*z;
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == g)) ;
 
-%!test		
-%! syms x y z		
-%! g = sin(x*y*z);		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = sin(x*y*z);
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == x*y*z)) ;
 
 %!error <length>

@@ -98,7 +98,9 @@
 function [p, m] = factor(f, varargin)
 
   f = sym(f);
-  varargin = sym(varargin);
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
+  end
 
   if ((nargin > 1) || (~isempty (findsymbols (f))))
     %% have symbols, do polynomial factorization
@@ -171,8 +173,8 @@ end
 %!error [p, m] = factor(sym(42), sym('x'));
 
 %!test
-%! # if polynomial happens to be a constant, don't attempt integer
-%! # factorization if a variable is specified
+%! % if polynomial happens to be a constant, don't attempt integer
+%! % factorization if a variable is specified
 %! f = sym(42);
 %! q = factor(f, sym('x'));
 %! assert (isequal (f, q));
