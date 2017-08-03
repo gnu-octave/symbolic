@@ -58,6 +58,19 @@
 %%   @result{} 9.9920e-16
 %% @end group
 %% @end example
+%% If you insist to do this manually try with with sym2polysane:
+%% @example
+%% @group
+%% coeffs = sym2polysane (L);
+%% polyval (coeffs, 6)
+%%   @result{} ans = (sym)
+%%     34213
+%%     ─────
+%%     35035
+%% ans - exact
+%%   @result{} ans = (sym) 0
+%% @end group
+%% @end example
 %%
 %% @seealso{@@sym/laguerreL}
 %% @end defun
