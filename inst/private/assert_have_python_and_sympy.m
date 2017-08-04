@@ -63,7 +63,11 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('We expected to see "status = 0" and "output = Python says hello".')
     disp ('Is there an error message above?  Do you have Python installed?')
     disp ('Please try using "setenv" as described above.')
-    % TODO: does "getenv PATH" work on Windows?  report that output here.
+    disp ('')
+    disp ('Most systems search the PATH environment when looking for commands.')
+    disp ('Your path seems to be:')
+    disp ('')
+    disp (getenv ('PATH'))
     return
   end
 
