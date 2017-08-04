@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,36 +16,117 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function assert_have_python_and_sympy(pyexec)
-%private function
+%% -*- texinfo -*-
+%% @defun assert_have_python_and_sympy (pyexec, verbose)
+%% Check that Python and SymPy are installed and working.
+%%
+%% @seealso{sympref}
+%% @end defun
 
-  [st, out] = system([pyexec ' -c "print(\"hello world\")"']);
-  if ( (st ~= 0) || (~ strcmp(strtrim(out), 'hello world')) )
-    error('OctSymPy:nopython', ...
-          ['Cannot run the Python executable "%s"\n' ...
-           '    Try "sympref diagnose" for more information.'], ...
-          pyexec)
-  end
-
+function assert_have_python_and_sympy (pyexec, verbose)
 
   minsympyver = '1.0';
 
-  [st, out] = system([pyexec ' -c "import sympy; print(sympy.__version__)"']);
+  if (verbose)
+    disp ('')
+    disp ('Symbolic package diagnostics')
+    disp ('============================')
+    disp ('')
+    disp ('Python and SymPy are needed for most features of the Symbolic package.')
+    disp ('')
+    fprintf ('The Python interpreter is currently: "%s".\n', pyexec)
+    disp ('')
+    disp ('Computers may have more than one Python interpreter installed.  Depending')
+    disp ('on how your system is configured, you may need to select a different one.')
+    disp ('See "help sympref" for details, but for example, to use Python 3, try')
+    disp ('    setenv PYTHON python3')
+    disp ('    sympref reset')
+    disp ('')
+    fprintf ('Attempting to run %s -c "print(\\"Python says hello\\")"\n\n', pyexec);
+  end
 
-  if (st ~= 0)
-    error('OctSymPy:nosympy', ...
-          ['Python cannot import SymPy: have you installed SymPy?\n' ...
-           '    Try "sympref diagnose" for more information.'])
+  [status, output] = system ([pyexec ' -c "print(\"Python says hello\")"']);
+  if (verbose)
+    status
+    output
+  end
+
+  if ( (status ~= 0) || (~ strcmp(strtrim(output), 'Python says hello')) )
+    if (~ verbose)
+      error ('OctSymPy:nopython', ...
+             ['Cannot run the Python executable "%s"\n' ...
+              '    Try "sympref diagnose" for more information.'], ...
+             pyexec)
+    end
+    disp ('')
+    disp ('Unfortunately, that command failed!')
+    disp ('We expected to see "status = 0" and "output = Python says hello".')
+    disp ('Is there an error message above?  Do you have Python installed?')
+    disp ('Please try using "setenv" as described above.')
+    % TODO: does "getenv PATH" work on Windows?  report that output here.
+    return
+  end
+
+  if (verbose)
+    disp ('Good, Python ran correctly.')
+    disp ('')
+    disp ('')
+    disp ('SymPy Python Library')
+    disp ('--------------------')
+    disp ('')
+    disp ('SymPy is a Python library used by Symbolic for almost all features.')
+    disp ('')
+    fprintf ('Attempting to run %s -c "import sympy; print(sympy.__version__)"\n\n', pyexec);
+  end
+
+  [status, output] = system([pyexec ' -c "import sympy; print(sympy.__version__)"']);
+  if (verbose)
+    status
+    output
+  end
+
+  if (status ~= 0)
+    if (~ verbose)
+      error ('OctSymPy:nosympy', ...
+            ['Python cannot import SymPy: have you installed SymPy?\n' ...
+             '    Try "sympref diagnose" for more information.'])
+    end
+    disp ('')
+    disp ('Unfortunately status was non-zero: probably Python cannot import sympy.')
+    disp ('Have you installed SymPy?  Please try to install it and try again.')
+    disp ('If you have installed SymPy, perhaps for a different Python interpreter?')
+    disp ('Please try "setenv" as described above to change your python interpreter.')
+    return
+  end
+
+  spver = strtrim(output);
+
+  if (verbose)
+    fprintf ('SymPy must be at least version %s; you have version %s.\n', ...
+             minsympyver, spver);
+  end
+
+  if (~ exist ('OCTAVE_VERSION', 'builtin'))
+    % no compare_versions on matlab, just assume its ok (!)
+    if (verbose)
+      disp ('We cannot automatically compare versions on Matlab: please verify above.')
+    end
   else
-    spver = strtrim(out);
-    % we have no compare_versions on matlab, just assume its ok (!)
-    if (exist ('OCTAVE_VERSION', 'builtin') & ...
-        (compare_versions (spver, minsympyver, '<')))
-      error('OctSymPy:oldsympy', ...
-            ['SymPy version %s found but is too old (%s required)\n' ...
-             '    Try "sympref diagnose" for more information.'], ...
-            spver, minsympyver)
+    if (compare_versions (spver, minsympyver, '<'))
+      if (~ verbose)
+        error('OctSymPy:oldsympy', ...
+              ['SymPy version %s found but is too old (%s required)\n' ...
+               '    Try "sympref diagnose" for more information.'], ...
+              spver, minsympyver)
+      end
+      disp ('**** Your SymPy is too old! ****')
+      disp ('Installed newer version already?  Perhaps it was for a different Python?')
+      disp ('Try "setenv" as described above to change your python interpreter.')
+      return
     end
   end
 
+  if (verbose)
+    fprintf ('\nYour kit looks good for running the Symbolic package.  Happy hacking!\n\n')
+  end
 end

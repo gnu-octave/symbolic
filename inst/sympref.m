@@ -337,7 +337,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     case 'diagnose'
-      octsympy_diagnose
+      assert_have_python_and_sympy (sympref ('python'), true)
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));
