@@ -78,22 +78,26 @@ function r = do_highbyte_escapes(s)
 
 end
 
-%!test
-%! s = 'a\\\xe2\x8c\x88y\xe2\x8c\x89b';
-%! r = 'a\\⌈y⌉b';
-%! assert (do_highbyte_escapes(s), r)
 
-%!test
-%! s = '\\xe2';
-%! r = '\\xe2';
-%! assert (do_highbyte_escapes(s), r)
+%% Note: tests in private/ execute but generally fail with __run_test_suite__
+% So these are commented out as of 2017-08
 
-%!test
-%! s = '\xe2\x8c\x88';
-%! r = '⌈';
-%! assert (do_highbyte_escapes(s), r)
+%%!test
+%%! s = 'a\\\xe2\x8c\x88y\xe2\x8c\x89b';
+%%! r = 'a\\⌈y⌉b';
+%%! assert (do_highbyte_escapes(s), r)
 
-%!test
-%! s = '\\\xe2\x8c\x88';
-%! r = '\\⌈';
-%! assert (do_highbyte_escapes(s), r)
+%%!test
+%%! s = '\\xe2';
+%%! r = '\\xe2';
+%%! assert (do_highbyte_escapes(s), r)
+
+%%!test
+%%! s = '\xe2\x8c\x88';
+%%! r = '⌈';
+%%! assert (do_highbyte_escapes(s), r)
+
+%%!test
+%%! s = '\\\xe2\x8c\x88';
+%%! r = '\\⌈';
+%%! assert (do_highbyte_escapes(s), r)
