@@ -164,7 +164,7 @@ function g = subs(f, in, out)
   end
 
   % "zip" will silently truncate
-  assert (numel (in) == 1 || numel (in) == numel (out),
+  assert (numel (in) == 1 || numel (in) == numel (out), ...
           'subs: number of outputs must match inputs')
 
   cmd = {
