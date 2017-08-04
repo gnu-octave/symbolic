@@ -56,7 +56,7 @@ function anyfail = octsympy_tests ()
   try
     page_screen_output (false);
     warning ("off", "Octave:deprecated-function");
-    fid = fopen ("octsympy_tests.log", "wt");
+    fid = fopen (fullfile(mycwd, "octsympy_tests.log"), "wt");
     if (fid < 0)
       error ("could not open octsympy_tests.log for writing");
     endif
