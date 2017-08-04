@@ -38,13 +38,21 @@
 %%
 %% @strong{Warning}: Using the single-argument form, the coefficient vector
 %% @var{c} is a plain numeric vector (double).  This is for compatibility
-%% with the Matlab Symbolic Math Toolbox, and could change in future versions
-%% of OctSymPy.  We thus recommend using @code{double} explicitly as in:
+%% with the Matlab Symbolic Math Toolbox.
+%% We suggest making this clear in your code by explicitly casting to @code{double},
+%% as in:
 %% @example
 %% @group
 %% syms x
-%% double(sym2poly(pi*x^2 + 3*x/2 + exp(sym(1))))
-%%    @result{}     3.1416   1.5000   2.7183
+%% double(sym2poly(pi*x^3 + 3*x/2 + exp(sym(1))))
+%%    @result{}     3.14159   0.00000   1.50000   2.71828
+%% @end group
+%% @end example
+%% You may prefer specifying @var{X} or using @code{coeffs}:
+%% @example
+%% @group
+%% coeffs(pi*x^3 + 3*x/2 + exp(sym(1)), 'all')
+%%    @result{} (sym) [π  0  3/2  ℯ]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -52,7 +60,7 @@
 %% certainly deal with more general concepts of polynomial but we do not
 %% yet expose all of that here.
 %%
-%% @seealso{poly2sym, polyval, roots}
+%% @seealso{poly2sym, @@sym/coeffs, polyval, roots}
 %% @end deftypemethod
 
 %% Created: 18 April 2003
