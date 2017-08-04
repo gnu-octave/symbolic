@@ -66,7 +66,7 @@ script:
         export IPC=default;
     fi
   - octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
-  - cat octsympy_tests.log
+  - cat fntests.log
   - if [ "x$DOCTEST" = "xyes" ]; then
         octave --path=$TRAVIS_BUILD_DIR/pytave -W --no-gui --eval "pkg load doctest; sympref ipc $IPC; syms x; r = doctest('.'); exit(~r)";
     fi
