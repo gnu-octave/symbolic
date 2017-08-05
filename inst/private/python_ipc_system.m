@@ -82,7 +82,7 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
   pyexec = sympref('python');
   if (first_time)
-    assert_have_python_and_sympy (pyexec, false)
+    assert_have_python_and_sympy (pyexec)
   end
 
   %% FIXME: Issue #63: with new regexp code on Matlab

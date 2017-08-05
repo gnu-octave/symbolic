@@ -17,7 +17,8 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @defun assert_have_python_and_sympy (pyexec, verbose)
+%% @defun  assert_have_python_and_sympy (pyexec)
+%% @defunx assert_have_python_and_sympy (pyexec, verbose)
 %% Check that Python and SymPy are installed and working.
 %%
 %% @seealso{sympref}
@@ -26,6 +27,10 @@
 function assert_have_python_and_sympy (pyexec, verbose)
 
   minsympyver = '1.0';
+
+  if (nargin < 2)
+    verbose = false;
+  end
 
   if (verbose)
     disp ('')
