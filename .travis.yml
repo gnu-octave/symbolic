@@ -5,17 +5,17 @@ language: generic
 
 matrix:
   include:
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=no  SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=no  SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON_VERSION=3 PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON_VERSION=3 PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
+    - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=3 PYTAVE=no  SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=2 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=3 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
   allow_failures:
-    - env: PYTHON=python2 PYTHON_VER=  PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON=python3 PYTHON_VER=3 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=2 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
+    - env: PYTHON_VERSION=3 PYTAVE=yes SYMPY_VER=1.1.1 OCT=daily DOCTEST=no  COLUMNS=80
 
 # need octave devel pkgs for doctest (has compiled code as of July 2015)
 before_install:
@@ -32,11 +32,12 @@ before_install:
     fi
 # we can drop numpy after https://bitbucket.org/mtmiller/pytave/issues/84 is resolved.
   - if [ "x$PYTAVE" = "xyes" ]; then
-        pip$PYTHON_VER install --user numpy;
+        pip$PYTHON_VERSION install --user numpy;
     fi
 
 install:
-  - pip$PYTHON_VER install --user sympy==$SYMPY_VER
+  - export PYTHON="python$PYTHON_VERSION"
+  - pip$PYTHON_VERSION install --user sympy==$SYMPY_VER
   - if [ "x$DOCTEST" = "xyes" ]; then
         mkdir ${HOME}/octave;
         wget https://github.com/catch22/octave-doctest/releases/download/v0.5.0/doctest-0.5.0.tar.gz;
@@ -47,13 +48,14 @@ install:
         pushd pytave;
         pwd;
         autoreconf --install || exit 1;
-        ./configure PYTHON_VERSION=$PYTHON_VER && make || exit 1;
+        ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1;
         popd;
     fi
 
 # all commands here must have exit code 0 for the build to be called "passing"
 # debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
+  - export PYTHON="python$PYTHON_VERSION"
   - octave -W --no-gui --eval "ver; pwd; exit(0)"
   - stty cols $COLUMNS rows 40
   - tput cols; stty size
