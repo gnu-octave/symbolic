@@ -66,7 +66,15 @@ function y = chol(x)
   elseif (nargin > 2)
     print_usage ();
   end
-  y = python_cmd('return _ins[0].cholesky(),', x);
+
+  cmd = { 'A = _ins[0]' ...
+          'try:' ...
+          '    y = A.cholesky_decomposition()' ...
+          'except AttributeError:' ...
+          '    y = A.cholesky()' ...
+          'return y' };
+
+  y = python_cmd(cmd, x);
 end
 
 
