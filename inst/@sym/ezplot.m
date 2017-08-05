@@ -213,5 +213,8 @@ end
 %! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
 %! end
 
+%!test
+%! close all
+
 %%!test
 %%! close (hf);
