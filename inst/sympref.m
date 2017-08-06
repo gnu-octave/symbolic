@@ -31,6 +31,12 @@
 %% configurations.  The various choices for @var{cmd} and
 %% @var{args} are documented below.
 %%
+%% Run @strong{diagnostics} on your system:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref diagnose
+%%   @print{} ...
+%% @end example
 %%
 %% Get the name of the @strong{Python executable}:
 %% @example
@@ -39,12 +45,15 @@
 %%   @result{} ans = python
 %% @end example
 %%
-%% This value can be changed by setting the environment variable
+%% Changing the Python executable might help if you've installed
+%% a local Python interpreter somewhere else on your system.
+%% The value can be changed by setting the environment variable
 %% @code{PYTHON}, which can be configured in the OS, or it can be
 %% set within Octave using:
 %% @example
 %% @comment doctest: +SKIP
-%% setenv PYTHON /usr/bin/python
+%% setenv PYTHON python3
+%% setenv PYTHON $@{HOME@}/.local/bin/python
 %% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
@@ -326,6 +335,9 @@ function varargout = sympref(cmd, arg)
       %  error ('the package %s is not installed', your_pkg);
       %end
       %pkg_path = pkg_l{idx}.dir
+
+    case 'diagnose'
+      assert_have_python_and_sympy (sympref ('python'), true)
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));

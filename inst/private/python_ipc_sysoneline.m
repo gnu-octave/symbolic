@@ -107,7 +107,7 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   pyexec = sympref('python');
   if (first_time)
-    assert_have_python_and_sympy(pyexec)
+    assert_have_python_and_sympy (pyexec)
   end
 
   bigs = [headers s1 s2 s3];
