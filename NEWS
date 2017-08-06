@@ -7,6 +7,10 @@ octsympy 2.6.1-dev
   * symfun can be evaluated at symbolic matrices: `f(sym([1 2; 3 4]))`
     now works where `f(x)` is a symfun.
 
+  * New command `sympref diagnose` to help debug Python/SymPy issues.
+
+  * Various bug fixes and documentation updates.
+
 
 
 octsympy 2.6.0 (2017-07-27)
