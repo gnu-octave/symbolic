@@ -1,6 +1,10 @@
 octsympy 2.6.1-dev
 ==================
 
+  * New symbolic commands:
+
+          ezcontour
+
   * `subs` allows multiple scalar variables to be replaced with symbolic
     matrix expressions.
 
