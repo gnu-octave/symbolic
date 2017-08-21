@@ -110,6 +110,36 @@
 %% @end group
 %% @end example
 %%
+%% @strong{Caution}, multiple interdependent substitutions can be
+%% ambiguous and results may depend on the order in which you
+%% specify them.
+%% A cautionary example:
+%% @example
+%% @group
+%% syms y(x) A B
+%% u = y + diff(y, x)
+%%   @result{} u(x) = (symfun)
+%%              d
+%%       y(x) + ──(y(x))
+%%              dx
+%%
+%% subs(u, @{y, diff(y, x)@}, @{A, B@})
+%%   @result{} ans = (sym) A
+%%
+%% subs(u, @{diff(y, x), y@}, @{B, A@})
+%%   @result{} ans = (sym) A + B
+%% @end group
+%% @end example
+%%
+%% Here it would be clearer to explicitly avoid the ambiguity
+%% by calling @code{subs} twice:
+%% @example
+%% @group
+%% subs(subs(u, diff(y, x), B), y, A)
+%%   @result{} ans = (sym) A + B
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/symfun}
 %% @end defmethod
 
