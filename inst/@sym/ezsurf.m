@@ -79,7 +79,7 @@ function varargout = ezsurf(varargin)
         % Each is function of one var, and its the same var for all
         thissym = symvar(varargin{i});
         assert(length(thissym) <= 2, ...
-          'ezplot3: plotting curves: functions should have at most two inputs');
+          'ezsurf: parameterized: functions should have at most two inputs');
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
