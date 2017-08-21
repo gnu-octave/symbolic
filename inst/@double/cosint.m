@@ -109,5 +109,5 @@ end
 %! R = expint (1i*x);
 %! C2 = -real (R);
 %! S2 = imag (R) + pi/2;
-%! assert (C1, C2, -10*eps);
-%! assert (S1, S2, -10*eps);
+%! assert (C1, C2, -100*eps);
+%! assert (S1, S2, -100*eps);

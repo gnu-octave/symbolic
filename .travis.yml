@@ -26,7 +26,6 @@ before_install:
   - sudo apt-get install -y liboctave-dev
   - sudo apt-get install -y octave
   - if [ "x$OCT" = "xdaily" ]; then
-        sudo apt-get install -y libarpack2-dev libgl2ps-dev libgraphicsmagick++-dev libqrupdate-dev libsuitesparse-dev;
         wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
         sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
     fi
