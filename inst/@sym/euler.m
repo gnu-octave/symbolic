@@ -25,9 +25,9 @@
 %% Examples:
 %% @example
 %% @group
-%% euler (0)
+%% euler (sym(0))
 %%   @result{} (sym) 1
-%% euler (32)
+%% euler (sym(32))
 %%   @result{} (sym) 177519391579539289436664789665
 %% @end group
 %% @end example
@@ -36,14 +36,22 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.2")'))
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% euler (2, x)
 %%   @result{} (sym)
-%%        2       1
-%%       x  - x + ─
-%%                6
+%%        2
+%%       x  - x
+%% @end group
+%%
+%% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
+%% euler (10, x)
+%%   @result{} (sym)
+%%        10      9       7        5        3
+%%       x   - 5⋅x  + 30⋅x  - 126⋅x  + 255⋅x  - 155⋅x
 %% @end group
 %% @end example
+%%
 %% (As of 2017-08, Euler polynomials require a patch for SymPy:
 %% @url{https://github.com/sympy/sympy/pull/13228})
 %%
@@ -69,52 +77,58 @@ end
 
 %!assert (isequal (euler (sym(0)), sym(1)))
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
-%! error <nonnegative> euler (sym(-1))
-
 %!test
 %! m = sym([0 1 2; 8 10 888889]);
 %! A = euler (m);
 %! B = sym([1 0 -1; 1385 -50521 0]);
 %! assert (isequal (A, B))
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! syms x
 %! assert (isequal (euler(6, x), x^6 - 3*x^5 + 5*x^3 - 3*x))
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! assert (isnan (euler (3, sym(nan))))
+%! end
+
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! syms m x
 %! em = euler (m, x);
 %! A = subs(em, [m x], [2 sym(pi)]);
 %! assert (isequal (A, sym(pi)^2 - sym(pi)))
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % vectorized
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! syms x y
 %! A = euler([1; 2], [x; y]);
 %! B = [x - sym(1)/2; y^2 - y];
 %! assert (isequal (A, B))
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % round trip
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! syms m z
 %! f = euler (m, z);
 %! h = function_handle (f, 'vars', [m z]);
 %! A = h (2, 2.2);
 %! B = euler (2, 2.2);
 %! assert (A, B)
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % compare vpa to maple: Digits:=34; evalf(euler(13, exp(1)+Pi*I/13));
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! A = vpa('1623.14184180556920918624604530515') + ...
 %!     vpa('4270.98066989140286451493108809574')*1i;
 %! z = vpa (exp(1), 32) + vpa(pi, 32)/13*1i;
 %! B = euler (13, z);
 %! relerr = double(abs((B - A)/A));
 %! assert (abs(relerr) < 2e-31);
+%! end

@@ -35,7 +35,7 @@
 %% Polynomial example:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.2")'))
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% euler (2, pi)
 %%   @result{} 6.7280
 %% @end group
@@ -92,8 +92,6 @@ end
 %!error <sizes> euler ([1 2], [1 2 3])
 %!error <sizes> euler ([1 2], [1; 2])
 
-%!error <nonnegative> euler (-1)
-
 %!assert (isequal (euler (0), 1))
 %!assert (isequal (euler (1), 0))
 %!assert (isequal (euler (10), -50521))
@@ -112,8 +110,8 @@ end
 %! B = double (euler (n));
 %! assert (isequal (A, B));
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! y = sym(19)/10;
 %! n = sym(2);
 %! x = 1.9;
@@ -121,24 +119,37 @@ end
 %! A = euler (m, x);
 %! B = double (euler (n, y));
 %! assert (A, B, -eps);
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! assert (isequal (euler (4, inf), inf))
+%! assert (isequal (euler (4, -inf), inf))
+%! assert (isequal (euler (3, inf), inf))
+%! assert (isequal (euler (3, -inf), -inf))
+%! assert (isnan (euler(3, nan)))
+%! assert (isnumeric (euler(3, nan)))
+%! end
+
+%!test
 %! % maple, complex input
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! A = 113.33970046079423204 - 46.991080726974811540i;
 %! B = euler(7, 2.12345 + 1.23i);
 %! assert (A, B, -eps);
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % maple, complex input, large m, small x
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! A = 0.18034673393294025238e276 + 0.27756266681280689172e276*i;
 %! B = euler (200, 0.123+0.234i);
 %! assert (A, B, -eps);
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % x matrix, m scalar
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! y = [1 2 sym(pi); exp(sym(1)) 5 6];
 %! n = sym(2);
 %! x = double (y);
@@ -146,10 +157,11 @@ end
 %! A = euler (m, x);
 %! B = double (euler (n, y));
 %! assert (A, B, -eps);
+%! end
 
-%!xtest
-%! % https://github.com/sympy/sympy/pull/13228
+%!test
 %! % m matrix, x scalar
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! m = [1 2 3; 4 5 6];
 %! n = sym(m);
 %! y = sym(21)/10;
@@ -157,3 +169,4 @@ end
 %! A = euler (m, x);
 %! B = double (euler (n, y));
 %! assert (A, B, -3*eps);
+%! end
