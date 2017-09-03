@@ -57,7 +57,12 @@ function y = euler (m, x)
 
   if (nargin == 1)
     y = zeros (size (m));
-    cmd = 'return [float(euler(sp.Integer(m))) for m in _ins[0]],';
+    % TODO: clean up when we drop support for 1.0
+    cmd = { 'if Version(spver) > Version("1.0"):'
+            '    return [float(euler(sp.Integer(m))) for m in _ins[0]],'
+            'else:'
+            '    myeul = combinatorial.numbers.euler'
+            '    return [float(myeul(sp.Integer(m))) for m in _ins[0]],' };
     c = python_cmd (cmd, num2cell (m(:)));
     for i = 1:numel (c)
       y(i) = c{i};
