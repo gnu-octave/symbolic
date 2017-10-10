@@ -29,6 +29,11 @@ before_install:
         wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
         sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
     fi
+  - if [ "x$PYTHON_VERSION" = "x2" ]; then
+        sudo apt-get install -y python-dev python-pip;
+    else
+        sudo apt-get install -y python$PYTHON_VERSION-dev python$PYTHON_VERSION-pip;
+    fi
 # we can drop numpy after https://bitbucket.org/mtmiller/pytave/issues/84 is resolved.
   - if [ "x$PYTAVE" = "xyes" ]; then
         pip$PYTHON_VERSION install --user numpy;
