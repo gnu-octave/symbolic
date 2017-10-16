@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -71,7 +71,7 @@ function r = vpa(x, n)
     elseif (strcmp (x, 'I'))
       x = 'Symbol("I")';
     end
-    % Want Float if its '2.3' but N if its 'pi'
+    % Want Float if its '2.3' but N if its 'sqrt(2)'
     cmd = {
         'x, n = _ins'
         'try:'
