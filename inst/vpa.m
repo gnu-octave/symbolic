@@ -33,17 +33,57 @@
 %% @end group
 %% @end example
 %%
+%% If @var{n} is omitted it defaults to the current value of
+%% @code{digits()}.
+%%
 %% Be careful when creating a high-precision float from a
 %% double as you will generally only get 15 digits:
 %% @example
 %% @group
-%% vpa(1/3, 32)
-%%   @result{} (sym) 0.33333333333333331482961625624739
+%% vpa(1/3)
+%%   @result{} (sym) 0.3333333333333333148296162...
+%% vpa(sqrt(2));
+%% ans^2
+%%   @result{} (sym) 2.0000000000000002734323463...
 %% @end group
 %% @end example
 %%
-%% If @var{n} is omitted it defaults to the current value of
-%% @code{digits()}.
+%% For the same reason, passing numbers with decimal points
+%% may produce undesirable results:
+%% @example
+%% @group
+%% vpa(0.1)
+%%   @result{} (sym) 0.1000000000000000055511151...
+%% @end group
+%% @end example
+%%
+%% Instead, enclose the decimal number in a string:
+%% @example
+%% @group
+%% vpa('0.1')
+%%   @result{} (sym) 0.10000000000000000000000000000000
+%% @end group
+%% @end example
+%%
+%% Very simple expressions can also be enclosed in quotes:
+%% @example
+%% @group
+%% vpa('sqrt(2)')
+%%   @result{} (sym) 1.4142135623730950488016887242097
+%% @end group
+%% @end example
+%% But be careful as this can lead to unexpected behaviour, for example
+%% when the expression contains numbers with decimal points.
+%% It is preferrable to use @code{sym} or @code{vpa} on the inner-most
+%% parts of your expression:
+%% @example
+%% @group
+%% cos(vpa('0.1'))
+%%   @result{} (sym) 0.99500416527802576609556198780387
+%% vpa(cos(sym(1)/10))
+%%   @result{} (sym) 0.99500416527802576609556198780387
+%% @end group
+%% @end example
 %%
 %% @seealso{sym, vpasolve, digits}
 %% @end defun
