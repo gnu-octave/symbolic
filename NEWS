@@ -10,6 +10,9 @@ octsympy 2.6.1-dev
 
           euler
 
+  * `vpa` now warns of low-precision on non-numbers strings with decimals
+    such as `vpa('cos(0.1)')`.  See "help vpa" for details.
+
   * `subs` allows multiple scalar variables to be replaced with symbolic
     matrix expressions.
 
