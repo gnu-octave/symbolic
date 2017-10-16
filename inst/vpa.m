@@ -72,10 +72,19 @@
 %%   @result{} (sym) 1.4142135623730950488016887242097
 %% @end group
 %% @end example
-%% But be careful as this can lead to unexpected behaviour, for example
-%% when the expression contains numbers with decimal points.
-%% It is preferrable to use @code{sym} or @code{vpa} on the inner-most
-%% parts of your expression:
+%%
+%% But be careful as this can lead to unexpected behaviour, such as
+%% low-precision results if the string contains decimal points:
+%% @example
+%% @group
+%% vpa('cos(0.1)')
+%%   @print{} warning: string expression with decimals is dangerous, see "help vpa"
+%%   @result{} (sym) 0.995004165278025709540...
+%% @end group
+%% @end example
+%%
+%% Instead, it is preferrable to use @code{sym} or @code{vpa} on the
+%% inner-most parts of your expression:
 %% @example
 %% @group
 %% cos(vpa('0.1'))
@@ -103,6 +112,11 @@ function r = vpa(x, n)
         'return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (ischar (x))
+    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
+    if (~isnum && ~isempty (strfind (x, '.')))
+      warning ('OctSymPy:vpa:precisionloss', ...
+               'string expression with decimals is dangerous, see "help vpa"')
+    end
     if (strcmp (x, 'inf') || strcmp (x, 'Inf') || strcmp (x, '+inf') || ...
         strcmp (x, '+Inf'))
       x = 'S.Infinity';
@@ -314,3 +328,5 @@ end
 %! b = vpa(a);
 %! c = vpa('1524157877488187881');
 %! assert (isequal (b, c))
+
+%!warning <dangerous> vpa ('sqrt(2.0)');
