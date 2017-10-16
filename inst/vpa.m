@@ -78,8 +78,9 @@
 %% @example
 %% @group
 %% vpa('cos(0.1)')
-%%   @print{} warning: string expression with decimals is dangerous, see "help vpa"
-%%   @result{} (sym) 0.995004165278025709540...
+%%   @print{} warning: string expression involving decimals is
+%%   @print{}          dangerous, see "help vpa"
+%%   @result{} ans = (sym) 0.995004165278025709540...
 %% @end group
 %% @end example
 %%
@@ -115,7 +116,7 @@ function r = vpa(x, n)
     isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
     if (~isnum && ~isempty (strfind (x, '.')))
       warning ('OctSymPy:vpa:precisionloss', ...
-               'string expression with decimals is dangerous, see "help vpa"')
+               'string expression involving decimals is dangerous, see "help vpa"')
     end
     if (strcmp (x, 'inf') || strcmp (x, 'Inf') || strcmp (x, '+inf') || ...
         strcmp (x, '+Inf'))
@@ -322,7 +323,7 @@ end
 %! c = vpa('152415765279684');
 %! assert (isequal (b, c))
 
-%!xtest
+%!test
 %! % big integers (workaround poor num2str, works in 4.0?)
 %! a = int64(1234567891);  a = a*a;
 %! b = vpa(a);
