@@ -146,6 +146,66 @@ function assert_have_python_and_sympy (pyexec, verbose)
   end
 
   if (verbose)
+    disp ('Good, a working version of SymPy is installed.')
+    disp ('')
+    disp ('')
+    disp ('Python XML Parsing and DOM Support')
+    disp ('----------------------------------')
+    disp ('')
+    disp ('The XML DOM library is used by Symbolic for passing values to and from Python.')
+    disp ('Some older versions of Python formatted XML output differently.  If you have')
+    disp ('a Python that is older than 2.7.3 or 3.2.3, this will probably fail.')
+    disp ('')
+  end
+
+  script = 'import xml.dom.minidom as minidom;';
+  script = [script ' doc = minidom.parseString(\"<item>value</item>\");'];
+  script = [script ' print(doc.toprettyxml(indent=\"\"))'];
+
+  if (verbose)
+    fprintf ('Attempting to run %s -c "%s"\n\n', pyexec, script);
+  end
+
+  [status, output] = system([pyexec ' -c "' script '"']);
+  if (verbose)
+    status
+    output
+  end
+
+  if (status ~= 0)
+    if (~ verbose)
+      error ('OctSymPy:noxmldom', ...
+            ['Python cannot import XML DOM: is there something unusual about your Python?\n' ...
+             '    Try "sympref diagnose" for more information.'])
+    end
+    disp ('')
+    disp ('Unfortunately status was non-zero: probably Python cannot import xml.dom.')
+    disp ('')
+    disp ('  * Is there an error message above?')
+    disp ('')
+    disp ('  * Are you using an unusual Python installation?  If not, please try to')
+    disp ('    reinstall it and try again.')
+    return
+  end
+
+  xmlout = strtrim (output);
+
+  if (isempty (strfind (xmlout, '<item>value</item>')))
+    if (~ verbose)
+      error ('OctSymPy:oldxmldom', ...
+             ['Python XML output is not compatible, probably an older version of Python?\n' ...
+              '    Try "sympref diagnose" for more information.'])
+    end
+    disp ('**** Your Python is too old! ****')
+    disp ('')
+    disp ('The XML output shown above must have "<item>value</item>" on the same line.')
+    disp ('If your Python interpreter is an old version of Python 2, or Python 3 older')
+    disp ('than 3.2.3, please try upgrading to a more recent version to use the Symbolic')
+    disp ('package.')
+    return
+  end
+
+  if (verbose)
     fprintf ('\nYour kit looks good for running the Symbolic package.  Happy hacking!\n\n')
   end
 end
