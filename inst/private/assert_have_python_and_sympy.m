@@ -146,6 +146,7 @@ function assert_have_python_and_sympy (pyexec, verbose)
   end
 
   if (verbose)
+    disp ('')
     disp ('Good, a working version of SymPy is installed.')
     disp ('')
     disp ('')
@@ -153,8 +154,8 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('----------------------------------')
     disp ('')
     disp ('The XML DOM library is used by Symbolic for passing values to and from Python.')
-    disp ('Some older versions of Python formatted XML output differently.  If you have')
-    disp ('a Python that is older than 2.7.3 or 3.2.3, this will probably fail.')
+    disp ('Some older versions of Python formatted XML output differently.  As long as you')
+    disp ('have any reasonably recent version of Python, this should pass.')
     disp ('')
   end
 
@@ -175,8 +176,8 @@ function assert_have_python_and_sympy (pyexec, verbose)
   if (status ~= 0)
     if (~ verbose)
       error ('OctSymPy:noxmldom', ...
-            ['Python cannot import XML DOM: is there something unusual about your Python?\n' ...
-             '    Try "sympref diagnose" for more information.'])
+             ['Python cannot import XML DOM: is this an unusual Python setup?\n' ...
+              '    Try "sympref diagnose" for more information.'])
     end
     disp ('')
     disp ('Unfortunately status was non-zero: probably Python cannot import xml.dom.')
@@ -193,14 +194,14 @@ function assert_have_python_and_sympy (pyexec, verbose)
   if (isempty (strfind (xmlout, '<item>value</item>')))
     if (~ verbose)
       error ('OctSymPy:oldxmldom', ...
-             ['Python XML output is not compatible, probably an older version of Python?\n' ...
+             ['Python XML output is not compatible, probably an old version of Python?\n' ...
               '    Try "sympref diagnose" for more information.'])
     end
     disp ('**** Your Python is too old! ****')
     disp ('')
     disp ('The XML output shown above must have "<item>value</item>" on the same line.')
     disp ('If your Python interpreter is an old version of Python 2, or Python 3 older')
-    disp ('than 3.2.3, please try upgrading to a more recent version to use the Symbolic')
+    disp ('than 3.2.3, please try upgrading to a more recent Python to use the Symbolic')
     disp ('package.')
     return
   end
