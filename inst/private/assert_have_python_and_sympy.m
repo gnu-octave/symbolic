@@ -159,9 +159,9 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('')
   end
 
-  script = 'import xml.dom.minidom as minidom;';
-  script = [script ' doc = minidom.parseString(\"<item>value</item>\");'];
-  script = [script ' print(doc.toprettyxml(indent=\"\"))'];
+  script = ['import xml.dom.minidom as minidom; ' ...
+            'doc = minidom.parseString(\"<item>value</item>\"); ' ...
+            'print(doc.toprettyxml(indent=\"\"))'];
 
   if (verbose)
     fprintf ('Attempting to run %s -c "%s"\n\n', pyexec, script);
