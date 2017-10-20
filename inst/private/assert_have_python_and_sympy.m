@@ -199,10 +199,10 @@ function assert_have_python_and_sympy (pyexec, verbose)
     end
     disp ('**** Your Python is too old! ****')
     disp ('')
-    disp ('The XML output shown above must have "<item>value</item>" on the same line.')
-    disp ('If your Python interpreter is an old version of Python 2, or Python 3 older')
-    disp ('than 3.2.3, please try upgrading to a more recent Python to use the Symbolic')
-    disp ('package.')
+    disp ('The XML output shown above must have "<item>value</item>" all on one line.')
+    disp ('If your Python interpreter is an older release, please try upgrading to a more')
+    disp ('recent version.  Symbolic should work with Python 2 (version 2.7.3 or newer)')
+    disp ('and Python 3 (version 3.2.3 or newer).')
     return
   end
 
