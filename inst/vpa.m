@@ -113,7 +113,8 @@ function r = vpa(x, n)
         'return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (ischar (x))
-    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
+    isnum = ~isempty (regexp (strtrim (x), ...
+                              '^[-+]*?[\d_]*\.?[\d_]*(e[+-]?[\d_]+)?$'));
     if (~isnum && ~isempty (strfind (x, '.')))
       warning ('OctSymPy:vpa:precisionloss', ...
                'string expression involving decimals is dangerous, see "help vpa"')
@@ -339,4 +340,12 @@ end
 %! % https://github.com/sympy/sympy/issues/13425
 %! a = vpa('2**0.5');
 %! b = vpa(sqrt(sym(2)));
+%! assert (isequal (a, b))
+
+%!test
+%! a = vpa('2.3e1');
+%! b = vpa(' 2.3e+1 ');
+%! assert (isequal (a, b))
+%! a = vpa('21e-1');
+%! b = vpa('2.1');
 %! assert (isequal (a, b))
