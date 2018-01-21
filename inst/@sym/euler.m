@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,8 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% (As of 2017-08, Euler polynomials require a patch for SymPy:
-%% @url{https://github.com/sympy/sympy/pull/13228})
+%% (Euler polynomials require SymPy > 1.1.1, unreleased as of 2018-01).
 %%
 %% @seealso{@@double/euler, bernoulli}
 %% @end deftypefun
