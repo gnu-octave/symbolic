@@ -349,3 +349,13 @@ end
 %! a = vpa('21e-1');
 %! b = vpa('2.1');
 %! assert (isequal (a, b))
+
+%!test
+%! % Issue #859, operations on immutable matrices
+%! x = vpa (sym ([1 2]));
+%! % If vpa no longer makes an ImmutableDenseMatrix,
+%! % may need to adjust or remove this test.
+%! assert (strfind (sympy (x), 'Immutable'))
+%! y = sin(x);
+%! y2 = [sin(vpa(sym(1))) sin(vpa(sym(2)))];
+%! assert (isequal (y, y2))
