@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,17 +33,67 @@
 %% @end group
 %% @end example
 %%
+%% If @var{n} is omitted it defaults to the current value of
+%% @code{digits()}.
+%%
 %% Be careful when creating a high-precision float from a
 %% double as you will generally only get 15 digits:
 %% @example
 %% @group
-%% vpa(1/3, 32)
-%%   @result{} (sym) 0.33333333333333331482961625624739
+%% vpa(1/3)
+%%   @result{} (sym) 0.3333333333333333148296162...
+%% vpa(sqrt(2));
+%% ans^2
+%%   @result{} (sym) 2.0000000000000002734323463...
 %% @end group
 %% @end example
 %%
-%% If @var{n} is omitted it defaults to the current value of
-%% @code{digits()}.
+%% For the same reason, passing numbers with decimal points
+%% may produce undesirable results:
+%% @example
+%% @group
+%% vpa(0.1)
+%%   @result{} (sym) 0.1000000000000000055511151...
+%% @end group
+%% @end example
+%%
+%% Instead, enclose the decimal number in a string:
+%% @example
+%% @group
+%% vpa('0.1')
+%%   @result{} (sym) 0.10000000000000000000000000000000
+%% @end group
+%% @end example
+%%
+%% Very simple expressions can also be enclosed in quotes:
+%% @example
+%% @group
+%% vpa('sqrt(2)')
+%%   @result{} (sym) 1.4142135623730950488016887242097
+%% @end group
+%% @end example
+%%
+%% But be careful as this can lead to unexpected behaviour, such as
+%% low-precision results if the string contains decimal points:
+%% @example
+%% @group
+%% vpa('cos(0.1)')
+%%   @print{} warning: string expression involving decimals is
+%%   @print{}          dangerous, see "help vpa"
+%%   @result{} ans = (sym) 0.995004165278025709540...
+%% @end group
+%% @end example
+%%
+%% Instead, it is preferrable to use @code{sym} or @code{vpa} on the
+%% inner-most parts of your expression:
+%% @example
+%% @group
+%% cos(vpa('0.1'))
+%%   @result{} (sym) 0.99500416527802576609556198780387
+%% vpa(cos(sym(1)/10))
+%%   @result{} (sym) 0.99500416527802576609556198780387
+%% @end group
+%% @end example
 %%
 %% @seealso{sym, vpasolve, digits}
 %% @end defun
@@ -63,6 +113,12 @@ function r = vpa(x, n)
         'return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (ischar (x))
+    isnum = ~isempty (regexp (strtrim (x), ...
+                              '^[-+]*?[\d_]*\.?[\d_]*(e[+-]?[\d_]+)?$'));
+    if (~isnum && ~isempty (strfind (x, '.')))
+      warning ('OctSymPy:vpa:precisionloss', ...
+               'string expression involving decimals is dangerous, see "help vpa"')
+    end
     if (strcmp (x, 'inf') || strcmp (x, 'Inf') || strcmp (x, '+inf') || ...
         strcmp (x, '+Inf'))
       x = 'S.Infinity';
@@ -71,13 +127,16 @@ function r = vpa(x, n)
     elseif (strcmp (x, 'I'))
       x = 'Symbol("I")';
     end
-    % Want Float if its '2.3' but N if its 'pi'
+    % Want Float if its '2.3' but N if its 'sqrt(2)'
     cmd = {
         'x, n = _ins'
         'try:'
         '    return sympy.Float(x, n),'
         'except ValueError:'
-        '    return sympy.N(x, n),' };
+        '    # TODO: if this is fixed upstream [1], switch back'
+        '    # [1] https://github.com/sympy/sympy/issues/13425'
+        '    return sympy.sympify(x, evaluate=False).evalf(n)'
+        '    #return sympy.N(x, n)' };
     r = python_cmd (cmd, x, n);
   elseif (isfloat (x) && ~isreal (x))
     r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
@@ -268,9 +327,25 @@ end
 %! c = vpa('152415765279684');
 %! assert (isequal (b, c))
 
-%!xtest
+%!test
 %! % big integers (workaround poor num2str, works in 4.0?)
 %! a = int64(1234567891);  a = a*a;
 %! b = vpa(a);
 %! c = vpa('1524157877488187881');
 %! assert (isequal (b, c))
+
+%!warning <dangerous> vpa ('sqrt(2.0)');
+
+%!warning <dangerous>
+%! % https://github.com/sympy/sympy/issues/13425
+%! a = vpa('2**0.5');
+%! b = vpa(sqrt(sym(2)));
+%! assert (isequal (a, b))
+
+%!test
+%! a = vpa('2.3e1');
+%! b = vpa(' 2.3e+1 ');
+%! assert (isequal (a, b))
+%! a = vpa('21e-1');
+%! b = vpa('2.1');
+%! assert (isequal (a, b))

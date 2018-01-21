@@ -90,7 +90,8 @@
 %% @example
 %% @group
 %% sym(0.1)
-%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @print{} warning: passing floating-point values to sym is
+%%   @print{}          dangerous, see "help sym"
 %%   @result{} ans = (sym) 1/10
 %% @end group
 %% @end example
@@ -115,7 +116,8 @@
 %% @example
 %% @group
 %% y = sym(pi/100)
-%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @print{} warning: passing floating-point values to sym is
+%%   @print{}          dangerous, see "help sym"
 %%   @result{} y = (sym)
 %%        π
 %%       ───
@@ -431,10 +433,10 @@ function s = sym(x, varargin)
       return
     end
 
-    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
-
+    isnum = ~isempty (regexp (strtrim (x), ...
+                              '^[-+]*?[\d_]*\.?[\d_]*(e[+-]?[\d_]+)?$'));
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
+    if ((~ isnum) && (~ isempty (regexp (strtrim (x), '^\w+$'))))
 
       cmd = { 'd = dict()'
               'x = _ins[0]'
