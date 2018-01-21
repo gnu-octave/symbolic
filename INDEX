@@ -295,6 +295,7 @@ Other methods for symbolic objects
  @sym/display
  @sym/disp
  @sym/end
+ @sym/ezcontour
  @sym/ezplot3
  @sym/ezplot
  @sym/ezsurf

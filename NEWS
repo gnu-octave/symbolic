@@ -4,6 +4,7 @@ octsympy 2.6.1-dev
   * New symbolic commands:
 
           euler
+          ezcontour
 
   * New `@double` numerical functions; these are wrappers around SymPy,
     so they are slower than native floating-point implementations.

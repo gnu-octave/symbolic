@@ -77,6 +77,10 @@
 
 function vars = symvar(F, Nout)
 
+  if (nargin > 2)
+    print_usage ();
+  end
+
   symlist = findsymbols (F);
   Nlist = length (symlist);
 
@@ -140,6 +144,8 @@ function vars = symvar(F, Nout)
 
 end
 
+
+%!error <usage> symvar (sym(1), 2, 3)
 
 %!test
 %! %% some empty cases
