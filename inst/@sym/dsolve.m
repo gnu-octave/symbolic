@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -23,7 +23,7 @@
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC})
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC1}, @var{IC2}, @dots{})
 %% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@var{ode}, @var{IC})
-%% Solve ordinary differentual equations (ODEs) symbolically.
+%% Solve ordinary differential equations (ODEs) symbolically.
 %%
 %% Basic example:
 %% @example
