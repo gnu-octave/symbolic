@@ -30,6 +30,7 @@ Double-precision numerical functions
  @double/coshint
  @double/cosint
  @double/dilog
+ @double/euler
  @double/fresnelc
  @double/fresnels
  @double/harmonic
@@ -113,6 +114,7 @@ Mathematical methods for symbolic objects
  @sym/erfi
  @sym/erfinv
  @sym/erf
+ @sym/euler
  @sym/expint
  @sym/exp
  @sym/expm
