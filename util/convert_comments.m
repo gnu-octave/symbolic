@@ -184,16 +184,20 @@ function success = convert_oct_2_ml (fname, foutname)
 
   %% 2017: we have more choices than "-- Function File"
   % just trim "--" so it doesn't break indents
+  def_line_has_function_name = false;
   for i=1:length(use)
     if regexp(use{i}, '^ -- ')
-      if isempty(strfind(use{i}, [' ' fcn]))
-        warning('function @deftypefn line may not include function name:')
-        use{i}
+      if (~ isempty(strfind(use{i}, [' ' fcn])))
+        def_line_has_function_name = true;
       end
     end
     use{i} = regexprep(use{i}, '^ -- ', '     ');
   end
   %usestr = strrep(usestr, lookforstr, '');
+  if (~ def_line_has_function_name)
+    warning('function @deftypefn line may not include function name:')
+    use{i}
+  end
 
   use = ltrim(use, 2);
   while isempty(use{end})
