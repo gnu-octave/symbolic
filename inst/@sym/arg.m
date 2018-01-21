@@ -1,4 +1,3 @@
-%% Copyright (C) 2016 Lagu
 %% Copyright (C) 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
@@ -19,23 +18,23 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym angle (@var{x})
-%% @defmethodx @@sym arg (@var{x})
+%% @defmethod  @@sym arg (@var{x})
+%% @defmethodx @@sym angle (@var{x})
 %% Symbolic polar angle.
 %%
 %% Example:
 %% @example
 %% @group
 %% x = sym(2+3*i);
-%% y = angle(x)
+%% y = arg(x)
 %%   @result{} y = (sym) atan(3/2)
 %% @end group
 %% @end example
-%% @seealso{angle, @@sym/abs}
+%% @seealso{arg, @@sym/abs}
 %% @end defmethod
 
 
-function y = angle (x)
+function y = arg (x)
   if (nargin ~= 1)
     print_usage ();
   end
@@ -44,16 +43,5 @@ end
 
 
 %!test
-%! Z = [sqrt(sym(3)) + 3*sym(i), 3 + sqrt(sym(3))*sym(i); 1 + sym(i), sym(i)];
-%! Q = [sym(pi)/3 sym(pi)/6; sym(pi)/4 sym(pi)/2];
-%! assert( isequal( angle(Z), Q));
-
-%!xtest
-%! % roundtrip
-%! % TODO: fix upstream sympy
 %! syms x
-%! A = angle (2+2i);
-%! f = angle (x);
-%! h = function_handle (f);
-%! B = h (2+2i);
-%! assert (A, B, -eps)
+%! assert (isequal (angle (x), arg (x)));

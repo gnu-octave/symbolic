@@ -3,6 +3,7 @@ octsympy 2.6.1-dev
 
   * New symbolic commands:
 
+          arg
           euler
           ezcontour
 

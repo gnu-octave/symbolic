@@ -51,6 +51,7 @@ Mathematical methods for symbolic objects
  @sym/adjoint
  @sym/airy
  @sym/angle
+ @sym/arg
  @sym/asech
  @sym/asec
  @sym/asind
