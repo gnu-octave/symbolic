@@ -119,11 +119,13 @@ end
 %!assert (isinf (harmonic (sym(inf))))
 %!assert (isequal (harmonic (sym([9 10])), [sym(7129)/2520 sym(7381)/2520]))
 
-%!xtest
+%!test
 %! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! y = sym('y');
 %! A = harmonic (7);
 %! f = harmonic (y);
 %! h = function_handle (f);
 %! B = h (7);
 %! assert (A, B, -eps)
+%! end

@@ -139,4 +139,19 @@ end
 
 %!error <Invalid call> expint(sym(1), 2, 3)
 
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms x
+%! A = expint (3);
+%! f = expint (x);
+%! h = function_handle (f);
+%! B = h (3);
+%! assert (A, B, -eps)
+%! end
 
+%!error <failed>
+%! % round trip
+%! syms n x
+%! f = expint (n, x);
+%! h = function_handle (f);
