@@ -68,7 +68,7 @@ function z = times(x, y)
           'if x.is_Matrix and y.is_Matrix:'
           '    try:'
           '        return x.multiply_elementwise(y)'
-          '    except AttributeError:'
+          '    except (AttributeError, TypeError):'
           '        return hadamard_product(x, y)'
           'return x*y' };
 
