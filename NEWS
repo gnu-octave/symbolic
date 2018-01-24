@@ -23,6 +23,8 @@ octsympy 2.6.1-dev
 
   * New command `sympref diagnose` to help debug Python/SymPy issues.
 
+  * Fixes for several bugs mentioning "immutable matrices".
+
   * Various bug fixes and documentation updates.
 
 
