@@ -109,6 +109,12 @@ end
 %! B = sym(eye(2)) / A;
 %! assert (isequal (B, inv(A))  ||  strncmpi (sympy (B), 'MatPow', 6))
 
+%!xtest
+%! % immutable test, upstream: TODO
+%! A = sym([1 2; 3 4]);
+%! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
+%! assert (isequal (A/A, B/B))
+
 %!test
 %! % A = C/B is C = A*B
 %! A = sym([1 2; 3 4]);
