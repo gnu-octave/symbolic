@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -40,10 +40,16 @@
 
 function A = ipermute(B, iperm)
 
+  if (nargin < 2)
+    print_usage ();
+  end
+
   A = permute(B, iperm);
 
 end
 
+
+%!error <Invalid> permute (sym(1))
 
 %!test
 %! syms x

@@ -1,5 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -40,9 +40,15 @@
 %% Keywords: symbolic, constants
 
 function g = eulergamma ()
+
+  if (nargin ~= 0)
+    print_usage ();
+  end
+
   g = python_cmd ('return sympy.S.EulerGamma,');
 end
 
 
+%!error <Invalid> catalan (sym(1))
 %!assert (double (eulergamma ()) > 0.577215664901)
 %!assert (double (eulergamma ()) < 0.577215664902)
