@@ -69,7 +69,7 @@ end
 %!test
 %! % round trip
 %! y = sym('y');
-%! if (exist ('OCTAVE_VERSION2', 'builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   A = cbrt (d);
 %! else
 %!   % Issue #742
