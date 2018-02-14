@@ -76,12 +76,15 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     end
     pyexec = sympref('python');
     assert_have_python_and_sympy (pyexec)
+    quiet_flag = ~verbose && python_have_quiet_flag (pyexec);
 
     if (ispc() && ~isunix() && compare_versions (OCTAVE_VERSION (), '4.0.2', '<='))
       if (verbose)
         disp('Using winwrapy.bat workaround for bug #43036 (Octave <= 4.0.2, on Windows)')
       end
       [fin, fout, pid] = popen2 ('winwrapy.bat', pyexec);
+    elseif (quiet_flag)
+      [fin, fout, pid] = popen2 (pyexec, '-iq');
     else
       [fin, fout, pid] = popen2 (pyexec, '-i');
     end
