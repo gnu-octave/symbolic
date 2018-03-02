@@ -143,9 +143,13 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     % the pipe should still be in working order, no need to reset
     return
   else
+    disp ('Debugging output:')
     A
     out
-    error('ipc_popen2: something unexpected happened sending variables to python')
+    msg = ['ipc_popen2: something unexpected happened sending variables to python.\n' ...
+           '    This can happen after interrupting with Ctrl-C.\n' ...
+           '    Do "sympref reset" and try your command again.'];
+    error (sprintf (msg))
   end
 
   % The number of lines of code before the command itself: because
