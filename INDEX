@@ -14,7 +14,6 @@ Symbolic Constants
  catalan
  eulergamma
 Functions
- bernoulli
  cell2sym
  digits
  dirac
@@ -61,6 +60,7 @@ Mathematical methods for symbolic objects
  @sym/atand
  @sym/atanh
  @sym/atan
+ @sym/bernoulli
  @sym/besselh
  @sym/besseli
  @sym/besselj

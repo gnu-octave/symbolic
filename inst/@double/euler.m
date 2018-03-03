@@ -45,7 +45,7 @@
 %% @strong{Note} this function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation.
 %%
-%% @seealso{@@sym/euler, bernoulli}
+%% @seealso{@@sym/euler}
 %% @end deftypefun
 
 function y = euler (m, x)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,16 +18,16 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefun  {@var{B} =} bernoulli (@var{n})
-%% @deftypefunx {@var{p} =} bernoulli (@var{n}, @var{x})
+%% @deftypemethod  @@sym {@var{B} =} bernoulli (@var{n})
+%% @deftypemethodx @@sym {@var{p} =} bernoulli (@var{n}, @var{x})
 %% Return symbolic Bernoulli numbers or Bernoulli polynomials.
 %%
 %% Examples:
 %% @example
 %% @group
-%% bernoulli(6)
+%% bernoulli(sym(6))
 %%   @result{} (sym) 1/42
-%% bernoulli(7)
+%% bernoulli(sym(7))
 %%   @result{} (sym) 0
 %% @end group
 %% @end example
@@ -43,8 +43,8 @@
 %%                6
 %% @end group
 %% @end example
-%% @seealso{euler}
-%% @end deftypefun
+%% @seealso{@@sym/euler}
+%% @end deftypemethod
 
 function r = bernoulli(n, x)
 
@@ -59,7 +59,7 @@ function r = bernoulli(n, x)
 end
 
 
-%!assert (isequal (bernoulli (8), -sym(1)/30))
-%!assert (isequal (bernoulli (9), 0))
+%!assert (isequal (bernoulli (sym(8)), -sym(1)/30))
+%!assert (isequal (bernoulli (sym(9)), sym(0)))
 %!test syms x
 %! assert (isequal (bernoulli(3,x), x^3 - 3*x^2/2 + x/2))
