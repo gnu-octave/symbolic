@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym expint (@var{x})
+%% @defmethod  @@sym expint (@var{x})
+%% @defmethodx @@sym expint (@var{n}, @var{x})
 %% Symbolic generalized exponential integral (expint) function.
 %%
 %% Integral definition:
