@@ -26,6 +26,7 @@ Functions
  poly2sym
  python_cmd
 Double-precision numerical functions
+ @double/bernoulli
  @double/coshint
  @double/cosint
  @double/dilog

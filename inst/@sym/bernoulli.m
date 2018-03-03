@@ -43,23 +43,50 @@
 %%                6
 %% @end group
 %% @end example
-%% @seealso{@@sym/euler}
+%% @seealso{@@double/bernoulli, @@sym/euler}
 %% @end deftypemethod
 
-function r = bernoulli(n, x)
+function r = bernoulli (varargin)
 
-  if (nargin == 1)
-    r = python_cmd ('return sp.bernoulli(*_ins),', sym(n));
-  elseif (nargin == 2)
-    r = python_cmd ('return sp.bernoulli(*_ins),', sym(n), sym(x));
-  else
+  if (nargin ~= 1 && nargin ~= 2)
     print_usage ();
   end
 
+  for i = 1:nargin
+    varargin{i} = sym (varargin{i});
+  end
+
+  r = elementwise_op ('bernoulli', varargin{:});
+
 end
 
+
+%!error <usage> bernoulli (sym(1), 2, 3)
 
 %!assert (isequal (bernoulli (sym(8)), -sym(1)/30))
 %!assert (isequal (bernoulli (sym(9)), sym(0)))
 %!test syms x
 %! assert (isequal (bernoulli(3,x), x^3 - 3*x^2/2 + x/2))
+
+%!test
+%! m = sym([0 1; 8 888889]);
+%! A = bernoulli (m);
+%! B = [1 -sym(1)/2; -sym(1)/30 0];
+%! assert (isequal (A, B))
+
+%!test
+%! syms x
+%! A = bernoulli ([0; 1], x);
+%! B = [sym(1); x - sym(1)/2];
+%! assert (isequal (A, B))
+
+%!test
+%! % round trip
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! syms n x
+%! f = bernoulli (n, x);
+%! h = function_handle (f, 'vars', [n x]);
+%! A = h (2, 2.2);
+%! B = bernoulli (2, 2.2);
+%! assert (A, B)
+%! end
