@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2018 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +45,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   if (strcmp(what, 'reset'))
     if (~isempty(pid))
       if (verbose)
-        disp('Closing the Python pipe...');
+        disp ('Closing the Python communications link.')
       end
     end
     if (~isempty(fin))
@@ -70,38 +71,20 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
   if isempty(pid)
     if (verbose)
-      fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
-              sympref('version'))
-      disp('Initializing communication with SymPy using a popen2() pipe.')
+      fprintf ('Symbolic pkg v%s: ', sympref('version'))
     end
     pyexec = sympref('python');
     assert_have_python_and_sympy (pyexec)
-    quiet_flag = ~verbose && python_have_quiet_flag (pyexec);
 
-    if (ispc() && ~isunix() && compare_versions (OCTAVE_VERSION (), '4.0.2', '<='))
-      if (verbose)
-        disp('Using winwrapy.bat workaround for bug #43036 (Octave <= 4.0.2, on Windows)')
-      end
-      [fin, fout, pid] = popen2 ('winwrapy.bat', pyexec);
-    elseif (quiet_flag)
-      [fin, fout, pid] = popen2 (pyexec, '-iq');
-    else
-      [fin, fout, pid] = popen2 (pyexec, '-i');
-    end
+    % formatting matters
+    args = {'-i', '-c', 'import sys;sys.ps1="";sys.ps2=""'};
+    [fin, fout, pid] = popen2 (pyexec, args);
 
-    if (verbose)
-      fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)
-      %fprintf('Technical details: fin = %d, fout = %d, pid = %d.\n', fin, fout, pid)
-    end
     fflush (stdout);
 
     if (pid < 0)
       error('popen2() failed');
     end
-
-    % repeated from python_header.py: kill prompt ASAP
-    fprintf (fin, 'import sys\nsys.ps1 = ""; sys.ps2 = ""\n\n')
-    fflush(fin);
 
     headers = python_header();
     fputs (fin, headers);
@@ -118,14 +101,9 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
         'ipc_popen2: something wrong? timed out starting python')
     end
     A = extractblock(out);
-    fprintf('\n');  % needed even if not verbose
     if (iscell(A) && strcmp(A{1}, 'Communication established.'))
       if (verbose)
-        disp(['OctSymPy: ' A{1} '  SymPy v' A{2} '.']);
-        % on unix we're seen this on stderr
-        if (ispc() && ~isunix())
-          disp(['Python ' strrep(A{3}, newl, '')])
-        end
+        fprintf ('Python communication link active, SymPy v%s.\n', A{2});
       end
     elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
       info.raw = out;
