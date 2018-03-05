@@ -113,19 +113,25 @@ function r = vpa(x, n)
         'return sympy.N(x, n),' };
     r = python_cmd (cmd, x, n);
   elseif (ischar (x))
-    isnum = ~isempty (regexp (strtrim (x), ...
-                              '^[-+]*?[\d_]*\.?[\d_]*(e[+-]?[\d_]+)?$'));
-    if (~isnum && ~isempty (strfind (x, '.')))
+    x = strtrim (x);
+    isfpnum = ...
+      ~isempty (regexp (x, '^[-+]*?[\d_]*\.[\d_]*(e[+-]?[\d_]+)?[ij]?$'));
+    if (~isfpnum && ~isempty (strfind (x, '.')))
       warning ('OctSymPy:vpa:precisionloss', ...
                'string expression involving decimals is dangerous, see "help vpa"')
     end
-    if (strcmp (x, 'inf') || strcmp (x, 'Inf') || strcmp (x, '+inf') || ...
-        strcmp (x, '+Inf'))
+    if (isfpnum && any (strcmp (x(end), {'i', 'j'})))
+      r = sym (1i)*vpa (x(1:end-1), n);
+      return
+    end
+    if (any (strcmp (x, {'inf', 'Inf', '+inf', '+Inf'})))
       x = 'S.Infinity';
     elseif (strcmp (x, '-inf') || strcmp (x, '-Inf'))
       x = '-S.Infinity';
     elseif (strcmp (x, 'I'))
       x = 'Symbol("I")';
+    elseif (any (strcmp (x, {'1i', '1j'})))
+      x = 'S.ImaginaryUnit';
     end
     % Want Float if its '2.3' but N if its 'sqrt(2)'
     cmd = {
@@ -285,6 +291,21 @@ end
 %! c = vpa('I');
 %! assert (~isequal (a, b))
 %! assert (~isequal (a, c))
+
+%!test
+%! % '1i' and '1j' strings
+%! a = vpa(sym(1i));
+%! b = vpa('1i');
+%! c = vpa('1j');
+%! assert (isequal (a, b))
+%! assert (isequal (a, c))
+
+%!test
+%! % Issue #868, precision loss on '0.33j'
+%! a = vpa('0.33j', 40);
+%! b = vpa('0.33i', 40);
+%! assert (double (abs (imag (a)*100/33) - 1) < 1e-39)
+%! assert (isequal (a, b))
 
 %!test
 %! % inf/-inf do not become symbol('inf')
