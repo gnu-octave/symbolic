@@ -167,6 +167,11 @@ function assert_have_python_and_sympy (pyexec, verbose)
     fprintf ('Attempting to run %s -c "%s"\n\n', pyexec, script);
   end
 
+  if (ispc () && (~isunix ()))
+    script = strrep (script, '<', '^<');
+    script = strrep (script, '>', '^>');
+  end
+
   [status, output] = system([pyexec ' -c "' script '"']);
   if (verbose)
     status
@@ -176,11 +181,11 @@ function assert_have_python_and_sympy (pyexec, verbose)
   if (status ~= 0)
     if (~ verbose)
       error ('OctSymPy:noxmldom', ...
-             ['Python cannot import XML DOM: is this an unusual Python setup?\n' ...
+             ['Something wrong, perhaps with XML DOM: is this an unusual Python setup?\n' ...
               '    Try "sympref diagnose" for more information.'])
     end
     disp ('')
-    disp ('Unfortunately status was non-zero: probably Python cannot import xml.dom.')
+    disp ('Unfortunately status was non-zero: perhaps Python cannot import xml.dom?')
     disp ('')
     disp ('  * Is there an error message above?')
     disp ('')
