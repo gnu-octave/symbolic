@@ -96,7 +96,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
     if (python_blacklisted_ic)
       if (verbose)
-      fprintf('Some output from the Python subprocess (pid %d) might appear next.\n', pid)
+        disp ('some output from Python might appear next.')
       end
     end
 
@@ -108,7 +108,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
     if (python_blacklisted_ic)
       % kill prompt ASAP
-      fprintf (fin, 'import sys\nsys.ps1 = ""; sys.ps2 = ""\n\n')
+      fprintf (fin, 'import sys; sys.ps1=""; sys.ps2=""\n\n')
       fflush(fin);
     end
 
@@ -127,12 +127,13 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
         'ipc_popen2: something wrong? timed out starting python')
     end
     A = extractblock(out);
-    if (python_blacklisted_ic)
-      fprintf('\n');  % needed even if not verbose
-    end
     if (iscell(A) && strcmp(A{1}, 'Communication established.'))
       if (verbose)
         fprintf ('Python communication link active, SymPy v%s.\n', A{2});
+      else
+        if (python_blacklisted_ic)
+          fprintf ('\n');
+        end
       end
     elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
       info.raw = out;
