@@ -12,6 +12,8 @@ octsympy 2.6.1-dev
 
           euler
 
+  * The initial startup is much quieter!
+
   * `vpa` now warns of low-precision on non-numbers strings with decimals
     such as `vpa('cos(0.1)')`.  See "help vpa" for details.
 

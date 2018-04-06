@@ -312,9 +312,6 @@ function varargout = sympref(cmd, arg)
 
     case 'reset'
       verbose = ~sympref('quiet');
-      if (verbose)
-        disp('Resetting the communication mechanism');
-      end
       r = python_ipc_driver('reset', []);
 
       if (nargout == 0)
