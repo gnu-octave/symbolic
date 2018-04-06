@@ -86,7 +86,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     assert_have_python_and_sympy (pyexec)
 
     % formatting matters
-    args = {'-i', '-c', 'import sys;sys.ps1=\"\";sys.ps2=\"\"'};
+    args = {'-i', '-c', 'import sys; sys.ps1=''''; sys.ps2='''''};
 
     if (python_blacklisted_ic)
       args = {'-i'};
