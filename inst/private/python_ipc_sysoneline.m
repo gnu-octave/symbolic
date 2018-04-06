@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -54,9 +54,8 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   end
 
   if (verbose && first_time)
-    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
-            sympref('version'))
-    disp('Using system()-based communication with Python [sysoneline].')
+    fprintf ('Symbolic pkg v%s: using one-line system() communication with SymPy.\n', ...
+             sympref ('version'))
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')
     disp('Warning: "sysoneline" will fail when using very long expressions.')
