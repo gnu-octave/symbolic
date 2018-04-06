@@ -67,7 +67,7 @@ cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
 
 # change default python to octpy.exe
 echo "making default python octpy.exe"
-sed -i "s/DEFAULTPYTHON = 'python'/DEFAULTPYTHON = 'octpy.exe'/" ${WINDIR}/inst/sympref.m
+sed -i "s/python = 'python'/python = 'octpy.exe'/" ${WINDIR}/inst/private/defaultpython.m
 
 # sympy and mpmath
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
