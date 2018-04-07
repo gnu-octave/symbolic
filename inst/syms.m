@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -233,3 +233,7 @@ end
 %! syms x positive integer
 %! assert (logical(exist('x', 'var')))
 %! assert (~logical(exist('positive', 'var')))
+
+%!test
+%! % Issue #885
+%! syms S(x) I(x) O(x)

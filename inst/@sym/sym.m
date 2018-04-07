@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -489,8 +489,9 @@ function s = sym(x, varargin)
       end
 
       cmd = {'x = _ins[0]'
+             'from sympy.abc import _clash1'  # single-letter fcns
              'try:'
-             '    return (0, 0, S(x))'
+             '    return (0, 0, sympify(x, locals=_clash1))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -977,3 +978,10 @@ end
 %! % function_handle
 %! f = @(x) A*sin(x);
 %! sym (f)
+
+%!test
+%! % Issue #885
+%! syms x
+%! f(x) = sym('S(x)');
+%! f(x) = sym('I(x)');
+%! f(x) = sym('O(x)');
