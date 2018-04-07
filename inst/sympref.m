@@ -396,7 +396,6 @@ end
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
-%! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
 %! syms x
 
@@ -461,8 +460,8 @@ end
 %! r = sympref('reset');
 %! % restore original sympref settings
 %! sympref ('ipc',   sympref_orig.ipc);
-%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
+%! sympref ('quiet', sympref_orig.quiet);
 %! assert(r)
 
 %!error <invalid preference or command> sympref ('nosuchsetting')

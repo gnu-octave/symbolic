@@ -49,6 +49,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       end
     end
     if (~isempty(fin))
+      % produces a single newline char: not sure why
       t = fclose(fin); fin = [];
       waitpid(pid);
       pid = [];
