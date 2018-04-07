@@ -27,6 +27,9 @@ octsympy 2.6.1-dev
 
   * Fixes for several bugs mentioning "immutable matrices".
 
+  * Added a `private/defaultpython.m` to make it easier for distributors
+    to control which python interpreter is used by default.
+
   * Various bug fixes and documentation updates.
 
 
