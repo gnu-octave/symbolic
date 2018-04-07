@@ -17,6 +17,7 @@ MPMATH=mpmath-0.19
 
 # for day-to-day testing
 VER=2.6.1-dev
+BRANCH=master
 # for release
 #VER=2.6.1
 #TAG=v${VER}
@@ -38,7 +39,7 @@ rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 ( cd octsympy
   if [ -z $TAG]; then
-    git checkout master
+    git checkout ${BRANCH}
   else
     git checkout tags/${TAG}
   fi )
