@@ -174,8 +174,25 @@ function syms(varargin)
 
       vars = {};
       for j = 1:length (varnames)
-        v = sym (varnames{j});
-        assignin ('caller', varnames{j}, v);
+        % is var in the workspace?
+        try
+          v = evalin ('caller', varnames{j});
+          create = false;
+        catch
+          create = true;
+        end
+        % if var was defined, is it a symbol with the right name?
+        if (~ create)
+          if (~ isa (v, 'sym'))
+            create = true;
+          elseif (~ strcmp (v.flat, varnames{j}))
+            create = true;
+          end
+        end
+        if (create)
+          v = sym (varnames{j});
+          assignin ('caller', varnames{j}, v);
+        end
         vars{j} = v;
       end
 
@@ -255,3 +272,14 @@ end
 %!test
 %! % Issue #290
 %! syms beta(x)
+
+%!test
+%! syms x real
+%! syms f(x)
+%! assert (~ isempty (assumptions (x)))
+
+%!test
+%! syms x real
+%! f(x) = symfun(sym('f(x)'), x);
+%! assert (~ isempty (assumptions (x)))
+%! assert (~ isempty (assumptions (argnames (f))))
