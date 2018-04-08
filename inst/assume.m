@@ -230,3 +230,11 @@ end
 %! assert (strcmp (assumptions (b), 'b: real'))
 %! assert (strcmp (assumptions (c), 'c: real'))
 %! assert (strcmp (assumptions (d), 'd: real'))
+
+%!test
+%! % assume after symfun
+%! clear x
+%! syms f(x)
+%! assume x real
+%! assert (~ isempty (assumptions (formula (f))))
+%! assert (~ isempty (assumptions (argnames (f))))
