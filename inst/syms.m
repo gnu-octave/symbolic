@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -166,17 +166,25 @@ function syms(varargin)
       % should not match: Rational(2, 3), f(2br02b)
       assert(~isempty(regexp(expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
              'invalid symfun expression')
-      s = sym(expr);
-      %vars = symvar(s)  % might re-order the inputs, instead:
-      cmd = { 'f = _ins[0]'
-              'return (f.func.__name__, f.args)' };
-      [name, vars] = python_cmd (cmd, s);
+
+      T = regexp (expr, '^(\w+)\((.*)\)$', 'tokens');
+      assert (length (T) == 1 && length (T{1}) == 2)
+      name = T{1}{1};
+      varnames = strtrim (strsplit (T{1}{2}, ','));
+
+      vars = {};
+      for j = 1:length (varnames)
+        v = sym (varnames{j});
+        assignin ('caller', varnames{j}, v);
+        vars{j} = v;
+      end
+
+      cmd = { 'f, vars = _ins'
+              'return Function(f)(*vars)' };
+      s = python_cmd (cmd, name, vars);
+
       sf = symfun(s, vars);
       assignin('caller', name, sf);
-      for i = 1:length(vars)
-        v = vars{i};
-        assignin('caller', v.flat, v);
-      end
     end
   end
 end
@@ -233,3 +241,17 @@ end
 %! syms x positive integer
 %! assert (logical(exist('x', 'var')))
 %! assert (~logical(exist('positive', 'var')))
+
+%!test
+%! % Issue #885
+%! syms S(x) I(x) O(x)
+
+%!test
+%! % Issue #290
+%! syms FF(x)
+%! syms ff(x)
+%! syms Eq(x)
+
+%!test
+%! % Issue #290
+%! syms beta(x)
