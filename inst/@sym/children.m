@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -53,17 +53,22 @@
 %%       ⎡x⋅y  2⎤
 %%       ⎢      ⎥
 %%       ⎣ 3   x⎦
-%% children(A)
-%%   @result{} ans =
-%%     @{
-%%     (sym) [x  y]  (1×2 matrix)
-%%     (sym) 3
-%%     (sym) 2
-%%     (sym) x
-%%     @}
-%% size(children(A))
+%%
+%% C = children (A)
+%%   @result{} C = @{ ... @}
+%% @end group
+%%
+%% @group
+%% class (C), size (C)
+%%   @result{} ans = cell
 %%   @result{} ans =
 %%        2   2
+%%
+%% C@{:@}
+%%   @result{} ans = (sym) [x  y]  (1×2 matrix)
+%%   @result{} ans = (sym) 3
+%%   @result{} ans = (sym) 2
+%%   @result{} ans = (sym) x
 %% @end group
 %% @end example
 %%

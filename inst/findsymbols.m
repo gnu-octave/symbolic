@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,13 +33,12 @@
 %% @group
 %% syms x y z
 %% C = @{x, 2*x*y, [1 x; sin(z) pi]@};
-%% findsymbols (C)
-%%   @result{} ans =
-%%       @{
-%%         (sym) x
-%%         (sym) y
-%%         (sym) z
-%%       @}
+%% S = findsymbols (C)
+%%   @result{} S = @{ ... @}
+%% S@{:@}
+%%   @result{} ans = (sym) x
+%%   @result{} ans = (sym) y
+%%   @result{} ans = (sym) z
 %% @end group
 %% @end example
 %%
