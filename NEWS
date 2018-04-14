@@ -23,6 +23,9 @@ octsympy 2.6.1-dev
   * symfun can be evaluated at symbolic matrices: `f(sym([1 2; 3 4]))`
     now works where `f(x)` is a symfun.
 
+  * Fixes for symfuns such as `syms N(t)` where the function name
+    conflicts with a SymPy command.
+
   * New command `sympref diagnose` to help debug Python/SymPy issues.
 
   * Fixes for several bugs mentioning "immutable matrices".
