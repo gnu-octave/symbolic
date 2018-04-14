@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -91,8 +91,8 @@ end
 %! s = svd(A);
 %! s2 = subs(s, x, 2);
 %! assert (isequal (s2, [sym(5); 3]))
-%! s = simplify(factor(s));
-%! assert (isequal (s, [2*x+1; x+1]))
+%! s2 = subs(s, x, -5);
+%! assert (isequal (s2, [sym(9); 4]))
 
 %%!test
 %%! % no sing vecs
