@@ -33,6 +33,8 @@ octsympy 2.6.1-dev
   * Added a `private/defaultpython.m` to make it easier for distributors
     to control which python interpreter is used by default.
 
+  * Fixes for GNU Octave 4.4.
+
   * Various bug fixes and documentation updates.
 
 
