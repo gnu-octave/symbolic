@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -70,7 +70,7 @@ function y = chol(x)
 end
 
 
-%!error <must be symmetric> chol (sym ([1 2; 3 4]));
+%!error <must be> chol (sym ([1 2; 3 4]));
 %!error <must be square> chol (sym ([1 2; 3 4; 5 6]));
 
 %!test
