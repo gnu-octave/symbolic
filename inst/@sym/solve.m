@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Lagu
 %%
@@ -292,6 +292,13 @@ end
 %!test
 %! A = solve([2*x == 4*y, 2 == 3], x);
 %! assert (isequal (A, sym(false)))
+
+%!test
+%! % Issue #850
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! A = solve (sym(pi)^2*x + y == 0);
+%! assert (isequal (A, -y/sym(pi)^2))
+%! end
 
 %!xtest
 %! % returns Eq, probably minor upstream problem?
