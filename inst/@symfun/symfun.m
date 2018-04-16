@@ -54,7 +54,8 @@
 %%   @result{} g(x) = (symfun) g(x)
 %% @end group
 %% @end example
-%% and note this creates the sym @code{x} automatically.
+%% (Note this creates the sym @code{x} automatically if it does
+%% not already exist.)
 %%
 %% Example: multivariable symfuns:
 %% @example
