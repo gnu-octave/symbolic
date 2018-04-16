@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -78,8 +78,6 @@
 %% @seealso{@@sym/eig, @@sym/jordan}
 %% @end defmethod
 
-%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
-
 
 function y = charpoly(varargin)
   if (nargin >= 3)
@@ -87,8 +85,8 @@ function y = charpoly(varargin)
   end
 
   cmd = {'if len(_ins) == 1:'
-         '    a = Dummy()'
-         '    return Poly.from_expr(_ins[0].charpoly(a).as_expr(), a).all_coeffs(),'
+         '    coeff_list = _ins[0].charpoly().all_coeffs()'
+         '    return Matrix([coeff_list])'
          'else:'
          '    return _ins[0].charpoly(_ins[1]).as_expr(),'};
 
@@ -97,31 +95,25 @@ function y = charpoly(varargin)
   end
   y = python_cmd(cmd, varargin{:});
 
-  if (nargin == 1)
-    y = cell2sym(y);
-  end
-
 end
 
 
-%!test
-%! syms x
-%! A = sym([x x; x x]);
-%! assert( isequal( charpoly(A, x), -x^2))
+%!error <Invalid> charpoly (sym (1), 1, 2)
+%!error <NonSquare> charpoly (sym ([1 2]))
 
 %!test
 %! syms x
 %! A = sym([1 2; 3 4]);
-%! assert( isequal( charpoly(A, x), x^2 - 5*x -2))
+%! assert (isequal (charpoly(A, x), x^2 - 5*x -2))
+
+%!test
+%! syms x
+%! A = sym([1 2; 3 4]);
+%! B = sym([1 -5 -2]);
+%! assert (isequal (charpoly(A), B))
 
 %!test
 %! syms x
 %! A = sym([x x; x x]);
 %! B = sym([1 -2*x 0]);
-%! assert( isequal( charpoly(A), B))
-
-%!xtest
-%! syms x
-%! A = sym([1 2; 3 4]);
-%! B = sym([1 -5 -2]);
-%! assert( isequal( charpoly(A), B))
+%! assert (isequal (charpoly(A), B))
