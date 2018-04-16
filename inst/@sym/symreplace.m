@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,13 +34,11 @@
 %% @group
 %% syms x y
 %% f = @{x; 2*x; sin(x)@};
-%% g = symreplace(f, x, y)
-%%   @result{} g =
-%%       @{
-%%         (sym) y
-%%         (sym) 2⋅y
-%%         (sym) sin(y)
-%%       @}
+%% g = symreplace(f, x, y);
+%% g@{:@}
+%%   @result{} ans = (sym) y
+%%   @result{} ans = (sym) 2⋅y
+%%   @result{} ans = (sym) sin(y)
 %% g = symreplace(f, 'x', y);   % alternative
 %% @end group
 %% @end example

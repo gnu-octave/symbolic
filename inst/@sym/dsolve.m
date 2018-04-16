@@ -122,17 +122,24 @@
 %% @end group
 %%
 %% @group
-%% dsolve (ode_sys)
+%% soln = dsolve (ode_sys)
+%%   @result{} soln = @{ ... @}
+%% @end group
+%%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% @group
+%% soln@{1@}
 %%   @result{} ans =
-%%     @{
 %%       (sym)
 %%                      -2⋅t         2⋅t
 %%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
 %%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% soln@{2@}
+%%   @result{} ans =
 %%       (sym)
 %%                        -2⋅t         2⋅t
 %%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
-%%     @}
 %% @end group
 %% @end example
 %%
