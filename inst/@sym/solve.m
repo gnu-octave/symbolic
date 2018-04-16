@@ -142,6 +142,7 @@ function varargout = solve(varargin)
           '        # e.g., Relational, or Expr implicitly assumed == 0'
           '        assert stage == 0'
           '        eqs.append(arg)'
+          'eqs = [e for e in eqs if e not in (True, S.true)]'  % https://github.com/sympy/sympy/issues/14632
         };
 
   if (nargout == 0 || nargout == 1)
@@ -300,7 +301,13 @@ end
 %! assert (isequal (A, -y/sym(pi)^2))
 %! end
 
-%!xtest
-%! % returns Eq, probably minor upstream problem?
-%! A = solve([2*x == 4*y, 2 == 2], x);
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x == 4*y, sym(2) == 2], x);
 %! assert (isequal (A, 2*y))
+
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x^2 == 32*y^2, sym(2) == 2], x);
+%! B = solve([2*x^2 == 32*y^2], x);
+%! assert (isequal (A, B) || isequal (A, flip (B)))
