@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -114,16 +114,14 @@ function [p, m] = factor(f, varargin)
   else
     %% no symbols: we are doing integer factorization
 
+    if (~isscalar(f))
+      error ('factor: integer prime factoring is only supported for scalar input')
+    end
+
     if (nargout <= 1)
-      if (~isscalar(f))
-        error('FIXME: check SMT, allows array input here?')
-      end
       % this is rather fragile, as noted in docs
       p = python_cmd ('return factorint(_ins[0], visual=True),', f);
     else
-      if (~isscalar(f))
-        error('vector output factorization only for scalar integers')
-      end
       cmd = { 'd = factorint(_ins[0], visual=False)'
               'num = len(d.keys())'
               'sk = sorted(d.keys())'
@@ -132,7 +130,6 @@ function [p, m] = factor(f, varargin)
               'return (p, m)' };
       [p, m] = python_cmd (cmd, f);
     end
-
 
   end
 end
