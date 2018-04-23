@@ -491,11 +491,40 @@ function s = sym(x, varargin)
       T = regexp (x, '^(\w+)\(([\w,\s]*)\)$', 'tokens');
       if (length (T) == 1 && length (T{1}) == 2)
         hint_symfun = true;
+        name = T{1}{1};
+        varnamestr = T{1}{2};
+        varnames = strtrim (strsplit (varnamestr, ','));
+
+        %% Blacklist some strings for which srepr(x) == str(x)
+        %TODO: can we build using "import * from sympy" namespace, where
+        %      callable is false and srepr(x) == str(x)?
+        var_blacklist = {'pi' 'I' 'E' 'Catalan'};
+
+        %% special case: if all (x,y,z) are in the blacklist, we should *not*
+        % force symfun, thus preserving the identity sympy(sym(x)) == x
+        if (all (cellfun (@(v) (any (strcmp (v, var_blacklist))), varnames)))
+          hint_symfun = false;
+        end
+
+        %% Whitelist some function names to always make a Function
+        % Currently this is unused, but could be used if we want
+        % different behaviour for the "I" in "I(t)" vs "F(I, t)".
+        % SMT 2014 compat: does *not* have I, E here
+        %function_whitelist = {'I', 'E', 'ff', 'FF'};
+        %if (hint_symfun)
+        %  if (any (strcmp (name, function_whitelist)))
+        %    x = ['Function("' name '")(' varnamestr ')'];
+        %  end
+        %end
       end
 
       cmd = {'x, hint_symfun = _ins'
              'if hint_symfun:'
-             '    from sympy.abc import _clash1 as myclash'
+             '    from sympy.abc import _clash1'
+             '    myclash = {v: Symbol(v) for v in ["ff", "FF"]}'
+             '    myclash.update(_clash1)'
+             '    #myclash.pop("I", None)'  % remove for SMT compat
+             '    #myclash.pop("E", None)'
              'else:'
              '    myclash = dict()'
              'try:'
@@ -1005,12 +1034,14 @@ end
 %! s2 = 'FallingFactorial(pi, pi)';
 %! assert (strcmp (s1, s2))
 
-%!xtest
+%!test
 %! % sym(sympy(x) == x identity
 %! % Don't mistake "I" which is "srepr(S.ImaginaryUnit)" for a symfun variable
 %! f = sym ('sin(I)');
 %! g = 1i*sinh (sym (1));
 %! assert (isequal (f, g))
+%! s = sympy (f);
+%! assert (isempty (strfind (s, 'Function')))
 
 %!test
 %! % some variable names that are special to sympy but should not be for us
@@ -1026,4 +1057,18 @@ end
 %! f = sym ('f(x, I, E)');
 %! s1 = sympy (f);
 %! s2 = 'Function(''f'')(Symbol(''x''), Symbol(''I''), Symbol(''E''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('FF(w)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''FF'')(Symbol(''w''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('FF(w, pi)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''FF'')(Symbol(''w''), pi)';
 %! assert (strcmp (s1, s2))
