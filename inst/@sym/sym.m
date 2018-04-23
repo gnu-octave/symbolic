@@ -405,9 +405,6 @@ function s = sym(x, varargin)
   if (isa (x, 'char'))
     %% Need to decide whether to use S() or Symbol()
 
-      % TODO: Warning if you try make a sym with the same name of a system function.
-      %symsnotfunc (x);
-
       % TODO: tests pass without this?  Is there a example where this is needed?
       %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
       %r = 1;
@@ -488,10 +485,21 @@ function s = sym(x, varargin)
         return
       end
 
-      cmd = {'x = _ins[0]'
-             'from sympy.abc import _clash1'  # single-letter fcns
+      hint_symfun = false;
+      %% distinguish b/w sym('FF(w)') and sym('FF(Symbol(...))')
+      % regexp detects F(<words commas spaces>)
+      T = regexp (x, '^(\w+)\(([\w,\s]*)\)$', 'tokens');
+      if (length (T) == 1 && length (T{1}) == 2)
+        hint_symfun = true;
+      end
+
+      cmd = {'x, hint_symfun = _ins'
+             'if hint_symfun:'
+             '    from sympy.abc import _clash1 as myclash'
+             'else:'
+             '    myclash = dict()'
              'try:'
-             '    return (0, 0, sympify(x, locals=_clash1))'
+             '    return (0, 0, sympify(x, locals=myclash))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -507,7 +515,7 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (cmd, x);
+      [err flag s] = python_cmd (cmd, x, hint_symfun);
 
       switch (flag)
         case 1  % Bad call to python function
@@ -937,11 +945,6 @@ end
 % TODO: test that might be used in the future
 %%!warning <avoid execute operations> sym ('1*2');
 
-% TODO: test that might be used in the future
-%%!warning <You are overloading/hiding> sym ('beta');
-
-%!error <use another variable name> sym ('FF(w)');
-
 %!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
 
 %!error sym({1 2 'a'}, 'positive');
@@ -985,3 +988,42 @@ end
 %! f(x) = sym('S(x)');
 %! f(x) = sym('I(x)');
 %! f(x) = sym('O(x)');
+
+%!test
+%! % sym(sympy(x) == x identity, Issue #890
+%! syms x
+%! f = exp (1i*x);
+%! s = sympy (f);
+%! g = sym (s);
+%! assert (isequal (f, g))
+
+%!test
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "pi" which is "srepr(S.Pi)" for a symfun variable
+%! f = sym ('ff(pi, pi)');
+%! s1 = sympy (f);
+%! s2 = 'FallingFactorial(pi, pi)';
+%! assert (strcmp (s1, s2))
+
+%!xtest
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "I" which is "srepr(S.ImaginaryUnit)" for a symfun variable
+%! f = sym ('sin(I)');
+%! g = 1i*sinh (sym (1));
+%! assert (isequal (f, g))
+
+%!test
+%! % some variable names that are special to sympy but should not be for us
+%! f = sym ('f(S, Q, C, O, N)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''f'')(Symbol(''S''), Symbol(''Q''), Symbol(''C''), Symbol(''O''), Symbol(''N''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % For SMT 2014 compatibilty, I and E would become ImaginaryUnit and Exp(1)
+%! % but I'm not sure this is by design.  This test would need to change if
+%! % we want stricter SMT compatibilty.
+%! f = sym ('f(x, I, E)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''f'')(Symbol(''x''), Symbol(''I''), Symbol(''E''))';
+%! assert (strcmp (s1, s2))
