@@ -475,7 +475,7 @@ function s = sym(x, varargin)
 
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
-      % TODO: figure version might warn on expression strings
+      % TODO: future version might warn on expression strings
         % Check if the user try to execute operations from sym
         %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         %  warning ('Please avoid execute operations from sym function.');
