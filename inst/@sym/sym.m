@@ -496,9 +496,14 @@ function s = sym(x, varargin)
         varnames = strtrim (strsplit (varnamestr, ','));
 
         %% Blacklist some strings for which srepr(x) == str(x)
-        %TODO: can we build using "import * from sympy" namespace, where
-        %      callable is false and srepr(x) == str(x)?
-        var_blacklist = {'pi' 'I' 'E' 'Catalan'};
+        % Python code for this:
+        % >>> ns = {}; exec('from sympy import *', ns)
+        % ... for (k, v) in ns.items():
+        % ...    if not callable(v) and k not in ['__builtins__', 'C']:
+        % ...        if k == srepr(v):
+        % ...            print(k)
+        var_blacklist = {'E' 'I' 'nan' 'oo' 'pi' 'zoo' 'Catalan' ...
+                         'EulerGamma' 'GoldenRatio'};
 
         %% special case: if all (x,y,z) are in the blacklist, we should *not*
         % force symfun, thus preserving the identity sympy(sym(x)) == x
