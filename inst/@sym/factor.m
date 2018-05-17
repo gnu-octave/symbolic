@@ -109,7 +109,7 @@ function [p, m] = factor(f, varargin)
       print_usage ();
     end
 
-    p = python_cmd ('return factor(*_ins)', f, varargin{:});
+    p = python_cmd ('return factor(*_ins, deep=True)', f, varargin{:});
 
   else
     %% no symbols: we are doing integer factorization
