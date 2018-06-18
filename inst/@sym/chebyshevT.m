@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/chebyshevU}
+%% @seealso{@@sym/chebyshevU, @@double/chebyshevT}
 %% @end defmethod
 
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/gamma}
+%% @seealso{@@sym/gamma, @@double/pochhammer}
 %% @end defmethod
 
 function I = pochhammer(x, n)
