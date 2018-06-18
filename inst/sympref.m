@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
 %%
@@ -58,7 +58,7 @@
 %% sympref reset
 %% @end example
 %% If the environment variable is empty or not set, the package
-%% uses a default setting (usually @code{python}).
+%% uses a default setting (often @code{python}).
 %%
 %%
 %% @strong{Display} of syms:
@@ -270,10 +270,9 @@ function varargout = sympref(cmd, arg)
       if (nargin ~= 1)
         error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
-      DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
       if (isempty(pyexec))
-        pyexec = DEFAULTPYTHON;
+        pyexec = defaultpython ();
       end
       varargout{1} = pyexec;
 
@@ -313,9 +312,6 @@ function varargout = sympref(cmd, arg)
 
     case 'reset'
       verbose = ~sympref('quiet');
-      if (verbose)
-        disp('Resetting the communication mechanism');
-      end
       r = python_ipc_driver('reset', []);
 
       if (nargout == 0)
@@ -400,7 +396,6 @@ end
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
-%! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
 %! syms x
 
@@ -465,8 +460,8 @@ end
 %! r = sympref('reset');
 %! % restore original sympref settings
 %! sympref ('ipc',   sympref_orig.ipc);
-%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
+%! sympref ('quiet', sympref_orig.quiet);
 %! assert(r)
 
 %!error <invalid preference or command> sympref ('nosuchsetting')

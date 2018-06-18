@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %% Copyright (C) 2016 Lagu
 %%
@@ -32,28 +32,34 @@
 %% defaults to zero.
 %%
 %% Key/value pairs can be used to set the order:
+%% @example
+%% @group
 %% syms x
 %% f = exp(x);
 %% taylor(f, x, 0, 'order', 6)
 %%   @result{} (sym)
-%%      5    4    3    2
-%%     x    x    x    x
-%%    ─── + ── + ── + ── + x + 1
-%%    120   24   6    2
+%%         5    4    3    2
+%%        x    x    x    x
+%%       ─── + ── + ── + ── + x + 1
+%%       120   24   6    2
+%% @end group
+%% @end example
+%%
+%% Two-dimensional expansion:
 %% @example
 %% @group
 %% syms x y
 %% f = exp(x*y);
-%% taylor(f, [x,y] , [0,0], 'order', 6)
+%% taylor(f, [x,y] , [0,0], 'order', 7)
 %%   @result{}  (sym)
-%%        2  2
-%%       x ⋅y
-%%       ───── + x⋅y + 1
-%%         2
+%%        3  3    2  2
+%%       x ⋅y    x ⋅y
+%%       ───── + ───── + x⋅y + 1
+%%         6       2
 %% @end group
 %% @end example
 %%
-%% As an alternative to passing @var{a}), you can also set the
+%% As an alternative to passing @var{a}, you can also set the
 %% expansion point using a key/value notation:
 %% @example
 %% @group
@@ -71,8 +77,6 @@
 %% @seealso{@@sym/diff}
 %% @end defmethod
 
-%% Author: Utkarsh Gautam, Colin B. Macdonald
-%% Keywords: symbolic, differentiation, multivariable
 
 function s = taylor(f, varargin)
 
@@ -132,7 +136,10 @@ function s = taylor(f, varargin)
         's = f.series(x, a, n).removeO()'
         'return s,' };
   else
-
+    % Multivariate case.
+    % TODO: keep on eye on upstream sympy; someday it will do this, e.g.,
+    % https://github.com/sympy/sympy/issues/6234
+    % https://stackoverflow.com/questions/22857162/multivariate-taylor-approximation-in-sympy
     cmd = {'(f, x, a, n) = _ins'
            'dic = dict(zip(x, a))'
            'xa = list(x)'

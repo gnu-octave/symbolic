@@ -1,6 +1,6 @@
 %% Copyright (C) 2008 Eric Chassande-Mottin
 %% Copyright (C) 2011 Carnë Draug
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
@@ -22,12 +22,19 @@
 %%
 %% Compute the value of the Laguerre polynomial of order @var{n}
 %% for each element of @var{x}.
+%% For example, the Laguerre polynomial of order 14 evaluated at
+%% the point 6 is
+%% @example
+%% @group
+%% laguerreL (14, 6)
+%%   @result{} 0.97654
+%% @end group
+%% @end example
 %%
 %% This implementation uses a three-term recurrence directly on the values
 %% of @var{x}.  The result is numerically stable, as opposed to evaluating
 %% the polynomial using the monomial coefficients.  For example, we can
-%% symbolically construct the Laguerre polynomial of degree 14 and evaluate it
-%% at the point 6:
+%% compare the above result to a symbolic construction:
 %% @example
 %% @group
 %% syms x
@@ -39,23 +46,24 @@
 %%       35035
 %% @end group
 %% @end example
-%% But if we extract the monomial coefficients and numerically evaluate the
+%% If we extract the monomial coefficients and numerically evaluate the
 %% polynomial at a point, the result is rather poor:
 %% @example
 %% @group
 %% coeffs = sym2poly (L);
 %% polyval (coeffs, 6)
 %%   @result{} 0.97654
-%% ans - double (exact)
-%%   @result{} -1.6798e-11
+%% err = ans - double (exact);
+%% num2str (err, '%.3g')
+%%   @result{} -1.68e-11
 %% @end group
 %% @end example
 %% So please don't do that!  The numerical @code{laguerreL} function
 %% does much better:
 %% @example
 %% @group
-%% laguerreL (14, 6) - double (exact)
-%%   @result{} 9.9920e-16
+%% err = laguerreL (14, 6) - double (exact)
+%%   @result{} err = 9.9920e-16
 %% @end group
 %% @end example
 %%

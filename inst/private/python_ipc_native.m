@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
@@ -51,10 +51,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   verbose = ~sympref('quiet');
 
   if (verbose && isempty(show_msg))
-    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
-            sympref('version'))
-    disp('Using experimental native Python/C communications with SymPy.')
-    show_msg = true;
+    fprintf ('Symbolic pkg v%s: ', sympref ('version'))
   end
 
   newl = sprintf('\n');
@@ -96,6 +93,12 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '    return LooseVersion(v.replace(".dev", ""))'
                   }, newl))
     have_headers = true;
+  end
+
+  if (verbose && isempty (show_msg))
+    fprintf ('Using experimental Python/C communications, SymPy v%s.\n', ...
+             char (py.sympy.__version__))
+    show_msg = true;
   end
 
   ins = store_vars_in_python(varargin);

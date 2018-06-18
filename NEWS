@@ -13,6 +13,8 @@ octsympy 2.6.1-dev
           euler
           bernoulli
 
+  * The initial startup is much quieter!
+
   * `vpa` now warns of low-precision on non-numbers strings with decimals
     such as `vpa('cos(0.1)')`.  See "help vpa" for details.
 
@@ -22,6 +24,11 @@ octsympy 2.6.1-dev
   * symfun can be evaluated at symbolic matrices: `f(sym([1 2; 3 4]))`
     now works where `f(x)` is a symfun.
 
+  * Fixes for symfuns such as `syms N(t)` where the function name
+    conflicts with a SymPy command.
+
+  * Fixes for how assumptions interact with symfuns.
+
   * New command `sympref diagnose` to help debug Python/SymPy issues.
 
   * Improve `function_handle` support by supporting more functions.
@@ -29,6 +36,11 @@ octsympy 2.6.1-dev
   * Fixes for several bugs mentioning "immutable matrices".
 
   * `bernoulli` now works with array inputs.
+
+  * Added a `private/defaultpython.m` to make it easier for distributors
+    to control which python interpreter is used by default.
+
+  * Fixes for GNU Octave 4.4.
 
   * Various bug fixes and documentation updates.
 
