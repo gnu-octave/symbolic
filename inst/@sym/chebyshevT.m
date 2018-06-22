@@ -64,6 +64,11 @@ function y = chebyshevT(n, x)
 end
 
 
+%!error <Invalid> chebyshevT (sym(1))
+%!error <Invalid> chebyshevT (sym(1), 2, 3)
+
+%!assert (isequaln (chebyshevT (2, sym(nan)), sym(nan)))
+
 %!shared x
 %! syms x
 
@@ -71,3 +76,14 @@ end
 %!assert(isequal(chebyshevT(1, x), x))
 %!assert(isequal(chebyshevT(2, x), 2*x*x - 1))
 %!assert(isequal(chebyshevT([0 1 2], x), [sym(1) x (2*x*x-1)]))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms n z
+%! f = chebyshevT (n, z);
+%! h = function_handle (f, 'vars', [n z]);
+%! A = h (1.1, 2.2);
+%! B = chebyshevT (1.1, 2.2);
+%! assert (A, B)
+%! end
