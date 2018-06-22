@@ -46,8 +46,8 @@ function y = pochhammer (n, x)
     error ('pochhammer: inputs N and X must have compatible sizes')
   end
 
-  % TODO: Sympy's RisingFactorial directly instead of calling mpmath here
-  % TODO: file upstream bug
+  % TODO: Sympy's RisingFactorial doesn't work so we call mpmath here
+  % https://github.com/sympy/sympy/issues/14822
   cmd = { 'Ln = _ins[0]'
           'Lx = _ins[1]'
           'if len(Ln) == 1 and len(Lx) != 1:'
@@ -97,7 +97,7 @@ end
 %! assert (A, B, -eps);
 
 %!xtest
-%! % TODO: Fails b/c of Sympy issue mentioned above
+%! % broken upstream, https://github.com/sympy/sympy/issues/14822
 %! % x matrix, s scalar
 %! y = [1 2 sym(pi); exp(sym(1)) 5 6];
 %! t = sym(2);
