@@ -52,15 +52,12 @@
 %% Instead, we could use the present function:
 %% @example
 %% @group
-%% Cfun = function_handle (chebyshevU (n, x))
-%%   @result{} Cfun =
-%%       @@(n, x) chebyshevU (n, x)
-%% value2 = Cfun(10, 0.96105)
+%% value2 = chebyshevU (10, 0.96105)
 %%   @result{} value2 = 0.22194
 %% @end group
 %% @end example
-%% Both results look similar but the @code{Cfun} result is more
-%% accurate---they differ by significantly more than machine precision:
+%% Both results look similar but @code{value2} is more accurate---they
+%% differ by significantly more than machine precision:
 %% @example
 %% @group
 %% value1 - value2
