@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% pochhammer (18, 0.9)
-%%   @result{} ans = 1.7315
+%%   @result{} ans = 13.448
 %% @end group
 %% @end example
 %%
