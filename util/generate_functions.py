@@ -79,7 +79,6 @@ sinint|Si
 fresnelc
 fresnels
 logint|li
-zeta
 harmonic||2017
 """
 
