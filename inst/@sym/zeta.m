@@ -76,36 +76,30 @@ end
 %!error <Invalid> zeta (sym(1), 2, 3)
 %!assert (isequaln (zeta (sym(nan)), sym(nan)))
 
-%!shared x, d
-%! d = 2;
-%! x = sym('2');
+%!test
+%! f1 = zeta (sym(2));
+%! f2 = pi^2/6;
+%! assert (double (f1), f2, -1e-15)
 
 %!test
-%! f1 = zeta(x);
-%! f2 = pi^2/6;
-%! assert( abs(double(f1) - f2) < 1e-15 )
-
-%!test
-%! D = [d d; d d];
-%! A = [x x; x x];
-%! f1 = zeta(A);
-%! f2 = pi^2/6;
-%! f2 = [f2 f2; f2 f2];
+%! A = sym([0 2; 4 6]);
+%! f1 = zeta (A);
+%! f2 = [-1/2 pi^2/6; pi^4/90 pi^6/945];
 %! assert( all(all( abs(double(f1) - f2) < 1e-15 )))
 
 %!test
 %! % round trip
 %! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! y = sym('y');
-%! A = zeta (d);
 %! f = zeta (y);
 %! h = function_handle (f);
-%! B = h (d);
+%! A = zeta (2);
+%! B = h (2);
 %! assert (A, B, -eps)
 %! end
 
 %!xtest
-%! %% https://github.com/sympy/sympy/issues/11802
+%! % https://github.com/sympy/sympy/issues/11802
 %! assert (double (zeta (sym (3), 4)), -0.07264084989132137196, -1e-14)
 
 %!test
