@@ -11,6 +11,7 @@ octsympy 2.6.1-dev
     so they are slower than native floating-point implementations.
 
           euler
+          bernoulli
 
   * The initial startup is much quieter!
 
@@ -30,7 +31,11 @@ octsympy 2.6.1-dev
 
   * New command `sympref diagnose` to help debug Python/SymPy issues.
 
+  * Improve `function_handle` support by supporting more functions.
+
   * Fixes for several bugs mentioning "immutable matrices".
+
+  * `bernoulli` now works with array inputs.
 
   * Added a `private/defaultpython.m` to make it easier for distributors
     to control which python interpreter is used by default.

@@ -18,8 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypefun  {@var{Em} =} euler (@var{m})
-%% @deftypefunx {@var{p} =}  euler (@var{m}, @var{x})
+%% @deftypemethod  @@sym {@var{Em} =} euler (@var{m})
+%% @deftypemethodx @@sym {@var{p} =}  euler (@var{m}, @var{x})
 %% Return symbolic Euler numbers or Euler polynomials.
 %%
 %% Examples:
@@ -54,8 +54,8 @@
 %%
 %% (Euler polynomials require SymPy > 1.1.1, unreleased as of 2018-01).
 %%
-%% @seealso{@@double/euler, bernoulli}
-%% @end deftypefun
+%% @seealso{@@double/euler, @@sym/bernoulli}
+%% @end deftypemethod
 
 function r = euler (varargin)
 

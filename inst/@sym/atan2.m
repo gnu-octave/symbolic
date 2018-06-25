@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -77,3 +77,13 @@ end
 %! sp = sym(pi);
 %! aex = [0 sp; sp/2 -sp/2];
 %! assert (isequal (a, aex))
+
+%!test
+%! % round trip
+%! syms x y
+%! xd = -2; yd = -3;
+%! f = atan2 (x, y);
+%! A = atan2 (xd, yd);
+%! h = function_handle (f);
+%! B = h (xd, yd);
+%! assert (A, B, -eps)
