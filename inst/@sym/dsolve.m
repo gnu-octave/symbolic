@@ -335,11 +335,13 @@ end
 %!test
 %! % System of ODEs
 %! syms x(t) y(t) C1 C2
-%! ode_1=diff(x(t),t) == 2*y(t);
-%! ode_2=diff(y(t),t) == 2*x(t);
-%! sol_sodes=dsolve([ode_1,ode_2]);
-%! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
-%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
+%! ode1 = diff(x(t),t) == 2*y(t);
+%! ode2 = diff(y(t),t) == 2*x(t);
+%! soln = dsolve([ode1, ode2]);
+%! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
+%! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! assert (isequal ([rhs(soln{1}), rhs(soln{2})], g1) || ...
+%!         isequal ([rhs(soln{1}), rhs(soln{2})], g2))
 
 %!test
 %! % System of ODEs (initial-value problem)
