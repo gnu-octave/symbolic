@@ -48,12 +48,13 @@ end
 %! Q = [sym(pi)/3 sym(pi)/6; sym(pi)/4 sym(pi)/2];
 %! assert( isequal( angle(Z), Q));
 
-%!xtest
+%!test
 %! % roundtrip
-%! % TODO: fix upstream sympy
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms x
 %! A = angle (2+2i);
 %! f = angle (x);
 %! h = function_handle (f);
 %! B = h (2+2i);
 %! assert (A, B, -eps)
+%! end

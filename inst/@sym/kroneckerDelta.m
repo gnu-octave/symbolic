@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -78,3 +78,13 @@ end
 %! assert (isequal (kroneckerDelta (x, x), sym(1)))
 
 %!assert (isequal (kroneckerDelta ([sym(1) 2 3], [1 2 0]), sym([1 1 0])))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms x y
+%! f = kroneckerDelta (x, y);
+%! h = function_handle (f);
+%! assert (h (1, 2), 0)
+%! assert (h (2, 2), 1)
+%! end

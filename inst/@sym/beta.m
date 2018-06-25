@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,5 +44,18 @@ function r = beta(x, y)
 end
 
 
+%!error <usage> beta (sym(1), 2, 3)
+
+%!assert (isequal (double (beta (sym(1), 2)), 1/2))
+%!assert (isinf (double (beta (sym(1), 0))))
+
 %!test
-%! assert (isequal (double (beta(1, 2)), 1/2))
+%! % round trip
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! syms x y
+%! f = beta (x, y);
+%! h = function_handle (f);
+%! A = h (1.1, 2.2);
+%! B = beta (1.1, 2.2);
+%! assert (A, B)
+%! end

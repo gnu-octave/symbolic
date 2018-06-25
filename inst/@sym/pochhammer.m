@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/gamma}
+%% @seealso{@@sym/gamma, @@double/pochhammer}
 %% @end defmethod
 
 function I = pochhammer(x, n)
@@ -71,3 +71,14 @@ end
 
 %!assert (isequal (pochhammer (sym(3), 4), sym(360)))
 %!assert (isequal (pochhammer (sym([2 3]), 3), sym([24 60])))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms n z
+%! f = pochhammer (z, n);
+%! h = function_handle (f, 'vars', [z n]);
+%! A = h (1.1, 2.2);
+%! B = pochhammer (1.1, 2.2);
+%! assert (A, B)
+%! end
