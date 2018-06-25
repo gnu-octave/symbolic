@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,6 +60,30 @@
 %% @group
 %% diff(sym(1))
 %%   @result{} (sym) 0
+%% @end group
+%% @end example
+%%
+%% Partial derivatives are assumed to commute:
+%% @example
+%% @group
+%% syms f(x, y)
+%% diff(f, x, y)
+%%   @result{} ans(x, y) = (symfun)
+%%
+%%          2
+%%         ∂
+%%       ─────(f(x, y))
+%%       ∂y ∂x
+%% @end group
+%%
+%% @group
+%% diff(f, y, x)
+%%   @result{} ans(x, y) = (symfun)
+%%
+%%          2
+%%         ∂
+%%       ─────(f(x, y))
+%%       ∂y ∂x
 %% @end group
 %% @end example
 %%
