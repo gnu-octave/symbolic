@@ -66,7 +66,7 @@ function y = zeta(n, z)
   % (mpmath does, we'll use that directly in @double/zeta)
   cmd = {'def _op(a, n):'
          '    z = Dummy("z")'
-         '    return Derivative(zeta(z), z, n).subs(z, a)'};
+         '    return Derivative(zeta(z), (z, n)).subs(z, a)'};
 
   y = elementwise_op (cmd, sym (z), sym (n));
 
@@ -105,3 +105,10 @@ end
 %!test
 %! syms x
 %! assert (isequal (zeta (0, x), zeta(x)))
+
+%!test
+%! % ensure its the nth deriv wrt x, not the n deriv
+%! syms x n
+%! F = zeta (n, x);
+%! F = subs(F, n, 3);
+%! assert (isequal (F, diff (zeta (x), x, x, x)))
