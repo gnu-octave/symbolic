@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -19,8 +19,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym zeta (@var{n})
-%% @defmethodx @@sym zeta (@var{z}, @var{n})
+%% @defmethod  @@sym zeta (@var{x})
+%% @defmethodx @@sym zeta (@var{n}, @var{z})
 %% Symbolic zeta function.
 %%
 %% Example:
@@ -32,40 +32,41 @@
 %% @end group
 %% @end example
 %%
-%% With 2 arguments you get the @var{z} derivative
-%% of the zeta function evaluated in @var{n}:
-%%
+%% With 2 arguments you get the @var{n}th derivative
+%% of the zeta function evaluated in @var{x}:
 %% @example
 %% @group
 %% syms x
 %% y = zeta (4, x)
 %%   @result{} y = (sym)
-%%         4      
-%%        d       
+%%         4
+%%        d
 %%       ───(ζ(x))
-%%         4      
-%%       dx 
+%%         4
+%%       dx
 %% @end group
 %% @end example
 %%
+%% @seealso{@@double/zeta}
 %% @end defmethod
 
 
-function y = zeta(z, n)
+function y = zeta(n, z)
   if (nargin > 2)
     print_usage ();
   end
 
   if (nargin == 1)
-      n = z;
-      z = 0;
+    z = n;
+    y = elementwise_op ('zeta', sym (z));
+    return
   end
 
-  cmd = {'def _op(a, b):'
-         '    x = Symbol("alpha")'
-         '    assert x not in a.free_symbols, "You can not use alpha symbol in this function"'
-         '    assert x not in b.free_symbols, "You can not use alpha symbol in this function"'
-         '    return Derivative(zeta(x), x, a).subs(x, b)'};
+  %% I don't think upstream sympy has a form for the derivatives
+  % (mpmath does, we'll use that directly in @double/zeta)
+  cmd = {'def _op(a, n):'
+         '    z = Dummy("z")'
+         '    return Derivative(zeta(z), z, n).subs(z, a)'};
 
   y = elementwise_op (cmd, sym (z), sym (n));
 
@@ -105,7 +106,7 @@ end
 
 %!xtest
 %! %% https://github.com/sympy/sympy/issues/11802
-%! assert (double (zeta (sym (3), 4)), -0.07264084989132137196244616781177, 10e-33)
+%! assert (double (zeta (sym (3), 4)), -0.07264084989132137196, -1e-14)
 
 %!test
 %! syms x
