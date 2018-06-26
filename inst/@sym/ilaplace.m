@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,34 +83,10 @@ function f = ilaplace(varargin)
     if (isempty(s))
       s = sym('s');
     end
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
-            'if t==s:'
-            '    t=sp.Symbol("x", positive=True)'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Laplace transform for each term'
-            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
-            '    if r!=None and sp.diff(term,s)!=0:'
-            '        modulus=r[a_]'
-            '        phase=r[b_]/s'
-            '        # if a is constant and b/s is constant'
-            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
-            '            f = f + modulus*sp.DiracDelta(t+phase)'
-            '        else:'
-            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            '    elif sp.diff(term,s)==0:'
-            '        f = f + term*sp.DiracDelta(t)'
-            '    else:'
-            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
-
-    f = python_cmd(cmd,F,s);
-
+    t = sym('t');
+    if (isequal (s, t))
+      t = sym('x', 'positive');
+    end
   elseif (nargin == 2)
     F = sym(varargin{1});
     t = sym(varargin{2});
@@ -118,37 +94,15 @@ function f = ilaplace(varargin)
     if (isempty(s))
       s = sym('s');
     end
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Laplace transform for each term'
-            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
-            '    if r!=None and sp.diff(term,s)!=0:'
-            '        modulus=r[a_]'
-            '        phase=r[b_]/s'
-            '        # if a is constant and b/s is constant'
-            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
-            '            f = f + modulus*sp.DiracDelta(t+phase)'
-            '        else:'
-            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            '    elif sp.diff(term,s)==0:'
-            '        f = f + term*sp.DiracDelta(t)'
-            '    else:'
-            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
-
-    f = python_cmd(cmd,F,s,t);
-
   elseif (nargin == 3)
     F = sym(varargin{1});
     s = sym(varargin{2});
     t = sym(varargin{3});
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
+  else
+    print_usage ();
+  end
+
+  cmd = { 'F, s, t = _ins'
             'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
             'Fr=F.rewrite(sp.exp)'
             'if type(Fr)==sp.Add:'
@@ -170,14 +124,9 @@ function f = ilaplace(varargin)
             '        f = f + term*sp.DiracDelta(t)'
             '    else:'
             '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
+            'return f,' };
 
-    f = python_cmd(cmd,F,s,t);
-
-  else
-    print_usage ();
-
-  end
+  f = python_cmd(cmd, F, s, t);
 
 end
 
