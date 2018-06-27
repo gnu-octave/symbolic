@@ -106,8 +106,8 @@ end
 %! A = sym([1 2; 3 4]);
 %! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
 %! C = sym('MatrixSymbol("C", 2, 2)');
-%! assert (strfind (sympy (C.*C), 'Hadamard'))
-%! assert (strfind (sympy (A.*C), 'Hadamard'))
-%! assert (strfind (sympy (C.*A), 'Hadamard'))
-%! assert (strfind (sympy (B.*C), 'Hadamard'))
-%! assert (strfind (sympy (C.*B), 'Hadamard'))
+%! assert (~ isempty (strfind (sympy (C.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (A.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (C.*A), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (B.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (C.*B), 'Hadamard')))
