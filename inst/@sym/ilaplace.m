@@ -83,33 +83,47 @@
 
 function f = ilaplace(varargin)
 
+  if (nargin > 3)
+    print_usage ();
+  end
+
   % FIXME: it only works for scalar functions
 
-  % If the Laplace variable in the frequency domain is equal to "t",
-  % "x" will be the physical variable (analogously to SMT)
-  if (nargin == 1)
-    F = sym(varargin{1});
-    s = symvar(F, 1);  % note SMT does something different, prefers s
-    if (isempty(s))
-      s = sym('s');
+  F = sym(varargin{1});
+
+  if (nargin == 3)
+    s = sym(varargin{2});
+  else
+    %% frequency domain variable not specifed
+    % if exactly one symbol has char(s) == 's'...
+    symbols = findsymbols (F);
+    charsyms = cell (size (symbols));
+    for i=1:numel(symbols)
+      charsyms{i} = char (symbols{i});
     end
+    I = find (strcmp (charsyms, 's'));
+    assert (numel (I) <= 1, 'ilaplace: there is more than one "s" symbol: check symvar(F) and sympy(F)')
+    if (~ isempty (I))
+      s = symbols{I};  % ... we want that one
+    else
+      s = symvar (F, 1);
+      if (isempty (s))
+        s = sym('s');
+      end
+    end
+  end
+
+  if (nargin == 1)
     t = sym('t', 'positive');  % TODO: potentially confusing?
-    if (isequal (s, t))
+    % If the Laplace variable in the frequency domain is equal to "t",
+    % "x" will be the physical variable (analogously to SMT)
+    if (strcmp (char (s), char (t)))
       t = sym('x', 'positive');
     end
   elseif (nargin == 2)
-    F = sym(varargin{1});
     t = sym(varargin{2});
-    s = symvar(F, 1);  % note SMT does something different, prefers s
-    if (isempty(s))
-      s = sym('s');
-    end
   elseif (nargin == 3)
-    F = sym(varargin{1});
-    s = sym(varargin{2});
     t = sym(varargin{3});
-  else
-    print_usage ();
   end
 
   cmd = { 'F, s, t = _ins'
@@ -187,3 +201,19 @@ end
 %! t = sym('t', 'positive');
 %! assert (isequal (ilaplace (5*exp(-3*s) + 2*exp(c*s) - 2*exp(-2*s)/s,t), ...
 %!                  5*dirac(t-3) + 2*dirac(c+t) - 2*heaviside(t-2)))
+
+%!error <more than one> ilaplace (sym('s', 'positive')*sym('s'))
+
+%!test
+%! % SMT compact, prefers s over symvar
+%! syms s x
+%! syms t positive
+%! assert (isequal (ilaplace(x/s^4), x*t^3/6))
+%! t = sym('t');
+%! assert (isequal (ilaplace(x/s^4, t), x*t^3/6*heaviside(t)))
+
+%!test
+%! % pick s even it has assumptions
+%! syms s real
+%! syms x t
+%! assert (isequal (ilaplace (x/s^2, t), x*t*heaviside(t)))
