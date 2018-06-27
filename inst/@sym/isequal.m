@@ -49,6 +49,10 @@
 
 function t = isequal(x, y, varargin)
 
+  if (nargin < 2)
+    print_usage ();
+  end
+
   % isequal does not care about type, but if you wanted it to...
   %if ( ~ ( isa (x, 'sym') && isa (y, 'sym')))
   %  t = false;
