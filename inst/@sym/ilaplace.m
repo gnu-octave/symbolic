@@ -144,6 +144,8 @@ function f = ilaplace(varargin)
 end
 
 
+%!error <Invalid> ilaplace (sym(1), 2, 3, 4)
+
 %!test
 %! % basic SMT compact: no heaviside
 %! syms s
@@ -174,8 +176,14 @@ end
 %! assert(logical( ilaplace(exp(-5*s)/s^2,t) == (t-5)*heaviside(t-5) ))
 
 %!test
-%! % Delta dirac tests
+%! % Delta dirac test
+%! syms s
+%! t = sym('t');
+%! assert (isequal (ilaplace (sym('2'), t), 2*dirac(t)))
+
+%!test
+%! % Delta dirac test 2
 %! syms s c
-%! t=sym('t','positive');
-%! assert(logical( ilaplace(sym('2'),t) == 2*dirac(t) ))
-%! assert(logical( ilaplace(5*exp(-3*s)+2*exp(c*s)-2*exp(-2*s)/s,t) == 5*dirac(t-3)+2*dirac(c+t)-2*heaviside(t-2)))
+%! t = sym('t', 'positive');
+%! assert (isequal (ilaplace (5*exp(-3*s) + 2*exp(c*s) - 2*exp(-2*s)/s,t), ...
+%!                  5*dirac(t-3) + 2*dirac(c+t) - 2*heaviside(t-2)))
