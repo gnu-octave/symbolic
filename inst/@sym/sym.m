@@ -1018,6 +1018,7 @@ end
 
 %!test
 %! % Issue #885
+%! clear f x  % if test not isolated (e.g., on matlab)
 %! syms x
 %! f(x) = sym('S(x)');
 %! f(x) = sym('I(x)');
