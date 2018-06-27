@@ -43,9 +43,18 @@
 %% Example:
 %% @example
 %% @group
-%% syms s
+%% syms s t
 %% F = 1/s^2;
-%% ilaplace(F)
+%% ilaplace(F, s, t)
+%%   @result{} (sym) t⋅Heaviside(t)
+%% @end group
+%% @end example
+%%
+%% To avoid @code{Heaviside}, try:
+%% @example
+%% @group
+%% syms t positive
+%% ilaplace(1/s^2, s, t)
 %%   @result{} (sym) t
 %% @end group
 %% @end example
@@ -55,7 +64,8 @@
 %% be overriden by specifying @var{t}.  For example:
 %% @example
 %% @group
-%% syms s t x
+%% syms s
+%% syms t x positive
 %% ilaplace(1/s^2)
 %%   @result{} (sym) t
 %% ilaplace(1/t^2)
@@ -83,7 +93,7 @@ function f = ilaplace(varargin)
     if (isempty(s))
       s = sym('s');
     end
-    t = sym('t');
+    t = sym('t', 'positive');  % TODO: potentially confusing?
     if (isequal (s, t))
       t = sym('x', 'positive');
     end
@@ -103,6 +113,9 @@ function f = ilaplace(varargin)
   end
 
   cmd = { 'F, s, t = _ins'
+          'f = inverse_laplace_transform(F, s, t)'
+          'if not f.has(InverseLaplaceTransform):'
+          '    return f,'
             'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
             'Fr=F.rewrite(sp.exp)'
             'if type(Fr)==sp.Add:'
@@ -132,18 +145,27 @@ end
 
 
 %!test
-%! % basic
-%! syms s t
-%! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
+%! % basic SMT compact: no heaviside
+%! syms s
+%! syms t positive
+%! assert (isequal (ilaplace(1/s^2), t))
+%! assert (isequal (ilaplace(s/(s^2+9)), cos(3*t)))
+%! assert (isequal (ilaplace(6/s^4), t^3))
 
 %!test
-%! % SMT compact
-%! syms r s t u
-%! assert(logical( ilaplace(1/r^2,u) == u ))
-%! assert(logical( ilaplace(1/r^2,r,u) == u ))
-%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
-%! assert(logical( ilaplace(6/s^4) == t^3 ))
+%! % more SMT compact
+%! syms r
+%! syms u positive
+%! assert (isequal (ilaplace(1/r^2, u), u))
+%! assert (isequal (ilaplace(1/r^2, r, u), u))
+
+%!test
+%! % if t specified and not positive, we expect heaviside
+%! clear s t
+%! syms s t
+%! assert (isequal (ilaplace(1/s^2, s, t), t*heaviside(t)))
+%! assert (isequal (ilaplace(s/(s^2+9), t), cos(3*t)*heaviside(t)))
+%! assert (isequal (ilaplace(6/s^4, t), t^3*heaviside(t)))
 
 %!test
 %! % Heaviside test
