@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -76,81 +76,53 @@
 
 function f = ifourier(varargin)
 
+  if (nargin > 3)
+    print_usage ();
+  end
+
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
-  % If the frequency variable determined to be "x", then
-  % use "t" as the spatial domain variable (analogously to SMT)
-  if (nargin == 1)
-    F = sym(varargin{1});
-    k = symvar(F, 1);  % note SMT does something different, prefers w
-    if (isempty(k))
-      k = sym('k');
-    end
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=sp.Symbol("x")'
-            'if x==k:'
-            '    x=sp.Symbol("t")'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Fourier transform '
-            '    r=sp.simplify(term*sp.exp(sp.I*x*k)).match(a_*sp.exp(b_))'
-            '    # if a is constant and b/(I*k) is constant'
-            '    modulus=r[a_]'
-            '    phase=r[b_]/(sp.I*k)'
-            '    if sp.diff(modulus,k)==0 and sp.diff(phase,k)==0:'
-            '        f = f + modulus*2*sp.pi*sp.DiracDelta(phase)'
-            '    else:'
-            '        fterm=sp.integrate(sp.simplify(term*sp.exp(sp.I*x*k)), (k, -sp.oo, sp.oo))'
-            '        if fterm.is_Piecewise:'
-            '            f=f+sp.simplify(fterm.args[0][0])'
-            '        else:'
-            '            f=f+sp.simplify(fterm)'
-            'return f/(2*sp.pi),'};
+  F = sym(varargin{1});
 
-    f = python_cmd(cmd, F, k);
-
-  elseif (nargin == 2)
-    F = sym(varargin{1});
-    x = sym(varargin{2});
-    k = symvar(F, 1);  % note SMT does something different, prefers w
-    if (isempty(k))
-      k = sym('k');
-    end
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Fourier transform '
-            '    r=sp.simplify(term*sp.exp(sp.I*x*k)).match(a_*sp.exp(b_))'
-            '    # if a is constant and b/(I*k) is constant'
-            '    modulus=r[a_]'
-            '    phase=r[b_]/(sp.I*k)'
-            '    if sp.diff(modulus,k)==0 and sp.diff(phase,k)==0:'
-            '        f = f + modulus*2*sp.pi*sp.DiracDelta(phase)'
-            '    else:'
-            '        fterm=sp.integrate(sp.simplify(term*sp.exp(sp.I*x*k)), (k, -sp.oo, sp.oo))'
-            '        if fterm.is_Piecewise:'
-            '            f=f+sp.simplify(fterm.args[0][0])'
-            '        else:'
-            '            f=f+sp.simplify(fterm)'
-            'return f/(2*sp.pi),'};
-
-    f = python_cmd(cmd, F, k, x);
-
-  elseif (nargin == 3)
-    F = sym(varargin{1});
+  if (nargin == 3)
     k = sym(varargin{2});
+  else
+    %% frequency domain variable not specifed
+    % if exactly one symbol has char(k) == 'k'...
+    symbols = findsymbols (F);
+    charsyms = cell (size (symbols));
+    for i=1:numel(symbols)
+      charsyms{i} = char (symbols{i});
+    end
+    I = find (strcmp (charsyms, 'k'));
+    assert (numel (I) <= 1, 'ifourier: there is more than one "k" symbol: check symvar(F) and sympy(F)')
+    if (~ isempty (I))
+      k = symbols{I};  % ... we want that one
+    else
+      k = symvar(F, 1);  % else we use symvar choice
+      if (isempty(k))
+        k = sym('k');
+      end
+    end
+  end
+
+  if (nargin == 1)
+    x = sym('x');
+    %% If the frequency variable k turned out to be "x", then
+    % use "t" as the spatial domain variable (analogously to SMT)
+    if (strcmp (char (k), char (x)))
+      x = sym('t');
+    end
+  elseif (nargin == 2)
+    x = sym(varargin{2});
+  elseif (nargin == 3)
     x = sym(varargin{3});
-    cmd = { 'F=_ins[0]; k=_ins[1]; x=_ins[2]'
+  end
+
+  cmd = { 'F, k, x = _ins'
+          '#f = inverse_fourier_transform(F, k, x)'
+          '#return f.subs(x, x/(2*S.Pi)) / (2*S.Pi)'
             'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
             'Fr=F.rewrite(sp.exp)'
             'if type(Fr)==sp.Add:'
@@ -173,15 +145,12 @@ function f = ifourier(varargin)
             '            f=f+sp.simplify(fterm)'
             'return f/(2*sp.pi),'};
 
-    f = python_cmd(cmd, F, k, x);
-
-  else
-    print_usage ();
-
-  end
+  f = python_cmd(cmd, F, k, x);
 
 end
 
+
+%!error <Invalid> ifourier (sym(1), 2, 3, 4)
 
 %!test
 %! % matlab SMT compat
@@ -221,3 +190,10 @@ end
 %! assert(logical( ifourier(2/(w^2 + 1)) == heaviside(x)/exp(x) + heaviside(-x)*exp(x) ))
 %! assert(logical( ifourier(-(w*4)/(w^4 + 2*w^2 + 1) )== -x*exp(-abs(x))*1i ))
 %! assert(logical( ifourier(-(w*4)/(w^4 + 2*w^2 + 1) )== -x*(heaviside(x)/exp(x) + heaviside(-x)*exp(x))*1i ))
+
+%!error <more than one> ifourier (sym('k', 'positive')*sym('k'))
+
+%!test
+%! % SMT compact, prefers k over symvar
+%! syms k x y
+%! assert (isequal (ifourier(y*exp(-k^2/4)), y/sqrt(sym(pi))*exp(-x^2)))
