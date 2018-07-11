@@ -859,7 +859,7 @@ end
 %! x = sym(0.1 + 0.1i, 'f');
 %! assert (isequal (x, q + 1i*q))
 
-%!xtest
+%!test
 %! assert (isequal (sym(inf, 'f'), sym(inf)))
 %! assert (isequal (sym(-inf, 'f'), sym(-inf)))
 %! assert (isequaln (sym(nan, 'f'), sym(nan)))
