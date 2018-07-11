@@ -79,7 +79,7 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! if (python_cmd ('return Version(spver) > Version("1.2")'))
 %! syms n z
 %! f = chebyshevT (n, z);
 %! h = function_handle (f, 'vars', [n z]);

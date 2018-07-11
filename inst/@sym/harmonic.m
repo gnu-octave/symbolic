@@ -121,7 +121,7 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! if (python_cmd ('return Version(spver) > Version("1.2")'))
 %! y = sym('y');
 %! A = harmonic (7);
 %! f = harmonic (y);
