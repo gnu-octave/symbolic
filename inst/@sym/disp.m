@@ -51,7 +51,7 @@
 %%   @print{}   [                                  ]
 %%   @print{}   [     /2*x\         /   /   x    \\]
 %%   @print{}   [acosh|---|  ceiling|sin|--------||]
-%%   @print{}   [     \ pi/         \   \gamma(x)//]
+%%   @print{}   [     \ pi/         \   \Gamma(x)//]
 %%
 %% disp(A, 'flat')
 %%   @print{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])
