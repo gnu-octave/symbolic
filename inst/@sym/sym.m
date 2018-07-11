@@ -503,7 +503,7 @@ function s = sym(x, varargin)
         % ...        if k == srepr(v):
         % ...            print(k)
         var_blacklist = {'E' 'I' 'nan' 'oo' 'pi' 'zoo' 'Catalan' ...
-                         'EulerGamma' 'GoldenRatio'};
+                         'EulerGamma' 'GoldenRatio' 'true' 'false'};
 
         %% special case: if all (x,y,z) are in the blacklist, we should *not*
         % force symfun, thus preserving the identity sympy(sym(x)) == x
@@ -1034,7 +1034,7 @@ end
 
 %!test
 %! % sym(sympy(x) == x identity
-%! % Don't mistake "pi" which is "srepr(S.Pi)" for a symfun variable
+%! % Don't mistake "pi" (which is "srepr(S.Pi)") for a symfun variable
 %! f = sym ('ff(pi, pi)');
 %! s1 = sympy (f);
 %! s2 = 'FallingFactorial(pi, pi)';
@@ -1042,12 +1042,18 @@ end
 
 %!test
 %! % sym(sympy(x) == x identity
-%! % Don't mistake "I" which is "srepr(S.ImaginaryUnit)" for a symfun variable
+%! % Don't mistake "I" (which is "srepr(S.ImaginaryUnit)") for a symfun variable
 %! f = sym ('sin(I)');
 %! g = 1i*sinh (sym (1));
 %! assert (isequal (f, g))
 %! s = sympy (f);
 %! assert (isempty (strfind (s, 'Function')))
+
+%!error
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "true/false" (which is "srepr(S.true)") for a symfun variable
+%! % (Used to print as `S.true` but just `true` in sympy 1.2)
+%! sym ('E(true,false)')
 
 %!test
 %! % some variable names that are special to sympy but should not be for us
