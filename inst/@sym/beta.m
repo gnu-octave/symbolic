@@ -26,6 +26,7 @@
 %% @example
 %% @group
 %% syms x y
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% beta(x, y)
 %%   @result{} ans = (sym) Β(x, y)
 %% @end group

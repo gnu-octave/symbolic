@@ -44,6 +44,7 @@
 %% @end group
 %%
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% disp(A, 'ascii')
 %%   @print{}   [     /x\              / c*x\      ]
 %%   @print{}   [  sin|-|         floor\a   /      ]
