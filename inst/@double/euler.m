@@ -40,7 +40,7 @@
 %%   @result{} 6.7280
 %% @end group
 %% @end example
-%% (Euler polynomials require SymPy > 1.1.1, unreleased as of 2018-01).
+%% (Euler polynomials require SymPy 1.2 or greater, released 2018-07).
 %%
 %% @strong{Note} this function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation.

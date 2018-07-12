@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% (Euler polynomials require SymPy > 1.1.1, unreleased as of 2018-01).
+%% (Euler polynomials require SymPy 1.2 or greater, released 2018-07).
 %%
 %% @seealso{@@double/euler, @@sym/bernoulli}
 %% @end deftypemethod
