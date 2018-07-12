@@ -76,41 +76,15 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     end
     pyexec = sympref('python');
 
-    % Blacklist "octpy.exe" and "py.exe" until "-i -c" is supported
-    % https://github.com/cbm755/octsympy/issues/873
-    python_blacklisted_ic = false;
-    [~, f, e] = fileparts (pyexec);
-    if (strcmp (e, '.exe') && (strcmp (f, 'py') || strcmp (f, 'octpy')))
-      python_blacklisted_ic = true;
-    end
-
     assert_have_python_and_sympy (pyexec)
 
     % formatting matters
     args = {'-i', '-c', 'import sys; sys.ps1=''''; sys.ps2='''''};
-
-    if (python_blacklisted_ic)
-      args = {'-i'};
-    end
-
     [fin, fout, pid] = popen2 (pyexec, args);
-
-    if (python_blacklisted_ic)
-      if (verbose)
-        disp ('some output from Python might appear next.')
-      end
-    end
-
     fflush (stdout);
 
     if (pid < 0)
       error('popen2() failed');
-    end
-
-    if (python_blacklisted_ic)
-      % kill prompt ASAP
-      fprintf (fin, 'import sys; sys.ps1=""; sys.ps2=""\n\n')
-      fflush(fin);
     end
 
     headers = python_header();
@@ -131,10 +105,6 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     if (iscell(A) && strcmp(A{1}, 'Communication established.'))
       if (verbose)
         fprintf ('Python communication link active, SymPy v%s.\n', A{2});
-      else
-        if (python_blacklisted_ic)
-          fprintf ('\n');
-        end
       end
     elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
       info.raw = out;
