@@ -10,8 +10,9 @@ octsympy 2.6.1-dev
   * New `@double` numerical functions; these are wrappers around SymPy,
     so they are slower than native floating-point implementations.
 
-          euler
-          bernoulli
+          bernoulli       euler
+          chebyshevT      pochhammer
+          chebyshevU
 
   * The initial startup is much quieter!
 
@@ -41,6 +42,8 @@ octsympy 2.6.1-dev
     to control which python interpreter is used by default.
 
   * Fixes for GNU Octave 4.4.
+
+  * Fixes for SymPy 1.2.
 
   * Various bug fixes and documentation updates.
 
