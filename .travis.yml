@@ -5,8 +5,6 @@ language: generic
 
 matrix:
   include:
-    - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTAVE=no  SYMPY_VER=1.0   OCT=ppa   DOCTEST=yes COLUMNS=80
     - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
     - env: PYTHON_VERSION=3 PYTAVE=no  SYMPY_VER=1.1.1 OCT=ppa   DOCTEST=yes COLUMNS=80
     - env: PYTHON_VERSION=2 PYTAVE=no  SYMPY_VER=1.2   OCT=ppa   DOCTEST=yes COLUMNS=80

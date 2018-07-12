@@ -281,12 +281,10 @@ end
 %!test
 %! % wrong order-1 series with nonzero expansion pt:
 %! % upstream bug https://github.com/sympy/sympy/issues/9351
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! g = x^2 + 2*x + 3;
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
-%! end
 
 %!test
 %! syms x y z

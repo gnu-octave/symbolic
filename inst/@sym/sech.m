@@ -65,7 +65,6 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! y = sym('y');
 %! A = sech (d);
 %! f = sech (y);

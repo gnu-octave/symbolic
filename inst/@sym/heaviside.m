@@ -50,11 +50,8 @@
 %% The optional second argument overrides the default:
 %% @example
 %% @group
-%% @comment Needs SymPy > 1.0
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, sym(1)/2)
 %%   @result{} (sym) 1/2
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% heaviside(0, [0 sym(1)/2 10])
 %%   @result{} (sym) [0  1/2  10]  (1×3 matrix)
 %% @end group

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,10 +62,7 @@ end
 
 %!assert (isequal (polylog (sym('s'), 0), sym(0)))
 
-%!test
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
-%! assert (isequal (double (polylog (1, sym(-1))), -log(2)))
-%! end
+%!assert (isequal (double (polylog (1, sym(-1))), -log(2)))
 
 %!assert (isequal (double (polylog (0, sym(2))), -2))
 %!assert (isequal (double (polylog (-1, sym(2))), 2))
@@ -77,11 +74,9 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms s z
 %! f = polylog (s, z);
 %! h = function_handle (f, 'vars', [s z]);
 %! A = h (1.1, 2.2);
 %! B = polylog (1.1, 2.2);
 %! assert (A, B)
-%! end

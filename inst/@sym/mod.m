@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,7 +46,6 @@
 %% third argument:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% q = mod(x, 3, false)
 %%   @result{} q = (sym) x mod 3
 %% subs(q, x, 10)

@@ -24,7 +24,6 @@
 %%
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% eulergamma
 %%   @result{} (sym) γ
 %%

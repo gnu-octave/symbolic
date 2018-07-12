@@ -26,7 +26,7 @@
 
 function assert_have_python_and_sympy (pyexec, verbose)
 
-  minsympyver = '1.0';
+  minsympyver = '1.1.1';
 
   if (nargin < 2)
     verbose = false;

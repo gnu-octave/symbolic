@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -71,8 +71,6 @@
 %% @end group
 %% @end example
 %%
-%% Some of the examples above require SymPy version 1.1 or later.
-%%
 %% @seealso{vpa}
 %% @end defun
 
@@ -105,8 +103,7 @@ function r = vpasolve(e, x, x0)
     x0 = num2cell (x0);
   end
 
-  if (python_cmd ('return Version(spver) > Version("1.0")'))
-    cmd = {
+  cmd = {
       '(e, x, x0, n) = _ins'
       'import mpmath'
       'mpmath.mp.dps = n'
@@ -115,29 +112,6 @@ function r = vpasolve(e, x, x0)
       'x0 = list(x0) if isinstance(x0, Matrix) else x0'
       'r = nsolve(e, x, x0)'
       'return r' };
-    r = python_cmd (cmd, sym(e), x, x0, n);
-    return
-  end
-
-
-  %% Older SymPy had lots of problems with nsolve:
-  % https://github.com/sympy/sympy/issues/6092
-  % https://github.com/sympy/sympy/issues/8564
-  % (can drop all this when we stop supporting 1.0)
-
-  cmd = {
-    '(e, x, x0, n) = _ins'
-    'import mpmath'
-    'mpmath.mp.dps = n'
-    'findroot = mpmath.findroot'
-    'if isinstance(e, Equality):'
-    '    e = e.lhs - e.rhs'
-    'e = e.evalf(n)'
-    'f = lambda meh: e.subs(x, meh)'
-    'r = findroot(f, x0)'
-    'r = sympy.N(r, n)'  % deal with mpf
-    'return r,' };
-
   r = python_cmd (cmd, sym(e), x, x0, n);
 
 end
@@ -191,7 +165,6 @@ end
 %! digits(m);
 
 %!test
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! r = vpasolve(x^2 + 2 == 0, x, 1i);
 %! assert (double (imag(r)^2 - 2), 0, 1e-32)
@@ -199,46 +172,37 @@ end
 %! r = vpasolve(x^2 + 2 == 0, x, -3i + 5);
 %! assert (double (imag(r)^2 - 2), 0, 1e-32)
 %! assert (double (real(r)^2), 0, 1e-32)
-%! end
 
 %!test
 %! % system
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x y
 %! f = 3*x^2 - 2*y^2 - 1;
 %! g = x^2 - 2*x + y^2 + 2*y - 8;
 %! r = vpasolve([f; g], [x; y], sym([-1; 1]));
 %! assert (isa (r, 'sym'))
 %! assert (numel (r) == 2)
-%! end
 
 %!test
 %! % system, double guess
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x y
 %! f = 3*x^2 - 2*y^2 - 1;
 %! g = x^2 - 2*x + y^2 + 2*y - 8;
 %! r = vpasolve([f; g], [x; y], [-1.1 1.2]);
-%! end
 
 %!test
 %! % system, double guess
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x y
 %! f = 3*x^2 - 2*y^2 - 1;
 %! g = x^2 - 2*x + y^2 + 2*y - 8;
 %! r1 = vpasolve([f; g], [x; y], [-1.1]);
 %! r2 = vpasolve([f; g], [x; y], [-1.1 -1.1]);
 %! assert (isequal (r1, r2))
-%! end
 
 %!test
 %! % system, more eqns than unknowns
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x y
 %! eqns = [x^3 - x - y == 0; y*exp(x) == 16; log(y) + x == 4*log(sym(2))];
 %! r = vpasolve (eqns, [x; y], [1; 1]);
 %! A = subs (lhs (eqns), [x; y], r);
 %! err = A - [0; 16; 4*log(sym(2))];
 %! assert (double (err), zeros (size (err)), 1e-31)
-%! end

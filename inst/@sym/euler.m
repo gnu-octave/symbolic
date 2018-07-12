@@ -67,11 +67,7 @@ function r = euler (varargin)
     varargin{i} = sym (varargin{i});
   end
 
-  % after we drop support for 1.0
-  %r = elementwise_op ('euler', varargin{:});
-
-  cmd = 'lambda *x: euler(*x) if Version(spver) > Version("1.0") else combinatorial.numbers.euler(*x)';
-  r = elementwise_op (cmd, varargin{:});
+  r = elementwise_op ('euler', varargin{:});
 
 end
 
