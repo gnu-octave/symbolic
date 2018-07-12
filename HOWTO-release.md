@@ -32,7 +32,7 @@ Checklist
 
   * Test regenerating html documentation: "make html"
 
-  * Run "Make release" and record the md5 sums.
+  * Run "make release" and record the md5 sums.
 
   * Test on Matlab if possible.
 
