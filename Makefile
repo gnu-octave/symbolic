@@ -64,7 +64,6 @@ $(OCTAVE_RELEASE): .git/index | $(BUILD_DIR)
 	git archive --format=tar --prefix="$@/" HEAD | tar -x
 	$(RM) "$@/README.matlab.md" \
 	      "$@/HOWTO-release.md" \
-	      "$@/README.bundled.md" \
 	      "$@/TODO.md" \
 	      "$@/.gitignore" \
 	      "$@/.travis.yml" \
