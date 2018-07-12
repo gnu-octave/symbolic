@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,9 +43,18 @@
 %% Example:
 %% @example
 %% @group
-%% syms s
+%% syms s t
 %% F = 1/s^2;
-%% ilaplace(F)
+%% ilaplace(F, s, t)
+%%   @result{} (sym) t⋅Heaviside(t)
+%% @end group
+%% @end example
+%%
+%% To avoid @code{Heaviside}, try:
+%% @example
+%% @group
+%% syms t positive
+%% ilaplace(1/s^2, s, t)
 %%   @result{} (sym) t
 %% @end group
 %% @end example
@@ -55,7 +64,8 @@
 %% be overriden by specifying @var{t}.  For example:
 %% @example
 %% @group
-%% syms s t x
+%% syms s
+%% syms t x positive
 %% ilaplace(1/s^2)
 %%   @result{} (sym) t
 %% ilaplace(1/t^2)
@@ -73,82 +83,53 @@
 
 function f = ilaplace(varargin)
 
+  if (nargin > 3)
+    print_usage ();
+  end
+
   % FIXME: it only works for scalar functions
 
-  % If the Laplace variable in the frequency domain is equal to "t",
-  % "x" will be the physical variable (analogously to SMT)
-  if (nargin == 1)
-    F = sym(varargin{1});
-    s = symvar(F, 1);  % note SMT does something different, prefers s
-    if (isempty(s))
-      s = sym('s');
-    end
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=sp.Symbol("t")'
-            'if t==s:'
-            '    t=sp.Symbol("x", positive=True)'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Laplace transform for each term'
-            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
-            '    if r!=None and sp.diff(term,s)!=0:'
-            '        modulus=r[a_]'
-            '        phase=r[b_]/s'
-            '        # if a is constant and b/s is constant'
-            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
-            '            f = f + modulus*sp.DiracDelta(t+phase)'
-            '        else:'
-            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            '    elif sp.diff(term,s)==0:'
-            '        f = f + term*sp.DiracDelta(t)'
-            '    else:'
-            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
+  F = sym(varargin{1});
 
-    f = python_cmd(cmd,F,s);
-
-  elseif (nargin == 2)
-    F = sym(varargin{1});
-    t = sym(varargin{2});
-    s = symvar(F, 1);  % note SMT does something different, prefers s
-    if (isempty(s))
-      s = sym('s');
-    end
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Laplace transform for each term'
-            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
-            '    if r!=None and sp.diff(term,s)!=0:'
-            '        modulus=r[a_]'
-            '        phase=r[b_]/s'
-            '        # if a is constant and b/s is constant'
-            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
-            '            f = f + modulus*sp.DiracDelta(t+phase)'
-            '        else:'
-            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            '    elif sp.diff(term,s)==0:'
-            '        f = f + term*sp.DiracDelta(t)'
-            '    else:'
-            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
-
-    f = python_cmd(cmd,F,s,t);
-
-  elseif (nargin == 3)
-    F = sym(varargin{1});
+  if (nargin == 3)
     s = sym(varargin{2});
+  else
+    %% frequency domain variable not specifed
+    % if exactly one symbol has char(s) == 's'...
+    symbols = findsymbols (F);
+    charsyms = cell (size (symbols));
+    for i=1:numel(symbols)
+      charsyms{i} = char (symbols{i});
+    end
+    I = find (strcmp (charsyms, 's'));
+    assert (numel (I) <= 1, 'ilaplace: there is more than one "s" symbol: check symvar(F) and sympy(F)')
+    if (~ isempty (I))
+      s = symbols{I};  % ... we want that one
+    else
+      s = symvar (F, 1);
+      if (isempty (s))
+        s = sym('s');
+      end
+    end
+  end
+
+  if (nargin == 1)
+    t = sym('t', 'positive');  % TODO: potentially confusing?
+    % If the Laplace variable in the frequency domain is equal to "t",
+    % "x" will be the physical variable (analogously to SMT)
+    if (strcmp (char (s), char (t)))
+      t = sym('x', 'positive');
+    end
+  elseif (nargin == 2)
+    t = sym(varargin{2});
+  elseif (nargin == 3)
     t = sym(varargin{3});
-    cmd = { 'F=_ins[0]; s=_ins[1]; t=_ins[2]'
+  end
+
+  cmd = { 'F, s, t = _ins'
+          'f = inverse_laplace_transform(F, s, t)'
+          'if not f.has(InverseLaplaceTransform):'
+          '    return f,'
             'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
             'Fr=F.rewrite(sp.exp)'
             'if type(Fr)==sp.Add:'
@@ -170,31 +151,37 @@ function f = ilaplace(varargin)
             '        f = f + term*sp.DiracDelta(t)'
             '    else:'
             '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,'};
+            'return f,' };
 
-    f = python_cmd(cmd,F,s,t);
-
-  else
-    print_usage ();
-
-  end
+  f = python_cmd(cmd, F, s, t);
 
 end
 
 
-%!test
-%! % basic
-%! syms s t
-%! assert(logical( ilaplace(1/s^2) == t ))
-%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
+%!error <Invalid> ilaplace (sym(1), 2, 3, 4)
 
 %!test
-%! % SMT compact
-%! syms r s t u
-%! assert(logical( ilaplace(1/r^2,u) == u ))
-%! assert(logical( ilaplace(1/r^2,r,u) == u ))
-%! assert(logical( ilaplace(s/(s^2+9)) == cos(3*t) ))
-%! assert(logical( ilaplace(6/s^4) == t^3 ))
+%! % basic SMT compact: no heaviside
+%! syms s
+%! syms t positive
+%! assert (isequal (ilaplace(1/s^2), t))
+%! assert (isequal (ilaplace(s/(s^2+9)), cos(3*t)))
+%! assert (isequal (ilaplace(6/s^4), t^3))
+
+%!test
+%! % more SMT compact
+%! syms r
+%! syms u positive
+%! assert (isequal (ilaplace(1/r^2, u), u))
+%! assert (isequal (ilaplace(1/r^2, r, u), u))
+
+%!test
+%! % if t specified and not positive, we expect heaviside
+%! clear s t
+%! syms s t
+%! assert (isequal (ilaplace(1/s^2, s, t), t*heaviside(t)))
+%! assert (isequal (ilaplace(s/(s^2+9), t), cos(3*t)*heaviside(t)))
+%! assert (isequal (ilaplace(6/s^4, t), t^3*heaviside(t)))
 
 %!test
 %! % Heaviside test
@@ -203,8 +190,30 @@ end
 %! assert(logical( ilaplace(exp(-5*s)/s^2,t) == (t-5)*heaviside(t-5) ))
 
 %!test
-%! % Delta dirac tests
+%! % Delta dirac test
+%! syms s
+%! t = sym('t');
+%! assert (isequal (ilaplace (sym('2'), t), 2*dirac(t)))
+
+%!test
+%! % Delta dirac test 2
 %! syms s c
-%! t=sym('t','positive');
-%! assert(logical( ilaplace(sym('2'),t) == 2*dirac(t) ))
-%! assert(logical( ilaplace(5*exp(-3*s)+2*exp(c*s)-2*exp(-2*s)/s,t) == 5*dirac(t-3)+2*dirac(c+t)-2*heaviside(t-2)))
+%! t = sym('t', 'positive');
+%! assert (isequal (ilaplace (5*exp(-3*s) + 2*exp(c*s) - 2*exp(-2*s)/s,t), ...
+%!                  5*dirac(t-3) + 2*dirac(c+t) - 2*heaviside(t-2)))
+
+%!error <more than one> ilaplace (sym('s', 'positive')*sym('s'))
+
+%!test
+%! % SMT compact, prefers s over symvar
+%! syms s x
+%! syms t positive
+%! assert (isequal (ilaplace(x/s^4), x*t^3/6))
+%! t = sym('t');
+%! assert (isequal (ilaplace(x/s^4, t), x*t^3/6*heaviside(t)))
+
+%!test
+%! % pick s even it has assumptions
+%! syms s real
+%! syms x t
+%! assert (isequal (ilaplace (x/s^2, t), x*t*heaviside(t)))
