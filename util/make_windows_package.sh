@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-2017 Colin B. Macdonald
+# Copyright 2016-2018 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -17,10 +17,10 @@ SYMPY=sympy-1.2
 MPMATH=mpmath-1.0.0
 
 # for day-to-day testing
-VER=2.6.1-dev
+VER=2.7.0
 BRANCH=master
 # for release
-#VER=2.6.1
+#VER=2.7.0
 #TAG=v${VER}
 
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -56,7 +56,6 @@
 %%   @result{} (sym) [0  1/2  10]  (1×3 matrix)
 %% @end group
 %% @end example
-%% (As of June 2016, this requires a development release of SymPy).
 %%
 %% @seealso{heaviside, @@sym/dirac}
 %% @end defmethod
