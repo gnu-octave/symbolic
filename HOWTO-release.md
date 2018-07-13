@@ -19,6 +19,8 @@ Checklist
 
   * Update NEWS file (date, version number, reformat).
 
+  * Update INDEX file for any new functions.
+
   * Check minimum sympy version is consistent: its in
     DESCRIPTION, assert_have_python_and_sympy.m
 
