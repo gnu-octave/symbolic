@@ -90,14 +90,12 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! y = sym('y');
 %! f = zeta (y);
 %! h = function_handle (f);
 %! A = zeta (2);
 %! B = h (2);
 %! assert (A, B, -eps)
-%! end
 
 %!xtest
 %! % https://github.com/sympy/sympy/issues/11802
