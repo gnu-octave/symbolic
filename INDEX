@@ -27,6 +27,8 @@ Functions
  python_cmd
 Double-precision numerical functions
  @double/bernoulli
+ @double/chebyshevT
+ @double/chebyshevU
  @double/coshint
  @double/cosint
  @double/dilog
@@ -35,6 +37,7 @@ Double-precision numerical functions
  @double/fresnels
  @double/harmonic
  @double/logint
+ @double/pochhammer
  @double/polylog
  @double/sinhint
  @double/sinint
