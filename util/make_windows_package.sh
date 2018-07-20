@@ -17,10 +17,10 @@ SYMPY=sympy-1.2
 MPMATH=mpmath-1.0.0
 
 # for day-to-day testing
-VER=2.7.0
+VER=2.7.1-dev
 BRANCH=master
 # for release
-#VER=2.7.0
+#VER=2.7.1
 #TAG=v${VER}
 
 
