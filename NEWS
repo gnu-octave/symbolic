@@ -1,6 +1,10 @@
 octsympy 2.7.1-dev
 ==================
 
+  * New symbolic commands:
+
+          numdem
+
   * Various bug fixes and documentation updates.
 
 
