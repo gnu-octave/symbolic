@@ -29,16 +29,21 @@
 %% @example
 %% @group
 %% syms g(s) t
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.2")'))
 %% f(t) = rewrite(ilaplace(g), 'Integral')
 %%   @result{} f(t) = (symfun)
 %%           c + ∞⋅ⅈ
 %%              ⌠
 %%              ⎮          s⋅t
-%%              ⎮    g(s)⋅ℯ    ds
+%%        -ⅈ⋅   ⎮    g(s)⋅ℯ    ds
 %%              ⌡
 %%           c - ∞⋅ⅈ
+%%        ────────────────────────
+%%                  2⋅π
 %% @end group
 %% @end example
+%% (This expression is usually written simply as the integral divided by
+%% @code{2⋅π⋅ⅈ}.)
 %%
 %% Example:
 %% @example
