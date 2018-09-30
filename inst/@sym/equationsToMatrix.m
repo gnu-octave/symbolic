@@ -53,7 +53,7 @@
 %% @group
 %% syms a
 %% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a)
-%%   @print{} ??? Cannot convert to matrix; system may not be linear.
+%%   @print{} ??? ... nonlinear...
 %%
 %% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a, x, y)
 %%   @result{} A = (sym 2×2 matrix)
@@ -123,6 +123,7 @@ function [A, b] = equationsToMatrix(varargin)
          '        L = L[0]'
          '    vars = list(vars)'
          '    A, B = linear_eq_to_matrix(L, vars)'
+         '    B = B.doit()'  # temp, https://github.com/sympy/sympy/issues/15312
          '    return True, A, B'
          '#'
          '# sympy <= 1.3: we do the work ourselves'
