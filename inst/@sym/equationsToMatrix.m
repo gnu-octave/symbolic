@@ -1,5 +1,5 @@
-%% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016 Colin B. Macdonald
+% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -99,11 +99,10 @@
 
 function [A, b] = equationsToMatrix(varargin)
 
-  s = symvar ([varargin{:}]);
+  % when Symbols are specified, this won't be used
+  s = findsymbols (varargin);
 
   cmd = {'L, symvars = _ins'
-         'if isinstance(symvars, Symbol):'
-         '    symvars = [symvars]'
          'if not isinstance(L[-1], MatrixBase):'
          '    if isinstance(L[-1], Symbol):'  % Symbol given, fill vars...
          '        vars = list()'
@@ -196,6 +195,15 @@ end
 %!test
 %! syms x y
 %! [A, B] = equationsToMatrix (-6*x + 4*y == 5, 4*x - 4*y - 5, x, y);
+%! a = sym ([-6 4; 4 -4]);
+%! b = sym ([5; 5]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
+
+%!test
+%! % vertical list of equations
+%! syms x y
+%! [A, B] = equationsToMatrix ([-6*x + 4*y == 5; 4*x - 4*y - 5], [x y]);
 %! a = sym ([-6 4; 4 -4]);
 %! b = sym ([5; 5]);
 %! assert (isequal (A, a))
