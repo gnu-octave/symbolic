@@ -133,6 +133,11 @@ function f = ilaplace(varargin)
 
   cmd = { 'F, s, t = _ins'
           'f = inverse_laplace_transform(F, s, t)'
+          'if Version(spver) > Version("1.2"):'
+          '    return f'
+          '#'
+          '# older sympy hacks'
+          '#'
           'if not f.has(InverseLaplaceTransform):'
           '    return f,'
             'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
