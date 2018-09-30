@@ -118,6 +118,15 @@ function [A, b] = equationsToMatrix(varargin)
          '        vars = symvars'
          '    else:'
          '        vars = L.pop(-1)'
+         'if Version(spver) > Version("1.3"):'
+         '    if len(L) == 1:'  % might be matrix of eqns, don't want [Matrix]
+         '        L = L[0]'
+         '    vars = list(vars)'
+         '    A, B = linear_eq_to_matrix(L, vars)'
+         '    return True, A, B'
+         '#'
+         '# sympy <= 1.3: we do the work ourselves'
+         '#'
          'vars = list(collections.OrderedDict.fromkeys(vars))' %% Never repeat elements
          'if len(L) == 1 and isinstance(L[0], MatrixBase):'
          '    L = [a for a in L[0]]'
@@ -147,7 +156,7 @@ function [A, b] = equationsToMatrix(varargin)
 
 
   if ~s
-    error('Cannot convert to matrix; system may not be linear.');
+    error('Cannot convert to matrix; system may be nonlinear.');
   end
 
 end
@@ -217,7 +226,7 @@ end
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
-%!error <system may not be linear>
+%!error <nonlinear>
 %! syms x y
 %! [A, B] = equationsToMatrix (x^2 + y^2 == 1, x - y + 1, x, y);
 
@@ -238,3 +247,10 @@ end
 %! b = sym (2);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
+
+%!error <unique>
+%! if (python_cmd ('return Version(spver) <= Version("1.3")'))
+%!   error ('unique')
+%! end
+%! syms x
+%! equationsToMatrix (3*x == 2, [x x])
