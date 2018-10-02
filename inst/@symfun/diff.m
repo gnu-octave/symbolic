@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,11 +62,11 @@
 %% syms f(x, y)
 %% diff(f, x, y, y)(3, 2)     % a third partial eval at (3, 2)
 %%   @result{} ans = (sym)
-%%       ⎛⎛   3           ⎞│   ⎞│
-%%       ⎜⎜  ∂            ⎟│   ⎟│
-%%       ⎜⎜──────(f(x, y))⎟│   ⎟│
-%%       ⎜⎜  2            ⎟│   ⎟│
-%%       ⎝⎝∂y  ∂x         ⎠│x=3⎠│y=2
+%%       ⎛   3           ⎞│
+%%       ⎜  ∂            ⎟│
+%%       ⎜──────(f(x, y))⎟│
+%%       ⎜  2            ⎟│
+%%       ⎝∂y  ∂x         ⎠│x=3, y=2
 %% @end group
 %% @end example
 %%
