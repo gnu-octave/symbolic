@@ -73,7 +73,7 @@ end
 %! syms x
 %! f(x) = x^2;
 %! g = x^2;
-%! if (exist('OCTAVE_VERSION', 'builtin') &&
+%! if (exist('OCTAVE_VERSION', 'builtin') && ...
 %!     compare_versions (OCTAVE_VERSION (), '4.4.2', '<'))
 %!   s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
 %! else

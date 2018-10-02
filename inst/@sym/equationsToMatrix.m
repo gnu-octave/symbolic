@@ -123,7 +123,7 @@ function [A, b] = equationsToMatrix(varargin)
          '        L = L[0]'
          '    vars = list(vars)'
          '    A, B = linear_eq_to_matrix(L, vars)'
-         '    B = B.doit()'  # temp, https://github.com/sympy/sympy/issues/15312
+         '    B = B.doit()'  % temp, https://github.com/sympy/sympy/issues/15312
          '    return True, A, B'
          '#'
          '# sympy <= 1.3: we do the work ourselves'
