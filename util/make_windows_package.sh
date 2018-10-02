@@ -59,7 +59,6 @@ cp -pR ${WINDIRTMP}/NEWS ${WINDIR}/
 cp -pR ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
 cp -pR ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
 cp -pR ${WINDIRTMP}/COPYING ${WINDIR}/
-cp -pR ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -pR ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
 # bundle pyexe
