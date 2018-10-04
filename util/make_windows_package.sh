@@ -13,14 +13,14 @@ PYEXE=pyexe/py27_v14.exe
 PYEXEREADME=pyexe/README.pyexe.txt
 
 # download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.2
+SYMPY=sympy-1.3
 MPMATH=mpmath-1.0.0
 
 # for day-to-day testing
-VER=2.7.1-dev
+VER=2.7.2-dev
 BRANCH=master
 # for release
-#VER=2.7.1
+#VER=2.7.2
 #TAG=v${VER}
 
 
@@ -59,7 +59,6 @@ cp -pR ${WINDIRTMP}/NEWS ${WINDIR}/
 cp -pR ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
 cp -pR ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
 cp -pR ${WINDIRTMP}/COPYING ${WINDIR}/
-cp -pR ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -pR ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
 # bundle pyexe
