@@ -1,5 +1,5 @@
-OctSymPy
-========
+Symbolic Package for GNU Octave
+===============================
 
 [![Build Status](https://travis-ci.org/cbm755/octsympy.svg?branch=master)](https://travis-ci.org/cbm755/octsympy)
 
