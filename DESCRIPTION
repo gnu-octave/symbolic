@@ -10,7 +10,7 @@ Description: Adds symbolic calculation features to GNU Octave.  These
  precision arithmetic and other features.  Compatibility with other symbolic
  toolboxes is intended.
 Categories: symbolic
-Url: http://github.com/cbm755/octsympy
+Url: https://octave.sourceforge.io/symbolic
 Depends: octave (>= 4.0)
 SystemRequirements: python, sympy (>= 1.0)
 License: GPL-3.0+

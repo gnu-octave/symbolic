@@ -5,7 +5,7 @@ OctSymPy
 
 An implementation of a symbolic toolbox using SymPy.
 
-[https://github.com/cbm755/octsympy]
+[https://octave.sourceforge.io/symbolic]
 
 
 Goals
