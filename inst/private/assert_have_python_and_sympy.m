@@ -84,6 +84,19 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('Good, Python ran correctly.')
     disp ('')
     disp ('')
+    disp ('Python version')
+    disp ('--------------')
+    disp ('')
+    disp ('Let''s check what version of Python we are calling...')
+    disp ('')
+    fprintf ('Attempting to run %s -c "import sys; print(sys.version)"\n\n', pyexec);
+    [status, output] = system([pyexec ' -c "import sys; print(sys.version)"']);
+    status
+    output
+  end
+
+  if (verbose)
+    disp ('')
     disp ('SymPy Python Library')
     disp ('--------------------')
     disp ('')
