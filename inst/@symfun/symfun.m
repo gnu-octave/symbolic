@@ -86,11 +86,12 @@
 %% syms f(t) g(t)
 %% F(t) = f(g(t))
 %%   @result{} F(t) = (symfun) f(g(t))
+%% @c doctest: +SKIP_IF(python_cmd('return Version(spver) <= Version("1.3")'))
 %% diff(F, t)
 %%   @result{} ans(t) = (symfun)
-%%       d        ⎛ d        ⎞│
-%%       ──(g(t))⋅⎜───(f(ξ₁))⎟│
-%%       dt       ⎝dξ₁       ⎠│ξ₁=g(t)
+%%         d            d
+%%       ─────(f(g(t)))⋅──(g(t))
+%%       dg(t)          dt
 %% @end group
 %% @end example
 %%

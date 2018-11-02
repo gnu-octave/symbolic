@@ -1,11 +1,11 @@
-OctSymPy
-========
+Symbolic Package for GNU Octave
+===============================
 
 [![Build Status](https://travis-ci.org/cbm755/octsympy.svg?branch=master)](https://travis-ci.org/cbm755/octsympy)
 
 An implementation of a symbolic toolbox using SymPy.
 
-[https://github.com/cbm755/octsympy]
+[https://octave.sourceforge.io/symbolic]
 
 
 Goals

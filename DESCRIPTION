@@ -1,17 +1,16 @@
 Name: symbolic
-Version: 2.7.0
-Date: 2018-07-12
+Version: 2.7.1
+Date: 2018-10-02
 Author: Colin B. Macdonald <cbm@m.fsf.org>
 Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
 Title: Octave Symbolic Package using SymPy
-Description: The Octave-Forge Symbolic package adds symbolic calculation
- features to GNU Octave.  These include common Computer Algebra System tools
- such as algebraic operations, calculus, equation solving, Fourier and Laplace
- transforms, variable precision arithmetic and other features.  Internally,
- the package uses [SymPy](www.sympy.org), but no knowledge of Python is
- required.  Compatibility with other symbolic toolboxes is intended.
+Description: Adds symbolic calculation features to GNU Octave.  These
+ include common Computer Algebra System tools such as algebraic operations,
+ calculus, equation solving, Fourier and Laplace transforms, variable
+ precision arithmetic and other features.  Compatibility with other symbolic
+ toolboxes is intended.
 Categories: symbolic
-Url: http://github.com/cbm755/octsympy
+Url: https://octave.sourceforge.io/symbolic
 Depends: octave (>= 4.0)
 SystemRequirements: python, sympy (>= 1.1.1)
 License: GPL-3.0+

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,7 +62,7 @@
 
 function z = mpower(x, y)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')

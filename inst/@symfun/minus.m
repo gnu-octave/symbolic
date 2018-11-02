@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -69,11 +69,16 @@ end
 %! assert( isa(f - x, 'symfun'))
 
 %!test
-%! % Octave bug: https://savannah.gnu.org/bugs/?42735
+%! % Octave bug #42735 fixed in 4.4.2
 %! syms x
 %! f(x) = x^2;
 %! g = x^2;
-%! s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
+%! if (exist('OCTAVE_VERSION', 'builtin') && ...
+%!     compare_versions (OCTAVE_VERSION (), '4.4.2', '<'))
+%!   s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
+%! else
+%!   s = warning();
+%! end
 %! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
 %! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
 %! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))

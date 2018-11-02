@@ -91,8 +91,21 @@ end
 %! s = svd(A);
 %! s2 = subs(s, x, 2);
 %! assert (isequal (s2, [sym(5); 3]))
-%! s2 = subs(s, x, -5);
-%! assert (isequal (s2, [sym(9); 4]))
+
+%!test
+%! % matrix with symbols
+%! syms x positive
+%! A = [x+1 0; sym(0) 2*x+1];
+%! s = svd(A);
+%! s2 = subs(s, x, 2);
+%! assert (isequal (s2, [sym(5); 3]))
+
+%!test
+%! % matrix with symbols, nonneg sing values
+%! syms x real
+%! A = [x 0; 0 sym(-5)];
+%! s = svd(A);
+%! assert (isequal (s, [abs(x); 5]))
 
 %%!test
 %%! % no sing vecs

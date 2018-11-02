@@ -1,4 +1,24 @@
-octsympy 2.7.0 (2017-07-12)
+octsympy 2.7.2-dev
+==================
+
+  * Bug fixes and documentation updates.
+
+
+
+octsympy 2.7.1 (2018-10-02)
+===========================
+
+  * New symbolic commands:
+
+          numdem
+
+  * Fixes for SymPy 1.3.
+
+  * Various bug fixes and documentation updates.
+
+
+
+octsympy 2.7.0 (2018-07-12)
 ===========================
 
   * New symbolic commands:
