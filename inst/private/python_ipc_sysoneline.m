@@ -174,6 +174,12 @@ function s = myesc(s)
     % dbl-quote is rather special here
     % /" -> ///////" -> ///" -> /" -> "
     s{i} = strrep(s{i}, '"', '\\\"');
+    %GC Escape sequence for WIN (Octave & Matlab)
+%    s{i} = strrep(s{i}, '>', '\x3e');
+%    s{i} = strrep(s{i}, '<', '\x3c');
+    s{i} = strrep(s{i}, '>', '^>');
+    s{i} = strrep(s{i}, '<', '^<');
+
 
   end
 end
