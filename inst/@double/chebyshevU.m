@@ -156,4 +156,4 @@ end
 %! x = 2;
 %! A = chebyshevU (s, x);
 %! B = double (chebyshevU (t, y));
-%! assert (A, B, -eps);
+%! assert (A, B, -2*eps);
