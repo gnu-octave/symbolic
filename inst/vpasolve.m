@@ -51,7 +51,6 @@
 %% @end group
 %%
 %% @group
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% vpasolve(eqns, [x; y], [1; 1])
 %%   @result{} (sym 2×1 matrix)
 %%
@@ -65,7 +64,6 @@
 %% guess:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% vpasolve(x^2 + 2 == 0, x, 1i)
 %%   @result{} (sym) 1.4142135623730950488016887242097⋅ⅈ
 %% @end group
