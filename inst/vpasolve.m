@@ -107,9 +107,10 @@ function r = vpasolve(e, x, x0)
       '(e, x, x0, n) = _ins'
       'import mpmath'
       'mpmath.mp.dps = n'
-      'e = list(e) if isinstance(e, Matrix) else e'
-      'x = list(x) if isinstance(x, Matrix) else x'
-      'x0 = list(x0) if isinstance(x0, Matrix) else x0'
+      'if Version(spver) < Version("1.4"):'
+      '    e = list(e) if isinstance(e, Matrix) else e'
+      '    x = list(x) if isinstance(x, Matrix) else x'
+      '    x0 = list(x0) if isinstance(x0, Matrix) else x0'
       'r = nsolve(e, x, x0)'
       'return r' };
   r = python_cmd (cmd, sym(e), x, x0, n);
