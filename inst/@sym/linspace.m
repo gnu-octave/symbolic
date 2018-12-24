@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2016 Colin B. Macdonald
+%% Copyright (C) 2015-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,15 +79,6 @@ end
 %! a = linspace(sym(3), 5, 5);
 %! b = [sym(6) 7 8 9 10]/2;
 %! assert (isequal (a, b))
-
-%!test
-%! % performance: want roughly O(1) not O(n)
-%! A = linspace(sym(0), sym(10), 3);  % do one first, avoid caching
-%! tic; A = linspace(sym(0), sym(10), 3);   t1 = toc();
-%! tic; A = linspace(sym(0), sym(10), 100); t2 = toc();
-%! if (t2 >= 10*t1)
-%!   assert (false);
-%! end
 
 %!test
 %! % non-integers
