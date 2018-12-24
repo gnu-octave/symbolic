@@ -94,7 +94,7 @@ end
 %! % maple, matrix inputs
 %! A = [5.61467232547723663908 20.6144884613920190965];
 %! B = pochhammer ([0.9 0.8], [3.1 4.2]);
-%! assert (A, B, -eps);
+%! assert (A, B, -3*eps);
 
 %!xtest
 %! % broken upstream, https://github.com/sympy/sympy/issues/14822
