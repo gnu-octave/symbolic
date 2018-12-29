@@ -71,4 +71,3 @@ end
 %! h = function_handle (f);
 %! B = h (d);
 %! assert (A, B, -eps)
-%! end
