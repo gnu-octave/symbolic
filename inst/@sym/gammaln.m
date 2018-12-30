@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,11 +76,9 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! f = gammaln (x);
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = gammaln (1.1);
 %! assert (A, B)
-%! end

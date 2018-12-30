@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -90,7 +90,6 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% A = psi (x) + eulergamma ()
 %%   @result{} A = (sym) polygamma(0, x) + γ
 %% rewrite (A, 'harmonic')

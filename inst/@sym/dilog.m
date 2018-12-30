@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -45,20 +45,15 @@ end
 %!assert (isequal (dilog (sym(1)), sym(0)))
 %!assert (isequal (dilog (sym(0)), sym(pi)^2/6))
 
-%!test
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
-%! assert (isequal (dilog (sym(2)), -sym(pi)^2/12))
-%! end
+%!assert (isequal (dilog (sym(2)), -sym(pi)^2/12))
 
 %!assert (double(dilog(sym(-1))), pi^2/4 - pi*1i*log(2), eps)
 
 %!test
 %! % round-trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! f = dilog (x);
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = dilog (1.1);
 %! assert (A, B, -eps)
-%! end

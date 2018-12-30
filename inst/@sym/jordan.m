@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Alex Vong
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -41,7 +41,6 @@
 %%
 %% We can also compute the generalized eigenvectors:
 %% @example
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% @group
 %% [V, J] = jordan (A)
 %%   @result{} V = (sym 4×4 matrix)
@@ -83,7 +82,6 @@
 %% lambda = J(2, 2)
 %%   @result{} lambda = (sym) 2
 %% B = A - lambda*eye (4);
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% v2 = V(:, 2)
 %%   @result{} v2 = (sym 4×1 matrix)
 %%       ⎡1⎤
@@ -93,7 +91,6 @@
 %%       ⎢0⎥
 %%       ⎢ ⎥
 %%       ⎣0⎦
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) < Version("1.1")'))
 %% v1 = B * v2
 %%   @result{} v1 = (sym 4×1 matrix)
 %%       ⎡4 ⎤
@@ -125,9 +122,6 @@ function [V, J] = jordan (A)
   cmd = {'(A, calctrans) = _ins'
          'if not A.is_Matrix:'
          '    A = sp.Matrix([A])'
-         'if Version(spver) < Version("1.1"):'
-         '    (V, J) = A.jordan_form()'
-         '    return (V, J) if calctrans else J'
          'return A.jordan_form(calctrans)'};
 
   if (nargout <= 1)
