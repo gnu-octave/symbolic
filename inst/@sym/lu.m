@@ -127,3 +127,30 @@ end
 %! assert ( max(max(double(U)-Ud)) <= 10*eps)
 %! assert ( isequal (P, Pd))
 
+%!test
+%! % rectangular
+%! A = sym([1 2; 3 4; 5 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular
+%! A = sym([1 2 3; 4 5 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular, repeated row
+%! A = sym([1 2 3; 2 4 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular, needs permutation
+%! A = sym([0 0 0; 1 2 3]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+%! assert (~isequal (tril (L), L))
+%! [L, U, P] = lu (A);
+%! assert (isequal (L*U, P*A))
+%! assert (isequal (tril (L), L))
