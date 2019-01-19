@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -70,9 +70,7 @@ function [Q, R] = qr(A, ord)
     error ('OctSymPy:NotImplemented', 'permutation output form not implemented')
   end
 
-  %% TODO: sympy QR routine could be improved, as of 2017:
-  % * it assumes full rank
-  % * it doesn't work with short fat matrices
+  %% TODO: sympy QR routine could be improved, as of 2019:
   % * does not give permutation matrix
   % * probably numerically unstable for Float matrices
 
@@ -118,9 +116,35 @@ end
 %! assert (size (R), [2 2])
 %! assert (isequal (Q*R, A))
 
-%!error <Python exception>
-%! % non square: short fat: not yet implemented upstream
-%! [Q, R] = qr (sym([1 2]), 0);
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! % non square: short fat
+%! A = sym([1 2 3; 4 5 6]);
+%! [Q, R] = qr (A);
+%! assert (isequal (Q*R, A))
+%! end
+
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! % non square: short fat, rank deficient
+%! A = sym([1 2 3; 2 4 6]);
+%! [Q, R] = qr (A);
+%! assert (isequal (Q*R, A))
+%! A = sym([1 2 3; 2 4 6; 0 0 0]);
+%! [Q, R] = qr (A);
+%! assert (isequal (Q*R, A))
+%! end
+
+%!test
+%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! % rank deficient
+%! A = sym([1 2 3; 2 4 6; 0 0 0]);
+%! [Q, R] = qr (A);
+%! assert (isequal (Q*R, A))
+%! A = sym([1 2 3; 2 5 6; 0 0 0]);
+%! [Q, R] = qr (A);
+%! assert (isequal (Q*R, A))
+%! end
 
 %!error <not implemented>
 %! [Q, R, P] = qr (sym(1))

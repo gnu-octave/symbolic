@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -113,7 +113,7 @@ end
 %! A = [1 2; 3 4];
 %! B = sym(A);
 %! [L, U, P] = lu(B);
-%! assert (isequal (L*U, P*A))
+%! assert (isequal (L*U, P*B))
 %! assert (isequal (U(2,1), sym(0)))
 %! % needs pivot
 %! A = [0 2; 3 4];
@@ -127,3 +127,30 @@ end
 %! assert ( max(max(double(U)-Ud)) <= 10*eps)
 %! assert ( isequal (P, Pd))
 
+%!test
+%! % rectangular
+%! A = sym([1 2; 3 4; 5 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular
+%! A = sym([1 2 3; 4 5 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular, repeated row
+%! A = sym([1 2 3; 2 4 6]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+
+%!test
+%! % rectangular, needs permutation
+%! A = sym([0 0 0; 1 2 3]);
+%! [L, U] = lu (A);
+%! assert (isequal (L*U, A))
+%! assert (~isequal (tril (L), L))
+%! [L, U, P] = lu (A);
+%! assert (isequal (L*U, P*A))
+%! assert (isequal (tril (L), L))
