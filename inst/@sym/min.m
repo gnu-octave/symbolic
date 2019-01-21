@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -56,21 +56,7 @@ function [z, I] = min(A, B, dim)
       [z, I] = min(A, [], 1);
     end
   elseif (nargin == 2) && (nargout <= 1)
-    A = sym(A);
-    B = sym(B);
-    cmd = { '(A, B) = _ins'
-            'if not A.is_Matrix and not B.is_Matrix:'
-            '    return min(A, B),'
-            'if not A.is_Matrix:'
-            '    A = sp.Matrix(B.rows, B.cols, [A]*(B.rows*B.cols))'
-            'elif not B.is_Matrix:'
-            '    B = sp.Matrix(A.rows, A.cols, [B]*(A.rows*A.cols))'
-            'M = A.copy()'
-            'for i in range(0, A.rows):'
-            '    for j in range(0, A.cols):'
-            '        M[i,j] = min(A[i,j], B[i,j])'
-            'return M,' };
-    z = python_cmd (cmd, A, B);
+    z = elementwise_op('min', sym(A), sym(B));
 
   elseif (nargin == 3)
     assert (isempty (B))
