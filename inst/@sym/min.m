@@ -46,6 +46,38 @@
 
 function [z, I] = min(A, B, dim)
 
+  if (nargout <= 1)
+    if (nargin == 1)
+      if (isvector(A))
+        z = python_cmd ('return Min(*_ins[0])', A);
+      else
+        z = min(A, [], 1);
+      end
+    elseif (nargin == 2)
+      z = elementwise_op('Min', sym(A), sym(B));
+    elseif (nargin == 3)
+      assert (isempty (B))
+      assert (logical(dim == 1) || logical(dim == 2))
+
+      cmd = { '(A, dim) = _ins'
+              'if not A.is_Matrix:'
+              '    A = sp.Matrix([A])'
+              'if dim == 0:'
+              '    if A.rows == 0:'
+              '        return A'
+              '    return Matrix([[Min(*A.col(i)) for i in range(0, A.cols)]])'
+              'elif dim == 1:'
+              '    if A.cols == 0:'
+              '        return A'
+              '    return Matrix([Min(*A.row(i)) for i in range(0, A.rows)])' };
+      z = python_cmd (cmd, A, dim - 1);
+    else
+      print_usage ();
+    end
+    return
+  end
+
+  % We have second output: need the index of the minimum, can't use "Min"
   if (nargin == 1)
     if (isvector(A))
       cmd = { 'A = _ins[0]'
@@ -55,9 +87,6 @@ function [z, I] = min(A, B, dim)
     else
       [z, I] = min(A, [], 1);
     end
-  elseif (nargin == 2) && (nargout <= 1)
-    z = elementwise_op('min', sym(A), sym(B));
-
   elseif (nargin == 3)
     assert (isempty (B))
     assert (logical(dim == 1) || logical(dim == 2))
@@ -249,6 +278,19 @@ end
 %! assert (isempty (I))
 
 %!test
+%! % empty without index output
+%! A = sym(zeros(3, 0));
+%! assert (isempty (min (A, [], 1)))
+%! assert (isempty (max (A, [], 1)))
+%! assert (isempty (min (A, [], 2)))
+%! assert (isempty (max (A, [], 2)))
+%! A = sym(zeros(0, 3));
+%! assert (isempty (min (A, [], 1)))
+%! assert (isempty (max (A, [], 1)))
+%! assert (isempty (min (A, [], 2)))
+%! assert (isempty (max (A, [], 2)))
+
+%!test
 %! % binary op form, one a scalar
 %! A = sym([3 1 9]);
 %! m = min(A, sym(2));
@@ -266,3 +308,29 @@ end
 %! M = max(sym(2), sym(2));
 %! assert (isequal (m, sym(1)))
 %! assert (isequal (M, sym(2)))
+
+%!test
+%! syms x y
+%! assert (isequal (children (min (x, y)), [x y]))
+
+%!test
+%! syms x y z
+%! A = [x 1; y z];
+%! assert (isequal (min (A, [], 1), [min(x, y)  min(1, z)]))
+%! assert (isequal (max (A, [], 1), [max(x, y)  max(1, z)]))
+%! assert (isequal (min (A, [], 2), [min(x, 1); min(y, z)]))
+%! assert (isequal (max (A, [], 2), [max(x, 1); max(y, z)]))
+
+%!test
+%! syms x y positive
+%! a = min([x 2 y -6]);
+%! assert (isequal (a, -6))
+%! a = max([x y -6]);
+%! assert (isequal (a, max(x, y)))
+
+%!test
+%! syms x negative
+%! a = min([x 6 10]);
+%! assert (isequal (a, x))
+%! a = max([x -2 6]);
+%! assert (isequal (a, 6))
