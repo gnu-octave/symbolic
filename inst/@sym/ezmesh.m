@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,23 +18,23 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym ezsurf (@var{z})
-%% @defmethodx @@sym ezsurf (@var{f1}, @var{f2}, @var{f3})
-%% @defmethodx @@sym ezsurf (@dots{}, @var{dom})
-%% @defmethodx @@sym ezsurf (@dots{}, @var{N})
-%% Simple 3D surface plots of symbolic expressions.
+%% @defmethod  @@sym ezmesh (@var{z})
+%% @defmethodx @@sym ezmesh (@var{f1}, @var{f2}, @var{f3})
+%% @defmethodx @@sym ezmesh (@dots{}, @var{dom})
+%% @defmethodx @@sym ezmesh (@dots{}, @var{N})
+%% Simple 3D wireframe mesh plots of symbolic expressions.
 %%
-%% Example 3D surface plot:
+%% Example 3D surface mesh plot:
 %% @example
 %% @group
 %% syms x y
 %% z = sin(2*x)*sin(y)
 %%   @result{} z = (sym) sin(2⋅x)⋅sin(y)
-%% ezsurf(z)                                    % doctest: +SKIP
+%% ezmesh(z)                                    % doctest: +SKIP
 %% @end group
 %% @end example
 %%
-%% Example parametric surface plot of a Möbius strip:
+%% Example parametric mesh of a Möbius strip:
 %% @example
 %% @group
 %% syms u v
@@ -46,20 +46,20 @@
 %% y = (1+v*cos(u/2))*sin(u);
 %% z = v*sin(u/2);
 %%
-%% ezsurf(x, y, z, [0 2*pi -0.5 0.5], 32)       % doctest: +SKIP
+%% ezmesh(x, y, z, [0 2*pi -0.5 0.5], 32)       % doctest: +SKIP
 %% axis equal
 %% @end group
 %% @end example
 %%
-%% See help for the (non-symbolic) @code{ezsurf}, which this
+%% See help for the (non-symbolic) @code{ezmesh}, which this
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
 %%
-%% @seealso{ezsurf, @@sym/ezmesh, @@sym/ezplot, @@sym/function_handle}
+%% @seealso{ezmesh, @@sym/ezsurf, @@sym/ezplot, @@sym/function_handle}
 %% @end defmethod
 
 
-function varargout = ezsurf(varargin)
+function varargout = ezmesh(varargin)
 
   % first input is handle, shift
   if (ishandle(varargin{1}))
@@ -79,7 +79,7 @@ function varargout = ezsurf(varargin)
         % Each is function of one var, and its the same var for all
         thissym = symvar(varargin{i});
         assert(length(thissym) <= 2, ...
-          'ezsurf: parameterized: functions should have at most two inputs');
+          'ezmesh: parameterized: functions should have at most two inputs');
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
@@ -91,7 +91,7 @@ function varargout = ezsurf(varargin)
             firstsym = thissym;
           else
             assert(all(logical(thissym == firstsym)), ...
-              'ezsurf: all functions must be in terms of the same variables');
+              'ezmesh: all functions must be in terms of the same variables');
           end
           thisf = function_handle(varargin{i});
         end
@@ -105,7 +105,7 @@ function varargout = ezsurf(varargin)
     end
   end
 
-  h = ezsurf(varargin{:});
+  h = ezmesh(varargin{:});
 
   if (nargout)
     varargout{1} = h;
@@ -116,8 +116,8 @@ end
 
 %!error <all functions must be in terms of the same variables>
 %! syms u v t
-%! ezsurf(u*v, 2*u*v, 3*v*t)
+%! ezmesh(u*v, 2*u*v, 3*v*t)
 
 %!error <functions should have at most two inputs>
 %! syms u v t
-%! ezsurf(u*v, 2*u*v, u*v*t)
+%! ezmesh(u*v, 2*u*v, u*v*t)
