@@ -5,6 +5,8 @@ octsympy 2.7.2-dev
 
   * Newer SymPy versions improve QR and LU on non-square matrices.
 
+  * Support for expressions with min and max such as `min(x, y)`.
+
   * Bug fixes and documentation updates.
 
 
