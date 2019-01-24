@@ -11,6 +11,6 @@ Description: Adds symbolic calculation features to GNU Octave.  These
  toolboxes is intended.
 Categories: symbolic
 Url: https://octave.sourceforge.io/symbolic
-Depends: octave (>= 4.0)
+Depends: octave (>= 4.2)
 SystemRequirements: python, sympy (>= 1.1.1)
 License: GPL-3.0+

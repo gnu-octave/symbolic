@@ -1,7 +1,7 @@
 octsympy 2.7.2-dev
 ==================
 
-  * Minimum SymPy version is now 1.1.1.
+  * Update minimum versions of SymPy to 1.1.1 and Octave to 4.2.
 
   * Newer SymPy versions improve QR and LU on non-square matrices.
 
