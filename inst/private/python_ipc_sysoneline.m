@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Osella Giancarlo
 %%
 %% This file is part of OctSymPy.
 %%
