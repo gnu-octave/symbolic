@@ -77,13 +77,13 @@
 function c = sym2poly(p, x)
 
   if ~(isscalar(p))
-    error('works for scalar input only');
+    error ('sym2poly: works for scalar input only');
   end
 
   if (nargin == 1)
     ss = findsymbols(p);
-    if (length(ss) >= 2)
-      error('Input has more than one symbol: not clear what you want me to do')
+    if (length (ss) >= 2)
+      error ('sym2poly: input has more than one symbol: not clear what you want me to do')
     elseif (length (ss) == 1)
       x = ss{1};
     else
@@ -103,7 +103,7 @@ function c = sym2poly(p, x)
 
   c2 = python_cmd (cmd, sym(p), sym(x));
   if (isempty(c2))
-    error('Empty python output, can this happen?  A bug.')
+    error ('sym2poly: empty python output, can this happen?  A bug.')
   end
 
   % FIXME: should be able to convert c2 to array faster than array
