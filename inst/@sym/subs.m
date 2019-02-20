@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -31,7 +31,8 @@
 %%   @result{} ans = (sym) 2⋅y
 %% @end group
 %% @end example
-%% If @var{x} is omitted, @code{symvar} is used on @var{f}.
+%% If @var{x} is omitted, @code{symvar} is called on @var{f} to
+%% determine an appropriate variable.
 %%
 %% @var{x} and @var{y} can also be vectors or lists of syms to
 %% replace:
