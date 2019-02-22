@@ -417,6 +417,17 @@ end
 
 %!test
 %! syms x y
+%! assert (isequal (subs (sym(42), x, y), sym(42)))
+%! assert (isequal (subs (sym(42), y), sym(42)))
+%! assert (isequal (subs (sym(42)), sym(42)))
+
+%!test
+%! % empty lists
+%! assert (isequal (subs (sym(42), {}, {}), sym(42)))
+%! assert (isequal (subs (42, sym([]), sym([])), sym(42)))
+
+%!test
+%! syms x y
 %! f = x*y;
 %! x = 6; y = 7;
 %! g = subs (f);
