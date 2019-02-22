@@ -20,6 +20,7 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym subs (@var{f}, @var{x}, @var{y})
 %% @defmethodx @@sym subs (@var{f}, @var{y})
+%% @defmethodx @@sym subs (@var{f})
 %% Replace symbols in an expression with other expressions.
 %%
 %% Example substituting a value for a variable:
@@ -51,12 +52,37 @@
 %% @end group
 %% @end example
 %%
+%% With only one argument, @code{subs(@var{F})} will attempt to find values for
+%% each symbol in @var{F} by searching the workspace:
+%% @example
+%% @group
+%% f = x*y
+%%   @result{} f = (sym) x⋅y
+%% @end group
+%%
+%% @group
+%% x = 42;
+%% f
+%%   @result{} f = (sym) x⋅y
+%% @end group
+%% @end example
+%% Here assigning a numerical value to the variable @code{x} did not
+%% change the expression (because symbols are not the same as variables!)
+%% However, we can automatically update @code{f} by calling:
+%% @example
+%% @group
+%% subs(f)
+%%   @result{} ans = (sym) 42⋅y
+%% @end group
+%% @end example
+%%
 %% @strong{Warning}: @code{subs} cannot be easily used to substitute a
 %% @code{double} matrix; it will cast @var{y} to a @code{sym}.  Instead,
 %% create a ``function handle'' from the symbolic expression, which can
 %% be efficiently evaluated numerically.  For example:
 %% @example
 %% @group
+%% syms x
 %% f = exp(sin(x))
 %%   @result{} f = (sym)
 %%
@@ -147,11 +173,32 @@
 
 function g = subs(f, in, out)
 
-  if (nargin == 1)
-    % FIXME: SMT will take values of x from the workspace in this case.
-    error('subs: we do not support single-input w/ substitution from workspace')
-  elseif (nargin > 3)
+  if (nargin > 3)
     print_usage ();
+  end
+
+  if (nargin == 1)
+    %% take values of x from the workspace
+    in = findsymbols (f);
+    out = {};
+    i = 1;
+    while (i <= length (in))
+      xstr = char (in{i});
+      try
+        xval = evalin ('caller', xstr);
+        foundit = true;
+      catch
+        foundit = false;
+      end
+      if (foundit)
+        out{i} = xval;
+        i = i + 1;
+      else
+        in(i) = [];  % erase that input
+      end
+    end
+    g = subs (f, in, out);
+    return
   end
 
   if (nargin == 2)
@@ -356,3 +403,36 @@ end
 %! syms x
 %! assert (isequal (subs (2*x, [3 5]), sym([6 10])))
 %! assert (isequal (subs (sym(2), [3 5]), sym([2 2])))
+
+%!test
+%! syms x y
+%! f = x*y;
+%! x = 6; y = 7;
+%! g = subs (f);
+%! assert (isequal (g, sym (42)))
+%! assert (isa (g, 'sym'))
+
+%!test
+%! syms x y
+%! f = x*y;
+%! x = 6;
+%! g = subs (f);
+%! assert (isequal (g, 6*y))
+
+%!test
+%! syms x y
+%! f = x*y;
+%! xsave = x;
+%! x = 6;
+%! g = subs (f);
+%! assert (isequal (g, 6*y))
+%! assert (isequal (f, xsave*y))
+
+%!test
+%! syms a x y
+%! f = a*x*y;
+%! a = 6;
+%! clear x
+%! g = subs (f);
+%! syms x
+%! assert (isequal (g, 6*x*y))
