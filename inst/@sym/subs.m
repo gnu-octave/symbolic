@@ -402,7 +402,18 @@ end
 %! % only two inputs, vector
 %! syms x
 %! assert (isequal (subs (2*x, [3 5]), sym([6 10])))
-%! assert (isequal (subs (sym(2), [3 5]), sym([2 2])))
+
+%!test
+%! % SMT compat, subbing in vec/mat for nonexist x
+%! syms x y z
+%! % you might think this would be y:
+%! assert (~ isequal (subs (y, x, [1 2]), y))
+%! % but it gives two y's:
+%! assert (isequal (subs (y, x, [1 2]), [y y]))
+%! assert (isequal (subs (sym(42), [3 5]), sym([42 42])))
+%! assert (isequal (subs (sym(42), x, []), sym([])))
+%! assert (isequal (subs (y, {x y}, {[1 2; 3 4], 6}), sym([6 6; 6 6])))
+%! assert (isequal (subs (y, {x z}, {[1 2; 3 4], 6}), [y y; y y]))
 
 %!test
 %! syms x y
