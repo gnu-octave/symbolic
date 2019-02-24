@@ -91,8 +91,18 @@ function g = eval(f)
     end
   end
 
-  g = subs (f, in, out);
+  try
+    %% Fails if the workspace doesn't have values for all symbols.
+    % Could also fail for fcns with broken "roundtrip"
+    fh = function_handle(f, 'vars', in);
+    g = fh(out{:});
+    return
+  catch
+    % no-op
+  end
 
+  %% Instead, try substituting and converting to double.
+  g = subs (f, in, out);
   try
     g = double (g);
   catch
@@ -122,3 +132,12 @@ end
 %! x = 3;
 %! g = eval (f);
 %! assert (isequal (g, 6*sym('y')))
+
+%!test
+%! % do not convert inputs to sym, for SMT compat
+%! nearpi = pi + 1e-14;  % sym could make this pi
+%! x = sym('x');
+%! f = 2*x;
+%! x = nearpi;
+%! d = eval (f);
+%! assert (abs (d - 2*pi) > 1e-15)
