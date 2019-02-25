@@ -3,11 +3,17 @@ octsympy 2.7.2-dev
 
   * New symbolic commands:
 
+          eval
           ezmesh
+          find
 
   * Minimum SymPy version is now 1.1.1.
 
   * Newer SymPy versions improve QR and LU on non-square matrices.
+
+  * Support for expressions with min and max such as `min(x, y)`.
+
+  * `subs(f)` now works: it finds values from the workspace.
 
   * Bug fixes and documentation updates.
 
