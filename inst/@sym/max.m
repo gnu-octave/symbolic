@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,11 +43,41 @@
 
 function [z, I] = max(A, B, dim)
 
+  if (nargout <= 1)
+    if (nargin == 1)
+      if (isvector(A))
+        z = python_cmd ('return Max(*_ins[0])', A);
+      else
+        z = max(A, [], 1);
+      end
+    elseif (nargin == 2)
+      z = elementwise_op ('Max', sym(A), sym(B));
+    elseif (nargin == 3)
+      assert (isempty (B))
+      assert (logical(dim == 1) || logical(dim == 2))
+
+      cmd = { '(A, dim) = _ins'
+              'if not A.is_Matrix:'
+              '    A = sp.Matrix([A])'
+              'if dim == 0:'
+              '    if A.rows == 0:'
+              '        return A'
+              '    return Matrix([[Max(*A.col(i)) for i in range(0, A.cols)]])'
+              'elif dim == 1:'
+              '    if A.cols == 0:'
+              '        return A'
+              '    return Matrix([Max(*A.row(i)) for i in range(0, A.rows)])' };
+      z = python_cmd (cmd, A, dim - 1);
+    else
+      print_usage ();
+    end
+    return
+  end
+
+  % dealing with the index (2nd output) is complicated, defer to min
   if (nargin == 1)
     [z, I] = min(-A);
     z = -z;
-  elseif (nargin == 2) && (nargout <= 1)
-    z = -min(-A, -B);
   elseif (nargin == 3)
     [z, I] = min(-A, -B, dim);
     z = -z;
@@ -63,3 +93,7 @@ end
 %!test
 %! % simple
 %! assert (isequal (max([sym(10) sym(11)]), sym(11)))
+
+%!test
+%! syms x y
+%! assert (isequal (children (max (x, y)), [x y]))
