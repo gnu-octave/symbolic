@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -39,8 +39,6 @@
 %% @seealso{ones, @@sym/zeros, @@sym/eye}
 %% @end defmethod
 
-%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
-
 
 function y = ones(varargin)
 
@@ -58,7 +56,12 @@ function y = ones(varargin)
   for i = 1:length(varargin)
     varargin{i} = sym(varargin{i});
   end
-  y = python_cmd ('return ones(*_ins)', varargin{:});
+
+  if (length (varargin) == 1 && ~isscalar (varargin{1}))
+    y = python_cmd ('return ones(*_ins[0])', varargin{1});
+  else
+    y = python_cmd ('return ones(*_ins)', varargin{:});
+  end
 
 end
 
@@ -77,6 +80,11 @@ end
 %! y = ones(sym(1), 2);
 %! x = [1 1];
 %! assert( isequal( y, sym(x)))
+
+%!test
+%! y = ones (sym([2 3]));
+%! x = sym (ones ([2 3]));
+%! assert (isequal (y, x))
 
 %% Check types:
 %!assert( isa( ones(sym(2), 'double'), 'double'))
