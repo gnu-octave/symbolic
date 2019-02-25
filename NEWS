@@ -4,6 +4,7 @@ octsympy 2.7.2-dev
   * New symbolic commands:
 
           eval
+          find
 
   * Minimum SymPy version is now 1.1.1.
 
