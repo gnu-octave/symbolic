@@ -47,9 +47,9 @@
 %%
 %% @group
 %% x = 2.1
-%%   @result{} x = 2.1
+%%   @result{} x = 2.1000
 %% y = 2.9
-%%   @result{} y = 2.9
+%%   @result{} y = 2.9000
 %% @end group
 %%
 %% @group
