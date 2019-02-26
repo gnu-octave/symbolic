@@ -4,6 +4,7 @@ octsympy 2.7.2-dev
   * New symbolic commands:
 
           eval
+          ezmesh
           find
 
   * Update minimum versions of SymPy to 1.1.1 and Octave to 4.2.
