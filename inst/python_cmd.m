@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,6 +21,8 @@
 %% @deftypefun {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run some Python command on some objects and return other objects.
 %%
+%% This function is not really intended for end users.
+%%
 %% Here @var{cmd} is a string of Python code.
 %% Inputs @var{x}, @var{y}, @dots{} can be a variety of objects
 %% (possible types listed below). Outputs @var{a}, @var{b}, @dots{} are
@@ -38,7 +40,7 @@
 %% @end group
 %% @end example
 %%
-%% The inputs will be in a list called '_ins'.
+%% The inputs will be in a list called @code{_ins}.
 %% Instead of @code{return}, you can append to the Python list
 %% @code{_outs}:
 %% @example
@@ -49,7 +51,7 @@
 %% @end group
 %% @end example
 %%
-%% If you want to return a list, one way to to append a comma
+%% If you want to return a list, one way is to append a comma
 %% to the return command.  Compare these two examples:
 %% @example
 %% @group
@@ -115,11 +117,8 @@
 %% But it still imports it in that case.  If  you want to run this
 %% w/o having the SymPy package, you'd need to hack a bit.
 %%
-%% @seealso{evalpy}
 %% @end deftypefun
 
-%% Author: Colin B. Macdonald
-%% Keywords: python
 
 function varargout = python_cmd(cmd, varargin)
 
