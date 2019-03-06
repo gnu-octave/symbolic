@@ -21,7 +21,7 @@
 %% Run the test suite, log results, and return true if any fail.
 %%
 %% On recent Octave, this is a thin layer around the built-in Octave
-%% command @code{__run_test_suite (@{'.'@}, @{@})}.
+%% command @code{__run_test_suite__ (@{'.'@}, @{@})}.
 %%
 %% Testing should work once the package is installed, which is otherwise
 %% harder to test (need to know the installation directory).
