@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
 %%
@@ -173,7 +173,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.7.2-dev
+%%   @result{} 2.7.1+
 %% @end group
 %% @end example
 %%
@@ -216,7 +216,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.7.2-dev';
+      varargout{1} = '2.7.1+';
 
     case 'display'
       if (nargin == 1)
