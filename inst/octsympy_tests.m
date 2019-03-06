@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,7 +34,7 @@
 %% @end defun
 
 function anyfail = octsympy_tests ()
-  if (compare_versions (OCTAVE_VERSION (), '4.2.1', '>='))
+  if (compare_versions (OCTAVE_VERSION (), '4.4.0', '>='))
     pkgdir = fileparts (mfilename ('fullpath'))
     if (strcmp (fullfile (pkgdir), fullfile (pwd)))
       % be quieter if pkgdir is the current dir
@@ -45,7 +45,7 @@ function anyfail = octsympy_tests ()
     return
   end
 
-  %% Deprecated: this code to be removed when we drop support for < 4.2.1.
+  %% Deprecated: this code to be removed when we drop support for < 4.4.0.
   % The remainder of this is an old fork of "__run_test_suite__.m" which is
   % Copyright (C) 2005-2013 David Bateman and part of GNU Octave, GPL v3.
 
