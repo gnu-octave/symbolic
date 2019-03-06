@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Osella Giancarlo
 %%
 %% This file is part of OctSymPy.
 %%
@@ -54,9 +55,8 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
   end
 
   if (verbose && first_time)
-    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
-            sympref('version'))
-    disp('Using system()-based communication with Python [sysoneline].')
+    fprintf ('Symbolic pkg v%s: using one-line system() communication with SymPy.\n', ...
+             sympref ('version'))
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new Python process and many operations involve several round-trips.')
     disp('Warning: "sysoneline" will fail when using very long expressions.')
@@ -107,7 +107,7 @@ function [A, info] = python_ipc_sysoneline(what, cmd, mktmpfile, varargin)
 
   pyexec = sympref('python');
   if (first_time)
-    assert_have_python_and_sympy(pyexec)
+    assert_have_python_and_sympy (pyexec)
   end
 
   bigs = [headers s1 s2 s3];
@@ -175,6 +175,14 @@ function s = myesc(s)
     % dbl-quote is rather special here
     % /" -> ///////" -> ///" -> /" -> "
     s{i} = strrep(s{i}, '"', '\\\"');
+    
+  if (ispc () && (~isunix ()))
+    %Escape sequence for WIN (Octave & Matlab)
+    s{i} = strrep(s{i}, '>', '^>');
+    s{i} = strrep(s{i}, '<', '^<');
+  end
+
+
 
   end
 end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -23,7 +23,7 @@
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC})
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC1}, @var{IC2}, @dots{})
 %% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@var{ode}, @var{IC})
-%% Solve ordinary differentual equations (ODEs) symbolically.
+%% Solve ordinary differential equations (ODEs) symbolically.
 %%
 %% Basic example:
 %% @example
@@ -122,17 +122,24 @@
 %% @end group
 %%
 %% @group
-%% dsolve (ode_sys)
+%% soln = dsolve (ode_sys)
+%%   @result{} soln = @{ ... @}
+%% @end group
+%%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% @group
+%% soln@{1@}
 %%   @result{} ans =
-%%     @{
 %%       (sym)
 %%                      -2⋅t         2⋅t
 %%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
 %%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% soln@{2@}
+%%   @result{} ans =
 %%       (sym)
 %%                        -2⋅t         2⋅t
 %%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
-%%     @}
 %% @end group
 %% @end example
 %%
@@ -328,11 +335,13 @@ end
 %!test
 %! % System of ODEs
 %! syms x(t) y(t) C1 C2
-%! ode_1=diff(x(t),t) == 2*y(t);
-%! ode_2=diff(y(t),t) == 2*x(t);
-%! sol_sodes=dsolve([ode_1,ode_2]);
-%! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
-%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
+%! ode1 = diff(x(t),t) == 2*y(t);
+%! ode2 = diff(y(t),t) == 2*x(t);
+%! soln = dsolve([ode1, ode2]);
+%! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
+%! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! assert (isequal ([rhs(soln{1}), rhs(soln{2})], g1) || ...
+%!         isequal ([rhs(soln{1}), rhs(soln{2})], g2))
 
 %!test
 %! % System of ODEs (initial-value problem)

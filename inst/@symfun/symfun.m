@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,7 +19,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypemethod  @@symfun {@var{f} =} symfun (@var{expr}, @var{vars})
-%% Define a symbolic function (not usually called directly).
+%% Define a symbolic function (not usually invoked directly).
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
 %% represents an unknown function (for example, in a differential
@@ -54,27 +54,10 @@
 %%   @result{} g(x) = (symfun) g(x)
 %% @end group
 %% @end example
-%% and note this creates the sym @code{x} automatically.
+%% (Note this creates the sym @code{x} automatically if it does
+%% not already exist.)
 %%
-%% Alternatively:
-%% @example
-%% @group
-%% x = sym('x');
-%% g(x) = sym('g(x)')
-%%   @result{} g(x) = (symfun) g(x)
-%% @end group
-%% @end example
-%% Note the following is @strong{not} the way to create an abstract
-%% symfun:
-%% @example
-%% @group
-%% g = sym('g(x)')     % just the symbolic expression g(x)
-%%   @result{} g = (sym) g(x)
-%% @end group
-%% @end example
-%% Instead, use @code{g(x)} on the left-hand side as above.
-%%
-%% You can make multidimensional concrete or abstract symfuns:
+%% Example: multivariable symfuns:
 %% @example
 %% @group
 %% syms x y
@@ -86,61 +69,65 @@
 %% @end group
 %% @end example
 %%
-%% As the above examples demonstrate, it is usually not necessary to
-%% call symfun directly.  However, it can be done:
+%% Example: creating an abstract function formally of two variables
+%% but depending only on @code{x}:
 %% @example
 %% @group
-%% syms x y
-%% f = symfun(sin(x), x)
-%%   @result{} f(x) = (symfun) sin(x)
-%% F = symfun(x*y, [x y])
-%%   @result{} F(x, y) = (symfun) x⋅y
-%% @end group
-%% @group
-%% g = symfun(sym('g(x)'), x)
-%%   @result{} g(x) = (symfun) g(x)
-%% G = symfun(sym('G(x, y)'), [x y])
-%%   @result{} G(x, y) = (symfun) G(x, y)
-%% @end group
-%% @end example
-%%
-%% This allows, for example, creating an abstract function formally
-%% of @code{x}, @code{y} but depending only on @code{x}:
-%% @example
-%% @group
-%% syms x y
-%% h = symfun(sym('h(x)'), [x y])
-%%   @result{} h(x, y) = (symfun) h(x)
-%% @end group
-%% @end example
-%% which is the same as:
-%% @example
-%% @group
-%% h(x,y) = sym('h(x)')
+%% syms x y h(x)
+%% h(x, y) = h(x)
 %%   @result{} h(x, y) = (symfun) h(x)
 %% @end group
 %% @end example
 %%
-%% It is possible to compose one symfun inside another.  For example, to
-%% demonstrate the chain rule, we might do:
+%% A symfun can be composed inside another.  For example, to
+%% demonstrate the chain rule in calculus, we might do:
 %% @example
 %% @group
 %% syms f(t) g(t)
 %% F(t) = f(g(t))
 %%   @result{} F(t) = (symfun) f(g(t))
+%% @c doctest: +SKIP_IF(python_cmd('return Version(spver) <= Version("1.3")'))
 %% diff(F, t)
 %%   @result{} ans(t) = (symfun)
-%%       d        ⎛ d        ⎞│
-%%       ──(g(t))⋅⎜───(f(ξ₁))⎟│
-%%       dt       ⎝dξ₁       ⎠│ξ₁=g(t)
+%%         d            d
+%%       ─────(f(g(t)))⋅──(g(t))
+%%       dg(t)          dt
+%% @end group
+%% @end example
+%%
+%% It is possible to create an abstract symfun without using the
+%% @code{syms} command:
+%% @example
+%% @group
+%% x = sym('x');
+%% g(x) = sym('g(x)')
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
+%% @end example
+%% (note the @code{x} must be included on the left-hand side.)
+%% However, @code{syms} is safer because this can fail or give
+%% unpredictable results for certain function names:
+%% @example
+%% @group
+%% beta(x) = sym('beta(x)')
+%%   @print{} ??? ... Error ...
+%% @end group
+%% @end example
+%%
+%% It is usually not necessary to call @code{symfun} directly
+%% but it can be done:
+%% @example
+%% @group
+%% f = symfun(x*sin(y), [x y])
+%%   @result{} f(x, y) = (symfun) x⋅sin(y)
+%% g = symfun(sym('g(x)'), x)
+%%   @result{} g(x) = (symfun) g(x)
 %% @end group
 %% @end example
 %%
 %% @seealso{sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, CAS
 
 function f = symfun(expr, vars)
 

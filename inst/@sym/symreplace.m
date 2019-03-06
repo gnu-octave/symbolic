@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,13 +34,11 @@
 %% @group
 %% syms x y
 %% f = @{x; 2*x; sin(x)@};
-%% g = symreplace(f, x, y)
-%%   @result{} g =
-%%       @{
-%%         (sym) y
-%%         (sym) 2⋅y
-%%         (sym) sin(y)
-%%       @}
+%% g = symreplace(f, x, y);
+%% g@{:@}
+%%   @result{} ans = (sym) y
+%%   @result{} ans = (sym) 2⋅y
+%%   @result{} ans = (sym) sin(y)
 %% g = symreplace(f, 'x', y);   % alternative
 %% @end group
 %% @end example
@@ -191,7 +189,17 @@ function [newobj, flag] = symreplace_helper(obj, xstr, newx)
 
   flag = false;
 
-  if isa(obj, 'sym')
+  if isa (obj, 'symfun')
+    sf_args = argnames (obj);
+    sf_formula = formula (obj);
+    [sf_args, flag1] = symreplace_helper(sf_args, xstr, newx);
+    [sf_formula, flag2] = symreplace_helper(sf_formula, xstr, newx);
+    if (flag1 || flag2)
+      flag = true;
+      newobj = symfun (sf_formula, sf_args);
+    end
+
+  elseif isa(obj, 'sym')
     % check if contains any symbols with the same string as x.
     symlist = findsymbols(obj);
     for c = 1:length(symlist)
@@ -203,9 +211,6 @@ function [newobj, flag] = symreplace_helper(obj, xstr, newx)
     % If so, subs in the new x and replace that variable.
     if (flag)
       newobj = subs(obj, symlist{c}, newx);
-    end
-    if isa(obj, 'symfun')
-      warning('FIXME: need to do anything special for symfun vars?')
     end
 
   elseif iscell(obj)

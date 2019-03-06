@@ -14,7 +14,6 @@ Symbolic Constants
  catalan
  eulergamma
 Functions
- bernoulli
  cell2sym
  digits
  dirac
@@ -27,13 +26,18 @@ Functions
  poly2sym
  python_cmd
 Double-precision numerical functions
+ @double/bernoulli
+ @double/chebyshevT
+ @double/chebyshevU
  @double/coshint
  @double/cosint
  @double/dilog
+ @double/euler
  @double/fresnelc
  @double/fresnels
  @double/harmonic
  @double/logint
+ @double/pochhammer
  @double/polylog
  @double/sinhint
  @double/sinint
@@ -50,6 +54,7 @@ Mathematical methods for symbolic objects
  @sym/adjoint
  @sym/airy
  @sym/angle
+ @sym/arg
  @sym/asech
  @sym/asec
  @sym/asind
@@ -59,6 +64,7 @@ Mathematical methods for symbolic objects
  @sym/atand
  @sym/atanh
  @sym/atan
+ @sym/bernoulli
  @sym/besselh
  @sym/besseli
  @sym/besselj
@@ -113,6 +119,7 @@ Mathematical methods for symbolic objects
  @sym/erfi
  @sym/erfinv
  @sym/erf
+ @sym/euler
  @sym/expint
  @sym/exp
  @sym/expm
@@ -293,6 +300,7 @@ Other methods for symbolic objects
  @sym/display
  @sym/disp
  @sym/end
+ @sym/ezcontour
  @sym/ezplot3
  @sym/ezplot
  @sym/ezsurf

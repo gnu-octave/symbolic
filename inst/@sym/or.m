@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -67,9 +67,8 @@ end
 %! z = [t f t f];
 %! assert (isequal (w | z, [t t t f]))
 
-%!xtest
+%!test
 %! % output is sym even for scalar t/f
-%! % ₣IXME: should match other bool fcns
 %! assert (isa (t | f, 'sym'))
 
 %!test

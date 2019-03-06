@@ -1,24 +1,26 @@
 #!/bin/sh
 
-# Copyright 2016-2017 Colin B. Macdonald
+# Copyright 2016-2018 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 
-# download py.exe from http://www.orbitals.com/programs/pyexe.html
-PYEXE=py27910.exe
-PYEXEREADME=py27910.readme.txt   # from the src package
+# Available from https://github.com/manthey/pyexe
+PYEXE=pyexe/py27_v14.exe
+# copy a few lines from https://github.com/manthey/pyexe/blob/master/README.md
+PYEXEREADME=pyexe/README.pyexe.txt
 
 # download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.1.1
-MPMATH=mpmath-0.19
+SYMPY=sympy-1.3
+MPMATH=mpmath-1.0.0
 
 # for day-to-day testing
-VER=2.6.1-dev
+VER=2.7.2-dev
+BRANCH=master
 # for release
-#VER=2.6.1
+#VER=2.7.2
 #TAG=v${VER}
 
 
@@ -38,7 +40,7 @@ rm -rf octsympy
 git clone https://github.com/cbm755/octsympy.git
 ( cd octsympy
   if [ -z $TAG]; then
-    git checkout master
+    git checkout ${BRANCH}
   else
     git checkout tags/${TAG}
   fi )
@@ -53,23 +55,22 @@ cp -R octsympy ${WINDIRTMP}
 # copy things to the package
 mkdir ${WINDIR}
 cp -pR ${WINDIRTMP}/inst ${WINDIR}/
-cp -pR ${WINDIRTMP}/bin ${WINDIR}/
 cp -pR ${WINDIRTMP}/NEWS ${WINDIR}/
 cp -pR ${WINDIRTMP}/CONTRIBUTORS ${WINDIR}/
 cp -pR ${WINDIRTMP}/DESCRIPTION ${WINDIR}/
 cp -pR ${WINDIRTMP}/COPYING ${WINDIR}/
-cp -pR ${WINDIRTMP}/README.bundled.md ${WINDIR}/
 cp -pR ${WINDIRTMP}/matlab_smt_differences.md ${WINDIR}/
 
-# octpy.exe(renamed to avoid any conflicts)
-cp ${PYEXE} ${WINDIR}/bin/octpy.exe
-cp ${PYEXEREADME} ${WINDIR}/README.pyexe.txt
+# bundle pyexe
+mkdir ${WINDIR}/bin
+cp ${PYEXE} ${WINDIR}/bin/py27.exe
+cp ${PYEXEREADME} ${WINDIR}/
 
-# change default python to octpy.exe
-echo "making default python octpy.exe"
-sed -i "s/DEFAULTPYTHON = 'python'/DEFAULTPYTHON = 'octpy.exe'/" ${WINDIR}/inst/sympref.m
+# change default python to pyexe
+echo "making default python py27.exe"
+sed -i "s/python = 'python'/python = 'py27.exe'/" ${WINDIR}/inst/private/defaultpython.m
 
-# sympy and mpmath
+# bundle sympy and mpmath
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
 cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
 cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1

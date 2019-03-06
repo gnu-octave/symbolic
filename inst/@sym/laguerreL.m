@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -145,7 +145,6 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! f = laguerreL (n, x);
 %! h = function_handle (f);
 %! A = h (1, 3.2);
@@ -154,7 +153,6 @@ end
 %! A = h ([1 2], [3.3 4.4]);
 %! B = laguerreL ([1 2], [3.3 4.4]);
 %! assert (A, B)
-%! end
 
 %!error <codegen failed>
 %! % round trip

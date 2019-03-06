@@ -212,9 +212,8 @@ end
 %%! w = logical(x);
 %%! assert (w)
 
-%!xtest
-%! % FIXME: bug in Octave: if should automatically use logical
-%! % (want "if (obj)" same as "if (logical(obj))")
+%!test
+%! % older Octave (< 4.2) didn't automatically do "if (logical(obj))"
 %! e = sym(true);
 %! if (e)
 %!   assert(true);
@@ -222,16 +221,17 @@ end
 %!   assert(false);
 %! end
 
-% more above, once it passes
-% e2 = sym(1) == sym(1);
-% if (e2)
-%   assert(true);
-% else
-%   assert(false);
-% end
-% e3 = sym([1 2]) == sym([1 1]);
-% if (e3(1))
-%   assert(true);
-% else
-%   assert(false);
-% end
+%!test
+%! % more of above
+%! e2 = sym(1) == sym(1);
+%! if (e2)
+%!   assert(true);
+%! else
+%!   assert(false);
+%! end
+%! e3 = sym([1 2]) == sym([1 1]);
+%! if (e3(1))
+%!   assert(true);
+%! else
+%!   assert(false);
+%! end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,6 +44,7 @@
 %% @end group
 %%
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% disp(A, 'ascii')
 %%   @print{}   [     /x\              / c*x\      ]
 %%   @print{}   [  sin|-|         floor\a   /      ]
@@ -51,7 +52,7 @@
 %%   @print{}   [                                  ]
 %%   @print{}   [     /2*x\         /   /   x    \\]
 %%   @print{}   [acosh|---|  ceiling|sin|--------||]
-%%   @print{}   [     \ pi/         \   \gamma(x)//]
+%%   @print{}   [     \ pi/         \   \Gamma(x)//]
 %%
 %% disp(A, 'flat')
 %%   @print{} Matrix([[sin(x/2), floor(a**(c*x))], [acosh(2*x/pi), ceiling(sin(x/gamma(x)))]])

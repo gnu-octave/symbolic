@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -70,3 +70,15 @@ end
 %! syms x real
 %! d = exp (x*i);
 %! assert (isequal (real (d), cos (x)))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms x
+%! d = 3 - 5i;
+%! f = real (x);
+%! A = real (d);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B)
+%! end

@@ -1,11 +1,11 @@
-OctSymPy
-========
+Symbolic Package for GNU Octave
+===============================
 
 [![Build Status](https://travis-ci.org/cbm755/octsympy.svg?branch=master)](https://travis-ci.org/cbm755/octsympy)
 
 An implementation of a symbolic toolbox using SymPy.
 
-[https://github.com/cbm755/octsympy]
+[https://octave.sourceforge.io/symbolic]
 
 
 Goals
@@ -48,12 +48,12 @@ How to Install on Windows
 
 1.  Get [Octave](http://www.octave.org) for Windows.
 
-2.  Download the `symbolic-win-py-bundle-2.5.0.zip` file from
+2.  Download the `symbolic-win-py-bundle-2.7.0.zip` file from
     [releases](https://github.com/cbm755/octsympy/releases).
 
 3.  Start Octave
 
-4.  At the Octave prompt, type `pkg install symbolic-win-py-bundle-2.5.0.zip`.
+4.  At the Octave prompt, type `pkg install symbolic-win-py-bundle-2.7.0.zip`.
 
 5.  At the Octave prompt, type `pkg load symbolic`.
 
@@ -78,9 +78,9 @@ Although this package is designed for GNU Octave, it will work with
 Matlab.  Currently only the slower system()-based communication is
 available.
 
-1.  Download the latest release, e.g., `octsympy-matlab-2.5.0.tar.gz`.
+1.  Download the latest release, e.g., `octsympy-matlab-2.7.0.tar.gz`.
 
-2.  Unzip is somewhere and add it to your Matlab Path.
+2.  Unzip it somewhere and add it to your Matlab Path.
 
 The .m files for Matlab have been reformatted for Matlab comment
 conventions, but are otherwise the same as the Octave source.

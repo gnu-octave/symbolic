@@ -1,11 +1,85 @@
-octsympy 2.6.1-dev
+octsympy 2.7.2-dev
 ==================
+
+  * New symbolic commands:
+
+          eval
+          ezmesh
+          find
+
+  * Update minimum versions of SymPy to 1.1.1 and Octave to 4.2.
+
+  * Newer SymPy versions improve QR and LU on non-square matrices.
+
+  * Support for expressions with min and max such as `min(x, y)`.
+
+  * `subs(f)` now works: it finds values from the workspace.
+
+  * Bug fixes and documentation updates.
+
+
+
+octsympy 2.7.1 (2018-10-02)
+===========================
+
+  * New symbolic commands:
+
+          numdem
+
+  * Fixes for SymPy 1.3.
+
+  * Various bug fixes and documentation updates.
+
+
+
+octsympy 2.7.0 (2018-07-12)
+===========================
+
+  * New symbolic commands:
+
+          arg
+          euler
+          ezcontour
+
+  * New `@double` numerical functions; these are wrappers around SymPy,
+    so they are slower than native floating-point implementations.
+
+          bernoulli       euler
+          chebyshevT      pochhammer
+          chebyshevU
+
+  * The initial startup is much quieter!
+
+  * `vpa` now warns of low-precision on non-numbers strings with decimals
+    such as `vpa('cos(0.1)')`.  See "help vpa" for details.
 
   * `subs` allows multiple scalar variables to be replaced with symbolic
     matrix expressions.
 
   * symfun can be evaluated at symbolic matrices: `f(sym([1 2; 3 4]))`
     now works where `f(x)` is a symfun.
+
+  * Fixes for symfuns such as `syms N(t)` where the function name
+    conflicts with a SymPy command.
+
+  * Fixes for how assumptions interact with symfuns.
+
+  * New command `sympref diagnose` to help debug Python/SymPy issues.
+
+  * Improve `function_handle` support by supporting more functions.
+
+  * Fixes for several bugs mentioning "immutable matrices".
+
+  * `bernoulli` now works with array inputs.
+
+  * Added a `private/defaultpython.m` to make it easier for distributors
+    to control which python interpreter is used by default.
+
+  * Fixes for GNU Octave 4.4.
+
+  * Fixes for SymPy 1.2.
+
+  * Various bug fixes and documentation updates.
 
 
 

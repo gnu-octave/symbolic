@@ -1,4 +1,6 @@
 %% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2017 Mike Miller
+%% Copyright (C) 2017 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -22,7 +24,7 @@
 %% @deftypemethodx @@sym {@var{s} =} fortran (@var{g1}, @dots{}, @var{gn})
 %% @deftypemethodx @@sym {} fortran (@dots{}, 'file', @var{filename})
 %% @deftypemethodx @@sym {[@var{F}, @var{H}] =} fortran (@dots{}, 'file', '')
-%% Convert symbolic expression into C code.
+%% Convert symbolic expression into Fortran code.
 %%
 %% Example returning a string of Fortran code:
 %% @example

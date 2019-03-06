@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2017 Colin B. Macdonald
+%% Copyright (C) 2015-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -42,6 +42,17 @@
 %% @end group
 %% @end example
 %%
+%% The binomial coefficient can be written in terms of factorials:
+%% @example
+%% @group
+%% rewrite (nchoosek (n, k), 'factorial')
+%%   @result{} ans = (sym)
+%%            n!
+%%       ────────────
+%%       k!⋅(-k + n)!
+%% @end group
+%% @end example
+%%
 %% For inputs which are not positive integers (including complex numbers),
 %% the result is defined in terms of the @code{gamma} function:
 %% @example
@@ -61,6 +72,7 @@
 %%   @result{} (sym) 6
 %% nchoosek (sym(5)/2, sym(3))
 %%   @result{} (sym) 5/16
+%% @c # simplify unnecessary sympy > 1.1.1
 %% simplify (simplify (nchoosek (3+4i, sym(2))))
 %%   @result{} (sym) -5 + 10⋅ⅈ
 %% @end group
@@ -89,7 +101,7 @@ end
 %!assert (isequal (nchoosek(sym(10), -1), 0))
 
 %!test
-%! n = sym('n');
+%! n = sym('n', 'nonnegative', 'integer');
 %! assert (isequal (nchoosek (n, n), sym(1)))
 
 %!test

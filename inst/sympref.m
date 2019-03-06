@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
 %%
@@ -31,6 +31,12 @@
 %% configurations.  The various choices for @var{cmd} and
 %% @var{args} are documented below.
 %%
+%% Run @strong{diagnostics} on your system:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref diagnose
+%%   @print{} ...
+%% @end example
 %%
 %% Get the name of the @strong{Python executable}:
 %% @example
@@ -39,17 +45,20 @@
 %%   @result{} ans = python
 %% @end example
 %%
-%% This value can be changed by setting the environment variable
+%% Changing the Python executable might help if you've installed
+%% a local Python interpreter somewhere else on your system.
+%% The value can be changed by setting the environment variable
 %% @code{PYTHON}, which can be configured in the OS, or it can be
 %% set within Octave using:
 %% @example
 %% @comment doctest: +SKIP
-%% setenv PYTHON /usr/bin/python
+%% setenv PYTHON python3
+%% setenv PYTHON $@{HOME@}/.local/bin/python
 %% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
 %% If the environment variable is empty or not set, the package
-%% uses a default setting (usually @code{python}).
+%% uses a default setting (often @code{python}).
 %%
 %%
 %% @strong{Display} of syms:
@@ -164,7 +173,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.6.1-dev
+%%   @result{} 2.7.2-dev
 %% @end group
 %% @end example
 %%
@@ -207,7 +216,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.6.1-dev';
+      varargout{1} = '2.7.2-dev';
 
     case 'display'
       if (nargin == 1)
@@ -261,10 +270,9 @@ function varargout = sympref(cmd, arg)
       if (nargin ~= 1)
         error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
-      DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
       if (isempty(pyexec))
-        pyexec = DEFAULTPYTHON;
+        pyexec = defaultpython ();
       end
       varargout{1} = pyexec;
 
@@ -304,9 +312,6 @@ function varargout = sympref(cmd, arg)
 
     case 'reset'
       verbose = ~sympref('quiet');
-      if (verbose)
-        disp('Resetting the communication mechanism');
-      end
       r = python_ipc_driver('reset', []);
 
       if (nargout == 0)
@@ -326,6 +331,9 @@ function varargout = sympref(cmd, arg)
       %  error ('the package %s is not installed', your_pkg);
       %end
       %pkg_path = pkg_l{idx}.dir
+
+    case 'diagnose'
+      assert_have_python_and_sympy (sympref ('python'), true)
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));
@@ -388,7 +396,6 @@ end
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
-%! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
 %! syms x
 
@@ -453,8 +460,8 @@ end
 %! r = sympref('reset');
 %! % restore original sympref settings
 %! sympref ('ipc',   sympref_orig.ipc);
-%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
+%! sympref ('quiet', sympref_orig.quiet);
 %! assert(r)
 
 %!error <invalid preference or command> sympref ('nosuchsetting')

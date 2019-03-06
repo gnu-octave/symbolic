@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,7 +62,7 @@
 
 function z = mpower(x, y)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
@@ -131,17 +131,11 @@ end
 %! assert (isequal (C, sym(eye(2))))
 
 %!test
-%! % scalar^array works in SymPy > 1.0.0, otherwise not implemented
+%! % scalar^array not implemented in SymPy < 1.0
 %! syms x
 %! A = [1 2; 3 4];
-%! try
-%!   B = x^A;
-%!   waserr = false;
-%! catch
-%!   waserr = true;
-%!   notimpl = any (strfind (lasterr (), 'NotImplementedError'));
-%! end
-%! assert ((~ waserr && strcmp (regexprep (disp (B, 'flat'), '\s+', ''), 'x**Matrix([[1,2],[3,4]])')) || (waserr && notimpl))
+%! B = x^A;
+%! assert (strcmp (regexprep (disp (B, 'flat'), '\s+', ''), 'x**Matrix([[1,2],[3,4]])'))
 
 %!error
 %! A = sym([1 2; 3 4]);

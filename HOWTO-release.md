@@ -19,6 +19,8 @@ Checklist
 
   * Update NEWS file (date, version number, reformat).
 
+  * Update INDEX file for any new functions.
+
   * Check minimum sympy version is consistent: its in
     DESCRIPTION, assert_have_python_and_sympy.m
 
@@ -32,7 +34,7 @@ Checklist
 
   * Test regenerating html documentation: "make html"
 
-  * Run "Make release" and record the md5 sums.
+  * Run "make release" and record the md5 sums.
 
   * Test on Matlab if possible.
 

@@ -1,5 +1,5 @@
-%% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016 Colin B. Macdonald
+% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -53,7 +53,7 @@
 %% @group
 %% syms a
 %% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a)
-%%   @print{} ??? Cannot convert to matrix; system may not be linear.
+%%   @print{} ??? ... nonlinear...
 %%
 %% [A, b] = equationsToMatrix (a*x + y == 1, y - x == a, x, y)
 %%   @result{} A = (sym 2×2 matrix)
@@ -99,11 +99,10 @@
 
 function [A, b] = equationsToMatrix(varargin)
 
-  s = symvar ([varargin{:}]);
+  % when Symbols are specified, this won't be used
+  s = findsymbols (varargin);
 
   cmd = {'L, symvars = _ins'
-         'if isinstance(symvars, Symbol):'
-         '    symvars = [symvars]'
          'if not isinstance(L[-1], MatrixBase):'
          '    if isinstance(L[-1], Symbol):'  % Symbol given, fill vars...
          '        vars = list()'
@@ -119,6 +118,15 @@ function [A, b] = equationsToMatrix(varargin)
          '        vars = symvars'
          '    else:'
          '        vars = L.pop(-1)'
+         'if Version(spver) > Version("1.3"):'
+         '    if len(L) == 1:'  % might be matrix of eqns, don't want [Matrix]
+         '        L = L[0]'
+         '    vars = list(vars)'
+         '    A, B = linear_eq_to_matrix(L, vars)'
+         '    return True, A, B'
+         '#'
+         '# sympy <= 1.3: we do the work ourselves'
+         '#'
          'vars = list(collections.OrderedDict.fromkeys(vars))' %% Never repeat elements
          'if len(L) == 1 and isinstance(L[0], MatrixBase):'
          '    L = [a for a in L[0]]'
@@ -148,7 +156,7 @@ function [A, b] = equationsToMatrix(varargin)
 
 
   if ~s
-    error('Cannot convert to matrix; system may not be linear.');
+    error('Cannot convert to matrix; system may be nonlinear.');
   end
 
 end
@@ -202,6 +210,15 @@ end
 %! assert (isequal (B, b))
 
 %!test
+%! % vertical list of equations
+%! syms x y
+%! [A, B] = equationsToMatrix ([-6*x + 4*y == 5; 4*x - 4*y - 5], [x y]);
+%! a = sym ([-6 4; 4 -4]);
+%! b = sym ([5; 5]);
+%! assert (isequal (A, a))
+%! assert (isequal (B, b))
+
+%!test
 %! syms x y
 %! [A, B] = equationsToMatrix (5*x == 1, y, x - 6*y - 7, y);
 %! a = sym ([0; 1; -6]);
@@ -209,7 +226,7 @@ end
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
 
-%!error <system may not be linear>
+%!error <nonlinear>
 %! syms x y
 %! [A, B] = equationsToMatrix (x^2 + y^2 == 1, x - y + 1, x, y);
 
@@ -230,3 +247,10 @@ end
 %! b = sym (2);
 %! assert (isequal (A, a))
 %! assert (isequal (B, b))
+
+%!error <unique>
+%! if (python_cmd ('return Version(spver) <= Version("1.3")'))
+%!   error ('unique')
+%! end
+%! syms x
+%! equationsToMatrix (3*x == 2, [x x])

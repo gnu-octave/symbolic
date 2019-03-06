@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,8 +34,9 @@
 %%         ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
 %%       x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
 %%         ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% ccode(g)
-%%   @result{} x*(x*(x*(-1.0L/4.0L*x + 1.0L/3.0L) - 1.0L/2.0L) + 1)
+%%   @result{} x*(x*(x*(-1.0/4.0*x + 1.0/3.0) - 1.0/2.0) + 1)
 %% @end group
 %% @end example
 %%
@@ -60,6 +61,7 @@
 %% @end group
 %%
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% disp(C.code)
 %%   @print{}  #include "file.h"
 %%   @print{}  #include <math.h>
@@ -67,7 +69,7 @@
 %%   @print{}  double myfun(double x) @{
 %%   @print{}
 %%   @print{}     double myfun_result;
-%%   @print{}     myfun_result = x*(x*(x*(-1.0L/4.0L*x + 1.0L/3.0L) - 1.0L/2.0L) + 1);
+%%   @print{}     myfun_result = x*(x*(x*(-1.0/4.0*x + 1.0/3.0) - 1.0/2.0) + 1);
 %%   @print{}     return myfun_result;
 %%   @print{}
 %%   @print{}  @}

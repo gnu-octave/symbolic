@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +18,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym expint (@var{x})
+%% @defmethod  @@sym expint (@var{x})
+%% @defmethodx @@sym expint (@var{n}, @var{x})
 %% Symbolic generalized exponential integral (expint) function.
 %%
 %% Integral definition:
@@ -138,4 +139,19 @@ end
 
 %!error <Invalid call> expint(sym(1), 2, 3)
 
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.2")'))
+%! syms x
+%! A = expint (3);
+%! f = expint (x);
+%! h = function_handle (f);
+%! B = h (3);
+%! assert (A, B, -eps)
+%! end
 
+%!error <failed>
+%! % round trip
+%! syms n x
+%! f = expint (n, x);
+%! h = function_handle (f);

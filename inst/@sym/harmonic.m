@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -90,7 +90,6 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +XFAIL_IF(python_cmd('return Version(spver) <= Version("1.0")'))
 %% A = psi (x) + eulergamma ()
 %%   @result{} A = (sym) polygamma(0, x) + γ
 %% rewrite (A, 'harmonic')
@@ -119,11 +118,13 @@ end
 %!assert (isinf (harmonic (sym(inf))))
 %!assert (isequal (harmonic (sym([9 10])), [sym(7129)/2520 sym(7381)/2520]))
 
-%!xtest
+%!test
 %! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.2")'))
 %! y = sym('y');
 %! A = harmonic (7);
 %! f = harmonic (y);
 %! h = function_handle (f);
 %! B = h (7);
 %! assert (A, B, -eps)
+%! end

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2016 Colin B. Macdonald
+Copyright 2016, 2019 Colin B. Macdonald
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -33,7 +33,7 @@ without any warranty.
     <keyword>sym</keyword>
     <keyword>Symbolic Math Toolbox</keyword>
   </keywords>
-  <url type="homepage">http://octave.sourceforge.net/symbolic</url>
+  <url type="homepage">https://octave.sourceforge.io/symbolic</url>
   <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
   <translation/>
   <metadata_license>FSFAP</metadata_license>

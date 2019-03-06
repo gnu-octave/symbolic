@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Lagu
 %%
@@ -122,26 +122,39 @@ function varargout = solve(varargin)
     varargin{i} = sym(varargin{i});
   end
 
+  %% input parsing explanation
+  % stage 0: no equations found yet
+  % stage 1: equations found, could be more
+  % stage 2: started finding symbols
+  % stage 3: done, no more input expected
   cmd = { 'eqs = list(); symbols = list()'
           'stage = 0'
           'for arg in _ins:'
           '    if arg.is_Matrix:'
           '        if any([a.is_Relational for a in arg]):'
-          '             assert stage == 0'
+          '             assert stage == 0 or stage == 1'
+          '             eqs.extend(arg)'
+          '             stage = 1'
+          '        elif stage == 0:'
           '             eqs.extend(arg)'
           '             stage = 1'
           '        else:'
-          '             assert stage == 0 or stage == 1'
+          '             assert stage != 0 or stage == 1 or stage == 2'
           '             symbols.extend(arg)'
-          '             stage = 2'
-          '    elif arg.is_Symbol:'
-          '        assert stage == 0 or stage == 1'
-          '        symbols.append(arg)'
+          '             stage = 3'
+          '    elif arg.is_Symbol and stage == 0:'
+          '        eqs.append(arg)'
           '        stage = 1'
+          '    elif arg.is_Symbol:'
+          '        assert stage != 0 or stage == 1 or stage == 2'
+          '        symbols.append(arg)'
+          '        stage = 2'
           '    else:'
           '        # e.g., Relational, or Expr implicitly assumed == 0'
-          '        assert stage == 0'
+          '        assert stage == 0 or stage == 1'
           '        eqs.append(arg)'
+          '        stage = 1'
+          'eqs = [e for e in eqs if e not in (True, S.true)]'  % https://github.com/sympy/sympy/issues/14632
         };
 
   if (nargout == 0 || nargout == 1)
@@ -293,7 +306,30 @@ end
 %! A = solve([2*x == 4*y, 2 == 3], x);
 %! assert (isequal (A, sym(false)))
 
-%!xtest
-%! % returns Eq, probably minor upstream problem?
-%! A = solve([2*x == 4*y, 2 == 2], x);
+%!test
+%! % Issue #850
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! A = solve (sym(pi)^2*x + y == 0);
+%! assert (isequal (A, -y/sym(pi)^2))
+%! end
+
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x == 4*y, sym(2) == 2], x);
 %! assert (isequal (A, 2*y))
+
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x^2 == 32*y^2, sym(2) == 2], x);
+%! B = solve([2*x^2 == 32*y^2], x);
+%! assert (isequal (A, B) || isequal (A, flip (B)))
+
+%!test
+%! A = solve ([x+1 0], x);
+%! assert (isequal (A, sym (-1)))
+
+%!test
+%! A = solve (x + 1, x);
+%! assert (isequal (A, sym (-1)))
+%! A = solve (x, x);
+%! assert (isequal (A, sym (0)))

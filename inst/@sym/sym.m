@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -90,7 +90,8 @@
 %% @example
 %% @group
 %% sym(0.1)
-%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @print{} warning: passing floating-point values to sym is
+%%   @print{}          dangerous, see "help sym"
 %%   @result{} ans = (sym) 1/10
 %% @end group
 %% @end example
@@ -115,7 +116,8 @@
 %% @example
 %% @group
 %% y = sym(pi/100)
-%%   @print{} warning: passing floating-point values to sym is dangerous, see "help sym"
+%%   @print{} warning: passing floating-point values to sym is
+%%   @print{}          dangerous, see "help sym"
 %%   @result{} y = (sym)
 %%        π
 %%       ───
@@ -403,9 +405,6 @@ function s = sym(x, varargin)
   if (isa (x, 'char'))
     %% Need to decide whether to use S() or Symbol()
 
-      % TODO: Warning if you try make a sym with the same name of a system function.
-      %symsnotfunc (x);
-
       % TODO: tests pass without this?  Is there a example where this is needed?
       %% sym('---1') -> '-' '1' Split first symbols to can search operators correctly.
       %r = 1;
@@ -431,10 +430,10 @@ function s = sym(x, varargin)
       return
     end
 
-    isnum = ~isempty (regexp (x, '^[-+]*?\d*\.?\d*(e-?\d+)?$'));
-
+    isnum = ~isempty (regexp (strtrim (x), ...
+                              '^[-+]*?[\d_]*\.?[\d_]*(e[+-]?[\d_]+)?$'));
     %% Use Symbol() for words, not numbers, not "f(x)".
-    if ((~ isnum) && (~ isempty (regexp (x, '^\w+$'))))
+    if ((~ isnum) && (~ isempty (regexp (strtrim (x), '^\w+$'))))
 
       cmd = { 'd = dict()'
               'x = _ins[0]'
@@ -473,7 +472,7 @@ function s = sym(x, varargin)
 
       assert (isempty (asm), 'Only symbols can have assumptions.')
 
-      % TODO: figure version might warn on expression strings
+      % TODO: future version might warn on expression strings
         % Check if the user try to execute operations from sym
         %if (~isempty (regexp (xc, '\!|\&|\^|\:|\*|\/|\\|\+|\-|\>|\<|\=|\~')))
         %  warning ('Please avoid execute operations from sym function.');
@@ -486,9 +485,55 @@ function s = sym(x, varargin)
         return
       end
 
-      cmd = {'x = _ins[0]'
+      hint_symfun = false;
+      %% distinguish b/w sym('FF(w)') and sym('FF(Symbol(...))')
+      % regexp detects F(<words commas spaces>)
+      T = regexp (x, '^(\w+)\(([\w,\s]*)\)$', 'tokens');
+      if (length (T) == 1 && length (T{1}) == 2)
+        hint_symfun = true;
+        name = T{1}{1};
+        varnamestr = T{1}{2};
+        varnames = strtrim (strsplit (varnamestr, ','));
+
+        %% Blacklist some strings for which srepr(x) == str(x)
+        % Python code for this:
+        % >>> ns = {}; exec('from sympy import *', ns)
+        % ... for (k, v) in ns.items():
+        % ...    if not callable(v) and k not in ['__builtins__', 'C']:
+        % ...        if k == srepr(v):
+        % ...            print(k)
+        var_blacklist = {'E' 'I' 'nan' 'oo' 'pi' 'zoo' 'Catalan' ...
+                         'EulerGamma' 'GoldenRatio' 'true' 'false'};
+
+        %% special case: if all (x,y,z) are in the blacklist, we should *not*
+        % force symfun, thus preserving the identity sympy(sym(x)) == x
+        if (all (cellfun (@(v) (any (strcmp (v, var_blacklist))), varnames)))
+          hint_symfun = false;
+        end
+
+        %% Whitelist some function names to always make a Function
+        % Currently this is unused, but could be used if we want
+        % different behaviour for the "I" in "I(t)" vs "F(I, t)".
+        % SMT 2014 compat: does *not* have I, E here
+        %function_whitelist = {'I', 'E', 'ff', 'FF'};
+        %if (hint_symfun)
+        %  if (any (strcmp (name, function_whitelist)))
+        %    x = ['Function("' name '")(' varnamestr ')'];
+        %  end
+        %end
+      end
+
+      cmd = {'x, hint_symfun = _ins'
+             'if hint_symfun:'
+             '    from sympy.abc import _clash1'
+             '    myclash = {v: Symbol(v) for v in ["ff", "FF"]}'
+             '    myclash.update(_clash1)'
+             '    #myclash.pop("I", None)'  % remove for SMT compat
+             '    #myclash.pop("E", None)'
+             'else:'
+             '    myclash = dict()'
              'try:'
-             '    return (0, 0, S(x))'
+             '    return (0, 0, sympify(x, locals=myclash))'
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
@@ -504,7 +549,7 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (cmd, x);
+      [err flag s] = python_cmd (cmd, x, hint_symfun);
 
       switch (flag)
         case 1  % Bad call to python function
@@ -668,6 +713,12 @@ end
 %! assert (isa (A, 'sym'))
 
 %!test
+%! % symbolic matrix, symbolic but Integer size
+%! A = sym ('A', sym([2 3]));
+%! assert (isa (A, 'sym'))
+%! assert (isequal (size (A), [2 3]))
+
+%!test
 %! % symbolic matrix, subs in for size
 %! syms n m integer
 %! A = sym ('A', [n m]);
@@ -808,7 +859,7 @@ end
 %! x = sym(0.1 + 0.1i, 'f');
 %! assert (isequal (x, q + 1i*q))
 
-%!xtest
+%!test
 %! assert (isequal (sym(inf, 'f'), sym(inf)))
 %! assert (isequal (sym(-inf, 'f'), sym(-inf)))
 %! assert (isequaln (sym(nan, 'f'), sym(nan)))
@@ -928,11 +979,6 @@ end
 % TODO: test that might be used in the future
 %%!warning <avoid execute operations> sym ('1*2');
 
-% TODO: test that might be used in the future
-%%!warning <You are overloading/hiding> sym ('beta');
-
-%!error <use another variable name> sym ('FF(w)');
-
 %!assert (isequal (sym({1 2 'a'}), [sym(1) sym(2) sym('a')]));
 
 %!error sym({1 2 'a'}, 'positive');
@@ -969,3 +1015,72 @@ end
 %! % function_handle
 %! f = @(x) A*sin(x);
 %! sym (f)
+
+%!test
+%! % Issue #885
+%! clear f x  % if test not isolated (e.g., on matlab)
+%! syms x
+%! f(x) = sym('S(x)');
+%! f(x) = sym('I(x)');
+%! f(x) = sym('O(x)');
+
+%!test
+%! % sym(sympy(x) == x identity, Issue #890
+%! syms x
+%! f = exp (1i*x);
+%! s = sympy (f);
+%! g = sym (s);
+%! assert (isequal (f, g))
+
+%!test
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "pi" (which is "srepr(S.Pi)") for a symfun variable
+%! f = sym ('ff(pi, pi)');
+%! s1 = sympy (f);
+%! s2 = 'FallingFactorial(pi, pi)';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "I" (which is "srepr(S.ImaginaryUnit)") for a symfun variable
+%! f = sym ('sin(I)');
+%! g = 1i*sinh (sym (1));
+%! assert (isequal (f, g))
+%! s = sympy (f);
+%! assert (isempty (strfind (s, 'Function')))
+
+%!error
+%! % sym(sympy(x) == x identity
+%! % Don't mistake "true/false" (which is "srepr(S.true)") for a symfun variable
+%! % (Used to print as `S.true` but just `true` in sympy 1.2)
+%! sym ('E(true,false)')
+
+%!test
+%! % some variable names that are special to sympy but should not be for us
+%! f = sym ('f(S, Q, C, O, N)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''f'')(Symbol(''S''), Symbol(''Q''), Symbol(''C''), Symbol(''O''), Symbol(''N''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % For SMT 2014 compatibilty, I and E would become ImaginaryUnit and Exp(1)
+%! % but I'm not sure this is by design.  This test would need to change if
+%! % we want stricter SMT compatibilty.
+%! f = sym ('f(x, I, E)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''f'')(Symbol(''x''), Symbol(''I''), Symbol(''E''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('FF(w)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''FF'')(Symbol(''w''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('FF(w, pi)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''FF'')(Symbol(''w''), pi)';
+%! assert (strcmp (s1, s2))

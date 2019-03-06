@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2016 Colin B. Macdonald
+%% Copyright (C) 2015-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -69,7 +69,7 @@ end
 %!test
 %! % round trip
 %! y = sym('y');
-%! if (exist ('OCTAVE_VERSION2', 'builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %!   A = cbrt (d);
 %! else
 %!   % Issue #742
