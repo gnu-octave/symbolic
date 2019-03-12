@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin Macdonald
+%% Copyright (C) 2016, 2019 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -42,11 +42,12 @@
 %% The argument @var{f} can be a matrix:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% rewrite([exp(x) cos(x) asin(x)], 'log')
 %%   @result{} ans = (sym 1×3 matrix)
-%%       ⎡                  ⎛         __________⎞⎤
-%%       ⎢ x                ⎜        ╱    2     ⎟⎥
-%%       ⎣ℯ   cos(x)  -ⅈ⋅log⎝ⅈ⋅x + ╲╱  - x  + 1 ⎠⎦
+%%       ⎡                  ⎛         ________⎞⎤
+%%       ⎢ x                ⎜        ╱      2 ⎟⎥
+%%       ⎣ℯ   cos(x)  -ⅈ⋅log⎝ⅈ⋅x + ╲╱  1 - x  ⎠⎦
 %% @end group
 %% @end example
 %% (and note that some elements of @var{f} might be unchanged.)

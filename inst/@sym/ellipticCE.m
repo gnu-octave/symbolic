@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,8 +27,9 @@
 %% @example
 %% @group
 %% syms m
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% ellipticCE (m)
-%%   @result{} ans = (sym) E(-m + 1)
+%%   @result{} ans = (sym) E(1 - m)
 %% @end group
 %% @end example
 %%

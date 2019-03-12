@@ -1,5 +1,5 @@
-% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -75,6 +75,7 @@
 %% @example
 %% @group
 %% eqns = [x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0];
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% [A, B] = equationsToMatrix (eqns, [x y])
 %%   @result{} A = (sym 3×2 matrix)
 %%
@@ -86,11 +87,11 @@
 %%
 %%   B = (sym 3×1 matrix)
 %%
-%%       ⎡ 2⋅z  ⎤
-%%       ⎢      ⎥
-%%       ⎢-z + 1⎥
-%%       ⎢      ⎥
-%%       ⎣z - 5 ⎦
+%%       ⎡ 2⋅z ⎤
+%%       ⎢     ⎥
+%%       ⎢1 - z⎥
+%%       ⎢     ⎥
+%%       ⎣z - 5⎦
 %% @end group
 %% @end example
 %% @seealso{@@sym/solve}
