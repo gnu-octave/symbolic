@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,9 +26,12 @@
 %% @example
 %% @group
 %% syms x
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% latex(sin(x/2))
-%%   @print{} \sin@{\left (\frac@{x@}@{2@} \right )@}
+%%   @print{} \sin@{\left(\frac@{x@}@{2@} \right)@}
+%% @end group
 %%
+%% @group
 %% A = [sym(1) 2; sym(3) 4];
 %% s = latex(A)
 %%   @result{} s = \left[\begin@{matrix@}1 & 2\\3 & 4\end@{matrix@}\right]
@@ -61,5 +64,8 @@ end
 %!test
 %! syms x
 %! y = sin(x);
-%! assert ( strcmp( latex(y), '\sin{\left (x \right )}'))
-%! assert ( strcmp( latex(exp(x)), 'e^{x}'))
+%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! assert (strcmp (latex (y), '\sin{\left(x \right)}'))
+%! end
+
+%!assert (strcmp (latex (exp (sym('x'))), 'e^{x}'))
