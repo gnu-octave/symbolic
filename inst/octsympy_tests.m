@@ -36,10 +36,11 @@
 function anyfail = octsympy_tests ()
   if (compare_versions (OCTAVE_VERSION (), '4.4.0', '>='))
     pkgdir = fileparts (mfilename ('fullpath'))
-    if (strcmp (fullfile (pkgdir), fullfile (pwd)))
-      % be quieter if pkgdir is the current dir
-      pkgdir = '.';
-    end
+    % Maybe later: https://savannah.gnu.org/bugs/?55841
+    %if (strcmp (fullfile (pkgdir), fullfile (pwd)))
+    %  % be quieter if pkgdir is the current dir
+    %  pkgdir = '.';
+    %end
     [pass, fail] = __run_test_suite__ ({pkgdir}, {});
     anyfail = fail > 0;
     return
