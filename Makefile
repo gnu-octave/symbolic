@@ -104,7 +104,7 @@ clean:
 
 test:
 	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --no-gui --silent --path "${PWD}/inst" \
+	@$(OCTAVE) --no-gui --silent --path "${CURDIR}/inst" \
 		--eval "set (0, 'defaultfigurevisible', 'off'); \
 		 anyfail = octsympy_tests; \
 		 sympref reset; \
@@ -115,7 +115,7 @@ doctest:
 	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
 	@# Otherwise, it will make the doctests fail
 	@echo "Testing documentation strings ..."
-	@$(OCTAVE) --no-gui --silent --path "${PWD}/inst" \
+	@$(OCTAVE) --no-gui --silent --path "${CURDIR}/inst" \
 		--eval "pkg load doctest; \
 		 sym ('x'); \
 		 set (0, 'defaultfigurevisible', 'off'); \
@@ -163,11 +163,11 @@ ml_copy: ml_convert_comments
 
 ## Matlab: extract and convert comments to Matlab style
 ml_convert_comments: ${MATLAB_PKG}/@sym ${MATLAB_PKG}/@symfun ${MATLAB_PKG}/@double ${MATLAB_PKG}/@logical
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '',         '../${MATLAB_PKG}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@symfun',  '../${MATLAB_PKG}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@sym',     '../${MATLAB_PKG}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@double',  '../${MATLAB_PKG}/')"
-	$(OCTAVE) --path ${PWD}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${CURDIR}/util --silent --eval "pwd, convert_comments('inst/', '',         '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${CURDIR}/util --silent --eval "pwd, convert_comments('inst/', '@symfun',  '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${CURDIR}/util --silent --eval "pwd, convert_comments('inst/', '@sym',     '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${CURDIR}/util --silent --eval "pwd, convert_comments('inst/', '@double',  '../${MATLAB_PKG}/')"
+	$(OCTAVE) --path ${CURDIR}/util --silent --eval "pwd, convert_comments('inst/', '@logical', '../${MATLAB_PKG}/')"
 
 matlab_test:
 	cd "${MATLAB_PKG}"; ${MATLAB} -nodesktop -nosplash -r "${MATLAB_STARTUP_CMD}; octsympy_tests_matlab"
