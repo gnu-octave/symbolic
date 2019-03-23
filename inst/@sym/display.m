@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -132,7 +132,8 @@ end
 
 function [s1 s2] = sym_describe(x, unicode_dec)
   if (unicode_dec)
-    timesstr = '×';
+    %timesstr = '×';  % https://savannah.gnu.org/bugs/index.php?56072
+    timesstr = do_highbyte_escapes('\xc3\x97');
   else
     timesstr = 'x';
   end
