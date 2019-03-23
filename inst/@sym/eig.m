@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,45 +26,50 @@
 %% @example
 %% @group
 %% A = sym([2 4; 6 8]);
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% sort(eig(A))
 %%   @result{} ans = (sym 2×1 matrix)
-%%       ⎡-√33 + 5⎤
-%%       ⎢        ⎥
-%%       ⎣5 + √33 ⎦
+%%       ⎡5 - √33⎤
+%%       ⎢       ⎥
+%%       ⎣5 + √33⎦
 %% @end group
 %% @end example
 %%
 %% We can also compute the eigenvectors:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% [V, D] = eig(A)
 %%   @result{} V = (sym 2×2 matrix)
 %%       ⎡  -4        -4    ⎤
 %%       ⎢────────  ────────⎥
-%%       ⎢-√33 - 3  -3 + √33⎥
+%%       ⎢-3 + √33  -√33 - 3⎥
 %%       ⎢                  ⎥
 %%       ⎣   1         1    ⎦
 %%   @result{} D = (sym 2×2 matrix)
-%%       ⎡5 + √33     0    ⎤
-%%       ⎢                 ⎥
-%%       ⎣   0     -√33 + 5⎦
+%%       ⎡5 - √33     0   ⎤
+%%       ⎢                ⎥
+%%       ⎣   0     5 + √33⎦
 %% @end group
 %% @end example
 %% The eigenvectors are the columns of @var{V}; we can extract one
 %% and check:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% v = V(:, 1)
 %%   @result{} v = (sym 2×1 matrix)
 %%       ⎡  -4    ⎤
 %%       ⎢────────⎥
-%%       ⎢-√33 - 3⎥
+%%       ⎢-3 + √33⎥
 %%       ⎢        ⎥
 %%       ⎣   1    ⎦
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% lambda = D(1,1)
-%%   @result{} lambda = (sym) 5 + √33
+%%   @result{} lambda = (sym) 5 - √33
 %% @end group
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% simplify(A*v - lambda*v)
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡0⎤

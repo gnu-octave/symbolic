@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2017 Mike Miller
 %% Copyright (C) 2017 Alex Vong
 %%
@@ -31,13 +31,15 @@
 %% @group
 %% syms x
 %% g = taylor(log(1 + x), x, 0, 'order', 5);
+%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% g = horner(g)
 %%   @result{} g = (sym)
-%%         ⎛  ⎛  ⎛  x   1⎞   1⎞    ⎞
-%%       x⋅⎜x⋅⎜x⋅⎜- ─ + ─⎟ - ─⎟ + 1⎟
-%%         ⎝  ⎝  ⎝  4   3⎠   2⎠    ⎠
+%%         ⎛  ⎛  ⎛1   x⎞   1⎞    ⎞
+%%       x⋅⎜x⋅⎜x⋅⎜─ - ─⎟ - ─⎟ + 1⎟
+%%         ⎝  ⎝  ⎝3   4⎠   2⎠    ⎠
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% fortran(g)
-%%   @result{} x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%%   @result{} x*(x*(x*(1.0d0/3.0d0 - 1.0d0/4.0d0*x) - 1.0d0/2.0d0) + 1)
 %% @end group
 %% @end example
 %%
@@ -52,12 +54,13 @@
 %% @end group
 %%
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% disp(f90.code)
 %%   @print{}  REAL*8 function myfun(x)
 %%   @print{}  implicit none
 %%   @print{}  REAL*8, intent(in) :: x
 %%   @print{}
-%%   @print{}  myfun = x*(x*(x*(-1.0d0/4.0d0*x + 1.0d0/3.0d0) - 1.0d0/2.0d0) + 1)
+%%   @print{}  myfun = x*(x*(x*(1.0d0/3.0d0 - 1.0d0/4.0d0*x) - 1.0d0/2.0d0) + 1)
 %%   @print{}
 %%   @print{}  end function
 %% @end group

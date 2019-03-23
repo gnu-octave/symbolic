@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -38,11 +38,11 @@
 %%       ─
 %%       2
 %%       ⌠
-%%       ⎮          1
-%%       ⎮ ──────────────────── dα
-%%       ⎮    _________________
-%%       ⎮   ╱        2
-%%       ⎮ ╲╱  - m⋅sin (α) + 1
+%%       ⎮         1
+%%       ⎮ ────────────────── dα
+%%       ⎮    _______________
+%%       ⎮   ╱          2
+%%       ⎮ ╲╱  1 - m⋅sin (α)
 %%       ⌡
 %%       0
 %% @end group
@@ -51,11 +51,12 @@
 %% Examples:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% diff (ellipticK (m), m)
 %%   @result{} (sym)
-%%       -(-m + 1)⋅K(m) + E(m)
-%%       ─────────────────────
-%%            2⋅m⋅(-m + 1)
+%%       -(1 - m)⋅K(m) + E(m)
+%%       ────────────────────
+%%           2⋅m⋅(1 - m)
 %% @end group
 %%
 %% @group
