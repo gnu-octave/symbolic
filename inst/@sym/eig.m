@@ -64,10 +64,12 @@
 %%       ⎢-3 + √33⎥
 %%       ⎢        ⎥
 %%       ⎣   1    ⎦
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% lambda = D(1,1)
 %%   @result{} lambda = (sym) 5 - √33
 %% @end group
 %% @group
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% simplify(A*v - lambda*v)
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡0⎤

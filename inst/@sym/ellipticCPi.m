@@ -27,7 +27,7 @@
 %% @example
 %% @group
 %% syms nu m
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% ellipticCPi (nu, m)
 %%   @result{} ans = (sym) Π(ν│1 - m)
 %% @end group

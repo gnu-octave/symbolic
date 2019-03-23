@@ -29,7 +29,7 @@
 %% @group
 %% syms x
 %% g = taylor(log(1 + x), x, 0, 'order', 5);
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% g = horner(g)
 %%   @result{} g = (sym)
 %%         ⎛  ⎛  ⎛1   x⎞   1⎞    ⎞
