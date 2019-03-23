@@ -56,7 +56,7 @@
 %% whereas the output @code{sinc(π⋅x)} is the equivalent SymPy expression
 %% written in terms of the unnormalized sinc function.
 %%
-%% Note if you conversion back into an Octave function works correctly as
+%% Note conversion back into an Octave function works correctly as
 %% demonstrated next:
 %% @example
 %% @group
@@ -70,7 +70,6 @@
 %%   @result{} ans = -0.15591
 %% @end group
 %% @end example
-%%
 %%
 %% @seealso{sinc}
 %% @end defmethod
