@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin Macdonald
+%% Copyright (C) 2016, 2019 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -36,6 +36,23 @@
 %%       -ⅈ⋅⎝ℯ    - ℯ    ⎠
 %%       ──────────────────
 %%               2
+%% @end group
+%% @end example
+%%
+%% Often @code{sincos} is more useful than @code{sin} or @code{cos}:
+%% @example
+%% @group
+%% rewrite(tan(x), 'sin')
+%%   @result{} (sym)
+%%            2
+%%       2⋅sin (x)
+%%       ─────────
+%%        sin(2⋅x)
+%% rewrite(tan(x), 'sincos')
+%%   @result{} (sym)
+%%       sin(x)
+%%       ──────
+%%       cos(x)
 %% @end group
 %% @end example
 %%
