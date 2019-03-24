@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,12 +50,13 @@ function out = subsref (f, idx)
       if (strcmp (fld, 'vars'))
         out = f.vars;
       elseif (strcmp (fld, 'sym'))
-        out = f.sym;
+        % TODO: we previously supported a symfun.sym property/method/whatever
+        % which developers used to mean "cast to sym".  But that might not be
+        % correct and should probably be deprecated/removed.  In most cases,
+        % you probably want "formula(f)".
+        out = formula (f);
       else
-        %out = sym/subsref(f, idx);
-        %out = f.sym.fld;
-        %warning(' is there a better way to call the superclass fcn?')
-        out = subsref(f.sym,idx);
+        out = subsref (formula (f), idx);
       end
 
     otherwise

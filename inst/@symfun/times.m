@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,4 +59,4 @@ end
 %! f(x) = [x 2*x];
 %! h = f.*[x 3];
 %! assert( isa(h, 'symfun'))
-%! assert( isequal (h.sym, [x^2 6*x]))
+%! assert (isequal (formula (h), [x^2 6*x]))

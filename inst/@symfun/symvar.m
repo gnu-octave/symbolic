@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -100,24 +100,20 @@ function vars = symvar(F, Nout)
 
   if (nargin == 1)
     % Note: symvar(symfun) differs from SMT, see test below
-    vars = symvar([F.vars{:} F.sym(:)]);
+    vars = symvar([argnames(F) formula(F)(:)]);
 
   else
     assert(Nout >= 0, 'number of requested symbols should be positive')
 
-    M = length(F.vars);
-
-    vars = sym([]);
-    % take first few from F.vars
-    for i = 1:min(Nout, M)
-      vars(i) = F.vars{i};
-    end
-
-    if (Nout == length(vars))
+    % take first few from the arguments of the symfun
+    vars = argnames (F);
+    M = length(vars);
+    if (Nout <= M)
+      vars = vars(1:Nout);
       return
     end
 
-    symvars = symvar(F.sym, inf);
+    symvars = symvar (formula (F), inf);
     symvars = remove_dupes(symvars, vars);
     vars = [vars symvars(1:min(end, Nout-M))];
   end
@@ -142,7 +138,7 @@ end
 %!test
 %! % basic
 %! syms f(t, s)
-%! assert (isequal (symvar (f, 0), sym([])))
+%! assert (isempty (symvar (f, 0)))
 %! assert (isequal (symvar (f, 1), t))
 %! assert (isequal (symvar (f, 2), [t s]))
 %! assert (isequal (symvar (f, 3), [t s]))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,14 +79,14 @@ end
 %! else
 %!   s = warning();
 %! end
-%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
-%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
-%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))
-%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.sym, x / g))
-%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.sym, x ^ g))
-%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.sym, x .* g))
-%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.sym, x ./ g))
-%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.sym, x .^ g))
+%! h = x - f;  assert (isa (h, 'symfun') && isequal (formula (h), x - g))
+%! h = x + f;  assert (isa (h, 'symfun') && isequal (formula (h), x + g))
+%! h = x * f;  assert (isa (h, 'symfun') && isequal (formula (h), x * g))
+%! h = x / f;  assert (isa (h, 'symfun') && isequal (formula (h), x / g))
+%! h = x ^ f;  assert (isa (h, 'symfun') && isequal (formula (h), x ^ g))
+%! h = x .* f; assert (isa (h, 'symfun') && isequal (formula (h), x .* g))
+%! h = x ./ f; assert (isa (h, 'symfun') && isequal (formula (h), x ./ g))
+%! h = x .^ f; assert (isa (h, 'symfun') && isequal (formula (h), x .^ g))
 %! warning(s);
 
 %!test
@@ -97,12 +97,12 @@ end
 %! h = f - g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.sym, 2*x - sin(x)))
+%! assert (isequal (formula (h), 2*x - sin(x)))
 %! % and even if rh-sym has a dummy variable:
 %! h = f - g(y);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames(f)))
-%! assert( isequal (h.sym, 2*x - sin(y)))
+%! assert (isequal (formula (h), 2*x - sin(y)))
 
 %!test
 %! % different variables, f has more
@@ -112,4 +112,4 @@ end
 %! h = f - g(y) + g(x);
 %! assert( isa(h, 'symfun'))
 %! assert( isequal (argnames (h), argnames (f)))
-%! assert( isequal (h.sym, 2*x*y - sin(y) + sin(x)))
+%! assert (isequal (formula (h), 2*x*y - sin(y) + sin(x)))

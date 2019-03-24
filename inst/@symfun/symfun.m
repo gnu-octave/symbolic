@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -166,7 +166,7 @@ function f = symfun(expr, vars)
 
   if (isa(expr, 'symfun'))
     % allow symfun(<symfun>, x)
-    expr = expr.sym;
+    expr = formula (expr);
   else
     % e.g., allow symfun(<double>, x)
     expr = sym(expr);
@@ -319,8 +319,8 @@ end
 %!test
 %! % syms own parsing code should not reorder the vars
 %! syms f(y, x)
-%! v = f.vars;
-%! assert (isequal (v{1}, y) && isequal (v{2}, x))
+%! v = argnames (f);
+%! assert (isequal (v(1), y) && isequal (v(2), x))
 
 %!test
 %! % assignment of symfun to symfun, issue #189
