@@ -1034,7 +1034,7 @@ end
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
 
-%!test
+%!xtest
 %! % num2cell works on sym arrays
 %! syms x
 %! C1 = num2cell ([x 2 3; 4 5 6*x]);
