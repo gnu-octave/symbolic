@@ -263,7 +263,6 @@ classdef sym < handle
   methods (Static, Access = private)
     assert_same_shape (x, y);
     cell2nosyms (x);
-    cell_array_to_sym (L);
     check_assumptions (x);
     codegen (varargin);
     detect_special_str (x);
