@@ -74,6 +74,7 @@
 %% elements of a matrix, first convert it to a cell array:
 %% @example
 %% @group
+%% @c doctest: +XFAIL   % classdef issue?
 %% A = [1 x 1; 2 1 x];
 %% finiteset(num2cell(A))
 %%   @result{} ans = (sym) @{1, 2, x@}
