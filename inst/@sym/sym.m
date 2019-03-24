@@ -266,6 +266,9 @@ classdef sym < handle
     cell_array_to_sym (L);
     check_assumptions (x);
     codegen (varargin);
+    detect_special_str (x);
+    double_to_sym_exact (x);
+    double_to_sym_heuristic (x, ratwarn, argnstr);
     elementwise_op(scalar_fcn, varargin);
     ineq_helper (op, fop, lhs, rhs, nanspecial);
     is_same_shape (x, y);
@@ -408,9 +411,9 @@ classdef sym < handle
       x = xx{n};
       switch ratflag
         case 'f'
-          y = double_to_sym_exact (x);
+          y = sym.double_to_sym_exact (x);
         case 'r'
-          y = double_to_sym_heuristic (x, ratwarn, []);
+          y = sym.double_to_sym_heuristic (x, ratwarn, []);
         otherwise
           error ('sym: this case should not be possible')
       end
@@ -457,7 +460,7 @@ classdef sym < handle
       %  end
       %end
 
-    y = detect_special_str (x);
+    y = sym.detect_special_str (x);
     if (~ isempty (y))
       assert (isempty (asm), 'Only symbols can have assumptions.')
       s = python_cmd (['return ' y]);
