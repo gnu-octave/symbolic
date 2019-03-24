@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,4 +60,3 @@ end
 %! h = f./[x 2];
 %! assert( isa(h, 'symfun'))
 %! assert (isequal (formula (h), [1 x]))
-

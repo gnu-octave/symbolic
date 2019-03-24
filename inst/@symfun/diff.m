@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,7 +79,8 @@
 
 function z = diff(f, varargin)
 
-  z = diff@sym(f, varargin{:});
+  %z = diff@sym(f, varargin{:});
+  z = diff(formula (f), varargin{:});
   z = symfun(z, f.vars);
 
 end

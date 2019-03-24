@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,14 +79,14 @@ end
 %! else
 %!   s = warning();
 %! end
-%! h = x - f;  assert(isa(h, 'symfun') && isequal(h.sym, x - g))
-%! h = x + f;  assert(isa(h, 'symfun') && isequal(h.sym, x + g))
-%! h = x * f;  assert(isa(h, 'symfun') && isequal(h.sym, x * g))
-%! h = x / f;  assert(isa(h, 'symfun') && isequal(h.sym, x / g))
-%! h = x ^ f;  assert(isa(h, 'symfun') && isequal(h.sym, x ^ g))
-%! h = x .* f; assert(isa(h, 'symfun') && isequal(h.sym, x .* g))
-%! h = x ./ f; assert(isa(h, 'symfun') && isequal(h.sym, x ./ g))
-%! h = x .^ f; assert(isa(h, 'symfun') && isequal(h.sym, x .^ g))
+%! h = x - f;  assert (isa (h, 'symfun') && isequal (formula (h), x - g))
+%! h = x + f;  assert (isa (h, 'symfun') && isequal (formula (h), x + g))
+%! h = x * f;  assert (isa (h, 'symfun') && isequal (formula (h), x * g))
+%! h = x / f;  assert (isa (h, 'symfun') && isequal (formula (h), x / g))
+%! h = x ^ f;  assert (isa (h, 'symfun') && isequal (formula (h), x ^ g))
+%! h = x .* f; assert (isa (h, 'symfun') && isequal (formula (h), x .* g))
+%! h = x ./ f; assert (isa (h, 'symfun') && isequal (formula (h), x ./ g))
+%! h = x .^ f; assert (isa (h, 'symfun') && isequal (formula (h), x .^ g))
 %! warning(s);
 
 %!test
