@@ -610,21 +610,7 @@ classdef sym < handle
   end
 
   methods (Static)
-    function symout = symarray (x, varargin)
-      if (iscell (x))
-        if nargin == 1
-          symout = sym.cell_array_to_sym (x);
-        else
-          symout = sym.cell_array_to_sym (x, varargin{:});
-        end
-      else
-        if nargin == 1
-          symout = sym (x);
-        else
-          symout = sym (x, varargin{:});
-        end
-      end
-    end
+    % none yet
   end
 end
 
@@ -705,42 +691,6 @@ end
 %! assert (isequal (sym (A), A))
 %! A = [1 x];
 %! assert (isequal (sym (A), A))
-
-%!test
-%! % Cell array lists to syms
-%! % (these tests are pretty weak, doens't recursively compare two
-%! % cells, but just running this is a good test.
-%! x = sym ('x');
-%!
-%! a = {1 2};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2 {3 4}};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 4};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 2; 3 {4}};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%!
-%! a = {1 [1 2] x [sym(pi) x]};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{2}), size (s{2})))
-%! assert (isequal (size (a{4}), size (s{4})))
-%!
-%! a = {{{[1 2; 3 4]}}};
-%! s = sym.symarray (a);
-%! assert (isequal (size (a), size (s)))
-%! assert (isequal (size (a{1}), size (s{1})))
-%! assert (isequal (size (a{1}{1}), size (s{1}{1})))
-%! assert (isequal (size (a{1}{1}{1}), size (s{1}{1}{1})))
-
 
 %!test
 %! %% assumptions and clearing them
