@@ -1,3 +1,4 @@
+%% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
@@ -18,39 +19,80 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@sym isequal (@var{f}, @var{g})
-%% @defmethodx @@sym isequal (@var{f}, @var{g}, @dots{})
-%% Test if contents of two or more symfuns are equal.
+%% @defmethod  @@symfun isequal (@var{f}, @var{g})
+%% @defmethodx @@symfun isequal (@var{f}, @var{g}, @dots{})
+%% Test if contents of two or more arrays are equal.
 %%
 %% Example:
 %% @example
 %% @group
 %% syms x
-%% f(x) = x;
-%% isequal (f(x), x)
+%% f(x) = x + 1;
+%% g(x) = x + 1;
+%% isequal(f, g)
 %%   @result{} 1
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/isequal}
+%% Note: two symfuns are equal if they have the same formula @emph{and}
+%% same arguments:
+%% @example
+%% @group
+%% syms x y
+%% f(x) = x + 1;
+%% g(x, y) = x + 1;
+%% isequal(f, g)
+%%   @result{} 0
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/isequal, @@symfun/formula, @@symfun/argnames}
 %% @end defmethod
 
-function t = isequal (x, y, varargin)
+function t = isequal(x, y, varargin)
 
-  t = isequal@sym (x, y, varargin{:});
+  if (nargin <= 1)
+    print_usage ();
+  end
+
+  t = isequal(formula(x), formula(y)) && isequal(argnames(x), argnames(y));
+
+  if nargin >= 3 && t
+    t = t && isequal(x, varargin{:});
+  end
 
 end
 
+%!error isequal (symfun('x + 1', x))
 
 %!test
-%! syms x;
-%! f(x) = x^2;
-%! g(x) = x^2;
-%! assert (isequal (f(x), g(x)))
-%! assert (isequal (f(x), x^2))
+%! syms x y
+%! f(x) = 2*x;
+%! g(x) = 2*x;
+%! assert (isequal (f, g))
 
 %!test
-%! syms x y;
-%! f(x) = x^2;
-%! g(y) = y^2;
-%! assert (isequal (f(x), g(x)))
+%! syms x
+%! f(x) = 2*x + 1;
+%! g(x) = 2*x + 1;
+%! h(x) = 2*x + 1;
+%! assert (isequal (f, g, h))
+
+%!test
+%! syms x
+%! f(x) = 2*x + 1;
+%! g(x) = 2*x + 1;
+%! h(x) = 2*x;
+%! assert (~ isequal (f, g, h))
+
+%!test
+%! syms x y
+%! f(x) = 2*x;
+%! g(x, y) = 2*x;
+%! assert (~ isequal (f, g))
+
+%!test
+%! syms x y
+%! f(x) = symfun(nan, x);
+%! g(x) = symfun(nan, x);
+%! assert (~ isequal (f, g))

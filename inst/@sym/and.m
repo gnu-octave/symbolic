@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,9 +63,9 @@ end
 %! assert (isequal (t & false, f))
 %! assert (isequal (t & true, t))
 %! assert (isequal (t & 0, f))
-%! assert (isequal (t & 6, t))
+%! assert (isequal (t & 1, t))
 %! assert (isa (t & false, 'sym'))
-%! assert (isa (t & 6, 'sym'))
+%! assert (isa (t & 1, 'sym'))
 
 %!test
 %! % array
@@ -75,12 +75,11 @@ end
 
 %!test
 %! % number
-%! assert (isequal( sym(5) & t, t))
+%! assert (isequal( sym(1) & t, t))
 %! assert (isequal( sym(0) & t, f))
 
-%!xtest
+%!test
 %! % output is sym even for scalar t/f
-%! % ₣IXME: should match other bool fcns
 %! assert (isa (t & f, 'sym'))
 
 %!test

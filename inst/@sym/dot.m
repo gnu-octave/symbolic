@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2016 Colin B. Macdonald
+%% Copyright (C) 2015-2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2016 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -60,9 +60,11 @@ function c = dot(a, b)
     print_usage ();
   end
 
-  % conjugate linear in the 1st slot to match the behavior of @double/dot
+  % conjugate a to match the behavior of @double/dot
   cmd = { 'a, b = _ins'
-          'return a.conjugate().dot(b),'
+          'if Version(spver) <= Version("1.3"):'
+          '    return a.conjugate().dot(b)'
+          'return a.dot(b, hermitian=True, conjugate_convention="left")'
         };
 
   c = python_cmd (cmd, sym(a), sym(b));

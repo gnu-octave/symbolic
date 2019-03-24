@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,7 +19,8 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym angle (@var{x})
+%% @defmethod  @@sym angle (@var{x})
+%% @defmethodx @@sym arg (@var{x})
 %% Symbolic polar angle.
 %%
 %% Example:
@@ -26,20 +28,18 @@
 %% @group
 %% x = sym(2+3*i);
 %% y = angle(x)
-%%   @result{} y = (sym) atan(3/2) 
+%%   @result{} y = (sym) atan(3/2)
 %% @end group
 %% @end example
-%% @seealso{@@sym/abs}
+%% @seealso{angle, @@sym/abs}
 %% @end defmethod
 
-%% Reference: https://stackoverflow.com/questions/33338349/python-sympy-angle-of-a-complex-number
 
-
-function y = angle(x)
+function y = angle (x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = elementwise_op ('lambda a: sympy.log(a).as_real_imag()[1]', x);
+  y = elementwise_op ('arg', x);
 end
 
 
@@ -47,3 +47,14 @@ end
 %! Z = [sqrt(sym(3)) + 3*sym(i), 3 + sqrt(sym(3))*sym(i); 1 + sym(i), sym(i)];
 %! Q = [sym(pi)/3 sym(pi)/6; sym(pi)/4 sym(pi)/2];
 %! assert( isequal( angle(Z), Q));
+
+%!test
+%! % roundtrip
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms x
+%! A = angle (2+2i);
+%! f = angle (x);
+%! h = function_handle (f);
+%! B = h (2+2i);
+%! assert (A, B, -eps)
+%! end

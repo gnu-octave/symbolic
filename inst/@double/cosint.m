@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,12 +48,8 @@ function y = cosint (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(Ci(complex(x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell(x(:)));
-  assert (numel (c) == numel (x))
-  y = x;
-  for i = 1:numel (c)
-    y(i) = c{i};
-  end
+  c = python_cmd (cmd, num2cell (x(:)));
+  y = reshape (cell2mat (c), size (x));
 end
 
 
@@ -113,5 +109,5 @@ end
 %! R = expint (1i*x);
 %! C2 = -real (R);
 %! S2 = imag (R) + pi/2;
-%! assert (C1, C2, -10*eps);
-%! assert (S1, S2, -10*eps);
+%! assert (C1, C2, -100*eps);
+%! assert (S1, S2, -100*eps);

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -51,7 +51,7 @@
 
 function z = times(x, y)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
@@ -59,17 +59,17 @@ function z = times(x, y)
     return
   end
 
-  % 2016-03: cannot simply call hadamard_product, see upstream:
+  % 2018-01: TODO cannot simply call hadamard_product, see upstream:
   % https://github.com/sympy/sympy/issues/8557
 
   cmd = { '(x,y) = _ins'
           'if x is None or y is None:'
           '    return x*y'
           'if x.is_Matrix and y.is_Matrix:'
-          '    if isinstance(x, sp.MatrixExpr) or isinstance(y, sp.MatrixExpr):'
-          '        return hadamard_product(x, y)'
-          '    else:'
+          '    try:'
           '        return x.multiply_elementwise(y)'
+          '    except (AttributeError, TypeError):'
+          '        return hadamard_product(x, y)'
           'return x*y' };
 
   z = python_cmd (cmd, sym(x), sym(y));
@@ -94,3 +94,20 @@ end
 %! assert (isequal ( A.*A , D.*D  ))
 %! assert (isequal ( A.*D , D.*D  ))
 %! assert (isequal ( D.*A , D.*D  ))
+
+%!test
+%! % immutable test
+%! A = sym([1 2]);
+%! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)]])');
+%! assert (isequal (A.*A, B.*B))
+
+%!test
+%! % MatrixSymbol test
+%! A = sym([1 2; 3 4]);
+%! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
+%! C = sym('MatrixSymbol("C", 2, 2)');
+%! assert (~ isempty (strfind (sympy (C.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (A.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (C.*A), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (B.*C), 'Hadamard')))
+%! assert (~ isempty (strfind (sympy (C.*B), 'Hadamard')))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -127,7 +127,7 @@ function f = function_handle(varargin)
     file_to_write = fullfile(fcnpath, [fcnname '.m']);
     [fid,msg] = fopen(file_to_write, 'w');
     assert(fid > -1, msg)
-    fprintf(fid, '%s', M.code)
+    fprintf(fid, '%s', M.code);
     fclose(fid);
     fprintf('Wrote file %s.\n', file_to_write);
 
@@ -265,6 +265,7 @@ end
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
@@ -289,6 +290,7 @@ end
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [a,b] = f(10,20,30);
 %! assert (isnumeric (a) && isnumeric (b))
 %! assert (a == 400)
@@ -327,6 +329,7 @@ end
 %! addpath(temp_path);
 %! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
+%! addpath(temp_path);  % Matlab 2014a needs this?
 %! [t1,t2,t3] = h(1,2,3);
 %! assert(isequal(t1, [1 2 3]))
 %! assert(isequal(t2, [1 2; 3 16]))
@@ -345,3 +348,10 @@ end
 %! f = y + 10*a + 100*x + 1000*A;
 %! h = function_handle(f);
 %! assert (h(1, 2, 3, 4) == 1000 + 20 + 300 + 4)
+
+%!test
+%! % https://github.com/cbm755/octsympy/issues/854
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%!   f = function_handle (x + 1i*sqrt (sym(3)));
+%!   assert (f (1), complex (1, sqrt (3)), -eps)
+%! end

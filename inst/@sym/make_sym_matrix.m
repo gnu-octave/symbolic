@@ -19,15 +19,27 @@
 function A = make_sym_matrix(As, sz)
 % private helper function for making symbolic matrix
 
-  assert (ischar (As));
-  assert (isequal (size(sz), [1 2]));
+  assert (ischar (As), 'Cannot create symbolic matrix with non-string')
+  assert (isequal (size(sz), [1 2]), 'Cannot create symbolic matrix with that size')
+  % regexp: non-digit followed by any word
+  assert (~ isempty (regexp (As, '^\D\w*$')), 'Cannot create symbolic matrix with expression "%s"', As)
+
   if (isa(sz, 'sym'))
-    cmd = { 'As, sz = _ins'
-            'return sympy.MatrixSymbol(As, *sz),' };
-    A = python_cmd (cmd, As, sz);
+    cmd = { 'As, (n, m), = _ins'
+            'if n.is_Integer and m.is_Integer:'
+	    '    return (0, int(n), int(m)) '
+	    'else:'
+	    '    return (1, sympy.MatrixSymbol(As, n, m), 0)' };
+    [flag, n, m] = python_cmd (cmd, As, sz);
+    if (flag)
+      A = n;
+      return
+    end
   else
     n = int32(sz(1));
     m = int32(sz(2));
+  end
+
     % FIXME: returning an appropriate MatrixSymbol is nice idea,
     % but would need more work on IPC, size().  The ideal thing
     % might be a string representation that looks like this
@@ -48,6 +60,5 @@ function A = make_sym_matrix(As, sz)
             'A = sympy.Matrix(L)'
             'return A,' };
     A = python_cmd (cmd, As, n, m);
-  end
 
 end

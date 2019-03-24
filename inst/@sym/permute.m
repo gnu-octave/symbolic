@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,6 +44,10 @@
 
 function B = permute(A, perm)
 
+  if (nargin < 2)
+    print_usage ();
+  end
+
   if (isequal(perm, [1 2]))
     B = A;
   elseif  (isequal(perm, [2 1]))
@@ -54,6 +58,8 @@ function B = permute(A, perm)
 
 end
 
+
+%!error <Invalid> permute (sym(1))
 
 %!test
 %! D = round(10*rand(5,3));

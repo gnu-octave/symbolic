@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,6 +44,10 @@
 
 
 function [n, d] = numden(x)
+
+  if (nargin ~= 1)
+    print_usage ()
+  end
 
   [n, d] = python_cmd ('return (sympy.numer(*_ins), sympy.denom(*_ins))', sym(x));
 

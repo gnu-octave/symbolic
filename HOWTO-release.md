@@ -19,36 +19,50 @@ Checklist
 
   * Update NEWS file (date, version number, reformat).
 
+  * Update INDEX file for any new functions.
+
   * Check minimum sympy version is consistent: its in
     DESCRIPTION, assert_have_python_and_sympy.m
 
   * Packages: need to run the following two scripts:
 
-      - Use the maintainer makefile: "make clean", "make pkg".
+      - Use the maintainer makefile: "make clean", "make dist".
 
-      - make_windows_package.sh, use "day-to-day testing" mode.  I
-        recommend testing them first without using the tag.  Then test
-        the packages by running the test suite.
+      - make_windows_package.sh, use "day-to-day testing" mode.
+        Run this script "out of tree", it will clone a clean copy.
+        Make sure py2exe and sympy are the most recent versions.
 
   * Test regenerating html documentation: "make html"
 
-  * If packages seem ok, then tag the repo with:
+  * Run "make release" and record the md5 sums.
 
-    `git tag -a v2.x.y -m "Version 2.x.y"`
+  * Test on Matlab if possible.
 
-  * `git push --tags origin master`.  If messed up and want to change
-    anything after this, need to bump version number (tag is public).
+  * Test on Windows if possible.
 
-  * Push and push tags to sourceforge.
+  * Ensure sourceforge and github both have up-to-date master.
 
-  * Then redo the packages (Windows bundle will need "tag" mode).
+  * Create ticket for release on sourceforge.  Upload tarball, html
+    tarball and md5sums.
+
+  * Update 2017-07: tagging now happens after review, by admins!
+
+      - If packages seem ok, admin/reviewer will tag with:
+
+          `git tag -a v2.x.y -m "Version 2.x.y"`
+
+  * Make sure tags are current on both sourceforge and github.
+    `git push --tags origin master`.
+
+  * Do github related release tasks:
+
+      - Redo the Windows bundle package (using tag mode, see script).
 
       - compute the md5sums, upload the packages to github release
-        page, and copy-paste the md5sums.
+        page, and copy-paste the md5sums.  These must match the
+        sourceforge md5sums.
 
-      - regenerate the html documentation.
-
-      - create ticket for binaries and doc tarball on sourceforge.
+      - Do github release (copy-paste from last time, update link).
 
 
 

@@ -1,5 +1,5 @@
 %% Copyright (C) 2003 Willem J. Atsma
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -38,13 +38,21 @@
 %%
 %% @strong{Warning}: Using the single-argument form, the coefficient vector
 %% @var{c} is a plain numeric vector (double).  This is for compatibility
-%% with the Matlab Symbolic Math Toolbox, and could change in future versions
-%% of OctSymPy.  We thus recommend using @code{double} explicitly as in:
+%% with the Matlab Symbolic Math Toolbox.
+%% We suggest making this clear in your code by explicitly casting to @code{double},
+%% as in:
 %% @example
 %% @group
 %% syms x
-%% double(sym2poly(pi*x^2 + 3*x/2 + exp(sym(1))))
-%%    @result{}     3.1416   1.5000   2.7183
+%% double(sym2poly(pi*x^3 + 3*x/2 + exp(sym(1))))
+%%    @result{}     3.14159   0.00000   1.50000   2.71828
+%% @end group
+%% @end example
+%% You may prefer specifying @var{X} or using @code{coeffs}:
+%% @example
+%% @group
+%% coeffs(pi*x^3 + 3*x/2 + exp(sym(1)), 'all')
+%%    @result{} (sym) [π  0  3/2  ℯ]  (1×4 matrix)
 %% @end group
 %% @end example
 %%
@@ -52,7 +60,7 @@
 %% certainly deal with more general concepts of polynomial but we do not
 %% yet expose all of that here.
 %%
-%% @seealso{poly2sym, polyval, roots}
+%% @seealso{poly2sym, @@sym/coeffs, polyval, roots}
 %% @end deftypemethod
 
 %% Created: 18 April 2003
@@ -69,15 +77,18 @@
 function c = sym2poly(p, x)
 
   if ~(isscalar(p))
-    error('works for scalar input only');
+    error ('sym2poly: works for scalar input only');
   end
 
   if (nargin == 1)
     ss = findsymbols(p);
-    if (length(ss) >= 2)
-      error('Input has more than one symbol: not clear what you want me to do')
+    if (length (ss) >= 2)
+      error ('sym2poly: input has more than one symbol: not clear what you want me to do')
+    elseif (length (ss) == 1)
+      x = ss{1};
+    else
+      x = sym('x');
     end
-    x = ss{1};
     convert_to_double = true;
   elseif (nargin == 2)
     convert_to_double = false;
@@ -92,7 +103,7 @@ function c = sym2poly(p, x)
 
   c2 = python_cmd (cmd, sym(p), sym(x));
   if (isempty(c2))
-    error('Empty python output, can this happen?  A bug.')
+    error ('sym2poly: empty python output, can this happen?  A bug.')
   end
 
   % FIXME: should be able to convert c2 to array faster than array
@@ -134,3 +145,5 @@ end
 %! % too many symbols for single-input
 %! p = a*x^2 + 2;
 %! c = sym2poly (p);
+
+%!assert (isequal (sym2poly (sym(5)), sym(5)))

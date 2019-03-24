@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,7 +47,7 @@
 %% @end group
 %% @end example
 %% Here the curve is defined implicitly by @code{f(x, y) == 0},
-%% but we do not enter to the @code{== 0} part.
+%% but we do not enter the @code{== 0} part.
 %%
 %% See help for the (non-symbolic) @code{ezplot}, which this
 %% routine calls after trying to convert sym inputs to
@@ -111,7 +111,7 @@ function varargout = ezplot(varargin)
           if (isempty(firstsym))
             firstsym = thissym;
           else
-            assert(logical(thissym == firstsym), ...
+            assert (all (logical (thissym == firstsym)), ...
               'ezplot: all functions must be in terms of the same variables');
           end
           thisf = function_handle(varargin{i});
@@ -176,8 +176,23 @@ end
 %! syms x y
 %! f = sqrt(x*x + y*y) - 1;
 %! h = ezplot(f);
-%! y = get(h, 'ydata');
-%! assert (max(y) - 1 <= 4*eps)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%!   xx = get (h, 'xdata');
+%!   yy = get (h, 'ydata');
+%! else
+%!   if (isempty (get (h, 'zdata')))
+%!     xx = get (h, 'xdata');
+%!     yy = get (h, 'ydata');
+%!   else
+%!     cm = get (h, 'ContourMatrix');
+%!     xx = cm(1, 2:end);
+%!     yy = cm(2, 2:end);
+%!     assert (cm(1, 1) == 0)
+%!     assert (cm(2, 1) == length (xx))
+%!   end
+%! end
+%! assert (abs (max (xx) - 1) <= 0.02)
+%! assert (abs (max (yy) - 1) <= 0.02)
 
 %!error
 %! % implicit plot supports single function
@@ -197,6 +212,9 @@ end
 %! assert (length(y) == 42)
 %! assert (abs(y(end) - cos(4*pi)) <= 4*eps)
 %! end
+
+%!test
+%! close all
 
 %%!test
 %%! close (hf);

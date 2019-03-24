@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2016 Colin B. Macdonald
+# Copyright (C) 2014-2017 Colin B. Macdonald
 # Free Software without warranty, GPL-3.0+: see python_header.m
 
 # In some cases this code is fed into stdin: two blank lines between
@@ -177,7 +177,7 @@ try:
             c = ET.SubElement(et, "list")
             for y in x:
                 octoutput(y, c)
-        elif isinstance(x, int):
+        elif isinstance(x, sp.compatibility.integer_types):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
@@ -198,7 +198,7 @@ try:
             f.text = d2hex(x.real)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x.imag)
-        elif isinstance(x, str) or (sys.version_info < (3, 0) and isinstance(x, unicode)):
+        elif isinstance(x, sp.compatibility.string_types):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)

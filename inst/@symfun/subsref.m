@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,9 +43,7 @@ function out = subsref (f, idx)
 
   switch idx.type
     case '()'
-      % TODO: why isn't this allowed?
-      %out = subs@sym (f, f.vars, idx.subs);
-      out = subs (formula (f), f.vars, idx.subs);
+      out = subs (formula (f), argnames (f), idx.subs);
 
     case '.'
       fld = idx.subs;

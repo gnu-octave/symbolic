@@ -1,7 +1,25 @@
+% Copyright (C) 2014-2017 Colin B. Macdonald
+%
+% This file is part of OctSymPy.
+%
+% OctSymPy is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published
+% by the Free Software Foundation; either version 3 of the License,
+% or (at your option) any later version.
+%
+% This software is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty
+% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+% the GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public
+% License along with this software; see the file COPYING.
+% If not, see <http://www.gnu.org/licenses/>.
+
 function extract_tests_for_matlab()
 
-  dirs = {'.', '@sym', '@symfun'};
-  dirstr = {'', 'sym', 'symfun'};
+  dirs = {'.', '@sym', '@symfun', '@double', '@logical'};
+  dirstr = {'', 'sym', 'symfun', 'double', 'logical'};
 
   outdir = 'tests_matlab';
 
@@ -62,6 +80,8 @@ function r = proc_file(base, basestr, nm, outdir)
   body = regexprep(body, '^xtest\n( [^\n]*\n)*', [nl dskip nl '%xtest' ...
                       ' (**TEST EXPECTED TO FAIL: REMOVE**)' nl], 'lineanchors');
   body = regexprep(body, '^error [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%error' ...
+                      ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
+  body = regexprep(body, '^error\n( [^\n]*\n)*', [nl dskip nl '%error' ...
                       ' (**ERROR TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');
   body = regexprep(body, '^warning [^\n]+\n( [^\n]*\n)*', [nl dskip nl '%warning' ...
                       ' (**WARNING TEST: NOT SUPPORTED, REMOVED**)' nl], 'lineanchors');

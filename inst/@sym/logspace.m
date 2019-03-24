@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,13 +63,10 @@
 %%       ⎣              100.0               ⎦
 %% @end group
 %% @end example
-%% (This example may fail if using SymPy older than 1.0.)
 %%
 %% @seealso{@@sym/linspace}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function r = logspace(a, b, N)
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -86,7 +86,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           'for A in _ins:'
           '    if isinstance(A, MatrixBase):'
           '        if q is None:'
-          '            q = A'
+          '            q = A.as_mutable()'
           '        else:'
           '            assert q.shape == A.shape, "Matrices in input must all have the same shape"'
           % in case all inputs were scalars:

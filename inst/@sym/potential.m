@@ -94,11 +94,9 @@ function p = potential(v, x, y)
           '    return S.NaN,'
           '_lambda = sympy.Dummy("lambda", real=True)'
           'q = y + _lambda*(x - y)'
-          'vlx = v.subs([a for a in zip(list(x), list(q))], simultaneous=True)'
+          'vlx = v.subs(list(zip(list(x), list(q))), simultaneous=True)'
           'p = integrate((x-y).dot(vlx), (_lambda, 0, 1))'
           'return p.simplify(),' };
-  % FIXME: [a for a in zip] is a hack for python 3: why is this
-  % necessary?  SymPy bug?
 
   p = python_cmd (cmd, sym(v), x, sym(y));
 

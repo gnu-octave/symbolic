@@ -1,4 +1,6 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,6 +31,12 @@
 %% configurations.  The various choices for @var{cmd} and
 %% @var{args} are documented below.
 %%
+%% Run @strong{diagnostics} on your system:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref diagnose
+%%   @print{} ...
+%% @end example
 %%
 %% Get the name of the @strong{Python executable}:
 %% @example
@@ -37,17 +45,20 @@
 %%   @result{} ans = python
 %% @end example
 %%
-%% This value can be changed by setting the environment variable
+%% Changing the Python executable might help if you've installed
+%% a local Python interpreter somewhere else on your system.
+%% The value can be changed by setting the environment variable
 %% @code{PYTHON}, which can be configured in the OS, or it can be
 %% set within Octave using:
 %% @example
 %% @comment doctest: +SKIP
-%% setenv PYTHON /usr/bin/python
+%% setenv PYTHON python3
+%% setenv PYTHON $@{HOME@}/.local/bin/python
 %% setenv PYTHON C:\Python\python.exe
 %% sympref reset
 %% @end example
 %% If the environment variable is empty or not set, the package
-%% uses a default setting (usually @code{python}).
+%% uses a default setting (often @code{python}).
 %%
 %%
 %% @strong{Display} of syms:
@@ -162,7 +173,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 2.5.0-dev
+%%   @result{} 2.7.1+
 %% @end group
 %% @end example
 %%
@@ -183,19 +194,29 @@ function varargout = sympref(cmd, arg)
     return
   end
 
+  if (isstruct (cmd))
+    assert (isequal (sort (fieldnames (cmd)), ...
+      sort ({'ipc'; 'display'; 'digits'; 'quiet'})), ...
+      'sympref: structure has incorrect field names')
+    settings = [];
+    sympref ('quiet', cmd.quiet)
+    sympref ('display', cmd.display)
+    sympref ('digits', cmd.digits)
+    sympref ('ipc', cmd.ipc)
+    return
+  end
 
   switch lower(cmd)
     case 'defaults'
       settings = [];
       settings.ipc = 'default';
-      settings.whichpython = '';
       sympref ('display', 'default')
       sympref ('digits', 'default')
       sympref ('quiet', 'default')
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '2.5.0-dev';
+      varargout{1} = '2.7.1+';
 
     case 'display'
       if (nargin == 1)
@@ -247,12 +268,11 @@ function varargout = sympref(cmd, arg)
 
     case 'python'
       if (nargin ~= 1)
-	error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
+        error('old syntax ''sympref python'' removed; use ''setenv PYTHON'' instead')
       end
-      DEFAULTPYTHON = 'python';
       pyexec = getenv('PYTHON');
       if (isempty(pyexec))
-        pyexec = DEFAULTPYTHON;
+        pyexec = defaultpython ();
       end
       varargout{1} = pyexec;
 
@@ -292,9 +312,6 @@ function varargout = sympref(cmd, arg)
 
     case 'reset'
       verbose = ~sympref('quiet');
-      if (verbose)
-        disp('Resetting the communication mechanism');
-      end
       r = python_ipc_driver('reset', []);
 
       if (nargout == 0)
@@ -314,6 +331,9 @@ function varargout = sympref(cmd, arg)
       %  error ('the package %s is not installed', your_pkg);
       %end
       %pkg_path = pkg_l{idx}.dir
+
+    case 'diagnose'
+      assert_have_python_and_sympy (sympref ('python'), true)
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));
@@ -376,7 +396,6 @@ end
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
-%! fprintf('\nRunning some tests that reset the IPC and produce output\n');
 %! sympref('ipc', 'system');
 %! syms x
 
@@ -409,17 +428,40 @@ end
 %! delete('tmp_python_cmd.py')
 
 %!test
+%! s = warning ('off', 'OctSymPy:sympref:invalidarg');
+%! sympref ('ipc', 'bogus');
+%! assert (strcmp (sympref ('ipc'), 'bogus'))
+%! warning (s)
+
+%!error <invalid ipc mechanism> syms ('x')
+
+%!test
 %! sympref('defaults')
 %! assert(strcmp(sympref('ipc'), 'default'))
 %! sympref('quiet', 'on')
+
+%!test
+%! % restore sympref from structure
+%! old = sympref ();
+%! sympref ('display', 'ascii');
+%! sympref ('digits', 64);
+%! old = orderfields (old);  % re-ordering the fields should be ok
+%! sympref (old);
+%! new = sympref ();
+%! assert (isequal (old, new))
+
+%!error <incorrect field names>
+%! s.a = 'hello';
+%! s.b = 'world';
+%! sympref (s)
 
 %!test
 %! syms x
 %! r = sympref('reset');
 %! % restore original sympref settings
 %! sympref ('ipc',   sympref_orig.ipc);
-%! sympref ('quiet', sympref_orig.quiet);
 %! syms x
+%! sympref ('quiet', sympref_orig.quiet);
 %! assert(r)
 
 %!error <invalid preference or command> sympref ('nosuchsetting')

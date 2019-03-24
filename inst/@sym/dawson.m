@@ -47,6 +47,9 @@ end
 
 
 %!test
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % dawson missing on Matlab, Issue #742
 %! A = dawson([1 2]);
 %! B = double(dawson(sym([1 2])));
 %! assert(A, B, -eps)
+%! end

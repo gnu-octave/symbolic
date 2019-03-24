@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -39,27 +39,28 @@
 %% @seealso{zeros, @@sym/ones, @@sym/eye}
 %% @end defmethod
 
-%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
-
 
 function y = zeros(varargin)
 
   % partial workaround for issue #13: delete when/if fixed properly
-  if (strcmp (varargin{nargin}, 'sym'))
-    nargin = nargin - 1;
-    varargin = varargin(1:nargin);
+  if ((isa (varargin{nargin}, 'char')) && (strcmp (varargin{nargin}, 'sym')))
+    varargin = varargin(1:(nargin-1));
   end
 
-  if (isa (varargin{nargin}, 'char'))
-    y = zeros (sym.cell2nosyms (varargin){:});
+  if (isa (varargin{end}, 'char'))
+    varargin = sym.cell2nosyms (varargin);
+    y = zeros (varargin{:});
     return
   end
 
   for i = 1:length(varargin)
     varargin{i} = sym(varargin{i});
   end
-  y = python_cmd ('return zeros(*_ins)', varargin{:});
-
+  if (length (varargin) == 1 && ~isscalar (varargin{1}))
+    y = python_cmd ('return zeros(*_ins[0])', varargin{1});
+  else
+    y = python_cmd ('return zeros(*_ins)', varargin{:});
+  end
 end
 
 
@@ -77,6 +78,11 @@ end
 %! y = zeros(sym(1), 2);
 %! x = [0 0];
 %! assert( isequal( y, sym(x)))
+
+%!test
+%! y = zeros (sym([2 3]));
+%! x = sym (zeros ([2 3]));
+%! assert (isequal (y, x))
 
 %% Check types:
 %!assert( isa( zeros(sym(2), 'double'), 'double'))

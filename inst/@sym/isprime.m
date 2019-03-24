@@ -41,7 +41,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/nextprime}
+%% @seealso{@@sym/nextprime, @@sym/prevprime}
 %% @end defmethod
 
 

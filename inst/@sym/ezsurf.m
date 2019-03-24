@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -55,7 +55,7 @@
 %% routine calls after trying to convert sym inputs to
 %% anonymous functions.
 %%
-%% @seealso{ezsurf, @@sym/ezplot, @@sym/function_handle}
+%% @seealso{ezsurf, @@sym/ezmesh, @@sym/ezplot, @@sym/function_handle}
 %% @end defmethod
 
 
@@ -79,7 +79,7 @@ function varargout = ezsurf(varargin)
         % Each is function of one var, and its the same var for all
         thissym = symvar(varargin{i});
         assert(length(thissym) <= 2, ...
-          'ezplot3: plotting curves: functions should have at most two inputs');
+          'ezsurf: parameterized: functions should have at most two inputs');
         if (isempty(thissym))
           % a number, create a constant function in a dummy variable
           % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)

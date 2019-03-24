@@ -45,7 +45,8 @@ end
 
 
 %!error <Invalid> sinhint (sym(1), 2)
-%!xtest assert (isequaln (sinhint (sym(nan)), sym(nan)))
+%!xtest
+%! assert (isequaln (sinhint (sym(nan)), sym(nan)))
 
 %!shared x, d
 %! d = 1;
@@ -66,11 +67,9 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! y = sym('y');
 %! A = sinhint (d);
 %! f = sinhint (y);
 %! h = function_handle (f);
 %! B = h (d);
 %! assert (A, B, -eps)
-%! end

@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,11 +19,45 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym chol (@var{A})
-%% Cholesky factorization of symbolic matrix.
-%% @end defmethod
-
-%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
+%% @deftypemethod @@sym {@var{L} =} chol (@var{A})
+%% Cholesky factorization of symbolic symmetric matrix.
+%%
+%% Returns a lower-triangular matrix @var{L}, such that @code{L*L'}
+%% is matrix @var{A}.  The matrix @var{A} must be symmetric
+%% positive-definite.  Example:
+%% @example
+%% @group
+%% A = sym([1 2 4; 2 13 23; 4 23 43])
+%%   @result{} A = (sym 3×3 matrix)
+%%
+%%       ⎡1  2   4 ⎤
+%%       ⎢         ⎥
+%%       ⎢2  13  23⎥
+%%       ⎢         ⎥
+%%       ⎣4  23  43⎦
+%%
+%% L = chol(A)
+%%   @result{} L = (sym 3×3 matrix)
+%%
+%%       ⎡1  0  0 ⎤
+%%       ⎢        ⎥
+%%       ⎢2  3  0 ⎥
+%%       ⎢        ⎥
+%%       ⎣4  5  √2⎦
+%%
+%% L*L'
+%%   @result{} (sym 3×3 matrix)
+%%
+%%       ⎡1  2   4 ⎤
+%%       ⎢         ⎥
+%%       ⎢2  13  23⎥
+%%       ⎢         ⎥
+%%       ⎣4  23  43⎦
+%% @end group
+%% @end example
+%%
+%% @seealso{chol, @@sym/qr, @@sym/lu}
+%% @end deftypemethod
 
 
 function y = chol(x)
@@ -34,6 +69,9 @@ function y = chol(x)
   y = python_cmd('return _ins[0].cholesky(),', x);
 end
 
+
+%!error <must be> chol (sym ([1 2; 3 4]));
+%!error <must be square> chol (sym ([1 2; 3 4; 5 6]));
 
 %!test
 %! A = chol(hilb(sym(2)));

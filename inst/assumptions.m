@@ -111,10 +111,8 @@ function [A, B] = assumptions(F, outp)
       'd = x._assumptions.generator'
       'if d == {}:'
       '    astr = ""'
-      'elif all(d.values()):'  % all True so list them
-      '    astr = ", ".join(sorted([str(i) for i in d.keys()]))'
-      'else:'  % more complicated case, just the raw dict
-      '    astr = str(d)'
+      'else:'
+      '    astr = ", ".join(sorted([("" if v else "~") + str(k) for (k,v) in list(d.items())]))'
       'if outputdict:'
       '    return (astr, d)'
       'else:'
@@ -171,10 +169,10 @@ end
 %! assert(isempty(assumptions(x)))
 
 %!test
-%! clear  % for matlab test script
+%! clear variables  % for matlab test script
 %! syms x positive
 %! assert(~isempty(assumptions()))
-%! clear
+%! clear x
 %! assert(isempty(assumptions()))
 
 %!test
@@ -222,7 +220,7 @@ end
 
 %!test
 %! %% assumptions on just the vars in an expression
-%! clear  % for matlab test script
+%! clear variables  % for matlab test script
 %! syms x y positive
 %! f = 2*x;
 %! assert(length(assumptions(f))==1)
@@ -230,7 +228,7 @@ end
 
 %!test
 %! %% assumptions in cell/struct
-%! clear  % for matlab test script
+%! clear variables  % for matlab test script
 %! syms x y z w positive
 %! f = {2*x [1 2 y] {1, {z}}};
 %! assert(length(assumptions())==4)
@@ -250,3 +248,8 @@ end
 %! % multiple assumptions: eqn neither true nor false
 %! n = sym('n', 'negative', 'even');
 %! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
+
+%!test
+%! %% TODO: rewrite later with https://github.com/cbm755/octsympy/issues/622
+%! a = python_cmd ('return Symbol("a", real=False)');
+%! assert (strcmp (assumptions (a), {'a: ~real'}))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,6 +21,8 @@
 %% @deftypefun {[@var{a}, @var{b}, @dots{}] =} python_cmd (@var{cmd}, @var{x}, @var{y}, @dots{})
 %% Run some Python command on some objects and return other objects.
 %%
+%% This function is not really intended for end users.
+%%
 %% Here @var{cmd} is a string of Python code.
 %% Inputs @var{x}, @var{y}, @dots{} can be a variety of objects
 %% (possible types listed below). Outputs @var{a}, @var{b}, @dots{} are
@@ -38,7 +40,7 @@
 %% @end group
 %% @end example
 %%
-%% The inputs will be in a list called '_ins'.
+%% The inputs will be in a list called @code{_ins}.
 %% Instead of @code{return}, you can append to the Python list
 %% @code{_outs}:
 %% @example
@@ -49,7 +51,7 @@
 %% @end group
 %% @end example
 %%
-%% If you want to return a list, one way to to append a comma
+%% If you want to return a list, one way is to append a comma
 %% to the return command.  Compare these two examples:
 %% @example
 %% @group
@@ -115,11 +117,8 @@
 %% But it still imports it in that case.  If  you want to run this
 %% w/o having the SymPy package, you'd need to hack a bit.
 %%
-%% @seealso{evalpy}
 %% @end deftypefun
 
-%% Author: Colin B. Macdonald
-%% Keywords: python
 
 function varargout = python_cmd(cmd, varargin)
 
@@ -181,9 +180,16 @@ function varargout = python_cmd(cmd, varargin)
     end
   elseif (~isempty(A) && ischar(A{1}) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
     % Here A{3} is the error msg and A{2} is more info about where it happened
-    error (['Python exception: %s\n    occurred %s.\n    Consider filing ' ...
-            'an issue at https://github.com/cbm755/octsympy/issues'], ...
-           A{3}, A{2});
+    if (strfind (A{3}, 'KeyboardInterrupt'))
+      what_to_do = ['Probably something was interrupted by "Ctrl-C".\n' ...
+                    '    Do "sympref reset" and repeat your command.'];
+    else
+      what_to_do = ['Try "sympref reset" and repeat your command?\n' ...
+                    '    (consider filing an issue at ' ...
+                    'https://github.com/cbm755/octsympy/issues)'];
+    end
+    error ('Python exception: %s\n    occurred %s.\n    %s', ...
+           A{3}, A{2}, sprintf (what_to_do))
   end
 
   M = length(A);
@@ -216,7 +222,15 @@ end
 
 %!test
 %! % int
-%! assert (python_cmd ('return 123456,') == 123456)
+%! r = python_cmd ('return 123456');
+%! assert (r == 123456)
+%! assert (isinteger (r))
+
+%!test
+%! % long (on python2)
+%! r = python_cmd ('return 42 if sys.version_info >= (3,0) else long(42)');
+%! assert (r == 42)
+%! assert (isinteger (r))
 
 %!test
 %! % string
@@ -435,9 +449,13 @@ end
 %! a = python_cmd('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!xtest error <octoutput does not know how to export type>
+%!error <does not know how to export type>
 %! % This command does not fail with native interface and '@pyobject'
-%! python_cmd({'return type(int)'});
+%! if (strcmp (sympref  ('ipc'), 'native'))
+%!   error ('does not know how to export type')
+%! else
+%!   python_cmd({'return type(int)'});
+%! end
 %!test
 %! % ...and after the above test, the pipe should still work
 %! a = python_cmd('return _ins[0]*2', 3);
@@ -454,16 +472,10 @@ end
 %! z = python_cmd ('return 3+2j');
 %! assert (z, 3+2i)
 
+%!error <multirow char array>
+%! s = char ('abc', 'defgh', '12345');
+%! r = python_cmd ('return _ins[0]', s);
+
 %!test
-%! % multirow char arrays are a thing!
-%! % https://github.com/cbm755/octsympy/issues/664
-%! % expected behaviour: each row padded, only first row is kept
-%! if (exist ('OCTAVE_VERSION', 'builtin'))
-%! s = ['abc'; 'defgh'; '12345'];
-%! q = python_cmd ('return len(_ins)', s);
-%! assert (q, 1)
-%! q = python_cmd ('return len(_ins[0])', s);
-%! assert (q, 5)
-%! s2 = python_cmd ('return _ins[0]', s);
-%! assert (strcmp (s2, 'abc  '))
-%! end
+%! r = python_cmd ('return len(_ins[0])', '');
+%! assert (r == 0)

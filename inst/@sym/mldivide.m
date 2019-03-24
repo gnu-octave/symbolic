@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -54,13 +54,14 @@
 %% @example
 %% @group
 %% A = sym([5 2]);
+%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% x = A \ 10
 %%   @result{} x = (sym 2×1 matrix)
-%%       ⎡  2⋅c₁    ⎤
-%%       ⎢- ──── + 2⎥
-%%       ⎢   5      ⎥
-%%       ⎢          ⎥
-%%       ⎣    c₁    ⎦
+%%       ⎡    2⋅c₁⎤
+%%       ⎢2 - ────⎥
+%%       ⎢     5  ⎥
+%%       ⎢        ⎥
+%%       ⎣   c₁   ⎦
 %% A*x == 10
 %%   @result{} ans = (sym) True
 %% @end group
@@ -89,7 +90,7 @@
 
 function x = mldivide(A, b)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(A, 'symfun') || isa(b, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')

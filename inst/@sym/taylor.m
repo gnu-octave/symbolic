@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %% Copyright (C) 2016 Lagu
 %%
@@ -32,28 +32,34 @@
 %% defaults to zero.
 %%
 %% Key/value pairs can be used to set the order:
+%% @example
+%% @group
 %% syms x
 %% f = exp(x);
 %% taylor(f, x, 0, 'order', 6)
 %%   @result{} (sym)
-%%      5    4    3    2
-%%     x    x    x    x
-%%    ─── + ── + ── + ── + x + 1
-%%    120   24   6    2
+%%         5    4    3    2
+%%        x    x    x    x
+%%       ─── + ── + ── + ── + x + 1
+%%       120   24   6    2
+%% @end group
+%% @end example
+%%
+%% Two-dimensional expansion:
 %% @example
 %% @group
 %% syms x y
 %% f = exp(x*y);
-%% taylor(f, [x,y] , [0,0], 'order', 6)
+%% taylor(f, [x,y] , [0,0], 'order', 7)
 %%   @result{}  (sym)
-%%        2  2
-%%       x ⋅y
-%%       ───── + x⋅y + 1
-%%         2
+%%        3  3    2  2
+%%       x ⋅y    x ⋅y
+%%       ───── + ───── + x⋅y + 1
+%%         6       2
 %% @end group
 %% @end example
 %%
-%% As an alternative to passing @var{a}), you can also set the
+%% As an alternative to passing @var{a}, you can also set the
 %% expansion point using a key/value notation:
 %% @example
 %% @group
@@ -71,8 +77,6 @@
 %% @seealso{@@sym/diff}
 %% @end defmethod
 
-%% Author: Utkarsh Gautam, Colin B. Macdonald
-%% Keywords: symbolic, differentiation, multivariable
 
 function s = taylor(f, varargin)
 
@@ -91,7 +95,7 @@ function s = taylor(f, varargin)
     x = varargin{1};
     a = varargin{2};
     if length(a) ~= length(x) && length(a) == 1
-          a = a*ones(1, length(x));    
+          a = a*ones(1, length(x));
     end
     i = 3;
   elseif (~ischar(varargin{1}) && ischar(varargin{2}))
@@ -132,7 +136,10 @@ function s = taylor(f, varargin)
         's = f.series(x, a, n).removeO()'
         'return s,' };
   else
-
+    % Multivariate case.
+    % TODO: keep on eye on upstream sympy; someday it will do this, e.g.,
+    % https://github.com/sympy/sympy/issues/6234
+    % https://stackoverflow.com/questions/22857162/multivariate-taylor-approximation-in-sympy
     cmd = {'(f, x, a, n) = _ins'
            'dic = dict(zip(x, a))'
            'xa = list(x)'
@@ -224,7 +231,7 @@ end
 
 %!test
 %! syms x y
-%! f = exp(x**2+y**2);
+%! f = exp (x^2 + y^2);
 %! expected = 1+ x^2 +y^2 + x^4/2 + x^2*y^2 + y^4/2;
 %! assert (isAlways(taylor(f,[x,y],'order',5)== expected))
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [0,0],'order',5) == expected))
@@ -240,7 +247,7 @@ end
 
 %!test
 %! syms x y
-%! f = sin(x**2+y**2);
+%! f = sin (x^2 + y^2);
 %! expected = sin(sym(1))+2*cos(sym(1))*(x-1)+(cos(sym(1))-2*sin(sym(1)))*(x-1)^2 + cos(sym(1))*y^2;
 %! assert (isAlways(taylor(f,[x,y],'expansionPoint', [1,0],'order',3) == expected))
 
@@ -254,12 +261,12 @@ end
 
 %!test
 %! syms x y
-%! f = x**2 +y**2;
+%! f = x^2 + y^2;
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',0)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',1)== sym(0) ))
 %! assert (isAlways(taylor(f,[x,y],[0,0],'order',2)== sym(0) ))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x**2+y**2)))
-%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x**2+y**2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',3)== sym(x^2 + y^2)))
+%! assert (isAlways(taylor(f,[x,y],[0,0],'order',4)== sym(x^2 + y^2)))
 
 %!test
 %! % expansion point
@@ -271,7 +278,7 @@ end
 %! g = taylor(f,x,a);
 %! assert (isequal (simplify(g), f))
 
-%!xtest
+%!test
 %! % wrong order-1 series with nonzero expansion pt:
 %! % upstream bug https://github.com/sympy/sympy/issues/9351
 %! syms x
@@ -279,16 +286,16 @@ end
 %! h = taylor (g, x, 4, 'order', 1);
 %! assert (isequal (h, 27))
 
-%!test		
-%! syms x y z		
-%! g = x^2 + 2*y + 3*z;		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = x^2 + 2*y + 3*z;
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == g)) ;
 
-%!test		
-%! syms x y z		
-%! g = sin(x*y*z);		
-%! h = taylor (g, [x,y,z], 'order', 4);		
+%!test
+%! syms x y z
+%! g = sin(x*y*z);
+%! h = taylor (g, [x,y,z], 'order', 4);
 %! assert (isAlways(h == x*y*z)) ;
 
 %!error <length>

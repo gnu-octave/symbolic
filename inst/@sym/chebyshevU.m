@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +52,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/chebyshevT}
+%% @seealso{@@sym/chebyshevT, @@double/chebyshevU}
 %% @end defmethod
 
 
@@ -64,6 +64,11 @@ function y = chebyshevU(n, x)
 end
 
 
+%!error <Invalid> chebyshevU (sym(1))
+%!error <Invalid> chebyshevU (sym(1), 2, 3)
+
+%!assert (isequaln (chebyshevU (2, sym(nan)), sym(nan)))
+
 %!shared x
 %! syms x
 
@@ -71,3 +76,14 @@ end
 %!assert(isequal(chebyshevU(1, x), 2*x))
 %!assert(isequal(chebyshevU(2, x), 4*x*x - 1))
 %!assert(isequal(chebyshevU([0 1 2], x), [sym(1) 2*x (4*x*x-1)]))
+
+%!test
+%! % round trip
+%! if (python_cmd ('return Version(spver) > Version("1.2")'))
+%! syms n z
+%! f = chebyshevU (n, z);
+%! h = function_handle (f, 'vars', [n z]);
+%! A = h (1.1, 2.2);
+%! B = chebyshevU (1.1, 2.2);
+%! assert (A, B)
+%! end

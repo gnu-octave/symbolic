@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Lagu
 %%
@@ -20,10 +20,12 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod  @@sym {@var{sol} =} solve (@var{eq, var})
-%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, eq2})
-%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eq1, @dots{}, eqn, v1, @dots{}, vm})
-%% @deftypemethodx @@sym {[@var{s1, @dots{}, sn}] =} solve (@var{eq1, @dots{}, eqm, v1, @dots{}, vn})
+%% @deftypemethod  @@sym {@var{sol} =} solve (@var{eqn})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eqn}, @var{var})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eqn1}, @dots{}, @var{eqnN})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eqn1}, @dots{}, @var{eqnN}, @var{var1}, @dots{}, @var{varM})
+%% @deftypemethodx @@sym {@var{sol} =} solve (@var{eqns}, @var{vars})
+%% @deftypemethodx @@sym {[@var{s1, @dots{}, sn}] =} solve (@var{eqns}, @var{vars})
 %% Symbolic solutions of equations, inequalities and systems.
 %%
 %% Examples
@@ -37,6 +39,18 @@
 %%       ⎡2⎤
 %%       ⎢ ⎥
 %%       ⎣3⎦
+%% @end group
+%% @end example
+%%
+%% Sometimes its helpful to assume an unknown is real:
+%% @example
+%% @group
+%% syms x real
+%% solve(abs(x) == 1, x)
+%%   @result{} ans = (sym 2×1 matrix)
+%%       ⎡-1⎤
+%%       ⎢  ⎥
+%%       ⎣1 ⎦
 %% @end group
 %% @end example
 %%
@@ -108,13 +122,43 @@ function varargout = solve(varargin)
     varargin{i} = sym(varargin{i});
   end
 
+  %% input parsing explanation
+  % stage 0: no equations found yet
+  % stage 1: equations found, could be more
+  % stage 2: started finding symbols
+  % stage 3: done, no more input expected
+  cmd = { 'eqs = list(); symbols = list()'
+          'stage = 0'
+          'for arg in _ins:'
+          '    if arg.is_Matrix:'
+          '        if any([a.is_Relational for a in arg]):'
+          '             assert stage == 0 or stage == 1'
+          '             eqs.extend(arg)'
+          '             stage = 1'
+          '        elif stage == 0:'
+          '             eqs.extend(arg)'
+          '             stage = 1'
+          '        else:'
+          '             assert stage != 0 or stage == 1 or stage == 2'
+          '             symbols.extend(arg)'
+          '             stage = 3'
+          '    elif arg.is_Symbol and stage == 0:'
+          '        eqs.append(arg)'
+          '        stage = 1'
+          '    elif arg.is_Symbol:'
+          '        assert stage != 0 or stage == 1 or stage == 2'
+          '        symbols.append(arg)'
+          '        stage = 2'
+          '    else:'
+          '        # e.g., Relational, or Expr implicitly assumed == 0'
+          '        assert stage == 0 or stage == 1'
+          '        eqs.append(arg)'
+          '        stage = 1'
+          'eqs = [e for e in eqs if e not in (True, S.true)]'  % https://github.com/sympy/sympy/issues/14632
+        };
+
   if (nargout == 0 || nargout == 1)
-    cmd = { 'eqs = list(); symbols = list()'
-            'for arg in _ins:'
-            '    if arg.is_Relational:'
-            '        eqs.append(arg)'
-            '    else:'
-            '        symbols.append(arg)'
+    cmd = [ cmd
             'd = sp.solve(eqs, *symbols, dict=True)'
             'if not isinstance(d, (list, tuple)):'  % https://github.com/sympy/sympy/issues/11661
             '    return d,'
@@ -125,19 +169,14 @@ function varargout = solve(varargin)
             '        return sp.Matrix([r.popitem()[1] for r in d]),'
             'if len(d) == 1:'
             '    d = d[0]'
-            'return d,' };
+            'return d,' ];
 
     out = python_cmd (cmd, varargin{:});
 
     varargout = {out};
 
   else  % multiple outputs
-    cmd = { 'eqs = list(); symbols = list()'
-            'for arg in _ins:'
-            '    if arg.is_Relational:'
-            '        eqs.append(arg)'
-            '    else:'
-            '        symbols.append(arg)'
+    cmd = [ cmd
             'd = sp.solve(eqs, *symbols, set=True)'
             'if not isinstance(d, (list, tuple)):'  % https://github.com/sympy/sympy/issues/11661
             '    return d,'
@@ -145,7 +184,7 @@ function varargout = solve(varargin)
             'q = []'
             'for (i, var) in enumerate(vars):'
             '    q.append(sp.Matrix([t[i] for t in solns]))'
-            'return q,' };
+            'return q,' ];
 
     out = python_cmd (cmd, varargin{:});
 
@@ -173,32 +212,28 @@ end
 %! assert (length(d) == 2);
 %! assert (isequal (d, [2; -2]) || isequal (d, [-2; 2]))
 
-%!shared x,y,e
+%!shared x,y,eq
 %! syms x y
-%! e = 10*x == 20*y;
+%! eq = 10*x == 20*y;
 %!test
-%! d = solve(e, x);
+%! d = solve(eq, x);
 %! assert (isequal (d, 2*y))
 %!test
-%! d = solve(e, y);
+%! d = solve(eq, y);
 %! assert (isequal (d, x/2))
 %!test
-%! d = solve(e);
+%! d = solve(eq);
 %! assert (isequal (d, 2*y))
 
-%!test
-%! % Solve for an expression 2*x instead of a variable.  Note only very
-%! % simple examples will work, see "?solve" in SymPy, hence this is no
-%! % longer documented in the help text.
-%! d = solve(e, 2*x);
-%! assert (isequal (d, 4*y))
+%!shared x,y
+%! syms x y
 
 %!test
 %! d = solve(2*x - 3*y == 0, x + y == 1);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
 
 %!test
-%! d = solve(2*x-3*y==0,x+y==1,x,y);
+%! d = solve(2*x - 3*y == 0, x + y == 1, x, y);
 %! assert (isequal (d.x, sym(3)/5) && isequal(d.y, sym(2)/5))
 
 %!test
@@ -220,34 +255,85 @@ end
 
 %!test
 %! % Multiple outputs with single solution
-%! syms x y
 %! [X, Y] = solve(2*x + y == 5, x + y == 3);
 %! assert (isequal (X, 2))
 %! assert (isequal (Y, 1))
 
 %!test
+%! % system: vector of equations, vector of vars
+%! [X, Y] = solve([2*x + y == 5, x + y == 3], [x y]);
+%! assert (isequal (X, 2))
+%! assert (isequal (Y, 1))
+
+%!test
+%! % system: vector of equations, individual vars
+%! [X, Y] = solve([2*x + y == 5, x + y == 3], x, y);
+%! assert (isequal (X, 2))
+%! assert (isequal (Y, 1))
+
+%!test
+%! % system: individual equations, vector of vars
+%! [X, Y] = solve(2*x + y == 5, x + y == 3, [x y]);
+%! assert (isequal (X, 2))
+%! assert (isequal (Y, 1))
+
+%!test
 %! % Multiple outputs with multiple solns
-%! syms x y
 %! [X, Y] = solve(x*x == 4, x == 2*y);
-%! assert (isequal (X, [2; -2]))
-%! assert (isequal (Y, [1; -1]))
+%! assert ((isequal (X, [2; -2]) && isequal (Y, [1; -1])) || ...
+%!         (isequal (X, [-2; 2]) && isequal (Y, [-1; 1])))
 
 %!test
 %! % Multiple outputs with multiple solns, specify vars
-%! syms x y
 %! [X, Y] = solve(x*x == 4, x == 2*y, x, y);
-%! assert (isequal (X, [2; -2]))
-%! assert (isequal (Y, [1; -1]))
+%! assert ((isequal (X, [2; -2]) && isequal (Y, [1; -1])) || ...
+%!         (isequal (X, [-2; 2]) && isequal (Y, [-1; 1])))
+
+%!error
+%! % mult outputs not allowed for scalar equation, even with mult soln (?)
+%! [s1, s2] = solve(x^2 == 4, x);
 
 %!test
-%! syms x
+%! % overdetermined
+%! X = solve(2*x - 10 == 0, 3*x - 15 == 0, x);
+%! assert (isequal (X, sym(5)))
+
+%!test
 %! a = solve(2*x >= 10, 10*x <= 50);
 %! assert (isequal( a, x==sym(5)))
 
-%!error
-%! syms a b
-%! solve(a==b, 1==1)
+%!test
+%! A = solve([2*x == 4*y, 2 == 3], x);
+%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%!   assert (isempty (A))
+%! else
+%!   assert (isequal (A, sym(false)))
+%! end
 
-%!error
-%! syms a b
-%! solve(a==b, 1==2)
+%!test
+%! % Issue #850
+%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
+%! A = solve (sym(pi)^2*x + y == 0);
+%! assert (isequal (A, -y/sym(pi)^2))
+%! end
+
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x == 4*y, sym(2) == 2], x);
+%! assert (isequal (A, 2*y))
+
+%!test
+%! % https://github.com/sympy/sympy/issues/14632
+%! A = solve([2*x^2 == 32*y^2, sym(2) == 2], x);
+%! B = solve([2*x^2 == 32*y^2], x);
+%! assert (isequal (A, B) || isequal (A, flip (B)))
+
+%!test
+%! A = solve ([x+1 0], x);
+%! assert (isequal (A, sym (-1)))
+
+%!test
+%! A = solve (x + 1, x);
+%! assert (isequal (A, sym (-1)))
+%! A = solve (x, x);
+%! assert (isequal (A, sym (0)))

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -110,3 +110,13 @@ end
 %! f = sym(false);
 %! assert (isequal ( conj(t), t))
 %! assert (isequal ( conj(f), f))
+
+%!test
+%! % round trip
+%! syms x
+%! d = 3 - 5i;
+%! f = conj (x);
+%! A = conj (d);
+%! h = function_handle (f);
+%! B = h (d);
+%! assert (A, B)

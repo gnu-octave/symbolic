@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -55,9 +55,6 @@
 %% @seealso{@@sym/tril}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
 function U = triu(A,k)
 
   if (nargin == 1)
@@ -71,6 +68,7 @@ function U = triu(A,k)
 
   cmd = { '(A,k) = _ins'
           'if A.is_Matrix:'
+          '    A = A.as_mutable()'
           '    (n,m) = A.shape'
           '    for c in range(0,m):'
           '        for r in range(max(0,1+c-k),n):'
@@ -114,3 +112,9 @@ end
 %! B = round(10*rand(3,4));
 %! assert (isequal (triu(B,sym(1)), triu(B,1)))
 %! assert (isa (triu(B,sym(1)), 'double'))
+
+%!test
+%! % immutable test
+%! A = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
+%! assert (isequal (triu (A), sym ([1 2; 0 4])))
+%! assert (isequal (tril (A), sym ([1 0; 3 4])))

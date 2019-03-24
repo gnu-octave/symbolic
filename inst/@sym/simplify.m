@@ -47,6 +47,10 @@
 %% @end group
 %% @end example
 %%
+%% Please note that @code{simplify} is not a well-defined mathematical
+%% operation: its precise behaviour can change between software versions
+%% (and certainly between different software packages!)
+%%
 %% @seealso{@@sym/isAlways, @@sym/factor, @@sym/expand, @@sym/rewrite}
 %% @end defmethod
 

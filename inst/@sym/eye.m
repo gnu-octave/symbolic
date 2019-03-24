@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -39,30 +39,36 @@
 %% @seealso{eye, @@sym/zeros, @@sym/ones}
 %% @end defmethod
 
-%% Reference: http://docs.sympy.org/dev/modules/matrices/matrices.html
-
 
 function y = eye(varargin)
 
   % partial workaround for issue #13: delete when/if fixed properly
-  if (strcmp (varargin{nargin}, 'sym'))
-    nargin = nargin - 1;
-    varargin = varargin(1:nargin);
+  if ((isa (varargin{nargin}, 'char')) && (strcmp (varargin{nargin}, 'sym')))
+    varargin = varargin(1:(nargin-1));
   end
 
-  if (isa (varargin{nargin}, 'char'))
-    y = eye (sym.cell2nosyms (varargin){:});
+  if (isa (varargin{end}, 'char'))
+    varargin = sym.cell2nosyms (varargin);
+    y = eye (varargin{:});
     return
   end
 
-  if nargin > 1 %%Sympy don't support eye(A, B)
-    y = sym(eye (sym.cell2nosyms (varargin){:}));
-  else
-    for i = 1:length(varargin)
-      varargin{i} = sym(varargin{i});
-    end
-    y = python_cmd ('return eye(*_ins)', varargin{:});
+  for i = 1:length(varargin)
+    varargin{i} = sym(varargin{i});
   end
+
+  cmd = { 'if len(_ins) == 1:'
+          '    n, = _ins'
+          '    try:'
+          '        n, m = iter(n)'
+          '    except TypeError:'
+          '        n, m = n, n'
+          'else:'
+          '    n, m = _ins'
+          'if n == m:'
+          '    return eye(n)'
+          'return eye(max(n,m))[0:n,0:m]' };
+  y = python_cmd (cmd, varargin{:});
 
 end
 
@@ -81,6 +87,11 @@ end
 %! y = eye(sym(1), 2);
 %! x = [1 0];
 %! assert( isequal( y, sym(x)))
+
+%!test
+%! y = eye (sym([2 3]));
+%! x = sym (eye ([2 3]));
+%! assert (isequal (y, x))
 
 %% Check types:
 %!assert( isa( eye(sym(2), 'double'), 'double'))

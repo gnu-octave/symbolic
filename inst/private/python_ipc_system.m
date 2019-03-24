@@ -54,9 +54,8 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
   end
 
   if (verbose && first_time)
-    fprintf('OctSymPy v%s: this is free software without warranty, see source.\n', ...
-            sympref('version'))
-    disp('You are using the slower system() communications with SymPy.')
+    fprintf ('Symbolic pkg v%s: using slower system() communications with SymPy.\n', ...
+             sympref ('version'))
     disp('Warning: this will be *SLOW*.  Every round-trip involves executing a')
     disp('new python process and many operations involve several round-trips.')
   end
@@ -82,7 +81,7 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 
   pyexec = sympref('python');
   if (first_time)
-    assert_have_python_and_sympy(pyexec)
+    assert_have_python_and_sympy (pyexec)
   end
 
   %% FIXME: Issue #63: with new regexp code on Matlab

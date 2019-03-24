@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,8 +29,11 @@
 %% fibonacci(15)
 %%   @result{} (sym) 610
 %% syms n
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% fibonacci(n)
-%%   @result{} (sym) fibonacci(n)
+%%   @result{} (sym)
+%%       F
+%%        n
 %% @end group
 %% @end example
 %%

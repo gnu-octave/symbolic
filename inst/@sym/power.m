@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,7 +62,7 @@
 
 function z = power(x, y)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
@@ -73,6 +73,7 @@ function z = power(x, y)
 
   cmd = { '(x,y) = _ins'
           'if x.is_Matrix and y.is_Matrix:'
+          '    x = x.as_mutable()'
           '    for i in range(0, len(x)):'
           '        x[i] = x[i]**y[i]'
           '    return x,'
@@ -133,3 +134,9 @@ end
 %! % (1 on sympy 0.7.4--0.7.6, but nan in git (2014-12-12, a210908d4))
 %! zoo = sym('zoo');
 %! assert (isnan (1^zoo))
+
+%!test
+%! % immutable test
+%! A = sym([1 2]);
+%! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)]])');
+%! assert (isequal (A.^A, B.^B))

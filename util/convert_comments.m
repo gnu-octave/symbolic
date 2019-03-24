@@ -1,11 +1,25 @@
+%% Copyright (C) 2014-2018 Colin B. Macdonald
+%%
+%% This file is part of OctSymPy.
+%%
+%% OctSymPy is free software; you can redistribute it and/or modify
+%% it under the terms of the GNU General Public License as published
+%% by the Free Software Foundation; either version 3 of the License,
+%% or (at your option) any later version.
+%%
+%% This software is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty
+%% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%% the GNU General Public License for more details.
+%%
+%% You should have received a copy of the GNU General Public
+%% License along with this software; see the file COPYING.
+%% If not, see <http://www.gnu.org/licenses/>.
+
 function convert_comments (basedir, subdir, dirout)
 % this slightly strange way of doing things (basedir, subdir) is
 % b/c I must "chdir" into base, but get_first_help_sentence() must
 % not be in the class dir...
-
-  disp(char('_' * ones(1,78)))
-  disp('')
-  fprintf('****** OCTAVE PROCESSING DIRECTORY %s\n', [basedir subdir])
 
   %basedir, subdir, dirout
   files = dir([basedir subdir]);
@@ -20,21 +34,18 @@ function convert_comments (basedir, subdir, dirout)
         else
           octname = [subdir '/' name ext];
         end
-        fprintf('**** Processing %s ****\n', octname)
+        fprintf('Converting texinfo to Matlab-style documentation: %s\n', octname)
         r = convert_oct_2_ml (octname, [dirout octname]);
         if ~r
           [status, msg, msgid] = copyfile (octname, [dirout octname], 'f');
           if (status ~= 1)
             error(msg)
           end
-          %disp(['   ' char('*' * ones(1,72))])
-          fprintf('******* COPYING %s UNMODIFIED ****\n', octname)
-          %disp(['   ' char('*' * ones(1,72))])
+          fprintf('**** COPYING %s UNMODIFIED ****\n', octname)
         end
       end
     end
   end
-  disp(char('_' * ones(1,78)))
 end
 
 
@@ -105,6 +116,8 @@ function success = convert_oct_2_ml (fname, foutname)
   cr = prepend_each_line(cr, '%', ' ');
   cr{1} = ['%' cr{1}];
   copyright_summary = 'This is free software under the GPL, see .m file for full details.';
+  % alternative for BSD:
+  %copyright_summary = 'This is free software, see .m file for license.';
 
 
   %% use block
@@ -129,7 +142,7 @@ function success = convert_oct_2_ml (fname, foutname)
   end
 
 
-  %% actual help, then format
+  %% get the texinfo source, and format it
   [text, form] = get_help_text(fname);
   if ~strcmp(form, 'texinfo')
     text
@@ -169,18 +182,22 @@ function success = convert_oct_2_ml (fname, foutname)
 
   use = strsplit(usestr, newl, 'CollapseDelimiters', false);
 
-  %% remove this string
-  % and make sure these lines have the correct function name
-  remstr = '-- Function File: ';
+  %% 2017: we have more choices than "-- Function File"
+  % just trim "--" so it doesn't break indents
+  def_line_has_function_name = false;
   for i=1:length(use)
-    if strfind(use{i}, remstr);
-      if isempty(strfind(use{i}, [' ' fcn]))
-        error('function @deftypefn line doesn''t include function name')
+    if regexp(use{i}, '^ -- ')
+      if (~ isempty(strfind(use{i}, [' ' fcn])))
+        def_line_has_function_name = true;
       end
     end
-    use{i} = strrep(use{i}, remstr, '    ');
+    use{i} = regexprep(use{i}, '^ -- ', '     ');
   end
   %usestr = strrep(usestr, lookforstr, '');
+  if (~ def_line_has_function_name)
+    warning('function @deftypefn line may not include function name:')
+    use{i}
+  end
 
   use = ltrim(use, 2);
   while isempty(use{end})
@@ -213,7 +230,7 @@ function success = convert_oct_2_ml (fname, foutname)
 
   fdisp(f, fcn_line)
 
-  fprintf(f, '%%%s   %s\n', upper(fcn), lookforstr)
+  fprintf(f, '%%%s  %s\n', upper(fcn), lookforstr)
 
   for i=1:length(use)
     fprintf(f, '%%%s\n', use{i});
@@ -290,4 +307,3 @@ function g = prepend_each_line(f, pre, pad)
     end
   end
 end
-

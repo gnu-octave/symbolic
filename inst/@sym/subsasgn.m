@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
@@ -56,6 +56,7 @@
 %% @seealso{@@sym/subsref, @@sym/subindex, @@sym/end, symfun}
 %% @end deftypeop
 
+
 function out = subsasgn (val, idx, rhs)
 
   switch idx.type
@@ -76,7 +77,7 @@ function out = subsasgn (val, idx, rhs)
         all_Symbols = python_cmd (cmd, idx.subs);
       end
       if (all_syms && all_Symbols)
-	%% Make a symfun
+        %% Make a symfun
         if (~isa(rhs, 'sym'))
           % rhs is, e.g., a double, then we call the constructor
           rhs = sym(rhs);
@@ -91,12 +92,12 @@ function out = subsasgn (val, idx, rhs)
             idx.subs{i} = double(idx.subs{i});
           end
         end
-	for i = 1:length(idx.subs)
+        for i = 1:length(idx.subs)
           if (~ sym.is_valid_index (idx.subs{i}))
             error('OctSymPy:subsref:invalidIndices', ...
                   'invalid indices: should be integers or boolean');
           end
-	end
+        end
         out = sym.mat_replace (val, idx.subs, sym(rhs));
       end
 
@@ -161,6 +162,20 @@ end
 %! a([1 end+1],end:end+1) = rhs;
 %! b([1 end+1],end:end+1) = rhs;
 %! assert(isequal( a, b ))
+
+%!test
+%! % grow from nothing
+%! clear a
+%! a(3) = sym (1);
+%! b = sym ([0 0 1]);
+%! assert (isequal (a, b))
+
+%!test
+%! % grow from nothing, 2D
+%! clear a
+%! a(2, 3) = sym (1);
+%! b = sym ([0 0 0; 0 0 1;]);
+%! assert (isequal (a, b))
 
 %!test
 %! % linear indices of 2D
@@ -410,23 +425,14 @@ end
 %! B = b;  B(I) = 17;
 %! assert (isequal (A, B))
 
-%!warning <unusual>
-%! % strange non-vector (matrix) RHS ("rhs2"), should be warning
-%! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
-%! rhs2 = reshape(2*b(I), 2, 3);  % strange bit
-%! A = a;
-%! A(I) = rhs2;
-
 %!test
 %! % nonetheless, above strange case should give right answer
 %! I = logical([1 0 1 0; 0 1 0 1; 1 0 1 0]);
 %! rhs = 2*b(I);
 %! rhs2 = reshape(rhs, 2, 3);
-%! s = warning ('off', 'OctSymPy:subsagn:rhs_shape');
 %! A0 = a; A1 = a;
 %! A0(I) = rhs;
 %! A1(I) = rhs2;
-%! warning (s)
 %! assert (isequal (A0, A1))
 
 
@@ -544,45 +550,76 @@ end
 %! a = [1 2 3 5; 4 5 6 9; 7 5 3 2];
 %! b = sym (a);
 
-%!function test_bool (a, b, c)
-%!  a(c) = 0;
-%!  b(c) = 0;
-%!  assert (isequal (a, b))
-%!endfunction
+%!test
+%! A = a; B = b;
+%! A(true) = 0;
+%! B(true) = 0;
+%! assert (isequal (A, B))
 
 %!test
-%! c = false;
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
+%! A = a; B = b;
+%! A(false) = 0;
+%! B(false) = 0;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true false true; true false true false; false true false true];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true false true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false; true; false; true; false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %!test
 %! c = [false true; false true; true false];
-%! test_bool (a, b, c)
-%! test_bool (a, b, c | true)
-%! test_bool (a, b, c & false)
+%! A = a; B = b;
+%! A(c) = 0; B(c) = 0;
+%! assert (isequal (A, B))
+%! d = c | true;
+%! A(d) = 1; B(d) = 1;
+%! assert (isequal (A, B))
+%! d = c & false;
+%! A(d) = 2; B(d) = 2;
+%! assert (isequal (A, B))
 
 %% End of mat_* tests

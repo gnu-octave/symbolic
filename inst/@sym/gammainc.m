@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -96,21 +96,26 @@ end
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
 
-%!xtest
-%! % compare to double: fails:
+%!test
+%! % compare to double
 %! % https://savannah.gnu.org/bugs/index.php?47800
+%! if (~ exist('OCTAVE_VERSION', 'builtin') || ...
+%!     compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
 %! x = 10; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
+%! end
 
-%!xtest
-%! % compare to double: fails:
-%! % https://savannah.gnu.org/bugs/index.php?47800
+%!test
+%! % compare to double
+%! if (~ exist('OCTAVE_VERSION', 'builtin') || ...
+%!     compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
 %! x = 40; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
+%! end
 
 %!test
 %! % compare to double
@@ -139,22 +144,18 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x a
 %! f = gammainc (x, a, 'upper');
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'upper');
 %! assert (A, B)
-%! end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x a
 %! f = gammainc (x, a, 'lower');
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'lower');
 %! assert (A, B)
-%! end

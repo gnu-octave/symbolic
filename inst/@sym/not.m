@@ -110,6 +110,6 @@ end
 %! syms x
 %! y = ~x;
 %! s = disp(y, 'flat');
-%! assert (strcmpi(strtrim(s), 'Not(x)'))
+%! assert (strcmp (strtrim (s), '~x') || strcmpi (strtrim (s), 'Not(x)'))
 
 %!error not (sym(1), 2)

@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,10 +33,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
 
   %% version check
   if exist('OCTAVE_VERSION', 'builtin')
-    if (compare_versions (OCTAVE_VERSION (), '4.0.0', '<'))
+    if (compare_versions (OCTAVE_VERSION (), '4.2', '<'))
       fprintf(['\n********************************************************************\n' ...
                'Your Octave version is %s but Octsympy is currently untested on\n' ...
-               'anything before 4.0.0.\n\n'], OCTAVE_VERSION ())
+               'anything before 4.2.\n\n'], OCTAVE_VERSION ())
       warning('Old Octave version detected: probably trouble ahead!')
       fprintf('\n********************************************************************\n\n')
       fflush(stdout);
@@ -73,5 +74,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
       [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
 
     otherwise
-      error('invalid ipc mechanism')
+      if (strcmp (what, 'reset'))
+        A = true;
+        db = [];
+      else
+        error ('invalid ipc mechanism')
+      end
   end

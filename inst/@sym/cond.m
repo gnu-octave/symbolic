@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,12 +25,13 @@
 %% @example
 %% @group
 %% A = sym([1 2; 3 0]);
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
 %% cond(A)^2
 %%   @result{} (sym)
 %%
 %%       √13 + 7
-%%       ────────
-%%       -√13 + 7
+%%       ───────
+%%       7 - √13
 %% @end group
 %% @end example
 %%

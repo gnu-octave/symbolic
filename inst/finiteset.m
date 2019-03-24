@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,7 +59,7 @@
 %% @end group
 %% @end example
 %%
-%% Careful, passing a matrix created a set of matrices (rather than a
+%% Careful, passing a matrix creates a set of matrices (rather than a
 %% set from the elements of the matrix):
 %% @example
 %% @group
@@ -114,10 +114,14 @@
 
 function S = finiteset(varargin)
 
+  % special case
   if (nargin == 1 && iscell(varargin{1}))
-    varargin = sym.symarray (varargin{1});
-  else
-    varargin = sym.symarray (varargin);
+    varargin = varargin{1};
+    nargin == numel (varargin);
+  end
+
+  for i = 1:numel(varargin)
+    varargin{i} = sym(varargin{i});
   end
 
   S = python_cmd ('return FiniteSet(*_ins),', varargin{:});

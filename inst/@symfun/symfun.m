@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
@@ -20,7 +20,7 @@
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
 %% @deftypemethod  @@symfun {@var{f} =} symfun (@var{expr}, @var{vars})
-%% Define a symbolic function (not usually called directly).
+%% Define a symbolic function (not usually invoked directly).
 %%
 %% A symfun can be abstract or concrete.  An abstract symfun
 %% represents an unknown function (for example, in a differential
@@ -55,27 +55,10 @@
 %%   @result{} g(x) = (symfun) g(x)
 %% @end group
 %% @end example
-%% and note this creates the sym @code{x} automatically.
+%% (Note this creates the sym @code{x} automatically if it does
+%% not already exist.)
 %%
-%% Alternatively:
-%% @example
-%% @group
-%% x = sym('x');
-%% g(x) = sym('g(x)')
-%%   @result{} g(x) = (symfun) g(x)
-%% @end group
-%% @end example
-%% Note the following is @strong{not} the way to create an abstract
-%% symfun:
-%% @example
-%% @group
-%% g = sym('g(x)')     % just the symbolic expression g(x)
-%%   @result{} g = (sym) g(x)
-%% @end group
-%% @end example
-%% Instead, use @code{g(x)} on the left-hand side as above.
-%%
-%% You can make multidimensional concrete or abstract symfuns:
+%% Example: multivariable symfuns:
 %% @example
 %% @group
 %% syms x y
@@ -87,61 +70,65 @@
 %% @end group
 %% @end example
 %%
-%% As the above examples demonstrate, it is usually not necessary to
-%% call symfun directly.  However, it can be done:
+%% Example: creating an abstract function formally of two variables
+%% but depending only on @code{x}:
 %% @example
 %% @group
-%% syms x y
-%% f = symfun(sin(x), x)
-%%   @result{} f(x) = (symfun) sin(x)
-%% F = symfun(x*y, [x y])
-%%   @result{} F(x, y) = (symfun) x⋅y
-%% @end group
-%% @group
-%% g = symfun(sym('g(x)'), x)
-%%   @result{} g(x) = (symfun) g(x)
-%% G = symfun(sym('G(x, y)'), [x y])
-%%   @result{} G(x, y) = (symfun) G(x, y)
-%% @end group
-%% @end example
-%%
-%% This allows, for example, creating an abstract function formally
-%% of @code{x}, @code{y} but depending only on @code{x}:
-%% @example
-%% @group
-%% syms x y
-%% h = symfun(sym('h(x)'), [x y])
-%%   @result{} h(x, y) = (symfun) h(x)
-%% @end group
-%% @end example
-%% which is the same as:
-%% @example
-%% @group
-%% h(x,y) = sym('h(x)')
+%% syms x y h(x)
+%% h(x, y) = h(x)
 %%   @result{} h(x, y) = (symfun) h(x)
 %% @end group
 %% @end example
 %%
-%% It is possible to compose one symfun inside another.  For example, to
-%% demonstrate the chain rule, we might do:
+%% A symfun can be composed inside another.  For example, to
+%% demonstrate the chain rule in calculus, we might do:
 %% @example
 %% @group
 %% syms f(t) g(t)
 %% F(t) = f(g(t))
 %%   @result{} F(t) = (symfun) f(g(t))
+%% @c doctest: +SKIP_IF(python_cmd('return Version(spver) <= Version("1.3")'))
 %% diff(F, t)
 %%   @result{} ans(t) = (symfun)
-%%       d        ⎛ d        ⎞│
-%%       ──(g(t))⋅⎜───(f(ξ₁))⎟│
-%%       dt       ⎝dξ₁       ⎠│ξ₁=g(t)
+%%         d            d
+%%       ─────(f(g(t)))⋅──(g(t))
+%%       dg(t)          dt
+%% @end group
+%% @end example
+%%
+%% It is possible to create an abstract symfun without using the
+%% @code{syms} command:
+%% @example
+%% @group
+%% x = sym('x');
+%% g(x) = sym('g(x)')
+%%   @result{} g(x) = (symfun) g(x)
+%% @end group
+%% @end example
+%% (note the @code{x} must be included on the left-hand side.)
+%% However, @code{syms} is safer because this can fail or give
+%% unpredictable results for certain function names:
+%% @example
+%% @group
+%% beta(x) = sym('beta(x)')
+%%   @print{} ??? ... Error ...
+%% @end group
+%% @end example
+%%
+%% It is usually not necessary to call @code{symfun} directly
+%% but it can be done:
+%% @example
+%% @group
+%% f = symfun(x*sin(y), [x y])
+%%   @result{} f(x, y) = (symfun) x⋅sin(y)
+%% g = symfun(sym('g(x)'), x)
+%%   @result{} g(x) = (symfun) g(x)
 %% @end group
 %% @end example
 %%
 %% @seealso{sym, syms}
 %% @end deftypemethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, symbols, CAS
 
 classdef symfun < sym
 
@@ -158,61 +145,59 @@ classdef symfun < sym
   methods
     function f = symfun(expr, vars)
 
-      if (nargin == 0)
-        % octave docs say need a no-argument default for loading from files
-        expr = sym(0);
-        vars = sym('x');
-      elseif (nargin == 1)
-        print_usage ();
-      end
+  %% TEMPORARY NON-INDENT: 4 spaces, for smaller diffs
+  if (nargin == 0)
+    % octave docs say need a no-argument default for loading from files
+    expr = sym(0);
+    vars = sym('x');
+  elseif (nargin == 1)
+    print_usage ();
+  elseif (nargin > 2)
+    print_usage ();
+  end
 
-      % if the vars are in a sym array, put them in a cell array
-      if (isa( vars, 'sym'))
-        varsarray = vars;
-        vars = cell(1, numel(varsarray));
-        for i = 1:numel(varsarray)
-          vars{i} = varsarray(i);
-        end
-      end
+  % if the vars are in a sym array, put them in a cell array
+  if (isa( vars, 'sym'))
+    varsarray = vars;
+    vars = cell(1, numel(varsarray));
+    for i = 1:numel(varsarray)
+      vars{i} = varsarray(i);
+    end
+  end
 
-      % check that vars are unique Symbols
-      cmd = { 'L, = _ins'
-              'if not all([x is not None and x.is_Symbol for x in L]):'
-        '    return False'
-        'return len(set(L)) == len(L)' };
-      if (~ python_cmd (cmd, vars))
-        error('OctSymPy:symfun:argNotUniqSymbols', ...
-              'symfun arguments must be unique symbols')
-      end
+  % check that vars are unique Symbols
+  cmd = { 'L, = _ins'
+          'if not all([x is not None and x.is_Symbol for x in L]):'
+          '    return False'
+          'return len(set(L)) == len(L)' };
+  if (~ python_cmd (cmd, vars))
+    error('OctSymPy:symfun:argNotUniqSymbols', ...
+          'symfun arguments must be unique symbols')
+  end
 
-      if (ischar (expr))
-        % FIXME: drop this later
-        warning('symfun: deprecated: symfun(''f'', x) format not supported')
-        tok = symfun.mystrsplit(expr, {'(', ')', ','});
-        fname = strtrim(tok{1});
-        assert (isvarname (fname))
-        cmd = {['_f = sp.Function("' fname '")(*_ins)'] ...
-                'return (_f,)' };
-        expr = python_cmd (cmd, vars{:});
-      end
+  if (ischar (expr))
+    error ('symfun(<string>, x) is not supported, see "help symfun" for options')
+  end
 
-      if (isa(expr, 'symfun'))
-        % allow symfun(<symfun>, x)
-        expr = expr.sym;
-      else
-        % e.g., allow symfun(<double>, x)
-        expr = sym(expr);
-      end
+  if (isa(expr, 'symfun'))
+    % allow symfun(<symfun>, x)
+    expr = expr.sym;
+  else
+    % e.g., allow symfun(<double>, x)
+    expr = sym(expr);
+  end
 
-      assert (isa (vars, 'cell'))
-      for i=1:length(vars)
-        assert (isa (vars{i}, 'sym'))
-      end
+  assert (isa (vars, 'cell'))
+  for i=1:length(vars)
+    assert (isa (vars{i}, 'sym'))
+  end
+  %% TEMPORARY NON-INDENT: 4 spaces, for smaller diffs
 
       f@sym([], expr.pickle, expr.symsize, expr.flat, expr.ascii, expr.unicode);
       f._symbol = sym(expr);
       f.vars = vars;
     end
+
     function g = sym(f)
       % Cast a symfun to a sym.
       % TODO: what is the correct way to cast to a superclass?
@@ -222,6 +207,10 @@ classdef symfun < sym
   end
 end
 
+
+%!error <Invalid> symfun (1, sym('x'), 3)
+
+%!error <not supported> symfun ('f', sym('x'))
 
 %!test
 %! syms x y
@@ -284,7 +273,7 @@ end
 %! f(5);
 %! assert (length (argnames (f)) == 1)
 %! assert (isequal (argnames (f), t))
-%! assert (isequal( diff(f,x), sym(0)))
+%! assert (isequal( formula(diff(f,x)), sym(0)))
 
 %!test
 %! % replace g with shorter and specific fcn
@@ -314,7 +303,7 @@ end
 
 %!test
 %! % syms f(x) without defining x
-%! clear
+%! clear x
 %! syms f(x)
 %! assert(isa(f, 'symfun'))
 %! assert(isa(x, 'sym'))
@@ -323,14 +312,14 @@ end
 %! % SMT compat: symfun indep var overwrites existing var
 %! t = 6;
 %! syms f(t)
-%! assert (logical (t != 6))
+%! assert (logical (t ~= 6))
 
 %!test
 %! % SMT compat: symfun indep var overwrites existing var, even if sym
 %! syms x
 %! t = x;
 %! syms f(t)
-%! assert (! logical (t == x))
+%! assert (~ logical (t == x))
 
 %!test
 %! syms x y

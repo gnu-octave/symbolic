@@ -1,4 +1,4 @@
-%% Copyright (C) 2015 Colin B. Macdonald
+%% Copyright (C) 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -17,29 +17,31 @@
 %% If not, see <http://www.gnu.org/licenses/>.
 
 %% -*- texinfo -*-
-%% @deftypefun {@var{s} =} magic_str_str (@var{x})
-%% Recognize special string values and substitute others.
+%% @documentencoding UTF-8
+%% @defmethod  @@sym arg (@var{x})
+%% @defmethodx @@sym angle (@var{x})
+%% Symbolic polar angle.
 %%
-%% Private function.
-%%
-%% @seealso{sym, vpa}
-%% @end deftypefun
+%% Example:
+%% @example
+%% @group
+%% x = sym(2+3*i);
+%% y = arg(x)
+%%   @result{} y = (sym) atan(3/2)
+%% @end group
+%% @end example
+%% @seealso{arg, @@sym/abs}
+%% @end defmethod
 
-function s = magic_str_str(x, varargin)
 
-  if (~ischar(x))
-    error('OctSymPy:magic_str_str:notstring', ...
-          'Expected a string');
+function y = arg (x)
+  if (nargin ~= 1)
+    print_usage ();
   end
-
-  if (strcmpi(x, 'inf')) || (strcmpi(x, '+inf'))
-    s = 'oo';
-  elseif (strcmpi(x, '-inf'))
-    s = '-oo';
-  elseif (strcmpi(x, 'i'))
-    s = 'I';
-  else
-    s = x;
-  end
-
+  y = elementwise_op ('arg', x);
 end
+
+
+%!test
+%! syms x
+%! assert (isequal (angle (x), arg (x)));

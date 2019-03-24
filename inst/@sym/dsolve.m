@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -23,7 +23,7 @@
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC})
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC1}, @var{IC2}, @dots{})
 %% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@var{ode}, @var{IC})
-%% Solve ordinary differentual equations (ODEs) symbolically.
+%% Solve ordinary differential equations (ODEs) symbolically.
 %%
 %% Basic example:
 %% @example
@@ -99,7 +99,7 @@
 %% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
 %%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
 %%
-%% dsolve (DE, y(0)==1, y(sym(pi)/2) == 2)
+%% dsolve (DE, y(0) == 1, y(sym(pi)/2) == 2)
 %%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
 %% @end group
 %% @end example
@@ -122,17 +122,24 @@
 %% @end group
 %%
 %% @group
-%% dsolve (ode_sys)
+%% soln = dsolve (ode_sys)
+%%   @result{} soln = @{ ... @}
+%% @end group
+%%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% @group
+%% soln@{1@}
 %%   @result{} ans =
-%%     @{
 %%       (sym)
 %%                      -2⋅t         2⋅t
 %%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
 %%
+%% @c doctest: +SKIP  # they might be re-ordered
+%% soln@{2@}
+%%   @result{} ans =
 %%       (sym)
 %%                        -2⋅t         2⋅t
 %%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
-%%     @}
 %% @end group
 %% @end example
 %%
@@ -143,6 +150,8 @@
 %% Note: The Symbolic Math Toolbox supports strings like 'Dy + y = 0'; we
 %% are unlikely to support this so you will need to assemble a symbolic
 %% equation instead.
+%%
+%% FIXME: should we support a cell array list input for ICs/BCs?
 %%
 %% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
 %% @end deftypemethod
@@ -168,8 +177,22 @@ function [soln,classify] = dsolve(ode,varargin)
     classify='';
   end
 
+  % Newer Sympy can do IC/BC itself
+  if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+    cmd = { 'ode=_ins[0]; ics=_ins[1:]'
+            '# convert our input to a dict'
+            'ics2 = {}'
+            'for s in ics:'
+            '    ics2[s.lhs] = s.rhs'
+            'sol = sp.dsolve(ode, ics=ics2)'
+            'return sol,' };
+    soln = python_cmd (cmd, ode, varargin{:});
+    return
+  end
+
+
   % FIXME: the initial/boundary conditions admit parameters
-  %        but only on their values (not at the evaluation point) 
+  %        but only on their values (not at the evaluation point)
 
   % FIXME: it is not currently supported a list of boundary/initial conditions
   if (isscalar(ode) && nargin>=2)
@@ -199,7 +222,7 @@ function [soln,classify] = dsolve(ode,varargin)
 
     soln = python_cmd (cmd, ode, varargin{:});
 
-  % FIXME: only solve initial-value problems involving linear systems 
+  % FIXME: only solve initial-value problems involving linear systems
   %        of first order ODEs with constant coefficients (a unique
   %        solution is expected)
   elseif(~isscalar(ode) && nargin>=2)
@@ -244,9 +267,15 @@ end
 %! % Not enough initial conditions
 %! syms y(x) C1
 %! de = diff(y, 2) + 4*y == 0;
-%! f = dsolve(de, y(0) == 3);
 %! g = 3*cos(2*x) + C1*sin(2*x);
-%! assert (isequal (rhs(f), g))
+%! try
+%!   f = dsolve(de, y(0) == 3);
+%!   waserr = false;
+%! catch
+%!   waserr = true;
+%!   expectederr = regexp (lasterr (), 'Perhaps.*under-specified');
+%! end
+%! assert ((waserr && expectederr) || isequal (rhs(f), g))
 
 %!test
 %! % Solution in implicit form
@@ -306,11 +335,13 @@ end
 %!test
 %! % System of ODEs
 %! syms x(t) y(t) C1 C2
-%! ode_1=diff(x(t),t) == 2*y(t);
-%! ode_2=diff(y(t),t) == 2*x(t);
-%! sol_sodes=dsolve([ode_1,ode_2]);
-%! g=[2*C1*exp(-2*t)+2*C2*exp(2*t),-2*C1*exp(-2*t)+2*C2*exp(2*t)];
-%! assert (isequal ([rhs(sol_sodes{1}),rhs(sol_sodes{2})], g))
+%! ode1 = diff(x(t),t) == 2*y(t);
+%! ode2 = diff(y(t),t) == 2*x(t);
+%! soln = dsolve([ode1, ode2]);
+%! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
+%! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! assert (isequal ([rhs(soln{1}), rhs(soln{2})], g1) || ...
+%!         isequal ([rhs(soln{1}), rhs(soln{2})], g2))
 
 %!test
 %! % System of ODEs (initial-value problem)
@@ -354,3 +385,11 @@ end
 %! Y = rhs(soln{2});
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
+
+%!test
+%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
+%! syms f(x) a b
+%! de = diff(f, x) == 4*f;
+%! s = dsolve(de, f(a) == b);
+%! assert (isequal (subs(rhs(s), x, a), b))
+%! end

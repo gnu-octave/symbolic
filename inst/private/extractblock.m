@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2017 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -129,7 +129,13 @@ function r = process_item(item)
   switch wh
     case OCTCODE_INT
       assert(M == 1)
+      % Note: is it possible to avoid converting to double first?
       r = str2double(C{2});
+      if (abs (r) > flintmax)
+        error ('precision would be lost converting integer larger than %ld', ...
+               flintmax)
+      end
+      r = int64 (r);
     case OCTCODE_DOUBLE
       assert(M == 1)
       r = hex2num(C{2});

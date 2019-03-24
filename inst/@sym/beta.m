@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,8 +26,9 @@
 %% @example
 %% @group
 %% syms x y
+%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% beta(x, y)
-%%   @result{} ans = (sym) β(x, y)
+%%   @result{} ans = (sym) Β(x, y)
 %% @end group
 %% @end example
 %% @end defmethod
@@ -43,5 +45,18 @@ function r = beta(x, y)
 end
 
 
+%!error <usage> beta (sym(1), 2, 3)
+
+%!assert (isequal (double (beta (sym(1), 2)), 1/2))
+%!assert (isinf (double (beta (sym(1), 0))))
+
 %!test
-%! assert (isequal (double (beta(1, 2)), 1/2))
+%! % round trip
+%! if (python_cmd('return Version(spver) > Version("1.2")'))
+%! syms x y
+%! f = beta (x, y);
+%! h = function_handle (f);
+%! A = h (1.1, 2.2);
+%! B = beta (1.1, 2.2);
+%! assert (A, B)
+%! end

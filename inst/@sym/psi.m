@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -87,17 +87,22 @@ end
 %! assert (psi (pi),    double (psi (sym (pi))),    -3*eps)
 %! assert (psi (100),   double (psi (sym (100))),   -3*eps)
 %! assert (psi (1e-3),  double (psi (1/sym (1e3))), -3*eps)
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
+%! % 2014a doesn't support negative or complex arguments
 %! assert (psi (-1.5),  double (psi (sym (-3)/2)),  -3*eps)
+%! assert (psi (-8.3),  double (psi (sym (-83)/10)),-4*eps)
 %! assert (psi (2i),    double (psi (sym (2i))),    -3*eps)
 %! assert (psi (10i+3), double (psi (sym (10i)+3)), -3*eps)
-%! assert (psi (-8.3),  double (psi (sym (-83)/10)),-4*eps)
+%! end
 %! end
 
 %!test
 %! % @double/psi loses accuracy near the poles: note higher rel tol
 %! if (exist ('psi','builtin'))
+%! if (exist ('OCTAVE_VERSION', 'builtin'))
 %! assert (psi (-1.1),  double (psi (sym (-11)/10)), -6*eps)
 %! assert (psi (-1.01), double (psi (sym (-101)/100)), -50*eps)
+%! end
 %! end
 
 % 2016-05: for k>0, @double/psi only does real positive
@@ -119,12 +124,10 @@ end
 %!test
 %! % round trip
 %! if (exist ('psi','builtin'))
-%! if (python_cmd ('return Version(spver) > Version("1.0")'))
 %! syms x
 %! f = psi (x);
 %! h = function_handle (f);
 %! A = h (1.1);
 %! B = psi (1.1);
 %! assert (A, B)
-%! end
 %! end

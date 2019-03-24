@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -42,7 +42,42 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/factorial}
+%% The binomial coefficient can be written in terms of factorials:
+%% @example
+%% @group
+%% rewrite (nchoosek (n, k), 'factorial')
+%%   @result{} ans = (sym)
+%%            n!
+%%       ────────────
+%%       k!⋅(-k + n)!
+%% @end group
+%% @end example
+%%
+%% For inputs which are not positive integers (including complex numbers),
+%% the result is defined in terms of the @code{gamma} function:
+%% @example
+%% @group
+%% rewrite (nchoosek (n, k), 'gamma')
+%%   @result{} (sym)
+%%              Γ(n + 1)
+%%       ──────────────────────
+%%       Γ(k + 1)⋅Γ(-k + n + 1)
+%% @end group
+%% @end example
+%%%
+%% For example:
+%% @example
+%% @group
+%% nchoosek (-sym(3), sym(2))
+%%   @result{} (sym) 6
+%% nchoosek (sym(5)/2, sym(3))
+%%   @result{} (sym) 5/16
+%% @c # simplify unnecessary sympy > 1.1.1
+%% simplify (simplify (nchoosek (3+4i, sym(2))))
+%%   @result{} (sym) -5 + 10⋅ⅈ
+%% @end group
+%% @end example
+%% @seealso{@@sym/factorial, @@sym/gamma}
 %% @end defmethod
 
 
@@ -66,6 +101,10 @@ end
 %!assert (isequal (nchoosek(sym(10), -1), 0))
 
 %!test
+%! n = sym('n', 'nonnegative', 'integer');
+%! assert (isequal (nchoosek (n, n), sym(1)))
+
+%!test
 %! n = sym('n', 'integer');
 %! q = nchoosek(n, 2);
 %! w = subs(q, n, 5);
@@ -77,3 +116,23 @@ end
 %! q = nchoosek(n, k);
 %! w = subs(q, {n k}, {5 2});
 %! assert (isequal (w, 10))
+
+%!test
+%! % negative input
+%! assert (isequal (nchoosek (sym(-2), sym(5)), sym(-6)))
+
+%!test
+%! % complex input
+%! n = sym(1 + 3i);
+%! k = sym(5);
+%! A = nchoosek (n, k);
+%! B = gamma (n + 1) / (gamma (k + 1) * gamma (n - k + 1));
+%! assert (double (A), double (B), -2*eps)
+
+%!test
+%! % complex input
+%! n = sym(-2 + 3i);
+%! k = sym(1 + i);
+%! A = nchoosek (n, k);
+%! B = gamma (n + 1) / (gamma (k + 1) * gamma (n - k + 1));
+%! assert (double (A), double (B), -2*eps)

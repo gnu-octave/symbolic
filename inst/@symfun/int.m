@@ -127,4 +127,4 @@ end
 %! g = int(f, y);
 %! assert (isa (g, 'symfun'))
 %! assert (isequal (argnames (g), x))
-%! assert (isequal (g, x^2*y))
+%! assert (isequal (formula(g), x^2*y))

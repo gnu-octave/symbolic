@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -70,7 +70,7 @@
 
 function z = mrdivide(x, y)
 
-  % Dear hacker from the distant future... maybe you can delete this?
+  % XXX: delete this when we drop support for Octave < 4.4.2
   if (isa(x, 'symfun') || isa(y, 'symfun'))
     warning('OctSymPy:sym:arithmetic:workaround42735', ...
             'worked around octave bug #42735')
@@ -108,6 +108,12 @@ end
 %! A = sym([1 2; 3 4]);
 %! B = sym(eye(2)) / A;
 %! assert (isequal (B, inv(A))  ||  strncmpi (sympy (B), 'MatPow', 6))
+
+%!xtest
+%! % immutable test, upstream: TODO
+%! A = sym([1 2; 3 4]);
+%! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
+%! assert (isequal (A/A, B/B))
 
 %!test
 %! % A = C/B is C = A*B

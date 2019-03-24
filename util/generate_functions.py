@@ -65,7 +65,6 @@ sinint|Si|1,0.9460830703671830149414||2016
 coshint|Chi|1,0.8378669409802082408947||2016
 sinhint|Shi|1,1.057250875375728514572||2016
 logint|li|2,1.045163780117492784845||2016
-zeta||2,pi^2/6||2016
 """
 
 
@@ -80,7 +79,7 @@ sinint|Si
 fresnelc
 fresnels
 logint|li
-zeta
+harmonic||2017
 """
 
 
@@ -344,12 +343,8 @@ function y = {NAME} (x)
   cmd = {{ 'L = _ins[0]'
           'A = [complex({SPNAME}(complex(x))) for x in L]'
           'return A,' }};
-  c = python_cmd (cmd, num2cell(x(:)));
-  assert (numel (c) == numel (x))
-  y = x;
-  for i = 1:numel (c)
-    y(i) = c{{i}};
-  end
+  c = python_cmd (cmd, num2cell (x(:)));
+  y = reshape (cell2mat (c), size (x));
 end
 
 

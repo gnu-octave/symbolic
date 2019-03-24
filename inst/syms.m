@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2018 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,10 +63,10 @@
 %% functions.
 %%   In particular, if you shadow a function name, you may get
 %%   hard-to-track-down bugs.  For example, instead of writing
-%%   @code{syms alpha} use @code{alpha = sym('alpha')} in functions.
+%%   @code{syms alpha} use @code{alpha = sym('alpha')} within functions.
 %%   [https://www.mathworks.com/matlabcentral/newsreader/view_thread/237730]
 %%
-%% @seealso{sym}
+%% @seealso{sym, assume}
 %% @end deffn
 
 %% Author: Colin B. Macdonald
@@ -104,16 +104,13 @@ function syms(varargin)
         last = n - 1;
       end
     elseif (strcmp(varargin{n}, 'clear'))
+      warning ('OctSymPy:deprecated', ...
+              ['"syms x clear" is deprecated and will be removed in a future version;\n' ...
+               '         use "assume x clear" or "assume(x, ''clear'')" instead.'])
+      assert (n == nargin, 'syms: "clear" should be the final argument')
+      assert (last < 0, 'syms: should not combine "clear" with other assumptions')
       doclear = true;
-      %warning ('deprecated: "syms x clear"; will be removed in future version')
-      if (last < 0)
-        last = n - 1;
-      else
-        warning('syms: should not combine "clear" with other assumptions')
-      end
-      if (n ~= nargin)
-        error('syms: "clear" should be the final argument')
-      end
+      last = n - 1;
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')
     end
@@ -169,17 +166,42 @@ function syms(varargin)
       % should not match: Rational(2, 3), f(2br02b)
       assert(~isempty(regexp(expr, '^\w+\(\s*[A-z]\w*(,\s*[A-z]\w*)*\s*\)$')), ...
              'invalid symfun expression')
-      s = sym(expr);
-      %vars = symvar(s)  % might re-order the inputs, instead:
-      cmd = { 'f = _ins[0]'
-              'return (f.func.__name__, f.args)' };
-      [name, vars] = python_cmd (cmd, s);
+
+      T = regexp (expr, '^(\w+)\((.*)\)$', 'tokens');
+      assert (length (T) == 1 && length (T{1}) == 2)
+      name = T{1}{1};
+      varnames = strtrim (strsplit (T{1}{2}, ','));
+
+      vars = {};
+      for j = 1:length (varnames)
+        % is var in the workspace?
+        try
+          v = evalin ('caller', varnames{j});
+          create = false;
+        catch
+          create = true;
+        end
+        % if var was defined, is it a symbol with the right name?
+        if (~ create)
+          if (~ isa (v, 'sym'))
+            create = true;
+          elseif (~ strcmp (v.flat, varnames{j}))
+            create = true;
+          end
+        end
+        if (create)
+          v = sym (varnames{j});
+          assignin ('caller', varnames{j}, v);
+        end
+        vars{j} = v;
+      end
+
+      cmd = { 'f, vars = _ins'
+              'return Function(f)(*vars)' };
+      s = python_cmd (cmd, name, vars);
+
       sf = symfun(s, vars);
       assignin('caller', name, sf);
-      for i = 1:length(vars)
-        v = vars{i};
-        assignin('caller', v.flat, v);
-      end
     end
   end
 end
@@ -197,7 +219,9 @@ end
 %! f = {x {2*x}};
 %! A = assumptions();
 %! assert ( ~isempty(A))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
+%! warning (s)
 %! A = assumptions();
 %! assert ( isempty(A))
 
@@ -207,7 +231,9 @@ end
 %! f = 2*x;
 %! clear x
 %! assert (~logical(exist('x', 'var')))
+%! s = warning ('off', 'OctSymPy:deprecated');
 %! syms x clear
+%! warning (s)
 %! assert (logical(exist('x', 'var')))
 
 %!error <symbols after assumptions>
@@ -218,7 +244,7 @@ end
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
 
-%!warning <should not combine>
+%!error <should not combine>
 %! syms x positive clear
 
 %!error <should be the final argument>
@@ -232,3 +258,28 @@ end
 %! syms x positive integer
 %! assert (logical(exist('x', 'var')))
 %! assert (~logical(exist('positive', 'var')))
+
+%!test
+%! % Issue #885
+%! syms S(x) I(x) O(x)
+
+%!test
+%! % Issue #290
+%! syms FF(x)
+%! syms ff(x)
+%! syms Eq(x)
+
+%!test
+%! % Issue #290
+%! syms beta(x)
+
+%!test
+%! syms x real
+%! syms f(x)
+%! assert (~ isempty (assumptions (x)))
+
+%!test
+%! syms x real
+%! f(x) = symfun(sym('f(x)'), x);
+%! assert (~ isempty (assumptions (x)))
+%! assert (~ isempty (assumptions (argnames (f))))
