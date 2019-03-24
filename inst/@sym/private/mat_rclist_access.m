@@ -47,13 +47,3 @@ function z = mat_rclist_access(A, r, c)
   cc = num2cell(int32(c-1));
   z = python_cmd (cmd, A, rr, cc);
 end
-
-
-%% Note: tests in @sym/private/ not executed
-% To run these in the test suite, you could move this mfile up to @sym.
-% However, note these are generally tested elsewhere indirectly.
-
-%!test
-%! B = [1 2 3; 5 6 7];
-%! A = sym(B);
-%! assert (isequal (mat_rclist_access(A,[1 2],[2 3]), [B(1,2); B(2,3)]))

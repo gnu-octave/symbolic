@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -18,22 +18,38 @@
 
 %% -*- texinfo -*-
 %% @defun octsympy_tests ()
-%% Run the OctSymPy tests, log results, and return true if any fail.
+%% Run the test suite, log results, and return true if any fail.
 %%
-%% I threw this together by modifying "__run_test_suite__.m" which
-%% is Copyright (C) 2005-2013 David Bateman and part of GNU Octave,
-%% GPL v3.
+%% On recent Octave, this is a thin layer around the built-in Octave
+%% command @code{__run_test_suite__ (@{'.'@}, @{@})}.
 %%
-%% FIXME: once we no longer try to support Octave 3.6, drop most of
-%% this and call "__run_test_suite__(@{'@@sym', '@@symfun'@}, @{@})"
-%% instead.  See https://savannah.gnu.org/bugs/?41215
+%% Testing should work once the package is installed, which is otherwise
+%% harder to test (need to know the installation directory).
 %%
+%% TODO: eventually we should drop this file altogether, but then how
+%% do we test the installed package?  Perhaps we could keep this here
+%% until @code{pkg test} works upstream: @url{https://savannah.gnu.org/bugs/?41215}
+%%
+%% @seealso{test, runtests, doctest}
 %% @end defun
 
-%% Author: Colin B. Macdonald, David Bateman
-%% Keywords: tests
-
 function anyfail = octsympy_tests ()
+  if (compare_versions (OCTAVE_VERSION (), '4.4.0', '>='))
+    pkgdir = fileparts (mfilename ('fullpath'))
+    % Maybe later: https://savannah.gnu.org/bugs/?55841
+    %if (strcmp (fullfile (pkgdir), fullfile (pwd)))
+    %  % be quieter if pkgdir is the current dir
+    %  pkgdir = '.';
+    %end
+    [pass, fail] = __run_test_suite__ ({pkgdir}, {});
+    anyfail = fail > 0;
+    return
+  end
+
+  %% Deprecated: this code to be removed when we drop support for < 4.4.0.
+  % The remainder of this is an old fork of "__run_test_suite__.m" which is
+  % Copyright (C) 2005-2013 David Bateman and part of GNU Octave, GPL v3.
+
   fcndirs = { '.'
               '@logical'
               '@double'
@@ -56,9 +72,9 @@ function anyfail = octsympy_tests ()
   try
     page_screen_output (false);
     warning ("off", "Octave:deprecated-function");
-    fid = fopen (fullfile(mycwd, "octsympy_tests.log"), "wt");
+    fid = fopen (fullfile(mycwd, "fntests.log"), "wt");
     if (fid < 0)
-      error ("could not open octsympy_tests.log for writing");
+      error ("could not open fntests.log for writing");
     endif
     test ("", "explain", fid);
     dp = dn = dxf = dsk = 0;
@@ -90,7 +106,7 @@ function anyfail = octsympy_tests ()
     fprintf ('  TIME %8.0fs (%.0fs CPU)\n', totaltime, totalcputime);
     puts ("\n");
 
-    puts ("See the file octsympy_tests.log for additional details.\n");
+    puts ("See the file fntests.log for additional details.\n");
     if (dxf > 0)
       puts ("\n");
       puts ("Expected failures (listed as XFAIL above) are usually known bugs.\n");
