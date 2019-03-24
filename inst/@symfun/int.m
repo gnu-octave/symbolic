@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -64,7 +64,7 @@ function F = int(f, varargin)
     indefinite = false;
   end
 
-  F = int(f.sym, varargin{:});
+  F = int(formula (f), varargin{:});
   if (indefinite)
     F = symfun(F, f.vars);
   end
