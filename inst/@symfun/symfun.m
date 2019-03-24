@@ -193,7 +193,7 @@ classdef symfun < sym
   end
   %% TEMPORARY NON-INDENT: 4 spaces, for smaller diffs
 
-      f@sym([], expr.pickle, expr.symsize, expr.flat, expr.ascii, expr.unicode);
+      f@sym([], expr.pickle, expr._priv_size, expr.flat, expr.ascii, expr.unicode);
       f._symbol = sym(expr);
       f.vars = vars;
     end

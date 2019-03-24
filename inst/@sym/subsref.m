@@ -78,13 +78,13 @@ function out = subsref (f, idx)
         out = f.ascii;
       elseif (strcmp (fld, 'unicode'))
         out = f.unicode;
-      elseif (strcmp (fld, 'symsize'))
-        out = f.symsize;
       %elseif (strcmp (fld, 'extra'))
       %  out = f.extra;
       % not part of the interface
       %elseif (strcmp (fld, 'size'))
-      %  out = f.size;
+      %  out = f._size;
+      elseif (strcmp (fld, '_priv_size'))  % XXX only for symfun?
+        out = f._size;
       else
         error ('@sym/subsref: invalid or nonpublic property ''%s''', fld);
       end

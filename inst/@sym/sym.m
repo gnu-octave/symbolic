@@ -249,10 +249,11 @@
 
 classdef sym < handle
   properties
-    symsize
+    % none?
   end
 
   properties (Access = private)
+    _size
     pickle
     flat
     ascii
@@ -297,7 +298,7 @@ classdef sym < handle
   % that "sym([])" is valid but "sym([], ...)" is otherwise not.
   if (isempty (x) && nargin == 6)
     s.pickle = varargin{1};
-    s.symsize = varargin{2};
+    s._size = varargin{2};
     s.flat = varargin{3};
     s.ascii = varargin{4};
     s.unicode = varargin{5};
