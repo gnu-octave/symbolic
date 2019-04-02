@@ -90,7 +90,7 @@ end
 %!assert (isequal (sinc (sym(1)), sym(0)))
 %!assert (isequal (sinc (-sym(1)), sym(0)))
 
-%!assert (double (sinc (1)), sinc (1))
+%!assert (double (sinc (sym(pi))), sinc (pi), -10*eps)
 
 %!test
 %! A = [-sym(1)/2 sym(1)/2 pi; -sym(7)/2 sym(71)/2 sym(101)/3];
