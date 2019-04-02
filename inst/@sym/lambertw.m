@@ -30,9 +30,9 @@
 %% @group
 %% syms x
 %% lambertw(x)
-%%   @result{} (sym) LambertW(x)
+%%   @result{} (sym) lambertw(x)
 %% lambertw(2, x)
-%%   @result{} (sym) LambertW(2, x)
+%%   @result{} (sym) lambertw(2, x)
 %% @end group
 %% @end example
 %%
@@ -41,7 +41,7 @@
 %% @group
 %% syms x y
 %% lambertw([0 1], [x y])
-%%   @result{} (sym) [LambertW(x)  LambertW(1, y)]  (1×2 matrix)
+%%   @result{} (sym) [lambertw(x)  lambertw(1, y)]  (1×2 matrix)
 %% @end group
 %% @end example
 %% @seealso{lambertw}

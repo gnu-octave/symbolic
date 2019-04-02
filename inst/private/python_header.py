@@ -51,10 +51,10 @@ try:
     from re import split
     # patch pretty printer, issue #952
     _mypp = pretty.__globals__["PrettyPrinter"]
-    def _my_rev_print(cls, f):
+    def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
-        return cls._print_Function(g)
-    _mypp._print_LambertW = _my_rev_print
+        return cls._print_Function(g, **kwargs)
+    _mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name='lambertw')
     _mypp._print_sinc = lambda cls, f: cls._print_Function(f, func_name="sinc_un")
     del _mypp
 except:
