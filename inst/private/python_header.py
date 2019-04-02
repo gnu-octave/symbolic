@@ -1,5 +1,5 @@
-# Copyright (C) 2014-2017 Colin B. Macdonald
-# Free Software without warranty, GPL-3.0+: see python_header.m
+# Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+# License: GPL-3.0-or-later, see python_header.m
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
@@ -49,6 +49,14 @@ try:
     import itertools
     import collections
     from re import split
+    # patch pretty printer, issue #952
+    _mypp = pretty.__globals__["PrettyPrinter"]
+    def _my_rev_print(cls, f):
+        g = f.func(*reversed(f.args), evaluate=False)
+        return cls._print_Function(g)
+    _mypp._print_LambertW = _my_rev_print
+    _mypp._print_sinc = lambda cls, f: cls._print_Function(f, func_name="sinc_un")
+    del _mypp
 except:
     echo_exception_stdout("in python_header import block")
     raise

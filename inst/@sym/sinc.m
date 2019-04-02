@@ -45,15 +45,18 @@
 %% @end ifnottex
 %% and SymPy (the software underlying Symbolic) uses this definition.
 %% That means the output of symbolic expressions involving @code{sinc}
-%% can be confusing:
+%% would be confusing.  Instead, behind the scenes we rewrite it as
+%% @code{sincᵤₙ}:
 %% @example
+%% @c check python2: it prints "sinc_un"---fine but test will fail
+%% @c doctest: +XFAIL_UNLESS (python_cmd('return isinstance(u"", str)'))
 %% @group
 %% f = sinc(x)
-%%   @result{} f = (sym) sinc(π⋅x)
+%%   @result{} f = (sym) sincᵤₙ(π⋅x)
 %% @end group
 %% @end example
 %% Here we typed our input in terms of the normalized sinc function
-%% whereas the output @code{sinc(π⋅x)} is the equivalent SymPy expression
+%% whereas the output @code{sincᵤₙ(π⋅x)} is the equivalent SymPy expression
 %% written in terms of the unnormalized sinc function.
 %%
 %% Note conversion back into an Octave function works correctly as
