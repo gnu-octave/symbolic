@@ -38,12 +38,15 @@
 %% symbolic expression, @ref{@@sym/igamma}.  This is purely cosmetic
 %% and does not effect operations on the results:
 %% @example
-%% gammainc(1, 3)
-%%   @result{} ans = 0.080301
+%% @group
+%% gammainc(3, 1)
+%%   @result{} ans = 0.95021
 %% gammainc(x, a)
 %%   @result{} (sym) γ(a, x)
-%% double(subs(ans, [x a], [1 3]))
-%%   @result{} ans = 0.080301
+%% double(subs(ans, [x a], [3 1]))
+%%   @result{} ans = 0.95021
+%% @end group
+%% @end example
 %%
 %% @seealso{gammainc, @@sym/igamma, @@sym/gamma}
 %% @end defmethod
