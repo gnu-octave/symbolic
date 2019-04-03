@@ -55,7 +55,7 @@ try:
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
     _mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name='lambertw')
-    _mypp._print_sinc = lambda cls, f: cls._print_Function(f, func_name="sinc_un")
+    _mypp._print_sinc = lambda cls, f: cls._print_Function(f.func(f.args[0]/sp.pi, evaluate=False))
     del _mypp
 except:
     echo_exception_stdout("in python_header import block")
