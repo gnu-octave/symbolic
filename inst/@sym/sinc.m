@@ -120,7 +120,7 @@ end
 
 %!test
 %! syms x
-%! h = function_handle (sinc (x))
+%! h = function_handle (sinc (x));
 %! A = double (sinc (sym (12)/10));
 %! B = h (1.2);
 %! C = sinc (1.2);
