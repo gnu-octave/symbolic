@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% syms x
-%% rewrite(sinc(x), 'sin')
+%% rewrite (sinc (x), 'sin')
 %%   @result{} (sym)
 %%       ⎧sin(π⋅x)
 %%       ⎪────────  for π⋅x ≠ 0
@@ -35,42 +35,37 @@
 %% @end group
 %% @end example
 %%
-%% Unfortunately, the notation @code{sinc} is also commonly used to represent
+%% Caution, the notation @code{sinc} is also commonly used to represent
 %% the unnormalized sinc function
 %% @iftex
-%% @math{\frac{\sin(x)}{x}},
+%% @math{\frac{\sin(x)}{x}}.
 %% @end iftex
 %% @ifnottex
-%% @code{sin(x)/x},
+%% @code{sin(x)/x}.
 %% @end ifnottex
-%% and SymPy (the software underlying Symbolic) uses this definition.
-%% That means the output of symbolic expressions involving @code{sinc}
-%% would be confusing.  Instead, behind the scenes we rewrite it as
-%% @code{sincᵤₙ}:
-%% @example
-%% @c check python2: it prints "sinc_un"---fine but test will fail
-%% @c doctest: +XFAIL_UNLESS (python_cmd('return isinstance(u"", str)'))
-%% @group
-%% f = sinc(x)
-%%   @result{} f = (sym) sincᵤₙ(π⋅x)
-%% @end group
-%% @end example
-%% Here we typed our input in terms of the normalized sinc function
-%% whereas the output @code{sincᵤₙ(π⋅x)} is the equivalent SymPy expression
-%% written in terms of the unnormalized sinc function.
 %%
-%% Note conversion back into an Octave function works correctly as
-%% demonstrated next:
+%% Further examples:
 %% @example
 %% @group
-%% h = function_handle(f)
-%%   @result{} h = @@(x) sinc (x)
-%% double(sinc(sym(12)/10))
-%%   @result{} ans = -0.15591
-%% h(1.2)
-%%   @result{} ans = -0.15591
-%% sinc(1.2)
-%%   @result{} ans = -0.15591
+%% rewrite (sin (x)/x, 'sinc')
+%%   @result{} ans = (sym)
+%%            ⎛x⎞
+%%        sinc⎜─⎟
+%%            ⎝π⎠
+%% @end group
+%%
+%% @group
+%% rewrite (sin (pi*x)/(pi*x), 'sinc')
+%%   @result{} ans = (sym) sinc(x)
+%% @end group
+%%
+%% @group
+%% diff (sinc (x))
+%%   @result{} ans = (sym)
+%%        π⋅x⋅cos(π⋅x) - sin(π⋅x)
+%%        ───────────────────────
+%%                     2
+%%                  π⋅x
 %% @end group
 %% @end example
 %%
@@ -122,3 +117,12 @@ end
 %! A = sinc (1.5);
 %! B = h (1.5);
 %! assert (A, B, -eps)
+
+%!test
+%! syms x
+%! h = function_handle (sinc (x))
+%! A = double (sinc (sym (12)/10));
+%! B = h (1.2);
+%! C = sinc (1.2);
+%! assert (A, B, -eps)
+%! assert (A, C, -eps)
