@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,7 +26,6 @@
 %% @example
 %% @group
 %% syms x y
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% beta(x, y)
 %%   @result{} ans = (sym) Β(x, y)
 %% @end group

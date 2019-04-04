@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,6 @@
 %% @end group
 %%
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% disp(A, 'ascii')
 %%   @print{}   [     /x\              / c*x\      ]
 %%   @print{}   [  sin|-|         floor\a   /      ]

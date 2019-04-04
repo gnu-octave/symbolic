@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -351,7 +351,5 @@ end
 
 %!test
 %! % https://github.com/cbm755/octsympy/issues/854
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
-%!   f = function_handle (x + 1i*sqrt (sym(3)));
-%!   assert (f (1), complex (1, sqrt (3)), -eps)
-%! end
+%! f = function_handle (x + 1i*sqrt (sym(3)));
+%! assert (f (1), complex (1, sqrt (3)), -eps)

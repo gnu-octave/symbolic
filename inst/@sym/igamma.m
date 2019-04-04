@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,15 +30,17 @@
 %% @end group
 %% @end example
 %%
-%% @strong{Note} the order of inputs is different from
-%% @ref{@@sym/gammainc},
-%% specifically:
+%% @strong{Note} the order of inputs and scaling is different from
+%% @ref{@@sym/gammainc}, specifically:
 %% @example
 %% @group
 %% igamma (nu, x)
 %%   @result{} (sym) Γ(ν, x)
 %% gammainc (x, nu, 'upper')
-%%   @result{} (sym) Γ(ν, x)
+%%   @result{} (sym)
+%%       Γ(ν, x)
+%%       ───────
+%%         Γ(ν)
 %% @end group
 %% @end example
 %%
@@ -50,7 +52,7 @@ function y = igamma(a, z)
     print_usage ();
   end
 
-  y = gammainc(z, a, 'upper');
+  y = elementwise_op ('uppergamma', sym(a), sym(z));
 end
 
 
@@ -58,3 +60,22 @@ end
 %! % mostly tested in @sym/gammainc
 %! syms x
 %! assert (isequal (igamma (2, x), gammainc(x, 2, 'upper')))
+
+%!test
+%! % unregularized
+%! B = double (igamma (sym(3), 1));
+%! A = gammainc (1, 3, 'upper')*gamma (3);
+%! assert (A, B, -2*eps)
+
+%!test
+%! % something like a round trip: no igamma(<double>)
+%! syms x a
+%! f = igamma (a, x);
+%! h = function_handle (f, 'vars', [a x]);
+%! A = h (1.1, 2.2);
+%! B = double (igamma (sym(11)/10, sym(22)/10));
+%! C = gammainc (2.2, 1.1, 'upper')*gamma(1.1);
+%! if (python_cmd ('return Version(spver) > Version("1.3")'))
+%! assert (A, B, -10*eps)
+%! assert (A, C, -10*eps)
+%! end
