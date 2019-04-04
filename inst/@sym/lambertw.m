@@ -1,4 +1,5 @@
 %% Copyright (C) 2015, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2019 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
