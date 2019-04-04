@@ -312,10 +312,8 @@ end
 
 %!test
 %! % Issue #850
-%! if (python_cmd('return Version(spver) > Version("1.1.1")'))
 %! A = solve (sym(pi)^2*x + y == 0);
 %! assert (isequal (A, -y/sym(pi)^2))
-%! end
 
 %!test
 %! % https://github.com/sympy/sympy/issues/14632
