@@ -1,4 +1,5 @@
-%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2019 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,27 +31,23 @@
 %% @group
 %% syms x
 %% lambertw(x)
-%%   @result{} (sym) LambertW(x)
+%%   @result{} (sym) lambertw(x)
 %% lambertw(2, x)
-%%   @result{} (sym) LambertW(x, 2)
+%%   @result{} (sym) lambertw(2, x)
 %% @end group
 %% @end example
-%% (@strong{Note} that the branch @var{k} must come first in the
-%% input but it comes last in the output.)
 %%
 %% Also supports vector/matrix input:
 %% @example
 %% @group
 %% syms x y
 %% lambertw([0 1], [x y])
-%%   @result{} (sym) [LambertW(x)  LambertW(y, 1)]  (1×2 matrix)
+%%   @result{} (sym) [lambertw(x)  lambertw(1, y)]  (1×2 matrix)
 %% @end group
 %% @end example
 %% @seealso{lambertw}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function W = lambertw(k, x)
   if (nargin == 1)
