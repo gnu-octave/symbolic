@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016 Colin Macdonald
+%% Copyright (C) 2015-2016, 2019 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,6 +79,20 @@
 %% @end group
 %% @end example
 %%
+%% If not specified by @var{t}, the independent variable is chosen by
+%% looking for a symbol named @code{t}.  If no such symbol is found,
+%% @pxref{@@sym/symvar} is used, which choses a variable close to @code{x}:
+%% @example
+%% @group
+%% syms a y
+%% laplace (a*exp (y))
+%%   @result{} (sym)
+%%         a
+%%       ─────
+%%       s - 1
+%% @end group
+%% @end example
+%%
 %% @seealso{@@sym/ilaplace}
 %% @end defmethod
 
@@ -90,14 +104,30 @@ function F = laplace(varargin)
   % FIXME: it only works for scalar functions
   % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
+  f = sym(varargin{1});
+  if (nargin == 1 || nargin == 2)
+    %% time domain variable not specified
+    % if exactly one symbol has char(t) == 't'...
+    symbols = findsymbols (f);
+    charsyms = cell (size (symbols));
+    for c=1:numel(charsyms)
+      charsyms{c} = char (symbols{c});
+    end
+    match = find (strcmp (charsyms, 't'));
+    assert (numel (match) <= 1, 'laplace: there is more than one "t" symbol: check symvar(F) and sympy(F)')
+    if (~ isempty (match))
+      t = symbols{match};  % ... we want that one
+    else
+      t = symvar (f, 1);
+      if (isempty (t))
+        t = sym ('t', 'positive');
+      end
+    end
+  end
+
   % If the physical variable of f is equal to "s",
   % "z" is the frequency domain variable (analogously to SMT)
   if (nargin == 1)
-    f = sym(varargin{1});
-    t = symvar(f, 1);  % note SMT does something different, prefers t
-    if (isempty(t))
-      t = sym('t','positive');
-    end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=sp.Symbol("s")'
             'if t==s:'
             '    s=sp.Symbol("z")'
@@ -110,12 +140,7 @@ function F = laplace(varargin)
     F = python_cmd(cmd, f, t);
 
   elseif (nargin == 2)
-    f = sym(varargin{1});
     s = sym(varargin{2});
-    t = symvar(f, 1);  % note SMT does something different, prefers t
-    if (isempty(t))
-      t = sym('t','positive');
-    end
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
             'F=sp.laplace_transform(f, t, s)'
             'if isinstance(F, sp.LaplaceTransform):'
@@ -126,7 +151,6 @@ function F = laplace(varargin)
     F = python_cmd(cmd, f, t, s);
 
   elseif (nargin == 3)
-    f = sym(varargin{1});
     t = sym(varargin{2});
     s = sym(varargin{3});
     cmd = { 'f=_ins[0]; t=_ins[1]; s=_ins[2]'
@@ -162,11 +186,18 @@ end
 
 %!test
 %! syms x s t z
-%! % matlab SMT prefers t over x (WTF not symvar like we do?)
-%! assert (isequal (laplace(x*exp(t), z), exp(t)/z^2))
+%! % matlab SMT prefers t over x
+%! assert (isequal (laplace (x*exp (t), z), x/(z - 1)))
 %! % as usual, you can just specify:
 %! assert (isequal (laplace(x*exp(t), t, z), x/(z - 1)))  % SMT result
 %! assert (isequal (laplace(x*exp(t), x, z), exp(t)/z^2))
+
+%!test
+%! syms x a s
+%! % if no t, use symvar: take x before a
+%! assert (isequal (laplace (a*exp (x)), a/(s - 1)))
+
+%!error <more than one> laplace (sym('t')*sym('t', 'real'))
 
 %!test
 %! % constant, issue #250

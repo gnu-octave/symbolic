@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2018 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018-2019 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -80,6 +80,10 @@
 %% @end group
 %% @end example
 %%
+%% The independent variable of the input can be specified by @var{s};
+%% if omitted it defaults a symbol named @code{s}, or @pxref{@@sym/symvar}
+%% if no such symbol is found.
+%%
 %% @seealso{@@sym/laplace}
 %% @end defmethod
 
@@ -99,7 +103,7 @@ function f = ilaplace(varargin)
   if (nargin == 3)
     s = sym(varargin{2});
   else
-    %% frequency domain variable not specifed
+    %% frequency domain variable not specified
     % if exactly one symbol has char(s) == 's'...
     symbols = findsymbols (F);
     charsyms = cell (size (symbols));
