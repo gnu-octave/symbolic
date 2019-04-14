@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,11 +50,9 @@ end
 
 %!test
 %! % roundtrip
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms x
 %! A = angle (2+2i);
 %! f = angle (x);
 %! h = function_handle (f);
 %! B = h (2+2i);
 %! assert (A, B, -eps)
-%! end

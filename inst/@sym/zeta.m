@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -36,7 +36,6 @@
 %% of the zeta function evaluated in @var{x}:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.1.1")'))
 %% syms x
 %% y = zeta (4, x)
 %%   @result{} y = (sym)
@@ -99,21 +98,15 @@ end
 
 %!xtest
 %! % https://github.com/sympy/sympy/issues/11802
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! assert (double (zeta (sym (3), 4)), -0.07264084989132137196, -1e-14)
-%! end
 
 %!test
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms x
 %! assert (isequal (zeta (0, x), zeta(x)))
-%! end
 
 %!test
 %! % ensure its the nth deriv wrt x, not the n deriv
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms x n
 %! F = zeta (n, x);
 %! F = subs(F, n, 3);
 %! assert (isequal (F, diff (zeta (x), x, x, x)))
-%! end

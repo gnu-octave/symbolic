@@ -1,5 +1,6 @@
-# Copyright (C) 2014-2017 Colin B. Macdonald
-# Free Software without warranty, GPL-3.0+: see python_header.m
+# Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+# Copyright (C) 2019 Mike Miller
+# License: GPL-3.0-or-later, see python_header.m
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
@@ -28,7 +29,6 @@ try:
     from sympy import __version__ as spver
     # need this to reactivate from srepr
     from sympy import *
-    import sympy.printing
     from sympy.logic.boolalg import Boolean, BooleanFunction
     from sympy.core.relational import Relational
     # temporary? for piecewise support
@@ -50,6 +50,14 @@ try:
     import itertools
     import collections
     from re import split
+    # patch pretty printer, issue #952
+    _mypp = pretty.__globals__["PrettyPrinter"]
+    def _my_rev_print(cls, f, **kwargs):
+        g = f.func(*reversed(f.args), evaluate=False)
+        return cls._print_Function(g, **kwargs)
+    _mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name='lambertw')
+    _mypp._print_sinc = lambda cls, f: cls._print_Function(f.func(f.args[0]/sp.pi, evaluate=False))
+    del _mypp
 except:
     echo_exception_stdout("in python_header import block")
     raise

@@ -6,8 +6,9 @@ octsympy 2.7.1+
           eval
           ezmesh
           find
+          sinc
 
-  * Update minimum versions of SymPy to 1.1.1 and Octave to 4.2.
+  * Update minimum versions of SymPy to 1.2 and Octave to 4.2.
 
   * Newer SymPy versions improve QR and LU on non-square matrices.
 

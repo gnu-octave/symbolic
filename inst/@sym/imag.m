@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -77,7 +77,6 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.1.1")'))
 %! syms x
 %! d = 3 - 5i;
 %! f = imag (x);
@@ -85,4 +84,3 @@ end
 %! h = function_handle (f);
 %! B = h (d);
 %! assert (A, B)
-%! end

@@ -72,8 +72,7 @@
 %%   @result{} (sym) 6
 %% nchoosek (sym(5)/2, sym(3))
 %%   @result{} (sym) 5/16
-%% @c # simplify unnecessary sympy > 1.1.1
-%% simplify (simplify (nchoosek (3+4i, sym(2))))
+%% nchoosek (3+4i, sym(2))
 %%   @result{} (sym) -5 + 10⋅ⅈ
 %% @end group
 %% @end example
