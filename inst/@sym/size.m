@@ -65,7 +65,7 @@ function [n, m] = size(x, dim)
 
   % Note: symbolic sized matrices should return double, not sym/string.
 
-  n = x.size;
+  n = x._size;
 
   % FIXME: for now, we artificially force symbolic sized objects
   % (where one or more dimension is recorded as NaN) to be 1x1.

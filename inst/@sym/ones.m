@@ -48,7 +48,7 @@ function y = ones(varargin)
   end
 
   if (isa (varargin{end}, 'char'))
-    varargin = cell2nosyms (varargin);
+    varargin = sym.cell2nosyms (varargin);
     y = ones (varargin{:});
     return
   end

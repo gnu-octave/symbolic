@@ -61,12 +61,12 @@ function out = subsref (f, idx)
         end
       end
       for i = 1:length(idx.subs)
-        if (~ is_valid_index(idx.subs{i}))
+        if (~ sym.is_valid_index (idx.subs{i}))
           error('OctSymPy:subsref:invalidIndices', ...
                 'invalid indices: should be integers or boolean');
         end
       end
-      out = mat_access(f, idx.subs);
+      out = sym.mat_access (f, idx.subs);
 
     case '.'
       fld = idx.subs;
@@ -82,7 +82,9 @@ function out = subsref (f, idx)
       %  out = f.extra;
       % not part of the interface
       %elseif (strcmp (fld, 'size'))
-      %  out = f.size;
+      %  out = f._size;
+      elseif (strcmp (fld, '_priv_size'))  % XXX only for symfun?
+        out = f._size;
       else
         error ('@sym/subsref: invalid or nonpublic property ''%s''', fld);
       end

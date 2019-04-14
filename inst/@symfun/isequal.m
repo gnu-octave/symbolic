@@ -1,4 +1,5 @@
 %% Copyright (C) 2017 NVS Abhilash
+%% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%

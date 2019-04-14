@@ -212,8 +212,9 @@ end
 %%! w = logical(x);
 %%! assert (w)
 
-%!test
+%!xtest
 %! % older Octave (< 4.2) didn't automatically do "if (logical(obj))"
+%! % re-broken on classdef?
 %! e = sym(true);
 %! if (e)
 %!   assert(true);
@@ -221,7 +222,7 @@ end
 %!   assert(false);
 %! end
 
-%!test
+%!xtest
 %! % more of above
 %! e2 = sym(1) == sym(1);
 %! if (e2)

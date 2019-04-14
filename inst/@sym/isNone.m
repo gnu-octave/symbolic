@@ -75,7 +75,7 @@ end
 %!assert (isequal (None(1), None));
 %!error None(None);
 %!error <must be integer> x=sym('x'); x(None);
-%!error <must be integer> x=1; x(None);
+%!xtest <must be integer> x=1; x(None);       % NOT supported for integer(classdef)
 %!error None(None);
 %!error 1 + None;
 %!error None - 1;

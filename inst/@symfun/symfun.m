@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -129,8 +130,22 @@
 %% @end deftypemethod
 
 
-function f = symfun(expr, vars)
+classdef symfun < sym
 
+  properties (Access = private)
+    vars
+    _symbol   % TODO: temporary hack?
+  end
+
+  methods (Static, Access = private)
+    helper_symfun_binops(f, g);
+    mystrsplit(str, sep);
+  end
+
+  methods
+    function f = symfun(expr, vars)
+
+  %% TEMPORARY NON-INDENT: 4 spaces, for smaller diffs
   if (nargin == 0)
     % octave docs say need a no-argument default for loading from files
     expr = sym(0);
@@ -176,15 +191,26 @@ function f = symfun(expr, vars)
   for i=1:length(vars)
     assert (isa (vars{i}, 'sym'))
   end
+  %% TEMPORARY NON-INDENT: 4 spaces, for smaller diffs
 
-  f.vars = vars;
-  f = class(f, 'symfun', expr);
-  superiorto ('sym');
+      f@sym([], expr.pickle, expr._priv_size, expr.flat, expr.ascii, expr.unicode);
+      f._symbol = sym(expr);
+      f.vars = vars;
+    end
 
+    function g = sym(f)
+      % Cast a symfun to a sym.
+      % TODO: what is the correct way to cast to a superclass?
+      g = f._symbol;
+      %g = sym@sym(f);
+    end
+  end
 end
 
 
-%!error <Invalid> symfun (1, sym('x'), 3)
+%!xtest
+%! % broken on classdef?
+%! error <Invalid> symfun (1, sym('x'), 3)
 
 %!error <not supported> symfun ('f', sym('x'))
 

@@ -56,6 +56,7 @@ function out = subsref (f, idx)
         % you probably want "formula(f)".
         out = formula (f);
       else
+        %out = subsref@sym(f, idx);
         out = subsref (formula (f), idx);
       end
 

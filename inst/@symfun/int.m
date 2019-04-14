@@ -64,6 +64,7 @@ function F = int(f, varargin)
     indefinite = false;
   end
 
+  %F = int@sym(f, varargin{:});
   F = int(formula (f), varargin{:});
   if (indefinite)
     F = symfun(F, f.vars);

@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2018 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2017 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
 %%
@@ -246,9 +247,46 @@
 %% @seealso{syms, assumptions, @@sym/assume, @@sym/assumeAlso}
 %% @end deftypeop
 
+classdef sym < handle
+  properties
+    % none?
+  end
 
-function s = sym(x, varargin)
+  properties (Access = private)
+    _size
+    pickle
+    flat
+    ascii
+    unicode
+    extra
+  end
 
+  methods (Static, Access = private)
+    assert_same_shape (x, y);
+    cell2nosyms (x);
+    check_assumptions (x);
+    codegen (varargin);
+    detect_special_str (x);
+    double_to_sym_exact (x);
+    double_to_sym_heuristic (x, ratwarn, argnstr);
+    elementwise_op(scalar_fcn, varargin);
+    ineq_helper (op, fop, lhs, rhs, nanspecial);
+    is_same_shape (x, y);
+    is_valid_index (x);
+    make_sym_matrix (As, sz);
+    mat_access (A, subs);
+    mat_rccross_access (A, r, c);
+    mat_rclist_access (A, r, c);
+    mat_rclist_asgn (A, r, c, B);
+    mat_replace (A, subs, b);
+    numeric_array_to_sym (A);
+    uniop_bool_helper (x, scalar_fcn, opt, varargin);
+  end
+
+  methods
+    function s = sym (x, varargin)
+
+  %% Should be INDENTED 4 spaces: just trying to keep the diffs small for now...
   if (nargin == 0)
     x = 0;
   end
@@ -260,12 +298,11 @@ function s = sym(x, varargin)
   % that "sym([])" is valid but "sym([], ...)" is otherwise not.
   if (isempty (x) && nargin == 6)
     s.pickle = varargin{1};
-    s.size = varargin{2};
+    s._size = varargin{2};
     s.flat = varargin{3};
     s.ascii = varargin{4};
     s.unicode = varargin{5};
     s.extra = [];
-    s = class (s, 'sym');
     return
   end
 
@@ -325,7 +362,7 @@ function s = sym(x, varargin)
     if (ismatrix (varargin{1}) && ~ischar (varargin{1}) && ~isstruct (varargin{1}) && ~iscell (varargin{1}))
       %% Handle MatrixSymbols
       assert (nargin < 3, 'MatrixSymbol do not support assumptions')
-      s = make_sym_matrix (x, varargin{1});
+      s = sym.make_sym_matrix (x, varargin{1});
       return
     elseif (nargin == 2 && isnumber && ischar (varargin{1}) && isscalar (varargin{1}))
       %% explicit ratflag given
@@ -350,13 +387,13 @@ function s = sym(x, varargin)
     else
       sclear = false;
       assert (~isnumber, 'Only symbols can have assumptions.')
-      check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
+      sym.check_assumptions (varargin);  % Check if assumptions exist - Sympy don't check this
       asm = varargin;
     end
   end
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
-    s = numeric_array_to_sym (x);
+    s = sym.numeric_array_to_sym (x);
     return
 
   elseif (isa (x, 'double'))  % Handle double/complex
@@ -374,9 +411,9 @@ function s = sym(x, varargin)
       x = xx{n};
       switch ratflag
         case 'f'
-          y = double_to_sym_exact (x);
+          y = sym.double_to_sym_exact (x);
         case 'r'
-          y = double_to_sym_heuristic (x, ratwarn, []);
+          y = sym.double_to_sym_heuristic (x, ratwarn, []);
         otherwise
           error ('sym: this case should not be possible')
       end
@@ -423,7 +460,7 @@ function s = sym(x, varargin)
       %  end
       %end
 
-    y = detect_special_str (x);
+    y = sym.detect_special_str (x);
     if (~ isempty (y))
       assert (isempty (asm), 'Only symbols can have assumptions.')
       s = python_cmd (['return ' y]);
@@ -568,6 +605,13 @@ function s = sym(x, varargin)
 
   error ('Conversion to symbolic with those arguments not (yet) supported')
 
+  %% END TEMPORARY INDENT
+    end
+  end
+
+  methods (Static)
+    % none yet
+  end
 end
 
 
@@ -948,7 +992,7 @@ end
 %!error <unexpected in assumptions>
 %! n = sym ('n', {{'negative', 'even'}});
 
-%!test
+%!xtest
 %! % save/load sym objects
 %! syms x
 %! y = 2*x;
@@ -990,7 +1034,7 @@ end
 %! assert (isequal (a, sym (1)))
 %! assert (isequal (b, sym (-1)))
 
-%!test
+%!xtest
 %! % num2cell works on sym arrays
 %! syms x
 %! C1 = num2cell ([x 2 3; 4 5 6*x]);

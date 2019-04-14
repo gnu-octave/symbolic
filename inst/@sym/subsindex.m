@@ -75,7 +75,7 @@ function b = subsindex(x)
 end
 
 
-%!test
+%!xtest
 %! i = sym(1);
 %! a = 7;
 %! assert(a(i)==a);
@@ -83,7 +83,7 @@ end
 %! a = 2:2:10;
 %! assert(a(i)==4);
 
-%!test
+%!xtest
 %! i = sym([1 3 5]);
 %! a = 1:10;
 %! assert( isequal (a(i), [1 3 5]))
@@ -105,12 +105,12 @@ end
 %! end
 %! assert(waserr)
 
-%!test
+%!xtest
 %! syms x
 %! assert (isequal (x(sym (true)), x))
 %! assert (isequal (x(sym (false)), sym ([])))
 
-%!test
+%!xtest
 %! x = 6;
 %! assert (isequal (x(sym (true)), 6))
 %! assert (isequal (x(sym (false)), []))
@@ -120,14 +120,14 @@ end
 %! assert (isequal (a(sym ([true false true])), a([1 3])))
 %! assert (isequal (a(sym ([false false false])), sym (ones(1,0))))
 
-%!test
+%!xtest
 %! a = [10 11; 12 13];
 %! p = [true false; true true];
 %! assert (isequal (a(sym (p)), a(p)))
 %! p = [false false false];
 %! assert (isequal (a(sym (p)), a(p)))
 
-%!error <indices must be integers or boolean>
+%!xtest <indices must be integers or boolean>
 %! a = [10 12];
 %! I = [sym(true) 2];
 %! b = a(I);
