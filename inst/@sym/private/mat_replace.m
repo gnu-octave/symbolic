@@ -61,6 +61,10 @@ function z = mat_replace(A, subs, b)
           end
         end
       case 2
+        if (isempty (subs{1}) || isempty (subs{2}))
+          z = A;
+          return
+        end
         if strcmp(subs{1}, ':')
           z = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
           return

@@ -579,6 +579,31 @@ end
 %! A = sym (magic (3));
 %! A([], 1) = [66; 66];
 
+%!test
+%! % Issue #966: empty indexing, empty RHS, A unchanged
+%! B = magic(3);
+%! A = sym(B);
+%! A(1, []) = [];
+%! assert (isequal (A, B))
+%! A([], 2) = [];
+%! assert (isequal (A, B))
+%! A([], []) = [];
+%! assert (isequal (A, B))
+%! A(2:3, []) = [];
+%! assert (isequal (A, B))
+%! A([], 2:3) = [];
+%! assert (isequal (A, B))
+%! A(:, []) = [];
+%! assert (isequal (A, B))
+%! A([], :) = [];
+%! assert (isequal (A, B))
+
+%!xtest
+%! B = [1 2; 3 4];
+%! A = sym(B);
+%! A([]) = [];
+%! assert (isequal (A, B))
+
 
 %% Tests from mat_replace
 
