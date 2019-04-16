@@ -36,16 +36,17 @@
 
 function z = mat_rclist_asgn(A, r, c, B)
 
+  if (isempty (r) && isempty (c) && (isempty (B) || isscalar (B)))
+    z = A;
+    return
+  end
+
   if ~( isvector(r) && isvector(c) && (length(r) == length(c)) )
     error('this routine is for a list of rows and cols');
   end
 
   if ((numel(B) == 1) && (numel(r) > 1))
     B = repmat(B, size(r));
-  end
-  if (isempty (r) && isempty (c) && (isempty (B) || isscalar (B)))
-    z = A;
-    return
   end
   if (length(r) ~= numel(B))
     error('not enough/too much in B')

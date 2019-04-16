@@ -611,11 +611,16 @@ end
 %! a([]) = [];
 %! assert (isequal (a, sym(7)))
 
-%!xtest
+%!test
 %! % Issue #965
 %! a = sym(7);
 %! a([]) = 42;
 %! assert (isequal (a, sym(7)))
+
+%!error
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = [42 42]
 
 
 %% Tests from mat_replace
