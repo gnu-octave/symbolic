@@ -491,6 +491,8 @@ end
 %! B(1,5) = 10;
 %! assert (isequal (A, B))
 
+%!shared
+
 %!test
 %! % Check row deletion 1D
 %! a = sym([1; 3; 5]);
