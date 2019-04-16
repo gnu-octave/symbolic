@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -42,6 +42,10 @@ function z = mat_rclist_asgn(A, r, c, B)
 
   if ((numel(B) == 1) && (numel(r) > 1))
     B = repmat(B, size(r));
+  end
+  if (isempty (r) && isempty (c) && (isempty (B) || isscalar (B)))
+    z = A;
+    return
   end
   if (length(r) ~= numel(B))
     error('not enough/too much in B')

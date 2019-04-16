@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
@@ -542,6 +542,40 @@ end
 %!error <null assignment>
 %! a = sym([1, 2; 3, 4]);
 %! a(1, 2) = [];
+
+%!test
+%! % Issue #963: scalar asgn to empty part of matrix
+%! A = sym (magic (3));
+%! B = A;
+%! A(1, []) = 42;
+%! assert (isequal (A, B))
+%! A([], 2) = 42;
+%! assert (isequal (A, B))
+%! A([]) = 42;
+%! assert (isequal (A, B))
+%! A([], []) = 42;
+%! assert (isequal (A, B))
+%! A(2:3, []) = 42;
+%! assert (isequal (A, B))
+%! A([], 2:3) = 42;
+%! assert (isequal (A, B))
+%! A(:, []) = 42;
+%! assert (isequal (A, B))
+%! A([], :) = 42;
+%! assert (isequal (A, B))
+
+%!error
+%! % TODO: do we care what error?
+%! A = sym (magic (3));
+%! A(2:3, []) = [66; 66];
+
+%!error
+%! A = sym (magic (3));
+%! A([]) = [66; 66];
+
+%!error
+%! A = sym (magic (3));
+%! A([], 1) = [66; 66];
 
 
 %% Tests from mat_replace
