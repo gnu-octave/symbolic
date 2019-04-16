@@ -123,8 +123,9 @@ function z = mat_replace(A, subs, b)
     end
 
     [r,c] = ndgrid(r,c);
-    if ~( isscalar(b) || is_same_shape (r, b) )
-      % Octave/Matlab both do this for double so we will to
+    if ~(isscalar (b) || (isvector (r) && isvector (b)) || is_same_shape (r, b))
+      % vectors may have diff orientations but if we have matrices then
+      % they must have the same shape (Octave/Matlab do this for double)
       error('A(I,J,...) = X: dimensions mismatch')
     end
     r = r(:);

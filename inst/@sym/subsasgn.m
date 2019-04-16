@@ -188,15 +188,34 @@ end
 %! a(1:4) = [10 11; 12 13];
 %! assert(isequal( a, b ))
 
-%% Wrong shape RHS
-% Matlab/Octave don't allow this on doubles, but if you do
-% this is the right answer (Matlab SMT 2013b gets it wrong)
-% I will disable it too.
-%test
-% rhs = [10 11; 12 13];
-% b(1:2,1:2) = rhs;
-% a(1:2,1:2) = rhs(:);
-% assert(isequal( a, b ))
+%!error <mismatch>
+%! % Wrong shape matrix RHS: Matlab/Octave don't allow this on doubles.
+%! % Matlab SMT 2013b gets it wrong.  We throw an error.
+%! rhs = [10 11; 12 13];
+%! a = sym (magic (3));
+%! a(1:2,1:2) = rhs(:);
+
+%!test
+%! % Issue #963: vector RHS with diff orientation from 2D indexing
+%! b = 1:4; b = [b; 2*b; 3*b];
+%! a = sym(b);
+%! b(1:2:3, 1) = 11:2:13;
+%! a(1:2:3, 1) = sym(11:2:13);
+%! assert (isequal (a, b))
+%! b(1:2:3, 1) = 1:2:3;
+%! a(1:2:3, 1) = 1:2:3;
+%! assert (isequal (a, b))
+
+%!test
+%! % Issue #963: vector RHS with diff orientation from 2D indexing
+%! a = sym (magic (3));
+%! b = a;
+%! a(1:2:3, 2) = [14 15];
+%! b(1:2:3, 2) = [14; 15];
+%! assert (isequal (a, b))
+%! a(2, 1:2:3) = [24 25];
+%! b(2, 1:2:3) = [24; 25];
+%! assert (isequal (a, b))
 
 %!test
 %! % 1D growth and 'end'
