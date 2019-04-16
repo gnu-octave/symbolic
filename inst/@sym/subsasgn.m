@@ -598,11 +598,24 @@ end
 %! A([], :) = [];
 %! assert (isequal (A, B))
 
-%!xtest
+%!test
+%! % Issue 967
 %! B = [1 2; 3 4];
 %! A = sym(B);
 %! A([]) = [];
 %! assert (isequal (A, B))
+
+%!test
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = [];
+%! assert (isequal (a, sym(7)))
+
+%!xtest
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = 42;
+%! assert (isequal (a, sym(7)))
 
 
 %% Tests from mat_replace
