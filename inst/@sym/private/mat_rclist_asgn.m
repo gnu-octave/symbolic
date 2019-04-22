@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,6 +35,11 @@
 
 
 function z = mat_rclist_asgn(A, r, c, B)
+
+  if (isempty (r) && isempty (c) && (isempty (B) || isscalar (B)))
+    z = A;
+    return
+  end
 
   if ~( isvector(r) && isvector(c) && (length(r) == length(c)) )
     error('this routine is for a list of rows and cols');

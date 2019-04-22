@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
@@ -188,15 +188,34 @@ end
 %! a(1:4) = [10 11; 12 13];
 %! assert(isequal( a, b ))
 
-%% Wrong shape RHS
-% Matlab/Octave don't allow this on doubles, but if you do
-% this is the right answer (Matlab SMT 2013b gets it wrong)
-% I will disable it too.
-%test
-% rhs = [10 11; 12 13];
-% b(1:2,1:2) = rhs;
-% a(1:2,1:2) = rhs(:);
-% assert(isequal( a, b ))
+%!error <mismatch>
+%! % Wrong shape matrix RHS: Matlab/Octave don't allow this on doubles.
+%! % Matlab SMT 2013b gets it wrong.  We throw an error.
+%! rhs = [10 11; 12 13];
+%! a = sym (magic (3));
+%! a(1:2,1:2) = rhs(:);
+
+%!test
+%! % Issue #963: vector RHS with diff orientation from 2D indexing
+%! b = 1:4; b = [b; 2*b; 3*b];
+%! a = sym(b);
+%! b(1:2:3, 1) = 11:2:13;
+%! a(1:2:3, 1) = sym(11:2:13);
+%! assert (isequal (a, b))
+%! b(1:2:3, 1) = 1:2:3;
+%! a(1:2:3, 1) = 1:2:3;
+%! assert (isequal (a, b))
+
+%!test
+%! % Issue #963: vector RHS with diff orientation from 2D indexing
+%! a = sym (magic (3));
+%! b = a;
+%! a(1:2:3, 2) = [14 15];
+%! b(1:2:3, 2) = [14; 15];
+%! assert (isequal (a, b))
+%! a(2, 1:2:3) = [24 25];
+%! b(2, 1:2:3) = [24; 25];
+%! assert (isequal (a, b))
 
 %!test
 %! % 1D growth and 'end'
@@ -472,6 +491,8 @@ end
 %! B(1,5) = 10;
 %! assert (isequal (A, B))
 
+%!shared
+
 %!test
 %! % Check row deletion 1D
 %! a = sym([1; 3; 5]);
@@ -523,6 +544,83 @@ end
 %!error <null assignment>
 %! a = sym([1, 2; 3, 4]);
 %! a(1, 2) = [];
+
+%!test
+%! % Issue #963: scalar asgn to empty part of matrix
+%! A = sym (magic (3));
+%! B = A;
+%! A(1, []) = 42;
+%! assert (isequal (A, B))
+%! A([], 2) = 42;
+%! assert (isequal (A, B))
+%! A([]) = 42;
+%! assert (isequal (A, B))
+%! A([], []) = 42;
+%! assert (isequal (A, B))
+%! A(2:3, []) = 42;
+%! assert (isequal (A, B))
+%! A([], 2:3) = 42;
+%! assert (isequal (A, B))
+%! A(:, []) = 42;
+%! assert (isequal (A, B))
+%! A([], :) = 42;
+%! assert (isequal (A, B))
+
+%!error
+%! % TODO: do we care what error?
+%! A = sym (magic (3));
+%! A(2:3, []) = [66; 66];
+
+%!error
+%! A = sym (magic (3));
+%! A([]) = [66; 66];
+
+%!error
+%! A = sym (magic (3));
+%! A([], 1) = [66; 66];
+
+%!test
+%! % Issue #966: empty indexing, empty RHS, A unchanged
+%! B = magic(3);
+%! A = sym(B);
+%! A(1, []) = [];
+%! assert (isequal (A, B))
+%! A([], 2) = [];
+%! assert (isequal (A, B))
+%! A([], []) = [];
+%! assert (isequal (A, B))
+%! A(2:3, []) = [];
+%! assert (isequal (A, B))
+%! A([], 2:3) = [];
+%! assert (isequal (A, B))
+%! A(:, []) = [];
+%! assert (isequal (A, B))
+%! A([], :) = [];
+%! assert (isequal (A, B))
+
+%!test
+%! % Issue 967
+%! B = [1 2; 3 4];
+%! A = sym(B);
+%! A([]) = [];
+%! assert (isequal (A, B))
+
+%!test
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = [];
+%! assert (isequal (a, sym(7)))
+
+%!test
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = 42;
+%! assert (isequal (a, sym(7)))
+
+%!error
+%! % Issue #965
+%! a = sym(7);
+%! a([]) = [42 42]
 
 
 %% Tests from mat_replace

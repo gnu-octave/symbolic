@@ -44,7 +44,11 @@ function z = mat_replace(A, subs, b)
         if strcmp(subs{1}, ':')
           z = sym([]);
           return
-        else
+        end
+        if (isempty (subs{1}))
+          z = A;
+          return
+        end
           if rows(A) == 1
             z = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
             return
@@ -59,8 +63,11 @@ function z = mat_replace(A, subs, b)
             z = subsasgn (z, substruct ('()', {subs{1}}), []);
             return
           end
-        end
       case 2
+        if (isempty (subs{1}) || isempty (subs{2}))
+          z = A;
+          return
+        end
         if strcmp(subs{1}, ':')
           z = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
           return
@@ -123,8 +130,9 @@ function z = mat_replace(A, subs, b)
     end
 
     [r,c] = ndgrid(r,c);
-    if ~( isscalar(b) || is_same_shape (r, b) )
-      % Octave/Matlab both do this for double so we will to
+    if ~(isscalar (b) || (isvector (r) && isvector (b)) || is_same_shape (r, b))
+      % vectors may have diff orientations but if we have matrices then
+      % they must have the same shape (Octave/Matlab do this for double)
       error('A(I,J,...) = X: dimensions mismatch')
     end
     r = r(:);
