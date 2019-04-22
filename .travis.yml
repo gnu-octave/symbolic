@@ -47,8 +47,8 @@ install:
   - pip$PYTHON_VERSION install --user sympy==$SYMPY_VER
   - if [ "x$DOCTEST" = "xyes" ]; then
         mkdir ${HOME}/octave;
-        wget https://github.com/catch22/octave-doctest/releases/download/v0.6.1/doctest-0.6.1.tar.gz;
-        octave -W --no-gui --eval "pkg install doctest-0.6.1.tar.gz";
+        wget https://github.com/catch22/octave-doctest/releases/download/v0.7.0/doctest-0.7.0.tar.gz;
+        octave -W --no-gui --eval "pkg install doctest-0.7.0.tar.gz";
     fi
   - if [ "x$PYTHONIC" = "xyes" ]; then
         git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
