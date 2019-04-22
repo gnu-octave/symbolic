@@ -1,85 +1,63 @@
-sudo: required
-dist: trusty
-
+dist: xenial
 language: generic
+
+services:
+- docker
 
 matrix:
   include:
-    - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.2   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.2   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.3   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.3   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.4   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4   OCT=ppa   DOCTEST=yes COLUMNS=80
-    - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.2 OCT=4.2   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.2 OCT=4.2   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.2 OCT=4.4   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.2 OCT=5     DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.3 OCT=4.2   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.3 OCT=4.4   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.3 OCT=4.4   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.3 OCT=5     DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=4.2   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=4.4   DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
   allow_failures:
-    - env: PYTHON_VERSION=2 PYTHONIC=no  SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
-    - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4   OCT=daily DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
 
 before_install:
-  - if [ "x$OCT" = "xppa" ]; then
-        sudo apt-add-repository -y ppa:octave/stable;
-    fi
-  - sudo apt-get update -qq
-  - sudo apt-get install -y octave
-  - if [ "x$OCT" = "xdaily" ]; then
-        wget https://s3.amazonaws.com/octave-snapshot/public/octave-ubuntu-trusty-snapshot.tar.xz;
-        sudo tar --extract --directory=/usr/local --strip-components=1 --file=octave-ubuntu-trusty-snapshot.tar.xz;
-    fi
-  - if [ "x$PYTHON_VERSION" = "x2" ]; then
-        sudo apt-get install -y python-dev python-pip;
-    else
-        sudo apt-get install -y python$PYTHON_VERSION-dev python$PYTHON_VERSION-pip;
-    fi
-# we can drop numpy after https://bitbucket.org/mtmiller/pytave/issues/84 is resolved.
-  - if [ "x$PYTHONIC" = "xyes" ]; then
-        pip$PYTHON_VERSION install --user numpy;
-    fi
-  - if [ "x$PYTHONIC" = "xyes" ]; then
-        sudo apt-get install -y liboctave-dev;
-    fi
+- docker pull mtmiller/octave:${OCT}
 
-install:
-  - export PYTHON="python$PYTHON_VERSION"
-  - pip$PYTHON_VERSION install --user sympy==$SYMPY_VER
-  - if [ "x$DOCTEST" = "xyes" ]; then
-        mkdir ${HOME}/octave;
-        wget https://github.com/catch22/octave-doctest/releases/download/v0.7.0/doctest-0.7.0.tar.gz;
-        octave -W --no-gui --eval "pkg install doctest-0.7.0.tar.gz";
-    fi
-  - if [ "x$PYTHONIC" = "xyes" ]; then
-        git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
-        pushd pythonic;
-        pwd;
-        autoreconf --install || exit 1;
-        ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1;
-        popd;
-    fi
-
-# all commands here must have exit code 0 for the build to be called "passing"
-# debugging: octave -W --no-gui --eval "syms x; A = [x sin(x) x^3]; A; exit(0)"
 script:
-  - export PYTHON="python$PYTHON_VERSION"
-  - octave -W --no-gui --eval "ver; pwd; exit(0)"
-  - stty cols $COLUMNS rows 40
-  - tput cols; stty size
-  - pushd inst
-  - if [ "x$PYTHONIC" = "xyes" ]; then
-        export IPC=native;
-    else
-        export IPC=default;
-    fi
-  - octave --path=$TRAVIS_BUILD_DIR/pythonic -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
-  - cat fntests.log
-  - if [ "x$DOCTEST" = "xyes" ]; then
-        octave --path=$TRAVIS_BUILD_DIR/pythonic -W --no-gui --eval "pkg load doctest; sympref ipc $IPC; syms x; r = doctest('.'); exit(~r)";
-    fi
-  - popd
+- docker run --cidfile=/tmp/container --detach --init --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+- docker exec $(cat /tmp/container) pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
+- docker exec $(cat /tmp/container) make -C octsympy PYTHON=python${PYTHON_VERSION} test
+- if [ "x$DOCTEST" = "xyes" ]; then
+      docker exec $(cat /tmp/container) octave --eval "pkg install -forge doctest";
+      docker exec $(cat /tmp/container) make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
+  fi
+- docker stop $(cat /tmp/container)
 
-#after_script:
-#  - echo ${TRAVIS_TEST_RESULT}
+# TODO:
+
+#- stty cols $COLUMNS rows 40
+#- tput cols; stty size
+
+#- if [ "x$PYTHONIC" = "xyes" ]; then
+#        export IPC=native;
+#    else
+#        export IPC=default;
+#    fi
+#  - octave --path=$TRAVIS_BUILD_DIR/pythonic -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
+
+#  - cat fntests.log
+
+# we can drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
+#  - if [ "x$PYTHONIC" = "xyes" ]; then
+#        pip$PYTHON_VERSION install --user numpy;
+#    fi
+#  - if [ "x$PYTHONIC" = "xyes" ]; then
+#        git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
+#        pushd pythonic;
+#        pwd;
+#        autoreconf --install || exit 1;
+#        ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1;
+#        popd;
+#    fi
