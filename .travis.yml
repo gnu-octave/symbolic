@@ -39,7 +39,7 @@ before_install:
 - docker pull mtmiller/octave:${OCT}
 
 script:
-- docker run --name=oc --detach --init --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+- docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
 - docker exec oc pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
 - docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test
 - if [ "x$DOCTEST" = "xyes" ]; then
