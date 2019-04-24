@@ -39,14 +39,14 @@ before_install:
 - docker pull mtmiller/octave:${OCT}
 
 script:
-- docker run --cidfile=/tmp/container --detach --init --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
-- docker exec $(cat /tmp/container) pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
-- docker exec $(cat /tmp/container) make -C octsympy PYTHON=python${PYTHON_VERSION} test
+- docker run --name=oc --detach --init --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+- docker exec oc pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
+- docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test
 - if [ "x$DOCTEST" = "xyes" ]; then
-      docker exec $(cat /tmp/container) octave --eval "pkg install -forge doctest";
-      docker exec $(cat /tmp/container) make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
+      docker exec oc octave --eval "pkg install -forge doctest";
+      docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
   fi
-- docker stop $(cat /tmp/container)
+- docker stop oc
 
 # TODO:
 
