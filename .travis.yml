@@ -32,9 +32,18 @@ matrix:
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=4.4   DOCTEST=yes COLUMNS=80
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
   allow_failures:
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
 
+# TODO: drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
 before_install:
 - docker pull mtmiller/octave:${OCT}
 - docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
@@ -42,35 +51,25 @@ before_install:
 - if [ "x$DOCTEST" = "xyes" ]; then
       docker exec oc octave --eval "pkg install -forge doctest";
   fi
+- if [ "x$PYTHONIC" = "xyes" ]; then
+      docker exec oc pip$PYTHON_VERSION install numpy;
+      docker exec oc git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
+      docker exec oc bash -c "cd pythonic; autoreconf --install || exit 1";
+      docker exec oc bash -c "cd pythonic; ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1";
+      docker exec oc bash -c "cd pythonic; make check || exit 1";
+  fi
 
+# TODO: doctest doesn't work with PYTHONIC
 script:
 - stty cols $COLUMNS rows 40
 - tput cols; stty size
-- docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test
+- if [ "x$PYTHONIC" = "xyes" ]; then
+      docker exec oc octave -W --path=/pythonic --path=/octsympy/inst --eval "sympref ipc native; r = octsympy_tests; exit(r)";
+  else
+      docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test;
+  fi
 - docker exec oc cat octsympy/fntests.log
 - if [ "x$DOCTEST" = "xyes" ]; then
       docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
   fi
 - docker stop oc
-
-# TODO:
-
-#- if [ "x$PYTHONIC" = "xyes" ]; then
-#        export IPC=native;
-#    else
-#        export IPC=default;
-#    fi
-#  - octave --path=$TRAVIS_BUILD_DIR/pythonic -W --no-gui --eval "sympref ipc $IPC; r = octsympy_tests; exit(r)";
-
-# we can drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
-#  - if [ "x$PYTHONIC" = "xyes" ]; then
-#        pip$PYTHON_VERSION install --user numpy;
-#    fi
-#  - if [ "x$PYTHONIC" = "xyes" ]; then
-#        git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
-#        pushd pythonic;
-#        pwd;
-#        autoreconf --install || exit 1;
-#        ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1;
-#        popd;
-#    fi
