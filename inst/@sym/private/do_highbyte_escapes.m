@@ -77,23 +77,3 @@ function r = do_highbyte_escapes(s)
   end
 
 end
-
-%!test
-%! s = 'a\\\xe2\x8c\x88y\xe2\x8c\x89b';
-%! r = 'a\\⌈y⌉b';
-%! assert (do_highbyte_escapes(s), r)
-
-%!test
-%! s = '\\xe2';
-%! r = '\\xe2';
-%! assert (do_highbyte_escapes(s), r)
-
-%!test
-%! s = '\xe2\x8c\x88';
-%! r = '⌈';
-%! assert (do_highbyte_escapes(s), r)
-
-%!test
-%! s = '\\\xe2\x8c\x88';
-%! r = '\\⌈';
-%! assert (do_highbyte_escapes(s), r)
