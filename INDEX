@@ -197,6 +197,7 @@ Mathematical methods for symbolic objects
  @sym/setxor
  @sym/signIm
  @sym/sign
+ @sym/sinc
  @sym/sind
  @sym/sinhint
  @sym/sinh
@@ -230,6 +231,7 @@ Methods for manipulating symbolic objects:
  @sym/expand
  @sym/factor
  @sym/findsym
+ @sym/find
  @sym/fliplr
  @sym/flipud
  @sym/formula
@@ -245,6 +247,7 @@ Methods for manipulating symbolic objects:
 Methods for converting symbolic objects to other formats
  @sym/ccode
  @sym/double
+ @sym/eval
  @sym/fortran
  @sym/function_handle
  @sym/latex
@@ -301,6 +304,7 @@ Other methods for symbolic objects
  @sym/disp
  @sym/end
  @sym/ezcontour
+ @sym/ezmesh
  @sym/ezplot3
  @sym/ezplot
  @sym/ezsurf

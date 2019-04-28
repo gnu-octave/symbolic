@@ -16,7 +16,11 @@ octsympy 2.7.1+
 
   * `subs(f)` now works: it finds values from the workspace.
 
-  * Bug fixes and documentation updates.
+  * `gammainc` now regularized correctly.
+
+  * `lambertw` has more consistent printing.
+
+  * Other bug fixes and documentation updates.
 
 
 
