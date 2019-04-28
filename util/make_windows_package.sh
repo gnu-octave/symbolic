@@ -44,6 +44,9 @@ git clone https://github.com/cbm755/octsympy.git
   else
     git checkout tags/${TAG}
   fi )
+pushd octsympy
+GIT_DATE=`git show -s --format=\%ci`
+popd
 
 
 # clean up
@@ -81,6 +84,16 @@ cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
 cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
 rm -rf ${SYMPY}
 
-zip -r ${WINPKG}.zip ${WINDIR}
+# For Octave 5.1, we need a tar.gz file instead of a zip
+#zip -r ${WINPKG}.zip ${WINDIR}
+#md5sum ${WINPKG}.zip
 
-md5sum ${WINPKG}.zip
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+find ${WINPKG} -print0 \
+    | LC_ALL=C sort -z \
+    | tar c --mtime="${GIT_DATE}" \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
+    | gzip -9n > ${WINPKG}.tar.gz
+
+md5sum ${WINPKG}.tar.gz
