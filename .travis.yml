@@ -43,10 +43,12 @@ matrix:
   - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
   - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
 
-# TODO: drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
 before_install:
 - docker pull mtmiller/octave:${OCT}
 - docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+
+# TODO: drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
+install:
 - docker exec oc pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
 - if [ "x$DOCTEST" = "xyes" ]; then
       docker exec oc octave --eval "pkg install -forge doctest";
@@ -72,4 +74,6 @@ script:
 - if [ "x$DOCTEST" = "xyes" ]; then
       docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
   fi
+
+after_script:
 - docker stop oc
