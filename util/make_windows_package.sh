@@ -12,7 +12,7 @@ PYEXE=pyexe/py27_v18.exe
 # copy a few lines from https://github.com/manthey/pyexe/blob/master/README.md
 PYEXEREADME=pyexe/README.pyexe.txt
 
-# download dependencies, unpack in the same directory where this script lives
+# download dependencies, leave tarballs in the same directory where this script lives
 SYMPY=sympy-1.4
 MPMATH=mpmath-1.1.0
 
@@ -66,14 +66,19 @@ mkdir ${WINDIR}/bin
 cp ${PYEXE} ${WINDIR}/bin/py27.exe
 cp ${PYEXEREADME} ${WINDIR}/
 
-# change default python to pyexe
 echo "making default python py27.exe"
 sed -i "s/python = 'python'/python = 'py27.exe'/" ${WINDIR}/inst/private/defaultpython.m
 
-# bundle sympy and mpmath
+echo "bundling mpmath"
+tar -zxf ${MPMATH}.tar.gz || exit 1
+cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
+rm -rf ${MPMATH}
+
+echo "bundling sympy"
+tar -zxf ${SYMPY}.tar.gz
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
 cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
-cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
+rm -rf ${SYMPY}
 
 zip -r ${WINPKG}.zip ${WINDIR}
 
