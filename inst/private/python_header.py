@@ -1,6 +1,6 @@
 # Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
-# License: GPL-3.0-or-later, see python_header.m
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
