@@ -72,6 +72,7 @@ sed -i "s/python = 'python'/python = 'py27.exe'/" ${WINDIR}/inst/private/default
 echo "bundling mpmath"
 tar -zxf ${MPMATH}.tar.gz || exit 1
 cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
+cp -pR ${MPMATH}/PKG-INFO ${WINDIR}/README.mpmath || exit 1
 rm -rf ${MPMATH}
 
 echo "bundling sympy"
