@@ -30,7 +30,7 @@ Checklist
 
       - make_windows_package.sh, use "day-to-day testing" mode.
         Run this script "out of tree", it will clone a clean copy.
-        Make sure py2exe and sympy are the most recent versions.
+        Make sure py2exe, mpmath, sympy are the most recent versions.
 
   * Test regenerating html documentation: "make html"
 

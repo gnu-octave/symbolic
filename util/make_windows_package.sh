@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-2018 Colin B. Macdonald
+# Copyright 2016-2019 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -8,19 +8,19 @@
 # without any warranty.
 
 # Available from https://github.com/manthey/pyexe
-PYEXE=pyexe/py27_v14.exe
+PYEXE=pyexe/py27_v18.exe
 # copy a few lines from https://github.com/manthey/pyexe/blob/master/README.md
 PYEXEREADME=pyexe/README.pyexe.txt
 
 # download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.3
-MPMATH=mpmath-1.0.0
+SYMPY=sympy-1.4
+MPMATH=mpmath-1.1.0
 
 # for day-to-day testing
-VER=2.7.2-dev
+VER=2.7.1+
 BRANCH=master
 # for release
-#VER=2.7.2
+#VER=2.8.0
 #TAG=v${VER}
 
 
