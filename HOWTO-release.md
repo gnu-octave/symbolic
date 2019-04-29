@@ -13,7 +13,7 @@ Checklist
 
   * Update sympref.m:
 
-      - update version number (remove "-dev", check if bump needed).
+      - update version number (remove "+", check if bump needed).
 
   * Update DESCRIPTION file (version number and date).
 
@@ -47,6 +47,8 @@ Checklist
 
   * Update 2017-07: tagging now happens after review, by admins!
 
+      - Ticket should include the git hash to be tagged.
+
       - If packages seem ok, admin/reviewer will tag with:
 
           `git tag -a v2.x.y -m "Version 2.x.y"`
@@ -69,11 +71,6 @@ Checklist
 AFTER release
 =============
 
-  * Bump version to the next anticipated version and append "-dev" in
-    in sympref.m.  See
-    [PEP 440](https://www.python.org/dev/peps/pep-0440).
+  * Bump version by appending "+" in sympref.m and DESCRIPTION.
 
   * Optionally, update the make_windows_bundle script.
-
-  * Leave old version in DESCRIPTION ("-dev" not supported here).  We
-    will bump it at the next release.  FIXME: this is unfortunate.
