@@ -96,9 +96,10 @@ end
 %! B = h (2);
 %! assert (A, B, -eps)
 
-%!xtest
-%! % https://github.com/sympy/sympy/issues/11802
-%! assert (double (zeta (sym (3), 4)), -0.07264084989132137196, -1e-14)
+%%!xtest
+%%! % Disabled: causes stack overflows and crashes Python in Fedora 30
+%%! % https://github.com/sympy/sympy/issues/11802
+%%! assert (double (zeta (sym (3), 4)), -0.07264084989132137196, -1e-14)
 
 %!test
 %! syms x
