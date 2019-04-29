@@ -10,6 +10,8 @@ octsympy 2.7.1+
 
   * Update minimum versions of SymPy to 1.2 and Octave to 4.2.
 
+  * Fixes for SymPy 1.4.
+
   * Newer SymPy versions improve QR and LU on non-square matrices.
 
   * Support for expressions with min and max such as `min(x, y)`.
