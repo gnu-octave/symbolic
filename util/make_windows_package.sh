@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2016-2018 Colin B. Macdonald
+# Copyright 2016-2019 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -8,19 +8,19 @@
 # without any warranty.
 
 # Available from https://github.com/manthey/pyexe
-PYEXE=pyexe/py27_v14.exe
+PYEXE=pyexe/py27_v18.exe
 # copy a few lines from https://github.com/manthey/pyexe/blob/master/README.md
 PYEXEREADME=pyexe/README.pyexe.txt
 
-# download dependencies, unpack in the same directory where this script lives
-SYMPY=sympy-1.3
-MPMATH=mpmath-1.0.0
+# download dependencies, leave tarballs in the same directory where this script lives
+SYMPY=sympy-1.4
+MPMATH=mpmath-1.1.0
 
 # for day-to-day testing
-VER=2.7.2-dev
+VER=2.7.1+
 BRANCH=master
 # for release
-#VER=2.7.2
+#VER=2.8.0
 #TAG=v${VER}
 
 
@@ -44,6 +44,9 @@ git clone https://github.com/cbm755/octsympy.git
   else
     git checkout tags/${TAG}
   fi )
+pushd octsympy
+GIT_DATE=`git show -s --format=\%ci`
+popd
 
 
 # clean up
@@ -66,15 +69,31 @@ mkdir ${WINDIR}/bin
 cp ${PYEXE} ${WINDIR}/bin/py27.exe
 cp ${PYEXEREADME} ${WINDIR}/
 
-# change default python to pyexe
 echo "making default python py27.exe"
 sed -i "s/python = 'python'/python = 'py27.exe'/" ${WINDIR}/inst/private/defaultpython.m
 
-# bundle sympy and mpmath
+echo "bundling mpmath"
+tar -zxf ${MPMATH}.tar.gz || exit 1
+cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
+cp -pR ${MPMATH}/PKG-INFO ${WINDIR}/README.mpmath || exit 1
+rm -rf ${MPMATH}
+
+echo "bundling sympy"
+tar -zxf ${SYMPY}.tar.gz
 cp -pR ${SYMPY}/sympy ${WINDIR}/bin/ || exit 1
 cp -pR ${SYMPY}/README.rst ${WINDIR}/README.sympy.rst || exit 1
-cp -pR ${MPMATH}/mpmath ${WINDIR}/bin/ || exit 1
+rm -rf ${SYMPY}
 
-zip -r ${WINPKG}.zip ${WINDIR}
+# For Octave 5.1, we need a tar.gz file instead of a zip
+#zip -r ${WINPKG}.zip ${WINDIR}
+#md5sum ${WINPKG}.zip
 
-md5sum ${WINPKG}.zip
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+find ${WINPKG} -print0 \
+    | LC_ALL=C sort -z \
+    | tar c --mtime="${GIT_DATE}" \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
+    | gzip -9n > ${WINPKG}.tar.gz
+
+md5sum ${WINPKG}.tar.gz
