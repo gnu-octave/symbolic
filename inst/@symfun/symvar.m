@@ -100,7 +100,8 @@ function vars = symvar(F, Nout)
 
   if (nargin == 1)
     % Note: symvar(symfun) differs from SMT, see test below
-    vars = symvar([argnames(F) formula(F)(:)]);
+    tmp = formula (F);
+    vars = symvar([argnames(F) tmp(:)]);
 
   else
     assert(Nout >= 0, 'number of requested symbols should be positive')
