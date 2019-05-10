@@ -45,7 +45,7 @@ matrix:
 
 before_install:
 - docker pull mtmiller/octave:${OCT}
-- docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+- docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --env=PYTHON_VERSION=${PYTHON_VERSION} --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
 
 # TODO: drop numpy after https://gitlab.com/mtmiller/octave-pythonic/issues/14
 install:
@@ -54,11 +54,8 @@ install:
       docker exec oc octave --eval "pkg install -forge doctest";
   fi
 - if [ "x$PYTHONIC" = "xyes" ]; then
-      docker exec oc pip$PYTHON_VERSION install numpy;
-      docker exec oc git clone https://gitlab.com/mtmiller/octave-pythonic.git pythonic;
-      docker exec oc bash -c "cd pythonic; autoreconf --install || exit 1";
-      docker exec oc bash -c "cd pythonic; ./configure PYTHON_VERSION=$PYTHON_VERSION && make || exit 1";
-      docker exec oc bash -c "cd pythonic; make check || exit 1";
+      docker exec oc pip${PYTHON_VERSION} install numpy;
+      docker exec oc octave --eval "pkg install https://gitlab.com/mtmiller/octave-pythonic/-/archive/master/octave-pythonic-master.tar.gz";
   fi
 
 # TODO: doctest doesn't work with PYTHONIC
@@ -66,7 +63,7 @@ script:
 - stty cols $COLUMNS rows 40
 - tput cols; stty size
 - if [ "x$PYTHONIC" = "xyes" ]; then
-      docker exec oc env PYTHON=python${PYTHON_VERSION} octave -W --path=/pythonic --path=/octsympy/inst --eval "cd octsympy; sympref ipc native; r = octsympy_tests; exit(r)";
+      docker exec oc env PYTHON=python${PYTHON_VERSION} octave -W --path=/octsympy/inst --eval "pkg load pythonic; cd octsympy; sympref ipc native; r = octsympy_tests; exit(r)";
   else
       docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test;
   fi
