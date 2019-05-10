@@ -63,7 +63,7 @@ script:
 - stty cols $COLUMNS rows 40
 - tput cols; stty size
 - if [ "x$PYTHONIC" = "xyes" ]; then
-      docker exec oc octave -W --path=/octsympy/inst --eval "pkg load pythonic; cd octsympy; sympref ipc native; r = octsympy_tests; exit(r)";
+      docker exec oc env PYTHON=python${PYTHON_VERSION} octave -W --path=/octsympy/inst --eval "pkg load pythonic; cd octsympy; sympref ipc native; r = octsympy_tests; exit(r)";
   else
       docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test;
   fi
