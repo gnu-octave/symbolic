@@ -17,7 +17,7 @@ SYMPY=sympy-1.4
 MPMATH=mpmath-1.1.0
 
 # for day-to-day testing
-VER=2.7.1+
+VER=2.8.0
 BRANCH=master
 # for release
 #VER=2.8.0
