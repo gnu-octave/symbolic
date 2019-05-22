@@ -37,7 +37,7 @@ without any warranty.
   <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
   <translation/>
   <metadata_license>FSFAP</metadata_license>
-  <project_license>GPL-3.0+</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <developer_name>Octave-Forge Community</developer_name>
   <update_contact>octave-maintainers@gnu.org</update_contact>
 </component>
