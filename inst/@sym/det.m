@@ -45,7 +45,7 @@ function z = det(x)
           '    A = sp.Matrix([A])'
           'return A.det(),' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

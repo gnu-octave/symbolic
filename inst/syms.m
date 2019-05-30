@@ -198,7 +198,7 @@ function syms(varargin)
 
       cmd = { 'f, vars = _ins'
               'return Function(f)(*vars)' };
-      s = python_cmd (cmd, name, vars);
+      s = pycall_sympy__ (cmd, name, vars);
 
       sf = symfun(s, vars);
       assignin('caller', name, sf);

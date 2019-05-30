@@ -82,7 +82,7 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd('return Version(spver) > Version("1.2")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms n x
 %! f = bernoulli (n, x);
 %! h = function_handle (f, 'vars', [n x]);

@@ -98,7 +98,7 @@ function p = potential(v, x, y)
           'p = integrate((x-y).dot(vlx), (_lambda, 0, 1))'
           'return p.simplify(),' };
 
-  p = python_cmd (cmd, sym(v), x, sym(y));
+  p = pycall_sympy__ (cmd, sym(v), x, sym(y));
 
 end
 

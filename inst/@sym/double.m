@@ -84,7 +84,7 @@ function y = double(x)
           'return (x.real, x.imag)'
         };
 
-  [A, B] = python_cmd (cmd, x);
+  [A, B] = pycall_sympy__ (cmd, x);
 
   %y = A + B*i;  % not quite the same for Inf + InFi
   if (B == 0.0)

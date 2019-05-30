@@ -66,7 +66,7 @@ function y = chol(x)
   elseif (nargin > 2)
     print_usage ();
   end
-  y = python_cmd('return _ins[0].cholesky(),', x);
+  y = pycall_sympy__ ('return _ins[0].cholesky(),', x);
 end
 
 

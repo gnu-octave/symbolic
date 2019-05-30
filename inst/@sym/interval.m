@@ -60,7 +60,7 @@ function I = interval(varargin)
     varargin{i} = sym(varargin{i});
   end
 
-  I = python_cmd ('return Interval(*_ins),', varargin{:});
+  I = pycall_sympy__ ('return Interval(*_ins),', varargin{:});
 
 end
 

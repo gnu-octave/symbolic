@@ -124,7 +124,7 @@ function S = finiteset(varargin)
     varargin{i} = sym(varargin{i});
   end
 
-  S = python_cmd ('return FiniteSet(*_ins),', varargin{:});
+  S = pycall_sympy__ ('return FiniteSet(*_ins),', varargin{:});
 
 end
 

@@ -87,7 +87,7 @@ function C = nchoosek(n, k)
   end
   assert (isscalar(k), 'nchoosek: k must be scalar');
 
-  C = python_cmd ('return sp.binomial(*_ins),', sym(n), sym(k));
+  C = pycall_sympy__ ('return sp.binomial(*_ins),', sym(n), sym(k));
 
 end
 

@@ -121,7 +121,7 @@ function g = curl(v,x)
           '      d(v[1], x[0]) - d(v[0], x[1])  ])'
           'return g,' };
 
-  g = python_cmd (cmd, sym(v), x);
+  g = pycall_sympy__ (cmd, sym(v), x);
 
 end
 

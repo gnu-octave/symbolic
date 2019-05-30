@@ -62,7 +62,7 @@ function B = repmat(A, n, m)
           'B = sp.Matrix.vstack(*L)'
           'return B' };
 
-  B = python_cmd (cmd, sym(A), int32(n), int32(m));
+  B = pycall_sympy__ (cmd, sym(A), int32(n), int32(m));
 
 end
 

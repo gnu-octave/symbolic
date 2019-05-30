@@ -93,7 +93,7 @@ function y = charpoly(varargin)
   for i = 1:nargin
     varargin{i} = sym(varargin{i});
   end
-  y = python_cmd(cmd, varargin{:});
+  y = pycall_sympy__ (cmd, varargin{:});
 
 end
 

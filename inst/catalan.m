@@ -44,7 +44,7 @@ function g = catalan ()
     print_usage ();
   end
 
-  g = python_cmd ('return sympy.S.Catalan,');
+  g = pycall_sympy__ ('return sympy.S.Catalan,');
 end
 
 

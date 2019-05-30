@@ -84,7 +84,7 @@ function z = norm(x, ord)
           '    x = sympy.Matrix([x])' ...
           'return x.norm(ord),' };
 
-  z = python_cmd (cmd, sym(x), ord);
+  z = pycall_sympy__ (cmd, sym(x), ord);
 
 end
 

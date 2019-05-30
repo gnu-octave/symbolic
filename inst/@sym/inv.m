@@ -56,7 +56,7 @@ function z = inv(x)
         '    return S.One/x,'
         };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

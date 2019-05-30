@@ -63,9 +63,9 @@ function y = horner(p, x)
   end
 
   if (isempty(x))
-    y = python_cmd ('return sp.horner(*_ins),', sym(p));
+    y = pycall_sympy__ ('return sp.horner(*_ins),', sym(p));
   else
-    y = python_cmd ('return sp.horner(*_ins),', sym(p), sym(x));
+    y = pycall_sympy__ ('return sp.horner(*_ins),', sym(p), sym(x));
   end
 
 end

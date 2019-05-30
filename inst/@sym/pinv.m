@@ -53,7 +53,7 @@ function z = pinv(x)
           '    x = sp.Matrix([[x]])'
           'return x.pinv(),' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

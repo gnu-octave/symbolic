@@ -52,7 +52,7 @@ function r = unique(A)
     print_usage ();
   end
 
-  r = python_cmd ('return sp.Matrix([list(uniq(*_ins))]),', A);
+  r = pycall_sympy__ ('return sp.Matrix([list(uniq(*_ins))]),', A);
 
 end
 

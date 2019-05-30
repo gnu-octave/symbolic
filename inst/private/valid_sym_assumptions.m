@@ -35,7 +35,7 @@ function L = valid_sym_assumptions()
 
     cmd = {'from sympy.core.assumptions import _assume_defined'
            'return list(_assume_defined),'};
-    List = python_cmd(cmd);
+    List = pycall_sympy__ (cmd);
 
   end
 

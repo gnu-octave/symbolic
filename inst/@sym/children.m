@@ -97,7 +97,7 @@ function r = children(f)
     '    r = scalarfcn(f)'
     'return r,' };
 
-  r = python_cmd (cmd, f);
+  r = pycall_sympy__ (cmd, f);
 
   if (~isscalar(f))
     r = reshape(r, size(f));

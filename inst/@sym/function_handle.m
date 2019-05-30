@@ -109,7 +109,7 @@ function f = function_handle(varargin)
             'return (True, out)' };
 
     [fcnpath, fcnname, fcnext] = fileparts(param.fname);
-    [worked, out] = python_cmd (cmd, varargin(1:Nout), fcnname, fcnname, param.show_header, inputs);
+    [worked, out] = pycall_sympy__ (cmd, varargin(1:Nout), fcnname, fcnname, param.show_header, inputs);
 
     if (~worked)
       if (strcmp(out, 'Language ''octave'' is not supported.'))
@@ -161,7 +161,7 @@ function f = function_handle(varargin)
               'if len(a) != 0:' ...
               '    return (False, "expected symbols-to-declare to be empty")' ...
               'return (True, s)' };
-      [worked, codestr] = python_cmd (cmd, expr);
+      [worked, codestr] = pycall_sympy__ (cmd, expr);
       if (~worked)
         error('function_handle: python codegen failed: %s', codestr)
       end

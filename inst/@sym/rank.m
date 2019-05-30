@@ -47,7 +47,7 @@ function r = rank(A)
           '    A = sp.Matrix([A])'
           'return A.rank(),' };
 
-  r = python_cmd (cmd, A);
+  r = pycall_sympy__ (cmd, A);
 
 end
 

@@ -98,7 +98,7 @@ function y = chebyshevU (n, x)
           '    Lx = Lx*len(Ln)'
           'c = [complex(chebyshevu(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (n(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

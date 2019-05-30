@@ -75,7 +75,7 @@
 %% @example
 %% @group
 %% eqns = [x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0];
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% [A, B] = equationsToMatrix (eqns, [x y])
 %%   @result{} A = (sym 3×2 matrix)
 %%
@@ -153,7 +153,7 @@ function [A, b] = equationsToMatrix(varargin)
     varargin{i} = sym (varargin{i});
   end
 
-  [s, A, b] = python_cmd (cmd, varargin, s);
+  [s, A, b] = pycall_sympy__ (cmd, varargin, s);
 
 
   if ~s
@@ -250,7 +250,7 @@ end
 %! assert (isequal (B, b))
 
 %!error <unique>
-%! if (python_cmd ('return Version(spver) <= Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
 %!   error ('unique')
 %! end
 %! syms x

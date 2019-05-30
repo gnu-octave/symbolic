@@ -46,7 +46,7 @@ function [z, I] = max(A, B, dim)
   if (nargout <= 1)
     if (nargin == 1)
       if (isvector(A))
-        z = python_cmd ('return Max(*_ins[0])', A);
+        z = pycall_sympy__ ('return Max(*_ins[0])', A);
       else
         z = max(A, [], 1);
       end
@@ -67,7 +67,7 @@ function [z, I] = max(A, B, dim)
               '    if A.cols == 0:'
               '        return A'
               '    return Matrix([Max(*A.row(i)) for i in range(0, A.rows)])' };
-      z = python_cmd (cmd, A, dim - 1);
+      z = pycall_sympy__ (cmd, A, dim - 1);
     else
       print_usage ();
     end

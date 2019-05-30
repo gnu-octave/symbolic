@@ -56,7 +56,7 @@ function n = nnz(A)
     'return n,'
   };
 
-  n = python_cmd (cmd, A);
+  n = pycall_sympy__ (cmd, A);
 
 end
 

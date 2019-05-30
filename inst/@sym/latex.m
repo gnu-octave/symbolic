@@ -26,7 +26,7 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% latex(sin(x/2))
 %%   @print{} \sin@{\left(\frac@{x@}@{2@} \right)@}
 %% @end group
@@ -50,7 +50,7 @@ function varargout = latex(x)
 
   cmd = { 'return sp.latex(*_ins),' };
 
-  s = python_cmd (cmd, x);
+  s = pycall_sympy__ (cmd, x);
 
   if (nargout == 0)
     disp(s)
@@ -64,7 +64,7 @@ end
 %!test
 %! syms x
 %! y = sin(x);
-%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (strcmp (latex (y), '\sin{\left(x \right)}'))
 %! end
 

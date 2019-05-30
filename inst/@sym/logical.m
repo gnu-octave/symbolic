@@ -112,7 +112,7 @@ function r = logical(p)
     '    r = "cannot reliably convert sym to bool"'
     'return (flag, r)' });
 
-  [flag, r] = python_cmd (cmd, p, 'error');
+  [flag, r] = pycall_sympy__ (cmd, p, 'error');
 
   % FIXME: oo, zoo error too in SMT
   %        '    elif p is nan:'

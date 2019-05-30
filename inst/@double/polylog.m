@@ -63,7 +63,7 @@ function y = polylog (s, x)
           '    Lx = Lx*len(Ls)'
           'c = [complex(polylog(complex(s), complex(x))) for s,x in zip(Ls, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (s(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (s(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

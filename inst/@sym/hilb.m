@@ -41,7 +41,7 @@ function y = hilb(x)
     print_usage ();
   end
 
-  y = python_cmd('return Matrix(_ins[0], _ins[0], lambda i,j: 1 / (i + j + 1)),', x);
+  y = pycall_sympy__ ('return Matrix(_ins[0], _ins[0], lambda i,j: 1 / (i + j + 1)),', x);
 
 end
 

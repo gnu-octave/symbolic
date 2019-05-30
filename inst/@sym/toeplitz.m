@@ -89,7 +89,7 @@ function A = toeplitz (C, R)
           '            A[i, j] = R[j-i]'
           'return A' };
 
-  A = python_cmd (cmd, C, R);
+  A = pycall_sympy__ (cmd, C, R);
 
 end
 

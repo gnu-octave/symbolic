@@ -54,7 +54,7 @@ function z = expm(x)
           '    x = sp.Matrix([[x]])'
           'return x.exp(),' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

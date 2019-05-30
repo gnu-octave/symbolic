@@ -73,7 +73,7 @@ function z = transpose(x)
           'else:'
           '    return x' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

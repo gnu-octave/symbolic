@@ -106,7 +106,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x);
+    F = pycall_sympy__ (cmd, f, x);
 
   elseif (nargin == 2)
     f = sym(varargin{1});
@@ -138,7 +138,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x, k);
+    F = pycall_sympy__ (cmd, f, x, k);
 
   elseif (nargin == 3)
     f = sym(varargin{1});
@@ -167,7 +167,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x, k);
+    F = pycall_sympy__ (cmd, f, x, k);
 
   else
     print_usage ();

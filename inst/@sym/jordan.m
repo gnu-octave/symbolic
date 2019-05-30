@@ -125,9 +125,9 @@ function [V, J] = jordan (A)
          'return A.jordan_form(calctrans)'};
 
   if (nargout <= 1)
-    V = python_cmd (cmd, sym (A), false);
+    V = pycall_sympy__ (cmd, sym (A), false);
   else
-    [V, J] = python_cmd (cmd, sym (A), true);
+    [V, J] = pycall_sympy__ (cmd, sym (A), true);
   end
 end
 

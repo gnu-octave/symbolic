@@ -73,7 +73,7 @@ function z = mpower(x, y)
   cmd = { 'x, y = _ins'
           'return x**y' };
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = pycall_sympy__ (cmd, sym(x), sym(y));
 
 end
 

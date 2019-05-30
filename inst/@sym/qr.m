@@ -80,7 +80,7 @@ function [Q, R] = qr(A, ord)
           '(Q, R) = A.QRdecomposition()' ...
           'return (Q, R)' };
 
-  [Q, R] = python_cmd (cmd, sym(A));
+  [Q, R] = pycall_sympy__ (cmd, sym(A));
 
 end
 
@@ -117,7 +117,7 @@ end
 %! assert (isequal (Q*R, A))
 
 %!test
-%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % non square: short fat
 %! A = sym([1 2 3; 4 5 6]);
 %! [Q, R] = qr (A);
@@ -125,7 +125,7 @@ end
 %! end
 
 %!test
-%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % non square: short fat, rank deficient
 %! A = sym([1 2 3; 2 4 6]);
 %! [Q, R] = qr (A);
@@ -136,7 +136,7 @@ end
 %! end
 
 %!test
-%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % rank deficient
 %! A = sym([1 2 3; 2 4 6; 0 0 0]);
 %! [Q, R] = qr (A);

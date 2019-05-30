@@ -38,7 +38,7 @@
 
 function y = expand(x)
 
-  y = python_cmd( 'return sympy.expand(*_ins),', sym(x));
+  y = pycall_sympy__ ( 'return sympy.expand(*_ins),', sym(x));
 
 end
 

@@ -65,7 +65,7 @@ function n = degree(p, x)
     x = sym('x');
   end
 
-  n = python_cmd ('return sympy.degree(*_ins),', sym(p), sym(x));
+  n = pycall_sympy__ ('return sympy.degree(*_ins),', sym(p), sym(x));
 
 end
 

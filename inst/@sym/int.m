@@ -135,12 +135,12 @@ function F = int(f, x, a, b)
     cmd = { '(f, x, a, b) = _ins'
             'F = sp.integrate(f, (x, a, b))'
             'return F,' };
-    F = python_cmd (cmd, sym(f), sym(x), sym(a), sym(b));
+    F = pycall_sympy__ (cmd, sym(f), sym(x), sym(a), sym(b));
   else
     cmd = { '(f,x) = _ins'
             'd = sp.integrate(f, x)'
             'return d,' };
-    F = python_cmd (cmd, sym(f), sym(x));
+    F = pycall_sympy__ (cmd, sym(f), sym(x));
   end
 
 end

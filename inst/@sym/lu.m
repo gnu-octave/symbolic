@@ -69,7 +69,7 @@ function [L, U, P] = lu(A, opt)
           '    P.row_swap(*w)' ...
           'return (L, U, P)' };
 
-  [L, U, P] = python_cmd (cmd, sym(A), opt);
+  [L, U, P] = pycall_sympy__ (cmd, sym(A), opt);
 
   if (nargout == 2)
     L = P.' * L;

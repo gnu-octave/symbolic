@@ -71,7 +71,7 @@ function B = orth(A)
           'return B,'
         };
 
-  B = python_cmd (cmd, A);
+  B = pycall_sympy__ (cmd, A);
 
 end
 

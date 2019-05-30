@@ -60,7 +60,7 @@ function t = isequaln(x, y, varargin)
 
   cmd = 'return (_ins[0] == _ins[1],)';
 
-  t = python_cmd (cmd, sym(x), sym(y));
+  t = pycall_sympy__ (cmd, sym(x), sym(y));
 
   if (~ islogical(t))
     error('nonboolean return from python');

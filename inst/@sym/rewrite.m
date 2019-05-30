@@ -59,7 +59,7 @@
 %% The argument @var{f} can be a matrix:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% rewrite([exp(x) cos(x) asin(x)], 'log')
 %%   @result{} ans = (sym 1×3 matrix)
 %%       ⎡                  ⎛         ________⎞⎤

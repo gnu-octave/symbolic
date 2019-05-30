@@ -45,7 +45,7 @@ function y = dilog (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(polylog(2, complex(1-x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell(x(:)));
+  c = pycall_sympy__ (cmd, num2cell(x(:)));
   assert (numel (c) == numel (x))
   y = x;
   for i = 1:numel (c)

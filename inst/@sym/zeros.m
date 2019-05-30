@@ -57,9 +57,9 @@ function y = zeros(varargin)
     varargin{i} = sym(varargin{i});
   end
   if (length (varargin) == 1 && ~isscalar (varargin{1}))
-    y = python_cmd ('return zeros(*_ins[0])', varargin{1});
+    y = pycall_sympy__ ('return zeros(*_ins[0])', varargin{1});
   else
-    y = python_cmd ('return zeros(*_ins)', varargin{:});
+    y = pycall_sympy__ ('return zeros(*_ins)', varargin{:});
   end
 end
 

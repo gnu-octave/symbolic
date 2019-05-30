@@ -145,7 +145,7 @@ function f = ifourier(varargin)
             '            f=f+sp.simplify(fterm)'
             'return f/(2*sp.pi),'};
 
-  f = python_cmd(cmd, F, k, x);
+  f = pycall_sympy__ (cmd, F, k, x);
 
 end
 

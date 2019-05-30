@@ -96,6 +96,6 @@ function z = elementwise_op(scalar_fcn, varargin)
           '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
           'return q' ];
 
-  z = python_cmd (cmd, varargin{:});
+  z = pycall_sympy__ (cmd, varargin{:});
 
 end

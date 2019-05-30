@@ -58,7 +58,7 @@ function r = union(a, b)
          'return sp.Matrix([list(C)]),'
         };
 
-    r = python_cmd (cmd, sym(a), sym(b));
+    r = pycall_sympy__ (cmd, sym(a), sym(b));
 
 end
 

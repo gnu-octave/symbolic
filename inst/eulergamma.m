@@ -44,7 +44,7 @@ function g = eulergamma ()
     print_usage ();
   end
 
-  g = python_cmd ('return sympy.S.EulerGamma,');
+  g = pycall_sympy__ ('return sympy.S.EulerGamma,');
 end
 
 

@@ -78,7 +78,7 @@ function z = mrdivide(x, y)
     return
   end
 
-  z = python_cmd ('return _ins[0]/_ins[1],', sym(x), sym(y));
+  z = pycall_sympy__ ('return _ins[0]/_ins[1],', sym(x), sym(y));
 
   % Note: SymPy also seems to support 1/A for the inverse (although 2/A
   % not working as of 2016-01).  We don't disallow this but its not a

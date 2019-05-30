@@ -108,7 +108,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       end
     elseif (iscell(A) && strcmp(A{1}, 'INTERNAL_PYTHON_ERROR'))
       info.raw = out;
-      % We want to return so that python_cmd can report the error instead of us.
+      % We want to return so that pycall_sympy__ can report the error instead of us.
       % But if cannot load python_header correctly, we cannot assume the pipe is
       % ok (e.g., probably have other errors sitting on the stdout).  So reset.
       python_ipc_popen2('reset');

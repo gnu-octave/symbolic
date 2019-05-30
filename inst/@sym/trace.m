@@ -80,7 +80,7 @@ function z = trace(x)
           '    x = sp.Matrix([[x]])'
           'return sp.trace(x),' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

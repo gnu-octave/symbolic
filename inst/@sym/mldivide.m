@@ -54,7 +54,7 @@
 %% @example
 %% @group
 %% A = sym([5 2]);
-%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% x = A \ 10
 %%   @result{} x = (sym 2×1 matrix)
 %%       ⎡    2⋅c₁⎤
@@ -131,7 +131,7 @@ function x = mldivide(A, b)
     'return (flag, Z)'
   };
 
-  [flag, x] = python_cmd (cmd, sym(A), sym(b));
+  [flag, x] = pycall_sympy__ (cmd, sym(A), sym(b));
   if (flag ~= 0)
     warning('octsympy:backslash:vpa', ...
             'vpa backslash may not match double backslash')

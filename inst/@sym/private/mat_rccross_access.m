@@ -82,7 +82,7 @@ function z = mat_rccross_access(A, r, c)
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd (cmd, A, rr, cc);
+  z = pycall_sympy__ (cmd, A, rr, cc);
 
   % FIXME: here's some code could be used for slices
   if (1==0)
@@ -91,6 +91,6 @@ function z = mat_rccross_access(A, r, c)
           'c = slice(_ins[3],_ins[4])'  ...
           'M = A[r,c]'  ...
           'return M,' };
-  z = python_cmd (cmd, A, r1-1, r2, c1-1, c2);
+  z = pycall_sympy__ (cmd, A, r1-1, r2, c1-1, c2);
   end
 end

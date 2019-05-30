@@ -72,7 +72,7 @@ function y = bernoulli (m, x)
           '    Lx = Lx*len(Lm)'
           'c = [complex(bernoulli(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (m(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (m(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

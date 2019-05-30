@@ -60,7 +60,7 @@ function h = vertcat(varargin)
   for i = 1:nargin
     varargin{i} = sym(varargin{i});
   end
-  h = python_cmd (cmd, varargin{:});
+  h = pycall_sympy__ (cmd, varargin{:});
 
 end
 

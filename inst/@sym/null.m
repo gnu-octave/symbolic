@@ -66,7 +66,7 @@ function r = null(A)
           '    return sympy.zeros(A.cols, 0),'
           'return sympy.Matrix.hstack(*ns),' };
 
-  r = python_cmd (cmd, A);
+  r = pycall_sympy__ (cmd, A);
 
 end
 

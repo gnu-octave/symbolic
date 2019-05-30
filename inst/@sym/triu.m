@@ -79,7 +79,7 @@ function U = triu(A,k)
           'else:'
           '    return sp.S(0),' };
 
-  U = python_cmd (cmd, A, int32(double(k)));
+  U = pycall_sympy__ (cmd, A, int32(double(k)));
 
 end
 

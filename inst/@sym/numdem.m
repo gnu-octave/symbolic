@@ -88,7 +88,7 @@ function [N, D] = numdem(f)
           '    n[i], d[i] = fraction(f[i])'
           'return n, d' };
 
-  [N, D] = python_cmd (cmd, f);
+  [N, D] = pycall_sympy__ (cmd, f);
 
 end
 

@@ -141,7 +141,7 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.2")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms x
 %! A = expint (3);
 %! f = expint (x);

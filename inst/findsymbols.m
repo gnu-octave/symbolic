@@ -63,7 +63,7 @@ function L = findsymbols(obj, dosort)
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
-    L = python_cmd (cmd, obj);
+    L = pycall_sympy__ (cmd, obj);
 
 
   elseif iscell(obj)

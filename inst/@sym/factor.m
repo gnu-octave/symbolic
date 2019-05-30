@@ -109,7 +109,7 @@ function [p, m] = factor(f, varargin)
       print_usage ();
     end
 
-    p = python_cmd ('return factor(*_ins, deep=True)', f, varargin{:});
+    p = pycall_sympy__ ('return factor(*_ins, deep=True)', f, varargin{:});
 
   else
     %% no symbols: we are doing integer factorization
@@ -120,7 +120,7 @@ function [p, m] = factor(f, varargin)
 
     if (nargout <= 1)
       % this is rather fragile, as noted in docs
-      p = python_cmd ('return factorint(_ins[0], visual=True),', f);
+      p = pycall_sympy__ ('return factorint(_ins[0], visual=True),', f);
     else
       cmd = { 'd = factorint(_ins[0], visual=False)'
               'num = len(d.keys())'
@@ -128,7 +128,7 @@ function [p, m] = factor(f, varargin)
               'p = sp.Matrix(1, num, sk)'
               'm = sp.Matrix(1, num, lambda i,j: d[sk[j]])'
               'return (p, m)' };
-      [p, m] = python_cmd (cmd, f);
+      [p, m] = pycall_sympy__ (cmd, f);
     end
 
   end

@@ -48,7 +48,7 @@ function y = logint (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(li(complex(x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (x(:)));
   y = reshape (cell2mat (c), size (x));
 end
 

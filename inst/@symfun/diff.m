@@ -60,7 +60,7 @@
 %%
 %% @group
 %% syms f(x, y)
-%% @c doctest: +SKIP_IF(python_cmd('return Version(spver) <= Version("1.3")'))
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
 %% diff(f, x, y, y)(3, 2)     % a third partial eval at (3, 2)
 %%   @result{} ans = (sym)
 %%       ⎛   3           ⎞│

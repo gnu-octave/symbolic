@@ -83,7 +83,7 @@ function g = laplacian(f,x)
           '    g = g + f.diff(y, 2)'
           'return g,' };
 
-  g = python_cmd (cmd, sym(f), x);
+  g = pycall_sympy__ (cmd, sym(f), x);
 
 end
 

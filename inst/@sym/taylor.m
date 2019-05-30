@@ -160,7 +160,7 @@ function s = taylor(f, varargin)
 
   end
 
-  s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
+  s = pycall_sympy__ (cmd, sym(f), sym(x), sym(a), n);
 
 end
 

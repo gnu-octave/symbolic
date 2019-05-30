@@ -103,7 +103,7 @@ function z = rdivide(x, y)
           'else:'
           '    return x/y,' };
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = pycall_sympy__ (cmd, sym(x), sym(y));
 
 end
 

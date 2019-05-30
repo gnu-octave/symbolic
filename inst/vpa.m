@@ -111,7 +111,7 @@ function r = vpa(x, n)
     cmd = {
         'x, n = _ins'
         'return sympy.N(x, n),' };
-    r = python_cmd (cmd, x, n);
+    r = pycall_sympy__ (cmd, x, n);
   elseif (ischar (x))
     x = strtrim (x);
     isfpnum = ...
@@ -143,7 +143,7 @@ function r = vpa(x, n)
         '    # [1] https://github.com/sympy/sympy/issues/13425'
         '    return sympy.sympify(x, evaluate=False).evalf(n)'
         '    #return sympy.N(x, n)' };
-    r = python_cmd (cmd, x, n);
+    r = pycall_sympy__ (cmd, x, n);
   elseif (isfloat (x) && ~isreal (x))
     r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
   elseif (isfloat(x) && isscalar(x) == 1)
@@ -165,15 +165,15 @@ function r = vpa(x, n)
     cmd = {
       'x, n = _ins'
       'return sympy.N(x, n)' };
-    r = python_cmd (cmd, x, n);
+    r = pycall_sympy__ (cmd, x, n);
   elseif (isinteger(x) && isscalar(x) == 1)
     cmd = {
         'x, n = _ins'
         'return sympy.N(x, n),' };
-    r = python_cmd (cmd, x, n);
+    r = pycall_sympy__ (cmd, x, n);
   elseif (~isscalar(x))
     cmd = { sprintf('return sympy.ZeroMatrix(%d, %d).as_mutable(),', size(x)) };
-    r = python_cmd (cmd);
+    r = pycall_sympy__ (cmd);
     for i=1:numel(x)
       r(i) = vpa(x(i), n);
     end

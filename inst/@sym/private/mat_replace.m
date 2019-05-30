@@ -50,10 +50,10 @@ function z = mat_replace(A, subs, b)
           return
         end
           if rows(A) == 1
-            z = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
             return
           elseif columns(A) == 1
-            z = python_cmd('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
             return
           else
             z = sym([]);
@@ -69,10 +69,10 @@ function z = mat_replace(A, subs, b)
           return
         end
         if strcmp(subs{1}, ':')
-          z = python_cmd('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
+          z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
           return
         elseif strcmp(subs{2}, ':')
-          z = python_cmd('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+          z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
           return
         else
           error('A null assignment can only have one non-colon index.'); % Standard octave error
@@ -83,7 +83,7 @@ function z = mat_replace(A, subs, b)
   end
 
   if (length(subs) == 1 && strcmp(subs{1}, ':') && length(b) == 1)
-    z = python_cmd('return ones(_ins[0], _ins[1])*_ins[2],', uint64(A.size(1)), uint64(A.size(2)), sym(b));
+    z = pycall_sympy__ ('return ones(_ins[0], _ins[1])*_ins[2],', uint64(A.size(1)), uint64(A.size(2)), sym(b));
     return
 
   elseif (length(subs) == 1)

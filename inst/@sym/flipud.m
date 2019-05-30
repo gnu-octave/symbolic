@@ -44,7 +44,7 @@ function B = flipud (A)
           '    A = sp.Matrix([A])'
           'return A[::-1, :]' };
 
-  B = python_cmd (cmd, sym(A));
+  B = pycall_sympy__ (cmd, sym(A));
 
 end
 

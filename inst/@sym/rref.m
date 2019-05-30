@@ -52,7 +52,7 @@ function [r, k] = rref(A)
           'return (L[0], K)'
         };
 
-  [r, k] = python_cmd (cmd, A);
+  [r, k] = pycall_sympy__ (cmd, A);
 
   k = k + 1;
 

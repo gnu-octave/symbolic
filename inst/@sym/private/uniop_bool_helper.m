@@ -56,7 +56,7 @@ function r = uniop_bool_helper(x, scalar_fcn, opt, varargin)
               '    return [bool(sf(a, *pp)) for a in x.T],'
               'return bool(sf(x, *pp))' ];
 
-      r = python_cmd (cmd, x, varargin{:});
+      r = pycall_sympy__ (cmd, x, varargin{:});
 
       if (~isscalar(x))
         r = reshape(cell2mat(r), size(x));
@@ -72,7 +72,7 @@ function r = uniop_bool_helper(x, scalar_fcn, opt, varargin)
               '    return x.applyfunc(sf, *pp)'
               'return sf(x, *pp)' ];
 
-      r = python_cmd (cmd, x, varargin{:});
+      r = pycall_sympy__ (cmd, x, varargin{:});
 
     case 'symIfAnyNone'
       error('FIXME: not implemented')

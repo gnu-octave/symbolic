@@ -67,7 +67,7 @@ function c = dot(a, b)
           'return a.dot(b, hermitian=True, conjugate_convention="left")'
         };
 
-  c = python_cmd (cmd, sym(a), sym(b));
+  c = pycall_sympy__ (cmd, sym(a), sym(b));
 
 end
 

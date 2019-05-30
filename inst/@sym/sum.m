@@ -74,10 +74,10 @@ function y = sum(x, n)
           '    B[i] = sum(A.row(i))'
           'return B' };
   if (n == 1)
-    y = python_cmd (cmd, transpose(x));
+    y = pycall_sympy__ (cmd, transpose(x));
     y = transpose(y);
   elseif (n == 2)
-    y = python_cmd (cmd, x);
+    y = pycall_sympy__ (cmd, x);
   else
     print_usage ();
   end

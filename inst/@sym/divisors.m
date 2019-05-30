@@ -38,7 +38,7 @@ function y = divisors(x)
   if (nargin ~= 1)
     print_usage ();
   end
-  y = python_cmd('return S(divisors(_ins[0])),', x);
+  y = pycall_sympy__ ('return S(divisors(_ins[0])),', x);
   y = cell2sym(y);
 end
 

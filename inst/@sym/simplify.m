@@ -59,7 +59,7 @@ function y = simplify(x)
 
   cmd = 'return sp.simplify(*_ins),';
 
-  y = python_cmd (cmd, x);
+  y = pycall_sympy__ (cmd, x);
 
 end
 

@@ -66,10 +66,10 @@ function s = sort(f)
       };
     if (rows(f)>1)
       f = f';
-      s = python_cmd (cmd, f);
+      s = pycall_sympy__ (cmd, f);
       s = s';
     else
-      s = python_cmd (cmd, f);
+      s = pycall_sympy__ (cmd, f);
     end
   end
 end

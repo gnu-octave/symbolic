@@ -104,7 +104,7 @@ function g = gradient(f,x)
           'G = f.jacobian(x).T'
           'return G,' };
 
-  g = python_cmd (cmd, sym(f), x);
+  g = pycall_sympy__ (cmd, sym(f), x);
 
 end
 

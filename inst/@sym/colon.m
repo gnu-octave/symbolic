@@ -72,7 +72,7 @@ function y = colon(a, step, b)
           'y = y*step + Matrix([[a]*y.cols])'
           'return y,' };
 
-  y = python_cmd (cmd, sym(a), sym(b), sym(step));
+  y = pycall_sympy__ (cmd, sym(a), sym(b), sym(step));
 
 end
 

@@ -27,7 +27,7 @@
 %% @example
 %% @group
 %% syms m
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% ellipticCE (m)
 %%   @result{} ans = (sym) E(1 - m)
 %% @end group

@@ -56,7 +56,7 @@ function b = subsindex(x)
       'else:'
       '    return 0,' };
 
-  flag = python_cmd (cmd, x);
+  flag = pycall_sympy__ (cmd, x);
 
   assert(isnumeric(flag))
 

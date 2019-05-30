@@ -81,7 +81,7 @@ function z = partfrac(f, x)
 
   cmd = 'return sp.polys.partfrac.apart(_ins[0],_ins[1]),';
 
-  z = python_cmd (cmd, sym(f), sym(x));
+  z = pycall_sympy__ (cmd, sym(f), sym(x));
 
 end
 

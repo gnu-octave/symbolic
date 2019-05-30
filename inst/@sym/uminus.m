@@ -39,7 +39,7 @@
 
 function z = uminus(x)
 
-  z = python_cmd('return -_ins[0],', x);
+  z = pycall_sympy__ ('return -_ins[0],', x);
 
 end
 

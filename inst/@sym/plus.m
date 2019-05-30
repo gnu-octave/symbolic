@@ -60,7 +60,7 @@ function z = plus(x, y)
           '    return x*sp.ones(*y.shape) + y,'
           'return x + y' };
 
-  z = python_cmd(cmd, sym(x), sym(y));
+  z = pycall_sympy__ (cmd, sym(x), sym(y));
 
 end
 
