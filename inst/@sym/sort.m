@@ -1,4 +1,5 @@
 %% Copyright (C) 2016 Utkarsh Gautam
+%% Copyright (C) 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -45,8 +46,6 @@
 %% @seealso{@@sym/unique}
 %% @end defmethod
 
-%% Author: Utkarsh Gautam
-%% Keywords: symbolic, sort
 
 function s = sort(f)
   if (nargin ~= 1)

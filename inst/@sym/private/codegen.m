@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -15,9 +15,6 @@
 %% You should have received a copy of the GNU General Public
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [outflag,output] = codegen(varargin)
 

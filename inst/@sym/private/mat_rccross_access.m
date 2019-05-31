@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,8 +30,6 @@
 %%
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_rccross_access(A, r, c)
 

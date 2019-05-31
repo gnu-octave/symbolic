@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,8 +58,6 @@
 %% @seealso{@@sym/ctranspose}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = transpose(x)
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -65,8 +65,6 @@
 %% @seealso{@@sym/rdivide, @@sym/mldivide}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mrdivide(x, y)
 

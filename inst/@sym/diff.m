@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%

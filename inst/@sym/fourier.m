@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -65,8 +65,6 @@
 %% @seealso{@@sym/ifourier}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic, integral transforms
 
 function F = fourier(varargin)
 
