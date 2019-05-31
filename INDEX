@@ -24,7 +24,6 @@ Functions
  laguerreL
  lambertw
  poly2sym
- python_cmd
 Double-precision numerical functions
  @double/bernoulli
  @double/chebyshevT
@@ -353,5 +352,6 @@ Class for symbolic functions
 Miscellaneous
  @logical/isAlways
 Deprecated
+ python_cmd
  evalpy
  octsympy_tests
