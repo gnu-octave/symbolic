@@ -202,7 +202,7 @@ end
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'upper');
-%! if (python_cmd ('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (A, B)
 %! end
 
@@ -213,6 +213,6 @@ end
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'lower');
-%! if (python_cmd ('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (A, B)
 %! end

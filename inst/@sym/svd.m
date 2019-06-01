@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -61,7 +61,7 @@ function [S, varargout] = svd(A)
           'L = sp.Matrix(A.singular_values())'
           'return L,' };
 
-  S = python_cmd (cmd, sym(A));
+  S = pycall_sympy__ (cmd, sym(A));
 
 end
 

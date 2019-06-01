@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -61,8 +61,6 @@
 %% @seealso{@@sym/repmat}
 %% @end deftypeop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function D = diag(A, k, c)
 
@@ -96,7 +94,7 @@ function D = diag(A, k, c)
             '        D[i-k,i] = A[i]'
             'return D,' };
 
-    D = python_cmd (cmd, sym(A), int32(k), int32(r), int32(c));
+    D = pycall_sympy__ (cmd, sym(A), int32(k), int32(r), int32(c));
 
   else
 
@@ -111,7 +109,7 @@ function D = diag(A, k, c)
       '    B = sp.Matrix([A[i-k,i] for i in range(0, min(r, c, c-k, r+k))])'
       'return B,' };
 
-    D = python_cmd (cmd, sym(A), int32(double(k)));
+    D = pycall_sympy__ (cmd, sym(A), int32(double(k)));
 
   end
 end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -71,8 +71,6 @@
 %% @seealso{@@sym/fourier}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic, integral transforms
 
 function f = ifourier(varargin)
 
@@ -145,7 +143,7 @@ function f = ifourier(varargin)
             '            f=f+sp.simplify(fterm)'
             'return f/(2*sp.pi),'};
 
-  f = python_cmd(cmd, F, k, x);
+  f = pycall_sympy__ (cmd, F, k, x);
 
 end
 

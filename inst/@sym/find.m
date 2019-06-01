@@ -138,7 +138,7 @@ function r = mylogical(p)
     '    x = [x,]'
     'return [scalar2tf(a) for a in x],' };
 
-  r = python_cmd (cmd, p);
+  r = pycall_sympy__ (cmd, p);
   r = cell2mat(r);
   r = reshape(r, size(p));
 end
@@ -173,7 +173,7 @@ end
 
 %!test
 %! % None
-%! none = python_cmd ('return None');
+%! none = pycall_sympy__ ('return None');
 %! assert (isequal (find ([sym(0) none sym(1)]), 3))
 %! syms x y
 %! assert (isequal (find ([x==y  none  x==x]), 3))

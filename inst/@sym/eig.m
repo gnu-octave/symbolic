@@ -26,7 +26,7 @@
 %% @example
 %% @group
 %% A = sym([2 4; 6 8]);
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% sort(eig(A))
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡5 - √33⎤
@@ -38,7 +38,7 @@
 %% We can also compute the eigenvectors:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% [V, D] = eig(A)
 %%   @result{} V = (sym 2×2 matrix)
 %%       ⎡  -4        -4    ⎤
@@ -56,7 +56,7 @@
 %% and check:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% v = V(:, 1)
 %%   @result{} v = (sym 2×1 matrix)
 %%       ⎡  -4    ⎤
@@ -64,12 +64,12 @@
 %%       ⎢-3 + √33⎥
 %%       ⎢        ⎥
 %%       ⎣   1    ⎦
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% lambda = D(1,1)
 %%   @result{} lambda = (sym) 5 - √33
 %% @end group
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% simplify(A*v - lambda*v)
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡0⎤
@@ -107,7 +107,7 @@ function [V, D] = eig(A, B)
             'L = sympy.Matrix(L)'
             'return L,' };
 
-    V = python_cmd (cmd, sym(A));
+    V = pycall_sympy__ (cmd, sym(A));
 
   else
     % careful, geometric vs algebraic mult, use m
@@ -128,7 +128,7 @@ function [V, D] = eig(A, B)
             'D = diag(*L)'
             'return V, D' };
 
-   [V, D] = python_cmd (cmd, sym(A));
+   [V, D] = pycall_sympy__ (cmd, sym(A));
 
   end
 end

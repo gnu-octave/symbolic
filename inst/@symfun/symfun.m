@@ -86,7 +86,7 @@
 %% syms f(t) g(t)
 %% F(t) = f(g(t))
 %%   @result{} F(t) = (symfun) f(g(t))
-%% @c doctest: +SKIP_IF(python_cmd('return Version(spver) <= Version("1.3")'))
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
 %% diff(F, t)
 %%   @result{} ans(t) = (symfun)
 %%         d            d
@@ -155,7 +155,7 @@ function f = symfun(expr, vars)
           'if not all([x is not None and x.is_Symbol for x in L]):'
           '    return False'
           'return len(set(L)) == len(L)' };
-  if (~ python_cmd (cmd, vars))
+  if (~ pycall_sympy__ (cmd, vars))
     error('OctSymPy:symfun:argNotUniqSymbols', ...
           'symfun arguments must be unique symbols')
   end

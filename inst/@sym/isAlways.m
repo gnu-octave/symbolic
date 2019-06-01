@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -143,7 +143,7 @@ function r = isAlways(p, varargin)
     '    r = "cannot reliably convert sym to bool"'
     'return (flag, r)' });
 
-  [flag, r] = python_cmd (cmd, p, cant);
+  [flag, r] = pycall_sympy__ (cmd, p, cant);
 
   if (~flag)
     assert (ischar (r), 'isAlways: programming error?')

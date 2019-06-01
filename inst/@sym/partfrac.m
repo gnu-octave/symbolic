@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -66,8 +66,6 @@
 %% @seealso{@@sym/factor}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic, fractions
 
 function z = partfrac(f, x)
 
@@ -81,7 +79,7 @@ function z = partfrac(f, x)
 
   cmd = 'return sp.polys.partfrac.apart(_ins[0],_ins[1]),';
 
-  z = python_cmd (cmd, sym(f), sym(x));
+  z = pycall_sympy__ (cmd, sym(f), sym(x));
 
 end
 

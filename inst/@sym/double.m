@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -84,7 +84,7 @@ function y = double(x)
           'return (x.real, x.imag)'
         };
 
-  [A, B] = python_cmd (cmd, x);
+  [A, B] = pycall_sympy__ (cmd, x);
 
   %y = A + B*i;  % not quite the same for Inf + InFi
   if (B == 0.0)

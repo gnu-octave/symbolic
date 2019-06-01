@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,7 +79,7 @@ function U = triu(A,k)
           'else:'
           '    return sp.S(0),' };
 
-  U = python_cmd (cmd, A, int32(double(k)));
+  U = pycall_sympy__ (cmd, A, int32(double(k)));
 
 end
 

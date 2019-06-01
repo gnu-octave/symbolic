@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -55,8 +55,6 @@
 %%          @@sym/hessian}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function g = laplacian(f,x)
 
@@ -83,7 +81,7 @@ function g = laplacian(f,x)
           '    g = g + f.diff(y, 2)'
           'return g,' };
 
-  g = python_cmd (cmd, sym(f), x);
+  g = pycall_sympy__ (cmd, sym(f), x);
 
 end
 

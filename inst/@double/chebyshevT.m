@@ -1,4 +1,4 @@
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -68,7 +68,7 @@ function y = chebyshevT (n, x)
           '    Lx = Lx*len(Ln)'
           'c = [complex(chebyshevt(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (n(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

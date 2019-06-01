@@ -74,7 +74,7 @@ function out = subsasgn (val, idx, rhs)
       if (all_syms)
         cmd = { 'L, = _ins'
                 'return all([x is not None and x.is_Symbol for x in L])' };
-        all_Symbols = python_cmd (cmd, idx.subs);
+        all_Symbols = pycall_sympy__ (cmd, idx.subs);
       end
       if (all_syms && all_Symbols)
         %% Make a symfun

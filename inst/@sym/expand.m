@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -38,7 +38,7 @@
 
 function y = expand(x)
 
-  y = python_cmd( 'return sympy.expand(*_ins),', sym(x));
+  y = pycall_sympy__ ( 'return sympy.expand(*_ins),', sym(x));
 
 end
 

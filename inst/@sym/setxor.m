@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -64,7 +64,7 @@ function r = setxor(a, b)
          'return sp.Matrix([list(C)]),'
         };
 
-  r = python_cmd (cmd, sym(a), sym(b));
+  r = pycall_sympy__ (cmd, sym(a), sym(b));
 
 end
 

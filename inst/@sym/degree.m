@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -65,7 +65,7 @@ function n = degree(p, x)
     x = sym('x');
   end
 
-  n = python_cmd ('return sympy.degree(*_ins),', sym(p), sym(x));
+  n = pycall_sympy__ ('return sympy.degree(*_ins),', sym(p), sym(x));
 
 end
 

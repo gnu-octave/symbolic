@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -57,8 +57,6 @@
 %% @seealso{@@sym/mpower}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = power(x, y)
 
@@ -83,7 +81,7 @@ function z = power(x, y)
           '    return y.applyfunc(lambda a: x**a),'
           'return x**y' };
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = pycall_sympy__ (cmd, sym(x), sym(y));
 
 end
 

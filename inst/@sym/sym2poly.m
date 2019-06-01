@@ -101,7 +101,7 @@ function c = sym2poly(p, x)
           'p = Poly.from_expr(f,x)'
           'return p.all_coeffs(),' };
 
-  c2 = python_cmd (cmd, sym(p), sym(x));
+  c2 = pycall_sympy__ (cmd, sym(p), sym(x));
   if (isempty(c2))
     error ('sym2poly: empty python output, can this happen?  A bug.')
   end

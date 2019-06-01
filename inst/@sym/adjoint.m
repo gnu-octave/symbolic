@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,7 +60,7 @@ function y = adjoint(x)
     print_usage();
   end
 
-  y = python_cmd('_ins[0] = _ins[0] if _ins[0].is_Matrix else Matrix([_ins[0]]); return _ins[0].adjugate(),', x);
+  y = pycall_sympy__ ('_ins[0] = _ins[0] if _ins[0].is_Matrix else Matrix([_ins[0]]); return _ins[0].adjugate(),', x);
 end
 
 

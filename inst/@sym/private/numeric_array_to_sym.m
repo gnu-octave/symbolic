@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014, 2015, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,7 +24,7 @@ function z = numeric_array_to_sym(A)
 
   if (n == 0 || m == 0)
     cmd = { sprintf('return sp.Matrix(%d, %d, []),', n, m) };
-    z = python_cmd (cmd);
+    z = pycall_sympy__ (cmd);
     return
   end
 
@@ -47,4 +47,4 @@ function z = numeric_array_to_sym(A)
   cmd = { 'L = _ins[0]'
           'M = sp.Matrix(L)'
           'return M,' };
-  z = python_cmd (cmd, Ac);
+  z = pycall_sympy__ (cmd, Ac);

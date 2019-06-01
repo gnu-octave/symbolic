@@ -1,5 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function g = catalan ()
     print_usage ();
   end
 
-  g = python_cmd ('return sympy.S.Catalan,');
+  g = pycall_sympy__ ('return sympy.S.Catalan,');
 end
 
 

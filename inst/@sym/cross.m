@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,7 +58,7 @@ function c = cross(a, b)
           'return a.cross(b),'
         };
 
-  c = python_cmd (cmd, sym(a), sym(b));
+  c = pycall_sympy__ (cmd, sym(a), sym(b));
 
 end
 

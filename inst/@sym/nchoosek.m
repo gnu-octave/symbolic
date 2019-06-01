@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2018 Colin B. Macdonald
+%% Copyright (C) 2015-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -87,7 +87,7 @@ function C = nchoosek(n, k)
   end
   assert (isscalar(k), 'nchoosek: k must be scalar');
 
-  C = python_cmd ('return sp.binomial(*_ins),', sym(n), sym(k));
+  C = pycall_sympy__ ('return sp.binomial(*_ins),', sym(n), sym(k));
 
 end
 

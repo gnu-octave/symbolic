@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -124,7 +124,7 @@ function S = finiteset(varargin)
     varargin{i} = sym(varargin{i});
   end
 
-  S = python_cmd ('return FiniteSet(*_ins),', varargin{:});
+  S = pycall_sympy__ ('return FiniteSet(*_ins),', varargin{:});
 
 end
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy
 %%
@@ -48,7 +48,7 @@ function z = isconstant(x)
           'if x is not None and x.is_Matrix:'
           '    return x.applyfunc(lambda a: a.is_constant()),'
           'return x.is_constant(),' };
-  z = python_cmd (cmd, sym(x));
+  z = pycall_sympy__ (cmd, sym(x));
   % Issue #27: Matrix of bools not converted to logical
   z = logical(z);
 

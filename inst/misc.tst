@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -100,42 +100,42 @@
 %!shared
 
 %!test
-%! r = python_cmd ('return Version("0.7.6") > Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("0.7.6") > Version("0.7.6"),');
 %! assert (isequal (r, false))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6") >= Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("0.7.6") >= Version("0.7.6"),');
 %! assert (isequal (r, true))
 
 %!xtest
 %! % see: https://github.com/cbm755/octsympy/pull/320
-%! r = python_cmd ('return Version("0.7.6") > Version("0.7.6.dev"),');
+%! r = pycall_sympy__ ('return Version("0.7.6") > Version("0.7.6.dev"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6") >= Version("0.7.6.dev"),');
+%! r = pycall_sympy__ ('return Version("0.7.6") >= Version("0.7.6.dev"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6.1") > Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("0.7.6.1") > Version("0.7.6"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6.1") >= Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("0.7.6.1") >= Version("0.7.6"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6.1.dev") >= Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("0.7.6.1.dev") >= Version("0.7.6"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("0.7.6.dev") >= Version("0.7.5"),');
+%! r = pycall_sympy__ ('return Version("0.7.6.dev") >= Version("0.7.5"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("1.0.1") > Version("1.0"),');
+%! r = pycall_sympy__ ('return Version("1.0.1") > Version("1.0"),');
 %! assert (isequal (r, true))
 
 %!test
-%! r = python_cmd ('return Version("1.0") > Version("0.7.6"),');
+%! r = pycall_sympy__ ('return Version("1.0") > Version("0.7.6"),');
 %! assert (isequal (r, true))

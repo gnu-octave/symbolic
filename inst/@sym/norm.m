@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -84,7 +84,7 @@ function z = norm(x, ord)
           '    x = sympy.Matrix([x])' ...
           'return x.norm(ord),' };
 
-  z = python_cmd (cmd, sym(x), ord);
+  z = pycall_sympy__ (cmd, sym(x), ord);
 
 end
 

@@ -29,7 +29,7 @@
 %% @example
 %% @group
 %% syms g(s) t
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.2")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %% f(t) = rewrite(ilaplace(g), 'Integral')
 %%   @result{} f(t) = (symfun)
 %%           c + ∞⋅ⅈ
@@ -167,7 +167,7 @@ function f = ilaplace(varargin)
             '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
             'return f,' };
 
-  f = python_cmd(cmd, F, s, t);
+  f = pycall_sympy__ (cmd, F, s, t);
 
 end
 

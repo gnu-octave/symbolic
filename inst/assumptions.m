@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -129,14 +129,14 @@ function [A, B] = assumptions(F, outp)
   for i=1:length(s)
     x = s{i};
     if strcmp(outp, 'dict')
-      [astr, adict] = python_cmd(cmd, x, true);
+      [astr, adict] = pycall_sympy__ (cmd, x, true);
       if ~isempty(astr)
         c = c + 1;
         A{c} = x;
         B{c} = adict;
       end
     else
-      astr = python_cmd(cmd, x, false);
+      astr = pycall_sympy__ (cmd, x, false);
       if ~isempty(astr)
         c = c + 1;
         str = [x.flat ': ' astr];
@@ -251,5 +251,5 @@ end
 
 %!test
 %! %% TODO: rewrite later with https://github.com/cbm755/octsympy/issues/622
-%! a = python_cmd ('return Symbol("a", real=False)');
+%! a = pycall_sympy__ ('return Symbol("a", real=False)');
 %! assert (strcmp (assumptions (a), {'a: ~real'}))

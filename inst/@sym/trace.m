@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -80,7 +80,7 @@ function z = trace(x)
           '    x = sp.Matrix([[x]])'
           'return sp.trace(x),' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

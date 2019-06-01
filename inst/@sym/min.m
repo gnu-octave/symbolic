@@ -49,7 +49,7 @@ function [z, I] = min(A, B, dim)
   if (nargout <= 1)
     if (nargin == 1)
       if (isvector(A))
-        z = python_cmd ('return Min(*_ins[0])', A);
+        z = pycall_sympy__ ('return Min(*_ins[0])', A);
       else
         z = min(A, [], 1);
       end
@@ -70,7 +70,7 @@ function [z, I] = min(A, B, dim)
               '    if A.cols == 0:'
               '        return A'
               '    return Matrix([Min(*A.row(i)) for i in range(0, A.rows)])' };
-      z = python_cmd (cmd, A, dim - 1);
+      z = pycall_sympy__ (cmd, A, dim - 1);
     else
       print_usage ();
     end
@@ -83,7 +83,7 @@ function [z, I] = min(A, B, dim)
       cmd = { 'A = _ins[0]'
               'val, idx = min((val, idx) for (idx, val) in enumerate(A))'
               'return val, idx+1' };
-      [z, I] = python_cmd (cmd, A);
+      [z, I] = pycall_sympy__ (cmd, A);
     else
       [z, I] = min(A, [], 1);
     end
@@ -113,7 +113,7 @@ function [z, I] = min(A, B, dim)
             '    m, I = zip(*val_idx_pairs)'
             '    return (Matrix(m), Matrix(I))' };
 
-    [z, I] = python_cmd (cmd, A, dim - 1);
+    [z, I] = pycall_sympy__ (cmd, A, dim - 1);
     I = double(I);
     if (~isempty(I))
       I = I + 1;

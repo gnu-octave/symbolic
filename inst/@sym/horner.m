@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,9 +63,9 @@ function y = horner(p, x)
   end
 
   if (isempty(x))
-    y = python_cmd ('return sp.horner(*_ins),', sym(p));
+    y = pycall_sympy__ ('return sp.horner(*_ins),', sym(p));
   else
-    y = python_cmd ('return sp.horner(*_ins),', sym(p), sym(x));
+    y = pycall_sympy__ ('return sp.horner(*_ins),', sym(p), sym(x));
   end
 
 end

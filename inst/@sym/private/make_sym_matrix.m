@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -30,7 +30,7 @@ function A = make_sym_matrix(As, sz)
 	    '    return (0, int(n), int(m)) '
 	    'else:'
 	    '    return (1, sympy.MatrixSymbol(As, n, m), 0)' };
-    [flag, n, m] = python_cmd (cmd, As, sz);
+    [flag, n, m] = pycall_sympy__ (cmd, As, sz);
     if (flag)
       A = n;
       return
@@ -59,6 +59,6 @@ function A = make_sym_matrix(As, sz)
             '      for i in range(0, n)]'
             'A = sympy.Matrix(L)'
             'return A,' };
-    A = python_cmd (cmd, As, n, m);
+    A = pycall_sympy__ (cmd, As, n, m);
 
 end

@@ -230,7 +230,7 @@ function g = subs(f, in, out)
   %if (isscalar(in) && isscalar(in) && isscalar(out))
   %  cmd = { '(f, x, y) = _ins'
   %          'return f.subs(x, y).doit(),' };
-  %  g = python_cmd (cmd, sym(f), sym(in), sym(out));
+  %  g = pycall_sympy__ (cmd, sym(f), sym(in), sym(out));
   %  return
   %end
 
@@ -264,7 +264,7 @@ function g = subs(f, in, out)
     'return g'
   };
 
-  g = python_cmd (cmd, f, in, out);
+  g = pycall_sympy__ (cmd, f, in, out);
 
 end
 

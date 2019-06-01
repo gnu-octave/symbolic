@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +48,7 @@ function y = logint (x)
   cmd = { 'L = _ins[0]'
           'A = [complex(li(complex(x))) for x in L]'
           'return A,' };
-  c = python_cmd (cmd, num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (x(:)));
   y = reshape (cell2mat (c), size (x));
 end
 

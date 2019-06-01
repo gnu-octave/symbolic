@@ -25,7 +25,7 @@
 %% @example
 %% @group
 %% A = sym([1 2; 3 0]);
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% cond(A)^2
 %%   @result{} (sym)
 %%
@@ -46,7 +46,7 @@ function k = cond(A)
           '    A = sp.Matrix([A])' ...
           'return A.condition_number(),' };
 
-  k = python_cmd (cmd, sym(A));
+  k = pycall_sympy__ (cmd, sym(A));
 
 end
 

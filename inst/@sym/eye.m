@@ -68,7 +68,7 @@ function y = eye(varargin)
           'if n == m:'
           '    return eye(n)'
           'return eye(max(n,m))[0:n,0:m]' };
-  y = python_cmd (cmd, varargin{:});
+  y = pycall_sympy__ (cmd, varargin{:});
 
 end
 

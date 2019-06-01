@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -56,8 +56,6 @@
 %% @seealso{@@sym/linspace}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function y = colon(a, step, b)
 
@@ -72,7 +70,7 @@ function y = colon(a, step, b)
           'y = y*step + Matrix([[a]*y.cols])'
           'return y,' };
 
-  y = python_cmd (cmd, sym(a), sym(b), sym(step));
+  y = pycall_sympy__ (cmd, sym(a), sym(b), sym(step));
 
 end
 

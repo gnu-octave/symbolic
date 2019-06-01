@@ -375,35 +375,35 @@ end
 %% Test for correct line numbers in Python exceptions.  These first tests
 %% happen with the default ipc---usually popen2.  We don't explicitly test
 %% popen2 because test suite should be portable.
-%!error <line 1> python_cmd('raise ValueError');
-%!error <line 1> python_cmd('raise ValueError', sym('x'));
-%!error <line 1> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
-%!error <line 1> python_cmd('raise ValueError', {1; 1; 1});
-%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
-%!error <line 2> python_cmd( {'x = 1' 'raise ValueError'} );
-%!error <line 3> python_cmd( {'x = 1' 'pass' '1/0'} );
-%!error <line 3> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
+%!error <line 1> pycall_sympy__ ('raise ValueError');
+%!error <line 1> pycall_sympy__ ('raise ValueError', sym('x'));
+%!error <line 1> pycall_sympy__ ('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <line 1> pycall_sympy__ ('raise ValueError', {1; 1; 1});
+%!error <line 1> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <line 2> pycall_sympy__ ( {'x = 1' 'raise ValueError'} );
+%!error <line 3> pycall_sympy__ ( {'x = 1' 'pass' '1/0'} );
+%!error <line 3> pycall_sympy__ ( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 %% Test for correct line error in Python exceptions.
-%!error <raise ValueError> python_cmd('raise ValueError');
-%!error <raise ValueError> python_cmd('raise ValueError', sym('x'));
-%!error <raise ValueError> python_cmd('raise ValueError', sym([1 2 3; 4 5 6]));
-%!error <raise ValueError> python_cmd('raise ValueError', {1; 1; 1});
-%!error <raise ValueError> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'));
-%!error <raise ValueError> python_cmd( {'x = 1' 'raise ValueError'} );
-%!error <1/0> python_cmd( {'x = 1' 'pass' '1/0'} );
-%!error <raise ValueError> python_cmd( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
+%!error <raise ValueError> pycall_sympy__ ('raise ValueError');
+%!error <raise ValueError> pycall_sympy__ ('raise ValueError', sym('x'));
+%!error <raise ValueError> pycall_sympy__ ('raise ValueError', sym([1 2 3; 4 5 6]));
+%!error <raise ValueError> pycall_sympy__ ('raise ValueError', {1; 1; 1});
+%!error <raise ValueError> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'));
+%!error <raise ValueError> pycall_sympy__ ( {'x = 1' 'raise ValueError'} );
+%!error <1/0> pycall_sympy__ ( {'x = 1' 'pass' '1/0'} );
+%!error <raise ValueError> pycall_sympy__ ( {'a=1' 'b=1' 'raise ValueError' 'c=1' 'd=1'} );
 
 %!test
 %! % system should work on all system, but just runs sysoneline on windows
 %! sympref('ipc', 'system');
 %! syms x
 
-%!error <line 1> python_cmd('raise ValueError')
-%!error <line 1> python_cmd('raise ValueError', sym('x'))
-%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+%!error <line 1> pycall_sympy__ ('raise ValueError')
+%!error <line 1> pycall_sympy__ ('raise ValueError', sym('x'))
+%!error <line 1> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'))
 
-%!error <c=1; raise ValueError> python_cmd ({'a=1' 'b=1' 'c=1; raise ValueError' 'd=1'});
+%!error <c=1; raise ValueError> pycall_sympy__ ({'a=1' 'b=1' 'c=1; raise ValueError' 'd=1'});
 
 
 %!test
@@ -411,8 +411,8 @@ end
 %! sympref('ipc', 'sysoneline');
 %! syms x
 
-%!error <line 1> python_cmd('raise ValueError')
-%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+%!error <line 1> pycall_sympy__ ('raise ValueError')
+%!error <line 1> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'))
 
 
 %!test
@@ -420,8 +420,8 @@ end
 %! syms x
 %! delete('tmp_python_cmd.py')
 
-%!error <line 1> python_cmd('raise ValueError')
-%!error <line 1> python_cmd('raise ValueError', struct('a', 1, 'b', 'word'))
+%!error <line 1> pycall_sympy__ ('raise ValueError')
+%!error <line 1> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'))
 
 %!test
 %! % (just to cleanup after the error tests)

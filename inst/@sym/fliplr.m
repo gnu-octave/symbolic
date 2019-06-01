@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function B = fliplr (A)
           '    A = sp.Matrix([A])'
           'return A[:, ::-1]' };
 
-  B = python_cmd (cmd, sym(A));
+  B = pycall_sympy__ (cmd, sym(A));
 
 end
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +52,7 @@ function [r, k] = rref(A)
           'return (L[0], K)'
         };
 
-  [r, k] = python_cmd (cmd, A);
+  [r, k] = pycall_sympy__ (cmd, A);
 
   k = k + 1;
 

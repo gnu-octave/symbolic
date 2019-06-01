@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -65,8 +65,6 @@
 %% @seealso{@@sym/ifourier}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic, integral transforms
 
 function F = fourier(varargin)
 
@@ -106,7 +104,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x);
+    F = pycall_sympy__ (cmd, f, x);
 
   elseif (nargin == 2)
     f = sym(varargin{1});
@@ -138,7 +136,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x, k);
+    F = pycall_sympy__ (cmd, f, x, k);
 
   elseif (nargin == 3)
     f = sym(varargin{1});
@@ -167,7 +165,7 @@ function F = fourier(varargin)
             '            F=F+sp.simplify(Fterm)'
             'return F,'};
 
-    F = python_cmd(cmd, f, x, k);
+    F = pycall_sympy__ (cmd, f, x, k);
 
   else
     print_usage ();

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -111,7 +111,7 @@ function r = vpasolve(e, x, x0)
       '    x0 = list(x0) if isinstance(x0, Matrix) else x0'
       'r = nsolve(e, x, x0)'
       'return r' };
-  r = python_cmd (cmd, sym(e), x, x0, n);
+  r = pycall_sympy__ (cmd, sym(e), x, x0, n);
 
 end
 

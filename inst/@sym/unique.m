@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -52,7 +52,7 @@ function r = unique(A)
     print_usage ();
   end
 
-  r = python_cmd ('return sp.Matrix([list(uniq(*_ins))]),', A);
+  r = pycall_sympy__ ('return sp.Matrix([list(uniq(*_ins))]),', A);
 
 end
 

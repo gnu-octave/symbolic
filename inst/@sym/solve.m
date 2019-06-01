@@ -171,7 +171,7 @@ function varargout = solve(varargin)
             '    d = d[0]'
             'return d,' ];
 
-    out = python_cmd (cmd, varargin{:});
+    out = pycall_sympy__ (cmd, varargin{:});
 
     varargout = {out};
 
@@ -186,7 +186,7 @@ function varargout = solve(varargin)
             '    q.append(sp.Matrix([t[i] for t in solns]))'
             'return q,' ];
 
-    out = python_cmd (cmd, varargin{:});
+    out = pycall_sympy__ (cmd, varargin{:});
 
     varargout = out;
 
@@ -304,7 +304,7 @@ end
 
 %!test
 %! A = solve([2*x == 4*y, 2 == 3], x);
-%! if (python_cmd('return Version(spver) > Version("1.3")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %!   assert (isempty (A))
 %! else
 %!   assert (isequal (A, sym(false)))

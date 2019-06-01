@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,12 +34,10 @@
 %% @end example
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = uminus(x)
 
-  z = python_cmd('return -_ins[0],', x);
+  z = pycall_sympy__ ('return -_ins[0],', x);
 
 end
 

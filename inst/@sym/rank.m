@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,7 +47,7 @@ function r = rank(A)
           '    A = sp.Matrix([A])'
           'return A.rank(),' };
 
-  r = python_cmd (cmd, A);
+  r = pycall_sympy__ (cmd, A);
 
 end
 

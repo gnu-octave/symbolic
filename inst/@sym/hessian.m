@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -67,8 +67,6 @@
 %%          @@sym/laplacian}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function H = hessian(f, x)
 
@@ -96,7 +94,7 @@ function H = hessian(f, x)
           'H = grad.jacobian(x)'
           'return H,' };
 
-  H = python_cmd (cmd, sym(f), x);
+  H = pycall_sympy__ (cmd, sym(f), x);
 
 end
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015-2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -67,7 +67,7 @@ function c = dot(a, b)
           'return a.dot(b, hermitian=True, conjugate_convention="left")'
         };
 
-  c = python_cmd (cmd, sym(a), sym(b));
+  c = pycall_sympy__ (cmd, sym(a), sym(b));
 
 end
 

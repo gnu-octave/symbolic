@@ -29,13 +29,13 @@
 %% @group
 %% syms x
 %% g = taylor(log(1 + x), x, 0, 'order', 5);
-%% @c doctest: +XFAIL_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% g = horner(g)
 %%   @result{} g = (sym)
 %%         ⎛  ⎛  ⎛1   x⎞   1⎞    ⎞
 %%       x⋅⎜x⋅⎜x⋅⎜─ - ─⎟ - ─⎟ + 1⎟
 %%         ⎝  ⎝  ⎝3   4⎠   2⎠    ⎠
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% ccode(g)
 %%   @result{} x*(x*(x*(1.0/3.0 - 1.0/4.0*x) - 1.0/2.0) + 1)
 %% @end group
@@ -62,7 +62,7 @@
 %% @end group
 %%
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% disp(C.code)
 %%   @print{}  #include "file.h"
 %%   @print{}  #include <math.h>

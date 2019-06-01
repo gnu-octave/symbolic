@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,9 +26,9 @@
 %% Example:
 %% @example
 %% @group
-%% @c FIXME: python_cmd is implementation detail, maybe better
+%% @c FIXME: pycall_sympy__ is implementation detail, maybe better
 %% @c to avoid it in our docs.
-%% a = python_cmd('return None')
+%% a = pycall_sympy__ ('return None')
 %%   @result{} a = (sym) None
 %% isNone(a)
 %%   @result{} ans =  1
@@ -51,10 +51,10 @@ end
 
 
 %!test
-%! None = python_cmd ('return None');
+%! None = pycall_sympy__ ('return None');
 
 %!shared None
-%! None = python_cmd ('return None');
+%! None = pycall_sympy__ ('return None');
 
 %!assert (isNone(None))
 %!assert (~isNone(sym('x')))

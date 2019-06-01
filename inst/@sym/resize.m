@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,7 +76,7 @@ function B = resize(A, n, m)
     'return Matrix(n, m, lambda i,j: 0 if i >= A.rows or j >= A.cols else A[i,j])'
   };
 
-  B = python_cmd (cmd, sym(A), int32(n), int32(m));
+  B = pycall_sympy__ (cmd, sym(A), int32(n), int32(m));
 end
 
 

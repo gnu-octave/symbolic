@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -156,7 +156,7 @@ function [c, t] = coeffs(p, x, all)
           '    tt = [t*x**q[0][i] for (t, q) in zip(tt, terms)]'
           'return (Matrix([cc]), Matrix([tt]))' };
 
-  [c, t] = python_cmd (cmd, p, x, all);
+  [c, t] = pycall_sympy__ (cmd, p, x, all);
 
   %% SMT compat:
   % reverse the order if t is not output.

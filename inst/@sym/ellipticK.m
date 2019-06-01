@@ -51,7 +51,7 @@
 %% Examples:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% diff (ellipticK (m), m)
 %%   @result{} (sym)
 %%       -(1 - m)⋅K(m) + E(m)

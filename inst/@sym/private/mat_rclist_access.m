@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,8 +25,6 @@
 %%
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_rclist_access(A, r, c)
 
@@ -45,5 +43,5 @@ function z = mat_rclist_access(A, r, c)
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd (cmd, A, rr, cc);
+  z = pycall_sympy__ (cmd, A, rr, cc);
 end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,8 +60,6 @@
 %% @seealso{@@sym/transpose, @@sym/conj}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = ctranspose(x)
 
@@ -86,7 +84,7 @@ function z = ctranspose(x)
           'else:'
           '    return x.conjugate()' };
 
-  z = python_cmd (cmd, x);
+  z = pycall_sympy__ (cmd, x);
 
 end
 

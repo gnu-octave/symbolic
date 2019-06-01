@@ -55,7 +55,7 @@ function y = euler (m, x)
   if (nargin == 1)
     y = zeros (size (m));
     cmd = { 'return [float(euler(sp.Integer(m))) for m in _ins[0]],' };
-    c = python_cmd (cmd, num2cell (m(:)));
+    c = pycall_sympy__ (cmd, num2cell (m(:)));
     for i = 1:numel (c)
       y(i) = c{i};
     end
@@ -78,7 +78,7 @@ function y = euler (m, x)
           '    Lx = Lx*len(Lm)'
           'c = [complex(euler(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (m(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (m(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

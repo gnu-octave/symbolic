@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -49,7 +49,7 @@ function [n, d] = numden(x)
     print_usage ()
   end
 
-  [n, d] = python_cmd ('return (sympy.numer(*_ins), sympy.denom(*_ins))', sym(x));
+  [n, d] = pycall_sympy__ ('return (sympy.numer(*_ins), sympy.denom(*_ins))', sym(x));
 
 end
 

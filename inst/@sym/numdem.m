@@ -1,4 +1,4 @@
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -88,7 +88,7 @@ function [N, D] = numdem(f)
           '    n[i], d[i] = fraction(f[i])'
           'return n, d' };
 
-  [N, D] = python_cmd (cmd, f);
+  [N, D] = pycall_sympy__ (cmd, f);
 
 end
 

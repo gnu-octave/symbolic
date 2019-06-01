@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,7 +63,7 @@ function L = findsymbols(obj, dosort)
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
-    L = python_cmd (cmd, obj);
+    L = pycall_sympy__ (cmd, obj);
 
 
   elseif iscell(obj)

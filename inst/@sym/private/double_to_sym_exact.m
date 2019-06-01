@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,13 +26,13 @@
 
 function y = double_to_sym_exact (x)
   if (isnan (x))
-    y = python_cmd ('return S.NaN');
+    y = pycall_sympy__ ('return S.NaN');
   elseif (isinf (x) && x < 0)
-    y = python_cmd ('return -S.Infinity');
+    y = pycall_sympy__ ('return -S.Infinity');
   elseif (isinf (x))
-    y = python_cmd ('return S.Infinity');
+    y = pycall_sympy__ ('return S.Infinity');
   else
     %% Rational will exactly convert from a float
-    y = python_cmd ('return Rational(_ins[0])', x);
+    y = pycall_sympy__ ('return Rational(_ins[0])', x);
   end
 end

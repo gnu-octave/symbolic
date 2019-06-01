@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -96,6 +96,6 @@ function z = elementwise_op(scalar_fcn, varargin)
           '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
           'return q' ];
 
-  z = python_cmd (cmd, varargin{:});
+  z = pycall_sympy__ (cmd, varargin{:});
 
 end

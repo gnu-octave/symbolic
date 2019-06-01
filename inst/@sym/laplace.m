@@ -137,7 +137,7 @@ function F = laplace(varargin)
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd, f, t);
+    F = pycall_sympy__ (cmd, f, t);
 
   elseif (nargin == 2)
     s = sym(varargin{2});
@@ -148,7 +148,7 @@ function F = laplace(varargin)
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd, f, t, s);
+    F = pycall_sympy__ (cmd, f, t, s);
 
   elseif (nargin == 3)
     t = sym(varargin{2});
@@ -160,7 +160,7 @@ function F = laplace(varargin)
             'else:'
             '    return F[0],'};
 
-    F = python_cmd(cmd, f, t, s);
+    F = pycall_sympy__ (cmd, f, t, s);
 
   else
     print_usage ();

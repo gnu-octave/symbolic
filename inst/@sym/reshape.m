@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,7 +83,7 @@ function z = reshape(a, n, m)
       '        raise ValueError("cannot reshape scalar to non-1x1 size")'
       '    return A' };
 
-  z = python_cmd (cmd, sym(a), int32(n), int32(m));
+  z = pycall_sympy__ (cmd, sym(a), int32(n), int32(m));
 
 end
 

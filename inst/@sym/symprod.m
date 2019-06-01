@@ -47,7 +47,7 @@
 %% @example
 %% @group
 %% syms x m
-%% @c doctest: +SKIP_UNLESS(python_cmd('return Version(spver) > Version("1.3")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% symprod(sin(x), x, [1 m])
 %%   @result{} (sym)
 %%         m
@@ -121,7 +121,7 @@ function S = symprod(f, n, a, b)
           'S = sp.product(f, (n, a, b))'
           'return S,' };
 
-  S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
+  S = pycall_sympy__ (cmd, sym(f), sym(n), sym(a), sym(b));
 
 end
 

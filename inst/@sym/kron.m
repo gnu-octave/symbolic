@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Utkarsh Gautam
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -66,7 +66,7 @@ function c = kron (a, b)
             'from sympy.physics.quantum import TensorProduct'
             'return TensorProduct(Matrix(a), Matrix(b))'
           };
-    c = python_cmd (cmd, sym(a), sym(b));
+    c = pycall_sympy__ (cmd, sym(a), sym(b));
   end
 end
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -80,10 +80,10 @@ function y = prod(x, n)
           '    B[i] = prod(A.row(i))'
           'return B' };
   if (n == 1)
-    y = python_cmd (cmd, transpose(x));
+    y = pycall_sympy__ (cmd, transpose(x));
     y = transpose(y);
   elseif (n == 2)
-    y = python_cmd (cmd, x);
+    y = pycall_sympy__ (cmd, x);
   else
     print_usage ();
   end

@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017-2018 Colin B. Macdonald
+%% Copyright (C) 2017-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -93,7 +93,7 @@ function y = charpoly(varargin)
   for i = 1:nargin
     varargin{i} = sym(varargin{i});
   end
-  y = python_cmd(cmd, varargin{:});
+  y = pycall_sympy__ (cmd, varargin{:});
 
 end
 

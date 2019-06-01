@@ -171,7 +171,7 @@ function [soln,classify] = dsolve(ode,varargin)
   % FIXME: might be nice to expose SymPy's "sp.ode.classify_sysode" and
   %        "sp.ode.classify_ode" with their own commands
   if (isscalar(ode) && nargout==2)
-    classify = python_cmd ('return sp.ode.classify_ode(_ins[0])[0],', ode);
+    classify = pycall_sympy__ ('return sp.ode.classify_ode(_ins[0])[0],', ode);
   elseif(~isscalar(ode) && nargout==2)
     warning('Classification of systems of ODEs is currently not supported')
     classify='';
@@ -184,7 +184,7 @@ function [soln,classify] = dsolve(ode,varargin)
           '    ics2[s.lhs] = s.rhs'
           'sol = sp.dsolve(ode, ics=ics2)'
           'return sol,' };
-  soln = python_cmd (cmd, ode, varargin{:});
+  soln = pycall_sympy__ (cmd, ode, varargin{:});
 end
 
 

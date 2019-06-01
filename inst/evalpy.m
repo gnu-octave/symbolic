@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,11 +83,11 @@
 %% @end itemize
 %%
 %% Multiline code should be placed in a cell array, see the
-%% @code{python_cmd} documentation.
+%% @code{pycall_sympy__} documentation.
 %%
 %% Warning: evalpy is probably too smart for its own good.  It is
 %% intended for interactive use.  In your non-interactive code, you
-%% might want @code{python_cmd} instead.
+%% might want @code{pycall_sympy__} instead.
 %%
 %% Notes:
 %% @itemize
@@ -103,11 +103,9 @@
 %%   specify them as args.
 %% @end itemize
 %%
-%% @seealso{python_cmd}
+%% @seealso{pycall_sympy__}
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: python
 
 function evalpy(cmd, varargin)
 
@@ -180,7 +178,7 @@ function evalpy(cmd, varargin)
   %disp(fullcmd)
   %fprintf('\n*** </CODE> ***\n\n')
 
-  [names, values] = python_cmd (fullcmd, varargin{:});
+  [names, values] = pycall_sympy__ (fullcmd, varargin{:});
   assert (length(names) == length(values))
 
   % Make the visual display of the results deterministic.  Not easy to

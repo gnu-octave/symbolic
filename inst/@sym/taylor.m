@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2018, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %% Copyright (C) 2016 Lagu
 %%
@@ -160,7 +160,7 @@ function s = taylor(f, varargin)
 
   end
 
-  s = python_cmd (cmd, sym(f), sym(x), sym(a), n);
+  s = pycall_sympy__ (cmd, sym(f), sym(x), sym(a), n);
 
 end
 

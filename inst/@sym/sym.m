@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -362,7 +362,7 @@ function s = sym(x, varargin)
   elseif (isa (x, 'double'))  % Handle double/complex
     iscmplx = ~isreal (x);
     if (iscmplx && isequal (x, 1i))
-      s = python_cmd ('return S.ImaginaryUnit');
+      s = pycall_sympy__ ('return S.ImaginaryUnit');
       return
     elseif (iscmplx)
       xx = {real(x); imag(x)};
@@ -390,14 +390,14 @@ function s = sym(x, varargin)
     return
 
   elseif (isinteger (x)) % Handle integer vealues
-    s = python_cmd ('return Integer(*_ins)', x);
+    s = pycall_sympy__ ('return Integer(*_ins)', x);
     return
 
   elseif (islogical (x)) % Handle logical values
     if (x)
-      s = python_cmd ('return S.true');
+      s = pycall_sympy__ ('return S.true');
     else
-      s = python_cmd ('return S.false');
+      s = pycall_sympy__ ('return S.false');
     end
     return
   end
@@ -426,7 +426,7 @@ function s = sym(x, varargin)
     y = detect_special_str (x);
     if (~ isempty (y))
       assert (isempty (asm), 'Only symbols can have assumptions.')
-      s = python_cmd (['return ' y]);
+      s = pycall_sympy__ (['return ' y]);
       return
     end
 
@@ -449,7 +449,7 @@ function s = sym(x, varargin)
               '    else:'
               '        raise ValueError("something unexpected in assumptions")'
               'return Symbol(x, **d)' };
-      s = python_cmd (cmd, x, asm{:});
+      s = pycall_sympy__ (cmd, x, asm{:});
 
       if (nargin == 2 && sclear)
         % ---------------------------------------------
@@ -481,7 +481,7 @@ function s = sym(x, varargin)
       % Usually want rational output here (i.e., if input was "1.2").
       % But if input has words and parentheses it might be raw Sympy code.
       if (isempty (regexp (x, '\w\(.*\)')))
-        s = python_cmd (['return S("' x '", rational=True)']);
+        s = pycall_sympy__ (['return S("' x '", rational=True)']);
         return
       end
 
@@ -549,7 +549,7 @@ function s = sym(x, varargin)
              '        return (str(e), 1, "\", \"".join(str(e) for e in lis))'
              '    return (str(e), 2, 0)' };
 
-      [err flag s] = python_cmd (cmd, x, hint_symfun);
+      [err flag s] = pycall_sympy__ (cmd, x, hint_symfun);
 
       switch (flag)
         case 1  % Bad call to python function
@@ -969,7 +969,7 @@ end
 %! a = sym ('2.1');
 %! b = sym (21) / 10;
 %! %% https://github.com/sympy/sympy/issues/11703
-%! assert (python_cmd ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
+%! assert (pycall_sympy__ ('return _ins[0] == _ins[1] and hash(_ins[0]) == hash(_ins[1])', a, b))
 
 %!test
 %! % issue #706

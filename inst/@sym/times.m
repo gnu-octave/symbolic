@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,8 +46,6 @@
 %% @seealso{@@sym/power}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = times(x, y)
 
@@ -72,7 +70,7 @@ function z = times(x, y)
           '        return hadamard_product(x, y)'
           'return x*y' };
 
-  z = python_cmd (cmd, sym(x), sym(y));
+  z = pycall_sympy__ (cmd, sym(x), sym(y));
 
 end
 

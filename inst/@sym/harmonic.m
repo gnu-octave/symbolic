@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2018 Colin B. Macdonald
+%% Copyright (C) 2017-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -120,7 +120,7 @@ end
 
 %!test
 %! % round trip
-%! if (python_cmd ('return Version(spver) > Version("1.2")'))
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! y = sym('y');
 %! A = harmonic (7);
 %! f = harmonic (y);

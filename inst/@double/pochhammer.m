@@ -57,7 +57,7 @@ function y = pochhammer (n, x)
           'import mpmath'
           'c = [complex(mpmath.rf(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
           'return c,' };
-  c = python_cmd (cmd, num2cell (n(:)), num2cell (x(:)));
+  c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)
     y(i) = c{i};
   end

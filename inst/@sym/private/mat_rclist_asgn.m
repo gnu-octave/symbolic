@@ -75,7 +75,7 @@ function z = mat_rclist_asgn(A, r, c, B)
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = python_cmd (cmd, A, rr, cc, B);
+  z = pycall_sympy__ (cmd, A, rr, cc, B);
 
   % a simpler earlier version, but only for scalar r,c
   %cmd = { '(A, r, c, b) = _ins'

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -15,9 +15,6 @@
 %% You should have received a copy of the GNU General Public
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function [outflag,output] = codegen(varargin)
 
@@ -66,7 +63,7 @@ function [outflag,output] = codegen(varargin)
       fname2 = param.fname; fcnname = param.fname;
     end
     % was note here about findsymbols vs symvar ordering: not relevant
-    out = python_cmd (cmd, varargin{1}, fcnname, fname2, param.show_header, inputs);
+    out = pycall_sympy__ (cmd, varargin{1}, fcnname, fname2, param.show_header, inputs);
     C.name = out{1}{1};
     C.code = out{1}{2};
     H.name = out{2}{1};
@@ -107,7 +104,7 @@ function [outflag,output] = codegen(varargin)
     exprstrs = {};
     for i=1:Nout
       expr = varargin{i};
-      exprstr{i} = python_cmd (cmd, expr);
+      exprstr{i} = pycall_sympy__ (cmd, expr);
     end
 
     if (Nout == 1)

@@ -156,7 +156,7 @@ function [s1 s2] = sym_describe(x, unicode_dec)
   elseif (is_matrix_symbol)
     %if (any(isnan(d)))  % may not tell the truth
     if (any(isnan(x.size)))
-      [nn, mm] = python_cmd('return (_ins[0].rows, _ins[0].cols)', x);
+      [nn, mm] = pycall_sympy__ ('return (_ins[0].rows, _ins[0].cols)', x);
       numrstr = strtrim(disp(nn, 'flat'));
       numcstr = strtrim(disp(mm, 'flat'));
     else

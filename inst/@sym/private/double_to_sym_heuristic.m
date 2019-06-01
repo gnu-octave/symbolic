@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,23 +27,23 @@
 function y = double_to_sym_heuristic (x, ratwarn, argnstr)
   assert (isempty (argnstr))
   if (isnan (x))
-    y = python_cmd ('return S.NaN');
+    y = pycall_sympy__ ('return S.NaN');
   elseif (isinf (x) && x < 0)
-    y = python_cmd ('return -S.Infinity');
+    y = pycall_sympy__ ('return -S.Infinity');
   elseif (isinf (x))
-    y = python_cmd ('return S.Infinity');
+    y = pycall_sympy__ ('return S.Infinity');
   elseif (isequal (x, pi))
     %% Special case for pi
-    y = python_cmd ('return S.Pi');
+    y = pycall_sympy__ ('return S.Pi');
   elseif (isequal (x, -pi))
-    y = python_cmd ('return -S.Pi');
+    y = pycall_sympy__ ('return -S.Pi');
   elseif (isequal (x, exp (1)))
     %% Special case for e
-    y = python_cmd ('return sympy.exp(1)');
+    y = pycall_sympy__ ('return sympy.exp(1)');
   elseif (isequal (x, -exp (1)))
-    y = python_cmd ('return -sympy.exp(1)');
+    y = pycall_sympy__ ('return -sympy.exp(1)');
   elseif ((abs (x) < flintmax) && (mod (x, 1) == 0))
-    y = python_cmd ('return Integer(_ins[0])', int64 (x));
+    y = pycall_sympy__ ('return Integer(_ins[0])', int64 (x));
   else
     %% Find the nearest rational, rational*pi or sqrt(integer)
     if (ratwarn)
@@ -58,12 +58,12 @@ function y = double_to_sym_heuristic (x, ratwarn, argnstr)
     err3 = abs (sqrt (N3) - x);
     if (err1 <= err3)
       if (err1 <= err2)
-        y = python_cmd ('return Rational(*_ins)', int64 (N1), int64 (D1));
+        y = pycall_sympy__ ('return Rational(*_ins)', int64 (N1), int64 (D1));
       else
-        y = python_cmd ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
+        y = pycall_sympy__ ('return Rational(*_ins)*S.Pi', int64 (N2), int64 (D2));
       end
     else
-      y = python_cmd ('return sqrt(Integer(*_ins))', int64 (N3));
+      y = pycall_sympy__ ('return sqrt(Integer(*_ins))', int64 (N3));
     end
   end
 end

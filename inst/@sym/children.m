@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -97,7 +97,7 @@ function r = children(f)
     '    r = scalarfcn(f)'
     'return r,' };
 
-  r = python_cmd (cmd, f);
+  r = pycall_sympy__ (cmd, f);
 
   if (~isscalar(f))
     r = reshape(r, size(f));

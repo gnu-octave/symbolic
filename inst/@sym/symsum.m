@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -116,7 +116,7 @@ function S = symsum(f, n, a, b)
            'S = sp.summation(f, (n, a, b))'
            'return S,' };
 
-  S = python_cmd (cmd, sym(f), sym(n), sym(a), sym(b));
+  S = pycall_sympy__ (cmd, sym(f), sym(n), sym(a), sym(b));
 
 end
 
