@@ -18,55 +18,109 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @deftypemethod @@sym {@var{n}, @var{d} =} numden (@var{x})
-%% Extract numerator and denominator of symbolic expression.
+%% @deftypemethod @@sym {[@var{N}, @var{D}] =} numden (@var{f})
+%% Extract numerator and denominator of a symbolic expression.
 %%
 %% Examples:
 %% @example
 %% @group
-%% [n, d] = numden(sym(4)/5)
-%%   @result{} n = (sym) 4
-%%   @result{} d = (sym) 5
+%% f = sym(5)/6;
+%% [N, D] = numden (f)
+%%   @result{} N = (sym) 5
+%%   @result{} D = (sym) 6
+%% @end group
+%%
+%% @group
+%% syms x
+%% f = (x^2+2*x-1)/(2*x^3+9*x^2+6*x+3)
+%%   @result{} f = (sym)
+%%             2
+%%            x  + 2⋅x - 1
+%%       ─────────────────────
+%%          3      2
+%%       2⋅x  + 9⋅x  + 6⋅x + 3
+%%
+%% [N, D] = numden (f)
+%%   @result{} N = (sym)
+%%        2
+%%       x  + 2⋅x - 1
+%%
+%%   @result{} D = (sym)
+%%          3      2
+%%       2⋅x  + 9⋅x  + 6⋅x + 3
 %% @end group
 %% @end example
 %%
+%% @var{f} can be a matrix, for example:
 %% @example
 %% @group
-%% syms x y
-%% [n, d] = numden((x+y)/sin(x))
-%%   @result{} n = (sym) x + y
-%%   @result{} d = (sym) sin(x)
+%% f = [1/x  exp(x)  exp(-x)];
+%% @c  @result{} f = (sym 1×3 matrix)
+%% @c      ⎡1   x   -x⎤
+%% @c      ⎢─  ℯ   ℯ  ⎥
+%% @c      ⎣x         ⎦
+%% [N, D] = numden (f)
+%%   @result{} N = (sym 1×3 matrix)
+%%       ⎡    x   ⎤
+%%       ⎣1  ℯ   1⎦
+%%
+%%   @result{} D = (sym 1×3 matrix)
+%%       ⎡       x⎤
+%%       ⎣x  1  ℯ ⎦
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/coeffs, @@sym/children, @@sym/lhs, @@sym/rhs}
+%% @seealso{@@sym/partfrac, @@sym/children, @@sym/coeffs, @@sym/children, @@sym/lhs, @@sym/rhs}
 %% @end deftypemethod
 
 
-function [n, d] = numden(x)
+function [N, D] = numden (f)
 
   if (nargin ~= 1)
-    print_usage ()
+    print_usage ();
   end
 
-  [n, d] = pycall_sympy__ ('return (sympy.numer(*_ins), sympy.denom(*_ins))', sym(x));
+  cmd = { 'f, = _ins'
+          'if not isinstance(f, MatrixBase):'
+          '    return fraction(f)'
+          'n = f.as_mutable()'
+          'd = n.copy()'
+          'for i in range(0, len(n)):'
+          '    n[i], d[i] = fraction(f[i])'
+          'return n, d' };
+
+  [N, D] = pycall_sympy__ (cmd, f);
 
 end
 
 
+%!error <Invalid> numden (sym(1), 2)
+
 %!test
-%! [n, d] = numden(sym(2));
+%! syms x
+%! [n, d] = numden (1/x);
+%! assert (isequal (n, sym(1)) && isequal (d, x))
+
+%!test
+%! syms x y
+%! n1 = [sym(1); x];
+%! d1 = [x; y];
+%! [n, d] = numden (n1 ./ d1);
+%! assert (isequal (n, n1) && isequal (d, d1))
+
+%!test
+%! [n, d] = numden (sym(2));
 %! assert (isequal (n, 2));
 %! assert (isequal (d, 1));
 
 %!test
 %! syms x y
-%! [n, d] = numden((x + pi)/(y + 6));
+%! [n, d] = numden ((x + pi)/(y + 6));
 %! assert (isequal (n, x + pi));
 %! assert (isequal (d, y + 6));
 
 %!test
 %! syms x y
-%! [n, d] = numden((x^2 + y^2)/(x*y));
+%! [n, d] = numden ((x^2 + y^2)/(x*y));
 %! assert (isequal (n, x^2 + y^2));
 %! assert (isequal (d, x*y));
