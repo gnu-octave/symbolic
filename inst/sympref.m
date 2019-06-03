@@ -107,12 +107,14 @@
 %% @end group
 %% @end example
 %%
-%% The default will typically be the @code{popen2} mechanism which
-%% uses a pipe to communicate with Python and should be fairly fast.
-%% If that doesn't work, try @code{sympref display system} which is
-%% much slower, as a new Python
-%% process is started for each operation (many commands use more
-%% than one operation).
+%% If the @uref{https://gitlab.com/mtmiller/octave-pythonic, Pythonic package}
+%% is loaded, the default will be the @code{native} mechanism.
+%%
+%% Otherwise, typically the @code{popen2} mechanism will be used,
+%% which uses a pipe to communicate with Python and should be fairly
+%% fast.  If that doesn't work, try @code{sympref ipc system} which is
+%% much slower, as a new Python process is started for each operation
+%% (many commands use more than one operation).
 %% Other options for @code{sympref ipc} include:
 %% @itemize
 %% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,

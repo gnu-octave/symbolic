@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
@@ -96,7 +96,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   end
 
   if (verbose && isempty (show_msg))
-    fprintf ('Using experimental Python/C communications, SymPy v%s.\n', ...
+    fprintf ('using Pythonic interface, SymPy v%s.\n', ...
              char (py.sympy.__version__))
     show_msg = true;
   end
