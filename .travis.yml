@@ -51,7 +51,7 @@ matrix:
 
 before_install:
 - docker pull mtmiller/octave:${OCT}
-- docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --env=PYTHON_VERSION=${PYTHON_VERSION} --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
+- docker run --name=oc --detach --init --env=LC_ALL=C.UTF-8 --env=PYTHON_VERSION=${PYTHON_VERSION} --env=PYTHON=python${PYTHON_VERSION} --volume=$PWD:/octsympy:z mtmiller/octave:${OCT} sleep inf
 
 install:
 - docker exec oc pip${PYTHON_VERSION} install sympy==${SYMPY_VER}
@@ -73,10 +73,10 @@ install:
 script:
 - stty cols $COLUMNS rows 40
 - tput cols; stty size
-- docker exec oc env PYTHON=python${PYTHON_VERSION} make -C octsympy test;
+- docker exec oc make -C octsympy test;
 - docker exec oc cat octsympy/fntests.log
 - if [ "x$DOCTEST" = "xyes" ]; then
-      docker exec oc env PYTHON=python${PYTHON_VERSION} make -C octsympy doctest;
+      docker exec oc make -C octsympy doctest;
   fi
 
 after_script:
