@@ -334,7 +334,13 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     case 'diagnose'
-      assert_have_python_and_sympy (sympref ('python'), true)
+      if (strcmp (lower (sympref ('ipc')), 'default') &&
+          exist ('pyversion') && exist ('pyexec') && exist ('pyeval'))
+        % TODO: see note in ipc_native
+        assert_pythonic_and_sympy (true)
+      else
+        assert_have_python_and_sympy (sympref ('python'), true)
+      end
 
     otherwise
       error ('sympref: invalid preference or command ''%s''', lower (cmd));

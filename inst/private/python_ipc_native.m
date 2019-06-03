@@ -51,6 +51,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   verbose = ~sympref('quiet');
 
   if (verbose && isempty(show_msg))
+    assert_pythonic_and_sympy ()
     fprintf ('Symbolic pkg v%s: ', sympref ('version'))
   end
 
