@@ -33,15 +33,21 @@ matrix:
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
   - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
-  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
   - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
-  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=yes COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=dev SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=dev SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=dev SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=dev SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
   allow_failures:
   - env: PYTHON_VERSION=3 PYTHONIC=no  SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
   - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
-  - env: PYTHON_VERSION=3 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
   - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
-  - env: PYTHON_VERSION=2 PYTHONIC=yes SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=dev SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=3 PYTHONIC=dev SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=dev SYMPY_VER=1.4 OCT=devel DOCTEST=no  COLUMNS=80
+  - env: PYTHON_VERSION=2 PYTHONIC=dev SYMPY_VER=1.4 OCT=5     DOCTEST=no  COLUMNS=80
 
 before_install:
 - docker pull mtmiller/octave:${OCT}
@@ -53,21 +59,24 @@ install:
       docker exec oc octave --eval "pkg install -forge doctest";
   fi
 - if [ "x$PYTHONIC" = "xyes" ]; then
+      docker exec oc octave --eval "pkg install https://octave-pythonic-downloads.s3.amazonaws.com/releases/octave-pythonic-0.0.1.tar.gz";
+  fi
+- if [ "x$PYTHONIC" = "xdev" ]; then
       docker exec oc octave --eval "pkg install https://gitlab.com/mtmiller/octave-pythonic/-/archive/master/octave-pythonic-master.tar.gz";
   fi
+- if [ "x$PYTHONIC" = "xno" ]; then
+      docker exec oc octave --eval "f=fopen('~/.octaverc','a');fprintf(f,'#empty\n');fclose(f)";
+  else
+      docker exec oc octave --eval "f=fopen('~/.octaverc','a');fprintf(f,'pkg load pythonic\n');fclose(f)";
+  fi
 
-# TODO: doctest doesn't work with PYTHONIC
 script:
 - stty cols $COLUMNS rows 40
 - tput cols; stty size
-- if [ "x$PYTHONIC" = "xyes" ]; then
-      docker exec oc env PYTHON=python${PYTHON_VERSION} octave -W --path=/octsympy/inst --eval "pkg load pythonic; cd octsympy; sympref ipc native; r = octsympy_tests; exit(r)";
-  else
-      docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} test;
-  fi
+- docker exec oc env PYTHON=python${PYTHON_VERSION} make -C octsympy test;
 - docker exec oc cat octsympy/fntests.log
 - if [ "x$DOCTEST" = "xyes" ]; then
-      docker exec oc make -C octsympy PYTHON=python${PYTHON_VERSION} doctest;
+      docker exec oc env PYTHON=python${PYTHON_VERSION} make -C octsympy doctest;
   fi
 
 after_script:
