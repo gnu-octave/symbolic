@@ -38,28 +38,6 @@
 %%   @print{} ...
 %% @end example
 %%
-%% Get the name of the @strong{Python executable}:
-%% @example
-%% @comment doctest: +SKIP
-%% sympref python
-%%   @result{} ans = python
-%% @end example
-%%
-%% Changing the Python executable might help if you've installed
-%% a local Python interpreter somewhere else on your system.
-%% The value can be changed by setting the environment variable
-%% @code{PYTHON}, which can be configured in the OS, or it can be
-%% set within Octave using:
-%% @example
-%% @comment doctest: +SKIP
-%% setenv PYTHON python3
-%% setenv PYTHON $@{HOME@}/.local/bin/python
-%% setenv PYTHON C:\Python\python.exe
-%% sympref reset
-%% @end example
-%% If the environment variable is empty or not set, the package
-%% uses a default setting (often @code{python}).
-%%
 %%
 %% @strong{Display} of syms:
 %%
@@ -107,19 +85,18 @@
 %% @end group
 %% @end example
 %%
-%% If the @uref{https://gitlab.com/mtmiller/octave-pythonic, Pythonic package}
-%% is loaded, the default will be the @code{native} mechanism.
-%%
+%% This default depends on your system.  If you have loaded the
+%% @uref{https://gitlab.com/mtmiller/octave-pythonic, Pythonic package},
+%% the default will be the @code{native} mechanism.
 %% Otherwise, typically the @code{popen2} mechanism will be used,
-%% which uses a pipe to communicate with Python and should be fairly
-%% fast.  If that doesn't work, try @code{sympref ipc system} which is
-%% much slower, as a new Python process is started for each operation
-%% (many commands use more than one operation).
+%% which uses a pipe to communicate with Python.
+%% If that doesn't work, try @code{sympref ipc system} which is
+%% much slower, as a new Python process is started for each operation.
+%%
 %% Other options for @code{sympref ipc} include:
 %% @itemize
-%% @item @code{sympref ipc popen2}: force popen2 choice (e.g.,
-%% on Matlab where it would not be the default).
-%% @item @code{sympref ipc native}: use native Python/C interface to
+%% @item @code{sympref ipc popen2}: force popen2 choice.
+%% @item @code{sympref ipc native}: use the @code{py} interface to
 %% interact directly with an embedded Python interpreter, e.g.,
 %% provided by the Octave Pythonic package.
 %% @item @code{sympref ipc system}: construct a long string of
@@ -128,12 +105,34 @@
 %% string for the commands, except on Windows where a long one-line
 %% string is used.
 %% @item @code{sympref ipc systmpfile}: output the python commands
-%% to a @code{tmp_python_cmd.py} file and then call that [for
-%% debugging, may not be supported long-term].
+%% to a @code{tmp_python_cmd.py} file and then call that.
+%% For debugging, will not be supported long-term.
 %% @item @code{sympref ipc sysoneline}: put the python commands all
 %% on one line and pass to @code{python -c} using a call to @code{system()}.
-%% [for debugging, may not be supported long-term].
+%% For debugging, will not be supported long-term.
 %% @end itemize
+%%
+%% Except for @code{native}, all of these communication interfaces
+%% depend on the current @strong{Python executable}, which can be queried:
+%% @example
+%% @comment doctest: +SKIP
+%% sympref python
+%%   @result{} ans = python
+%% @end example
+%% Changing this might help if you've installed
+%% a local Python interpreter somewhere else on your system.
+%% The value can be changed by setting the environment variable
+%% @code{PYTHON}, which can be configured in the OS, or it can be
+%% set within Octave using:
+%% @example
+%% @comment doctest: +SKIP
+%% setenv PYTHON python3
+%% setenv PYTHON $@{HOME@}/.local/bin/python
+%% setenv PYTHON C:\Python\python.exe
+%% sympref reset
+%% @end example
+%% If the environment variable is empty or not set, the package
+%% uses a default setting (often @code{python}).
 %%
 %%
 %% @strong{Reset}: reset the SymPy communication mechanism.  This can be
