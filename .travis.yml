@@ -67,7 +67,7 @@ install:
       docker exec oc octave --eval "pkg install https://gitlab.com/mtmiller/octave-pythonic/-/archive/master/octave-pythonic-master.tar.gz";
   fi
 - if [ "x$PYTHONIC" != "xno" ]; then
-      docker exec oc octave --eval "f=fopen('~/.octaverc','a');fprintf(f,'pkg load pythonic\n');fclose(f)";
+      docker exec oc bash -c "echo 'pkg load pythonic' >> ~/.octaverc";
   fi
 
 script:
