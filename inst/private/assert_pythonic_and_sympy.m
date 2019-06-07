@@ -125,14 +125,14 @@ function assert_pythonic_and_sympy (verbose)
 
   if (verbose)
     disp ('')
-    fprintf ('SymPy must be at least version %s; you have version "%s".\n', ...
+    fprintf ('SymPy must be at least version %s; you have version %s.\n', ...
              minsympyver, spver);
   end
 
   if (~ exist ('OCTAVE_VERSION', 'builtin'))
     % no compare_versions on matlab, just assume its ok (!)
     if (verbose)
-      disp ('We cannot automatically compare versions on your system: please verify above.')
+      disp ('We cannot easily compare versions on your system: please verify the above.')
     end
   else
     if (compare_versions (spver, minsympyver, '<'))
@@ -150,6 +150,7 @@ function assert_pythonic_and_sympy (verbose)
   end
 
   if (verbose)
+    disp ('')
     disp ('Good, a working version of SymPy is installed.')
     disp ('')
   end
