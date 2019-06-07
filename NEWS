@@ -1,6 +1,9 @@
 octsympy 2.8.0+
 ===============
 
+  * If the Pythonic package is loaded, automatically use it for Python
+    communication (see `help sympref` for details).
+
   * Deprecation notice: `python_cmd` will be removed in a future release.
 
 
