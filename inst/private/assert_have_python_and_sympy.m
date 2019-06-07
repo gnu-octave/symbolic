@@ -148,7 +148,7 @@ function assert_have_python_and_sympy (pyexec, verbose)
   if (~ exist ('OCTAVE_VERSION', 'builtin'))
     % no compare_versions on matlab, just assume its ok (!)
     if (verbose)
-      disp ('We cannot automatically compare versions on Matlab: please verify above.')
+      disp ('We cannot easily compare versions on your system: please verify the above.')
     end
   else
     if (compare_versions (spver, minsympyver, '<'))

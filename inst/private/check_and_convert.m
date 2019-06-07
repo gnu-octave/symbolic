@@ -68,8 +68,9 @@ function obj = check_and_convert(var_pyobj)
       end
       obj{i} = int64 (x);
     else
-      x
-      warning('something was not converted from pyobject')
+      warning ('OctSymPy:pythonic_no_convert',
+               sprintf ('something was not converted from pyobject: %s',
+                       char (x)))
       obj{i} = x;
     end
   end

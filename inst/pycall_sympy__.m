@@ -449,14 +449,16 @@ end
 %! a = pycall_sympy__ ('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
 
-%!error <does not know how to export type>
-%! % This command does not fail with native interface and '@pyobject'
-%! if (strcmp (sympref  ('ipc'), 'native'))
-%!   error ('does not know how to export type')
-%! else
-%!   pycall_sympy__ ({'return type(int)'});
-%! end
 %!test
+%! % This command does not fail with native interface and '@pyobject'
+%! s = warning ('off', 'OctSymPy:pythonic_no_convert');
+%! try
+%!   q = pycall_sympy__ ({'return type(int)'});
+%! catch
+%!   msg = lasterror.message;
+%!   assert (~ isempty (regexp (msg, '.*does not know how to.*')))
+%! end
+%! warning (s)
 %! % ...and after the above test, the pipe should still work
 %! a = pycall_sympy__ ('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))

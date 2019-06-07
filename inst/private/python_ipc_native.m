@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
 %% This file is part of OctSymPy.
@@ -51,6 +51,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   verbose = ~sympref('quiet');
 
   if (verbose && isempty(show_msg))
+    assert_pythonic_and_sympy ()
     fprintf ('Symbolic pkg v%s: ', sympref ('version'))
   end
 
@@ -81,6 +82,14 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'import itertools'
                     'import collections'
                     'from re import split'
+                    '# patch pretty printer, issue #952'
+                    '_mypp = pretty.__globals__["PrettyPrinter"]'
+                    'def _my_rev_print(cls, f, **kwargs):'
+                    '    g = f.func(*reversed(f.args), evaluate=False)'
+                    '    return cls._print_Function(g, **kwargs)'
+                    '_mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name="lambertw")'
+                    '_mypp._print_sinc = lambda cls, f: cls._print_Function(f.func(f.args[0]/sp.pi, evaluate=False))'
+                    'del _mypp'
                     'def dictdiff(a, b):'
                     '    """ keys from a that are not in b, used by evalpy() """'
                     '    n = dict()'
@@ -96,7 +105,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   end
 
   if (verbose && isempty (show_msg))
-    fprintf ('Using experimental Python/C communications, SymPy v%s.\n', ...
+    fprintf ('using Pythonic interface, SymPy v%s.\n', ...
              char (py.sympy.__version__))
     show_msg = true;
   end
