@@ -80,3 +80,6 @@ end
 %!       -0.74701205140887967022e7 - 0.10381447401236722090e8*1i ];
 %! B = sinhint (x);
 %! assert (A, B, -eps)
+
+%!assert (sinhint (inf), inf)
+%!assert (sinhint (-inf), -inf)

@@ -80,3 +80,6 @@ end
 %!        0.15391592966931193100e26  - 0.75738824160998910388e24*1i ];
 %! B = fresnelc (x);
 %! assert (A, B, -eps)
+
+%!assert (fresnelc (inf), 0.5)
+%!assert (fresnelc (-inf), -0.5)
