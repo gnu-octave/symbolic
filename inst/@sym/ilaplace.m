@@ -50,8 +50,9 @@
 %% @group
 %% syms s t
 %% F = 1/s^2;
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ilaplace(F, s, t)
-%%   @result{} (sym) t⋅Heaviside(t)
+%%   @result{} (sym) t⋅θ(t)
 %% @end group
 %% @end example
 %%

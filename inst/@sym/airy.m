@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,20 +29,25 @@
 %% @example
 %% @group
 %% syms z
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% Ai = airy(0, z)
-%%   @result{} Ai = (sym) airyai(z)
+%%   @result{} Ai = (sym) Ai(z)
 %%
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% Bi = airy(2, z)
-%%   @result{} Bi = (sym) airybi(z)
+%%   @result{} Bi = (sym) Bi(z)
 %%
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% Bi_prime = airy(3, z)
-%%   @result{} Bi_prime = (sym) airybi′(z)
+%%   @result{} Bi_prime = (sym) Bi'(z)
 %%
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% diff(Bi, z)
-%%   @result{} (sym) airybi′(z)
+%%   @result{} (sym) Bi'(z)
 %%
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% diff(Bi, z, z)
-%%   @result{} (sym) z⋅airybi(z)
+%%   @result{} (sym) z⋅Bi(z)
 %% @end group
 %% @end example
 %%

@@ -39,8 +39,9 @@
 %% @group
 %% syms n m integer
 %% A = sym('A', [n m]);
-%% A.*A
-%%   @result{} ans = (sym) A∘A
+%% B = sym('B', [n m]);
+%% A.*B
+%%   @result{} ans = (sym) A∘B
 %% @end group
 %% @end example
 %% @seealso{@@sym/power}

@@ -27,16 +27,17 @@
 %% syms n integer
 %% y = harmonic (n)
 %%   @result{} y = (sym) harmonic(n)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% rewrite (y, 'Sum')
 %%   @result{} (sym)
 %%
 %%         n
 %%        ____
 %%        ╲
-%%         ╲   1
-%%          ╲  ─
-%%          ╱  k
-%%         ╱
+%%         ╲
+%%          ╲  1
+%%          ╱  ─
+%%         ╱   k
 %%        ╱
 %%        ‾‾‾‾
 %%       k = 1
