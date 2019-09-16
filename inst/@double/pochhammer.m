@@ -93,16 +93,17 @@ end
 %! B = pochhammer ([0.9 0.8], [3.1 4.2]);
 %! assert (A, B, -3*eps);
 
-%!xtest
-%! % broken upstream, https://github.com/sympy/sympy/issues/14822
+%!test
 %! % x matrix, s scalar
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! y = [1 2 sym(pi); exp(sym(1)) 5 6];
 %! t = sym(2);
 %! x = double (y);
 %! s = 2;
 %! A = pochhammer (s, x);
 %! B = double (pochhammer (t, y));
-%! assert (A, B, -eps);
+%! assert (A, B, -3*eps);
+%! end
 
 %!test
 %! % s matrix, x scalar
