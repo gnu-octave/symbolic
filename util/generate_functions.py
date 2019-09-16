@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2014-2016 Colin B. Macdonald
@@ -191,7 +191,7 @@ def autogen_functions(L, where):
     for d in L:
         f = d['name']
         fname = '%s/@sym/%s.m' % (where,f)
-        print fname
+        print(fname)
 
         fd = open(fname, "w")
 
@@ -212,7 +212,7 @@ def autogen_functions(L, where):
             ystr = "\n" + "\n".join(lines)
         else:
             ystr = " " + ystr
-        yutf8 = ystr.encode('utf-8')
+        yutf8 = ystr  # old python2: ystr.encode('utf-8')
 
         body = \
 """
@@ -297,7 +297,7 @@ def autogen_numerical_functions(L, where):
 def make_numerical_fcn(d, where):
     f = d['name']
     fname = '%s/%s.m' % (where,f)
-    print fname
+    print(fname)
 
     fd = open(fname, "w")
 
@@ -369,25 +369,25 @@ end
 
 
 def print_usage():
-    print """
+    print("""
   Run this script with one argument:
     python generate_functions install:  make m files in ../inst/@sym
     python generate_functions clean:  remove them from above
-"""
+""")
 
 if __name__ == "__main__":
     L = process_input_list(input_list)
     Lnum = process_numerical_list(numerical_list)
-    print sys.argv
+    print(sys.argv)
     if len(sys.argv) <= 1:
         print_usage()
     elif sys.argv[1] == 'install':
-        print "***** Generating numerical .m file code ****"
+        print("***** Generating numerical .m file code ****")
         autogen_numerical_functions(Lnum, '../inst/@double')
-        print "***** Generating code for .m files from template ****"
+        print("***** Generating code for .m files from template ****")
         autogen_functions(L, '../inst')
     elif sys.argv[1] == 'clean':
-        print "cleaning up"
+        print("cleaning up")
         remove_all(L)
     else:
         print_usage()
