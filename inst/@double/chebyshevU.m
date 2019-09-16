@@ -96,7 +96,7 @@ function y = chebyshevU (n, x)
           '    Ln = Ln*len(Lx)'
           'if len(Ln) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Ln)'
-          'c = [complex(mpmath.chebyu(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
+          'c = [complex(mpmath.chebyu(n, x)) for n,x in zip(Ln, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)

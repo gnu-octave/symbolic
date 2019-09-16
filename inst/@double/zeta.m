@@ -49,7 +49,7 @@ function y = zeta (n, x)
   if (nargin == 1)
     x = n;
     cmd = { 'L = _ins[0]'
-            'A = [complex(mpmath.zeta(complex(x))) for x in L]'
+            'A = [complex(mpmath.zeta(x)) for x in L]'
             'return A,' };
     c = pycall_sympy__ (cmd, num2cell (x(:)));
     y = reshape (cell2mat (c), size (x));

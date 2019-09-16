@@ -70,7 +70,7 @@ function y = bernoulli (m, x)
           '    Lm = Lm*len(Lx)'
           'if len(Lm) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Lm)'
-          'c = [complex(mpmath.bernpoly(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
+          'c = [complex(mpmath.bernpoly(int(m), x)) for m,x in zip(Lm, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (m(:)), num2cell (x(:)));
   for i = 1:numel (c)

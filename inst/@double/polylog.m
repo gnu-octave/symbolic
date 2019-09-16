@@ -61,7 +61,7 @@ function y = polylog (s, x)
           '    Ls = Ls*len(Lx)'
           'if len(Ls) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Ls)'
-          'c = [complex(polylog(complex(s), complex(x))) for s,x in zip(Ls, Lx)]'
+          'c = [complex(polylog(s, x)) for s,x in zip(Ls, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (s(:)), num2cell (x(:)));
   for i = 1:numel (c)

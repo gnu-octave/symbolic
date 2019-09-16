@@ -43,7 +43,7 @@ function y = dilog (x)
     print_usage ();
   end
   cmd = { 'L = _ins[0]'
-          'A = [complex(mpmath.polylog(2, complex(1-x))) for x in L]'
+          'A = [complex(mpmath.polylog(2, 1-x)) for x in L]'
           'return A,' };
   c = pycall_sympy__ (cmd, num2cell(x(:)));
   assert (numel (c) == numel (x))
