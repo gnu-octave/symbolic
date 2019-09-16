@@ -25,6 +25,7 @@ def echo_exception_stdout(mystr):
 
 try:
     import sympy
+    import mpmath
     import sympy as sp
     from sympy import __version__ as spver
     # need this to reactivate from srepr

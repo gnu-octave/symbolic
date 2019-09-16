@@ -70,7 +70,7 @@ function y = bernoulli (m, x)
           '    Lm = Lm*len(Lx)'
           'if len(Lm) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Lm)'
-          'c = [complex(bernoulli(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
+          'c = [complex(mpmath.bernpoly(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (m(:)), num2cell (x(:)));
   for i = 1:numel (c)
@@ -94,7 +94,7 @@ end
 %! B = double (bernoulli (n));
 %! assert (A, B, -eps);
 
-%!xtest
+%!test
 %! m = [0 1; 2 4];
 %! n = sym(m);
 %! A = bernoulli (m);
@@ -110,10 +110,11 @@ end
 %! B = double (bernoulli (n, y));
 %! assert (A, B, -eps);
 
-%!xtest
-%! % these give nan, need upstream fix in sympy
+%!test
 %! assert (isequal (bernoulli (4, inf), inf))
 %! assert (isequal (bernoulli (4, -inf), inf))
+%!xtest
+%! % still broken?
 %! assert (isequal (bernoulli (3, inf), inf))
 %! assert (isequal (bernoulli (3, -inf), -inf))
 

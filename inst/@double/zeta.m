@@ -32,7 +32,7 @@
 %%
 %% @strong{Note} this function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation
-%% but rather the numerical evaluation of the SymPy function
+%% but rather the numerical evaluation of the Python @code{mpmath} function
 %% @code{zeta}.
 %%
 %% TODO: The two-argument form is not yet implemented.
@@ -49,7 +49,7 @@ function y = zeta (n, x)
   if (nargin == 1)
     x = n;
     cmd = { 'L = _ins[0]'
-            'A = [complex(zeta(complex(x))) for x in L]'
+            'A = [complex(mpmath.zeta(complex(x))) for x in L]'
             'return A,' };
     c = pycall_sympy__ (cmd, num2cell (x(:)));
     y = reshape (cell2mat (c), size (x));

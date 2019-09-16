@@ -35,7 +35,7 @@
 %%
 %% @strong{Note} this function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation
-%% but rather the numerical evaluation of the SymPy function
+%% but rather the numerical evaluation of the Python @code{mpmath} function
 %% @code{polylog}.
 %%
 %% @seealso{@@sym/polylog}

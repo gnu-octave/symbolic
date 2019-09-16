@@ -1,4 +1,4 @@
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,15 +46,12 @@ function y = pochhammer (n, x)
     error ('pochhammer: inputs N and X must have compatible sizes')
   end
 
-  % TODO: Sympy's RisingFactorial doesn't work so we call mpmath here
-  % https://github.com/sympy/sympy/issues/14822
   cmd = { 'Ln = _ins[0]'
           'Lx = _ins[1]'
           'if len(Ln) == 1 and len(Lx) != 1:'
           '    Ln = Ln*len(Lx)'
           'if len(Ln) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Ln)'
-          'import mpmath'
           'c = [complex(mpmath.rf(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));

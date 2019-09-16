@@ -40,7 +40,7 @@
 %%
 %% This function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation
-%% but rather the numerical evaluation of the SymPy function
+%% but rather the numerical evaluation of the Python @code{mpmath} function
 %% @code{chebyshevt}.
 %%
 %% @seealso{@@sym/chebychevT, @@double/chebyshevU}
@@ -66,7 +66,7 @@ function y = chebyshevT (n, x)
           '    Ln = Ln*len(Lx)'
           'if len(Ln) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Ln)'
-          'c = [complex(chebyshevt(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
+          'c = [complex(mpmath.chebyt(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)
