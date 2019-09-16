@@ -86,10 +86,10 @@ end
 %!error nnz(None);
 
 % FIXME: possibly later we will want e.g., None -> false
-%!error <has no attribute 'is_number'> logical(None);
-%!error <has no attribute 'is_number'> isAlways(None);
-%!error <has no attribute 'is_number'> logical([sym(true) None]);
-%!error <has no attribute 'is_number'> isAlways([sym(true) None]);
+%!error <AttributeError> logical(None);
+%!error <AttributeError> isAlways(None);
+%!error <AttributeError> logical([sym(true) None]);
+%!error <AttributeError> isAlways([sym(true) None]);
 
 %!assert (isequal (children(None), None))
 %!assert (isequal (repmat(None, 1, 2), [None None]))

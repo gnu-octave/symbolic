@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,16 +26,18 @@
 %% @example
 %% @group
 %% syms x
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% y = heaviside (x)
-%%   @result{} y = (sym) Heaviside(x)
+%%   @result{} y = (sym) θ(x)
 %% @end group
 %% @end example
 %%
 %% By default, the value at zero is undefined:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% heaviside(sym(0))
-%%   @result{} (sym) Heaviside(0)
+%%   @result{} (sym) θ(0)
 %% @end group
 %% @end example
 %% This behaviour is different from the double-precision function:

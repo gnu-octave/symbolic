@@ -116,11 +116,15 @@ end
 %! B = double (euler (n, y));
 %! assert (A, B, -eps);
 
-%!test
+%!xtest
+%! % correct behaviour at floating point infinity
+%! % https://github.com/sympy/sympy/issues/17612
 %! assert (isequal (euler (4, inf), inf))
 %! assert (isequal (euler (4, -inf), inf))
 %! assert (isequal (euler (3, inf), inf))
 %! assert (isequal (euler (3, -inf), -inf))
+
+%!test
 %! assert (isnan (euler(3, nan)))
 %! assert (isnumeric (euler(3, nan)))
 

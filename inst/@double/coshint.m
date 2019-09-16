@@ -80,3 +80,8 @@ end
 %!        0.74701205140887966531e7 + 0.10381444259644068585e8*1i ];
 %! B = coshint (x);
 %! assert (A, B, -eps)
+
+%!assert (coshint (inf), inf)
+%!assert (isinf (coshint (-inf)))
+%!xtest
+%! assert (imag (coshint (-inf)), pi)

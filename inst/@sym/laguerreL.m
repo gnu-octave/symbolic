@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -55,6 +55,33 @@
 %% @end group
 %% @end example
 %%
+%% Laguerre @emph{Functions} have non-positive integer @var{N},
+%% such as
+%% @example
+%% @group
+%% syms x
+%% N = -3;
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% y = laguerreL(N, x)
+%%   @result{} y = (sym)
+%%       ⎛ 2          ⎞
+%%       ⎜x           ⎟  x
+%%       ⎜── + 2⋅x + 1⎟⋅ℯ
+%%       ⎝2           ⎠
+%% @end group
+%% @end example
+%% These satisfy Laguerre's differential equation:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% x*diff(y, x, x) + (1 - x)*diff(y, x) + N*y == 0
+%%   @result{} (sym) ...
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% simplify(ans)
+%%   @result{} (sym) True
+%% @end group
+%% @end example
+%%
 %% Note: the Generalized Laguerre @emph{Function} is not implemented.
 %%
 %% @seealso{laguerreL, @@sym/chebychevT, @@sym/chebychevU}
@@ -81,11 +108,16 @@ end
 %!assert (isequal (laguerreL(1, x), 1-x))
 %!assert (isequal (laguerreL(2, x), x^2/2 - 2*x + 1))
 
-%!error laguerreL(-1, x)
 %!error laguerreL(x)
 %!error laguerreL(1, 2, x, 3)
 
 %!shared
+
+%!test
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%! syms x
+%! assert (isequal (laguerreL (-3, x), exp(x)*(x^2/2 + 2*x + 1)))
+%! end
 
 %!test
 %! syms x n

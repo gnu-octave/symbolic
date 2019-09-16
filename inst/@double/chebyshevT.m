@@ -127,3 +127,10 @@ end
 %! A = chebyshevT (s, x);
 %! B = double (chebyshevT (t, y));
 %! assert (A, B, -eps);
+
+%!xtest
+%! % https://github.com/fredrik-johansson/mpmath/issues/469
+%! assert (chebyshevT (4, inf), inf)
+%! assert (chebyshevT (4, -inf), inf)
+%! assert (chebyshevT (3, inf), inf)
+%! assert (chebyshevT (3, -inf), -inf)

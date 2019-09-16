@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,8 +24,9 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% z = fresnelc(sym('x'))
-%%   @result{} z = (sym) fresnelc(x)
+%%   @result{} z = (sym) C(x)
 %% diff(z)
 %%   @result{} (sym)
 %%          ⎛   2⎞

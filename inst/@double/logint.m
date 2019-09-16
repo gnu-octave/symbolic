@@ -80,3 +80,6 @@ end
 %!       -2.3996350854560916779 - 7.6971739096353664559*1i ];
 %! B = logint (x);
 %! assert (A, B, -eps)
+
+%!assert (logint (inf), inf)
+%!assert (isnan (logint (-inf)))
