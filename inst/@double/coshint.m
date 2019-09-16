@@ -83,5 +83,4 @@ end
 
 %!assert (coshint (inf), inf)
 %!assert (isinf (coshint (-inf)))
-%!xtest
-%! assert (imag (coshint (-inf)), pi)
+%!assert (imag (coshint (-inf)), pi)
