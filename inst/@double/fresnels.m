@@ -46,7 +46,7 @@ function y = fresnels (x)
     print_usage ();
   end
   cmd = { 'L = _ins[0]'
-          'A = [complex(mpmath.fresnels(complex(x))) for x in L]'
+          'A = [complex(mpmath.fresnels(x)) for x in L]'
           'return A,' };
   c = pycall_sympy__ (cmd, num2cell (x(:)));
   y = reshape (cell2mat (c), size (x));

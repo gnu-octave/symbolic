@@ -342,7 +342,7 @@ function y = {NAME} (x)
     print_usage ();
   end
   cmd = {{ 'L = _ins[0]'
-          'A = [complex(mpmath.{SPNAME}(complex(x))) for x in L]'
+          'A = [complex(mpmath.{SPNAME}(x)) for x in L]'
           'return A,' }};
   c = pycall_sympy__ (cmd, num2cell (x(:)));
   y = reshape (cell2mat (c), size (x));

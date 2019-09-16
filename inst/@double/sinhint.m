@@ -46,7 +46,7 @@ function y = sinhint (x)
     print_usage ();
   end
   cmd = { 'L = _ins[0]'
-          'A = [complex(mpmath.shi(complex(x))) for x in L]'
+          'A = [complex(mpmath.shi(x)) for x in L]'
           'return A,' };
   c = pycall_sympy__ (cmd, num2cell (x(:)));
   y = reshape (cell2mat (c), size (x));
