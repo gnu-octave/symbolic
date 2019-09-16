@@ -81,3 +81,9 @@ end
 %!       -1.5445800511775466879 + 9.4256034277816069684*1i ];
 %! B = dilog (x);
 %! assert (A, B, -eps)
+
+%!xtest
+%! % https://github.com/fredrik-johansson/mpmath/issues/473
+%! assert (isinf (dilog (inf)))
+
+%!assert (isnan (dilog (-inf)))
