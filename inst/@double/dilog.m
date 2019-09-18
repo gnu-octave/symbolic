@@ -31,7 +31,7 @@
 %%
 %% @strong{Note} this function may be slow for large numbers of inputs.
 %% This is because it is not a native double-precision implementation
-%% but rather the numerical evaluation of the SymPy function
+%% but rather the numerical evaluation of the Python @code{mpmath} function
 %% @code{polylog}.
 %%
 %% @seealso{@@sym/dilog}
@@ -43,7 +43,7 @@ function y = dilog (x)
     print_usage ();
   end
   cmd = { 'L = _ins[0]'
-          'A = [complex(polylog(2, complex(1-x))) for x in L]'
+          'A = [complex(mpmath.polylog(2, 1-x)) for x in L]'
           'return A,' };
   c = pycall_sympy__ (cmd, num2cell(x(:)));
   assert (numel (c) == numel (x))
@@ -81,3 +81,9 @@ end
 %!       -1.5445800511775466879 + 9.4256034277816069684*1i ];
 %! B = dilog (x);
 %! assert (A, B, -eps)
+
+%!xtest
+%! % https://github.com/fredrik-johansson/mpmath/issues/473
+%! assert (isinf (dilog (inf)))
+
+%!assert (isnan (dilog (-inf)))

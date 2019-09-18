@@ -60,6 +60,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   if isempty(have_headers)
     pyexec(strjoin({'import sys'
                     'import sympy'
+                    'import mpmath'
                     'import sympy as sp'
                     'from sympy import __version__ as spver'
                     'from sympy import *'

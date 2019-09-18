@@ -76,7 +76,7 @@ function y = euler (m, x)
           '    Lm = Lm*len(Lx)'
           'if len(Lm) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Lm)'
-          'c = [complex(euler(int(m), complex(x))) for m,x in zip(Lm, Lx)]'
+          'c = [complex(mpmath.eulerpoly(int(m), x)) for m,x in zip(Lm, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (m(:)), num2cell (x(:)));
   for i = 1:numel (c)
@@ -116,9 +116,8 @@ end
 %! B = double (euler (n, y));
 %! assert (A, B, -eps);
 
-%!xtest
+%!test
 %! % correct behaviour at floating point infinity
-%! % https://github.com/sympy/sympy/issues/17612
 %! assert (isequal (euler (4, inf), inf))
 %! assert (isequal (euler (4, -inf), inf))
 %! assert (isequal (euler (3, inf), inf))

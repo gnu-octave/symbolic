@@ -1,4 +1,4 @@
-%% Copyright (C) 2018 Colin B. Macdonald
+%% Copyright (C) 2018-2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,16 +46,13 @@ function y = pochhammer (n, x)
     error ('pochhammer: inputs N and X must have compatible sizes')
   end
 
-  % TODO: Sympy's RisingFactorial doesn't work so we call mpmath here
-  % https://github.com/sympy/sympy/issues/14822
   cmd = { 'Ln = _ins[0]'
           'Lx = _ins[1]'
           'if len(Ln) == 1 and len(Lx) != 1:'
           '    Ln = Ln*len(Lx)'
           'if len(Ln) != 1 and len(Lx) == 1:'
           '    Lx = Lx*len(Ln)'
-          'import mpmath'
-          'c = [complex(mpmath.rf(complex(n), complex(x))) for n,x in zip(Ln, Lx)]'
+          'c = [complex(mpmath.rf(n, x)) for n,x in zip(Ln, Lx)]'
           'return c,' };
   c = pycall_sympy__ (cmd, num2cell (n(:)), num2cell (x(:)));
   for i = 1:numel (c)
@@ -96,16 +93,17 @@ end
 %! B = pochhammer ([0.9 0.8], [3.1 4.2]);
 %! assert (A, B, -3*eps);
 
-%!xtest
-%! % broken upstream, https://github.com/sympy/sympy/issues/14822
+%!test
 %! % x matrix, s scalar
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! y = [1 2 sym(pi); exp(sym(1)) 5 6];
 %! t = sym(2);
 %! x = double (y);
 %! s = 2;
 %! A = pochhammer (s, x);
 %! B = double (pochhammer (t, y));
-%! assert (A, B, -eps);
+%! assert (A, B, -3*eps);
+%! end
 
 %!test
 %! % s matrix, x scalar
