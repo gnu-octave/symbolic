@@ -1,4 +1,6 @@
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2016 Mike Miller
+%% Copyright (C) 2016, 2019 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,12 +26,31 @@
 %% Example:
 %% @example
 %% @group
-%% y = round(sym(-27)/10)
+%% y = round (sym(-27)/10)
 %%   @result{} y = (sym) -3
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/ceil, @@sym/floor, @@sym/fix, @@sym/frac}
+%% Note as of SymPy 1.5, this function rounds toward even:
+%% @example
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% @group
+%% round ([sym(5)/2 sym(7)/2])
+%%   @result{} (sym) [2  4]  (1×2 matrix)
+%% @end group
+%% @end example
+%% This differs from the builtin numeric function @pxref{round};
+%% it corresponds to the builtin Octave function @pxref{roundb}.
+%% @example
+%% @group
+%% round ([5/2 7/2])
+%%   @result{} 3  4
+%% roundb ([5/2 7/2])
+%%   @result{} 2  4
+%% @end group
+%% @end example
+%%
+%% @seealso{roundb, @@sym/ceil, @@sym/floor, @@sym/fix, @@sym/frac}
 %% @end defmethod
 
 
@@ -48,7 +69,8 @@ end
 %! f2 = round(d);
 %! assert (isequal (f1, f2))
 
-%!test
+%!xtest
+%! % ideally rounding direction would match Octave
 %! d = 5/2;
 %! x = sym('5/2');
 %! f1 = round(x);
@@ -73,8 +95,8 @@ end
 %! assert (isequal (round (d), c))
 
 %!test
-%! d = 5j/2;
-%! x = sym(5j)/2;
+%! d = 7j/2;
+%! x = sym(7j)/2;
 %! f1 = round (x);
 %! f2 = round (d);
 %! assert (isequal (f1, f2))
