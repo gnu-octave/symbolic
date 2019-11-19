@@ -34,7 +34,8 @@
 %% syms x
 %% solve(x == 2*x + 6, x)
 %%   @result{} ans = (sym) -6
-%% solve(x^2 + 6 == 5*x, x)
+%% solve(x^2 + 6 == 5*x, x);
+%% sort(ans)
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡2⎤
 %%       ⎢ ⎥
@@ -46,7 +47,8 @@
 %% @example
 %% @group
 %% syms x real
-%% solve(abs(x) == 1, x)
+%% solve(abs(x) == 1, x);
+%% sort(ans)
 %%   @result{} ans = (sym 2×1 matrix)
 %%       ⎡-1⎤
 %%       ⎢  ⎥
@@ -64,14 +66,18 @@
 %% d = solve(x^2 == 4, x + y == 1);
 %%
 %% % the first solution
+%% @c doctest: +SKIP  % nondeterministic ordering
 %% d@{1@}.x
 %%   @result{} (sym) -2
+%% @c doctest: +SKIP  % nondeterministic ordering
 %% d@{1@}.y
 %%   @result{} (sym) 3
 %%
 %% % the second solution
+%% @c doctest: +SKIP  % nondeterministic ordering
 %% d@{2@}.x
 %%   @result{} (sym) 2
+%% @c doctest: +SKIP  % nondeterministic ordering
 %% d@{2@}.y
 %%   @result{} (sym) -1
 %% @end group
@@ -86,6 +92,7 @@
 %% Alternatively:
 %% @example
 %% @group
+%% @c doctest: +SKIP  % nondeterministic ordering
 %% [X, Y] = solve(x^2 == 4, x + y == 1, x, y)
 %%   @result{} X = (sym 2×1 matrix)
 %%       ⎡-2⎤
