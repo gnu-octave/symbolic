@@ -28,8 +28,9 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% chebyshevT (18, 0.9)
-%%   @result{} ans = -0.26143
+%%   @result{} ans = -0.2614
 %% @end group
 %% @end example
 %%

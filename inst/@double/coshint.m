@@ -24,8 +24,9 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% coshint (1.1)
-%%   @result{} ans = 0.99069
+%%   @result{} ans = 0.9907
 %% @end group
 %% @end example
 %%

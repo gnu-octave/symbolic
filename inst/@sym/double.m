@@ -26,8 +26,9 @@
 %% @group
 %% x = sym(1) / 3
 %%   @result{} x = (sym) 1/3
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double (x)
-%%   @result{} ans =  0.33333
+%%   @result{} ans =  0.3333
 %% @end group
 %% @end example
 %%

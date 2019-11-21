@@ -48,15 +48,17 @@
 %% and does not effect operations on the results:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% gammainc(3, 1)
-%%   @result{} ans = 0.95021
+%%   @result{} ans = 0.9502
 %% gammainc(x, a)
 %%   @result{} (sym)
 %%       γ(a, x)
 %%       ───────
 %%         Γ(a)
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double(subs(ans, [x a], [3 1]))
-%%   @result{} ans = 0.95021
+%%   @result{} ans = 0.9502
 %% @end group
 %% @end example
 %%

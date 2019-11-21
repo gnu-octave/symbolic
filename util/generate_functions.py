@@ -308,7 +308,11 @@ def make_numerical_fcn(d, where):
     fd.write(license_boilerplate)
 
     numresult = eval("mpmath.%s(1.1)" % d['mpmathname'])
-    numresult = "%.5g" % numresult
+    # quick-n-dirty fix for Octave 6 logic, probably not quite right
+    if abs(numresult) < 1:
+        numresult = "%.4g" % numresult
+    else:
+        numresult = "%.5g" % numresult
 
     body = \
 """

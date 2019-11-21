@@ -24,8 +24,9 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% fresnelc (1.1)
-%%   @result{} ans = 0.76381
+%%   @result{} ans = 0.7638
 %% @end group
 %% @end example
 %%

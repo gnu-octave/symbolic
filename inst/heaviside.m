@@ -35,8 +35,9 @@
 %% function returns 0.5 by default:
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% heaviside(0)
-%%   @result{} 0.50000
+%%   @result{} 0.5000
 %% @end group
 %% @end example
 %% However, this can be changed via the optional second input

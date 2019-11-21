@@ -27,10 +27,12 @@
 %% @group
 %% f = 2*sin(sym(3))
 %%   @result{} f = (sym) 2⋅sin(3)
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% eval(f)
-%%   @result{} ans = 0.28224
+%%   @result{} ans = 0.2822
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double(f)
-%%   @result{} ans = 0.28224
+%%   @result{} ans = 0.2822
 %% @end group
 %% @end example
 %%
@@ -56,8 +58,9 @@
 %% f
 %%   @result{} f = (sym) x⋅sin(y)
 %%
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% eval(f)
-%%   @result{} ans = 0.50242
+%%   @result{} ans = 0.5024
 %% @end group
 %% @end example
 %%
