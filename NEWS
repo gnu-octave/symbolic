@@ -5,6 +5,8 @@ octsympy 2.8.0+
       - `@sym/round` changed to round-to-even.
       - fix broken EmptySet `finiteset()`.
 
+  * Documentation updates for upcoming Octave 6.
+
   * If the Pythonic package is loaded, automatically use it for Python
     communication (see `help sympref` for details).
 
