@@ -60,6 +60,7 @@
 %% @end group
 %%
 %% @group
+%% syms x nonzero
 %% diff (sinc (x))
 %%   @result{} ans = (sym)
 %%        π⋅x⋅cos(π⋅x) - sin(π⋅x)
