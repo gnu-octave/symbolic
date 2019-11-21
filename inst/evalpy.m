@@ -67,10 +67,10 @@
 %% x = 20;
 %% evalpy ('_y = 3*x; z_ = _y/6; my = z_/2;', x)
 %%   @print{} Variables effected: my
-%% _y
-%%   @print{} ??? '_y' undefined near line 1 column 1
-%% z_
-%%   @print{} ??? 'z_' undefined near line 1 column 1
+%% _y   @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
+%%   @print{} ??? '_y' undefined near line 1, column 1
+%% z_   @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
+%%   @print{} ??? 'z_' undefined near line 1, column 1
 %% warning (s);
 %% @end group
 %% @end example
