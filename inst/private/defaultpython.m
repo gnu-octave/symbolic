@@ -22,7 +22,7 @@
 %% A string to execute to call a Python interpreter.
 %%
 %% Distributors/vendors may find this a convenient place to change
-%% the default python executable, e.g., to specify "python3" or to
+%% the default python executable, e.g., to specify "python3.8" or to
 %% hardcode a path to a particular executable.
 %%
 %% End-users can always override this by setting the environment
@@ -32,6 +32,6 @@
 
 function python = defaultpython ()
 
-  python = 'python';
+  python = 'python3';
 
 end
