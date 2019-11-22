@@ -44,8 +44,9 @@
 %% @example
 %% @group
 %% syms x
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double(sym2poly(pi*x^3 + 3*x/2 + exp(sym(1))))
-%%    @result{}     3.14159   0.00000   1.50000   2.71828
+%%    @result{}     3.1416      0   1.5000   2.7183
 %% @end group
 %% @end example
 %% You may prefer specifying @var{X} or using @code{coeffs}:

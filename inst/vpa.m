@@ -79,7 +79,7 @@
 %% @group
 %% vpa('cos(0.1)')
 %%   @print{} warning: string expression involving decimals is
-%%   @print{}          dangerous, see "help vpa"
+%%   @print{}          dangerous, see "help vpa"...
 %%   @result{} ans = (sym) 0.995004165278025709540...
 %% @end group
 %% @end example

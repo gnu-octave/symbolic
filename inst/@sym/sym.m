@@ -91,7 +91,7 @@
 %% @group
 %% sym(0.1)
 %%   @print{} warning: passing floating-point values to sym is
-%%   @print{}          dangerous, see "help sym"
+%%   @print{}          dangerous, see "help sym"...
 %%   @result{} ans = (sym) 1/10
 %% @end group
 %% @end example
@@ -117,7 +117,7 @@
 %% @group
 %% y = sym(pi/100)
 %%   @print{} warning: passing floating-point values to sym is
-%%   @print{}          dangerous, see "help sym"
+%%   @print{}          dangerous, see "help sym"...
 %%   @result{} y = (sym)
 %%        π
 %%       ───

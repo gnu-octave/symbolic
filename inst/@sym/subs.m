@@ -95,15 +95,15 @@
 %%       @@(x) exp (sin (x))
 %% @end group
 %%
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% @group
 %% fh(linspace(0, 2*pi, 700)')
 %%   @result{} ans =
-%%       ...
-%%       1.00903
-%%       1.01814
-%%       1.02733
-%%       1.03660
-%%       1.04595
+%%       1.0000
+%%       1.0090
+%%       1.0181
+%%       1.0273
+%%       1.0366
 %%       ...
 %% @end group
 %% @end example

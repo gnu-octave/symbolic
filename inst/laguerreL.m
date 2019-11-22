@@ -26,8 +26,9 @@
 %% the point 6 is
 %% @example
 %% @group
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% laguerreL (14, 6)
-%%   @result{} 0.97654
+%%   @result{} 0.9765
 %% @end group
 %% @end example
 %%
@@ -51,8 +52,9 @@
 %% @example
 %% @group
 %% coeffs = sym2poly (L);
+%% @c doctest: +XFAIL_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% polyval (coeffs, 6)
-%%   @result{} 0.97654
+%%   @result{} 0.9765
 %% err = ans - double (exact);
 %% num2str (err, '%.3g')
 %%   @result{} -1.68e-11
