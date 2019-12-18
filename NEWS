@@ -1,5 +1,5 @@
-octsympy 2.8.0+
-===============
+octsympy 2.9.0 (2019-12-19)
+===========================
 
   * Default python interpreter is now `python3`.
 
