@@ -114,6 +114,7 @@
 %% @end group
 %%
 %% @group
+%% syms x
 %% solve(x^2 - 1 > 0, x < 10)
 %%   @result{} ans = (sym) (-∞ < x ∧ x < -1) ∨ (1 < x ∧ x < 10)
 %% @end group
