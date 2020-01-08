@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2020 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
 %%
@@ -333,7 +333,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = pkg_l{idx}.dir
 
     case 'diagnose'
-      if (strcmp (lower (sympref ('ipc')), 'default') &&
+      if (strcmp (lower (sympref ('ipc')), 'default') && ...
           exist ('pyversion') && exist ('pyexec') && exist ('pyeval'))
         % TODO: see note in ipc_native
         assert_pythonic_and_sympy (true)

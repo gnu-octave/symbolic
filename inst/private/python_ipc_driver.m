@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019-2020 Colin B. Macdonald
 %% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
@@ -44,7 +44,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
   end
 
   if (strcmp(lower(which_ipc), 'default'))
-    # TODO: may need to adjust, ideally just 'py'
+    % TODO: may need to adjust, ideally just 'py'
     if (exist ('pyversion') && exist ('pyexec') && exist ('pyeval'))
       which_ipc = 'native';
     elseif (exist ('popen2') > 1)
