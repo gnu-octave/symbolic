@@ -13,7 +13,7 @@ PYEXE=pyexe/py27_v18.exe
 PYEXEREADME=pyexe/README.pyexe.txt
 
 # download dependencies, leave tarballs in the same directory where this script lives
-SYMPY=sympy-1.5
+SYMPY=sympy-1.5.1
 MPMATH=mpmath-1.1.0
 
 # for day-to-day testing
