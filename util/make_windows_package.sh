@@ -70,7 +70,7 @@ cp ${PYEXE} ${WINDIR}/bin/py27.exe
 cp ${PYEXEREADME} ${WINDIR}/
 
 echo "making default python py27.exe"
-sed -i "s/python = 'python'/python = 'py27.exe'/" ${WINDIR}/inst/private/defaultpython.m
+sed -i "s/python = 'python3'/python = 'py27.exe'/" ${WINDIR}/inst/private/defaultpython.m
 
 echo "bundling mpmath"
 tar -zxf ${MPMATH}.tar.gz || exit 1
