@@ -39,8 +39,8 @@
 %% @group
 %% sol = dsolve (DE)
 %%   @result{} sol = (sym)
-%%                  4⋅x
-%%       y(x) = C₁⋅ℯ
+%%     4⋅x
+%% C₁⋅ℯ
 %% @end group
 %% @end example
 %%
@@ -49,22 +49,11 @@
 %% @group
 %% sol = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%               4⋅x
-%%       y(x) = ℯ
+%%  4⋅x
+%% ℯ
 %% @end group
 %% @end example
-%%
-%% Note the result is an equation so if you need an expression
-%% for the solution:
-%% @example
-%% @group
-%% rhs (sol)
-%%   @result{} (sym)
-%%        4⋅x
-%%       ℯ
-%% @end group
-%% @end example
-%%
+%% 
 %% In some cases, SymPy can return a classification of the
 %% differential equation:
 %% @example
@@ -77,9 +66,9 @@
 %%
 %% [sol, classify] = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%                -1
-%%        y(x) = ─────
-%%               x - 1
+%%  -1
+%% ─────
+%% x - 1
 %%   @result{} classify = separable
 %% @end group
 %% @end example
@@ -97,10 +86,10 @@
 %%        dx
 %%
 %% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
-%%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
+%%   @result{} (sym) 4⋅sin(3⋅x) + cos(3⋅x)
 %%
 %% dsolve (DE, y(0) == 1, y(sym(pi)/2) == 2)
-%%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
+%%   @result{} (sym) -2⋅sin(3⋅x) + cos(3⋅x)
 %% @end group
 %% @end example
 %%
@@ -120,26 +109,21 @@
 %%       ⎢──(y(t)) = 2⋅x(t)⎥
 %%       ⎣dt               ⎦
 %% @end group
+%% 
 %%
 %% @group
 %% soln = dsolve (ode_sys)
-%%   @result{} soln = @{ ... @}
-%% @end group
-%%
-%% @c doctest: +SKIP  # they might be re-ordered
-%% @group
-%% soln@{1@}
+%% soln.x
 %%   @result{} ans =
 %%       (sym)
-%%                      -2⋅t         2⋅t
-%%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%               2⋅t          -2⋅t
+%%         2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
 %%
-%% @c doctest: +SKIP  # they might be re-ordered
-%% soln@{2@}
+%% soln.y
 %%   @result{} ans =
 %%       (sym)
-%%                        -2⋅t         2⋅t
-%%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%               2⋅t          -2⋅t
+%%         2⋅C₁⋅ℯ     - 2⋅C₂⋅ℯ
 %% @end group
 %% @end example
 %%
