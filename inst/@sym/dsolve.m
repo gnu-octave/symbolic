@@ -307,8 +307,8 @@ end
 %! soln = dsolve([ode1, ode2]);
 %! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
 %! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
-%! assert (isequal ([soln.x), soln.y], g1) || ...
-%!         isequal ([soln.x), soln.y], g2))
+%! assert (isequal ([soln.x, soln.y], g1) || ...
+%!         isequal ([soln.x, soln.y], g2))
 
 %!test
 %! % System of ODEs (initial-value problem)
