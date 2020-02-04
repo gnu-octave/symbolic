@@ -39,8 +39,8 @@
 %% @group
 %% sol = dsolve (DE)
 %%   @result{} sol = (sym)
-%%     4⋅x
-%% C₁⋅ℯ
+%%           4⋅x
+%%       C₁⋅ℯ
 %% @end group
 %% @end example
 %%
@@ -49,8 +49,8 @@
 %% @group
 %% sol = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%  4⋅x
-%% ℯ
+%%        4⋅x
+%%       ℯ
 %% @end group
 %% @end example
 %% 
@@ -66,9 +66,9 @@
 %%
 %% [sol, classify] = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%  -1
-%% ─────
-%% x - 1
+%%        -1
+%%       ─────
+%%       x - 1
 %%   @result{} classify = separable
 %% @end group
 %% @end example
@@ -112,7 +112,7 @@
 %% 
 %%
 %% @group
-%% soln = dsolve (ode_sys)
+%% soln = dsolve (ode_sys);
 %% soln.x
 %%   @result{} ans =
 %%       (sym)
