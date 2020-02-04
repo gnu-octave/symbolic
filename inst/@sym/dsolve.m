@@ -193,7 +193,13 @@ function [soln,classify] = dsolve(ode,varargin)
           % If the solution set is iterable (system or multiple solutions),
           % we will convert it to a structure of {eqname: expr, eqname2: expr2 ...}
           % 'cause that's what matlab does!
-          'if iterable(sol):'
+          'try:'
+          '    iterator = iter(sol)'
+          'except TypeError:'
+          % Not iterable
+          '    pass'
+          'else:'
+          % Iterable
           '    return_data = dict()'
           '    for solution_part in sol:'
           '        results = convert(solution_part)'
