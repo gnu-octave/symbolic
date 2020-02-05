@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod expm (@var{A})
+%% @defmethod @@sym expm (@var{A})
 %% Symbolic matrix exponential.
 %%
 %% Example:

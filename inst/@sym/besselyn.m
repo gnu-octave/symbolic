@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod besselyn (@var{alpha}, @var{x})
+%% @defmethod @@sym besselyn (@var{alpha}, @var{x})
 %% Symbolic Spherical Bessel function of the second kind.
 %%
 %% Example:
