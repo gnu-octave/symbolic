@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod fix (@var{x})
+%% @defmethod @@sym fix (@var{x})
 %% Symbolic fix function.
 %%
 %% Example:

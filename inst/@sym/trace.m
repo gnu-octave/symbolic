@@ -18,7 +18,7 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@ym trace (@var{A})
+%% @defmethod @@sym trace (@var{A})
 %% Trace of symbolic matrix.
 %%
 %% Example:

@@ -18,11 +18,11 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod  @@ym ezplot (@var{f})
-%% @defmethodx @@ym ezplot (@var{f1}, @var{f2})
-%% @defmethodx @@ym ezplot (@var{f}, @var{dom})
-%% @defmethodx @@ym ezplot (@var{f1}, @var{f2}, @var{dom})
-%% @defmethodx @@ym ezplot (@dots{}, @var{N})
+%% @defmethod  @@sym ezplot (@var{f})
+%% @defmethodx @@sym ezplot (@var{f1}, @var{f2})
+%% @defmethodx @@sym ezplot (@var{f}, @var{dom})
+%% @defmethodx @@sym ezplot (@var{f1}, @var{f2}, @var{dom})
+%% @defmethodx @@sym ezplot (@dots{}, @var{N})
 %% Simple plotting of symbolic expressions.
 %%
 %% Example parametric plot of a Lissajous Curve:
