@@ -34,7 +34,7 @@
 
 function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
-  persistent fin fout pid
+  persistent cleanup fin fout pid
 
   py_startup_timeout = 30;  % seconds
 
@@ -43,24 +43,11 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   info = [];
 
   if (strcmp(what, 'reset'))
-    if (~isempty(pid))
-      if (verbose)
-        disp ('Closing the Python communications link.')
-      end
-    end
-    if (~isempty(fin))
-      % produces a single newline char: not sure why
-      t = fclose(fin); fin = [];
-      waitpid(pid);
-      pid = [];
-      A = (t == 0);
-    else
-      A = true;
-    end
-    if (~isempty(fout))
-      t = fclose(fout); fout = [];
-      A = A && (t == 0);
-    end
+    cleanup = [];
+    fin = [];
+    fout = [];
+    pid = [];
+    A = true;
     return
   end
 
@@ -86,6 +73,8 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     if (pid < 0)
       error('popen2() failed');
     end
+
+    cleanup = onCleanup (@() python_ipc_popen2_reset (fin, fout, pid));
 
     headers = python_header();
     fputs (fin, headers);
