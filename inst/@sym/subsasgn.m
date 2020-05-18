@@ -425,6 +425,13 @@ end
 %! e(1:2) = true;
 %! assert (isequal (e, [sym(1)==1  sym(2)==2  x==10  sym(3)==4]))
 
+%!test
+%! % grow scalar equality expression into a matrix of equalities
+%! syms a b c d
+%! e = a == b;
+%! e(2) = c == d;
+%! assert (isequal (e, [a==b  c==d]))
+
 
 %% 2D arrays from mat_mask_asgn
 
