@@ -50,10 +50,10 @@ function z = mat_replace(A, subs, b)
           return
         end
           if rows(A) == 1
-            z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = delete_col_rows(A, subs{1}, 'col');
             return
           elseif columns(A) == 1
-            z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = delete_col_rows(A, subs{1}, 'row');
             return
           else
             z = sym([]);
@@ -69,10 +69,15 @@ function z = mat_replace(A, subs, b)
           return
         end
         if strcmp(subs{1}, ':')
-          z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
-          return
+          if strcmp(subs{2}, ':')
+            z = sym(zeros(0,columns(A)));
+            return
+          else
+            z = delete_col_rows(A, subs{2}, 'col');
+            return
+          end
         elseif strcmp(subs{2}, ':')
-          z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+          z = delete_col_rows(A, subs{1}, 'row');
           return
         else
           error('A null assignment can only have one non-colon index.'); % Standard octave error
@@ -143,4 +148,17 @@ function z = mat_replace(A, subs, b)
 
   z = mat_rclist_asgn(A, r, c, b);
 
+end
+
+function z=delete_col_rows(A, subs, col_row)
+  if isscalar(A)
+    z = sym(1:0);
+  else
+    z = pycall_sympy__ ({'if isinstance(_ins[1],Integer):',...
+                        ['    _ins[0].',col_row,'_del(_ins[1] - 1)'],...
+                         'else:',...
+                         '    for i in sorted(_ins[1],reverse=True):',...
+                        ['        _ins[0].',col_row,'_del(i - 1)'],...
+                         'return _ins[0],'}, A, sym(subs));
+  end
 end
