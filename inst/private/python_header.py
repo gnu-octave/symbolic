@@ -53,8 +53,12 @@ try:
     import collections
     from re import split
     # patch pretty printer, issue #952
-    from sympy.printing.pretty.pretty import PrettyPrinter
-    _mypp = PrettyPrinter
+    try:
+        from sympy.printing.pretty.pretty import PrettyPrinter
+        _mypp = PrettyPrinter
+    except:
+        # is this needed for SymPy 1.4?  TODO: Bump minimum SymPy and cleanup
+        _mypp = pretty.__globals__["PrettyPrinter"]
     def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
