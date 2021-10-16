@@ -9,6 +9,9 @@ from __future__ import print_function
 from __future__ import division
 
 import sys
+
+from sympy.core.compatibility import unicode
+
 sys.ps1 = ""; sys.ps2 = ""
 
 
@@ -50,7 +53,8 @@ try:
     import collections
     from re import split
     # patch pretty printer, issue #952
-    _mypp = pretty.__globals__["PrettyPrinter"]
+    from sympy.printing.pretty.pretty import PrettyPrinter
+    _mypp = PrettyPrinter
     def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
@@ -184,7 +188,8 @@ try:
             c = ET.SubElement(et, "list")
             for y in x:
                 octoutput(y, c)
-        elif isinstance(x, sp.compatibility.integer_types):
+        elif isinstance(x, int) or \
+                (sys.version_info[0] <= 2 and isinstance(x, long)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
@@ -205,7 +210,8 @@ try:
             f.text = d2hex(x.real)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x.imag)
-        elif isinstance(x, sp.compatibility.string_types):
+        elif isinstance(x, str) or \
+                (sys.version_info[0] <= 2 and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
