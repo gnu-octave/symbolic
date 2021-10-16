@@ -111,7 +111,7 @@ function g = curl(v,x)
   cmd = { '(v, x) = _ins'
           'def d(u, y):'
           '    if u.is_constant():'  % FIXME ?
-          '        return sp.numbers.Zero()'
+          '        return sp.core.numbers.Zero()'
           '    return u.diff(y)'
           'g = Matrix([ \'
           '      d(v[2], x[1]) - d(v[1], x[2]),  \'
