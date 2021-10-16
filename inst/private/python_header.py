@@ -43,6 +43,12 @@ try:
     from sympy.functions.special.hyper import TupleArg
     # for sets
     from sympy.utilities.iterables import uniq
+    try:
+        # quick fix for https://github.com/cbm755/octsympy/issues/1053
+        # TODO: investigate the sym ctor in this case, likely a better fix in there
+        from sympy.core.symbol import Str
+    except ImportError:
+        pass
     import copy
     import binascii
     import struct
