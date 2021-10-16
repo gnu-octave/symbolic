@@ -7,6 +7,9 @@ An implementation of a symbolic toolbox using SymPy.
 
 [https://octave.sourceforge.io/symbolic]
 
+<sub>Note: Development for most Octave packages tends to take place in sourceforge. However, unlike most other Octave packages, the main development repository for this package is on **github** (https://github.com/cbm755/octsympy), and only _mirrored_ on sourceforge (https://sourceforge.net/p/octave/symbolic/).
+If you are thinking of contributing and you're looking at this README file from the sourceforge website, please consider visiting our github page and contributing there instead, as we do not tend to monitor sourceforge for activity.</sub>
+
 
 Goals
 -----
