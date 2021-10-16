@@ -189,7 +189,7 @@ try:
             for y in x:
                 octoutput(y, c)
         elif isinstance(x, int) or \
-                (sys.version_info[0] <= 2 and isinstance(x, long)):
+            (sys.version_info[0] <= 2 and isinstance(x, long)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
@@ -211,7 +211,7 @@ try:
             f = ET.SubElement(a, "f")
             f.text = d2hex(x.imag)
         elif isinstance(x, str) or \
-                (sys.version_info[0] <= 2 and isinstance(x, unicode)):
+            (sys.version_info[0] <= 2 and isinstance(x, unicode)):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
