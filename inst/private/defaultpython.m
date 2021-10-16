@@ -32,12 +32,12 @@
 
 function python = defaultpython ()
 
+  % PEP394 says Python 3 installs should all provide this command
+  python = 'python3';
+
   if (ispc () && (~isunix ()))
     % 2020-03: Python.org installer/Anaconda do not provide python3
     python = 'python';
-  else
-    % PEP394 says Python 3 installs should all provide this command
-    python = 'python3';
   end
 
 end
