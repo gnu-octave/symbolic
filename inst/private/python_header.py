@@ -9,6 +9,9 @@ from __future__ import print_function
 from __future__ import division
 
 import sys
+
+from sympy.core.compatibility import unicode
+
 sys.ps1 = ""; sys.ps2 = ""
 
 
@@ -50,7 +53,8 @@ try:
     import collections
     from re import split
     # patch pretty printer, issue #952
-    _mypp = pretty.__globals__["PrettyPrinter"]
+    from sympy.printing.pretty.pretty import PrettyPrinter
+    _mypp = PrettyPrinter
     def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
