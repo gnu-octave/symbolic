@@ -139,10 +139,7 @@ function r = vpa(x, n)
         'try:'
         '    return sympy.Float(x, n),'
         'except ValueError:'
-        '    # TODO: if this is fixed upstream [1], switch back'
-        '    # [1] https://github.com/sympy/sympy/issues/13425'
-        '    return sympy.sympify(x, evaluate=False).evalf(n)'
-        '    #return sympy.N(x, n)' };
+        '    return sympy.N(x, n),' };
     r = pycall_sympy__ (cmd, x, n);
   elseif (isfloat (x) && ~isreal (x))
     r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
