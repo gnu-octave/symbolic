@@ -152,7 +152,7 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase)):
+        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase, sp.NDimArray)):
             # FIXME: is it weird to pretend None is a SymPy object?
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
@@ -161,6 +161,9 @@ try:
                 _d = [float(r) if (isinstance(r, sp.Basic) and r.is_Integer)
                       else float('nan') if isinstance(r, sp.Basic)
                       else r for r in x.shape]
+            elif isinstance(x, sp.NDimArray):
+                _d = x.shape
+                dbout(f"I am here with an array with shape {_d}")
             elif x is None:
                 _d = (1,1)
             else:
