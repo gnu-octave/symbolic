@@ -1,3 +1,4 @@
+#
 name: CI
 
 on:
@@ -24,5 +25,40 @@ jobs:
 
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
+          echo Hello world
+          sudo uname -a
+          docker pull docker.io/gnuoctave/octave:6.2.0
+          # sudo apt-get install -y octave
           echo test, and deploy your project.
+          #octave --eval 'disp("hi")'
+          ls
+          cd inst
+          ls
+          docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
+          # docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'help sympref'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); y=2*x; disp(42)"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); test @sym/qr"
+          docker run --rm --group-add=users -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); octsympy_tests"
+          docker run --rm --group-add=users -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 touch foo
+          ls
+
+
+  my_job2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a multi-line script
+        run: |
+          echo Hello world
+          sudo uname -a
+          docker pull docker.io/gnuoctave/octave:6.4.0
+          docker run --name=oc --detach --init --group-add=users --volume=$PWD:/home/jovyan/octsympy:rw gnuoctave/octave:6.4.0 sleep inf
+          # docker run --name=oc --detach --init --group-add=users --volume=$PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 sleep inf
+          docker exec oc pip3 install sympy==1.5.1
+          docker exec oc octave-cli --eval 'disp(42)'
+          docker exec oc octave-cli --eval 'pwd; ls'
+          docker exec oc make -C octsympy test
+          docker stop oc
+          ls
