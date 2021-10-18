@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2021-2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -84,7 +84,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           % Make sure all matrices in the input are the same size, and set q to one of them
           'q = None'
           'for A in _ins:'
-          '    if isinstance(A, MatrixBase):'
+          '    if isinstance(A, (MatrixBase, NDimArray)):'
           '        if q is None:'
           '            q = A'
           '        else:'
@@ -97,7 +97,10 @@ function z = elementwise_op(scalar_fcn, varargin)
           'elements = []'
           'for i in range(0, len(q)):'
           '    elements.append(_op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins]))'
-          'return Matrix(*q.shape, elements)' ];
+          'if all(isinstance(x, Expr) for x in elements):'
+          '    return Matrix(*q.shape, elements)'
+          'dbout(f"elementwise_op: returning an Array not a Matrix")'
+          'return Array(elements, shape=q.shape)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 
