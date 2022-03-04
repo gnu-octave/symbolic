@@ -77,7 +77,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'import copy'
                     'import struct'
                     'import codecs'
-                    'from distutils.version import LooseVersion'
+                    'from packaging.version import Version as LooseVersion'
                     'import itertools'
                     'import collections'
                     'from re import split'
