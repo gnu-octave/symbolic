@@ -55,7 +55,10 @@ jobs:
     strategy:
       matrix:
         octave: [5.2.0, 6.2.0, 6.4.0]
-        sympy: [1.5.1, 1.6.2]
+        sympy: [1.5.1]
+        include:
+          - octave: 6.4.0
+          - sympy: [1.6.2, 1.7.1]
     steps:
       - uses: actions/checkout@v2
       - name:
