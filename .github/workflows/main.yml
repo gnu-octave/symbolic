@@ -59,6 +59,9 @@ jobs:
           docker exec oc pip3 install sympy==1.5.1
           docker exec oc octave-cli --eval 'disp(42)'
           docker exec oc octave-cli --eval 'pwd; ls'
-          docker exec oc make -C octsympy test
+          docker exec oc make -C octsympy install
+          # TODO needs updating:
+          # docker exec oc make -C octsympy test
+          docker exec oc octave-cli --eval "pkg test symbolic"
           docker stop oc
           ls
