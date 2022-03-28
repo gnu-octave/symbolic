@@ -80,7 +80,7 @@ jobs:
           docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
           # TODO: runs all the tests for some reason
           # docker exec oc octave-cli --eval "pkg test symbolic"
-          docker exec oc octave-cli --eval "pkg load symbolic; octsympy_tests"
+          docker exec oc octave-cli --eval "pkg load symbolic; exit(octsympy_tests)"
           docker exec oc ls
           echo "Stopping container"
           docker stop oc
