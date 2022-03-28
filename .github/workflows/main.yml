@@ -53,6 +53,8 @@ jobs:
   bist:
     runs-on: ubuntu-latest
     strategy:
+      # for now! later default of true is less wasteful
+      fail-fast: false
       matrix:
         octave: [5.2.0, 6.2.0, 6.4.0]
         sympy: [1.5.1]
