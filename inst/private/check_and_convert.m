@@ -1,5 +1,6 @@
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2016, 2017 Colin B. Macdonald
+%% Copyright (C) 2020 Tianyu Chen (billchenchina)
 %%
 %% This file is part of OctSymPy.
 %%
