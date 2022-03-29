@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2021-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -80,7 +80,7 @@
 %% vpa('cos(0.1)')
 %%   @print{} warning: string expression involving decimals is
 %%   @print{}          dangerous, see "help vpa"...
-%%   @result{} ans = (sym) 0.995004165278025709540...
+%%   @result{} ans = (sym) 0.99500416527802...
 %% @end group
 %% @end example
 %%
