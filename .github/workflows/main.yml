@@ -63,6 +63,8 @@ jobs:
             sympy: 1.6.2
           - octave: 6.4.0
             sympy: 1.7.1
+          - octave: 6.4.0
+            sympy: 1.8.0
     steps:
       - uses: actions/checkout@v2
       - name:
@@ -87,7 +89,7 @@ jobs:
           docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
           # TODO: runs all the tests for some reason
           # docker exec oc octave-cli --eval "pkg test symbolic"
-          docker exec oc octave-cli --eval "pkg load symbolic; exit(octsympy_tests)"
+          docker exec oc octave-cli --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
           docker exec oc ls
           echo "Stopping container"
           docker stop oc
