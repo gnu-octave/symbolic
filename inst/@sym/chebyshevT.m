@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,11 +79,9 @@ end
 
 %!test
 %! % round trip
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms n z
 %! f = chebyshevT (n, z);
 %! h = function_handle (f, 'vars', [n z]);
 %! A = h (1.1, 2.2);
 %! B = chebyshevT (1.1, 2.2);
 %! assert (A, B)
-%! end

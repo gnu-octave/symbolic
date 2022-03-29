@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -141,14 +141,12 @@ end
 
 %!test
 %! % round trip
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms x
 %! A = expint (3);
 %! f = expint (x);
 %! h = function_handle (f);
 %! B = h (3);
 %! assert (A, B, -eps)
-%! end
 
 %!error <failed>
 %! % round trip

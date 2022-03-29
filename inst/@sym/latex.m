@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,7 +26,6 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% latex(sin(x/2))
 %%   @print{} \sin@{\left(\frac@{x@}@{2@} \right)@}
 %% @end group
@@ -64,8 +63,6 @@ end
 %!test
 %! syms x
 %! y = sin(x);
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (strcmp (latex (y), '\sin{\left(x \right)}'))
-%! end
 
 %!assert (strcmp (latex (exp (sym('x'))), 'e^{x}'))

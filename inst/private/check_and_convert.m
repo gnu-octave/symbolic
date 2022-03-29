@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Abhinav Tripathi
-%% Copyright (C) 2016, 2017 Colin B. Macdonald
+%% Copyright (C) 2016, 2017, 2022 Colin B. Macdonald
 %% Copyright (C) 2020 Tianyu Chen (billchenchina)
 %%
 %% This file is part of OctSymPy.
@@ -23,16 +23,12 @@ function obj = check_and_convert(var_pyobj)
   persistent sp
   persistent list_or_tuple
   persistent _sym
-  persistent string_types
-  persistent integer_types
   if isempty(builtins)
     builtins = pyeval("__builtins__");
     list_or_tuple = py.tuple({builtins.list, builtins.tuple});
 
     sp = py.sympy;
     _sym = py.tuple({sp.Basic, sp.MatrixBase});
-    string_types = py.str;
-    integer_types = py.int;
   end
 
 
@@ -50,7 +46,7 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
-    elseif (py.isinstance (x, string_types))
+    elseif (py.isinstance (x, py.str))
       obj{i} = char (x);
     elseif (py.isinstance(x, builtins.dict))
       make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
@@ -59,7 +55,7 @@ function obj = check_and_convert(var_pyobj)
       % make sure values are converted to sym
       s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
       obj{i} = s;
-    elseif (py.isinstance(x, integer_types))
+    elseif (py.isinstance(x, py.int))
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
       end

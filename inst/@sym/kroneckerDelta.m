@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2019 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -81,10 +81,8 @@ end
 
 %!test
 %! % round trip
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms x y
 %! f = kroneckerDelta (x, y);
 %! h = function_handle (f);
 %! assert (h (1, 2), 0)
 %! assert (h (2, 2), 1)
-%! end
