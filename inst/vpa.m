@@ -139,10 +139,7 @@ function r = vpa(x, n)
         'try:'
         '    return sympy.Float(x, n),'
         'except ValueError:'
-        '    # TODO: if this is fixed upstream [1], switch back'
-        '    # [1] https://github.com/sympy/sympy/issues/13425'
-        '    return sympy.sympify(x, evaluate=False).evalf(n)'
-        '    #return sympy.N(x, n)' };
+        '    return sympy.N(x, n),' };
     r = pycall_sympy__ (cmd, x, n);
   elseif (isfloat (x) && ~isreal (x))
     r = vpa (real (x), n) + sym (1i)*vpa (imag (x), n);
@@ -358,10 +355,13 @@ end
 %!warning <dangerous> vpa ('sqrt(2.0)');
 
 %!warning <dangerous>
-%! % https://github.com/sympy/sympy/issues/13425
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %! a = vpa('2**0.5');
 %! b = vpa(sqrt(sym(2)));
 %! assert (isequal (a, b))
+%! else
+%! warning('dangerous')  % fake it until we drop 1.4
+%! end
 
 %!test
 %! a = vpa('2.3e1');

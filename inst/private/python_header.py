@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2022 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
@@ -45,6 +45,12 @@ try:
     from sympy.functions.special.hyper import TupleArg
     # for sets
     from sympy.utilities.iterables import uniq
+    try:
+        # quick fix for https://github.com/cbm755/octsympy/issues/1053
+        # TODO: investigate the sym ctor in this case, likely a better fix in there
+        from sympy.core.symbol import Str
+    except ImportError:
+        pass
     import copy
     import binascii
     import struct
@@ -55,8 +61,12 @@ try:
     import collections
     from re import split
     # patch pretty printer, issue #952
-    from sympy.printing.pretty.pretty import PrettyPrinter
-    _mypp = PrettyPrinter
+    try:
+        from sympy.printing.pretty.pretty import PrettyPrinter
+        _mypp = PrettyPrinter
+    except:
+        # is this needed for SymPy 1.4?  TODO: Bump minimum SymPy and cleanup
+        _mypp = pretty.__globals__["PrettyPrinter"]
     def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
