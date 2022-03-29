@@ -22,7 +22,7 @@ function r = do_highbyte_escapes(s)
 %      ans = aaa \\⌈ bbb
 %
 %
-%   Copyright 2016-2017 Colin B. Macdonald
+%   Copyright 2016-2017, 2022 Colin B. Macdonald
 %
 %   Copying and distribution of this file, with or without modification,
 %   are permitted in any medium without royalty provided the copyright
@@ -48,14 +48,7 @@ function r = do_highbyte_escapes(s)
   end
 
   % get the two-char hex numbers make them into bytes
-  if (exist ('OCTAVE_VERSION', 'builtin') && ...
-      compare_versions (OCTAVE_VERSION (), '4.3.0', '<'))
-    % Bug on old Octave: https://savannah.gnu.org/bugs/?49659
-    dec = char(hex2dec(NM.hex));
-  else
-    % roughly 3-4 times slower than the above
-    dec = char (hex2dec (struct2cell (NM)));
-  end
+  dec = char (hex2dec (struct2cell (NM)));
   % faster:
   %d = uint8('ee');
   %d = (d >= 48 & d <= 57).*(d-48) + (d >= 97 & d <= 102).*(d-87);
