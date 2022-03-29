@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -51,11 +51,9 @@ end
 
 %!test
 %! % round trip
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms x y
 %! f = beta (x, y);
 %! h = function_handle (f);
 %! A = h (1.1, 2.2);
 %! B = beta (1.1, 2.2);
 %! assert (A, B)
-%! end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -204,9 +204,7 @@ end
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'upper');
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (A, B)
-%! end
 
 %!test
 %! % round trip
@@ -215,6 +213,4 @@ end
 %! h = function_handle (f, 'vars', [x a]);
 %! A = h (1.1, 2.2);
 %! B = gammainc (1.1, 2.2, 'lower');
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (A, B)
-%! end

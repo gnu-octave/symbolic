@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2019 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -74,11 +74,9 @@ end
 
 %!test
 %! % round trip
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %! syms n z
 %! f = pochhammer (z, n);
 %! h = function_handle (f, 'vars', [z n]);
 %! A = h (1.1, 2.2);
 %! B = pochhammer (1.1, 2.2);
 %! assert (A, B)
-%! end

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2016 Lagu
 %%
@@ -312,11 +312,7 @@ end
 
 %!test
 %! A = solve([2*x == 4*y, 2 == 3], x);
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
-%!   assert (isempty (A))
-%! else
-%!   assert (isequal (A, sym(false)))
-%! end
+%! assert (isempty (A))
 
 %!test
 %! % Issue #850
