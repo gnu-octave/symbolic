@@ -274,10 +274,17 @@ end
 %! ode1 = diff(x(t),t) == 2*y(t);
 %! ode2 = diff(y(t),t) == 2*x(t);
 %! soln = dsolve([ode1, ode2]);
-%! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
-%! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
-%! assert (isequal ([rhs(soln{1}), rhs(soln{2})], g1) || ...
-%!         isequal ([rhs(soln{1}), rhs(soln{2})], g2))
+%! soln = [rhs(soln{1}), rhs(soln{2})];
+%! g1 = [C1*exp(-2*t) + C2*exp(2*t), -C1*exp(-2*t) + C2*exp(2*t)];
+%! g2 = [C1*exp(2*t) + C2*exp(-2*t), C1*exp(2*t) - C2*exp(-2*t)];
+%! g3 = [-C1*exp(-2*t) + C2*exp(2*t), C1*exp(-2*t) + C2*exp(2*t)];
+%! g4 = [C1*exp(2*t) - C2*exp(-2*t), C1*exp(2*t) + C2*exp(-2*t)];
+%! % old SymPy <= 1.5.1 had some extra twos
+%! g5 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
+%! g6 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! assert (isequal (soln, g1) || isequal (soln, g2) || ...
+%!         isequal (soln, g3) || isequal (soln, g4) || ...
+%!         isequal (soln, g5) || isequal (soln, g6))
 
 %!test
 %! % System of ODEs (initial-value problem)
