@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -55,6 +55,8 @@
 %%       ⎣True  True⎦
 %% @end group
 %% @end example
+%%
+%% Using this for scalar raised to a matrix power is not yet supported.
 %%
 %% @seealso{@@sym/power}
 %% @end defop
@@ -130,12 +132,18 @@ end
 %! C = subs(B, n, 0);
 %! assert (isequal (C, sym(eye(2))))
 
-%!test
-%! % scalar^array not implemented in SymPy < 1.0
+%!xtest
+%! % scalar^array (e.g., defined by matrix exponential) not implemented in SymPy?
+%! % on 1.0 < SymPy <= 1.5.1, you can form the expression but still cannot eval
 %! syms x
 %! A = [1 2; 3 4];
 %! B = x^A;
 %! assert (strcmp (regexprep (disp (B, 'flat'), '\s+', ''), 'x**Matrix([[1,2],[3,4]])'))
+%! % sub in and compare to double
+%! Bs = subs(B, x, sym(3)/2);
+%! D1 = double(Bs);
+%! D2 = (3/2)^[1 2; 3 4];
+%! assert (max(max(abs(D1 - D2))) < 1e-14)
 
 %!error
 %! A = sym([1 2; 3 4]);
