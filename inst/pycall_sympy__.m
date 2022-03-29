@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -224,12 +224,6 @@ end
 %! % int
 %! r = pycall_sympy__ ('return 123456');
 %! assert (r == 123456)
-%! assert (isinteger (r))
-
-%!test
-%! % long (on python2)
-%! r = pycall_sympy__ ('return 42 if sys.version_info >= (3,0) else long(42)');
-%! assert (r == 42)
 %! assert (isinteger (r))
 
 %!test

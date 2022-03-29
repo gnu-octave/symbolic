@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2019 Colin B. Macdonald
+%% Copyright (C) 2016-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,8 +43,8 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('')
     disp ('Computers may have more than one Python interpreter installed.  If you')
     disp ('need to, you can select a different one using the PYTHON environment')
-    disp ('variable (see "help sympref").  For example, to use Python 2, try')
-    disp ('    setenv PYTHON python2')
+    disp ('variable (see "help sympref").  For example, to use Python 3, try')
+    disp ('    setenv PYTHON python3')
     disp ('    sympref reset')
     disp ('')
     fprintf ('Attempting to run %s -c "print(\\"Python says hello\\")"\n\n', pyexec);
