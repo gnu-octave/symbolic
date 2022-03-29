@@ -99,3 +99,44 @@ jobs:
           docker stop oc
           docker rm oc
           ls
+
+
+  doctests:
+    runs-on: ubuntu-latest
+    strategy:
+      # for now! later default of true is less wasteful
+      fail-fast: false
+      matrix:
+        octave: [5.2.0, 6.2.0, 6.4.0]
+        sympy: [1.4.0, 1.5.1]
+        include:
+          - octave: 6.4.0
+            sympy: 1.6.2
+    steps:
+      - uses: actions/checkout@v2
+      - name:
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          echo Running doctests on Octave $OCT and SymPy $SYMPY
+          sudo uname -a
+          docker pull docker.io/gnuoctave/octave:$OCT
+          # TODO: nonsense here to try to get r/w access: enables sudo below
+          docker run --name=oc --detach --init \
+            -u root --env="GRANT_SUDO=yes" \
+            --volume=$PWD:/home/jovyan/octsympy:rw \
+            gnuoctave/octave:$OCT sleep inf
+          docker exec oc pip3 install sympy==$SYMPY
+          docker exec oc octave-cli --eval 'pwd; ls'
+          docker exec oc octave-cli --eval "pkg install -forge doctest"
+          docker exec oc sudo make -C octsympy install
+          docker exec oc octave-cli --eval "pkg list"
+          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
+          # docker exec oc octave-cli --eval "pkg load symbolic; sym('x'); doctest ."
+          docker exec oc make -C octsympy doctest
+          docker exec oc ls
+          echo "Stopping container"
+          docker stop oc
+          docker rm oc
+          ls
