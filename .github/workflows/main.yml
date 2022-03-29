@@ -1,0 +1,101 @@
+# SPDX-License-Identifier: FSFAP
+# Copyright (C) 2022 Colin B. Macdonald
+#
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+#
+# Github Actions configuration for Octave's Symbolic package
+
+name: CI
+
+#on:
+#  push:
+#    branches:
+#    - ci
+#  #pull_request:
+#  #  branches: [ master ]
+
+on:
+  push
+
+jobs:
+  # Just some misc stuff, minimal testing, diagnostics etc
+  try_stuff:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      - name: Run a multi-line script
+        run: |
+          echo Hello world
+          sudo uname -a
+          docker pull docker.io/gnuoctave/octave:6.4.0
+          # sudo apt-get install -y octave
+          # octave --eval 'disp("hi")'
+          ls
+          cd inst
+          ls
+          docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "sympref diagnose"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
+          echo "Try a test"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); test @sym/qr"
+
+
+  # Built-in Self Tests for various supported Octave and SymPy
+  bist:
+    runs-on: ubuntu-latest
+    strategy:
+      # for now! later default of true is less wasteful
+      fail-fast: false
+      matrix:
+        octave: [5.2.0, 6.2.0, 6.4.0]
+        sympy: [1.5.1]
+        include:
+          - octave: 6.4.0
+            sympy: 1.6.2
+          - octave: 6.4.0
+            sympy: 1.7.1
+          - octave: 6.4.0
+            sympy: 1.8.0
+          - octave: 6.4.0
+            sympy: 1.9.0
+          - octave: 6.4.0
+            sympy: 1.10.1
+    steps:
+      - uses: actions/checkout@v2
+      - name:
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          echo Running tests on Octave $OCT and SymPy $SYMPY
+          sudo uname -a
+          docker pull docker.io/gnuoctave/octave:$OCT
+          # TODO: nonsense here to try to get r/w access: enables sudo below
+          docker run --name=oc --detach --init \
+            -u root --env="GRANT_SUDO=yes" \
+            --volume=$PWD:/home/jovyan/octsympy:rw \
+            gnuoctave/octave:$OCT sleep inf
+          docker exec oc pip3 install sympy==$SYMPY
+          docker exec oc octave-cli --eval 'pwd; ls'
+          docker exec oc sudo make -C /home/jovyan/octsympy install
+          # TODO needs updating:
+          # docker exec oc make -C octsympy test
+          docker exec oc octave-cli --eval "pkg list"
+          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
+          # TODO: runs all the tests for some reason
+          # docker exec oc octave-cli --eval "pkg test symbolic"
+          docker exec oc octave-cli --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
+          docker exec oc ls
+          echo "Stopping container"
+          docker stop oc
+          docker rm oc
+          ls
