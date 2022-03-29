@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2022 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # SPDX-License-Identifier: GPL-3.0-or-later
 
