@@ -355,10 +355,13 @@ end
 %!warning <dangerous> vpa ('sqrt(2.0)');
 
 %!warning <dangerous>
-%! % https://github.com/sympy/sympy/issues/13425
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %! a = vpa('2**0.5');
 %! b = vpa(sqrt(sym(2)));
 %! assert (isequal (a, b))
+%! else
+%! warning('dangerous')  % fake it until we drop 1.4
+%! end
 
 %!test
 %! a = vpa('2.3e1');
