@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2020 Colin B. Macdonald
+%% Copyright (C) 2014-2020, 2022 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
 %%
@@ -312,15 +312,7 @@ function varargout = sympref(cmd, arg)
 
     case 'reset'
       verbose = ~sympref('quiet');
-      r = python_ipc_driver('reset', []);
-
-      if (nargout == 0)
-        if (~r)
-          disp('Problem resetting');
-        end
-      else
-        varargout{1} = r;
-      end
+      python_ipc_driver('reset', []);
 
     %case 'path'
       %pkg_path = fileparts (mfilename ('fullpath'));
@@ -463,12 +455,11 @@ end
 
 %!test
 %! syms x
-%! r = sympref('reset');
+%! sympref('reset');
 %! % restore original sympref settings
 %! sympref ('ipc',   sympref_orig.ipc);
 %! syms x
 %! sympref ('quiet', sympref_orig.quiet);
-%! assert(r)
 
 %!error <invalid preference or command> sympref ('nosuchsetting')
 %!error <invalid preference or command> sympref ('nosuchsetting', true)

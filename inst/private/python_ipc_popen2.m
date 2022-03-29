@@ -1,5 +1,5 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
-%% Copyright (C) 2018 Mike Miller
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2018, 2020 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -43,7 +43,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   info = [];
 
   if (strcmp(what, 'reset'))
-    cleanup = [];
+    cleanup = [];  % triggers a call to reset function
     fin = [];
     fout = [];
     pid = [];
@@ -74,6 +74,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       error('popen2() failed');
     end
 
+    % this will be called when we `clear cleanup`: avoids dangling file handles
     cleanup = onCleanup (@() python_ipc_popen2_reset (fin, fout, pid));
 
     headers = python_header();

@@ -1,4 +1,5 @@
-%% Copyright (C) 2020 Mike Miller
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2018, 2020 Mike Miller
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,10 +21,9 @@
 %% @deftypefun {@var{A} =} python_ipc_popen2_reset (@var{fin}, @var{fout}, @var{pid})
 %% Private helper function for Python IPC.
 %%
-%% @var{A} is the resulting object, which might be an error code.
 %% @end deftypefun
 
-function A = python_ipc_popen2_reset (fin, fout, pid)
+function python_ipc_popen2_reset (fin, fout, pid)
 
   verbose = ~ sympref ('quiet');
 
@@ -47,5 +47,7 @@ function A = python_ipc_popen2_reset (fin, fout, pid)
     t = fclose (fout); fout = [];
     A = A && (t == 0);
   end
+
+  % Note: A is true if everything went well; unclear how to return this
 
 end
