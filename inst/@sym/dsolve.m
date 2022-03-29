@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -171,7 +171,9 @@ function [soln,classify] = dsolve(ode,varargin)
   % FIXME: might be nice to expose SymPy's "sp.ode.classify_sysode" and
   %        "sp.ode.classify_ode" with their own commands
   if (isscalar(ode) && nargout==2)
-    classify = pycall_sympy__ ('return sp.ode.classify_ode(_ins[0])[0],', ode);
+    cmd = { 'from sympy.solvers import classify_ode'
+            'return classify_ode(_ins[0])[0],' };
+    classify = pycall_sympy__ (cmd, ode);
   elseif(~isscalar(ode) && nargout==2)
     warning('Classification of systems of ODEs is currently not supported')
     classify='';
