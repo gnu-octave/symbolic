@@ -1,6 +1,6 @@
 # Copyright (C) 2014-2017, 2019 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
-# Copyright (C) 2020 billchenchina
+# Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
 # SPDX-License-Identifier: GPL-3.0-or-later
 
