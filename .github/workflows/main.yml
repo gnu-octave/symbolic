@@ -10,15 +10,15 @@
 
 name: CI
 
-on:
-  push:
-    branches:
-    - ci
-  #pull_request:
-  #  branches: [ master ]
+#on:
+#  push:
+#    branches:
+#    - ci
+#  #pull_request:
+#  #  branches: [ master ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on:
+  push
 
 jobs:
   # Just some misc stuff, minimal testing, diagnostics etc
@@ -65,6 +65,10 @@ jobs:
             sympy: 1.7.1
           - octave: 6.4.0
             sympy: 1.8.0
+          - octave: 6.4.0
+            sympy: 1.9.0
+          - octave: 6.4.0
+            sympy: 1.10.1
     steps:
       - uses: actions/checkout@v2
       - name:
