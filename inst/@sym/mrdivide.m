@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -41,7 +41,9 @@
 %% @end example
 %%
 %% The forward slash notation can be used to solve systems
-%% of the form A⋅B = C using @code{A = C / B}:
+%% of the form A⋅B = C using @code{A = C / B}.
+%% Unfortunately, this is currently broken
+%% (see @url{https://github.com/cbm755/octsympy/issues/1079}):
 %% @example
 %% @group
 %% B = sym([1 0; 1 2]);
@@ -50,11 +52,13 @@
 %%       ⎡1 + π  2⋅π⎤
 %%       ⎢          ⎥
 %%       ⎣  7     8 ⎦
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) > Version("1.5.1")'))
 %% C / B
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡1  π⎤
 %%       ⎢    ⎥
 %%       ⎣3  4⎦
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) > Version("1.5.1")'))
 %% C * inv(B)
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡1  π⎤
@@ -101,8 +105,9 @@ end
 %! assert (isequal ( A/2 , D/2  ))
 %! assert (isequal ( A/sym(2) , D/2  ))
 
-%!test
+%!xtest
 %! % I/A: either invert A or leave unevaluated: not bothered which
+%! % Issue #1079: used to work
 %! A = sym([1 2; 3 4]);
 %! B = sym(eye(2)) / A;
 %! assert (isequal (B, inv(A))  ||  strncmpi (sympy (B), 'MatPow', 6))
@@ -113,15 +118,17 @@ end
 %! B = sym('ImmutableDenseMatrix([[Integer(1), Integer(2)], [Integer(3), Integer(4)]])');
 %! assert (isequal (A/A, B/B))
 
-%!test
+%!xtest
 %! % A = C/B is C = A*B
+%! % Issue #1079: used to work
 %! A = sym([1 2; 3 4]);
 %! B = sym([1 3; 4 8]);
 %! C = A*B;
 %! A2 = C / B;
 %! assert (isequal (A, A2))
 
-%!test
+%!xtest
+%! % Issue #1079: used to work
 %! A = [1 2; 3 4];
 %! B = A / A;
 %! % assert (isequal (B, sym(eye(2))
@@ -130,7 +137,8 @@ end
 %! assert (isequal (B(2,1), 0))
 %! assert (isequal (B(1,2), 0))
 
-%!test
+%!xtest
+%! % Issue #1079: used to work
 %! A = sym([5 6]);
 %! B = sym([1 2; 3 4]);
 %! C = A*B;
