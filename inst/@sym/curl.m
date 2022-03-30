@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2021-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -111,7 +111,10 @@ function g = curl(v,x)
   cmd = { '(v, x) = _ins'
           'def d(u, y):'
           '    if u.is_constant():'  % FIXME ?
-          '        return sp.numbers.Zero()'
+          '        try:'
+          '            return sp.core.numbers.Zero()'
+          '        except AttributeError:'  % fix for SymPy 1.5.x
+          '            return sp.numbers.Zero()'
           '    return u.diff(y)'
           'g = Matrix([ \'
           '      d(v[2], x[1]) - d(v[1], x[2]),  \'

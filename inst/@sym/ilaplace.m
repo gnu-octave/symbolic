@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2018-2019 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018-2019, 2022 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -29,7 +29,6 @@
 %% @example
 %% @group
 %% syms g(s) t
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.2")'))
 %% f(t) = rewrite(ilaplace(g), 'Integral')
 %%   @result{} f(t) = (symfun)
 %%           c + ∞⋅ⅈ
@@ -138,35 +137,7 @@ function f = ilaplace(varargin)
 
   cmd = { 'F, s, t = _ins'
           'f = inverse_laplace_transform(F, s, t)'
-          'if Version(spver) > Version("1.2"):'
-          '    return f'
-          '#'
-          '# older sympy hacks'
-          '#'
-          'if not f.has(InverseLaplaceTransform):'
-          '    return f,'
-            'f=0; a_ = sp.Wild("a_"); b_ = sp.Wild("b_")'
-            'Fr=F.rewrite(sp.exp)'
-            'if type(Fr)==sp.Add:'
-            '    terms=Fr.expand().args'
-            'else:'
-            '    terms=(Fr,)'
-            'for term in terms:'
-            '    #compute the Laplace transform for each term'
-            '    r=sp.simplify(term).match(a_*sp.exp(b_))'
-            '    if r!=None and sp.diff(term,s)!=0:'
-            '        modulus=r[a_]'
-            '        phase=r[b_]/s'
-            '        # if a is constant and b/s is constant'
-            '        if sp.diff(modulus,s)==0 and sp.diff(phase,s)==0:'
-            '            f = f + modulus*sp.DiracDelta(t+phase)'
-            '        else:'
-            '            f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            '    elif sp.diff(term,s)==0:'
-            '        f = f + term*sp.DiracDelta(t)'
-            '    else:'
-            '        f = f + sp.Subs(sp.inverse_laplace_transform(term, s, t),sp.Heaviside(t),1).doit()'
-            'return f,' };
+          'return f,' };
 
   f = pycall_sympy__ (cmd, F, s, t);
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -117,15 +117,12 @@ end
 %! assert (isequal (Q*R, A))
 
 %!test
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % non square: short fat
 %! A = sym([1 2 3; 4 5 6]);
 %! [Q, R] = qr (A);
 %! assert (isequal (Q*R, A))
-%! end
 
 %!test
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % non square: short fat, rank deficient
 %! A = sym([1 2 3; 2 4 6]);
 %! [Q, R] = qr (A);
@@ -133,10 +130,8 @@ end
 %! A = sym([1 2 3; 2 4 6; 0 0 0]);
 %! [Q, R] = qr (A);
 %! assert (isequal (Q*R, A))
-%! end
 
 %!test
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! % rank deficient
 %! A = sym([1 2 3; 2 4 6; 0 0 0]);
 %! [Q, R] = qr (A);
@@ -144,7 +139,6 @@ end
 %! A = sym([1 2 3; 2 5 6; 0 0 0]);
 %! [Q, R] = qr (A);
 %! assert (isequal (Q*R, A))
-%! end
 
 %!error <not implemented>
 %! [Q, R, P] = qr (sym(1))

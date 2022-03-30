@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %%
 %% This file is part of OctSymPy.
@@ -171,7 +171,9 @@ function [soln,classify] = dsolve(ode,varargin)
   % FIXME: might be nice to expose SymPy's "sp.ode.classify_sysode" and
   %        "sp.ode.classify_ode" with their own commands
   if (isscalar(ode) && nargout==2)
-    classify = pycall_sympy__ ('return sp.ode.classify_ode(_ins[0])[0],', ode);
+    cmd = { 'from sympy.solvers import classify_ode'
+            'return classify_ode(_ins[0])[0],' };
+    classify = pycall_sympy__ (cmd, ode);
   elseif(~isscalar(ode) && nargout==2)
     warning('Classification of systems of ODEs is currently not supported')
     classify='';
@@ -272,10 +274,17 @@ end
 %! ode1 = diff(x(t),t) == 2*y(t);
 %! ode2 = diff(y(t),t) == 2*x(t);
 %! soln = dsolve([ode1, ode2]);
-%! g1 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
-%! g2 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
-%! assert (isequal ([rhs(soln{1}), rhs(soln{2})], g1) || ...
-%!         isequal ([rhs(soln{1}), rhs(soln{2})], g2))
+%! soln = [rhs(soln{1}), rhs(soln{2})];
+%! g1 = [C1*exp(-2*t) + C2*exp(2*t), -C1*exp(-2*t) + C2*exp(2*t)];
+%! g2 = [C1*exp(2*t) + C2*exp(-2*t), C1*exp(2*t) - C2*exp(-2*t)];
+%! g3 = [-C1*exp(-2*t) + C2*exp(2*t), C1*exp(-2*t) + C2*exp(2*t)];
+%! g4 = [C1*exp(2*t) - C2*exp(-2*t), C1*exp(2*t) + C2*exp(-2*t)];
+%! % old SymPy <= 1.5.1 had some extra twos
+%! g5 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
+%! g6 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! assert (isequal (soln, g1) || isequal (soln, g2) || ...
+%!         isequal (soln, g3) || isequal (soln, g4) || ...
+%!         isequal (soln, g5) || isequal (soln, g6))
 
 %!test
 %! % System of ODEs (initial-value problem)

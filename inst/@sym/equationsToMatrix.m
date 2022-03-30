@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -250,8 +250,5 @@ end
 %! assert (isequal (B, b))
 
 %!error <unique>
-%! if (pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
-%!   error ('unique')
-%! end
 %! syms x
 %! equationsToMatrix (3*x == 2, [x x])

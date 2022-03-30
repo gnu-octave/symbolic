@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -75,7 +75,5 @@ end
 %! A = h (1.1, 2.2);
 %! B = double (igamma (sym(11)/10, sym(22)/10));
 %! C = gammainc (2.2, 1.1, 'upper')*gamma(1.1);
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %! assert (A, B, -10*eps)
 %! assert (A, C, -10*eps)
-%! end

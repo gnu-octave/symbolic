@@ -1,4 +1,4 @@
-%% Copyright (C) 2019 Colin B. Macdonald
+%% Copyright (C) 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,7 +26,7 @@
 
 function assert_pythonic_and_sympy (verbose)
 
-  minsympyver = '1.2';
+  minsympyver = '1.4';
 
   if (nargin < 1)
     verbose = false;

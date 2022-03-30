@@ -1,16 +1,13 @@
-# Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2022 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
+# Copyright (C) 2020 Tianyu Chen (billchenchina)
+# Copyright (C) 2021 Johannes Maria Frank
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
 
-from __future__ import print_function
-from __future__ import division
-
 import sys
-
-from sympy.core.compatibility import unicode
 
 sys.ps1 = ""; sys.ps2 = ""
 
@@ -43,6 +40,12 @@ try:
     from sympy.functions.special.hyper import TupleArg
     # for sets
     from sympy.utilities.iterables import uniq
+    try:
+        # quick fix for https://github.com/cbm755/octsympy/issues/1053
+        # TODO: investigate the sym ctor in this case, likely a better fix in there
+        from sympy.core.symbol import Str
+    except ImportError:
+        pass
     import copy
     import binascii
     import struct
@@ -53,8 +56,12 @@ try:
     import collections
     from re import split
     # patch pretty printer, issue #952
-    from sympy.printing.pretty.pretty import PrettyPrinter
-    _mypp = PrettyPrinter
+    try:
+        from sympy.printing.pretty.pretty import PrettyPrinter
+        _mypp = PrettyPrinter
+    except:
+        # is this needed for SymPy 1.4?  TODO: Bump minimum SymPy and cleanup
+        _mypp = pretty.__globals__["PrettyPrinter"]
     def _my_rev_print(cls, f, **kwargs):
         g = f.func(*reversed(f.args), evaluate=False)
         return cls._print_Function(g, **kwargs)
@@ -70,13 +77,10 @@ try:
     def dbout(l):
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
-        # used to pass doubles back-and-forth (.decode for py3)
+        # used to pass doubles back-and-forth
         return binascii.hexlify(struct.pack(">d", x)).decode()
     def hex2d(s):
-        if sys.version_info >= (3, 0):
-            bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
-        else:
-            bins = "".join(chr(int(s[x:x+2], 16)) for x in range(0, len(s), 2))
+        bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
         return struct.unpack(">d", bins)[0]
     def dictdiff(a, b):
         """ keys from a that are not in b, used by evalpy() """
@@ -89,14 +93,11 @@ try:
         # short but not quite right: https://github.com/cbm755/octsympy/pull/320
         return LooseVersion(v.replace('.dev', ''))
     def myesc(s):
-        if sys.version_info >= (3, 0):
-            # workaround https://bugs.python.org/issue25270
-            if not s:
-                return s
-            b, n = codecs.escape_encode(s.encode('utf-8'))
-            return b.decode('ascii')
-        else:
-            return s.encode('utf-8').encode('string_escape')
+        # workaround https://bugs.python.org/issue25270
+        if not s:
+            return s
+        b, _ = codecs.escape_encode(s.encode('utf-8'))
+        return b.decode('ascii')
 except:
     echo_exception_stdout("in python_header defining fcns block 1")
     raise
@@ -121,10 +122,7 @@ try:
         import xml.dom.minidom as minidom
         DOM = minidom.parseString(ET.tostring(xroot))
         # want real newlines here (so hard to do escaping *after* this)
-        if sys.version_info >= (3, 0):
-            s = DOM.toprettyxml(indent="", newl="\n")
-        else:
-            s = DOM.toprettyxml(indent="", newl="\n", encoding="utf-8")
+        s = DOM.toprettyxml(indent="", newl="\n")
         if tostdout:
             print(s)
         else:
@@ -188,8 +186,7 @@ try:
             c = ET.SubElement(et, "list")
             for y in x:
                 octoutput(y, c)
-        elif isinstance(x, int) or \
-             (sys.version_info[0] <= 2 and isinstance(x, long)):
+        elif isinstance(x, int):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_INT)
@@ -210,8 +207,7 @@ try:
             f.text = d2hex(x.real)
             f = ET.SubElement(a, "f")
             f.text = d2hex(x.imag)
-        elif isinstance(x, str) or \
-             (sys.version_info[0] <= 2 and isinstance(x, unicode)):
+        elif isinstance(x, str):
             a = ET.SubElement(et, "item")
             f = ET.SubElement(a, "f")
             f.text = str(OCTCODE_STR)
@@ -229,10 +225,7 @@ try:
             octoutput(keystr, c)
             c = ET.SubElement(a, "list")
             # FIXME: bit of a kludge, use iterable instead of list, tuple above?
-            if sys.version_info >= (3, 0):
-                octoutput(list(x.values()), c)
-            else:
-                octoutput(x.values(), c)
+            octoutput(list(x.values()), c)
         else:
             raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
