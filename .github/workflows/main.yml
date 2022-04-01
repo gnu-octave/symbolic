@@ -10,15 +10,11 @@
 
 name: CI
 
-#on:
-#  push:
-#    branches:
-#    - ci
-#  #pull_request:
-#  #  branches: [ master ]
-
 on:
   push
+on:
+  pull_request
+
 
 jobs:
   # Just some misc stuff, minimal testing, diagnostics etc
