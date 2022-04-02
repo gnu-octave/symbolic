@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -36,9 +36,10 @@ function z = mat_rclist_access(A, r, c)
           'if A is None or not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'n = len(rr)'
-          'M = sp.Matrix.zeros(n, 1)'
-          'for i in range(0,n):'
-          '    M[i,0] = A[rr[i],cc[i]]'
+          'M = [[0]]*n'
+          'for i in range(0, n):'
+          '    M[i][0] = A[rr[i],cc[i]]'
+          'M = sp.Matrix(M)'
           'return M,' };
 
   rr = num2cell(int32(r-1));

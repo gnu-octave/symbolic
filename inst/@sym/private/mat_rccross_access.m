@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,8 +25,11 @@
 %% Namely @code{':'}.
 %%
 %% @var{r} and @var{c} could contain duplicates.  This is one
-%% reason by this code doesn't easily replace
+%% reason why this code doesn't easily replace
 %% @code{mat_rclist_access}.
+%%
+%% @var{z} return is small matrix with @code{len(@var{c})} columns
+%% and @code{len(@var{r})} rows.
 %%
 %% @end defun
 
@@ -72,10 +75,11 @@ function z = mat_rccross_access(A, r, c)
   cmd = { '(A, rr, cc) = _ins'
           'if not A.is_Matrix:'
           '    A = sp.Matrix([A])'
-          'M = sp.Matrix.zeros(len(rr), len(cc))'
+          'M = [[0]*len(cc) for i in range(len(rr))]'
           'for i in range(0, len(rr)):'
           '    for j in range(0, len(cc)):'
-          '        M[i,j] = A[rr[i], cc[j]]'
+          '        M[i][j] = A[rr[i], cc[j]]'
+          'M = sp.Matrix(M)'
           'return M,' };
 
   rr = num2cell(int32(r-1));
