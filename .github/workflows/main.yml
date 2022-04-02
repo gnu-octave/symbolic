@@ -41,7 +41,7 @@ jobs:
           ls
           cd inst
           ls
-          docker run --rm -v pip3 install packaging
+          docker run pip3 install packaging
           docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "sympref diagnose"
