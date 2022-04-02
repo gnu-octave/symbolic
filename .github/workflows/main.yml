@@ -35,13 +35,13 @@ jobs:
         run: |
           echo Hello world
           sudo uname -a
+          pip3 install packaging
           docker pull docker.io/gnuoctave/octave:6.4.0
           # sudo apt-get install -y octave
           # octave --eval 'disp("hi")'
           ls
           cd inst
           ls
-          docker run pip3 install packaging
           docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "sympref diagnose"
