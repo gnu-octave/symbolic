@@ -41,13 +41,12 @@ jobs:
           ls
           cd inst
           ls
-          docker run --rm -v pip3 install packaging
           docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "sympref diagnose"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
+          #docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
           echo "Try a test"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); test @sym/qr"
+          #docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); test @sym/qr"
 
 
   # Built-in Self Tests for various supported Octave and SymPy
