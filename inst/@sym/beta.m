@@ -22,7 +22,7 @@
 %% @defmethod @@sym beta (@var{x}, @var{y})
 %% Beta function.
 %%
-%% Examples:
+%% Example:
 %% @example
 %% @group
 %% syms x y
@@ -30,6 +30,21 @@
 %%   @result{} ans = (sym) Β(x, y)
 %% @end group
 %% @end example
+%%
+%% The beta function is related to the gamma function:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% rewrite (beta (x,y), "gamma")
+%%   @result{}
+%%     ans = (sym)
+%%       Γ(x)⋅Γ(y)
+%%       ─────────
+%%       Γ(x + y)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/gamma}
 %% @end defmethod
 
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,7 +25,6 @@
 %% @example
 %% @group
 %% syms z
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% dilog (z)
 %%   @result{} ans = (sym) polylog(2, 1 - z)
 %% @end group
