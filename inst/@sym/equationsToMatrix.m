@@ -75,7 +75,6 @@
 %% @example
 %% @group
 %% eqns = [x + y - 2*z == 0, x + y + z == 1, 2*y - z + 5 == 0];
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% [A, B] = equationsToMatrix (eqns, [x y])
 %%   @result{} A = (sym 3×2 matrix)
 %%

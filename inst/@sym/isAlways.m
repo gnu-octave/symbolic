@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -117,10 +117,10 @@ function r = isAlways(p, varargin)
     '            if r in (S.true, S.false):'
     '                 return not bool(r)'
     '        if isinstance(p, (Lt, Gt, Le, Ge)):'
-    '            r = p._eval_relation(sp.simplify(p.lhs - p.rhs), 0)'
+    '            r = p._eval_relation(sp.simplify(p.lhs - p.rhs), sp.S(0))'
     '            r = simplify(r)'
     '            if r in (S.true, S.false):'
-    '                 return not bool(r)'
+    '                 return bool(r)'
     '    # for SMT compat'
     '    if p.is_number:'
     '        r = p.is_zero'  % FIXME: return bool(r)?
@@ -297,7 +297,7 @@ end
 
 %!test
 %! % ineq
-%! e =  x*(x+y) >= x^2 + x*y + 1;
+%! e =  x*(x+y) <= x^2 + x*y + 1;
 %! assert (~logical(e))
 %! assert (isAlways(e))
 %! e =  x*(x+y) <= x^2 + x*y;

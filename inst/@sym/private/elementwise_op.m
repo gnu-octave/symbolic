@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -89,12 +89,15 @@ function z = elementwise_op(scalar_fcn, varargin)
           '            q = A.as_mutable()'
           '        else:'
           '            assert q.shape == A.shape, "Matrices in input must all have the same shape"'
-          % in case all inputs were scalars:
+          % all inputs were scalars:
           'if q is None:'
-          '    q = Matrix([0])'
+          '    return _op(*_ins)'
+          % at least one input was a matrix:
+          '# dbout(f"at least one matrix param, shape={q.shape}")'
+          'elements = []'
           'for i in range(0, len(q)):'
-          '    q[i] = _op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins])'
-          'return q' ];
+          '    elements.append(_op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins]))'
+          'return Matrix(*q.shape, elements)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 

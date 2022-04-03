@@ -250,7 +250,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 2, y(1) == 0);
 %! g = -2*sin(2*x)/tan(sym('2'))+2*cos(2*x);
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (simplify (rhs(f) - g), 0))
 
 %!test
 %! % Neumann boundary conditions (second order ode)
@@ -258,7 +258,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, subs(diff(y,x),x,0)==1, subs(diff(y,x),x,1)==0);
 %! g = sin(2*x)/2+cos(2*x)/(2*tan(sym('2')));
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (simplify (rhs(f) - g), 0))
 
 %!test
 %! % Dirichlet-Neumann boundary conditions (second order ode)
@@ -266,7 +266,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3, subs(diff(y,x),x,1)==0);
 %! g = 3*sin(2*x)*tan(sym('2'))+3*cos(2*x);
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (simplify (rhs(f) - g), 0))
 
 %!test
 %! % System of ODEs

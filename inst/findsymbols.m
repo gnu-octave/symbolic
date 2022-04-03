@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,7 +59,11 @@ function L = findsymbols(obj, dosort)
   end
 
   if isa(obj, 'sym')
-    cmd = { 's = _ins[0].free_symbols'
+    cmd = { 'if isinstance(_ins[0], MatrixBase):'
+            '    # having problems with Eq in matrices in SymPy >= 1.7.1'
+            '    s = set().union(*(i.free_symbols for i in _ins[0] if i is not None))'
+            'else:'
+            '    s = _ins[0].free_symbols'
             'l = list(s)'
             'l = sorted(l, key=str)'
             'return l,' };
@@ -174,3 +178,14 @@ end
 %! B = A^n;
 %! L = findsymbols(B);
 %! assert (isequal (L, {n x y}))
+
+%!test
+%! % array of eq
+%! syms x y
+%! assert (isequal (findsymbols (2 == [2 x y]), {x y}))
+
+%!test
+%! % array of ineq
+%! syms x y
+%! A = [x < 1  2*x < y  x >= 2  3 <= x  x != y];
+%! assert (isequal (findsymbols (A), {x y}))

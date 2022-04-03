@@ -34,6 +34,7 @@
 %% function:
 %% @example
 %% @group
+%% syms x positive
 %% rewrite (pochhammer (x, n), 'gamma')
 %%   @result{} (sym)
 %%

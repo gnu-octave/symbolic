@@ -90,6 +90,8 @@ end
 %! [q, r] = qr(sym(6));
 %! assert (isequal (q, sym(1)))
 %! assert (isequal (r, sym(6)))
+
+%!test
 %! syms x
 %! [q, r] = qr(x);
 %! assert (isequal (q*r, x))

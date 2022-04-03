@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -168,4 +168,12 @@ end
 %! % symbolic size matrix
 %! syms n m integer
 %! A = sym('a', [n m]);
-%! assert (isequal (children(A), [sym('a') n m]))
+%! C = children (A);
+%! assert (isequal (C(2), n))
+%! assert (isequal (C(3), m))
+
+%!xtest
+%! % symbolic size matrix, fails on newer SymPy Issue #1089
+%! syms n m integer
+%! A = sym('a', [n m]);
+%! assert (isequal (children (A), [sym('a') n m]))
