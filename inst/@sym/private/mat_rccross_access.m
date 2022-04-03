@@ -79,7 +79,9 @@ function z = mat_rccross_access(A, r, c)
           'for i in range(0, len(rr)):'
           '    for j in range(0, len(cc)):'
           '        M[i][j] = A[rr[i], cc[j]]'
-          'M = sp.Matrix(M)'
+          '# M = sp.Matrix(M)'
+          '# not quite b/c of preserving 3x0 and 0x3 for example'
+          'M = sp.Matrix(len(rr), len(cc), [c for r in M for c in r])'
           'return M,' };
 
   rr = num2cell(int32(r-1));
