@@ -117,7 +117,7 @@ function r = isAlways(p, varargin)
     '            if r in (S.true, S.false):'
     '                 return not bool(r)'
     '        if isinstance(p, (Lt, Gt, Le, Ge)):'
-    '            r = p._eval_relation(sp.simplify(p.lhs - p.rhs), 0)'
+    '            r = p._eval_relation(sp.simplify(p.lhs - p.rhs), sp.S(0))'
     '            r = simplify(r)'
     '            if r in (S.true, S.false):'
     '                 return not bool(r)'
