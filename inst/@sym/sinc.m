@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -61,12 +61,12 @@
 %%
 %% @group
 %% syms x nonzero
-%% diff (sinc (x))
+%% simplify (diff (sinc (x)))
 %%   @result{} ans = (sym)
-%%        π⋅x⋅cos(π⋅x) - sin(π⋅x)
-%%        ───────────────────────
-%%                     2
-%%                  π⋅x
+%%        cos(π⋅x)   sin(π⋅x)
+%%        ──────── - ────────
+%%           x            2
+%%                     π⋅x
 %% @end group
 %% @end example
 %%
