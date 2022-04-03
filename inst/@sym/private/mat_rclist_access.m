@@ -36,7 +36,7 @@ function z = mat_rclist_access(A, r, c)
           'if A is None or not A.is_Matrix:'
           '    A = sp.Matrix([A])'
           'n = len(rr)'
-          'M = [[0]]*n'
+          'M = [[0] for i in range(n)]'
           'for i in range(0, n):'
           '    M[i][0] = A[rr[i],cc[i]]'
           'M = sp.Matrix(M)'
