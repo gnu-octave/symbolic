@@ -22,7 +22,7 @@
 %% @defmethod @@sym beta (@var{x}, @var{y})
 %% Beta function.
 %%
-%% Examples:
+%% Example:
 %% @example
 %% @group
 %% syms x y
@@ -30,6 +30,20 @@
 %%   @result{} ans = (sym) Β(x, y)
 %% @end group
 %% @end example
+%%
+%% The beta function is related to the gamma function:
+%% @example
+%% @group
+%% rewrite (beta (x,y), "gamma")
+%%   @result{}
+%%     ans = (sym)
+%%       Γ(x)⋅Γ(y)
+%%       ─────────
+%%       Γ(x + y)
+%% @end group
+%% @end example
+%%
+%% @seealso{@@sym/gamma}
 %% @end defmethod
 
 

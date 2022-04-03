@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -109,10 +109,21 @@
 %% unpredictable results for certain function names:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) < Version("1.8")'))
 %% beta(x) = sym('beta(x)')
 %%   @print{} ??? ... Error ...
 %% @end group
 %% @end example
+%% whereas on more recent SymPy we get
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.8")'))
+%% beta(x) = sym('beta(x)')
+%%   @result{} beta(x) = (symfun) Β(x, x)
+%% @end group
+%% @end example
+%% in either case, we're not getting an abstract symfun but rather the
+%% beta function (see @ref{@@sym/beta}).
 %%
 %% It is usually not necessary to call @code{symfun} directly
 %% but it can be done:
