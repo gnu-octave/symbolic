@@ -1,6 +1,7 @@
 %% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2021 Johannes Maria Frank
+%% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
 %%
