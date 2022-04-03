@@ -51,7 +51,10 @@ try:
     import struct
     import codecs
     import xml.etree.ElementTree as ET
-    from distutils.version import LooseVersion
+    try:
+        from packaging.version import Version as LooseVersion
+    except ImportError:
+        from distutils.version import LooseVersion
     import itertools
     import collections
     from re import split

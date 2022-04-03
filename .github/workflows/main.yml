@@ -80,6 +80,7 @@ jobs:
             -u root --env="GRANT_SUDO=yes" \
             --volume=$PWD:/home/jovyan/octsympy:rw \
             gnuoctave/octave:$OCT sleep inf
+          docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval 'pwd; ls'
           docker exec oc sudo make -C /home/jovyan/octsympy install
@@ -123,6 +124,7 @@ jobs:
             -u root --env="GRANT_SUDO=yes" \
             --volume=$PWD:/home/jovyan/octsympy:rw \
             gnuoctave/octave:$OCT sleep inf
+          docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval 'pwd; ls'
           docker exec oc octave-cli --eval "pkg install -forge doctest"
