@@ -108,6 +108,8 @@ jobs:
         include:
           - octave: 6.4.0
             sympy: 1.6.2
+          - octave: 6.4.0
+            sympy: 1.7.1
     steps:
       - uses: actions/checkout@v2
       - name:
