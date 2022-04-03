@@ -34,6 +34,7 @@
 %% The beta function is related to the gamma function:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% rewrite (beta (x,y), "gamma")
 %%   @result{}
 %%     ans = (sym)
