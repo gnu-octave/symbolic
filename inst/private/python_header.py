@@ -53,9 +53,13 @@ try:
     import codecs
     import xml.etree.ElementTree as ET
     try:
-        from packaging.version import Version as LooseVersion
+        from packaging.version import Version
     except ImportError:
+        # will fail on Python 3.12
         from distutils.version import LooseVersion
+        def Version(v):
+            # short but not quite right: https://github.com/cbm755/octsympy/pull/320
+            return LooseVersion(v.replace('.dev', ''))
     import itertools
     import collections
     from re import split
@@ -93,9 +97,6 @@ try:
             if not k in b:
                 n[k] = a[k]
         return n
-    def Version(v):
-        # short but not quite right: https://github.com/cbm755/octsympy/pull/320
-        return LooseVersion(v.replace('.dev', ''))
     def myesc(s):
         # workaround https://bugs.python.org/issue25270
         if not s:

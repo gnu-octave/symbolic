@@ -80,9 +80,12 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'import struct'
                     'import codecs'
                     'try:'
-                    '    from packaging.version import Version as LooseVersion'
+                    '    from packaging.version import Version'
                     'except ImportError:'
                     '    from distutils.version import LooseVersion'
+                    '    def Version(v):'
+                    '        # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
+                    '        return LooseVersion(v.replace(".dev", ""))'
                     'import itertools'
                     'import collections'
                     'from re import split'
@@ -102,9 +105,6 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '        if not k in b:'
                     '            n[k] = a[k]'
                     '    return n'
-                    'def Version(v):'
-                    '    # short but not quite right: https://github.com/cbm755/octsympy/pull/320'
-                    '    return LooseVersion(v.replace(".dev", ""))'
                   }, newl))
     have_headers = true;
   end
