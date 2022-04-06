@@ -25,6 +25,10 @@
 %%
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) < Version("1.10")'))
+%% catalan ()
+%%   @result{} (sym) Catalan
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
 %% catalan ()
 %%   @result{} (sym) G
 %%
