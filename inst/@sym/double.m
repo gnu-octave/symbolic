@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,8 +46,9 @@
 %% @example
 %% @group
 %% syms x
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.9")'))
 %% double (x)
-%%   @print{} ??? ... can't convert expression ...
+%%   @print{} ??? ... Cannot convert expression ...
 %% @end group
 %% @end example
 %%
