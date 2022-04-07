@@ -52,7 +52,56 @@
 %%
 %% Passing an extra argument of @code{0} gives an ``economy-sized''
 %% factorization.  This is currently the default behaviour even without
-%% the extra argument.
+%% the extra argument.  In fact the result may even more minimal than
+%% the double precision @ref{qr}; when the input has low rank, a
+%% rectangular rank-revealing result is returned:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
+%% [Q, R] = qr (sym ([6 2; 6 2]))
+%%   @result{} Q = (sym 2×1 matrix)
+%%       ⎡√2⎤
+%%       ⎢──⎥
+%%       ⎢2 ⎥
+%%       ⎢  ⎥
+%%       ⎢√2⎥
+%%       ⎢──⎥
+%%       ⎣2 ⎦
+%%   @result{} R = (sym) [6⋅√2  2⋅√2]  (1×2 matrix)
+%% @end group
+%% @end example
+%% We have one column in @code{Q} because the original matrix had
+%% rank one:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
+%% Q*R
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡6  2⎤
+%%       ⎢    ⎥
+%%       ⎣6  2⎦
+%% @end group
+%% @end example
+%%
+%% But what of the extreme case of a zero matrix?
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
+%% [Q, R] = qr (sym (zeros (2, 2)))
+%%   @result{} Q = (sym) []  (empty 2×0 matrix)
+%%   @result{} R = (sym) []  (empty 0×2 matrix)
+%% @end group
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
+%% Q*R
+%%   @result{} ans = (sym 2×2 matrix)
+%%       ⎡0  0⎤
+%%       ⎢    ⎥
+%%       ⎣0  0⎦
+%% @end group
+%% @end example
+%% Magic?  Not really but don't let anyone tell you the dimensions
+%% of empty matrices are unimportant!
 %%
 %% @seealso{qr, @@sym/lu}
 %% @end deftypemethod
