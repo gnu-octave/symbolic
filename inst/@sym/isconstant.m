@@ -25,22 +25,16 @@
 %% Example:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) < Version("1.10")'))
 %% syms x y
-%% A = [x 1 pi; 2 2*y catalan()]
-%%   @result{} A = (sym 2×3 matrix)
-%%       ⎡x   1      π   ⎤
-%%       ⎢               ⎥
-%%       ⎣2  2⋅y  Catalan⎦
+%% A = [x 1 pi; 2 2*y catalan()] 
 %% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
-%% syms x y
-%% A = [x 1 pi; 2 2*y catalan()]
 %%   @result{} A = (sym 2×3 matrix)
 %%      ⎡x   1   π⎤
 %%      ⎢         ⎥
 %%      ⎣2  2⋅y  G⎦
 %%
 %% isconstant (A)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
 %%   @result{} ans =
 %%       0  1  1
 %%       1  0  1
