@@ -1,4 +1,5 @@
 %% Copyright (C) 2020 Tasos Papastylianou
+%% Copyright (C) 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -85,20 +86,20 @@ function y = cumprod (x, dim)
   if (nargin == 2)
 
     assert (
-      !isempty (dim),
-      sprintf ("@sym/cumprod: dimension argument is an empty object")
+      ~ isempty (dim),
+      sprintf ('@sym/cumprod: dimension argument is an empty object')
     );
 
     assert (
       isnumeric (dim),
-      sprintf ("@sym/cumprod: invalid dimension argument type: %s", class (dim))
+      sprintf ('@sym/cumprod: invalid dimension argument type: %s', class (dim))
     );
 
     dim = floor (dim(1));   % behaviour compatible with builtin cumprod
 
     assert (
       dim > 0,
-      sprintf( "@sym/cumprod: invalid dimension argument: %d", dim)
+      sprintf ('@sym/cumprod: invalid dimension argument: %d', dim)
     );
 
   else  % (nargin == 1)
