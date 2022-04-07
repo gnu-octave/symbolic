@@ -20,6 +20,7 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {[@var{Q}, @var{R}] =} qr (@var{A})
 %% @deftypemethodx @@sym {[@var{Q}, @var{R}] =} qr (@var{A}, 0)
+%% @deftypemethodx @@sym {@var{R} =} qr (@var{A})
 %% Symbolic QR factorization of a matrix.
 %%
 %% Example:
@@ -131,6 +132,9 @@ function [Q, R] = qr(A, ord)
 
   [Q, R] = pycall_sympy__ (cmd, sym(A));
 
+  if (nargout <= 1)
+    Q = R;
+  end
 end
 
 
@@ -197,6 +201,10 @@ end
 %! A = sym([1 2 3; 2 5 6; 0 0 0]);
 %! [Q, R] = qr (A);
 %! assert (isequal (Q*R, A))
+
+%!test
+%! % single return value R not Q
+%! assert (isequal (qr (sym(4)), sym(4)))
 
 %!error <not implemented>
 %! [Q, R, P] = qr (sym(1))
