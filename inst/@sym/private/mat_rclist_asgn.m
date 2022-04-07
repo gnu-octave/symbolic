@@ -1,4 +1,6 @@
-%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2020 Mike Miller
+%% Copyright (C) 2020 Fernando Alvarruiz
 %%
 %% This file is part of OctSymPy.
 %%
@@ -61,7 +63,7 @@ function z = mat_rclist_asgn(A, r, c, B)
           '    B = sp.Matrix([[B]])'
           'BT = B.T'
           '# copy of A, expanded and padded with zeros'
-          'if A is None or not A.is_Matrix:'
+          'if A is None or not isinstance(A, MatrixBase):'
           '    n = max( max(r)+1, 1 )'
           '    m = max( max(c)+1, 1 )'
           'else:'
