@@ -1,5 +1,6 @@
 %% Copyright (C) 2015 Carnë Draug
 %% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,8 +25,9 @@
 %%
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
 %% catalan ()
-%%   @result{} (sym) Catalan
+%%   @result{} (sym) G
 %%
 %% vpa (catalan ())
 %%   @result{} (sym) 0.91596559417721901505460351493238

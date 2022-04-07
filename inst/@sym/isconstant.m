@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy
 %%
@@ -25,13 +26,15 @@
 %% @example
 %% @group
 %% syms x y
-%% A = [x 1 pi; 2 2*y catalan()]
+%% A = [x 1 pi; 2 2*y catalan()] 
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
 %%   @result{} A = (sym 2×3 matrix)
-%%       ⎡x   1      π   ⎤
-%%       ⎢               ⎥
-%%       ⎣2  2⋅y  Catalan⎦
+%%      ⎡x   1   π⎤
+%%      ⎢         ⎥
+%%      ⎣2  2⋅y  G⎦
 %%
 %% isconstant (A)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.10")'))
 %%   @result{} ans =
 %%       0  1  1
 %%       1  0  1
