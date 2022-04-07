@@ -92,12 +92,19 @@ end
 %! assert (isequal (r, sym(6)))
 
 %!test
-%! syms x
+%! syms x positive
 %! [q, r] = qr(x);
 %! assert (isequal (q*r, x))
-%! % could hardcode this if desired
-%! %assert (isequal (q, sym(1)))
-%! %assert (isequal (r, x))
+%! assert (isequal (q, sym(1)))
+%! assert (isequal (r, x))
+
+%!test
+%! % trickier if x could be zero, fails on 1.8 <= SymPy <= 1.10.1
+%! syms x
+%! [q, r] = qr(x);
+%! if (pycall_sympy__ ('return Version(spver) > Version("1.10.1")'))
+%! assert (isequal (q*r, x))
+%! end
 
 %!test
 %! A = [1 2; 3 4];
