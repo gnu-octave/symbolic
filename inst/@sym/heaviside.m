@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,34 +33,41 @@
 %% @end group
 %% @end example
 %%
-%% By default, the value at zero is undefined:
+%% There are various conventions for 'heaviside(sym(0))'; this function
+%% returns (sym) 1/2 by default.
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% heaviside(sym(0))
-%%   @result{} (sym) θ(0)
-%% @end group
-%% @end example
-%% This behaviour is different from the double-precision function:
-%% @example
-%% @group
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
-%% heaviside(0)
-%%   @result{} 0.5000
-%% @end group
-%% @end example
-%% (@pxref{heaviside})
-%%
-%% The optional second argument overrides the default:
-%% @example
-%% @group
-%% heaviside(0, sym(1)/2)
 %%   @result{} (sym) 1/2
-%% heaviside(0, [0 sym(1)/2 10])
-%%   @result{} (sym) [0  1/2  10]  (1×3 matrix)
 %% @end group
 %% @end example
 %%
+%% The optional second argument overrides the default.  For example
+%% to make the function right-continuous,
+%% @example
+%% @group
+%% heaviside(0, sym(1))
+%%   @result{} (sym) 1
+%% @end group
+%% @end example
+%% or left-continuous.
+%% @example
+%% @group
+%% heaviside(0, sym(0))
+%%   @result{} (sym) 0
+%% @end group
+%% @end example
+%%
+%% If passed a matrix, the heaviside function is computed for each
+%% element.
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
+%% heaviside([sym(-1) sym(0) sym(1) sym(x)])
+%%   @result{} (sym) [0  1/2  1  θ(x)]  (1×4 matrix)
+%% @end group
+%% @end example
 %% @seealso{heaviside, @@sym/dirac}
 %% @end defmethod
 
