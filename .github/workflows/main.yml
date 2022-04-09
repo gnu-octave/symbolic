@@ -49,8 +49,7 @@ jobs:
   bist:
     runs-on: ubuntu-latest
     strategy:
-      # for now! later default of true is less wasteful
-      fail-fast: false
+      fail-fast: true
       matrix:
         octave: [5.1.0, 5.2.0, 6.2.0, 6.4.0]
         sympy: [1.4, 1.5.1, 1.6.2, 1.7.1]
@@ -97,8 +96,7 @@ jobs:
   doctests:
     runs-on: ubuntu-latest
     strategy:
-      # for now! later default of true is less wasteful
-      fail-fast: false
+      fail-fast: true
       matrix:
         octave: [5.2.0, 6.2.0, 6.4.0]
         sympy: [1.4.0, 1.5.1, 1.6.2, 1.7.1, 1.8]
