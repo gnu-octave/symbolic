@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -93,6 +93,12 @@ end
 %! assert (isequal ( A.*A , D.*D  ))
 %! assert (isequal ( A.*D , D.*D  ))
 %! assert (isequal ( D.*A , D.*D  ))
+
+%!test
+%! syms x
+%! A = [1 x];
+%! B = [2 3];
+%! assert (isequal (A.*B, [2 3*x]))
 
 %!test
 %! % immutable test
