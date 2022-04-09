@@ -216,16 +216,20 @@ end
 %!test
 %! % Solution in implicit form
 %! syms y(x) C1
-%! sol=dsolve((2*x*y(x)-exp(-2*y(x)))*diff(y(x),x)+y(x)==0);
-%! eq=x*exp(2*y(x))-log(y(x))==C1;
-%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)) )
+%! de = (2*x*y(x) - exp(-2*y(x)))*diff(y(x), x) + y(x) == 0;
+%! sol = dsolve (de);
+%! eqn = x*exp(2*y(x)) - log(y(x)) == C1;
+%! % could differ by signs
+%! sol = lhs (sol) - rhs (sol);
+%! eqn = lhs (eqn) - rhs (eqn);
+%! sol2 = subs (sol, C1, -C1);
+%! assert (isequal (sol, eqn) || isequal (sol2, eqn))
 
 %!test
 %! % Compute solution and classification
 %! syms y(x) C1
-%! [sol,classy]=dsolve((2*x*y(x)-exp(-2*y(x)))*diff(y(x),x)+y(x)==0);
-%! eq=x*exp(2*y(x))-log(y(x))==C1;
-%! assert (isequal (rhs(sol), rhs(eq)) && isequal (lhs(sol), lhs(eq)))
+%! de = (2*x*y(x) - exp(-2*y(x)))*diff(y(x), x) + y(x) == 0;
+%! [sol, classy] = dsolve (de);
 %! assert (strcmp (classy, '1st_exact'))
 
 %!test
