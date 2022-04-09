@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -256,12 +256,14 @@ function g = subs(f, in, out)
     'sizes = {(a.shape if a.is_Matrix else (1, 1)) for a in yy}'
     'sizes.discard((1, 1))'
     'assert len(sizes) == 1, "all substitions must be same size or scalar"'
-    'g = zeros(*sizes.pop())'
+    'size = sizes.pop()'
+    'numel = prod(size)'
+    'g = [0]*numel'
     'for i in range(len(g)):'
     '    yyy = [y[i] if y.is_Matrix else y for y in yy]'
     '    sublist = list(zip(xx, yyy))'
     '    g[i] = f.subs(sublist, simultaneous=True).doit()'
-    'return g'
+    'return Matrix(*size, g)'
   };
 
   g = pycall_sympy__ (cmd, f, in, out);

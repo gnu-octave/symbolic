@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
@@ -629,6 +629,14 @@ end
 %! a = sym(7);
 %! a([]) = [42 42]
 
+%!test
+%! b = eye (3);
+%! a = sym (b);
+%! I = [2 3; 4 5];
+%! a(I) = -2*I;
+%! b(I) = -2*I;
+%! assert (isequal (a, sym (b)));
+%! assert (size (a), [3 3]);
 
 %% Tests from mat_replace
 
