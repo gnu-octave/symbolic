@@ -46,21 +46,24 @@ jobs:
 
 
   # Built-in Self Tests for various supported Octave and SymPy
+  # Test oldest-supported and newest Octave and all supported SymPy
+  # Test other supported Octave releases with latest SymPy
   bist:
     runs-on: ubuntu-latest
     strategy:
-      # for now! later default of true is less wasteful
-      fail-fast: false
+      fail-fast: true
       matrix:
-        octave: [5.1.0, 5.2.0, 6.2.0, 6.4.0]
-        sympy: [1.4, 1.5.1, 1.6.2, 1.7.1]
-        #include:
-        #  - octave: 6.4.0
-        #    sympy: 1.8.0
-        #  - octave: 6.4.0
-        #    sympy: 1.9.0
-        #  - octave: 6.4.0
-        #    sympy: 1.10.1
+        octave: [5.1.0, 6.4.0]
+        sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8]
+        include:
+          - octave: 5.2.0
+            sympy: 1.8
+          - octave: 6.1.0
+            sympy: 1.8
+          - octave: 6.2.0
+            sympy: 1.8
+          - octave: 6.3.0
+            sympy: 1.8
     steps:
       - uses: actions/checkout@v2
       - name:
@@ -97,13 +100,12 @@ jobs:
   doctests:
     runs-on: ubuntu-latest
     strategy:
-      # for now! later default of true is less wasteful
-      fail-fast: false
+      fail-fast: true
       matrix:
-        octave: [5.2.0, 6.2.0, 6.4.0]
-        sympy: [1.4.0, 1.5.1, 1.6.2, 1.7.1, 1.8]
+        octave: [5.1.0, 6.4.0]
+        sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8]
         include:
-          - octave: 5.1.0
+          - octave: 5.2.0
             sympy: 1.8
     steps:
       - uses: actions/checkout@v2
