@@ -1,5 +1,6 @@
 %% Copyright (C) 2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -52,7 +53,13 @@ function r = unique(A)
     print_usage ();
   end
 
-  r = pycall_sympy__ ('return sp.Matrix([list(uniq(*_ins))]),', A);
+  cmd = {'(A,) = _ins'
+         'if A.is_Matrix:'
+         '    return sp.Matrix([list(uniq(*_ins))]),'
+         'else:'
+         '    return _ins'};
+
+  r = pycall_sympy__ (cmd, A);
 
 end
 
@@ -67,3 +74,7 @@ end
 %! A = [1 2 3 3 4 5 5 6 7 7 x x y y];
 %! B = [1  2  3  4  5  6  7  x  y];
 %! assert (isequal (unique(A), B))
+
+%!test
+%! syms x
+%! assert (isequal (unique(x), x))
