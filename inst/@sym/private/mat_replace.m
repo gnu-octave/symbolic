@@ -1,6 +1,7 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
+%% Copyright (C) 2020 Fernando Alvarruiz
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,8 +25,6 @@
 %%
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_replace(A, subs, b)
 

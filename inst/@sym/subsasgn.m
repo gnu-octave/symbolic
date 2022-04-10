@@ -553,6 +553,13 @@ end
 %! a(1, 2) = [];
 
 %!test
+%! % Issue #964
+%! a = sym(10);
+%! a(1) = [];
+%! assert (isempty (a))
+%! assert (isequal (a, zeros(1, 0)))
+
+%!test
 %! % Issue #963: scalar asgn to empty part of matrix
 %! A = sym (magic (3));
 %! B = A;
