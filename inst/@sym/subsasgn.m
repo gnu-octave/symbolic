@@ -580,6 +580,20 @@ end
 %! A([], :) = 42;
 %! assert (isequal (A, B))
 
+%!test
+%! % Issue #1026
+%! a = sym(1:5);
+%! a(1:3) = [];
+%! assert (isequal (a, sym([4 5])))
+
+%!test
+%! % Issue #1026
+%! B = eye(4);
+%! A = sym(B);
+%! A(1:2, :) = [];
+%! B(1:2, :) = [];
+%! assert (isequal (A, B))
+
 %!error
 %! % TODO: do we care what error?
 %! A = sym (magic (3));
