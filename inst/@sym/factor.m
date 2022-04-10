@@ -51,7 +51,7 @@
 %% @example
 %% @group
 %% syms x
-%% factor(x**2 + 7*x + 12)
+%% factor(x^2 + 7*x + 12)
 %%   @result{} (sym) (x + 3)⋅(x + 4)
 %% @end group
 %% @end example
