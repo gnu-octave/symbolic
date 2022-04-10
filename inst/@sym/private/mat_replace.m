@@ -1,6 +1,7 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
+%% Copyright (C) 2020 Fernando Alvarruiz
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,8 +25,6 @@
 %%
 %% @end defun
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = mat_replace(A, subs, b)
 
@@ -50,10 +49,10 @@ function z = mat_replace(A, subs, b)
           return
         end
           if rows(A) == 1
-            z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = delete_col(A, subs{1});
             return
           elseif columns(A) == 1
-            z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+            z = delete_row(A, subs{1});
             return
           else
             z = sym([]);
@@ -69,10 +68,15 @@ function z = mat_replace(A, subs, b)
           return
         end
         if strcmp(subs{1}, ':')
-          z = pycall_sympy__ ('_ins[0].col_del(_ins[1] - 1); return _ins[0],', A, sym(subs{2}));
-          return
+          if strcmp(subs{2}, ':')
+            z = sym(zeros(0,columns(A)));
+            return
+          else
+            z = delete_col(A, subs{2});
+            return
+          end
         elseif strcmp(subs{2}, ':')
-          z = pycall_sympy__ ('_ins[0].row_del(_ins[1] - 1); return _ins[0],', A, sym(subs{1}));
+          z = delete_row(A, subs{1});
           return
         else
           error('A null assignment can only have one non-colon index.'); % Standard octave error
@@ -143,4 +147,37 @@ function z = mat_replace(A, subs, b)
 
   z = mat_rclist_asgn(A, r, c, b);
 
+end
+
+
+function z = delete_col(A, subs)
+  if isscalar (A)
+    z = sym(zeros (1, 0));
+  else
+    cmd = { 'A, subs = _ins'
+            'if isinstance(subs, Integer):'
+            '    A.col_del(subs - 1)'
+            '    return A,'
+            'for i in sorted(subs, reverse=True):'
+            '    A.col_del(i - 1)'
+            'return A,' };
+    z = pycall_sympy__ (cmd, A, sym(subs));
+  end
+end
+
+
+function z = delete_row(A, subs)
+  if isscalar (A)
+    % no test coverage: not sure how to hit this
+    z = sym(zeros (0, 1));
+  else
+    cmd = { 'A, subs = _ins'
+            'if isinstance(subs, Integer):'
+            '    A.row_del(subs - 1)'
+            '    return A,'
+            'for i in sorted(subs, reverse=True):'
+            '    A.row_del(i - 1)'
+            'return A,' };
+    z = pycall_sympy__ (cmd, A, sym(subs));
+  end
 end
