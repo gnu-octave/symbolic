@@ -49,10 +49,10 @@ function z = mat_replace(A, subs, b)
           return
         end
           if rows(A) == 1
-            z = delete_col_rows(A, subs{1}, 'col');
+            z = delete_col(A, subs{1});
             return
           elseif columns(A) == 1
-            z = delete_col_rows(A, subs{1}, 'row');
+            z = delete_row(A, subs{1});
             return
           else
             z = sym([]);
@@ -72,11 +72,11 @@ function z = mat_replace(A, subs, b)
             z = sym(zeros(0,columns(A)));
             return
           else
-            z = delete_col_rows(A, subs{2}, 'col');
+            z = delete_col(A, subs{2});
             return
           end
         elseif strcmp(subs{2}, ':')
-          z = delete_col_rows(A, subs{1}, 'row');
+          z = delete_row(A, subs{1});
           return
         else
           error('A null assignment can only have one non-colon index.'); % Standard octave error
@@ -149,15 +149,35 @@ function z = mat_replace(A, subs, b)
 
 end
 
-function z=delete_col_rows(A, subs, col_row)
-  if isscalar(A)
-    z = sym(1:0);
+
+function z = delete_col(A, subs)
+  if isscalar (A)
+    z = sym(zeros (1, 0));
   else
-    z = pycall_sympy__ ({'if isinstance(_ins[1],Integer):',...
-                        ['    _ins[0].',col_row,'_del(_ins[1] - 1)'],...
-                         'else:',...
-                         '    for i in sorted(_ins[1],reverse=True):',...
-                        ['        _ins[0].',col_row,'_del(i - 1)'],...
-                         'return _ins[0],'}, A, sym(subs));
+    cmd = { 'A, subs = _ins'
+            'if isinstance(subs, Integer):'
+            '    A.col_del(subs - 1)'
+            '    return A,'
+            'for i in sorted(subs, reverse=True):'
+            '    A.col_del(i - 1)'
+            'return A,' };
+    z = pycall_sympy__ (cmd, A, sym(subs));
+  end
+end
+
+
+function z = delete_row(A, subs)
+  if isscalar (A)
+    % no test coverage: not sure how to hit this
+    z = sym(zeros (0, 1));
+  else
+    cmd = { 'A, subs = _ins'
+            'if isinstance(subs, Integer):'
+            '    A.row_del(subs - 1)'
+            '    return A,'
+            'for i in sorted(subs, reverse=True):'
+            '    A.row_del(i - 1)'
+            'return A,' };
+    z = pycall_sympy__ (cmd, A, sym(subs));
   end
 end
