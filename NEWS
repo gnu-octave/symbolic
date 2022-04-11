@@ -3,6 +3,12 @@ octsympy 2.9.0+
 
   * Fixes for SymPy 1.6 and later.
 
+  * Fixes for Octave 6.x and Octave 7.1.
+
+  * Drop Python 2 support.
+
+  * Update minimum versions of SymPy to 1.4 and Octave to 5.1.
+
 
 
 octsympy 2.9.0 (2020-03-04)

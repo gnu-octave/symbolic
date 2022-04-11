@@ -80,7 +80,7 @@ end
 %!error 1 + None;
 %!error None - 1;
 %!error 6*None;
-%!error 2**None;
+%!error 2^None;
 %!error [1 2].*None;
 %!error isconstant(None);
 %!error nnz(None);
