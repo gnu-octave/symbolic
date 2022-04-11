@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %%
@@ -50,7 +50,7 @@
 %% @seealso{@@sym/subsasgn, @@sym/subsindex, @@sym/end}
 %% @end defop
 
-function out = subsref (f, idx)
+function varargout = subsref (f, idx)
 
   switch idx.type
     case '()'
@@ -91,6 +91,9 @@ function out = subsref (f, idx)
       error ('@sym/subsref: invalid subscript type ''%s''', idx.type);
 
   end
+
+  % Octave 7.1, Issue #1112 and https://savannah.gnu.org/bugs/?61898
+  varargout = {out};
 
 end
 
