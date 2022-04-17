@@ -91,7 +91,7 @@ function z = mrdivide(x, y)
 end
 
 
-%!xtest
+%!test
 %! % scalar
 %! syms x
 %! assert (isa( x/x, 'sym'))
