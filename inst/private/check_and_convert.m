@@ -46,7 +46,7 @@ function obj = check_and_convert(var_pyobj)
       obj{i} = get_sym_from_python(x);
     elseif (py.isinstance(x, list_or_tuple))
       obj{i} = check_and_convert(x);
-    elseif (py.isinstance (x, py.type(py.str())))
+    elseif (isa (x, 'py.str'))
       obj{i} = char (x);
     elseif (py.isinstance(x, builtins.dict))
       make_str_keys = pyeval ('lambda x: {str(k): v for k, v in x.items()}');
@@ -55,7 +55,7 @@ function obj = check_and_convert(var_pyobj)
       % make sure values are converted to sym
       s = structfun (@(t) check_and_convert (t){:}, s, 'UniformOutput', false);
       obj{i} = s;
-    elseif (py.isinstance(x, py.type(py.int())))
+    elseif (isa (x, 'py.int'))
       if (py.isinstance(x, pyeval('bool')))
         error ('unexpected python bool')
       end
