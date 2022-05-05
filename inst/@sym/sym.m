@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -526,7 +526,7 @@ function s = sym(x, varargin)
       cmd = {'x, hint_symfun = _ins'
              'if hint_symfun:'
              '    from sympy.abc import _clash1'
-             '    myclash = {v: Symbol(v) for v in ["ff", "FF"]}'
+             '    myclash = {v: "" for v in ["ff", "FF"]}'
              '    myclash.update(_clash1)'
              '    #myclash.pop("I", None)'  % remove for SMT compat
              '    #myclash.pop("E", None)'
@@ -1083,4 +1083,19 @@ end
 %! f = sym ('FF(w, pi)');
 %! s1 = sympy (f);
 %! s2 = 'Function(''FF'')(Symbol(''w''), pi)';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('ff(x, y)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''ff'')(Symbol(''x''), Symbol(''y''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % But this one should satisfy "sym(sympy(x) == x" identity
+%! % (OOTB, SymPy has ff -> FallingFactorial)
+%! f = sym ('FallingFactorial(x, y)');
+%! s1 = sympy (f);
+%! s2 = 'FallingFactorial(Symbol(''x''), Symbol(''y''))';
 %! assert (strcmp (s1, s2))
