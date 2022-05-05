@@ -486,7 +486,7 @@ function s = sym(x, varargin)
       end
 
       hint_symfun = false;
-      %% distinguish b/w sym('FF(w)') and sym('FF(Symbol("w"))')
+      %% distinguish b/w sym('ff(w)') and sym('ff(6, Symbol("w"))')
       % regexp detects F(<words commas spaces>)
       T = regexp (x, '^(\w+)\(([\w,\s]*)\)$', 'tokens');
       if (length (T) == 1 && length (T{1}) == 2)
@@ -526,7 +526,7 @@ function s = sym(x, varargin)
       cmd = {'x, hint_symfun = _ins'
              'if hint_symfun:'
              '    from sympy.abc import _clash1'
-             '    myclash = {v: "" for v in ["ff", "FF"]}'
+             '    myclash = {v: Function(v) for v in ["ff", "FF"]}'
              '    myclash.update(_clash1)'
              '    #myclash.pop("I", None)'  % remove for SMT compat
              '    #myclash.pop("E", None)'
