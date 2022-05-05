@@ -79,6 +79,10 @@ jobs:
             -u root --env="GRANT_SUDO=yes" \
             --volume=$PWD:/home/jovyan/octsympy:rw \
             gnuoctave/octave:$OCT sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval 'pwd; ls'
@@ -122,6 +126,10 @@ jobs:
             -u root --env="GRANT_SUDO=yes" \
             --volume=$PWD:/home/jovyan/octsympy:rw \
             gnuoctave/octave:$OCT sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval 'pwd; ls'
