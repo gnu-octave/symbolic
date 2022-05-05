@@ -80,7 +80,7 @@
 %%                -1
 %%        y(x) = ─────
 %%               x - 1
-%%   @result{} classify = separable
+%%   @result{} classify = ... separable ...
 %% @end group
 %% @end example
 %%
@@ -172,7 +172,7 @@ function [soln,classify] = dsolve(ode,varargin)
   %        "sp.ode.classify_ode" with their own commands
   if (isscalar(ode) && nargout==2)
     cmd = { 'from sympy.solvers import classify_ode'
-            'return classify_ode(_ins[0])[0],' };
+            'return classify_ode(_ins[0]),' };
     classify = pycall_sympy__ (cmd, ode);
   elseif(~isscalar(ode) && nargout==2)
     warning('Classification of systems of ODEs is currently not supported')
@@ -230,7 +230,7 @@ end
 %! syms y(x) C1
 %! de = (2*x*y(x) - exp(-2*y(x)))*diff(y(x), x) + y(x) == 0;
 %! [sol, classy] = dsolve (de);
-%! assert (strcmp (classy, '1st_exact'))
+%! assert (any (strcmp (classy, '1st_exact')))
 
 %!test
 %! % initial conditions (first order ode)
