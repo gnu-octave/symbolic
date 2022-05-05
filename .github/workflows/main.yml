@@ -147,3 +147,47 @@ jobs:
           docker stop oc
           docker rm oc
           ls
+
+
+  python3_10:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a multi-line script
+        run: |
+          sudo uname -a
+          python3 --version
+          sudo apt-get install -y octave
+          octave --version
+          python3 --version
+          #octave --eval "pkg install -forge doctest"
+          pwd
+          ls
+          pip install sympy
+          make -C octsympy install
+          octave --eval "pkg load symbolic; sympref diagnose"
+          # TODO: runs all the tests for some reason
+          #octave --eval "pkg test symbolic"
+          octave --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
+
+
+  python3_9:
+    runs-on: ubuntu-21.10
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a multi-line script
+        run: |
+          sudo uname -a
+          python3 --version
+          sudo apt-get install -y octave
+          octave --version
+          python3 --version
+          #octave --eval "pkg install -forge doctest"
+          pwd
+          ls
+          pip install sympy
+          make -C octsympy install
+          octave --eval "pkg load symbolic; sympref diagnose"
+          # TODO: runs all the tests for some reason
+          #octave --eval "pkg test symbolic"
+          octave --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
