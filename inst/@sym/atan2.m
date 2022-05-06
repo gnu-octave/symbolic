@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,6 +50,9 @@ function a = atan2(y, x)
 
 end
 
+
+%!error atan2 (1)
+%!error atan2 (1, 2, 3)
 
 %!test
 %! % some angles
