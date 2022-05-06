@@ -353,6 +353,8 @@ function y = {NAME} (x)
 end
 
 
+%!error {NAME} (1, 2)
+
 %!test
 %! x = 1.1;
 %! y = sym(11)/10;
