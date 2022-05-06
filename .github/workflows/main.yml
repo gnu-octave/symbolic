@@ -110,13 +110,15 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        octave: [6.4.0, 7.1.0]
+        octave: [7.1.0]
         sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8, 1.10.1]
         include:
           - octave: 5.1.0
-            sympy: 1.4
+            sympy: 1.8
           - octave: 5.2.0
             sympy: 1.8
+          - octave: 6.4.0
+            sympy: 1.10.1
     steps:
       - uses: actions/checkout@v2
       - name:
@@ -166,11 +168,10 @@ jobs:
           #octave --eval "pkg install -forge doctest"
       - name: Install SymPy
         run: |
-          pwd
-          ls
           pip install sympy
       - name: Install package, verify
         run: |
+          pwd
           make install
           octave --eval "pkg load symbolic; sympref diagnose"
       - name: Load package, run tests
