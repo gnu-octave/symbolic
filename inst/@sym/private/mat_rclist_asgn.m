@@ -54,26 +54,41 @@ function z = mat_rclist_asgn(A, r, c, B)
     error('not enough/too much in B')
   end
 
-  % Note: we expand by making a new big enough matrix and calling
-  % .copyin_matrix.  Easiest as: new[0,0] = old
+  % Easy trick to copy A into larger matrix AA:
+  %    AA = sp.Matrix.zeros(n, m)
+  %    AA[0, 0] = A
+  % Also usefil: .copyin_matrix
 
   cmd = { '(A, r, c, B) = _ins'
           '# B linear access fix, transpose for sympy row-based'
           'if B is None or not B.is_Matrix:'
           '    B = sp.Matrix([[B]])'
           'BT = B.T'
-          '# copy of A, expanded and padded with zeros'
-          'if A is None or not isinstance(A, MatrixBase):'
-          '    n = max( max(r)+1, 1 )'
-          '    m = max( max(c)+1, 1 )'
+          '# make a resized copy of A, and copy existing stuff in'
+          'if isinstance(A, list):'
+          '    assert len(A) == 0, "unexpectedly non-empty list: report bug!"'
+          '    n = max(max(r) + 1, 1)'
+          '    m = max(max(c) + 1, 1)'
+          '    AA = [[0]*m for i in range(n)]'
+          'elif A is None or not isinstance(A, MatrixBase):'
+          '    # we have non-matrix, put in top-left'
+          '    n = max(max(r) + 1, 1)'
+          '    m = max(max(c) + 1, 1)'
+          '    AA = [[0]*m for i in range(n)]'
+          '    AA[0][0] = A'
           'else:'
-          '    n = max( max(r)+1, A.rows )'
-          '    m = max( max(c)+1, A.cols )'
-          'AA = sp.Matrix.zeros(n, m)'
-          'AA[0, 0] = A'
-          'for i in range(0, len(r)):'
-          '    AA[r[i],c[i]] = BT[i]'
-          'return AA,' };
+          '    # build bigger matrix'
+          '    n = max(max(r) + 1, A.rows)'
+          '    m = max(max(c) + 1, A.cols)'
+          '    AA = [[0]*m for i in range(n)]'
+          '    # copy current matrix in'
+          '    for i in range(A.rows):'
+          '        for j in range(A.cols):'
+          '            AA[i][j] = A[i, j]'
+          '# now insert the new bits from B'
+          'for i, (r, c) in enumerate(zip(r, c)):'
+          '    AA[r][c] = BT[i]'
+          'return sp.Matrix(AA),' };
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));

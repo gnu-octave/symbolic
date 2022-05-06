@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -486,7 +486,7 @@ function s = sym(x, varargin)
       end
 
       hint_symfun = false;
-      %% distinguish b/w sym('FF(w)') and sym('FF(Symbol(...))')
+      %% distinguish b/w sym('ff(w)') and sym('ff(6, Symbol("w"))')
       % regexp detects F(<words commas spaces>)
       T = regexp (x, '^(\w+)\(([\w,\s]*)\)$', 'tokens');
       if (length (T) == 1 && length (T{1}) == 2)
@@ -495,29 +495,29 @@ function s = sym(x, varargin)
         varnamestr = T{1}{2};
         varnames = strtrim (strsplit (varnamestr, ','));
 
-        %% Blacklist some strings for which srepr(x) == str(x)
+        %% Blocklist some strings for which srepr(x) == str(x)
         % Python code for this:
         % >>> ns = {}; exec('from sympy import *', ns)
         % ... for (k, v) in ns.items():
         % ...    if not callable(v) and k not in ['__builtins__', 'C']:
         % ...        if k == srepr(v):
         % ...            print(k)
-        var_blacklist = {'E' 'I' 'nan' 'oo' 'pi' 'zoo' 'Catalan' ...
+        var_blocklist = {'E' 'I' 'nan' 'oo' 'pi' 'zoo' 'Catalan' ...
                          'EulerGamma' 'GoldenRatio' 'true' 'false'};
 
-        %% special case: if all (x,y,z) are in the blacklist, we should *not*
+        %% special case: if all (x,y,z) are in the blocklist, we should *not*
         % force symfun, thus preserving the identity sympy(sym(x)) == x
-        if (all (cellfun (@(v) (any (strcmp (v, var_blacklist))), varnames)))
+        if (all (cellfun (@(v) (any (strcmp (v, var_blocklist))), varnames)))
           hint_symfun = false;
         end
 
-        %% Whitelist some function names to always make a Function
+        %% special case some function names to always make a Function
         % Currently this is unused, but could be used if we want
         % different behaviour for the "I" in "I(t)" vs "F(I, t)".
         % SMT 2014 compat: does *not* have I, E here
-        %function_whitelist = {'I', 'E', 'ff', 'FF'};
+        %function_allowlist = {'I', 'E', 'ff', 'FF'};
         %if (hint_symfun)
-        %  if (any (strcmp (name, function_whitelist)))
+        %  if (any (strcmp (name, function_allowlist)))
         %    x = ['Function("' name '")(' varnamestr ')'];
         %  end
         %end
@@ -526,7 +526,7 @@ function s = sym(x, varargin)
       cmd = {'x, hint_symfun = _ins'
              'if hint_symfun:'
              '    from sympy.abc import _clash1'
-             '    myclash = {v: Symbol(v) for v in ["ff", "FF"]}'
+             '    myclash = {v: Function(v) for v in ["ff", "FF"]}'
              '    myclash.update(_clash1)'
              '    #myclash.pop("I", None)'  % remove for SMT compat
              '    #myclash.pop("E", None)'
@@ -1083,4 +1083,19 @@ end
 %! f = sym ('FF(w, pi)');
 %! s1 = sympy (f);
 %! s2 = 'Function(''FF'')(Symbol(''w''), pi)';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % not the identity, force symfun
+%! f = sym ('ff(x, y)');
+%! s1 = sympy (f);
+%! s2 = 'Function(''ff'')(Symbol(''x''), Symbol(''y''))';
+%! assert (strcmp (s1, s2))
+
+%!test
+%! % But this one should satisfy "sym(sympy(x) == x" identity
+%! % (OOTB, SymPy has ff -> FallingFactorial)
+%! f = sym ('FallingFactorial(x, y)');
+%! s1 = sympy (f);
+%! s2 = 'FallingFactorial(Symbol(''x''), Symbol(''y''))';
 %! assert (strcmp (s1, s2))
