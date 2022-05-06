@@ -271,7 +271,7 @@ function g = subs(f, in, out)
 end
 
 
-%!error <Invalid> subs (sym(1), 2, 3, 4)
+%!error subs (sym(1), 2, 3, 4)
 
 %!shared x,y,t,f
 %! syms x y t

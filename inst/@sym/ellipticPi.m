@@ -106,8 +106,8 @@ function y = ellipticPi (nu, phi, m)
 end
 
 
-%!error <Invalid> ellipticPi (sym (1))
-%!error <Invalid> ellipticPi (sym (1), 2, 3, 4)
+%!error ellipticPi (sym (1))
+%!error ellipticPi (sym (1), 2, 3, 4)
 
 %!assert (double (ellipticPi (sym (-23)/10, sym (pi)/4, 0)), 0.5876852228, 10e-11)
 %!assert (double (ellipticPi (sym (1)/3, sym (pi)/3, sym (1)/2)), 1.285032276, 10e-11)

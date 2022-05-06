@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Utkarsh Gautam
-%% Copyright (C) 2019 Colin B. Macdonald
+%% Copyright (C) 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -74,7 +74,7 @@ function s = sort(f)
 end
 
 
-%!error <Invalid> sort (sym(1), 2)
+%!error sort (sym(1), 2)
 
 %!test
 %! f = [sym(1), sym(0)];

@@ -127,6 +127,8 @@ function g = curl(v,x)
 end
 
 
+%!error curl([sym(1) 2 3], 42, 42)
+
 %!shared x,y,z
 %! syms x y z
 
@@ -173,4 +175,3 @@ end
 
 %!error <3D vector> curl([sym(1) 2 3 4])
 %!error <three components> curl([sym(1) 2 3], {sym('x') sym('y') sym('z') sym('t')})
-%!error <Invalid> curl([sym(1) 2 3], 42, 42)

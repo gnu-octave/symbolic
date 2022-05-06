@@ -1,4 +1,4 @@
-%% Copyright (C) 2019 Colin B. Macdonald
+%% Copyright (C) 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -115,7 +115,7 @@ function g = eval(f)
 end
 
 
-%!error <Invalid> eval (sym(1), 2)
+%!error eval (sym(1), 2)
 
 %!assert (isnumeric (eval (sym(3))))
 %!assert (isnumeric (eval (sin (sym(3)))))

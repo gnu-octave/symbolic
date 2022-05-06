@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -104,7 +104,7 @@ function y = ellipticE (phi, m)
 end
 
 
-%!error <Invalid> ellipticE (sym(1), 2, 3)
+%!error ellipticE (sym(1), 2, 3)
 
 %!assert (double (ellipticE (sym (-105)/10)), 3.70961391, 10e-9)
 %!assert (double (ellipticE (sym (-pi)/4)), 1.844349247, 10e-10)

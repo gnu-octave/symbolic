@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +48,7 @@ function y = acosd(x)
 end
 
 
-%!error <Invalid> acosd (sym(1), 2)
+%!error acosd (sym(1), 2)
 %!assert (isequaln (acosd (sym(nan)), sym(nan)))
 
 %!test

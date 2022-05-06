@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -94,7 +94,7 @@ function [N, D] = numden (f)
 end
 
 
-%!error <Invalid> numden (sym(1), 2)
+%!error numden (sym(1), 2)
 
 %!test
 %! syms x

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -94,7 +94,7 @@ function L = limit(f, x, a, dir)
 end
 
 
-%!error <Invalid> limit (sym(1), 2, 3, 4, 5)
+%!error limit (sym(1), 2, 3, 4, 5)
 
 %!shared x, oo
 %! syms x

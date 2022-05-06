@@ -61,10 +61,11 @@ function y = pochhammer (n, x)
 end
 
 
+%!error pochhammer (1)
+%!error pochhammer (1, 2, 3)
+
 %!error <sizes> pochhammer ([1 2], [1 2 3])
 %!error <sizes> pochhammer ([1 2], [1; 2])
-%!error <Invalid> pochhammer (1, 2, 3)
-%!error <Invalid> pochhammer (1)
 
 %!test
 %! y = sym(11)/10;

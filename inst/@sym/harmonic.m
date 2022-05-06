@@ -110,7 +110,7 @@ function y = harmonic(x)
 end
 
 
-%!error <Invalid> harmonic (sym(1), 2)
+%!error harmonic (sym(1), 2)
 
 %!xtest
 %! assert (isequaln (harmonic (sym(nan)), sym(nan)))

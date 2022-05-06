@@ -1,4 +1,4 @@
-%% Copyright (C) 2019 Colin B. Macdonald
+%% Copyright (C) 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -144,8 +144,8 @@ function r = mylogical(p)
 end
 
 
-%!error <Invalid> find (sym (1), 2, 3, 4)
-%!error <Invalid> [x, y, z, w] = find (sym (1))
+%!error find (sym (1), 2, 3, 4)
+%!error <Invalid|too many outputs> [x, y, z, w] = find (sym (1))
 
 %!test
 %! syms x y positive

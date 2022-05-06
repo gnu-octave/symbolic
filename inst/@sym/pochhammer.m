@@ -67,8 +67,8 @@ function I = pochhammer(x, n)
 end
 
 
-%!error <Invalid> pochhammer (sym(1))
-%!error <Invalid> pochhammer (sym(1), 2, 3)
+%!error pochhammer (sym(1))
+%!error pochhammer (sym(1), 2, 3)
 
 %!assert (isequal (pochhammer (sym(3), 4), sym(360)))
 %!assert (isequal (pochhammer (sym([2 3]), 3), sym([24 60])))

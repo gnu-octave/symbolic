@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -100,7 +100,7 @@ function z = mod(x, n, canpoly)
 end
 
 
-%!error <Invalid> mod (sym(1), 2, 3 ,4)
+%!error mod (sym(1), 2, 3 ,4)
 
 %!assert (isequal (mod (sym(5), 4), sym(1)))
 %!assert (isequal (mod ([sym(5) 8], 4), [1 0] ))

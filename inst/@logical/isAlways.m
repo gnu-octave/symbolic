@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,6 +50,6 @@ function r = isAlways(p)
 end
 
 
-%!error <Invalid> isAlways (true, false)
+%!error isAlways (true, false)
 %!assert(isAlways(true))
 %!assert(~isAlways(false))

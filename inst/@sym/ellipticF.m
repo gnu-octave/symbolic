@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -101,8 +101,8 @@ function y = ellipticF (phi, m)
 end
 
 
-%!error <Invalid> ellipticF (sym(1))
-%!error <Invalid> ellipticF (sym(1), 2, 3)
+%!error ellipticF (sym(1))
+%!error ellipticF (sym(1), 2, 3)
 
 %!assert (double (ellipticF (sym (pi)/3, sym (-105)/10)), 0.6184459461, 10e-11)
 %!assert (double (ellipticF (sym (pi)/4, sym (-pi))), 0.6485970495, 10e-11)

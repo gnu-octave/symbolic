@@ -64,8 +64,8 @@ function y = chebyshevT(n, x)
 end
 
 
-%!error <Invalid> chebyshevT (sym(1))
-%!error <Invalid> chebyshevT (sym(1), 2, 3)
+%!error chebyshevT (sym(1))
+%!error chebyshevT (sym(1), 2, 3)
 
 %!assert (isequaln (chebyshevT (2, sym(nan)), sym(nan)))
 

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -148,7 +148,7 @@ function f = ifourier(varargin)
 end
 
 
-%!error <Invalid> ifourier (sym(1), 2, 3, 4)
+%!error ifourier (sym(1), 2, 3, 4)
 
 %!test
 %! % matlab SMT compat

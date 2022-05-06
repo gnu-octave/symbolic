@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2017, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,7 +60,7 @@ function y = ellipticCK (m)
 end
 
 
-%!error <Invalid> ellipticCK (sym (1), 2)
+%!error ellipticCK (sym (1), 2)
 
 %!assert (double (ellipticCK (sym (1)/2)), 1.8541, 10e-5)
 %!assert (double (ellipticCK (sym (101)/10)), 0.812691836806976, -3*eps)

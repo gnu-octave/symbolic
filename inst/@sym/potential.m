@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -103,7 +103,7 @@ function p = potential(v, x, y)
 end
 
 
-%!error <Invalid> potential (sym(1), 2, 3, 4)
+%!error potential (sym(1), 2, 3, 4)
 
 %!shared x,y,z
 %! syms x y z

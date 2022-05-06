@@ -1,5 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,6 +48,6 @@ function g = eulergamma ()
 end
 
 
-%!error <Invalid> catalan (sym(1))
+%!error catalan (sym(1))
 %!assert (double (eulergamma ()) > 0.577215664901)
 %!assert (double (eulergamma ()) < 0.577215664902)

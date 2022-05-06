@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2019 Colin B. Macdonald
+%% Copyright (C) 2016-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,7 +60,7 @@ function y = zeta (n, x)
 end
 
 
-%!error <Invalid> zeta (1, 2, 3)
+%!error zeta (1, 2, 3)
 %!assert (isnan (zeta (nan)))
 
 %!test

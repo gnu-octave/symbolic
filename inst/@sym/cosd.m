@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +48,7 @@ function y = cosd(x)
 end
 
 
-%!error <Invalid> cosd (sym(1), 2)
+%!error cosd (sym(1), 2)
 %!assert (isequaln (cosd (sym(nan)), sym(nan)))
 
 %!test

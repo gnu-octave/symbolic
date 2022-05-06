@@ -71,7 +71,7 @@ function a = kroneckerDelta (n, m)
 end
 
 
-%!error <Invalid> kroneckerDelta (sym(1), 2, 3)
+%!error kroneckerDelta (sym(1), 2, 3)
 
 %!test
 %! syms x
