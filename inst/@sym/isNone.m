@@ -67,8 +67,7 @@ end
 %! a = [None; None];
 %! a = [None 2; 3 None];
 
-%!xtest
-%! % fails on SymPy 1.10.1, temporarily disable for Issue #1124
+%!test
 %! a = sym([1 2]);
 %! a(1,2) = None;
 %! assert (isequal (a, [sym(1) None]));
