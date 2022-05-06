@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2016-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -53,6 +53,8 @@ function y = cosint (x)
   y = reshape (cell2mat (c), size (x));
 end
 
+
+%!error cosint (1, 2)
 
 %!test
 %! x = 1.1;

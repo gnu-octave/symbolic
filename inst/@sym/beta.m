@@ -59,7 +59,7 @@ function r = beta(x, y)
 end
 
 
-%!error <usage> beta (sym(1), 2, 3)
+%!error beta (sym(1), 2, 3)
 
 %!assert (isequal (double (beta (sym(1), 2)), 1/2))
 %!assert (isinf (double (beta (sym(1), 0))))

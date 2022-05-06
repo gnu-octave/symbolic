@@ -108,6 +108,8 @@ function y = expint(n, x)
 end
 
 
+%!error expint (sym(1), 2, 3)
+
 %!test
 %! f1 = expint(sym(1));
 %! f2 = expint(1);
@@ -136,8 +138,6 @@ end
 %! A = exp(-x)/x;
 %! B = expint(0, x);
 %! assert (isequal (A, B))
-
-%!error <Invalid call> expint(sym(1), 2, 3)
 
 %!test
 %! % round trip

@@ -195,7 +195,7 @@ function f = symfun(expr, vars)
 end
 
 
-%!error <Invalid> symfun (1, sym('x'), 3)
+%!error symfun (1, sym('x'), 3)
 
 %!error <not supported> symfun ('f', sym('x'))
 

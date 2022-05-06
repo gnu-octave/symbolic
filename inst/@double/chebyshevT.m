@@ -1,4 +1,4 @@
-%% Copyright (C) 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,10 +76,11 @@ function y = chebyshevT (n, x)
 end
 
 
+%!error chebyshevT (1)
+%!error chebyshevT (1, 2, 3)
+
 %!error <sizes> chebyshevT ([1 2], [1 2 3])
 %!error <sizes> chebyshevT ([1 2], [1; 2])
-%!error <Invalid> chebyshevT (1, 2, 3)
-%!error <Invalid> chebyshevT (1)
 
 %!test
 %! y = sym(11)/10;

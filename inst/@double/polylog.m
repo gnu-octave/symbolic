@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -70,10 +70,11 @@ function y = polylog (s, x)
 end
 
 
+%!error polylog (1)
+%!error polylog (1, 2, 3)
+
 %!error <sizes> polylog ([1 2], [1 2 3])
 %!error <sizes> polylog ([1 2], [1; 2])
-%!error <Invalid> polylog (1, 2, 3)
-%!error <Invalid> polylog (1)
 
 %!test
 %! y = sym(11)/10;

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = asec(x)
 end
 
 
-%!error <Invalid> asec (sym(1), 2)
+%!error asec (sym(1), 2)
 %!assert (isequaln (asec (sym(nan)), sym(nan)))
 
 %!shared x, d

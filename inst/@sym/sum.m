@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -84,8 +84,8 @@ function y = sum(x, n)
 end
 
 
-%!error <Invalid> sum (sym(1), 2, 3)
-%!error <Invalid> sum (sym(1), 42)
+%!error sum (sym(1), 2, 3)
+%!error sum (sym(1), 42)
 
 %!shared x,y,z
 %! syms x y z

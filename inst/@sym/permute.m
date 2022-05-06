@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,7 +59,8 @@ function B = permute(A, perm)
 end
 
 
-%!error <Invalid> permute (sym(1))
+%!error permute (sym(1))
+%!error permute (sym(1), 2, 3)
 
 %!test
 %! D = round(10*rand(5,3));

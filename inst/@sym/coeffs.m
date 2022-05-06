@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -168,7 +168,7 @@ function [c, t] = coeffs(p, x, all)
 end
 
 
-%!error <Invalid> coeffs (sym(1), 2, 3, 4)
+%!error coeffs (sym(1), 2, 3, 4)
 %!error <should be> coeffs (sym(1), 2, 'al')
 %!error <should be> coeffs (sym(1), 'al')
 

@@ -1,5 +1,5 @@
 %% Copyright (C) 2015 Carnë Draug
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
@@ -50,6 +50,6 @@ function g = catalan ()
 end
 
 
-%!error <Invalid> catalan (sym(1))
+%!error catalan (sym(1))
 %!assert (double (catalan ()) > 0.915965594177)
 %!assert (double (catalan ()) < 0.915965594178)

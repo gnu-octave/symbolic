@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -90,8 +90,8 @@ function y = prod(x, n)
 end
 
 
-%!error <Invalid> prod (sym(1), 2, 3)
-%!error <Invalid> prod (sym(1), 42)
+%!error prod (sym(1), 2, 3)
+%!error prod (sym(1), 42)
 
 %!shared x,y,z
 %! syms x y z

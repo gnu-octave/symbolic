@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -49,7 +49,8 @@ function A = ipermute(B, iperm)
 end
 
 
-%!error <Invalid> permute (sym(1))
+%!error permute (sym(1))
+%!error permute (sym(1), 2, 3)
 
 %!test
 %! syms x

@@ -144,7 +144,7 @@ function f = ilaplace(varargin)
 end
 
 
-%!error <Invalid> ilaplace (sym(1), 2, 3, 4)
+%!error ilaplace (sym(1), 2, 3, 4)
 
 %!test
 %! % basic SMT compact: no heaviside

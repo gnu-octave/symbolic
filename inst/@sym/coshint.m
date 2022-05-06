@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = coshint(x)
 end
 
 
-%!error <Invalid> coshint (sym(1), 2)
+%!error coshint (sym(1), 2)
 %!xtest
 %! assert (isequaln (coshint (sym(nan)), sym(nan)))
 

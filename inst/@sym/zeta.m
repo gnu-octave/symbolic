@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -73,7 +73,7 @@ function y = zeta(n, z)
 end
 
 
-%!error <Invalid> zeta (sym(1), 2, 3)
+%!error zeta (sym(1), 2, 3)
 %!assert (isequaln (zeta (sym(nan)), sym(nan)))
 
 %!test

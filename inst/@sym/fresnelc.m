@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,6 +47,8 @@ function J = fresnelc (x)
   J = elementwise_op ('fresnelc', x);
 end
 
+
+%!error fresnelc (sym(1), 2)
 
 %!test
 %! a = fresnelc(sym(0));

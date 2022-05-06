@@ -1,7 +1,7 @@
 #!/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright 2014-2016 Colin B. Macdonald
+# Copyright 2014-2016, 2022 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -245,7 +245,7 @@ function y = {NAME}(x)
 end
 
 
-%!error <Invalid> {NAME} (sym(1), 2)
+%!error {NAME} (sym(1), 2)
 %!assert (isequaln ({NAME} (sym(nan)), sym(nan)))
 
 """.format(NAME=f, SPNAME=d['spname'], XSTR=xstr, YUTF8=yutf8)
@@ -352,6 +352,8 @@ function y = {NAME} (x)
   y = reshape (cell2mat (c), size (x));
 end
 
+
+%!error {NAME} (1, 2)
 
 %!test
 %! x = 1.1;

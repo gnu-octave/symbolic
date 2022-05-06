@@ -82,7 +82,7 @@ function y = sinc(x)
 end
 
 
-%!error <Invalid> sinc (sym(1), 2)
+%!error sinc (sym(1), 2)
 %!assert (isequaln (sinc (sym(nan)), sym(nan)))
 
 %!assert (isequal (sinc (sym(0)), sym(1)))

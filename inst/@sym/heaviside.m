@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
@@ -83,7 +83,7 @@ function y = heaviside(x, h0)
 end
 
 
-%!error <Invalid> heaviside (sym(1), 2, 3)
+%!error heaviside (sym(1), 2, 3)
 
 %!assert (isequal (heaviside (sym(1)), sym(1)))
 %!assert (isequal (heaviside (-sym(1)), sym(0)))

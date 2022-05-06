@@ -108,7 +108,7 @@
 %% @end deftypemethod
 
 
-function [Q, R] = qr(A, ord)
+function [varargout] = qr(A, ord)
 
   if (nargin == 2)
     assert (ord == 0, 'OctSymPy:NotImplemented', 'Matrix "B" form not implemented')
@@ -133,10 +133,18 @@ function [Q, R] = qr(A, ord)
   [Q, R] = pycall_sympy__ (cmd, sym(A));
 
   if (nargout <= 1)
-    Q = R;
+    varargout{1} = R;
+  else
+    varargout{1} = Q;
+    varargout{2} = R;
   end
 end
 
+
+%!error qr (sym(1), 2, 3)
+
+%!error <not implemented> [Q, R, P] = qr (sym(1))
+%!error <not implemented> qr (sym(1), 1)
 
 %!test
 %! % scalar
@@ -205,6 +213,3 @@ end
 %!test
 %! % single return value R not Q
 %! assert (isequal (qr (sym(4)), sym(4)))
-
-%!error <not implemented>
-%! [Q, R, P] = qr (sym(1))

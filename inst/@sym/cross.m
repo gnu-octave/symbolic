@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -63,7 +63,7 @@ function c = cross(a, b)
 end
 
 
-%!error <Invalid> cross (sym(1), 2, 3)
+%!error cross (sym(1), 2, 3)
 
 %!test
 %! a = sym([1; 0; 0]);

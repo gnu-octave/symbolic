@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -126,7 +126,7 @@ function S = symprod(f, n, a, b)
 end
 
 
-%!error <Invalid> symprod (sym(1), 2, 3, 4, 5)
+%!error symprod (sym(1), 2, 3, 4, 5)
 
 %!test
 %! % simple

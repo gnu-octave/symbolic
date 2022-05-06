@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +48,7 @@ function y = atand(x)
 end
 
 
-%!error <Invalid> atand (sym(1), 2)
+%!error atand (sym(1), 2)
 %!assert (isequaln (atand (sym(nan)), sym(nan)))
 
 %!test

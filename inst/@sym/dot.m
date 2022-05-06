@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2015-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -72,7 +72,7 @@ function c = dot(a, b)
 end
 
 
-%!error <Invalid> dot (sym(1), 2, 3)
+%!error dot (sym(1), 2, 3)
 
 %!test
 %! a = sym([1; 1; 0]);

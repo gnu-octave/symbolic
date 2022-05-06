@@ -1,4 +1,4 @@
-%% Copyright (C) 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -79,7 +79,7 @@ function y = bernoulli (m, x)
 end
 
 
-%!error <usage> bernoulli (1, 2, 3)
+%!error bernoulli (1, 2, 3)
 %!error <sizes> bernoulli ([1 2], [1 2 3])
 %!error <sizes> bernoulli ([1 2], [1; 2])
 

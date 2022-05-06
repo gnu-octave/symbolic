@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2017-2019 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -98,7 +98,7 @@ function y = charpoly(varargin)
 end
 
 
-%!error <Invalid> charpoly (sym (1), 1, 2)
+%!error charpoly (sym (1), 1, 2)
 %!error <NonSquare> charpoly (sym ([1 2]))
 
 %!test

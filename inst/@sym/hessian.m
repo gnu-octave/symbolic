@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -99,6 +99,9 @@ function H = hessian(f, x)
 end
 
 
+%!error hessian (sym(1), 2, 3)
+%!error <only for scalar> hessian ([sym(1) sym(2)])
+
 %!shared x,y,z
 %! syms x y z
 
@@ -148,6 +151,3 @@ end
 %! Hexp = [0 0 -sin(z); sym(0) 0 0; -sin(z) 0 -f];
 %! H = hessian(f, {x y z});
 %! assert (isequal (H, Hexp))
-
-%!error <only for scalar> hessian([sym(1) sym(2)])
-%!error <Invalid call> hessian(sym(1), 2, 3)
