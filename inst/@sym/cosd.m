@@ -61,4 +61,4 @@ end
 %! A = sym(D);
 %! f1 = cosd (A);
 %! f2 = cosd (D);
-%! assert (double (f1), f2, -eps)
+%! assert (double (f1), f2, -4*eps)

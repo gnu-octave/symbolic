@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2019 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -68,7 +68,7 @@ function r = euler (varargin)
 end
 
 
-%!error <usage> euler (sym(1), 2, 3)
+%!error euler (sym(1), 2, 3)
 
 %!assert (isequal (euler (sym(0)), sym(1)))
 

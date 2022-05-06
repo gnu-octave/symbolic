@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -110,6 +110,9 @@ function g = jacobian(f, x)
 end
 
 
+%!error jacobian (sym(1), 2, 3)
+%!error <only for vectors> jacobian ([sym(1) 2; sym(3) 4])
+
 %!shared x,y,z
 %! syms x y z
 
@@ -169,6 +172,3 @@ end
 %! assert (isequal (size(jacobian(f, x)), [2 1]))
 %! f = f.';  % same shape output
 %! assert (isequal (size(jacobian(f, x)), [2 1]))
-
-%!error <only for vectors> jacobian([sym(1) 2; sym(3) 4])
-%!error <Invalid call> jacobian(sym(1), 2, 3)

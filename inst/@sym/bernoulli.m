@@ -61,7 +61,7 @@ function r = bernoulli (varargin)
 end
 
 
-%!error <usage> bernoulli (sym(1), 2, 3)
+%!error bernoulli (sym(1), 2, 3)
 
 %!assert (isequal (bernoulli (sym(8)), -sym(1)/30))
 %!assert (isequal (bernoulli (sym(9)), sym(0)))

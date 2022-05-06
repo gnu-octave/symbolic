@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -145,7 +145,7 @@ function vars = symvar(F, Nout)
 end
 
 
-%!error <usage> symvar (sym(1), 2, 3)
+%!error symvar (sym(1), 2, 3)
 
 %!test
 %! %% some empty cases

@@ -1,6 +1,6 @@
 %% Copyright (C) 2008 Eric Chassande-Mottin
 %% Copyright (C) 2011 Carnë Draug
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018, 2022 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
@@ -118,6 +118,9 @@ function L = laguerreL(n, x)
 end
 
 
+%!error laguerreL (1)
+%!error laguerreL (1, 2, 3)
+
 %!assert (isequal (laguerreL (0, rand), 1))
 
 %!test
@@ -146,7 +149,6 @@ end
 %! assert(y1 - y2, 0, 30*eps)
 
 %!error <positive integer> laguerreL(1.5, 10)
-%!error <Invalid call> laguerreL(10)
 %!error <same size or scalar> laguerreL([0 1], [1 2 3])
 %!error <same size or scalar> laguerreL([0 1], [1; 2])
 

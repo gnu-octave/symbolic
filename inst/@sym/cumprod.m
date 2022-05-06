@@ -136,13 +136,13 @@ endfunction
 %!shared x, y
 %! x = sym ('x');
 %! y = sym ('y');
+%!error cumprod (x, 1, 2)
 %!assert (isequal (cumprod ([-x; -2*x; -3*x]), [-x; 2*x^2; -6*x^3]))
 %!assert (isequal (expand (cumprod ([x + i, x - i])), [x + i, x^2 + 1]))
 %!assert (isequal (cumprod ([1, x; y, 2], 1), [1, x; y, 2*x] ))
 %!assert (isequal (cumprod ([1, x; y, 2], 2), [1, x; y, 2*y] ))
 %!test cumprod ([x, x], [2,  1]);   # ensure behaves like builtin cumprod
 %!test cumprod ([x, x], [1, -2]);   # ensure behaves like builtin cumprod
-%!error <Invalid call> cumprod (x, 1, 2)
 %!error <empty> cumprod (x, [])
 %!error <invalid dimension argument type> cumprod (x, {1})
 %!error <invalid dimension argument type> cumprod (x, struct('a', 1))

@@ -130,13 +130,13 @@ endfunction
 %!shared x, y
 %! x = sym ('x');
 %! y = sym ('y');
+%!error cumsum (x, 1, 2)
 %!assert (isequal (cumsum ([-x; -2*x; -3*x]), [-x; -3*x; -6*x]))
 %!assert (isequal (cumsum ([x + 2i*y, 2*x + i*y]), [x + 2i*y, 3*x + 3i*y]))
 %!assert (isequal (cumsum ([x, 2*x; 3*x, 4*x], 1), [1*x, 2*x; 4*x, 6*x] ))
 %!assert (isequal (cumsum ([x, 2*x; 3*x, 4*x], 2), [1*x, 3*x; 3*x, 7*x] ))
 %!test cumsum ([x, x], [2,  1]);   # ensure behaves like builtin cumsum
 %!test cumsum ([x, x], [1, -2]);   # ensure behaves like builtin cumsum
-%!error <Invalid call> cumsum (x, 1, 2)
 %!error <empty> cumsum (x, [])
 %!error <invalid dimension argument type> cumsum (x, {1})
 %!error <invalid dimension argument type> cumsum (x, struct('a', 1))
