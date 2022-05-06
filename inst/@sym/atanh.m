@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = atanh(x)
 end
 
 
-%!error <Invalid> atanh (sym(1), 2)
+%!error atanh (sym(1), 2)
 %!assert (isequaln (atanh (sym(nan)), sym(nan)))
 
 %!shared x, d

@@ -1,4 +1,4 @@
-%% Copyright (C) 2015-2018 Colin B. Macdonald
+%% Copyright (C) 2015-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,7 +46,7 @@ function y = cbrt(x)
 end
 
 
-%!error <Invalid> cbrt (sym(1), 2)
+%!error cbrt (sym(1), 2)
 %!assert (isequaln (cbrt (sym(nan)), sym(nan)))
 
 %!shared x, d

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = factorial(x)
 end
 
 
-%!error <Invalid> factorial (sym(1), 2)
+%!error factorial (sym(1), 2)
 %!xtest
 %! assert (isequaln (factorial (sym(nan)), sym(nan)))
 

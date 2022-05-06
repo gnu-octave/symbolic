@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = cosh(x)
 end
 
 
-%!error <Invalid> cosh (sym(1), 2)
+%!error cosh (sym(1), 2)
 %!assert (isequaln (cosh (sym(nan)), sym(nan)))
 
 %!shared x, d

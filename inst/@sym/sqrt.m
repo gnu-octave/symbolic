@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,7 +47,7 @@ function y = sqrt(x)
 end
 
 
-%!error <Invalid> sqrt (sym(1), 2)
+%!error sqrt (sym(1), 2)
 %!assert (isequaln (sqrt (sym(nan)), sym(nan)))
 
 %!shared x, d

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = asin(x)
 end
 
 
-%!error <Invalid> asin (sym(1), 2)
+%!error asin (sym(1), 2)
 %!assert (isequaln (asin (sym(nan)), sym(nan)))
 
 %!shared x, d

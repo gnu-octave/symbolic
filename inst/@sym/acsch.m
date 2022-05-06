@@ -1,4 +1,4 @@
-%% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2016-2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,7 +44,7 @@ function y = acsch(x)
 end
 
 
-%!error <Invalid> acsch (sym(1), 2)
+%!error acsch (sym(1), 2)
 %!assert (isequaln (acsch (sym(nan)), sym(nan)))
 
 %!shared x, d
