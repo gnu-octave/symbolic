@@ -168,7 +168,7 @@ jobs:
         run: |
           pwd
           ls
-          pip install sympy==1.8
+          pip install sympy
       - name: Install package, verify
         run: |
           make install
