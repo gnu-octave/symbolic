@@ -1,4 +1,4 @@
-%% Copyright (C) 2017 Colin B. Macdonald
+%% Copyright (C) 2017, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,7 +58,7 @@
 %% @end deffn
 
 
-function assume(varargin)
+function varargout = assume(varargin)
 
   assert (nargout == 0, 'assume: use functional form if you want output');
 
