@@ -91,6 +91,8 @@ Mathematical methods for symbolic objects
  @sym/csch
  @sym/csc
  @sym/ctranspose
+ @sym/cumprod
+ @sym/cumsum
  @sym/curl
  @sym/dawson
  @sym/degree
@@ -221,6 +223,7 @@ Mathematical methods for symbolic objects
  @sym/union
  @sym/unique
  @sym/zeta
+ @sym/ztrans
 Methods for manipulating symbolic objects:
  @sym/argnames
  @sym/char
