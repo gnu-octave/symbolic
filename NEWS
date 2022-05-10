@@ -1,6 +1,12 @@
 octsympy 2.9.0+
 ===============
 
+  * New symbolic commands:
+
+          cumprod
+          cumsum
+          ztrans
+
   * Fixes for SymPy 1.6 and later.
 
   * Fixes for Octave 6.x and Octave 7.1.
