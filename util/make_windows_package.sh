@@ -7,6 +7,13 @@
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 
+######################################################################
+# DEPRECATED: we no longer provide this bundled package, partially b/c
+# the community Windows Octave builds now include Python and also b/c
+# we have been unable to port to Python 3 due to
+# https://github.com/manthey/pyexe/issues/25
+######################################################################
+
 # Available from https://github.com/manthey/pyexe
 PYEXE=pyexe/py27_v18.exe
 # copy a few lines from https://github.com/manthey/pyexe/blob/master/README.md
