@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -73,12 +73,6 @@ end
 %! syms x
 %! f(x) = x^2;
 %! g = x^2;
-%! if (exist('OCTAVE_VERSION', 'builtin') && ...
-%!     compare_versions (OCTAVE_VERSION (), '4.4.2', '<'))
-%!   s = warning('off', 'OctSymPy:sym:arithmetic:workaround42735');
-%! else
-%!   s = warning();
-%! end
 %! h = x - f;  assert (isa (h, 'symfun') && isequal (formula (h), x - g))
 %! h = x + f;  assert (isa (h, 'symfun') && isequal (formula (h), x + g))
 %! h = x * f;  assert (isa (h, 'symfun') && isequal (formula (h), x * g))
@@ -87,7 +81,6 @@ end
 %! h = x .* f; assert (isa (h, 'symfun') && isequal (formula (h), x .* g))
 %! h = x ./ f; assert (isa (h, 'symfun') && isequal (formula (h), x ./ g))
 %! h = x .^ f; assert (isa (h, 'symfun') && isequal (formula (h), x .^ g))
-%! warning(s);
 
 %!test
 %! % different variables
