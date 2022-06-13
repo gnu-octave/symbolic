@@ -15,6 +15,8 @@ octsympy 2.9.0+
 
   * Update minimum versions of SymPy to 1.4 and Octave to 5.1.
 
+  * Remove deprecated `evalpy` utility.
+
 
 
 octsympy 2.9.0 (2020-03-04)

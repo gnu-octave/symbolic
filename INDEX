@@ -356,5 +356,4 @@ Miscellaneous
  @logical/isAlways
 Deprecated
  python_cmd
- evalpy
  octsympy_tests

@@ -90,13 +90,6 @@ try:
     def hex2d(s):
         bins = bytes([int(s[x:x+2], 16) for x in range(0, len(s), 2)])
         return struct.unpack(">d", bins)[0]
-    def dictdiff(a, b):
-        """ keys from a that are not in b, used by evalpy() """
-        n = dict()
-        for k in a:
-            if not k in b:
-                n[k] = a[k]
-        return n
     def myesc(s):
         # workaround https://bugs.python.org/issue25270
         if not s:

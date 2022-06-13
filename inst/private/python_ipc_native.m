@@ -98,13 +98,6 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '_mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name="lambertw")'
                     '_mypp._print_sinc = lambda cls, f: cls._print_Function(f.func(f.args[0]/sp.pi, evaluate=False))'
                     'del _mypp'
-                    'def dictdiff(a, b):'
-                    '    """ keys from a that are not in b, used by evalpy() """'
-                    '    n = dict()'
-                    '    for k in a:'
-                    '        if not k in b:'
-                    '            n[k] = a[k]'
-                    '    return n'
                   }, newl))
     have_headers = true;
   end
