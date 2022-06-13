@@ -55,11 +55,14 @@ try:
     try:
         from packaging.version import Version
     except ImportError:
-        # will fail on Python 3.12
-        from distutils.version import LooseVersion
-        def Version(v):
-            # short but not quite right: https://github.com/cbm755/octsympy/pull/320
-            return LooseVersion(v.replace('.dev', ''))
+        try:
+            # available on SymPy >= 1.9
+            from sympy.external.importtools import version_tuple as Version
+        except ImportError:
+            # will fail on Python 3.12: drop this soon in favour of above
+            from distutils.version import LooseVersion
+            def Version(v):
+                return LooseVersion(v.replace('.dev', ''))
     import itertools
     import collections
     from re import split

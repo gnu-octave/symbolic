@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -108,11 +108,9 @@
 %! assert (isequal (r, true))
 
 %!xtest
-%! % see: https://github.com/cbm755/octsympy/pull/320
+%! % `.dev` is not treated quite right except by packaging.version.Version
 %! r = pycall_sympy__ ('return Version("0.7.6") > Version("0.7.6.dev"),');
 %! assert (isequal (r, true))
-
-%!test
 %! r = pycall_sympy__ ('return Version("0.7.6") >= Version("0.7.6.dev"),');
 %! assert (isequal (r, true))
 
