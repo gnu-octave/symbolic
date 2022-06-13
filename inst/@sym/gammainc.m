@@ -135,24 +135,17 @@ end
 
 %!test
 %! % compare to double
-%! % https://savannah.gnu.org/bugs/index.php?47800
-%! if (~ exist('OCTAVE_VERSION', 'builtin') || ...
-%!     compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
 %! x = 10; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
-%! end
 
 %!test
 %! % compare to double
-%! if (~ exist('OCTAVE_VERSION', 'builtin') || ...
-%!     compare_versions (OCTAVE_VERSION (), '4.3.0', '>='))
 %! x = 40; a = 1;
 %! A = gammainc (x, a, 'upper');
 %! B = double (gammainc (sym(x), a, 'upper'));
 %! assert(A, B, -10*eps)
-%! end
 
 %!test
 %! % compare to double
