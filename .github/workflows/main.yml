@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: FSFAP
 # Copyright (C) 2022 Colin B. Macdonald
 # Copyright (C) 2022 Chris Gorman
+# Copyright (C) 2022 Alex Vong
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -151,6 +152,158 @@ jobs:
           docker exec oc make -C octsympy doctest
           docker exec oc ls
           echo "Stopping container"
+          docker stop oc
+          docker rm oc
+          ls
+
+
+  # Built-in Self Tests using the Pythonic interface
+  # Currently, we only test the newest Octave and SymPy since the support for
+  # the Pythonic interface is experimental. We may change this in the future.
+  # For Pythonic, we use the latest commit from the master branch since the
+  # last release (0.0.1) no longer works with newer Python.
+  # FIXME: The code is a bit of a mess. Preferably, we should factor out code
+  # shared across different jobs to avoid code duplication.
+  bist-pythonic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        octave: [7.1.0]
+        sympy: [1.10.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name:
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          printf 'Running tests on Octave %s and SymPy %s\n' "$OCT" "$SYMPY"
+          uname -a
+          docker pull docker.io/gnuoctave/octave:"$OCT"
+          # TODO: nonsense here to try to get r/w access: enables sudo below
+          docker run --name=oc --detach --init \
+            -u root --env="GRANT_SUDO=yes" \
+            --volume="$PWD":/home/jovyan/octsympy:rw \
+            gnuoctave/octave:"$OCT" sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc \
+            sudo git config --global --add safe.directory /home/jovyan/octsympy
+          docker exec oc apt-get update
+          docker exec oc apt-get install -y libpython3-dev
+          docker exec oc pip3 install packaging
+          docker exec oc pip3 install sympy=="$SYMPY"
+          docker exec oc octave-cli --eval "pwd; ls"
+          docker exec oc \
+            git clone https://gitlab.com/mtmiller/octave-pythonic.git
+          # FIXME: Workaround the following error
+          # --8<---------------cut here---------------start------------->8---
+          # error: subsref: cannot index Python object, not sequence or callable
+          # --8<---------------cut here---------------end--------------->8---
+          # by replacing all occurences of
+          # "py.collections.Callable" to "py.collections.abc.Callable" and
+          # "py.collections.Sequence" to "py.collections.abc.Sequence"
+          # See also https://gitlab.com/mtmiller/octave-pythonic/-/issues/95
+          # and https://github.com/cbm755/octsympy/issues/1067
+          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
+            's/py\.collections\.Callable/py.collections.abc.Callable/g' \
+            '{}' ';'
+          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
+            's/py\.collections\.Sequence/py.collections.abc.Sequence/g' \
+            '{}' ';'
+          docker exec oc \
+            tar cvzf octave-pythonic.tar.gz --exclude='.git*' octave-pythonic
+          docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
+          docker exec oc sudo make -C /home/jovyan/octsympy install
+          # TODO needs updating:
+          # docker exec oc make -C octsympy test
+          docker exec oc octave-cli --eval "pkg list"
+          docker exec oc octave-cli \
+            --eval "pkg load pythonic; pkg load symbolic; sympref diagnose"
+          # TODO: runs all the tests for some reason
+          # docker exec oc octave-cli --eval "pkg test symbolic"
+          docker exec oc octave-cli \
+            --eval "pkg load pythonic; pkg load symbolic; \
+            r = octsympy_tests; if r, type ('fntests.log') end; exit (r)"
+          docker exec oc ls
+          printf 'Stopping container\n'
+          docker stop oc
+          docker rm oc
+          ls
+
+
+  # Documentation tests using the Pythonic interface
+  # Currently, we only test the newest Octave and SymPy since the support for
+  # the Pythonic interface is experimental. We may change this in the future.
+  # For Pythonic, we use the latest commit from the master branch since the
+  # last release (0.0.1) no longer works with newer Python.
+  # FIXME: The code is a bit of a mess. Preferably, we should factor out code
+  # shared across different jobs to avoid code duplication.
+  doctests-pythonic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        octave: [7.1.0]
+        sympy: [1.10.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name:
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          printf 'Running tests on Octave %s and SymPy %s\n' "$OCT" "$SYMPY"
+          uname -a
+          docker pull docker.io/gnuoctave/octave:"$OCT"
+          # TODO: nonsense here to try to get r/w access: enables sudo below
+          docker run --name=oc --detach --init \
+            -u root --env="GRANT_SUDO=yes" \
+            --volume="$PWD":/home/jovyan/octsympy:rw \
+            gnuoctave/octave:"$OCT" sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc \
+            sudo git config --global --add safe.directory /home/jovyan/octsympy
+          docker exec oc apt-get update
+          docker exec oc apt-get install -y libpython3-dev
+          docker exec oc pip3 install packaging
+          docker exec oc pip3 install sympy=="$SYMPY"
+          docker exec oc octave-cli --eval "pwd; ls"
+          docker exec oc octave-cli --eval "pkg install -forge doctest"
+          docker exec oc \
+            git clone https://gitlab.com/mtmiller/octave-pythonic.git
+          # FIXME: Workaround the following error
+          # --8<---------------cut here---------------start------------->8---
+          # error: subsref: cannot index Python object, not sequence or callable
+          # --8<---------------cut here---------------end--------------->8---
+          # by replacing all occurences of
+          # "py.collections.Callable" to "py.collections.abc.Callable" and
+          # "py.collections.Sequence" to "py.collections.abc.Sequence"
+          # See also https://gitlab.com/mtmiller/octave-pythonic/-/issues/95
+          # and https://github.com/cbm755/octsympy/issues/1067
+          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
+            's/py\.collections\.Callable/py.collections.abc.Callable/g' \
+            '{}' ';'
+          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
+            's/py\.collections\.Sequence/py.collections.abc.Sequence/g' \
+            '{}' ';'
+          docker exec oc \
+            tar cvzf octave-pythonic.tar.gz --exclude='.git*' octave-pythonic
+          docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
+          docker exec oc sudo make -C octsympy install
+          docker exec oc octave-cli --eval "pkg list"
+          docker exec oc octave-cli \
+            --eval "pkg load pythonic; pkg load symbolic; sympref diagnose"
+          docker exec oc octave-cli \
+            --eval "pkg load doctest; pkg load pythonic; pkg load symbolic; \
+            sym ('x'); success = doctest ('octsympy/inst/'); exit (!success)"
+          # docker exec oc make -C octsympy doctest
+          docker exec oc ls
+          printf 'Stopping container\n'
           docker stop oc
           docker rm oc
           ls
