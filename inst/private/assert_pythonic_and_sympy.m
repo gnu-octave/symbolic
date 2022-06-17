@@ -1,4 +1,5 @@
 %% Copyright (C) 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -83,6 +84,8 @@ function assert_pythonic_and_sympy (verbose)
     disp ('--------------')
     disp ('')
     pyversion ()
+    disp ('')
+    show_system_info ()
   else
     pyver = pyversion ();
   end
