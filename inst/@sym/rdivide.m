@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -92,10 +93,18 @@ function z = rdivide(x, y)
     return
   end
 
+  %% 2022-06: TODO cannot simply call hadamard_product for sympy <1.9,
+  %% see upstream: https://github.com/sympy/sympy/issues/8557
 
   cmd = { '(x,y) = _ins'
           'if x.is_Matrix and y.is_Matrix:'
-          '    return x.multiply_elementwise(y.applyfunc(lambda a: 1/a)),'
+          '    y_eltwise_recip = y.applyfunc(lambda a: 1/a)'
+          '    if Version(spver) < Version("1.9"):'
+          '        try:'
+          '            return x.multiply_elementwise(y_eltwise_recip)'
+          '        except:'
+          '            pass'
+          '    return hadamard_product(x, y_eltwise_recip)'
           'if not x.is_Matrix and y.is_Matrix:'
           '    return y.applyfunc(lambda a: x/a),'
           'else:'
