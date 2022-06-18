@@ -49,22 +49,12 @@ How to Install on Windows
 
 1.  Get [Octave](http://www.octave.org) for Windows.
 
-2.  Download the `symbolic-win-py-bundle-2.7.0.zip` file from
-    [releases](https://github.com/cbm755/octsympy/releases).
+2.  At the Octave prompt, type `pkg install -forge symbolic`.
 
-3.  Start Octave
+3.  At the Octave prompt, type `pkg load symbolic`.
 
-4.  At the Octave prompt, type `pkg install symbolic-win-py-bundle-2.7.0.zip`.
-
-5.  At the Octave prompt, type `pkg load symbolic`.
-
-6.  At the Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
+4.  At the Octave prompt, type `syms x`, then `f = (sin(x/2))^3`,
     `diff(f, x)`, etc.
-
-The `symbolic-win-py-bundle` package should have no dependencies other than
-Octave (it includes SymPy and a Python interpreter).  Alternatively, you can
-install Python and SymPy yourself and use the standard
-`pkg install -forge symbolic` command.
 
 If you encounter any difficulties (even minor ones) please read and
 if possible help us improve the
@@ -125,4 +115,3 @@ Related Projects
 
   * ["SymPy CAS" by Jonathan Lister](http://www.mathworks.com/matlabcentral/fileexchange/42787-sympy-cas-in-matlab).
     Calls SymPy commands using system().
-

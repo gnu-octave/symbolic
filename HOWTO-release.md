@@ -58,7 +58,7 @@ Checklist
 
   * Do github related release tasks:
 
-      - Redo the Windows bundle package (using tag mode, see script).
+      - DEPRECATED: Redo the Windows bundle package (using tag mode, see script).
 
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.  These must match the

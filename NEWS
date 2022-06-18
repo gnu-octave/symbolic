@@ -13,6 +13,9 @@ octsympy 2.9.0+
 
   * Drop Python 2 support.
 
+  * The `symbolic-win-py-bundle-x.y.z.zip` is no longer provided as we
+    have not been able to port it to Python 3.
+
   * Update minimum versions of SymPy to 1.4 and Octave to 5.1.
 
   * Remove deprecated `evalpy` utility.
