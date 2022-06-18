@@ -1,4 +1,5 @@
 %% Copyright (C) 2016-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -100,6 +101,8 @@ function assert_have_python_and_sympy (pyexec, verbose)
     [status, output] = system([pyexec ' -c "import sys; print(sys.version)"']);
     status
     output
+    disp ('');
+    show_system_info ();
   end
 
   if (verbose)
