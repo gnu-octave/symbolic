@@ -177,7 +177,7 @@ jobs:
   bist-pythonic:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         octave: [7.1.0]
         sympy: [1.9, 1.10.1]
@@ -254,7 +254,7 @@ jobs:
   doctests-pythonic:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         octave: [7.1.0]
         sympy: [1.9, 1.10.1]
