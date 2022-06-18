@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -475,3 +476,8 @@ end
 %!test
 %! r = pycall_sympy__ ('return len(_ins[0])', '');
 %! assert (r == 0)
+
+%!test
+%! % ensure the 0x0 matrix in octave gets mapped to the empty list in python
+%! % @sym/subsasgn currently replies on this behaviour
+%! assert (pycall_sympy__ ('return _ins[0] == []', []));

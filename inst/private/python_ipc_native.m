@@ -2,6 +2,7 @@
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2021 Johannes Maria Frank
 %% Copyright (C) 2022 Chris Gorman
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,6 +77,12 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     'from sympy.functions.special.hyper import TupleArg'
                     '# for sets'
                     'from sympy.utilities.iterables import uniq'
+                    'try:'
+                    '    # quick fix for https://github.com/cbm755/octsympy/issues/1053'
+                    '    # TODO: investigate the sym ctor in this case, likely a better fix in there'
+                    '    from sympy.core.symbol import Str'
+                    'except ImportError:'
+                    '    pass'
                     'import copy'
                     'import struct'
                     'import codecs'

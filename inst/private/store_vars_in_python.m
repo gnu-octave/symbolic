@@ -1,5 +1,6 @@
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2016 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,6 +26,8 @@ function var_pyobj = store_vars_in_python (L)
       var_pyobj.append (pyeval (sympy (x)))
     elseif (iscell (x))
       var_pyobj.append (store_vars_in_python (x))
+    elseif (isequal (x, []))
+      var_pyobj.append (py.list ());
     else
       var_pyobj.append(x);
     end
