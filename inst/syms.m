@@ -58,6 +58,16 @@
 %%
 %% Called without arguments, @code{syms} displays a list of
 %% all symbolic functions defined in the current workspace.
+%% @example
+%% @group
+%% syms x y z
+%% syms
+%%   @print{} Symbolic variables in current scope:
+%%   @print{}   x
+%%   @print{}   y
+%%   @print{}   z
+%% @end group
+%% @end example
 %%
 %% Caution: On Matlab, you may not want to use @code{syms} within
 %% functions.
