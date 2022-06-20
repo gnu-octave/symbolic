@@ -69,6 +69,39 @@
 %% @end group
 %% @end example
 %%
+%% Using @code{syms} to create a new symbol with different assumptions
+%% does not automatically replace instances of the old symbol in the
+%% caller's workspace.  For example suppose we make an absolute value
+%% expression:
+%% @example
+%% @group
+%% syms x
+%% f = abs (x)
+%%   @result{} f = (sym) │x│
+%% @end group
+%% @end example
+%% If we make a new positive @code{x}, @code{f} still contains the old
+%% symbol:
+%% @example
+%% @group
+%% syms x positive
+%% simplify (f)
+%%   @result{} (sym) │x│
+%% @end group
+%% @end example
+%% Note: this behaviour is slightly different from Matlab's Symbolic
+%% Math Toolbox, which does change existing symbols.
+%% If that behaviour is desired, @pxref{@@sym/assume} which modifies
+%% existing expressions in the caller's workspace:
+%% @example
+%% @group
+%% syms x
+%% assume x positive
+%% f
+%%   @result{} f = (sym) x
+%% @end group
+%% @end example
+%%
 %% Caution: On Matlab, you may not want to use @code{syms} within
 %% functions.
 %%   In particular, if you shadow a function name, you may get
