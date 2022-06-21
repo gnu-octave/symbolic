@@ -63,7 +63,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
 
     case 'system'
       if (ispc () && (~isunix ()))
-        [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
+        [A, db] = python_ipc_sysoneline(what, cmd, varargin{:});
       else
         [A, db] = python_ipc_system(what, cmd, false, varargin{:});
       end
@@ -74,7 +74,7 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
 
     case 'sysoneline'
       %% for debugging, not intended for long-term usage
-      [A, db] = python_ipc_sysoneline(what, cmd, false, varargin{:});
+      [A, db] = python_ipc_sysoneline(what, cmd, varargin{:});
 
     otherwise
       if (strcmp (what, 'reset'))
