@@ -105,7 +105,7 @@
 %% string for the commands, except on Windows where a long one-line
 %% string is used.
 %% @item @code{sympref ipc systmpfile}: output the python commands
-%% to a @code{tmp_python_cmd.py} file and then call that.
+%% to a file in @code{tempdir} and then call that.
 %% For debugging, will not be supported long-term.
 %% @item @code{sympref ipc sysoneline}: put the python commands all
 %% on one line and pass to @code{python -c} using a call to @code{system()}.
@@ -416,14 +416,9 @@ end
 %!test
 %! sympref('ipc', 'systmpfile');
 %! syms x
-%! delete('tmp_python_cmd.py')
 
 %!error <line 1> pycall_sympy__ ('raise ValueError')
 %!error <line 1> pycall_sympy__ ('raise ValueError', struct('a', 1, 'b', 'word'))
-
-%!test
-%! % (just to cleanup after the error tests)
-%! delete('tmp_python_cmd.py')
 
 %!test
 %! s = warning ('off', 'OctSymPy:sympref:invalidarg');
