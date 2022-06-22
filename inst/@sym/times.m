@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,17 +59,19 @@ function z = times(x, y)
     return
   end
 
-  % 2018-01: TODO cannot simply call hadamard_product, see upstream:
-  % https://github.com/sympy/sympy/issues/8557
+  %% 2022-06: TODO cannot simply call hadamard_product for sympy <1.9,
+  %% see upstream: https://github.com/sympy/sympy/issues/8557
 
   cmd = { '(x,y) = _ins'
           'if x is None or y is None:'
           '    return x*y'
           'if x.is_Matrix and y.is_Matrix:'
-          '    try:'
-          '        return x.multiply_elementwise(y)'
-          '    except (AttributeError, TypeError):'
-          '        return hadamard_product(x, y)'
+          '    if Version(spver) < Version("1.9"):'
+          '        try:'
+          '            return x.multiply_elementwise(y)'
+          '        except (AttributeError, TypeError):'
+          '            pass'
+          '    return hadamard_product(x, y)'
           'return x*y' };
 
   z = pycall_sympy__ (cmd, sym(x), sym(y));
