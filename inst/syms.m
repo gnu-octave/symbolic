@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,6 +58,49 @@
 %%
 %% Called without arguments, @code{syms} displays a list of
 %% all symbolic functions defined in the current workspace.
+%% @example
+%% @group
+%% syms x y z
+%% syms
+%%   @print{} Symbolic variables in current scope:
+%%   @print{}   x
+%%   @print{}   y
+%%   @print{}   z
+%% @end group
+%% @end example
+%%
+%% Using @code{syms} to create a new symbol with different assumptions
+%% does not automatically replace instances of the old symbol in the
+%% caller's workspace.  For example suppose we make an absolute value
+%% expression:
+%% @example
+%% @group
+%% syms x
+%% f = abs (x)
+%%   @result{} f = (sym) │x│
+%% @end group
+%% @end example
+%% If we make a new positive @code{x}, @code{f} still contains the old
+%% symbol:
+%% @example
+%% @group
+%% syms x positive
+%% simplify (f)
+%%   @result{} (sym) │x│
+%% @end group
+%% @end example
+%% Note: this behaviour is slightly different from Matlab's Symbolic
+%% Math Toolbox, which does change existing symbols.
+%% If that behaviour is desired, @pxref{@@sym/assume} which modifies
+%% existing expressions in the caller's workspace:
+%% @example
+%% @group
+%% syms x
+%% assume x positive
+%% f
+%%   @result{} f = (sym) x
+%% @end group
+%% @end example
 %%
 %% Caution: On Matlab, you may not want to use @code{syms} within
 %% functions.
@@ -96,7 +139,6 @@ function syms(varargin)
   %% Find assumptions
   valid_asm = assumptions('possible');
   last = -1;
-  doclear = false;
   for n=1:nargin
     assert(ischar(varargin{n}), 'syms: expected string inputs')
     if (ismember(varargin{n}, valid_asm))
@@ -104,13 +146,8 @@ function syms(varargin)
         last = n - 1;
       end
     elseif (strcmp(varargin{n}, 'clear'))
-      warning ('OctSymPy:deprecated', ...
-              ['"syms x clear" is deprecated and will be removed in a future version;\n' ...
-               '         use "assume x clear" or "assume(x, ''clear'')" instead.'])
-      assert (n == nargin, 'syms: "clear" should be the final argument')
-      assert (last < 0, 'syms: should not combine "clear" with other assumptions')
-      doclear = true;
-      last = n - 1;
+      error ('OctSymPy:oldsyntax', ...
+             'Old "syms x clear" not supported; use "assume x clear" or "assume(x, ''clear'')"')
     elseif (last > 0)
       error('syms: cannot have symbols after assumptions')
     end
@@ -135,30 +172,7 @@ function syms(varargin)
     % look for parenthesis: check if we're making a symfun
     if (isempty (strfind (expr, '(') ))  % no
       assert(isvarname(expr)); % help prevent malicious strings
-      if (doclear)
-        % We do this here instead of calling sym() because sym()
-        % would modify this workspace instead of the caller's.
-        newx = sym(expr);
-        assignin('caller', expr, newx);
-        xstr = newx.flat;
-        % ---------------------------------------------
-        % Muck around in the caller's namespace, replacing syms
-        % that match 'xstr' (a string) with the 'newx' sym.
-        %xstr = x;
-        %newx = s;
-        context = 'caller';
-        % ---------------------------------------------
-        S = evalin(context, 'whos');
-        evalin(context, '[];');  % clear 'ans'
-        for i = 1:numel(S)
-          obj = evalin(context, S(i).name);
-          [newobj, flag] = symreplace(obj, xstr, newx);
-          if flag, assignin(context, S(i).name, newobj); end
-        end
-        % ---------------------------------------------
-      else
-        assignin('caller', expr, sym(expr, asm{:}))
-      end
+      assignin('caller', expr, sym(expr, asm{:}))
 
     else  % yes, this is a symfun
       assert(isempty(asm), 'mixing symfuns and assumptions not supported')
@@ -214,27 +228,24 @@ end
 %! assert (isequal (x, x2))
 
 %!test
-%! %% assumptions and clearing them
+%! % assumptions and clearing them on a symbol
 %! syms x real
-%! f = {x {2*x}};
-%! A = assumptions();
-%! assert ( ~isempty(A))
-%! s = warning ('off', 'OctSymPy:deprecated');
-%! syms x clear
-%! warning (s)
-%! A = assumptions();
-%! assert ( isempty(A))
+%! assert (~isempty (assumptions (x)))
+%! syms x
+%! assert (isempty (assumptions (x)))
 
 %!test
-%! % SMT compat, syms x clear should add x to workspace
+%! % Note SMT would clear syms in existing expressions
 %! syms x real
-%! f = 2*x;
-%! clear x
-%! assert (~logical(exist('x', 'var')))
-%! s = warning ('off', 'OctSymPy:deprecated');
+%! f = {x {2*x} cos(x/2)};
+%! assert (~isempty (assumptions (f)))
+%! syms x
+%! % but we do not: this would have to toggle for pure SMT compat
+%! assert (~isempty (assumptions (f)))
+%! % assert (isempty (assumptions (f)))
+
+%!error <not supported>
 %! syms x clear
-%! warning (s)
-%! assert (logical(exist('x', 'var')))
 
 %!error <symbols after assumptions>
 %! syms x positive y
@@ -243,12 +254,6 @@ end
 %! % this sometimes catches typos or errors in assumption names
 %! % (if you need careful checking, use sym not syms)
 %! syms x positive evne
-
-%!error <should not combine>
-%! syms x positive clear
-
-%!error <should be the final argument>
-%! syms x clear y
 
 %!error <cannot have only assumptions>
 %! syms positive integer
