@@ -1,5 +1,6 @@
 %% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Chris Gorman
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -68,26 +69,7 @@
 
 
 function z = mrdivide(x, y)
-
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = mrdivide(x, y);
-    return
-  end
-
-  cmd = {
-    '(A, B) = _ins'
-    'if not B.is_Matrix:'
-    '     Z = A / B'
-    'else:'
-    '     Z = B.T.solve(A.T).T'
-    'return (Z)'
-  };
-
-  z = pycall_sympy__ (cmd, sym(x), sym(y));
-
+  z = (y.' \ x.').';
 end
 
 
