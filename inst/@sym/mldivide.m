@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -102,7 +103,7 @@ function x = mldivide(A, b)
   %'ans = A.LUsolve(b)'
 
   if (isscalar(A))
-    x = b / A;
+    x = A .\ b;
     return
   end
 
