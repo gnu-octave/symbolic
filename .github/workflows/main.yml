@@ -324,6 +324,4 @@ jobs:
           octave --eval "pkg load symbolic; sympref diagnose"
       - name: Load package, run tests
         run: |
-          # TODO: runs all the tests for some reason
-          #octave --eval "pkg test symbolic"
-          octave --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
+          octave --eval "pkg test symbolic"
