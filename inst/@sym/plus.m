@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,14 +34,6 @@
 
 
 function z = plus(x, y)
-
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = plus(x, y);
-    return
-  end
 
   % Note elementwise_op *prefers* element-wise operations, which may not
   % be what we always want here (e.g., see MatrixExpr test below).

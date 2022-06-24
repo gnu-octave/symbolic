@@ -64,14 +64,6 @@
 
 function z = mpower(x, y)
 
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = mpower(x, y);
-    return
-  end
-
   cmd = { 'x, y = _ins'
           'return x**y' };
 

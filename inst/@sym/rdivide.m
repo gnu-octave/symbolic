@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -84,14 +84,6 @@
 
 
 function z = rdivide(x, y)
-
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = rdivide(x, y);
-    return
-  end
 
   %% 2022-06: TODO cannot simply call hadamard_product for sympy <1.9,
   %% see upstream: https://github.com/sympy/sympy/issues/8557
