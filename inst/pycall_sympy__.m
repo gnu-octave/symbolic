@@ -481,3 +481,7 @@ end
 %! % ensure the 0x0 matrix in octave gets mapped to the empty list in python
 %! % @sym/subsasgn currently replies on this behaviour
 %! assert (pycall_sympy__ ('return _ins[0] == []', []));
+
+%!test
+%! % ensure the empty string gets mapped to the empty string in python
+%! assert (pycall_sympy__ ('return _ins[0] == ""', ''));
