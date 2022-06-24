@@ -8,7 +8,7 @@
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 #
-# Github Actions configuration for Octave's Symbolic package
+# Github Actions configuration for Octave's Symbolic package.
 
 name: CI
 
@@ -101,13 +101,11 @@ jobs:
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval 'pwd; ls'
           docker exec oc sudo make -C /home/jovyan/octsympy install
-          # TODO needs updating:
-          # docker exec oc make -C octsympy test
+          docker exec oc make -C octsympy test
           docker exec oc octave-cli --eval "pkg list"
           docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
-          # TODO: runs all the tests for some reason
-          # docker exec oc octave-cli --eval "pkg test symbolic"
-          docker exec oc octave-cli --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
+          # TODO: execute twice, just to check if `pkg test ...` is working
+          docker exec oc octave-cli --eval "pkg test symbolic"
           docker exec oc ls
           echo "Stopping container"
           docker stop oc
