@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -255,13 +256,13 @@ end
 %!test
 %! % output to disk
 %! fprintf('\n')
+%! temp_path = make_temp_dir__ (tempdir (), 'octsympy-temp-dir-');
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
-%!   temp_file = tempname('', 'oct_');
+%!   temp_file = [temp_path '/oct_temp_file'];
 %! else
-%!   temp_file = tempname();
+%!   temp_file = [temp_path '/temp_file'];
 %! end
 %! % allow loading function from temp_file
-%! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
@@ -280,13 +281,13 @@ end
 
 %!test
 %! % output to disk: also works with .m specified
+%! temp_path = make_temp_dir__ (tempdir (), 'octsympy-temp-dir-');
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
-%!   temp_file = [tempname('', 'oct_') '.m'];
+%!   temp_file = [temp_path '/oct_temp_file.m'];
 %! else
-%!   temp_file = [tempname() '.m'];
+%!   temp_file = [temp_path '/temp_file.m'];
 %! end
 %! % allow loading function from temp_file
-%! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
 %! f = function_handle(2*x*y, 2^x, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(f, 'function_handle'))
@@ -319,13 +320,13 @@ end
 %! H = [x y z];
 %! M = [x y; z 16];
 %! V = [x;y;z];
+%! temp_path = make_temp_dir__ (tempdir (), 'octsympy-temp-dir-');
 %! if (exist ('OCTAVE_VERSION', 'builtin'))
-%!   temp_file = tempname('', 'oct_');
+%!   temp_file = [temp_path '/oct_temp_file'];
 %! else
-%!   temp_file = tempname();
+%!   temp_file = [temp_path '/temp_file'];
 %! end
 %! % allow loading function from temp_file
-%! [temp_path, ans, ans] = fileparts(temp_file);
 %! addpath(temp_path);
 %! h = function_handle(H, M, V, 'vars', {x y z}, 'file', temp_file);
 %! assert( isa(h, 'function_handle'))
