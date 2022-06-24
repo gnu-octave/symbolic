@@ -98,18 +98,11 @@ jobs:
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          docker exec oc octave-cli --eval 'pwd; ls'
-          docker exec oc sudo make -C /home/jovyan/octsympy install
+          # docker exec oc sudo make -C /home/jovyan/octsympy install
           docker exec oc make -C octsympy test
-          docker exec oc octave-cli --eval "pkg list"
-          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
-          # TODO: execute twice, just to check if `pkg test ...` is working
-          docker exec oc octave-cli --eval "pkg test symbolic"
-          docker exec oc ls
           echo "Stopping container"
           docker stop oc
           docker rm oc
-          ls
 
 
   # note sympy 1.10 doesn't support Python 3.6 so won't work on 5.1.0/5.2.0
@@ -150,18 +143,11 @@ jobs:
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          docker exec oc octave-cli --eval 'pwd; ls'
           docker exec oc octave-cli --eval "pkg install -forge doctest"
-          docker exec oc sudo make -C octsympy install
-          docker exec oc octave-cli --eval "pkg list"
-          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
-          # docker exec oc octave-cli --eval "pkg load symbolic; sym('x'); doctest ."
           docker exec oc make -C octsympy doctest
-          docker exec oc ls
           echo "Stopping container"
           docker stop oc
           docker rm oc
-          ls
 
 
   # Built-in Self Tests using the Pythonic interface
