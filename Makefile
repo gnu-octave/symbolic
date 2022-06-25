@@ -66,7 +66,6 @@ $(OCTAVE_RELEASE): .git/index | $(BUILD_DIR)
 	      "$@/HOWTO-release.md" \
 	      "$@/TODO.md" \
 	      "$@/.gitignore" \
-	      "$@/.travis.yml" \
 	      "$@/.mailmap" \
 	      "$@/screenshot.png" \
 	      "$@/screenshot-install.png"
