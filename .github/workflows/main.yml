@@ -8,7 +8,7 @@
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 #
-# Github Actions configuration for Octave's Symbolic package
+# Github Actions configuration for Octave's Symbolic package.
 
 name: CI
 
@@ -38,12 +38,11 @@ jobs:
           ls
           cd inst
           ls
-          docker run --rm gnuoctave/octave:6.2.0 octave-cli --eval 'disp(42)'
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "sympref diagnose"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "sympref diagnose"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
           echo "Try a test"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.2.0 octave-cli --eval "x=sym('x'); test @sym/qr"
+          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); test @sym/qr"
 
 
   # Built-in Self Tests for various supported Octave and SymPy
@@ -99,20 +98,11 @@ jobs:
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          docker exec oc octave-cli --eval 'pwd; ls'
-          docker exec oc sudo make -C /home/jovyan/octsympy install
-          # TODO needs updating:
-          # docker exec oc make -C octsympy test
-          docker exec oc octave-cli --eval "pkg list"
-          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
-          # TODO: runs all the tests for some reason
-          # docker exec oc octave-cli --eval "pkg test symbolic"
-          docker exec oc octave-cli --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
-          docker exec oc ls
+          # docker exec oc sudo make -C /home/jovyan/octsympy install
+          docker exec oc make -C octsympy test
           echo "Stopping container"
           docker stop oc
           docker rm oc
-          ls
 
 
   # note sympy 1.10 doesn't support Python 3.6 so won't work on 5.1.0/5.2.0
@@ -153,18 +143,11 @@ jobs:
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          docker exec oc octave-cli --eval 'pwd; ls'
           docker exec oc octave-cli --eval "pkg install -forge doctest"
-          docker exec oc sudo make -C octsympy install
-          docker exec oc octave-cli --eval "pkg list"
-          docker exec oc octave-cli --eval "pkg load symbolic; sympref diagnose"
-          # docker exec oc octave-cli --eval "pkg load symbolic; sym('x'); doctest ."
           docker exec oc make -C octsympy doctest
-          docker exec oc ls
           echo "Stopping container"
           docker stop oc
           docker rm oc
-          ls
 
 
   # Built-in Self Tests using the Pythonic interface
@@ -341,6 +324,4 @@ jobs:
           octave --eval "pkg load symbolic; sympref diagnose"
       - name: Load package, run tests
         run: |
-          # TODO: runs all the tests for some reason
-          #octave --eval "pkg test symbolic"
-          octave --eval "pkg load symbolic; r=octsympy_tests; if r, type('fntests.log') end; exit(r)"
+          octave --eval "pkg test symbolic"
