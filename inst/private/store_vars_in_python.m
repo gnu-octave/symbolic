@@ -26,7 +26,7 @@ function var_pyobj = store_vars_in_python (L)
       var_pyobj.append (pyeval (sympy (x)))
     elseif (iscell (x))
       var_pyobj.append (store_vars_in_python (x))
-    elseif (isequal (x, []))
+    elseif (isnumeric (x) && isequal (x, [])) % See #1151 for more details
       var_pyobj.append (py.list ());
     else
       var_pyobj.append(x);
