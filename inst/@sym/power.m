@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,15 +59,6 @@
 
 
 function z = power(x, y)
-
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = power(x, y);
-    return
-  end
-
 
   cmd = { '(x,y) = _ins'
           'if x.is_Matrix and y.is_Matrix:'

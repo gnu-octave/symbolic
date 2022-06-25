@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -86,18 +86,8 @@
 %% @seealso{@@sym/ldivide, @@sym/mrdivide}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function x = mldivide(A, b)
-
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(A, 'symfun') || isa(b, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    x = mldivide(A, b);
-    return
-  end
 
   % not for singular
   %'ans = A.LUsolve(b)'
@@ -139,7 +129,6 @@ function x = mldivide(A, b)
   end
 end
 
-% [5 2] \ 10
 
 %!test
 %! % scalar

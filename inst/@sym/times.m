@@ -51,14 +51,6 @@
 
 function z = times(x, y)
 
-  % XXX: delete this when we drop support for Octave < 4.4.2
-  if (isa(x, 'symfun') || isa(y, 'symfun'))
-    warning('OctSymPy:sym:arithmetic:workaround42735', ...
-            'worked around octave bug #42735')
-    z = times(x, y);
-    return
-  end
-
   %% 2022-06: TODO cannot simply call hadamard_product for sympy <1.9,
   %% see upstream: https://github.com/sympy/sympy/issues/8557
 
