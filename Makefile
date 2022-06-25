@@ -1,6 +1,6 @@
 SHELL   := /bin/bash
 
-## Copyright 2016-2017 Colin B. Macdonald
+## Copyright 2016-2019, 2022 Colin B. Macdonald
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright
@@ -69,6 +69,7 @@ $(OCTAVE_RELEASE): .git/index | $(BUILD_DIR)
 	      "$@/.mailmap" \
 	      "$@/screenshot.png" \
 	      "$@/screenshot-install.png"
+	$(RM) -r "$@/.github"
 	$(RM) -r "$@/testing" "$@/util"
 	chmod -R a+rX,u+w,go-w "$@"
 
