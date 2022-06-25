@@ -355,5 +355,4 @@ Class for symbolic functions
 Miscellaneous
  @logical/isAlways
 Deprecated
- python_cmd
  octsympy_tests
