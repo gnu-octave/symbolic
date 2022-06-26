@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015 Colin B. Macdonald
+%% Copyright (C) 2014, 2015, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -25,12 +25,6 @@ function s = python_header()
     thisdir = fileparts (mfilename ('fullpath'));
     pyfile = fullfile (thisdir, 'python_header.py');
     PyStrCache = fileread (pyfile);
-    % octave 3.6 workaround
-    sz = size(PyStrCache);
-    if (sz(1) > sz(2))
-      warning('Octave 3.6 support is deprecated');
-      PyStrCache = PyStrCache';
-    end
   end
 
   s = PyStrCache;
