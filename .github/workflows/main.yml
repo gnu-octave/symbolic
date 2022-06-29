@@ -98,8 +98,11 @@ jobs:
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          # docker exec oc sudo make -C /home/jovyan/octsympy install
+          echo Running BIST in-place
           docker exec oc make -C octsympy test
+          echo Make package, then install-load-unload-uninstall
+          docker exec oc make -C octsympy install
+          docker exec oc octave --eval "pkg load symbolic; sympref diagnose; syms x; clear all; pkg unload symbolic; pkg uninstall symbolic"
           echo "Stopping container"
           docker stop oc
           docker rm oc
@@ -327,4 +330,4 @@ jobs:
           octave --eval "pkg test symbolic"
       - name: uninstall package
         run: |
-          octave --eval "pkg uninstall symbolic"
+          octave --eval "pkg uninstall symbolic; pkg list"
