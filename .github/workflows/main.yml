@@ -321,7 +321,10 @@ jobs:
         run: |
           pwd
           make install
-          octave --eval "pkg load symbolic; sympref diagnose"
+          octave --eval "pkg load symbolic; sympref diagnose; pkg unload symbolic"
       - name: Load package, run tests
         run: |
           octave --eval "pkg test symbolic"
+      - name: uninstall package
+        run: |
+          octave --eval "pkg uninstall symbolic"
