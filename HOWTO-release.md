@@ -28,7 +28,7 @@ Checklist
 
       - Use the maintainer makefile: "make clean", "make dist".
 
-      - make_windows_package.sh, use "day-to-day testing" mode.
+      - DEPRECATED: make_windows_package.sh, use "day-to-day testing" mode.
         Run this script "out of tree", it will clone a clean copy.
         Make sure py2exe, mpmath, sympy are the most recent versions.
 
@@ -40,7 +40,7 @@ Checklist
 
   * Test on Windows if possible.
 
-  * Ensure sourceforge and github both have up-to-date master.
+  * Ensure sourceforge and github both have up-to-date main branch.
 
   * Create ticket for release on sourceforge.  Upload tarball, html
     tarball and md5sums.
@@ -54,7 +54,7 @@ Checklist
           `git tag -a v2.x.y -m "Version 2.x.y"`
 
   * Make sure tags are current on both sourceforge and github.
-    `git push --tags origin master`.
+    `git push --tags origin main`.
 
   * Do github related release tasks:
 
@@ -73,4 +73,4 @@ AFTER release
 
   * Bump version by appending "+" in sympref.m and DESCRIPTION.
 
-  * Optionally, update the make_windows_bundle script.
+  * Optionally, update the make_windows_bundle script.  DEPRECATED.
