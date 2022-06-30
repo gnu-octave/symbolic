@@ -26,9 +26,10 @@
 %% Testing should work once the package is installed, which is otherwise
 %% harder to test (need to know the installation directory).
 %%
-%% TODO: eventually we should drop this file altogether, but then how
-%% do we test the installed package?  Perhaps we could keep this here
-%% until @code{pkg test} works upstream: @url{https://savannah.gnu.org/bugs/?41215}
+%% TODO: eventually we should drop this file altogether, and use
+%% @code{pkg test symbolic} instead, see
+%% @url{https://github.com/cbm755/octsympy/issues/1142}
+%% and @url{https://savannah.gnu.org/bugs/?62681}.
 %%
 %% @seealso{test, runtests, doctest}
 %% @end defun

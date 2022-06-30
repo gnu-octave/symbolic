@@ -45,13 +45,17 @@ Checklist
   * Create ticket for release on sourceforge.  Upload tarball, html
     tarball and md5sums.
 
+      - get checklist https://wiki.octave.org/Reviewing_Octave_Forge_packages
+
+      - fill it out as best we can
+
   * Update 2017-07: tagging now happens after review, by admins!
 
       - Ticket should include the git hash to be tagged.
 
       - If packages seem ok, admin/reviewer will tag with:
 
-          `git tag -a v2.x.y -m "Version 2.x.y"`
+          `git tag -a v3.x.y -m "Version 3.x.y"`
 
   * Make sure tags are current on both sourceforge and github.
     `git push --tags origin main`.
@@ -66,6 +70,13 @@ Checklist
 
       - Do github release (copy-paste from last time, update link).
 
+  * Update the https://gnu-octave.github.io/packages/ yaml file
+
+      - see https://github.com/gnu-octave/packages/blob/main/CONTRIBUTING.md
+
+      - send pull request
+
+      - TODO: or does this happen automatically for forge packages?
 
 
 AFTER release
