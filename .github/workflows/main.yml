@@ -96,6 +96,7 @@ jobs:
           # For more details, see https://stackoverflow.com/q/71901632
           # and https://github.com/actions/checkout/issues/760
           docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
+          docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           echo Running BIST in-place
