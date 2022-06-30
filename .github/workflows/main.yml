@@ -79,12 +79,11 @@ jobs:
             sympy: 1.10.1
     steps:
       - uses: actions/checkout@v2
-      - name:
+      - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
           SYMPY: ${{ matrix.sympy }}
         run: |
-          echo Running tests on Octave $OCT and SymPy $SYMPY
           sudo uname -a
           docker pull docker.io/gnuoctave/octave:$OCT
           # TODO: nonsense here to try to get r/w access: enables sudo below
@@ -99,12 +98,14 @@ jobs:
           docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-          echo Running BIST in-place
-          docker exec oc make -C octsympy test
-          echo Make package, then install-load-unload-uninstall
+      - name: Running in-place BIST
+        run: docker exec oc make -C octsympy test
+      - name: Make package, then install-load-unload-uninstall
+        run: |
           docker exec oc make -C octsympy install
           docker exec oc octave --eval "pkg load symbolic; sympref diagnose; syms x; clear all; pkg unload symbolic; pkg uninstall symbolic"
-          echo "Stopping container"
+      - name: Stop container
+        run: |
           docker stop oc
           docker rm oc
 
