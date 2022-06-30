@@ -62,14 +62,6 @@ jobs:
           - octave: 5.2.0
             sympy: 1.8
           - octave: 6.1.0
-            sympy: 1.9
-          - octave: 6.2.0
-            sympy: 1.9
-          - octave: 6.3.0
-            sympy: 1.9
-          - octave: 6.4.0
-            sympy: 1.9
-          - octave: 6.1.0
             sympy: 1.10.1
           - octave: 6.2.0
             sympy: 1.10.1
@@ -121,10 +113,6 @@ jobs:
         include:
           - octave: 5.1.0
             sympy: 1.8
-          - octave: 5.2.0
-            sympy: 1.8
-          - octave: 6.4.0
-            sympy: 1.9
           - octave: 6.4.0
             sympy: 1.10.1
     steps:
