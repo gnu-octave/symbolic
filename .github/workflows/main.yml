@@ -150,7 +150,7 @@ jobs:
   # the Pythonic interface is experimental. We may change this in the future.
   # For Pythonic, we use the latest commit from the master branch since the
   # last release (0.0.1) no longer works with newer Python.
-  bist-pythonic:
+  pythonic-dist-doctest:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
