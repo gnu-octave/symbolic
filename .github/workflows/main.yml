@@ -98,7 +98,7 @@ jobs:
           docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
-      - name: Running in-place BIST
+      - name: Run BIST in-place
         run: docker exec oc make -C octsympy test
       - name: Make package, then install-load-unload-uninstall
         run: |
@@ -129,12 +129,11 @@ jobs:
             sympy: 1.10.1
     steps:
       - uses: actions/checkout@v2
-      - name:
+      - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
           SYMPY: ${{ matrix.sympy }}
         run: |
-          echo Running doctests on Octave $OCT and SymPy $SYMPY
           sudo uname -a
           docker pull docker.io/gnuoctave/octave:$OCT
           # TODO: nonsense here to try to get r/w access: enables sudo below
@@ -149,8 +148,10 @@ jobs:
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval "pkg install -forge doctest"
-          docker exec oc make -C octsympy doctest
-          echo "Stopping container"
+      - name: Run doctests in-place
+        run: docker exec oc make -C octsympy doctest
+      - name: Stop container
+        run: |
           docker stop oc
           docker rm oc
 
