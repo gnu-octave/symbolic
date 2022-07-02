@@ -269,7 +269,6 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{@@sym/iztrans}
 %% @end defmethod
 
 %% Author: Alex Vong
