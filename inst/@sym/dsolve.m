@@ -229,6 +229,14 @@ end
 %! sol2 = subs (sol, C1, -C1);
 %! assert (isequal (sol, eqn) || isequal (sol2, eqn))
 
+%%!xtest
+%%! % system with solution in implicit form
+%%! % TODO: not implemented upstream?
+%%! syms y(x) z(x) C1
+%%! de1 = (2*x*y(x) - exp(-2*y(x)))*diff(y(x), x) + y(x) == 0;
+%%! de2 = diff(z, x) == 0;
+%%! sol = dsolve ([de1; de2]);
+
 %!test
 %! % Compute solution and classification
 %! syms y(x) C1
