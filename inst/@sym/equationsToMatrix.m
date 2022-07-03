@@ -118,35 +118,11 @@ function [A, b] = equationsToMatrix(varargin)
          '        vars = symvars'
          '    else:'
          '        vars = L.pop(-1)'
-         'if Version(spver) > Version("1.3"):'
-         '    if len(L) == 1:'  % might be matrix of eqns, don't want [Matrix]
-         '        L = L[0]'
-         '    vars = list(vars)'
-         '    A, B = linear_eq_to_matrix(L, vars)'
-         '    return True, A, B'
-         '#'
-         '# sympy <= 1.3: we do the work ourselves'
-         '#'
-         'vars = list(collections.OrderedDict.fromkeys(vars))' %% Never repeat elements
-         'if len(L) == 1 and isinstance(L[0], MatrixBase):'
-         '    L = [a for a in L[0]]'
-         'if len(L) == 0 or len(vars) == 0:'
-         '    return True, Matrix([]), Matrix([])'
-         'A = zeros(len(L), len(vars)); b = zeros(len(L), 1)'
-         'for i in range(len(L)):'
-         '    q = L[i]'
-         '    for j in range(len(vars)):'
-         '        p = Poly.from_expr(L[i], vars[j]).all_coeffs()'
-         '        q = Poly.from_expr(q, vars[j]).all_coeffs()'
-         '        if len(p) > 2:'
-         '            return False, 0, 0'
-         '        p = p[0] if len(p) == 2 else S(0)'
-         '        q = q[1] if len(q) == 2 else q[0]'
-         '        if not set(p.free_symbols).isdisjoint(set(vars)):'
-         '            return False, 0, 0'
-         '        A[i, j] = p'
-         '    b[i] = -q'
-         'return True, A, b' };
+         'if len(L) == 1:'  % might be matrix of eqns, don't want [Matrix]
+         '    L = L[0]'
+         'vars = list(vars)'
+         'A, B = linear_eq_to_matrix(L, vars)'
+         'return True, A, B' };
 
   for i = 1:length(varargin)
     varargin{i} = sym (varargin{i});
