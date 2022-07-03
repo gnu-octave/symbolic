@@ -117,17 +117,19 @@
 %%        x = ...
 %%        y = ...
 %%
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.5.1")'))
 %% soln.x
 %%   @result{} ans =
 %%       (sym)
-%%               2⋅t          -2⋅t
-%%         2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%               -2⋅t       2⋅t
+%%         - C₁⋅ℯ     + C₂⋅ℯ
 %%
+%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.5.1")'))
 %% soln.y
 %%   @result{} ans =
 %%       (sym)
-%%               2⋅t          -2⋅t
-%%         2⋅C₁⋅ℯ     - 2⋅C₂⋅ℯ
+%%             -2⋅t       2⋅t
+%%         C₁⋅ℯ     + C₂⋅ℯ
 %% @end group
 %% @end example
 %%
