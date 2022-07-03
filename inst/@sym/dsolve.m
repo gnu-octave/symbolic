@@ -290,6 +290,16 @@ end
 %! assert (isequal (simplify (f - g), 0))
 
 %!test
+%! % System of ODEs gives struct, Issue #1003.
+%! syms x(t) y(t)
+%! ode1 = diff(x(t),t) == 2*y(t);
+%! ode2 = diff(y(t),t) == 2*x(t);
+%! soln = dsolve([ode1, ode2]);
+%! assert (isstruct (soln))
+%! assert (numfields (soln) == 2)
+%! assert (isequal (sort (fieldnames (soln)), {'x'; 'y'}))
+
+%!test
 %! % System of ODEs
 %! syms x(t) y(t) C1 C2
 %! ode1 = diff(x(t),t) == 2*y(t);
