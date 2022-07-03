@@ -162,11 +162,8 @@ function [soln,classify] = dsolve(ode,varargin)
   end
 
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
-          '# convert our input to a dict'
-          'ics2 = {}'
-          'for s in ics:'
-          '    ics2[s.lhs] = s.rhs'
-          'sol = sp.dsolve(ode, ics=ics2)'
+          'ics = {ic.lhs: ic.rhs for ic in ics}'
+          'sol = sp.dsolve(ode, ics=ics)'
           % Helper function to 
           'def convert(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
