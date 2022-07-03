@@ -165,40 +165,32 @@ function [soln,classify] = dsolve(ode,varargin)
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           'ics = {ic.lhs: ic.rhs for ic in ics}'
           'sol = sp.dsolve(ode, ics=ics)'
-          % Helper function
-          'def convert(sympy_obj):'
+          'def convert_helper(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
-                   % y(t) = 2t to str "y", rhs expression
+                   % y(t) = rhs to str "y", rhs expression
           '        return str(sympy_obj.lhs.func), sympy_obj.rhs'
-          '    return None'
+          '    return None, None'
+          % if just single equality with simple lhs, we return the rhs
+          'if isinstance(sol, Eq):'
+          '    if sol.lhs.is_Function:'
+          '        return sol.rhs'
           % If the solution set is iterable (system or multiple solutions),
-          % we will convert it to a structure of {eqname: expr, eqname2: expr2 ...}
-          % 'cause that's what matlab does!
+          % we will try to convert to structure of {"x": expr, "y": expr2, ...}
           'try:'
-          '    iterator = iter(sol)'
-          'except TypeError:'
-          % Not iterable
-          '    pass'
-          'else:'
-          % Iterable
           '    return_data = dict()'
           '    for solution_part in sol:'
-          '        results = convert(solution_part)'
-          '        if results is None:'
-          '            return 0, -1'
-          '        return_data[results[0]] = results[1]'
-          '    return return_data, 0'
-          % If we just have a single equality:
-          'if isinstance(sol, Eq):'
-          % Check if the left hand side is a single function (assuming that we solve for a function in dsolve)
-          '    if sol.lhs.is_Function:'
-          % If so, then we return the rhs as an expression.
-          '        return sol.rhs, 0'
-          'return sol, 0' };
-  [soln, error_code] = pycall_sympy__ (cmd, ode, varargin{:});
-  if (error_code == -1)
-    error('dsolve: Encountered bad data when solving system of equations')
-  end
+          '        key, rhs = convert_helper(solution_part)'
+          '        if key is None:'
+          '            raise ValueError("not of right form for extraction")'
+          '        if key in return_data.keys():'
+          '            raise KeyError(f"repeated key {key}")'
+          '        return_data[key] = rhs'
+          '    return return_data'
+          'except (TypeError, ValueError, KeyError):'
+          '    pass'
+          % if nothing else worked, give back whatever form we have
+          'return sol' };
+  soln = pycall_sympy__ (cmd, ode, varargin{:});
 end
 
 
