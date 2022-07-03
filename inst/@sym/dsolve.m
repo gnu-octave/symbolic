@@ -189,7 +189,7 @@ function [soln,classify] = dsolve(ode,varargin)
           '    return_data = dict()'
           '    for solution_part in sol:'
           '        results = convert(solution_part)'
-          '        if results == None:'
+          '        if results is None:'
           '            return 0, -1'
           '        return_data[results[0]] = results[1]'
           '    return return_data, 0'
