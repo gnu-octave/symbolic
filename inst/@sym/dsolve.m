@@ -39,8 +39,8 @@
 %% @group
 %% sol = dsolve (DE)
 %%   @result{} sol = (sym)
-%%                  4⋅x
-%%       y(x) = C₁⋅ℯ
+%%           4⋅x
+%%       C₁⋅ℯ
 %% @end group
 %% @end example
 %%
@@ -49,22 +49,11 @@
 %% @group
 %% sol = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%               4⋅x
-%%       y(x) = ℯ
-%% @end group
-%% @end example
-%%
-%% Note the result is an equation so if you need an expression
-%% for the solution:
-%% @example
-%% @group
-%% rhs (sol)
-%%   @result{} (sym)
 %%        4⋅x
 %%       ℯ
 %% @end group
 %% @end example
-%%
+%% 
 %% In some cases, SymPy can return a classification of the
 %% differential equation:
 %% @example
@@ -77,9 +66,9 @@
 %%
 %% [sol, classify] = dsolve (DE, y(0) == 1)
 %%   @result{} sol = (sym)
-%%                -1
-%%        y(x) = ─────
-%%               x - 1
+%%        -1
+%%       ─────
+%%       x - 1
 %%   @result{} classify = ... separable ...
 %% @end group
 %% @end example
@@ -97,10 +86,10 @@
 %%        dx
 %%
 %% dsolve (DE, y(0) == 1, diff(y)(0) == 12)
-%%   @result{} (sym) y(x) = 4⋅sin(3⋅x) + cos(3⋅x)
+%%   @result{} (sym) 4⋅sin(3⋅x) + cos(3⋅x)
 %%
 %% dsolve (DE, y(0) == 1, y(sym(pi)/2) == 2)
-%%   @result{} (sym) y(x) = -2⋅sin(3⋅x) + cos(3⋅x)
+%%   @result{} (sym) -2⋅sin(3⋅x) + cos(3⋅x)
 %% @end group
 %% @end example
 %%
@@ -120,26 +109,21 @@
 %%       ⎢──(y(t)) = 2⋅x(t)⎥
 %%       ⎣dt               ⎦
 %% @end group
+%% 
 %%
 %% @group
-%% soln = dsolve (ode_sys)
-%%   @result{} soln = @{ ... @}
-%% @end group
-%%
-%% @c doctest: +SKIP  # they might be re-ordered
-%% @group
-%% soln@{1@}
+%% soln = dsolve (ode_sys);
+%% soln.x
 %%   @result{} ans =
 %%       (sym)
-%%                      -2⋅t         2⋅t
-%%         x(t) = 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%               2⋅t          -2⋅t
+%%         2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
 %%
-%% @c doctest: +SKIP  # they might be re-ordered
-%% soln@{2@}
+%% soln.y
 %%   @result{} ans =
 %%       (sym)
-%%                        -2⋅t         2⋅t
-%%         y(t) = - 2⋅C₁⋅ℯ     + 2⋅C₂⋅ℯ
+%%               2⋅t          -2⋅t
+%%         2⋅C₁⋅ℯ     - 2⋅C₂⋅ℯ
 %% @end group
 %% @end example
 %%
@@ -185,8 +169,41 @@ function [soln,classify] = dsolve(ode,varargin)
           'for s in ics:'
           '    ics2[s.lhs] = s.rhs'
           'sol = sp.dsolve(ode, ics=ics2)'
-          'return sol,' };
-  soln = pycall_sympy__ (cmd, ode, varargin{:});
+          % Helper function to 
+          'def convert(sympy_obj):'
+          '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
+                   % type() of a sympy function gives an undefined sympy function, I guess
+                   % str to turn it into just the string like matlab
+          '        return str(type(sympy_obj.lhs)), sympy_obj.rhs'
+          '    return None'
+          % If the solution set is iterable (system or multiple solutions),
+          % we will convert it to a structure of {eqname: expr, eqname2: expr2 ...}
+          % 'cause that's what matlab does!
+          'try:'
+          '    iterator = iter(sol)'
+          'except TypeError:'
+          % Not iterable
+          '    pass'
+          'else:'
+          % Iterable
+          '    return_data = dict()'
+          '    for solution_part in sol:'
+          '        results = convert(solution_part)'
+          '        if results == None:'
+          '            return 0, -1'
+          '        return_data[results[0]] = results[1]'
+          '    return return_data, 0'
+          % If we just have a single equality:
+          'if isinstance(sol, Eq):'
+          % Check if the left hand side is a single function (assuming that we solve for a function in dsolve)
+          '    if sol.lhs.is_Function:'
+          % If so, then we return the rhs as an expression.
+          '        return sol.rhs, 0'
+          'return sol, 0' };
+  [soln, error_code] = pycall_sympy__ (cmd, ode, varargin{:});
+  if (error_code == -1)
+    error('dsolve: Encountered bad data when solving system of equations')
+  end
 end
 
 
@@ -197,7 +214,7 @@ end
 %! syms C1 C2
 %! g1 = C1*exp(-2*x) + C2*exp(2*x);
 %! g2 = C2*exp(-2*x) + C1*exp(2*x);
-%! assert (isequal (rhs(f), g1) || isequal (rhs(f), g2))
+%! assert (isequal (f, g1) || isequal (f, g2))
 
 %!test
 %! % Not enough initial conditions
@@ -211,7 +228,7 @@ end
 %!   waserr = true;
 %!   expectederr = regexp (lasterr (), 'Perhaps.*under-specified');
 %! end
-%! assert ((waserr && expectederr) || isequal (rhs(f), g))
+%! assert ((waserr && expectederr) || isequal (f, g))
 
 %!test
 %! % Solution in implicit form
@@ -238,7 +255,7 @@ end
 %! de = diff(y, x) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3);
 %! g = 3*exp(-4*x);
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (f, g))
 
 %!test
 %! % initial conditions (second order ode)
@@ -246,7 +263,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3, subs(diff(y,x),x,0)==0);
 %! g = 3*cos(2*x);
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (f, g))
 
 %!test
 %! % Dirichlet boundary conditions (second order ode)
@@ -254,7 +271,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 2, y(1) == 0);
 %! g = -2*sin(2*x)/tan(sym('2'))+2*cos(2*x);
-%! assert (isequal (simplify (rhs(f) - g), 0))
+%! assert (isequal (simplify (f - g), 0))
 
 %!test
 %! % Neumann boundary conditions (second order ode)
@@ -262,7 +279,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, subs(diff(y,x),x,0)==1, subs(diff(y,x),x,1)==0);
 %! g = sin(2*x)/2+cos(2*x)/(2*tan(sym('2')));
-%! assert (isequal (simplify (rhs(f) - g), 0))
+%! assert (isequal (simplify (f - g), 0))
 
 %!test
 %! % Dirichlet-Neumann boundary conditions (second order ode)
@@ -270,7 +287,7 @@ end
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 3, subs(diff(y,x),x,1)==0);
 %! g = 3*sin(2*x)*tan(sym('2'))+3*cos(2*x);
-%! assert (isequal (simplify (rhs(f) - g), 0))
+%! assert (isequal (simplify (f - g), 0))
 
 %!test
 %! % System of ODEs
@@ -278,7 +295,7 @@ end
 %! ode1 = diff(x(t),t) == 2*y(t);
 %! ode2 = diff(y(t),t) == 2*x(t);
 %! soln = dsolve([ode1, ode2]);
-%! soln = [rhs(soln{1}), rhs(soln{2})];
+%! soln = [soln.x, soln.y];
 %! g1 = [C1*exp(-2*t) + C2*exp(2*t), -C1*exp(-2*t) + C2*exp(2*t)];
 %! g2 = [C1*exp(2*t) + C2*exp(-2*t), C1*exp(2*t) - C2*exp(-2*t)];
 %! g3 = [-C1*exp(-2*t) + C2*exp(2*t), C1*exp(-2*t) + C2*exp(2*t)];
@@ -297,14 +314,14 @@ end
 %! ode_2=diff(y(t),t) == 2*x(t);
 %! sol_ivp=dsolve([ode_1,ode_2],x(0)==1,y(0)==0);
 %! g_ivp=[exp(-2*t)/2+exp(2*t)/2,-exp(-2*t)/2+exp(2*t)/2];
-%! assert (isequal ([rhs(sol_ivp{1}),rhs(sol_ivp{2})], g_ivp))
+%! assert (isequal ([sol_ivp.x, sol_ivp.y], g_ivp))
 
 %!test
 %! syms y(x)
 %! de = diff(y, 2) + 4*y == 0;
 %! f = dsolve(de, y(0) == 0, y(sym(pi)/4) == 1);
 %! g = sin(2*x);
-%! assert (isequal (rhs(f), g))
+%! assert (isequal (f, g))
 
 %!test
 %! % Nonlinear example
@@ -312,7 +329,7 @@ end
 %! e = diff(y, x) == y^2;
 %! g = -1 / (C1 + x);
 %! soln = dsolve(e);
-%! assert (isequal (rhs(soln), g))
+%! assert (isequal (soln, g))
 
 %!test
 %! % Nonlinear example with initial condition
@@ -320,7 +337,7 @@ end
 %! e = diff(y, x) == y^2;
 %! g = -1 / (x - 1);
 %! soln = dsolve(e, y(0) == 1);
-%! assert (isequal (rhs(soln), g))
+%! assert (isequal (soln, g))
 
 %!xtest
 %! % forcing, Issue #183
@@ -328,8 +345,8 @@ end
 %! ode1 = diff(x) == x + sin(t) + 2;
 %! ode2 = diff(y) == y - t - 3;
 %! soln = dsolve([ode1 ode2], x(0) == 1, y(0) == 2);
-%! X = rhs(soln{1});
-%! Y = rhs(soln{2});
+%! X = soln.x;
+%! Y = soln.y;
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
 
@@ -337,4 +354,4 @@ end
 %! syms f(x) a b
 %! de = diff(f, x) == 4*f;
 %! s = dsolve(de, f(a) == b);
-%! assert (isequal (subs(rhs(s), x, a), b))
+%! assert (isequal (subs(s, x, a), b))
