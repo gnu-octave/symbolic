@@ -245,6 +245,11 @@ jobs:
       - name: Load package, run tests
         run: |
           octave --eval "pkg test symbolic"
+      - name: Build HTML documentation
+        run: |
+          octave --eval "pkg install -forge generate_html"
+          make html
+          octave --eval "pkg uninstall generate_html; pkg list"
       - name: uninstall package
         run: |
           octave --eval "pkg uninstall symbolic; pkg list"
