@@ -138,8 +138,6 @@
 %% are unlikely to support this so you will need to assemble a symbolic
 %% equation instead.
 %%
-%% FIXME: should we support a cell array list input for ICs/BCs?
-%%
 %% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
 %% @end deftypemethod
 
@@ -148,7 +146,7 @@ function [soln,classify] = dsolve(ode,varargin)
 
   % Usually we cast to sym in the _cmd call, but want to be
   % careful here b/c of symfuns
-  if (any(~isa(ode, 'sym')))
+  if (~ iscell (ode) && ~ all (isa (ode, 'sym')))
     error('Inputs must be sym or symfun')
   end
 
@@ -200,6 +198,8 @@ function [soln,classify] = dsolve(ode,varargin)
   soln = pycall_sympy__ (cmd, ode, varargin{:});
 end
 
+
+%!error <sym> dsolve (1, sym('x'))
 
 %!test
 %! syms y(x)
@@ -377,6 +377,19 @@ end
 %! ode_1 = diff (x(t), t) == 2*y(t);
 %! ode_2 = diff (y(t), t) == 2*x(t);
 %! sol = dsolve([ode_1, ode_2], [x(0)==1 y(0)==0]);
+%! g = [exp(-2*t)/2+exp(2*t)/2, -exp(-2*t)/2+exp(2*t)/2];
+%! assert (isequal ([sol.x, sol.y], g))
+
+%!test
+%! % cell-array of ICs or ODEs, but not both
+%! % Note: to support both we'd need a wrapper outside of @sym
+%! syms x(t) y(t)
+%! ode_1 = diff (x(t), t) == 2*y(t);
+%! ode_2 = diff (y(t), t) == 2*x(t);
+%! sol = dsolve([ode_1, ode_2], {x(0)==1 y(0)==0});
+%! g = [exp(-2*t)/2+exp(2*t)/2, -exp(-2*t)/2+exp(2*t)/2];
+%! assert (isequal ([sol.x, sol.y], g))
+%! sol = dsolve({ode_1, ode_2}, [x(0)==1 y(0)==0]);
 %! g = [exp(-2*t)/2+exp(2*t)/2, -exp(-2*t)/2+exp(2*t)/2];
 %! assert (isequal ([sol.x, sol.y], g))
 
