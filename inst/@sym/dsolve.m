@@ -22,8 +22,9 @@
 %% @documentencoding UTF-8
 %% @deftypemethod  @@sym {@var{sol} =} dsolve (@var{ode})
 %% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC})
-%% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ode}, @var{IC1}, @var{IC2}, @dots{})
-%% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@var{ode}, @var{IC})
+%% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ODEs}, @var{IC1}, @var{IC2}, @dots{})
+%% @deftypemethodx @@sym {@var{sol} =} dsolve (@var{ODEs}, @var{ICs})
+%% @deftypemethodx @@sym {[@var{sol}, @var{classify}] =} dsolve (@dots{})
 %% Solve ordinary differential equations (ODEs) symbolically.
 %%
 %% Basic example:
@@ -163,7 +164,13 @@ function [soln,classify] = dsolve(ode,varargin)
   end
 
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
-          'ics = {ic.lhs: ic.rhs for ic in ics}'
+          'if len(ics) == 1:'
+          '    try:'
+          '        ics = {ic.lhs: ic.rhs for ic in ics[0]}'
+          '    except TypeError:'
+          '        ics = {ic.lhs: ic.rhs for ic in ics}'
+          'else:'
+          '    ics = {ic.lhs: ic.rhs for ic in ics}'
           'sol = sp.dsolve(ode, ics=ics)'
           'def convert_helper(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
@@ -214,6 +221,7 @@ end
 %! catch
 %!   waserr = true;
 %!   expectederr = regexp (lasterr (), 'Perhaps.*under-specified');
+%!   f = 42;
 %! end
 %! assert ((waserr && expectederr) || isequal (f, g))
 
@@ -362,3 +370,23 @@ end
 %! de = diff(f, x) == 4*f;
 %! s = dsolve(de, f(a) == b);
 %! assert (isequal (subs(s, x, a), b))
+
+%!test
+%! % array of ICs
+%! syms x(t) y(t)
+%! ode_1 = diff (x(t), t) == 2*y(t);
+%! ode_2 = diff (y(t), t) == 2*x(t);
+%! sol = dsolve([ode_1, ode_2], [x(0)==1 y(0)==0]);
+%! g = [exp(-2*t)/2+exp(2*t)/2, -exp(-2*t)/2+exp(2*t)/2];
+%! assert (isequal ([sol.x, sol.y], g))
+
+%!test
+%! % array of ICs, Issue #1040.
+%! syms x(t) y(t) z(t)
+%! syms x_0 y_0 z_0
+%! diffEqns = [diff(x, t) == -x + 1, diff(y, t) == -y, diff(z, t) == -z];
+%! initCond = [x(0) == x_0, y(0) == y_0, z(0) == z_0];
+%! soln = dsolve (diffEqns, initCond);
+%! soln = [soln.x, soln.y, soln.z];
+%! exact_soln = [(x_0 - 1)*exp(-t) + 1  y_0*exp(-t)  z_0*exp(-t)];
+%! assert (isequal (soln, exact_soln))
