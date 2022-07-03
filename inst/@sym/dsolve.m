@@ -394,6 +394,7 @@ end
 
 %!test
 %! % array of ICs, Issue #1040.
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.7.1")'))
 %! syms x(t) y(t) z(t)
 %! syms x_0 y_0 z_0
 %! diffEqns = [diff(x, t) == -x + 1, diff(y, t) == -y, diff(z, t) == -z];
@@ -402,3 +403,4 @@ end
 %! soln = [soln.x, soln.y, soln.z];
 %! exact_soln = [(x_0 - 1)*exp(-t) + 1  y_0*exp(-t)  z_0*exp(-t)];
 %! assert (isequal (soln, exact_soln))
+%! end
