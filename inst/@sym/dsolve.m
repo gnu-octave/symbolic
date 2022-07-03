@@ -163,12 +163,11 @@ function [soln,classify] = dsolve(ode,varargin)
 
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           'if len(ics) == 1:'
-          '    try:'
-          '        ics = {ic.lhs: ic.rhs for ic in ics[0]}'
-          '    except TypeError:'
-          '        ics = {ic.lhs: ic.rhs for ic in ics}'
-          'else:'
+          '    ics = ics[0]'
+          'try:'
           '    ics = {ic.lhs: ic.rhs for ic in ics}'
+          'except TypeError:'  % not iterable
+          '    ics = {ics.lhs: ics.rhs}'
           'sol = sp.dsolve(ode, ics=ics)'
           'def convert_helper(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
