@@ -168,9 +168,8 @@ function [soln,classify] = dsolve(ode,varargin)
           % Helper function
           'def convert(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
-                   % type() of a sympy function gives an undefined sympy function, I guess
-                   % str to turn it into just the string like matlab
-          '        return str(type(sympy_obj.lhs)), sympy_obj.rhs'
+                   % y(t) = 2t to str "y", rhs expression
+          '        return str(sympy_obj.lhs.func), sympy_obj.rhs'
           '    return None'
           % If the solution set is iterable (system or multiple solutions),
           % we will convert it to a structure of {eqname: expr, eqname2: expr2 ...}
