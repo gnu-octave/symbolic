@@ -54,7 +54,7 @@
 %%       ℯ
 %% @end group
 %% @end example
-%% 
+%%
 %% In some cases, SymPy can return a classification of the
 %% differential equation:
 %% @example
@@ -110,10 +110,13 @@
 %%       ⎢──(y(t)) = 2⋅x(t)⎥
 %%       ⎣dt               ⎦
 %% @end group
-%% 
 %%
 %% @group
-%% soln = dsolve (ode_sys);
+%% soln = dsolve (ode_sys)
+%%   @result{} soln = scalar structure containing ...
+%%        x = ...
+%%        y = ...
+%%
 %% soln.x
 %%   @result{} ans =
 %%       (sym)
@@ -164,7 +167,7 @@ function [soln,classify] = dsolve(ode,varargin)
   cmd = { 'ode=_ins[0]; ics=_ins[1:]'
           'ics = {ic.lhs: ic.rhs for ic in ics}'
           'sol = sp.dsolve(ode, ics=ics)'
-          % Helper function to 
+          % Helper function
           'def convert(sympy_obj):'
           '    if isinstance(sympy_obj, Eq) and sympy_obj.lhs.is_Function:'
                    % type() of a sympy function gives an undefined sympy function, I guess
