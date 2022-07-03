@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
+%% Copyright (C) 2020 Jing-Chen Peng
 %%
 %% This file is part of OctSymPy.
 %%
@@ -139,9 +140,6 @@
 %%
 %% @seealso{@@sym/diff, @@sym/int, @@sym/solve}
 %% @end deftypemethod
-
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic
 
 
 function [soln,classify] = dsolve(ode,varargin)
