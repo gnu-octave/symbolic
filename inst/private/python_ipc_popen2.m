@@ -44,11 +44,29 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   info = [];
 
   if (strcmp(what, 'reset'))
-    cleanup = [];  % triggers a call to reset function
+    if (~ isempty (pid))
+      if (verbose)
+        disp ('Closing the Python communications link.')
+      end
+    end
+    A = true;
+    if (~ isempty (fin))
+      % produces a single newline char: not sure why
+      t = fclose (fin);
+      fin = [];
+      waitpid (pid);
+      pid = [];
+      A = A && (t == 0);
+    end
+    if (~ isempty (fout))
+      t = fclose (fout);
+      fout = [];
+      A = A && (t == 0);
+    end
+    cleanup = [];  % note: triggers emergency file-close
     fin = [];
     fout = [];
     pid = [];
-    A = true;
     return
   end
 
