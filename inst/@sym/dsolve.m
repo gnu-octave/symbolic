@@ -349,8 +349,9 @@ end
 %! soln = dsolve(e, y(0) == 1);
 %! assert (isequal (soln, g))
 
-%!xtest
-%! % forcing, Issue #183
+%!test
+%! % forcing, Issue #183, broken in older sympy
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.7.1")'))
 %! syms x(t) y(t)
 %! ode1 = diff(x) == x + sin(t) + 2;
 %! ode2 = diff(y) == y - t - 3;
@@ -359,6 +360,7 @@ end
 %! Y = soln.y;
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
+%! end
 
 %!test
 %! syms f(x) a b
