@@ -45,11 +45,11 @@ jobs:
           docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); test @sym/qr"
 
 
-  # Built-in Self Tests for various supported Octave and SymPy
+  # Built-in Self Tests and Doctests for various supported Octave and SymPy
   # Test newest Octave and all supported SymPy
   # Test other supported Octave releases with latest available SymPy
   # Note that 1.10.1 not supported on Python 3.6 (Ubuntu 18.04-based systems)
-  bist:
+  bist_doc:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -90,55 +90,15 @@ jobs:
           docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
+          docker exec oc octave-cli --eval "pkg install -forge doctest"
       - name: Run BIST in-place
         run: docker exec oc make -C octsympy test
+      - name: Run doctests in-place
+        run: docker exec oc make -C octsympy doctest
       - name: Make package, then install-load-unload-uninstall
         run: |
           docker exec oc make -C octsympy install
           docker exec oc octave --eval "pkg load symbolic; sympref diagnose; syms x; clear all; pkg unload symbolic; pkg uninstall symbolic"
-      - name: Stop container
-        run: |
-          docker stop oc
-          docker rm oc
-
-
-  # note sympy 1.10 doesn't support Python 3.6 so won't work on 5.1.0/5.2.0
-  doctests:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        octave: [7.1.0]
-        sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1]
-        include:
-          - octave: 5.1.0
-            sympy: 1.8
-          - octave: 6.4.0
-            sympy: 1.10.1
-    steps:
-      - uses: actions/checkout@v2
-      - name: Container setup
-        env:
-          OCT: ${{ matrix.octave }}
-          SYMPY: ${{ matrix.sympy }}
-        run: |
-          sudo uname -a
-          docker pull docker.io/gnuoctave/octave:$OCT
-          # TODO: nonsense here to try to get r/w access: enables sudo below
-          docker run --name=oc --detach --init \
-            -u root --env="GRANT_SUDO=yes" \
-            --volume=$PWD:/home/jovyan/octsympy:rw \
-            gnuoctave/octave:$OCT sleep inf
-          # FIXME: workaround "fatal: unsafe repository" error
-          # For more details, see https://stackoverflow.com/q/71901632
-          # and https://github.com/actions/checkout/issues/760
-          docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
-          docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
-          docker exec oc pip3 install packaging
-          docker exec oc pip3 install sympy==$SYMPY
-          docker exec oc octave-cli --eval "pkg install -forge doctest"
-      - name: Run doctests in-place
-        run: docker exec oc make -C octsympy doctest
       - name: Stop container
         run: |
           docker stop oc
