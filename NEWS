@@ -7,6 +7,10 @@ octsympy 2.9.0+
           cumsum
           ztrans
 
+  * `dsolve` output prefers expressions (right-hand sides) rather than
+    equations.  Also uses structs for systems.  This brings it closer
+    to `solve` and more compatible with other symbolic toolboxes.
+
   * Fixes for SymPy 1.6 and later.
 
   * Fixes for Octave 6.x and Octave 7.1.
