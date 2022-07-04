@@ -11,6 +11,8 @@ octsympy 2.9.0+
     equations.  Also uses structs for systems.  This brings it closer
     to `solve` and more compatible with other symbolic toolboxes.
 
+  * `dsolve` supports arrays of initial conditions.
+
   * Fixes for SymPy 1.6 and later.
 
   * Fixes for Octave 6.x and Octave 7.1.
