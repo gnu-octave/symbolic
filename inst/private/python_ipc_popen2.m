@@ -35,7 +35,7 @@
 
 function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
-  persistent cleanup fin fout pid
+  persistent emergency_cleanup fin fout pid
 
   py_startup_timeout = 30;  % seconds
 
@@ -63,7 +63,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       fout = [];
       A = A && (t == 0);
     end
-    cleanup = [];  % note: triggers emergency file-close
+    emergency_cleanup = [];  % note: triggers emergency file-close
     fin = [];
     fout = [];
     pid = [];
@@ -94,12 +94,12 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     end
 
     then = @(f, g) g (f ());
-    % this will be called when we `clear cleanup`: avoids dangling file handles
-    cleanup = onCleanup (@() ...
+    % will be called when we `clear functions`: avoids dangling file handles
+    emergency_cleanup = onCleanup (@() ...
                           then (@(varagin) ...
                                  [is_valid_file_id(fin) && fclose(fin), ...
                                   is_valid_file_id(fout) && fclose(fout)], ...
-                                @(varargin) waitpid(pid)));
+                                @(varargin) ~isempty(pid) && waitpid(pid)));
     headers = python_header();
     fputs (fin, headers);
     fprintf (fin, '\n\n');
