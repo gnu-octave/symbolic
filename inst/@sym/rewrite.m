@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,7 +59,6 @@
 %% The argument @var{f} can be a matrix:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% rewrite([exp(x) cos(x) asin(x)], 'log')
 %%   @result{} ans = (sym 1×3 matrix)
 %%       ⎡                  ⎛         ________⎞⎤

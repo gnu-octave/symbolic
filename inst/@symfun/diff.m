@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,7 +60,6 @@
 %%
 %% @group
 %% syms f(x, y)
-%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
 %% diff(f, x, y, y)(3, 2)     % a third partial eval at (3, 2)
 %%   @result{} ans = (sym)
 %%       ⎛   3           ⎞│

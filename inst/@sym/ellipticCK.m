@@ -27,7 +27,6 @@
 %% @example
 %% @group
 %% syms m
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% ellipticCK (m)
 %%   @result{} ans = (sym) K(1 - m)
 %% @end group

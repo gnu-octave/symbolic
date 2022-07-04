@@ -27,7 +27,6 @@
 %% @example
 %% @group
 %% syms nu m
-%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% ellipticCPi (nu, m)
 %%   @result{} ans = (sym) Π(ν│1 - m)
 %% @end group

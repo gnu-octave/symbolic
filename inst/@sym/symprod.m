@@ -47,7 +47,6 @@
 %% @example
 %% @group
 %% syms x m
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% symprod(sin(x), x, [1 m])
 %%   @result{} (sym)
 %%         m

@@ -62,8 +62,6 @@ function c = dot(a, b)
 
   % conjugate a to match the behavior of @double/dot
   cmd = { 'a, b = _ins'
-          'if Version(spver) <= Version("1.3"):'
-          '    return a.conjugate().dot(b)'
           'return a.dot(b, hermitian=True, conjugate_convention="left")'
         };
 

@@ -55,7 +55,6 @@
 %% @example
 %% @group
 %% A = sym([5 2]);
-%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.3")'))
 %% x = A \ 10
 %%   @result{} x = (sym 2×1 matrix)
 %%       ⎡    2⋅c₁⎤

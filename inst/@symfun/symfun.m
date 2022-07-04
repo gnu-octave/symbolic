@@ -86,7 +86,6 @@
 %% syms f(t) g(t)
 %% F(t) = f(g(t))
 %%   @result{} F(t) = (symfun) f(g(t))
-%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.3")'))
 %% diff(F, t)
 %%   @result{} ans(t) = (symfun)
 %%         d            d
