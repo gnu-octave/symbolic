@@ -35,7 +35,7 @@
 
 function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
-  persistent cleanup fin fout pid
+  persistent emergency_cleanup fin fout pid
 
   py_startup_timeout = 30;  % seconds
 
@@ -44,11 +44,29 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
   info = [];
 
   if (strcmp(what, 'reset'))
-    cleanup = [];  % triggers a call to reset function
+    if (~ isempty (pid))
+      if (verbose)
+        disp ('Closing the Python communications link.')
+      end
+    end
+    A = true;
+    if (is_valid_file_id (fin))
+      % produces a single newline char: not sure why
+      t = fclose (fin);
+      fin = [];
+      waitpid (pid);
+      pid = [];
+      A = A && (t == 0);
+    end
+    if (is_valid_file_id (fout))
+      t = fclose (fout);
+      fout = [];
+      A = A && (t == 0);
+    end
+    emergency_cleanup = [];  % trigger while we know it is a no-op
     fin = [];
     fout = [];
     pid = [];
-    A = true;
     return
   end
 
@@ -76,12 +94,12 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     end
 
     then = @(f, g) g (f ());
-    % this will be called when we `clear cleanup`: avoids dangling file handles
-    cleanup = onCleanup (@() ...
+    % will be called when we `clear functions`: avoids dangling file handles
+    emergency_cleanup = onCleanup (@() ...
                           then (@(varagin) ...
                                  [is_valid_file_id(fin) && fclose(fin), ...
                                   is_valid_file_id(fout) && fclose(fout)], ...
-                                @(varargin) waitpid(pid)));
+                                @(varargin) ~isempty(pid) && waitpid(pid)));
     headers = python_header();
     fputs (fin, headers);
     fprintf (fin, '\n\n');
