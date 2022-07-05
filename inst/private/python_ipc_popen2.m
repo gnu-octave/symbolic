@@ -50,7 +50,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       end
     end
     A = true;
-    if (~ isempty (fin))
+    if (is_valid_file_id (fin))
       % produces a single newline char: not sure why
       t = fclose (fin);
       fin = [];
@@ -58,12 +58,12 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       pid = [];
       A = A && (t == 0);
     end
-    if (~ isempty (fout))
+    if (is_valid_file_id (fout))
       t = fclose (fout);
       fout = [];
       A = A && (t == 0);
     end
-    emergency_cleanup = [];  % note: triggers emergency file-close
+    emergency_cleanup = [];  % trigger while we know it is a no-op
     fin = [];
     fout = [];
     pid = [];
