@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2018, 2020 Mike Miller
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -74,9 +75,13 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
       error('popen2() failed');
     end
 
+    then = @(f, g) g (f ());
     % this will be called when we `clear cleanup`: avoids dangling file handles
-    cleanup = onCleanup (@() python_ipc_popen2_reset (fin, fout, pid));
-
+    cleanup = onCleanup (@() ...
+                          then (@(varagin) ...
+                                 [is_valid_file_id(fin) && fclose(fin), ...
+                                  is_valid_file_id(fout) && fclose(fout)], ...
+                                @(varargin) waitpid(pid)));
     headers = python_header();
     fputs (fin, headers);
     fprintf (fin, '\n\n');
