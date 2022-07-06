@@ -49,13 +49,19 @@ Checklist
 
       - fill it out as best we can
 
-  * Update 2017-07: tagging now happens after review, by admins!
+  * Update 2022-07: tagging now happens after review, by admins!
 
       - Ticket should include the git hash to be tagged.
 
-      - If packages seem ok, admin/reviewer will tag with:
+      - If packages seem ok, hopefully someone else will +1 the release
+        then we can tag:
 
           `git tag -a v3.x.y -m "Version 3.x.y"`
+
+      - Follow the admin instructions under the review wiki above:
+
+          `sftp` is useful for looking, and can then use `rsync`, something like
+          `rsync -auvn --delete ./tmp/symbolic-html/symbolic/ <user>@web.sourceforge.net:/home/project-web/octave/htdocs/packages/symbolic/`
 
   * Make sure tags are current on both sourceforge and github.
     `git push --tags origin main`.
