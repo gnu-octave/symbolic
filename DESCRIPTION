@@ -1,6 +1,6 @@
 Name: symbolic
-Version: 3.0.0
-Date: 2022-07-05
+Version: 3.0.0+
+Date: 2022-07-06
 Author: Colin B. Macdonald <cbm@m.fsf.org>
 Maintainer: Colin B. Macdonald <cbm@m.fsf.org>
 Title: Octave Symbolic Package using SymPy
