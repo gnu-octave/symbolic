@@ -182,21 +182,46 @@ jobs:
           docker rm oc
 
 
-  ubuntu2204_python310:
+  ubuntu2204_ootb:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - name: Install Octave
+      - name: Install Octave, Python and SymPy
         run: |
           sudo uname -a
-          python3 --version
           sudo apt-get install -y octave
           octave --version
           python3 --version
-          #octave --eval "pkg install -forge doctest"
-      - name: Install SymPy
+          sudo apt-get install -y python3-sympy
+          python3 -c "import sympy; print(sympy.__version__)"
+      - name: Install package, verify
         run: |
+          pwd
+          make install
+          octave --eval "pkg load symbolic; sympref diagnose; pkg unload symbolic"
+      - name: Load package, run tests
+        run: |
+          octave --eval "pkg test symbolic"
+      - name: uninstall package
+        run: |
+          octave --eval "pkg uninstall symbolic; pkg list"
+
+
+  ubuntu2204_pip_sympy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Octave and Python
+        run: |
+          sudo uname -a
+          sudo apt-get install -y octave
+          octave --version
+          python3 --version
+          pip --version
+      - name: Install SymPy from pip
+        run:
           pip install sympy
+          python3 -c "import sympy; print(sympy.__version__)"
       - name: Install package, verify
         run: |
           pwd
