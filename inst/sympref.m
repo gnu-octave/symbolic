@@ -318,7 +318,7 @@ function varargout = sympref(cmd, arg)
       %pkg_path = fileparts (mfilename ('fullpath'));
       % or
       %pkg_l = pkg ('list');
-      %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, "UniformOutput", false));
+      %idx = strcmp ('octsympy', cellfun (@(x) x.name, pkg_l, 'UniformOutput', false));
       %if (~ any (idx))
       %  error ('the package %s is not installed', your_pkg);
       %end

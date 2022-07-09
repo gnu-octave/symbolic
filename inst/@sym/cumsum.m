@@ -21,7 +21,7 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym cumsum (@var{x})
 %% @defmethodx @@sym cumsum (@var{x}, @var{dim})
-%% Perform a cumulative sum over the rows or columns of a symbolic array.
+%% Cumulative sum over the rows or columns of a symbolic array.
 %%
 %% If @var{dim} is omitted, it defaults to the first non-singleton dimension.
 %% For example:

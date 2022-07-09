@@ -21,7 +21,7 @@
 %% @documentencoding UTF-8
 %% @defmethod  @@sym cumprod (@var{x})
 %% @defmethodx @@sym cumprod (@var{x}, @var{dim})
-%% Perform a cumulative product over the rows or columns of a symbolic array.
+%% Cumulative product over the rows or columns of a symbolic array.
 %%
 %% If @var{dim} is omitted, it defaults to the first non-singleton dimension.
 %% For example:
