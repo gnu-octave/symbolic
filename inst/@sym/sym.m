@@ -1,5 +1,6 @@
 %% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -953,7 +954,7 @@ end
 %! syms x
 %! y = 2*x;
 %! a = 42;
-%! myfile = tempname ();
+%! [fd, myfile] = make_temp_file__ (tempdir (), 'octsympy-myfile-');
 %! save (myfile, 'x', 'y', 'a')
 %! clear x y a
 %! load (myfile)
