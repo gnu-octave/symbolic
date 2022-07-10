@@ -110,7 +110,7 @@ jobs:
   # the Pythonic interface is experimental. We may change this in the future.
   # For Pythonic, we use the latest commit from the master branch since the
   # last release (0.0.1) no longer works with newer Python.
-  pythonic-dist-doctest:
+  pythonic-bist-doctest:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -217,10 +217,10 @@ jobs:
           sudo apt-get install --no-install-recommends -y octave python3 python3-pip
           octave --version
           python3 --version
-          pip --version
+          pip3 --version
       - name: Install SymPy from pip
-        run:
-          pip install sympy
+        run: |
+          pip3 install sympy
           python3 -c "import sympy; print(sympy.__version__)"
       - name: Install package, verify
         run: |
