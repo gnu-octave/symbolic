@@ -437,7 +437,13 @@ end
 %! % This tests the "INTERNAL_PYTHON_ERROR" path.
 %! % FIXME: this is a very specialized test, relies on internal octsympy
 %! % implementation details, and may need to be adjusted for changes.
-%! b = sym([], 'S.make_an_attribute_err_exception', [1 1], 'Test', 'Test', 'Test');
+%! disp('')
+%! disp('**********************************************************************')
+%! disp('')
+%! disp('  Some deliberate AttributeError and ValueError may appear next')
+%! disp('')
+%! disp('v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v  v')
+%! b = sym([], 'S.This_is_supposed_to_make_an_exception', [1 1], 'Test', 'Test', 'Test');
 %! c = b + 1;
 %!test
 %! % ...and after the above test, the pipe should still work
@@ -454,6 +460,10 @@ end
 %!   assert (~ isempty (regexp (msg, '.*does not know how to.*')))
 %! end
 %! warning (s)
+%! disp('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+%! disp('                  End of deliberate errors!')
+%! disp('  You should see "46/46" or "Passes 46 out of 46 tests" below')
+%! disp('**********************************************************************')
 %! % ...and after the above test, the pipe should still work
 %! a = pycall_sympy__ ('return _ins[0]*2', 3);
 %! assert (isequal (a, 6))
