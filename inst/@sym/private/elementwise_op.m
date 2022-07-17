@@ -86,7 +86,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           'for A in _ins:'
           '    if isinstance(A, MatrixBase):'
           '        if q is None:'
-          '            q = A.as_mutable()'
+          '            q = A'
           '        else:'
           '            assert q.shape == A.shape, "Matrices in input must all have the same shape"'
           % all inputs were scalars:
