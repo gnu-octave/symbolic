@@ -25,6 +25,7 @@ Functions
  lambertw
  poly2sym
 Double-precision numerical functions
+ @double/adjoint
  @double/bernoulli
  @double/chebyshevT
  @double/chebyshevU
