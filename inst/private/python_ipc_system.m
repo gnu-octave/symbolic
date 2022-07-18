@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -130,6 +131,10 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
     if status < 0
       error ('system ipc: failed to close %s (fd %d) after writing', ...
 	     tmpfilename, fd);
+    end
+
+    if python_env_is_cygwin_like (pyexec)
+      tmpfilename = cygpath (tmpfilename);
     end
     [status, out] = system ([pyexec ' ' tmpfilename]);
   end
