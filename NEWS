@@ -6,6 +6,11 @@ octsympy 3.0.0+
 
           adjoint
 
+  * Misc bug fixes and improvements in error handling.
+
+  * `.oct-config` files indicate source is UTF-8 encoded and should improve
+    any locale or encoding problems on Octave 7 and above.
+
 
 
 octsympy 3.0.0 (2022-07-05)
