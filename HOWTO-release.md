@@ -49,12 +49,14 @@ Checklist
 
       - fill it out as best we can
 
-  * Update 2022-07: tagging now happens after review, by admins!
-
       - Ticket should include the git hash to be tagged.
 
-      - If packages seem ok, hopefully someone else will +1 the release
-        then we can tag:
+  * tagging happens after review, by admins!
+
+      - If packages seem ok, hopefully someone else will +1 the release but this
+        is no longer essential (summer 2022)
+
+      - then we can tag:
 
           `git tag -a v3.x.y -m "Version 3.x.y"`
 
@@ -62,17 +64,23 @@ Checklist
 
           `sftp` is useful for looking, and can then use `rsync`, something like
           `rsync -auvn --delete ./tmp/symbolic-html/symbolic/ <user>@web.sourceforge.net:/home/project-web/octave/htdocs/packages/symbolic/`
+          (only certain users can do this: ask cbm for now)
+         
+      - TODO: summer 2022: longer term, we might invert this process, tagging on github
+        before review.
 
   * Make sure tags are current on both sourceforge and github.
     `git push --tags origin main`.
+    `git push --tags sourceforge main`.
+    (cbm can do this part, TODO and it may not be necessary long term)
 
-  * Do github related release tasks:
+  * Do github-related release tasks:
 
       - DEPRECATED: Redo the Windows bundle package (using tag mode, see script).
 
       - compute the md5sums, upload the packages to github release
         page, and copy-paste the md5sums.  These must match the
-        sourceforge md5sums.
+        sourceforge md5sums.  Also compute sha256sum.
 
       - Do github release (copy-paste from last time, update link).
 
@@ -81,8 +89,6 @@ Checklist
       - see https://github.com/gnu-octave/packages/blob/main/CONTRIBUTING.md
 
       - send pull request
-
-      - TODO: or does this happen automatically for forge packages?
 
 
 AFTER release
