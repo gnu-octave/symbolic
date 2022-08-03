@@ -73,6 +73,7 @@ Mathematical methods for symbolic objects
  @sym/bessely
  @sym/besselyn
  @sym/beta
+ @sym/cart2pol
  @sym/cbrt
  @sym/ceil
  @sym/charpoly
