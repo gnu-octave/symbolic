@@ -11,6 +11,9 @@ octsympy 3.0.0+
   * `.oct-config` files indicate source is UTF-8 encoded and should improve
     any locale or encoding problems on Octave 7 and above.
 
+  * Fixes some errors when Python is running in Cygwin-like environment.
+    But there could still be errors in other places (issue #1182).
+
 
 
 octsympy 3.0.0 (2022-07-05)
