@@ -189,6 +189,7 @@ jobs:
       - name: Install Octave, Python and SymPy
         run: |
           sudo uname -a
+          sudo apt-get update
           sudo apt-get install --no-install-recommends -y octave python3
           octave --version
           python3 --version
@@ -214,6 +215,7 @@ jobs:
       - name: Install Octave and Python
         run: |
           sudo uname -a
+          sudo apt-get update
           sudo apt-get install --no-install-recommends -y octave python3 python3-pip
           octave --version
           python3 --version
