@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        octave: [7.1.0]
+        octave: [7.2.0]
         sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1]
         include:
           - octave: 5.1.0
@@ -68,6 +68,8 @@ jobs:
           - octave: 6.3.0
             sympy: 1.10.1
           - octave: 6.4.0
+            sympy: 1.10.1
+          - octave: 7.1.0
             sympy: 1.10.1
     steps:
       - uses: actions/checkout@v3
@@ -106,7 +108,7 @@ jobs:
 
 
   # Built-in Self Tests and Doctests using the Pythonic interface
-  # Currently, we only test the newest Octave and SymPy since the support for
+  # Currently, we only test with newer Octave and SymPy since the support for
   # the Pythonic interface is experimental. We may change this in the future.
   # For Pythonic, we use the latest commit from the master branch since the
   # last release (0.0.1) no longer works with newer Python.
@@ -115,7 +117,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        octave: [7.1.0]
+        octave: [7.1.0, 7.2.0]
         sympy: [1.9, 1.10.1]
     steps:
       - uses: actions/checkout@v3
