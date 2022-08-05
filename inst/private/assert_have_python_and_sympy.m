@@ -97,8 +97,8 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('')
     disp ('Let''s check what version of Python we are calling...')
     disp ('')
-    fprintf ('Attempting to run %s -c "import sys; print(sys.version)"\n\n', pyexec);
-    [status, output] = system([pyexec ' -c "import sys; print(sys.version)"']);
+    fprintf ('Attempting to run %s -c "import sys; print(); print(''version: '' + sys.version); print(''executable: '' + sys.executable)"\n\n', pyexec);
+    [status, output] = system([pyexec ' -c "import sys; print(); print(''version: '' + sys.version); print(''executable: '' + sys.executable)"']);
     status
     output
     disp ('');
