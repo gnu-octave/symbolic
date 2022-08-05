@@ -101,6 +101,12 @@ function assert_have_python_and_sympy (pyexec, verbose)
     [status, output] = system([pyexec ' -c "import sys; print(); print(''version: '' + sys.version); print(''executable: '' + sys.executable)"']);
     status
     output
+    fprintf ('Checking if %s is running in a Cygwin-like POSIX environment...', pyexec);
+    if python_env_is_cygwin_like (pyexec)
+      fprintf (' yes\n\n');
+    else
+      fprintf (' no\n\n');
+    end
     disp ('');
     show_system_info ();
   end
