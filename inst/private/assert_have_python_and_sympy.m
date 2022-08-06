@@ -97,10 +97,19 @@ function assert_have_python_and_sympy (pyexec, verbose)
     disp ('')
     disp ('Let''s check what version of Python we are calling...')
     disp ('')
-    fprintf ('Attempting to run %s -c "import sys; print(sys.version)"\n\n', pyexec);
-    [status, output] = system([pyexec ' -c "import sys; print(sys.version)"']);
+    fprintf ('Attempting to run %s -c "import sys; print(sys.version)"\n', pyexec);
+    [status, output] = system ([pyexec ' -c "import sys; print(sys.version)"']);
     status
     output
+    fprintf ('Running %s -c "import sys; print(sys.executable)"\n', pyexec);
+    [status, output] = system ([pyexec ' -c "import sys; print(sys.executable)"']);
+    output
+    fprintf ('Checking if %s is running in a Cygwin-like POSIX environment...', pyexec);
+    if python_env_is_cygwin_like (pyexec)
+      fprintf (' yes\n\n');
+    else
+      fprintf (' no\n\n');
+    end
     disp ('');
     show_system_info ();
   end
