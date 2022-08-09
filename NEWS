@@ -1,5 +1,5 @@
-octsympy 3.0.0+
-===============
+octsympy 3.0.1 (2022-08-09)
+===========================
 
   * New `@double` numerical functions; these are wrappers around SymPy,
     so they are slower than native floating-point implementations.

@@ -1,6 +1,7 @@
 %% Copyright (C) 2014-2020, 2022 Colin B. Macdonald
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2017 Mike Miller
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -173,7 +174,7 @@
 %% @example
 %% @group
 %% sympref version
-%%   @result{} 3.0.0+
+%%   @result{} 3.0.1
 %% @end group
 %% @end example
 %%
@@ -216,7 +217,7 @@ function varargout = sympref(cmd, arg)
 
     case 'version'
       assert (nargin == 1)
-      varargout{1} = '3.0.0+';
+      varargout{1} = '3.0.1';
 
     case 'display'
       if (nargin == 1)
