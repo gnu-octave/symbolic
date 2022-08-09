@@ -1,5 +1,5 @@
-octsympy 3.0.0+
-===============
+octsympy 3.0.1 (2022-08-09)
+===========================
 
   * New `@double` numerical functions; these are wrappers around SymPy,
     so they are slower than native floating-point implementations.
@@ -10,6 +10,9 @@ octsympy 3.0.0+
 
   * `.oct-config` files indicate source is UTF-8 encoded and should improve
     any locale or encoding problems on Octave 7 and above.
+
+  * Fixes some errors when Python is running in Cygwin-like environment.
+    But there could still be errors in other places (issue #1182).
 
 
 
