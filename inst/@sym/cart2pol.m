@@ -1,4 +1,5 @@
 %% Copyright (C) 2022 Alex Vong
+%% Copyright (C) 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -22,8 +23,7 @@
 %% @deftypemethodx @@sym {[@var{theta}, @var{r}, @var{z}] =} cart2pol (@var{x}, @var{y}, @var{z})
 %% @deftypemethodx @@sym {[@var{theta}, @var{r}] =} cart2pol (@var{C})
 %% @deftypemethodx @@sym {[@var{theta}, @var{r}, @var{z}] =} cart2pol (@var{C})
-%% Transform symbolic Cartesian coordinates into symbolic polar or cylindrical
-%% coordinates.
+%% Transform symbolic Cartesian coordinates into polar or cylindrical.
 %%
 %% If called with inputs @var{x}, @var{y} (and @var{z}), they must be of the
 %% same shape or a scalar.  The shape of the outputs @var{theta}, @var{r} (and
