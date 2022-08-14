@@ -1,6 +1,10 @@
 octsympy 3.0.1+
 ===============
 
+  * New symbolic commands:
+
+          cart2pol
+
 
 
 octsympy 3.0.1 (2022-08-09)
