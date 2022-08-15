@@ -182,6 +182,7 @@ Mathematical methods for symbolic objects
  @sym/numden
  @sym/orth
  @sym/partfrac
+ @sym/piecewise
  @sym/pinv
  @sym/pochhammer
  @sym/polylog
