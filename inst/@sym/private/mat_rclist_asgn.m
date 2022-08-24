@@ -2,6 +2,7 @@
 %% Copyright (C) 2014, 2016-2017, 2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2020 Mike Miller
 %% Copyright (C) 2020 Fernando Alvarruiz
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -60,40 +61,38 @@ function z = mat_rclist_asgn(A, r, c, B)
   %    AA[0, 0] = A
   % Also usefil: .copyin_matrix
 
-  cmd = { '(A, r, c, B) = _ins'
-          '# B linear access fix, transpose for sympy row-based'
-          'if B is None or not B.is_Matrix:'
-          '    B = sp.Matrix([[B]])'
-          'BT = B.T'
-          '# make a resized copy of A, and copy existing stuff in'
-          'if isinstance(A, list):'
-          '    assert len(A) == 0, "unexpectedly non-empty list: report bug!"'
-          '    n = max(max(r) + 1, 1)'
-          '    m = max(max(c) + 1, 1)'
-          '    AA = [[0]*m for i in range(n)]'
-          'elif A is None or not isinstance(A, MatrixBase):'
-          '    # we have non-matrix, put in top-left'
-          '    n = max(max(r) + 1, 1)'
-          '    m = max(max(c) + 1, 1)'
-          '    AA = [[0]*m for i in range(n)]'
-          '    AA[0][0] = A'
-          'else:'
-          '    # build bigger matrix'
-          '    n = max(max(r) + 1, A.rows)'
-          '    m = max(max(c) + 1, A.cols)'
-          '    AA = [[0]*m for i in range(n)]'
-          '    # copy current matrix in'
-          '    for i in range(A.rows):'
-          '        for j in range(A.cols):'
-          '            AA[i][j] = A[i, j]'
-          '# now insert the new bits from B'
-          'for i, (r, c) in enumerate(zip(r, c)):'
-          '    AA[r][c] = BT[i]'
-          'return sp.Matrix(AA),' };
+  cmd = {'dbg_no_array = True'
+         '(A, rr, cc, b) = _ins'
+         'assert A == [] or not isinstance(A, list), "unexpectedly non-empty list: report bug!"'
+         'if A == []:'
+         '    AA = []'
+         '    (nrows_A, ncols_A) = (0, 0)'
+         'elif isinstance(A, (MatrixBase, NDimArray)):'
+         '    AA = A.tolist()'
+         '    (nrows_A, ncols_A) = A.shape'
+         'else:'
+         '    AA = [[A]]'
+         '    (nrows_A, ncols_A) = (1, 1)'
+         'bb = b.tolist() if isinstance(b, (MatrixBase, NDimArray)) else [[b]]'
+         'bb_elts = itertools.chain.from_iterable(bb)'
+         'entries = dict(zip(zip(rr, cc), bb_elts))'
+         'def entry(i, j):'
+         '    if (i, j) in entries:'
+         '        return entries[i, j]'
+         '    elif i < nrows_A and j < ncols_A:'
+         '        return AA[i][j]'
+         '    else:'
+         '        return 0'
+         'n = max(max(rr) + 1, nrows_A)'
+         'm = max(max(cc) + 1, ncols_A)'
+         'MM = [[entry(i, j) for j in range(m)] for i in range(n)]'
+         'M = make_matrix_or_array(MM)'
+         'return M,'};
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
-  z = pycall_sympy__ (cmd, A, rr, cc, B);
+  b = vec (B); # B is accessed with linear indexing, as a column vector
+  z = pycall_sympy__ (cmd, A, rr, cc, b);
 
   % a simpler earlier version, but only for scalar r,c
   %cmd = { '(A, r, c, b) = _ins'
