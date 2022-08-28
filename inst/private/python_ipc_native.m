@@ -107,6 +107,10 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '_mypp._print_LambertW = lambda cls, f: _my_rev_print(cls, f, func_name="lambertw")'
                     '_mypp._print_sinc = lambda cls, f: cls._print_Function(f.func(f.args[0]/sp.pi, evaluate=False))'
                     'del _mypp'
+                    'def dbout(l):'
+                    '    # should be kept in sync with the same function'
+                    '    # defined in inst/private/python_header.py'
+                    '    sys.stderr.write("pydebug: " + str(l) + "\n")'
                   }, newl))
     have_headers = true;
   end
