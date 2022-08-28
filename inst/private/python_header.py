@@ -241,6 +241,30 @@ try:
 except:
     echo_exception_stdout("in python_header defining fcns block 4")
     raise
+
+
+try:
+    def make_matrix_or_array(ls_of_ls, dbg_no_array=True):
+        # should be kept in sync with the same function
+        # defined in inst/private/python_ipc_native.m
+        # FIXME: dbg_no_array is currently used for debugging,
+        # remove it once sympy drops non-Expr supp in Matrix
+        """
+        Given a list of list of syms LS_OF_LS
+        If all elements of LS_OF_LS are Expr,
+        construct the corresponding Matrix.
+        Otherwise, construct the corresponding 2D array.
+        """
+        elts = itertools.chain.from_iterable(ls_of_ls)
+        if (dbg_no_array
+            or all(isinstance(elt, Expr) for elt in elts)):
+            return Matrix(ls_of_ls)
+        else:
+            dbout(f"make_matrix_or_array: making 2D Array...")
+            return Array(ls_of_ls)
+except:
+    echo_exception_stdout("in python_header defining fcns block 5")
+    raise
 # end of python header, now couple blank lines
 
 
