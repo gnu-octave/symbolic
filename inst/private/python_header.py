@@ -3,6 +3,7 @@
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
 # Copyright (C) 2022 Chris Gorman
+# Copyright (C) 2022 Alex Vong
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # In some cases this code is fed into stdin: two blank lines between
@@ -86,6 +87,8 @@ except:
 
 try:
     def dbout(l):
+        # should be kept in sync with the same function
+        # defined in inst/private/python_ipc_native.m
         sys.stderr.write("pydebug: " + str(l) + "\n")
     def d2hex(x):
         # used to pass doubles back-and-forth
