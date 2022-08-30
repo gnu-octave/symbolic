@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -66,8 +67,11 @@ function z = transpose(x)
   end
 
   cmd = { 'x = _ins[0]'
-          'if x.is_Matrix:'
+          'if isinstance(x, MatrixBase):'
           '    return x.T'
+          'elif isinstance(x, NDimArray):'
+          '    xx = x.tolist()'
+          '    return make_matrix_or_array(list(zip(*xx)))'
           'else:'
           '    return x' };
 
@@ -92,3 +96,8 @@ end
 %!test
 %! A = [1 2] + 1i;
 %! assert(isequal( sym(A).' , sym(A.') ))
+
+%!test
+%! % see https://github.com/cbm755/octsympy/issues/1215
+%! none = pycall_sympy__ ('return None');
+%! assert (isequal (none.', none));
