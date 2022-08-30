@@ -68,8 +68,7 @@ function f = piecewise (varargin)
     print_usage ();
   end
 
-  cmd = {'import itertools'
-         'def chunks_of(ls, n):'
+  cmd = {'def chunks_of(ls, n):'
          '    return itertools.zip_longest(*[ls[k::n] for k in range(n)])'
          'args = [(val, cond) if val is not None else (cond, True)'
          '        for cond, val in chunks_of(_ins, 2)]'
