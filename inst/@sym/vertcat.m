@@ -1,5 +1,6 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2014-2017, 2019, 2024 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
