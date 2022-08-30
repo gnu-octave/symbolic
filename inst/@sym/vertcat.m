@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,7 +21,7 @@
 %% @documentencoding UTF-8
 %% @defop  Method   @@sym {vertcat} {(@var{x}, @var{y}, @dots{})}
 %% @defopx Operator @@sym {[@var{x}; @var{y}; @dots{}]} {}
-%% Vertically concatentate symbolic arrays.
+%% Vertically concatenate symbolic arrays.
 %%
 %% Example:
 %% @example

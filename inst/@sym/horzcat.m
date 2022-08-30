@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,7 +22,7 @@
 %% @defop  Method   @@sym {horzcat} {(@var{x}, @var{y}, @dots{})}
 %% @defopx Operator @@sym {[@var{x}, @var{y}, @dots{}]} {}
 %% @defopx Operator @@sym {[@var{x} @var{y} @dots{}]} {}
-%% Horizontally concatentate symbolic arrays.
+%% Horizontally concatenate symbolic arrays.
 %%
 %% Example:
 %% @example
