@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,7 +22,7 @@
 %% @defop  Method   @@sym {horzcat} {(@var{x}, @var{y}, @dots{})}
 %% @defopx Operator @@sym {[@var{x}, @var{y}, @dots{}]} {}
 %% @defopx Operator @@sym {[@var{x} @var{y} @dots{}]} {}
-%% Horizontally concatentate symbolic arrays.
+%% Horizontally concatenate symbolic arrays.
 %%
 %% Example:
 %% @example
@@ -45,25 +46,8 @@
 
 function h = horzcat(varargin)
 
-  % special case for 0x0 but other empties should be checked for
-  % compatibilty
-  cmd = {
-          '_proc = []'
-          'for i in _ins:'
-          '    if i is None or not i.is_Matrix:'
-          '        _proc.append(sp.Matrix([[i]]))'
-          '    else:'
-          '        if i.shape == (0, 0):'
-          '            pass'
-          '        else:'
-          '            _proc.append(i)'
-          'return sp.MatrixBase.hstack(*_proc),'
-          };
-
-  for i = 1:nargin
-    varargin{i} = sym(varargin{i});
-  end
-  h = pycall_sympy__ (cmd, varargin{:});
+  args = cellfun (@transpose, varargin, 'UniformOutput', false);
+  h = vertcat (args{:}).';
 
 end
 

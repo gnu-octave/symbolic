@@ -1,4 +1,5 @@
 %% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -20,7 +21,7 @@
 %% @documentencoding UTF-8
 %% @defop  Method   @@sym {vertcat} {(@var{x}, @var{y}, @dots{})}
 %% @defopx Operator @@sym {[@var{x}; @var{y}; @dots{}]} {}
-%% Vertically concatentate symbolic arrays.
+%% Vertically concatenate symbolic arrays.
 %%
 %% Example:
 %% @example
@@ -44,23 +45,25 @@ function h = vertcat(varargin)
 
   % special case for 0x0 but other empties should be checked for
   % compatibilty
-  cmd = {
-          '_proc = []'
-          'for i in _ins:'
-          '    if i is None or not i.is_Matrix:'
-          '        _proc.append(sp.Matrix([[i]]))'
-          '    else:'
-          '        if i.shape == (0, 0):'
-          '            pass'
-          '        else:'
-          '            _proc.append(i)'
-          'return sp.MatrixBase.vstack(*_proc),'
-          };
+  cmd = {'def is_matrix_or_array(x):'
+         '    return isinstance(x, (MatrixBase, NDimArray))'
+         'def number_of_columns(x):'
+         '    return x.shape[1] if is_matrix_or_array(x) else 1'
+         'def all_equal(*ls):'
+         '    return True if ls == [] else all(ls[0] == x for x in ls[1:])'
+         'def as_list_of_list(x):'
+         '    return x.tolist() if is_matrix_or_array(x) else [[x]]'
+         'args = [x for x in _ins if x != zeros(0, 0)] # remove 0x0 matrices'
+         'ncols = [number_of_columns(x) for x in args]'
+         'if not all_equal(*ncols):'
+         '    msg = "vertcat: all inputs must have the same number of columns"'
+         '    raise ShapeError(msg)'
+         'CCC = [as_list_of_list(x) for x in args]'
+         'CC = list(itertools.chain.from_iterable(CCC))'
+         'return make_matrix_or_array(CC)'};
 
-  for i = 1:nargin
-    varargin{i} = sym(varargin{i});
-  end
-  h = pycall_sympy__ (cmd, varargin{:});
+  args = cellfun (@sym, varargin, 'UniformOutput', false);
+  h = pycall_sympy__ (cmd, args{:});
 
 end
 
