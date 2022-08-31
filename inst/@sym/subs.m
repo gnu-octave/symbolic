@@ -262,7 +262,7 @@ function g = subs(f, in, out)
     '        yyy = [y[i, j] if y.is_Matrix else y for y in yy]'
     '        sublist = list(zip(xx, yyy))'
     '        g[i][j] = f.subs(sublist, simultaneous=True).doit()'
-    'return make_matrix_or_array(g)'
+    'return make_2d_sym(g)'
   };
 
   g = pycall_sympy__ (cmd, f, in, out);

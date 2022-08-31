@@ -84,7 +84,7 @@ function z = mat_rclist_asgn(A, r, c, B)
          'n = max(max(rr) + 1, nrows_A)'
          'm = max(max(cc) + 1, ncols_A)'
          'MM = [[entry(i, j) for j in range(m)] for i in range(n)]'
-         'M = make_matrix_or_array(MM)'
+         'M = make_2d_sym(MM)'
          'return M,'};
 
   rr = num2cell(int32(r-1));

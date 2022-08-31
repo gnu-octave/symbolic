@@ -60,7 +60,7 @@ function h = vertcat(varargin)
          '    raise ShapeError(msg)'
          'CCC = [as_list_of_list(x) for x in args]'
          'CC = flatten(CCC, levels=1)'
-         'return make_matrix_or_array(CC)'};
+         'return make_2d_sym(CC)'};
 
   args = cellfun (@sym, varargin, 'UniformOutput', false);
   h = pycall_sympy__ (cmd, args{:});
