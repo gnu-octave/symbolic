@@ -100,7 +100,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           'for i in range(m):'
           '    for j in range(n):'
           '        g[i][j] = _op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins])'
-          'return make_matrix_or_array(g)' ];
+          'return make_2d_sym(g)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 
