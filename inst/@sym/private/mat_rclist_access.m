@@ -33,8 +33,7 @@ function z = mat_rclist_access(A, r, c)
     error('this routine is for a list of rows and cols');
   end
 
-  cmd = {'dbg_no_array = True'
-         '(A, rr, cc) = _ins'
+  cmd = {'(A, rr, cc) = _ins'
          'AA = A.tolist() if isinstance(A, (MatrixBase, NDimArray)) else [[A]]'
          'MM = [[AA[i][j]] for i, j in zip(rr, cc)]'
          'M = make_matrix_or_array(MM)'
