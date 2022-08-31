@@ -66,10 +66,8 @@ function z = transpose(x)
     print_usage ();
   end
 
-  cmd = {'def is_matrix_or_array(x):'
-         '    return isinstance(x, (MatrixBase, NDimArray))'
-         'x, = _ins'
-         'return transpose(x) if is_matrix_or_array(x) else x'};
+  cmd = {'x, = _ins'
+         'return transpose(x) if is_2d_sym(x) else x'};
 
   z = pycall_sympy__ (cmd, x);
 

@@ -34,7 +34,7 @@ function z = mat_rclist_access(A, r, c)
   end
 
   cmd = {'(A, rr, cc) = _ins'
-         'AA = A.tolist() if isinstance(A, (MatrixBase, NDimArray)) else [[A]]'
+         'AA = list_from_2d_sym(A) if is_2d_sym(A) else [[A]]'
          'MM = [[AA[i][j]] for i, j in zip(rr, cc)]'
          'M = make_2d_sym(MM)'
          'return M,'};

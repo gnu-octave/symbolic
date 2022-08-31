@@ -45,14 +45,12 @@ function h = vertcat(varargin)
 
   % special case for 0x0 but other empties should be checked for
   % compatibilty
-  cmd = {'def is_matrix_or_array(x):'
-         '    return isinstance(x, (MatrixBase, NDimArray))'
-         'def number_of_columns(x):'
-         '    return x.shape[1] if is_matrix_or_array(x) else 1'
+  cmd = {'def number_of_columns(x):'
+         '    return shape_of_2d_sym(x)[1] if is_2d_sym(x) else 1'
          'def all_equal(*ls):'
          '    return True if ls == [] else all(ls[0] == x for x in ls[1:])'
          'def as_list_of_list(x):'
-         '    return x.tolist() if is_matrix_or_array(x) else [[x]]'
+         '    return list_from_2d_sym(x) if is_2d_sym(x) else [[x]]'
          'args = [x for x in _ins if x != zeros(0, 0)] # remove 0x0 matrices'
          'ncols = [number_of_columns(x) for x in args]'
          'if not all_equal(*ncols):'

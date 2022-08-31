@@ -241,9 +241,10 @@ except:
 
 
 try:
+    # begin: 2D sym funcs
+    # 2D sym funcs defined in inst/private/python_ipc_native.m
+    # and inst/private/python_header.py should be kept in sync
     def make_2d_sym(it_of_it, dbg_matrix_only=False):
-        # should be kept in sync with the same function
-        # defined in inst/private/python_ipc_native.m
         # FIXME: dbg_matrix_only is used for debugging, remove
         # it once sympy drops non-Expr support in Matrix
         """
@@ -262,7 +263,26 @@ try:
             return Matrix(ls_of_ls)
         else:
             dbout(f"make_2d_sym: constructing 2D sym...")
+            # FIXME: should we use Array or TableForm?
             return Array(ls_of_ls)
+    def is_2d_sym(x):
+        types = (MatrixBase, NDimArray, TableForm)
+        return isinstance(x, types)
+    def is_matrix(x):
+        return isinstance(x, MatrixBase)
+    def is_non_matrix_2d_sym(x):
+        return isinstance(x, (NDimArray, TableForm))
+    def list_from_2d_sym(X):
+        if isinstance(X, TableForm):
+            return [[x for x in tup] for tup in X._lines]
+        else:
+            return X.tolist()
+    def shape_of_2d_sym(X):
+        if isinstance(X, TableForm):
+            return (X._h, X._w)
+        else:
+            return X.shape
+    # end: 2D sym funcs
 except:
     echo_exception_stdout("in python_header defining fcns block 5")
     raise
