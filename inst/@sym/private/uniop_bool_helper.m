@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -51,9 +51,9 @@ function r = uniop_bool_helper(x, scalar_fcn, opt, varargin)
       cmd = [ cmd
               'x = _ins[0]'
               'pp = _ins[1:]'
-              'if x is not None and x.is_Matrix:'
+              'if isinstance(x, (MatrixBase, NDimArray)):'
               '    # bool will map None to False'
-              '    return [bool(sf(a, *pp)) for a in x.T],'
+              '    return [bool(sf(a, *pp)) for a in flatten(transpose(x).tolist())],'
               'return bool(sf(x, *pp))' ];
 
       r = pycall_sympy__ (cmd, x, varargin{:});
