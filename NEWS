@@ -4,6 +4,7 @@ octsympy 3.0.1+
   * New symbolic commands:
 
           cart2pol
+          piecewise
 
 
 
