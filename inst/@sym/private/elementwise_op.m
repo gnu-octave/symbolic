@@ -95,8 +95,10 @@ function z = elementwise_op(scalar_fcn, varargin)
           % at least one input was a matrix:
           '# dbout(f"at least one matrix param, shape={q.shape}")'
           'elements = []'
-          'for i in range(0, len(q)):'
-          '    elements.append(_op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins]))'
+	  'assert len(q.shape) == 2, "non-2D arrays/tensors not yet supported"'
+          'for i in range(0, q.shape[0]):'
+          '    for j in range(0, q.shape[1]):'
+          '        elements.append(_op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins]))'
           'if all(isinstance(x, Expr) for x in elements):'
           '    return Matrix(*q.shape, elements)'
           'dbout(f"elementwise_op: returning an Array not a Matrix")'
