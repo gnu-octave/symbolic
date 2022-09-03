@@ -255,14 +255,14 @@ function g = subs(f, in, out)
     'sizes = {(a.shape if a.is_Matrix else (1, 1)) for a in yy}'
     'sizes.discard((1, 1))'
     'assert len(sizes) == 1, "all substitutions must be same size or scalar"'
-    'size = sizes.pop()'
-    'numel = prod(size)'
-    'g = [0]*numel'
-    'for i in range(len(g)):'
-    '    yyy = [y[i] if y.is_Matrix else y for y in yy]'
-    '    sublist = list(zip(xx, yyy))'
-    '    g[i] = f.subs(sublist, simultaneous=True).doit()'
-    'return Matrix(*size, g)'
+    'm, n = sizes.pop()'
+    'g = [[0]*n for i in range(m)]'
+    'for i in range(m):'
+    '    for j in range(n):'
+    '        yyy = [y[i, j] if y.is_Matrix else y for y in yy]'
+    '        sublist = list(zip(xx, yyy))'
+    '        g[i][j] = f.subs(sublist, simultaneous=True).doit()'
+    'return make_matrix_or_array(g)'
   };
 
   g = pycall_sympy__ (cmd, f, in, out);
