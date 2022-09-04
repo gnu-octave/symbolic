@@ -128,8 +128,8 @@ function r = isAlways(p, varargin)
 
   cmd = vertcat(cmd, {
     '(x, map_unknown_to) = _ins'
-    'if x is not None and x.is_Matrix:'
-    '    r = [a for a in x.T]' % note transpose
+    'if x is not None and isinstance(x, (MatrixBase, NDimArray)):'
+    '    r = [a for a in flatten(transpose(x).tolist())]'  % note tranpose
     'else:'
     '    r = [x,]'
     'r = [simplify_true_false_none(a) for a in r]'
