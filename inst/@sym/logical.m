@@ -180,7 +180,7 @@ end
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true false true]))
-%! e = e';
+%! e = e.';
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true; false; true]))
