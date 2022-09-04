@@ -112,7 +112,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '    # should be kept in sync with the same function'
                     '    # defined in inst/private/python_header.py'
                     '    sys.stderr.write("pydebug: " + str(l) + "\n")'
-                    'def make_matrix_or_array(ls_of_ls, dbg_no_array=True):'
+                    'def make_matrix_or_array(ls_of_ls, dbg_no_array=False):'
                     '    # should be kept in sync with the same function'
                     '    # defined in inst/private/python_header.py'
                     '    # FIXME: dbg_no_array is currently used for debugging,'
