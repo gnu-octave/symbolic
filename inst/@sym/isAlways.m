@@ -131,8 +131,8 @@ function r = isAlways(p, varargin)
 
   cmd = vertcat(cmd, {
     '(x, unknown) = _ins'
-    'if x is not None and x.is_Matrix:'
-    '    r = [a for a in x.T]' % note transpose
+    'if isinstance(x, (MatrixBase, NDimArray)):'
+    '    r = [a for a in flatten(transpose(x).tolist())]'  % note tranpose
     'else:'
     '    r = [x,]'
     'r = [simplify_tfn(a) for a in r]'
