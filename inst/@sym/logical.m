@@ -102,7 +102,7 @@ function r = logical(p)
 
   cmd = vertcat(cmd, {
     '(x, unknown) = _ins'
-    'if isinstance(x, (Matrix, NDimArray)):'
+    'if isinstance(x, (MatrixBase, NDimArray)):'
     '    r = [a for a in flatten(transpose(x).tolist())]'  % note tranpose
     'else:'
     '    r = [x,]'
