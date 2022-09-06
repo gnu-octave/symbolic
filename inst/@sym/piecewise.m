@@ -68,11 +68,14 @@ function f = piecewise (varargin)
     print_usage ();
   end
 
-  cmd = {'def chunks_of(ls, n):'
-         '    return itertools.zip_longest(*[ls[k::n] for k in range(n)])'
-         'args = [(val, cond) if val is not None else (cond, True)'
-         '        for cond, val in chunks_of(_ins, 2)]'
-         'return Piecewise(*args)'
+  cmd = {'def pack_args_without_else(args):'
+         '    return [(val, cond) for cond, val in unflatten(args, 2)]'
+         'def pack_args(args):'
+         '    if len(args) % 2 == 0:'
+         '        return pack_args_without_else(args)'
+         '    else:'
+         '        return pack_args_without_else(args[:-1]) + [(args[-1], True)]'
+         'return Piecewise(*pack_args(_ins))'
         };
 
   args = cellfun (@sym, varargin, 'UniformOutput', false);
