@@ -80,7 +80,7 @@ function z = mat_rclist_asgn(A, r, c, B)
          '    elif i < nrows_A and j < ncols_A:'
          '        return AA[i][j]'
          '    else:'
-         '        return 0'
+         '        return S.Zero'
          'n = max(max(rr) + 1, nrows_A)'
          'm = max(max(cc) + 1, ncols_A)'
          'MM = [[entry(i, j) for j in range(m)] for i in range(n)]'
