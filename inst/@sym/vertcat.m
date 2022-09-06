@@ -59,7 +59,7 @@ function h = vertcat(varargin)
          '    msg = "vertcat: all inputs must have the same number of columns"'
          '    raise ShapeError(msg)'
          'CCC = [as_list_of_list(x) for x in args]'
-         'CC = list(itertools.chain.from_iterable(CCC))'
+         'CC = flatten(CCC, levels=1)'
          'return make_matrix_or_array(CC)'};
 
   args = cellfun (@sym, varargin, 'UniformOutput', false);

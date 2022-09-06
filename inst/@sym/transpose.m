@@ -66,14 +66,10 @@ function z = transpose(x)
     print_usage ();
   end
 
-  cmd = { 'x = _ins[0]'
-          'if isinstance(x, MatrixBase):'
-          '    return x.T'
-          'elif isinstance(x, NDimArray):'
-          '    xx = x.tolist()'
-          '    return make_matrix_or_array(list(zip(*xx)))'
-          'else:'
-          '    return x' };
+  cmd = {'def is_matrix_or_array(x):'
+         '    return isinstance(x, (MatrixBase, NDimArray))'
+         'x, = _ins'
+         'return transpose(x) if is_matrix_or_array(x) else x'};
 
   z = pycall_sympy__ (cmd, x);
 
