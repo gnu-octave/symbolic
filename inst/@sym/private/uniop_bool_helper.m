@@ -65,10 +65,11 @@ function r = uniop_bool_helper(x, scalar_fcn, opt, varargin)
     case 'sym'
       warning('FIXME: not working for scalars')
 
+      % currently unused, and certainly not tested
       cmd = [ cmd
               'x = _ins[0]'
               'pp = _ins[1:]'
-              'if x if not None and x.is_Matrix:'
+              'if isinstance(x, (MatrixBase, NDimArray)):'
               '    return x.applyfunc(sf, *pp)'
               'return sf(x, *pp)' ];
 
