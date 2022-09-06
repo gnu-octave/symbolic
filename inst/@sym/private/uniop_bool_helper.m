@@ -53,7 +53,7 @@ function r = uniop_bool_helper(x, scalar_fcn, opt, varargin)
               'pp = _ins[1:]'
               'if isinstance(x, (MatrixBase, NDimArray)):'
               '    # bool will map None to False'
-              '    return [bool(sf(a, *pp)) for a in flatten(transpose(x).tolist())],'
+              '    return [bool(sf(a, *pp)) for a in flatten(transpose(x).tolist(), levels=1)],'
               'return bool(sf(x, *pp))' ];
 
       r = pycall_sympy__ (cmd, x, varargin{:});
