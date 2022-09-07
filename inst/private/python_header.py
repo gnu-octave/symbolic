@@ -257,6 +257,9 @@ try:
         """
         ls_of_ls = [[elt for elt in it] for it in it_of_it]
         elts = flatten(ls_of_ls, levels=1)
+        if Version(spver) <= Version("1.11.1"):
+            # never use Array on older SymPy
+            dbg_no_array = True
         if (dbg_no_array
             or all(isinstance(elt, Expr) for elt in elts)):
             return Matrix(ls_of_ls)
