@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -123,12 +123,6 @@ end
 %! a = [v; []; []];
 %! assert (isequal (a, v))
 
-%!xtest
-%! % FIXME: is this Octave bug? worth worrying about
-%! syms x
-%! a = [x; [] []];
-%! assert (isequal (a, x))
-
 %!test
 %! % more empty vectors
 %! v = [sym(1) sym(2)];
@@ -139,6 +133,14 @@ end
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(0, 3));
 %! w = vertcat(v, q);
+
+%!error <ShapeError>
+%! z03 = sym (zeros (0, 3));
+%! z04 = sym (zeros (0, 4));
+%! % Note Issue #1238: unclear error message:
+%! % [z03; z04];
+%! % but this gives the ShapeError
+%! vertcat(z03, z04);
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
@@ -157,3 +159,29 @@ end
 %! A = sym ([1 2]);
 %! B = simplify (A);
 %! assert (isequal ([B; A], [A; B]))
+
+%!xtest
+%! % issue #1236, correct empty sizes
+%! syms x
+%! z00 = sym (zeros (0, 0));
+%! z30 = sym (zeros (3, 0));
+%! z40 = sym (zeros (4, 0));
+%! z03 = sym (zeros (0, 3));
+%! assert (size ([z00; z00]), [0 0])
+%! assert (size ([z00; z30]), [3 0])
+%! assert (size ([z30; z30]), [6 0])
+%! assert (size ([z30; z40]), [7 0])
+%! assert (size ([z30; z00; z30]), [6 0])
+%! assert (size ([z03; z03]), [0 3])
+%! assert (size ([z03; z03; z03]), [0 3])
+
+%!test
+%! % special case for the 0x0 empty: no error
+%! z00 = sym (zeros (0, 0));
+%! z03 = sym (zeros (0, 3));
+%! [z00; z03];
+
+%!test
+%! syms x
+%! a = [x; sym([]) []];
+%! assert (isequal (a, x))
