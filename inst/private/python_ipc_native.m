@@ -133,6 +133,21 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '    else:'
                     '        dbout(f"make_2d_sym: constructing 2D sym...")'
                     '        return Array(ls_of_ls)'
+                    'def _make_2d_sym(flat, shape, dbg_matrix_only=False):'
+                    '    """'
+                    '    If all elements of FLAT are Expr, construct the'
+                    '    corresponding Matrix. Otherwise, construct the'
+                    '    corresponding non-Matrix 2D sym.'
+                    '    """'
+                    '    flat = list(flat)'
+                    '    if Version(spver) <= Version("1.11.1"):'
+                    '        # never use Array on older SymPy'
+                    '        dbg_matrix_only = True'
+                    '    if (dbg_matrix_only'
+                    '        or all(isinstance(elt, Expr) for elt in flat)):'
+                    '        return Matrix(*shape, flat)'
+                    '    dbout(f"make_2d_sym: constructing 2D sym...")'
+                    '    return Array(flat, shape)'
                   }, newl))
     have_headers = true;
   end

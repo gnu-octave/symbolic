@@ -96,11 +96,11 @@ function z = elementwise_op(scalar_fcn, varargin)
           '# dbout(f"at least one matrix param, shape={q.shape}")'
           'assert len(q.shape) == 2, "non-2D arrays/tensors not yet supported"'
           'm, n = q.shape'
-          'g = [[0]*n for i in range(m)]'
+          'g = []'
           'for i in range(m):'
           '    for j in range(n):'
-          '        g[i][j] = _op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins])'
-          'return make_2d_sym(g)' ];
+          '        g.append(_op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins]))'
+          'return _make_2d_sym(g, shape=q.shape)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 
