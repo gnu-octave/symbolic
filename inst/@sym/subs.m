@@ -256,13 +256,13 @@ function g = subs(f, in, out)
     'sizes.discard((1, 1))'
     'assert len(sizes) == 1, "all substitutions must be same size or scalar"'
     'm, n = sizes.pop()'
-    'g = [[0]*n for i in range(m)]'
+    'g = []'
     'for i in range(m):'
     '    for j in range(n):'
     '        yyy = [y[i, j] if y.is_Matrix else y for y in yy]'
     '        sublist = list(zip(xx, yyy))'
-    '        g[i][j] = f.subs(sublist, simultaneous=True).doit()'
-    'return make_2d_sym(g)'
+    '        g.append(f.subs(sublist, simultaneous=True).doit())'
+    'return _make_2d_sym(g, shape=(m, n))'
   };
 
   g = pycall_sympy__ (cmd, f, in, out);
@@ -459,3 +459,13 @@ end
 %! g = subs (f);
 %! syms x
 %! assert (isequal (g, 6*x*y))
+
+%!test
+%! % issue #1236, correct empty sizes
+%! syms x
+%! g = subs (x, x, zeros (0, 0));
+%! assert (size (g), [0 0])
+%! g = subs (x, x, zeros (0, 3));
+%! assert (size (g), [0 3])
+%! g = subs (x, x, zeros (3, 0));
+%! assert (size (g), [3 0])
