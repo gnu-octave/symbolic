@@ -105,6 +105,9 @@ function r = vpasolve(e, x, x0)
       '(e, x, x0, n) = _ins'
       'import mpmath'
       'mpmath.mp.dps = n'
+      'if isinstance(x, MatrixBase):'
+      '    # TODO: find/file upstream issue'
+      '    x = x.as_mutable()'
       'r = nsolve(e, x, x0)'
       'return r' };
   r = pycall_sympy__ (cmd, sym(e), x, x0, n);
