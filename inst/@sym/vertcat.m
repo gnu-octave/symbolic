@@ -49,18 +49,20 @@ function h = vertcat(varargin)
          '    return isinstance(x, (MatrixBase, NDimArray))'
          'def number_of_columns(x):'
          '    return x.shape[1] if is_matrix_or_array(x) else 1'
+         'def number_of_rows(x):'
+         '    return x.shape[0] if is_matrix_or_array(x) else 1'
          'def all_equal(*ls):'
          '    return True if ls == [] else all(ls[0] == x for x in ls[1:])'
-         'def as_list_of_list(x):'
-         '    return x.tolist() if is_matrix_or_array(x) else [[x]]'
          'args = [x for x in _ins if x != zeros(0, 0)] # remove 0x0 matrices'
          'ncols = [number_of_columns(x) for x in args]'
+         'nrows = [number_of_rows(x) for x in args]'
          'if not all_equal(*ncols):'
          '    msg = "vertcat: all inputs must have the same number of columns"'
          '    raise ShapeError(msg)'
-         'CCC = [as_list_of_list(x) for x in args]'
+         'ncol = 0 if not ncols else ncols[0]'
+         'CCC = [flatten(x, levels=1) if is_matrix_or_array(x) else [x] for x in args]'
          'CC = flatten(CCC, levels=1)'
-         'return make_2d_sym(CC)'};
+         'return _make_2d_sym(CC, shape=(sum(nrows), ncol))' };
 
   args = cellfun (@sym, varargin, 'UniformOutput', false);
   h = pycall_sympy__ (cmd, args{:});
@@ -160,7 +162,7 @@ end
 %! B = simplify (A);
 %! assert (isequal ([B; A], [A; B]))
 
-%!xtest
+%!test
 %! % issue #1236, correct empty sizes
 %! syms x
 %! z00 = sym (zeros (0, 0));
