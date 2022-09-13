@@ -35,9 +35,9 @@ function z = mat_rclist_access(A, r, c)
 
   cmd = {'(A, rr, cc) = _ins'
          'AA = A.tolist() if isinstance(A, (MatrixBase, NDimArray)) else [[A]]'
-         'MM = [[AA[i][j]] for i, j in zip(rr, cc)]'
-         'M = make_2d_sym(MM)'
-         'return M,'};
+         'M = [AA[i][j] for i, j in zip(rr, cc)]'
+         'return _make_2d_sym(M, shape=(len(rr), 1)),'
+	};
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
