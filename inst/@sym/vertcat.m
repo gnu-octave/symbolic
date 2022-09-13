@@ -145,6 +145,17 @@ end
 %! vertcat(z03, z04);
 
 %!test
+%! % special case for the 0x0 empty: no error
+%! z00 = sym (zeros (0, 0));
+%! z03 = sym (zeros (0, 3));
+%! [z00; z03];
+
+%!test
+%! syms x
+%! a = [x; sym([]) []];
+%! assert (isequal (a, x))
+
+%!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
 %! a = [sym(1) 2];
 %! assert (isequal ( [a; [3 4]] , [1 2; 3 4]  ))
@@ -176,14 +187,3 @@ end
 %! assert (size ([z30; z00; z30]), [6 0])
 %! assert (size ([z03; z03]), [0 3])
 %! assert (size ([z03; z03; z03]), [0 3])
-
-%!test
-%! % special case for the 0x0 empty: no error
-%! z00 = sym (zeros (0, 0));
-%! z03 = sym (zeros (0, 3));
-%! [z00; z03];
-
-%!test
-%! syms x
-%! a = [x; sym([]) []];
-%! assert (isequal (a, x))
