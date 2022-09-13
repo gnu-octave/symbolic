@@ -94,15 +94,13 @@ function z = elementwise_op(scalar_fcn, varargin)
           '    return _op(*_ins)'
           % at least one input was a matrix:
           '# dbout(f"at least one matrix param, shape={q.shape}")'
-          'elements = []'
-	  'assert len(q.shape) == 2, "non-2D arrays/tensors not yet supported"'
-          'for i in range(0, q.shape[0]):'
-          '    for j in range(0, q.shape[1]):'
-          '        elements.append(_op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins]))'
-          'if all(isinstance(x, Expr) for x in elements):'
-          '    return Matrix(*q.shape, elements)'
-          'dbout(f"elementwise_op: returning an Array not a Matrix")'
-          'return Array(elements, shape=q.shape)' ];
+          'assert len(q.shape) == 2, "non-2D arrays/tensors not yet supported"'
+          'm, n = q.shape'
+          'g = [[0]*n for i in range(m)]'
+          'for i in range(m):'
+          '    for j in range(n):'
+          '        g[i][j] = _op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins])'
+          'return make_matrix_or_array(g)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 
