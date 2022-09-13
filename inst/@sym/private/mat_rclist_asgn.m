@@ -58,7 +58,7 @@ function z = mat_rclist_asgn(A, r, c, B)
   % Easy trick to copy A into larger matrix AA:
   %    AA = sp.Matrix.zeros(n, m)
   %    AA[0, 0] = A
-  % Also usefil: .copyin_matrix
+  % Also useful: .copyin_matrix
 
   cmd = {'(A, rr, cc, b) = _ins'
          'assert A == [] or not isinstance(A, list), "unexpectedly non-empty list: report bug!"'
