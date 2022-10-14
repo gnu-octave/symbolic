@@ -84,13 +84,13 @@ jobs:
           # TODO: nonsense here to try to get r/w access: enables sudo below
           docker run --name=oc --detach --init \
             -u root --env="GRANT_SUDO=yes" \
-            --volume=$PWD:/home/jovyan/octsympy:rw \
+            --volume=$PWD:/workdir/octsympy:rw \
             gnuoctave/octave:$OCT sleep inf
           # FIXME: workaround "fatal: unsafe repository" error
           # For more details, see https://stackoverflow.com/q/71901632
           # and https://github.com/actions/checkout/issues/760
-          docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
-          docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
+          docker exec oc sudo git config --global --add safe.directory /workdir/octsympy
+          docker exec oc      git config --global --add safe.directory /workdir/octsympy
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval "pkg install -forge doctest"
@@ -132,13 +132,13 @@ jobs:
           # TODO: nonsense here to try to get r/w access: enables sudo below
           docker run --name=oc --detach --init \
             -u root --env="GRANT_SUDO=yes" \
-            --volume="$PWD":/home/jovyan/octsympy:rw \
+            --volume="$PWD":/workdir/octsympy:rw \
             gnuoctave/octave:"$OCT" sleep inf
           # FIXME: workaround "fatal: unsafe repository" error
           # For more details, see https://stackoverflow.com/q/71901632
           # and https://github.com/actions/checkout/issues/760
-          docker exec oc sudo git config --global --add safe.directory /home/jovyan/octsympy
-          docker exec oc      git config --global --add safe.directory /home/jovyan/octsympy
+          docker exec oc sudo git config --global --add safe.directory /workdir/octsympy
+          docker exec oc      git config --global --add safe.directory /workdir/octsympy
           docker exec oc apt-get update
           docker exec oc apt-get install --no-install-recommends -y libpython3-dev
           docker exec oc pip3 install packaging
@@ -167,7 +167,7 @@ jobs:
           docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
       - name: Run BIST
         run: |
-          docker exec oc sudo make -C /home/jovyan/octsympy install
+          docker exec oc sudo make -C /workdir/octsympy install
           docker exec oc octave-cli --eval "pkg list"
           docker exec oc octave-cli \
             --eval "pkg load pythonic; pkg load symbolic; sympref diagnose; pkg unload symbolic"
