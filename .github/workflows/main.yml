@@ -32,7 +32,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Hello world
-          sudo uname -a
+          uname -a
           docker pull docker.io/gnuoctave/octave:6.4.0
           # sudo apt-get install --no-install-recommends -y octave
           # octave --version
@@ -79,7 +79,7 @@ jobs:
           OCT: ${{ matrix.octave }}
           SYMPY: ${{ matrix.sympy }}
         run: |
-          sudo uname -a
+          uname -a
           docker pull docker.io/gnuoctave/octave:$OCT
           docker run --name=oc --detach --init \
             --volume=$PWD:/workdir/octsympy:rw \
@@ -185,7 +185,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Octave, Python and SymPy
         run: |
-          sudo uname -a
+          uname -a
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y octave python3
           octave --version
@@ -211,7 +211,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Octave and Python
         run: |
-          sudo uname -a
+          uname -a
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y octave python3 python3-pip
           octave --version
