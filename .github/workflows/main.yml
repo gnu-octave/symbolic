@@ -15,7 +15,8 @@ name: CI
 on:
   push:
   pull_request:
-
+  schedule:
+    - cron: '17 0 * * 0'
 
 jobs:
   # Just some misc stuff, minimal testing, diagnostics etc
