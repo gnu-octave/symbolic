@@ -39,11 +39,11 @@ jobs:
           ls
           cd inst
           ls
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "sympref diagnose"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
+          docker run --rm -v $PWD:/workdir:rw gnuoctave/octave:6.4.0 octave-cli --eval 'pwd; ls; disp(42); help sympref'
+          docker run --rm -v $PWD:/workdir:rw gnuoctave/octave:6.4.0 octave-cli --eval "sympref diagnose"
+          docker run --rm -v $PWD:/workdir:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); y=sin(x/17); disp(y)"
           echo "Try a test"
-          docker run --rm -v $PWD:/home/jovyan:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); test @sym/qr"
+          docker run --rm -v $PWD:/workdir:rw gnuoctave/octave:6.4.0 octave-cli --eval "x=sym('x'); test @sym/qr"
 
 
   # Built-in Self Tests and Doctests for various supported Octave and SymPy
