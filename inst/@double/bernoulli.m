@@ -32,6 +32,16 @@
 %% @end group
 %% @end example
 %%
+%% Note there are two conventions in the literature about the sign of B_1:
+%% @example
+%% @group
+%% abs (bernoulli (1))
+%%   @result{} 0.5000
+%% @end group
+%% @end example
+%% As of 2022, this numerical evaluation function is in a state of flux
+%% about which one it takes, @pxref{@@sym/bernoulli}.
+%%
 %% Polynomial example:
 %% @example
 %% @group
@@ -85,7 +95,14 @@ end
 
 %!assert (bernoulli (0), 1)
 %!assert (bernoulli (3), 0)
-%!assert (bernoulli (1), -0.5, -eps)
+
+%!test
+%! % two different definitions in literature
+%! assert (abs (bernoulli (1)), 0.5, -eps)
+
+%!xtest
+%! % we want to use B_1 = 1/2, possible with a version-specific filter
+%! assert (bernoulli (1), 0.5, -eps)
 
 %!test
 %! n = sym(88);
@@ -95,7 +112,7 @@ end
 %! assert (A, B, -eps);
 
 %!test
-%! m = [0 1; 2 4];
+%! m = [0 2; 3 4];
 %! n = sym(m);
 %! A = bernoulli (m);
 %! B = double (bernoulli (n));
