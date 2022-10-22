@@ -1,5 +1,5 @@
 %% Copyright (C) 2006 Sylvain Pelissier <sylvain.pelissier@gmail.com>
-%% Copyright (C) 2015-2016 Colin B. Macdonald <cbm@m.fsf.org>
+%% Copyright (C) 2015-2016, 2019, 2022 Colin B. Macdonald <cbm@m.fsf.org>
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
@@ -35,6 +35,7 @@
 %% function returns 0.5 by default:
 %% @example
 %% @group
+%% @c Would render with an extra zero on earlier Octave
 %% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% heaviside(0)
 %%   @result{} 0.5000

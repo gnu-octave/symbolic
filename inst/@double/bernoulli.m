@@ -35,6 +35,8 @@
 %% Note there are two conventions in the literature about the sign of B_1:
 %% @example
 %% @group
+%% @c Would render with an extra zero on earlier Octave
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% abs (bernoulli (1))
 %%   @result{} 0.5000
 %% @end group
