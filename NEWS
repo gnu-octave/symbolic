@@ -6,6 +6,7 @@ octsympy 3.0.1+
           cart2pol
           piecewise
 
+  * `kron` works for three or more inputs (issue #1245).
 
 
 octsympy 3.0.1 (2022-08-09)
