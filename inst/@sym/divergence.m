@@ -69,8 +69,6 @@
 %%          @@sym/hessian}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function g = divergence(f, x)
 

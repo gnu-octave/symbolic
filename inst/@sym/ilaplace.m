@@ -87,8 +87,6 @@
 %% @seealso{@@sym/laplace}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Andrés Prieto
-%% Keywords: symbolic, integral transforms
 
 function f = ilaplace(varargin)
 

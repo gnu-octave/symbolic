@@ -37,8 +37,6 @@
 %% @seealso{@@sym/atan, @@sym/hypot}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function a = atan2(y, x)
 

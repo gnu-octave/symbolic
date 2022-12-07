@@ -62,8 +62,6 @@
 %% @seealso{@@sym/ctranspose, @@sym/real, @@sym/imag}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = conj(x)
 

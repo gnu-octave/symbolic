@@ -16,9 +16,6 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
-
 function t = ineq_helper(op, fop, lhs, rhs, nanspecial)
 
   if (nargin == 4)

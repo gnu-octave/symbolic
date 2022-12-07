@@ -33,8 +33,6 @@
 %% @seealso{@@sym/uminus}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function x = uplus(x)
 

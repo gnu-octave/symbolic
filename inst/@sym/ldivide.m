@@ -50,8 +50,6 @@
 %% @seealso{@@sym/rdivide, @@sym/mldivide}
 %% @end defop
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = ldivide(x, y)
 
