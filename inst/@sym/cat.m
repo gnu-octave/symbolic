@@ -40,8 +40,6 @@
 %% @seealso{@@sym/vertcat, @@sym/horzcat}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic
 
 function z = cat(dim, varargin)
 

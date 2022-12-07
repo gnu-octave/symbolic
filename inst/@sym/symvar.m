@@ -72,8 +72,6 @@
 %% @seealso{findsymbols, @@sym/findsym}
 %% @end defmethod
 
-%% Author: Colin B. Macdonald, Willem J. Atsma (previous versions)
-%% Keywords: symbolic
 
 function vars = symvar(F, Nout)
 

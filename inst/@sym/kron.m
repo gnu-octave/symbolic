@@ -71,9 +71,6 @@
 %% @end example
 %% @end defmethod
 
-%% Author: Utkarsh Gautam
-%% Keywords:  kron product
-
 function c = kron (varargin)
 
   if (nargin < 2)

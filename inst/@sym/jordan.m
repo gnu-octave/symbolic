@@ -115,8 +115,6 @@
 %% @seealso{@@sym/charpoly, @@sym/eig}
 %% @end deftypemethod
 
-%% Author: Alex Vong
-%% Keywords: symbolic
 
 function [V, J] = jordan (A)
   cmd = {'(A, calctrans) = _ins'

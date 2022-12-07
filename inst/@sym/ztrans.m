@@ -271,8 +271,6 @@
 %%
 %% @end defmethod
 
-%% Author: Alex Vong
-%% Keywords: symbolic
 
 function X = ztrans (varargin)
   if (nargin > 3 || nargin == 0)
