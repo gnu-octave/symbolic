@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Utkarsh Gautam
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -19,8 +19,9 @@
 
 %% -*- texinfo -*-
 %% @documentencoding UTF-8
-%% @defmethod @@sym kron (@var{a}, @var{b})
-%% Kronecker tensor product of two matrices.
+%% @defmethod  @@sym kron (@var{a}, @var{b})
+%% @defmethodx @@sym kron (@var{a}, @var{b}, @dots{}, @var{c})
+%% Kronecker tensor product of two or more symbolic matrices.
 %%
 %% Examples:
 %% @example
@@ -52,24 +53,45 @@
 %%
 %% @end group
 %% @end example
+%%
+%% @example
+%% @group
+%% kron([1, 2], [x, y; y, x], [1; 7])
+%%   @result{} ans = (sym 4×4 matrix)
+%%
+%%       ⎡ x    y   2⋅x   2⋅y ⎤
+%%       ⎢                    ⎥
+%%       ⎢7⋅x  7⋅y  14⋅x  14⋅y⎥
+%%       ⎢                    ⎥
+%%       ⎢ y    x   2⋅y   2⋅x ⎥
+%%       ⎢                    ⎥
+%%       ⎣7⋅y  7⋅x  14⋅y  14⋅x⎦
+%%
+%% @end group
+%% @end example
 %% @end defmethod
 
 %% Author: Utkarsh Gautam
 %% Keywords:  kron product
 
-function c = kron (a, b)
+function c = kron (varargin)
 
-  if (isscalar (a) || isscalar (b))
-    c = a*b;
-  else
-    cmd = { 'a, b = _ins'
-            'from sympy.physics.quantum import TensorProduct'
-            'return TensorProduct(Matrix(a), Matrix(b))'
-          };
-    c = pycall_sympy__ (cmd, sym(a), sym(b));
+  if (nargin < 2)
+    print_usage ();
   end
+
+  for i = 1:nargin
+    varargin{i} = sym (varargin{i});
+  end
+
+  cmd = { '_ins = (a if isinstance(a, (MatrixBase, NDimArray)) else Matrix([a]) for a in _ins)'
+          'from sympy.physics.quantum import TensorProduct'
+          'return TensorProduct(*_ins)' };
+  c = pycall_sympy__ (cmd, varargin{:});
 end
 
+
+%!error kron (sym (2))
 
 %!test
 %! syms x y
@@ -110,3 +132,17 @@ end
 %! Y = [1, 0; 0, 1];
 %! expected = [x, x^2, 0, 0; y, y^2, 0, 0; 0, 0, x, x^2; 0, 0, y, y^2];
 %! assert (isequal (kron(Y, X), expected))
+
+%!test
+%! syms x y z
+%! assert (isequal (kron (x, y, z), x*y*z))
+%! assert (isequal (kron (x, y, z, 4), 4*x*y*z))
+%! assert (isequal (kron ([2 3], y, z), [2 3]*y*z))
+%! assert (isequal (kron ([2 3], [4; 5], y), [8 12; 10 15]*y))
+
+%!test
+%! syms x y
+%! A = kron ([x y], [1, -1; -1, 1], [2 3; 4 5]);
+%! D = kron ([7 9], [1, -1; -1, 1], [2 3; 4 5]);
+%! A = double (subs (A, [x y], [7 9]));
+%! assert (isequal (A, D))
