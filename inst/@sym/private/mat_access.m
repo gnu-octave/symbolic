@@ -1,4 +1,4 @@
-%% Copyright (C) 2014 Colin B. Macdonald
+%% Copyright (C) 2014, 2023 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2017 Mike Miller
 %% Copyright (C) 2017 NVS Abhilash
@@ -62,7 +62,12 @@ function z = mat_access(A, subs)
     if (ischar(i))
       error(['invalid indexing, i="' i '"'])
     end
-    [r, c] = ind2sub (size(A), i);
+    # Octave 8 does not raise error from ind2sub so we do it ourselves
+    sz = size (A);
+    if (i > prod (sz))
+      error ('%d is out of bound %d (dimensions are %dx%d)\n', i, prod (sz), sz)
+    end
+    [r, c] = ind2sub (sz, i);
     z = mat_rclist_access(A, r(:), c(:));
     % output shape, see also logic in comments in mat_mask_access.m
     if (~isscalar(A) && isrow(A) && isvector(i))
