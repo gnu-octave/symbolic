@@ -62,7 +62,7 @@ function z = mat_access(A, subs)
     if (ischar(i))
       error(['invalid indexing, i="' i '"'])
     end
-    # Octave 8 does not raise error from ind2sub so we do it ourselves
+    % Octave 8 does not raise error from ind2sub so we do it ourselves
     sz = size (A);
     if (i > prod (sz))
       error ('%d is out of bound %d (dimensions are %dx%d)\n', i, prod (sz), sz)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022-2023 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2017 NVS Abhilash
@@ -101,7 +101,13 @@ function z = mat_replace(A, subs, b)
       r = subs{1};  c = ones(size(r));
     else
       % linear indices into 2D array
-      [r, c] = ind2sub (size(A), subs{1});
+      % Octave 8 does not raise error from ind2sub so we do it ourselves
+      sz = size (A);
+      i = subs{1};
+      if (i > prod (sz))
+        error ('%d is out of bound %d (dimensions are %dx%d)\n', i, prod (sz), sz)
+      end
+      [r, c] = ind2sub (size (A), i);
       % keep all the indices in a row vector
       r = reshape (r, 1, []);
       c = reshape (c, 1, []);

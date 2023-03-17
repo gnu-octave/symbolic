@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022-2023 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2017 NVS Abhilash
@@ -661,6 +661,11 @@ end
 %! assert (size (a), [3 3]);
 
 %% Tests from mat_replace
+
+%!error <out of bound>
+%! syms x
+%! A = [1 x; x 2];
+%! A(5) = x;
 
 %!test
 %! % 2D indexing with length in one dimension more than 2
