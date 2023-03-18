@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -112,5 +112,14 @@ end
 %!     vpa('4270.98066989140286451493108809574')*1i;
 %! z = vpa (exp(1), 32) + vpa(pi, 32)/13*1i;
 %! B = euler (13, z);
-%! relerr = double(abs((B - A)/A));
-%! assert (abs(relerr) < 2e-31);
+%! relerr = abs(double(abs((B - A)/A)));
+%! assert (relerr < 20*eps);
+
+%!xtest
+%! % as above, high-prec result broken in 1.12: https://github.com/sympy/sympy/issues/24156
+%! A = vpa('1623.14184180556920918624604530515') + ...
+%!     vpa('4270.98066989140286451493108809574')*1i;
+%! z = vpa (exp(1), 32) + vpa(pi, 32)/13*1i;
+%! B = euler (13, z);
+%! relerr = abs(double(abs((B - A)/A)));
+%! assert (relerr < 2e-31);
