@@ -8,6 +8,8 @@ octsympy 3.0.1+
 
   * `kron` works for three or more inputs (issue #1245).
 
+  * Indexing bounds checking to support Octave 8.
+
 
 octsympy 3.0.1 (2022-08-09)
 ===========================

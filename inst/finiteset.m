@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2016-2017, 2019, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -46,7 +46,7 @@
 %% @example
 %% @group
 %% S(2)
-%%   @print{} ??? ind2sub: index out of range
+%%   @print{} ??? 2 is out of bound ...
 %% @end group
 %% @end example
 %% Instead you can first convert it to a cell (@pxref{@@sym/children}):
