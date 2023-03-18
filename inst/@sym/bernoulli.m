@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -22,12 +22,33 @@
 %% @deftypemethodx @@sym {@var{p} =} bernoulli (@var{n}, @var{x})
 %% Return symbolic Bernoulli numbers or Bernoulli polynomials.
 %%
-%% Examples:
+%% With a sufficiently recent SymPy version, the first seven
+%% Bernoulli numbers are:
 %% @example
 %% @group
-%% bernoulli(sym(6))
+%% @c doctest: +XFAIL_IF(pycall_sympy__ ('return Version(spver) < Version("1.12.dev")'))
+%% bernoulli (sym(0:6))
+%%   @result{} (sym) [1  1/2  1/6  0  -1/30  0  1/42]  (1×7 matrix)
+%% @end group
+%% @end example
+%%
+%% Note there are two different definitions in use which differ
+%% in the sign of the value of B_1.  As of 2023 and a sufficiently
+%% recent SymPy library, we use the definition with positive one half:
+%% @example
+%% @group
+%% @c doctest: +XFAIL_IF(pycall_sympy__ ('return Version(spver) < Version("1.12.dev")'))
+%% bernoulli (sym(1))
+%%   @result{} (sym) 1/2
+%% @end group
+%% @end example
+%%
+%% Other examples:
+%% @example
+%% @group
+%% bernoulli (sym(6))
 %%   @result{} (sym) 1/42
-%% bernoulli(sym(7))
+%% bernoulli (sym(7))
 %%   @result{} (sym) 0
 %% @end group
 %% @end example
@@ -36,7 +57,7 @@
 %% @example
 %% @group
 %% syms x
-%% bernoulli(2, x)
+%% bernoulli (2, x)
 %%   @result{} (sym)
 %%        2       1
 %%       x  - x + ─
@@ -69,9 +90,19 @@ end
 %! assert (isequal (bernoulli(3,x), x^3 - 3*x^2/2 + x/2))
 
 %!test
-%! m = sym([0 1; 8 888889]);
+%! % two different definitions in literature
+%! assert (isequal (abs (bernoulli (sym(1))), sym(1)/2))
+
+%!test
+%! % we use B_1 = 1/2
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.12.dev")'))
+%!   assert (isequal (bernoulli (sym(1)), sym(1)/2))
+%! end
+
+%!test
+%! m = sym([0 2; 8 888889]);
 %! A = bernoulli (m);
-%! B = [1 -sym(1)/2; -sym(1)/30 0];
+%! B = [1 sym(1)/6; -sym(1)/30 0];
 %! assert (isequal (A, B))
 
 %!test
