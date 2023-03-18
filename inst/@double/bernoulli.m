@@ -1,4 +1,4 @@
-%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,7 +32,8 @@
 %% @end group
 %% @end example
 %%
-%% Note there are two conventions in the literature about the sign of B_1:
+%% Note there are two conventions in the literature about the sign of B_1,
+%% but for certain the absolute value is one half:
 %% @example
 %% @group
 %% @c Would render with an extra zero on earlier Octave
@@ -41,7 +42,7 @@
 %%   @result{} 0.5000
 %% @end group
 %% @end example
-%% As of 2022, this numerical evaluation function is in a state of flux
+%% As of 2023, this numerical evaluation function is in a state of flux
 %% about which one it takes, @pxref{@@sym/bernoulli}.
 %%
 %% Polynomial example:

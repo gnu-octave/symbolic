@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,7 +33,7 @@
 %% @end example
 %%
 %% Note there are two different definitions in use which differ
-%% in the sign of the value of B_1.  As of 2022 and a sufficient
+%% in the sign of the value of B_1.  As of 2023 and a sufficiently
 %% recent SymPy library, we use the definition with positive one half:
 %% @example
 %% @group
