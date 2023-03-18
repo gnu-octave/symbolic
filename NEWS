@@ -10,6 +10,11 @@ octsympy 3.0.1+
 
   * Indexing bounds checking to support Octave 8.
 
+  * Fix assumptions on SymPy 1.12.
+
+  * Other misc fixes and changes for SymPy 1.12.
+
+
 
 octsympy 3.0.1 (2022-08-09)
 ===========================

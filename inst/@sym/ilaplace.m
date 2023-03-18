@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2018-2019, 2022 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018-2019, 2022-2023 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -181,10 +181,18 @@ end
 
 %!test
 %! % Delta dirac test 2
-%! syms s c
-%! t = sym('t', 'positive');
-%! assert (isequal (ilaplace (5*exp(-3*s) + 2*exp(c*s) - 2*exp(-2*s)/s,t), ...
-%!                  5*dirac(t-3) + 2*dirac(c+t) - 2*heaviside(t-2)))
+%! syms s t
+%! calc = ilaplace (5*exp (-3*s) - 2*exp (-2*s)/s, s, t);
+%! want = 5*dirac (t-3) - 2*heaviside (t-2);
+%! assert (isequal (calc, want))
+
+%!test
+%! % Delta dirac test 3, coefficient
+%! syms s t
+%! syms c positive
+%! calc = ilaplace (2*exp (-c*s), s, t);
+%! want = 2*dirac (t - c);
+%! assert (isAlways (calc == want))
 
 %!error <more than one> ilaplace (sym('s', 'positive')*sym('s'))
 
