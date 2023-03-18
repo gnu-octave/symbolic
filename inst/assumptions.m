@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -108,15 +108,14 @@ function [A, B] = assumptions(F, outp)
   cmd = {
       'x = _ins[0]'
       'outputdict = _ins[1]'
-      'd = x._assumptions.generator'
-      'if d == {}:'
-      '    astr = ""'
+      'if Version(spver) > Version("1.11.1"):'
+      '    d = x._assumptions_orig'
       'else:'
-      '    astr = ", ".join(sorted([("" if v else "~") + str(k) for (k,v) in list(d.items())]))'
+      '    d = x._assumptions.generator'
+      'astr = ", ".join(sorted([("" if v else "~") + str(k) for (k,v) in d.items()]))'
       'if outputdict:'
       '    return (astr, d)'
-      'else:'
-      '    return astr,' };
+      'return astr,' };
 
   c = 0; A = {};
   if strcmp(outp, 'dict')
