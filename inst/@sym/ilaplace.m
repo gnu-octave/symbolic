@@ -192,7 +192,7 @@ end
 %! syms c positive
 %! calc = ilaplace (2*exp (-c*s), s, t);
 %! want = 2*dirac (t - c);
-%! assert (isequal (calc, want))
+%! assert (isAlways (calc == want))
 
 %!error <more than one> ilaplace (sym('s', 'positive')*sym('s'))
 
