@@ -39,7 +39,7 @@ function retS = get_sym_from_python(var_pyobj)
   % Don't return 1x1 matrices
   if (py.isinstance(var_pyobj, sp_matrix) && isequal(var_pyobj.shape, tuple_1_1))
     % TODO: Probably better if supported via Pythonic
-    % https://gitlab.com/mtmiller/octave-pythonic/issues/11
+    % https://gitlab.com/gnu-octave/octave-pythonic/issues/11
     var_pyobj = var_pyobj.__getitem__(tuple_0_0);
   end
 

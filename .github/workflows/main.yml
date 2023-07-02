@@ -146,7 +146,7 @@ jobs:
           docker exec oc octave-cli --eval "pkg install -forge doctest"
           docker exec oc octave-cli --eval "pwd; ls"
           docker exec oc \
-            git clone https://gitlab.com/mtmiller/octave-pythonic.git
+            git clone https://gitlab.com/gnu-octave/octave-pythonic.git
           # FIXME: Workaround the following error
           # --8<---------------cut here---------------start------------->8---
           # error: subsref: cannot index Python object, not sequence or callable
@@ -154,7 +154,7 @@ jobs:
           # by replacing all occurences of
           # "py.collections.Callable" to "py.collections.abc.Callable" and
           # "py.collections.Sequence" to "py.collections.abc.Sequence"
-          # See also https://gitlab.com/mtmiller/octave-pythonic/-/issues/95
+          # See also https://gitlab.com/gnu-octave/octave-pythonic/-/issues/95
           # and https://github.com/cbm755/octsympy/issues/1067
           docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
             's/py\.collections\.Callable/py.collections.abc.Callable/g' \
