@@ -87,7 +87,7 @@
 %% @end example
 %%
 %% This default depends on your system.  If you have loaded the
-%% @uref{https://gitlab.com/mtmiller/octave-pythonic, Pythonic package},
+%% @uref{https://gitlab.com/gnu-octave/octave-pythonic, Pythonic package},
 %% the default will be the @code{native} mechanism.
 %% Otherwise, typically the @code{popen2} mechanism will be used,
 %% which uses a pipe to communicate with Python.
