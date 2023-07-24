@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017, 2019, 2021-2022 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2023 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
@@ -43,7 +43,7 @@ try:
     # for sets
     from sympy.utilities.iterables import uniq
     try:
-        # quick fix for https://github.com/cbm755/octsympy/issues/1053
+        # quick fix for https://github.com/gnu-octave/symbolic/issues/1053
         # TODO: investigate the sym ctor in this case, likely a better fix in there
         from sympy.core.symbol import Str
     except ImportError:

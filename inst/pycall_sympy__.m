@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022-2023 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -187,7 +187,7 @@ function varargout = pycall_sympy__ (cmd, varargin)
     else
       what_to_do = ['Try "sympref reset" and repeat your command?\n' ...
                     '    (consider filing an issue at ' ...
-                    'https://github.com/cbm755/octsympy/issues)'];
+                    'https://github.com/gnu-octave/symbolic/issues)'];
     end
     error ('Python exception: %s\n    occurred %s.\n    %s', ...
            A{3}, A{2}, sprintf (what_to_do))

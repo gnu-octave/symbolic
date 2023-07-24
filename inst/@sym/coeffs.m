@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -101,7 +101,7 @@
 %% @end group
 %% @end example
 %% @strong{Note:} The @qcode{'all'} feature does not yet work with
-%% multivariate polynomials (https://github.com/cbm755/octsympy/issues/720).
+%% multivariate polynomials (https://github.com/gnu-octave/symbolic/issues/720).
 %%
 %% @seealso{@@sym/sym2poly}
 %% @end deftypemethod
@@ -248,13 +248,13 @@ end
 %! assert (isequal (t, s))
 
 %!error <multivariate polynomials not supported>
-%! % TODO: multivariate all not working (https://github.com/cbm755/octsympy/issues/720)
+%! % TODO: multivariate all not working (https://github.com/gnu-octave/symbolic/issues/720)
 %! syms x y
 %! [c, t] = coeffs(6*x^2 + 7*y + 19, [x y], 'all');
 
 %!test
 %! % empty same as not specifying; maybe not SMT compatible:
-%! % https://github.com/cbm755/octsympy/pull/708#discussion_r94292831
+%! % https://github.com/gnu-octave/symbolic/pull/708#discussion_r94292831
 %! syms x y
 %! [c, t] = coeffs(6*x*x + 27*y*x  + 36, {});
 %! a = [6  27  36];

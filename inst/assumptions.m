@@ -249,6 +249,6 @@ end
 %! assert (~isequal (n, sym(true)) && ~isequal (n, sym(false)))
 
 %!test
-%! %% TODO: rewrite later with https://github.com/cbm755/octsympy/issues/622
+%! %% TODO: rewrite later with https://github.com/gnu-octave/symbolic/issues/622
 %! a = pycall_sympy__ ('return Symbol("a", real=False)');
 %! assert (strcmp (assumptions (a), {'a: ~real'}))

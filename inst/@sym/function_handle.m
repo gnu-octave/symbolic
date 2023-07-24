@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -350,6 +350,6 @@ end
 %! assert (h(1, 2, 3, 4) == 1000 + 20 + 300 + 4)
 
 %!test
-%! % https://github.com/cbm755/octsympy/issues/854
+%! % https://github.com/gnu-octave/symbolic/issues/854
 %! f = function_handle (x + 1i*sqrt (sym(3)));
 %! assert (f (1), complex (1, sqrt (3)), -eps)

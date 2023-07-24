@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -54,7 +54,7 @@
 %% be infinite'' (as opposed to ``x is not infinite'').
 %%
 %% FIXME: this is behaviour might change in a future version; come
-%% discuss at @url{https://github.com/cbm755/octsympy/issues/308}.
+%% discuss at @url{https://github.com/gnu-octave/symbolic/issues/308}.
 %%
 %% @seealso{@@sym/isnan, @@sym/double}
 %% @end defmethod
