@@ -114,8 +114,6 @@ jobs:
   # Built-in Self Tests and Doctests using the Pythonic interface
   # Currently, we only test with newer Octave and SymPy since the support for
   # the Pythonic interface is experimental. We may change this in the future.
-  # For Pythonic, we use the latest commit from the master branch since the
-  # last release (0.0.1) no longer works with newer Python.
   pythonic-bist-doctest:
     runs-on: ubuntu-latest
     strategy:
@@ -144,27 +142,12 @@ jobs:
           docker exec oc pip3 install packaging
           docker exec oc pip3 install sympy=="$SYMPY"
           docker exec oc octave-cli --eval "pkg install -forge doctest"
-          docker exec oc octave-cli --eval "pwd; ls"
-          docker exec oc \
-            git clone https://gitlab.com/gnu-octave/octave-pythonic.git
-          # FIXME: Workaround the following error
-          # --8<---------------cut here---------------start------------->8---
-          # error: subsref: cannot index Python object, not sequence or callable
-          # --8<---------------cut here---------------end--------------->8---
-          # by replacing all occurences of
-          # "py.collections.Callable" to "py.collections.abc.Callable" and
-          # "py.collections.Sequence" to "py.collections.abc.Sequence"
-          # See also https://gitlab.com/gnu-octave/octave-pythonic/-/issues/95
-          # and https://github.com/gnu-octave/symbolic/issues/1067
-          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
-            's/py\.collections\.Callable/py.collections.abc.Callable/g' \
-            '{}' ';'
-          docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
-            's/py\.collections\.Sequence/py.collections.abc.Sequence/g' \
-            '{}' ';'
-          docker exec oc \
-            tar cvzf octave-pythonic.tar.gz --exclude='.git*' octave-pythonic
-          docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
+          docker exec oc octave-cli --eval "pkg install -forge pythonic"
+          # docker exec oc \
+          #   git clone https://gitlab.com/gnu-octave/octave-pythonic.git
+          # docker exec oc \
+          #   tar cvzf octave-pythonic.tar.gz --exclude='.git*' octave-pythonic
+          # docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
       - name: Run BIST
         run: |
           docker exec oc make -C /workdir/octsympy install
