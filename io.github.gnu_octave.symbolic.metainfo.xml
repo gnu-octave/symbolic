@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2016, 2019 Colin B. Macdonald
+Copyright 2016, 2019, 2023 Colin B. Macdonald
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -8,8 +8,8 @@ notice and this notice are preserved.  This file is offered as-is,
 without any warranty.
 -->
 <component type="addon">
-  <id>octave-symbolic</id>
-  <extends>www.octave.org-octave.desktop</extends>
+  <id>io.github.gnu_octave.symbolic.metainfo.xml</id>
+  <extends>org.octave.Octave</extends>
   <name>Symbolic</name>
   <summary>Symbolic manipulation, calculus, variable precision arithmetic, and other computer algebra features</summary>
   <description>
@@ -34,10 +34,10 @@ without any warranty.
     <keyword>Symbolic Math Toolbox</keyword>
   </keywords>
   <url type="homepage">https://octave.sourceforge.io/symbolic</url>
-  <url type="bugtracker">https://github.com/cbm755/octsympy/issues/new</url>
+  <url type="bugtracker">https://github.com/gnu-octave/symbolic/issues/new</url>
   <translation/>
   <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <developer_name>Octave-Forge Community</developer_name>
+  <developer_name>Octave Community</developer_name>
   <update_contact>octave-maintainers@gnu.org</update_contact>
 </component>
