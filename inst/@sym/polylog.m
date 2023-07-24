@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2016, 2018, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,6 +24,16 @@
 %% Returns the polylogarithm of order @var{s} and argument @var{z}.
 %%
 %% Example:
+%% @example
+%% @group
+%% syms z
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12")'))
+%% polylog (-3, z)
+%%   @result{} ans = (sym) Li₋₃(z)
+%% @end group
+%% @end example
+%%
+%% For more complicated expressions, the printing uses a functional form:
 %% @example
 %% @group
 %% syms z s
