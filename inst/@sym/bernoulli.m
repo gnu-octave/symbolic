@@ -26,7 +26,7 @@
 %% Bernoulli numbers are:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(pycall_sympy__ ('return Version(spver) < Version("1.12.dev")'))
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
 %% bernoulli (sym(0:6))
 %%   @result{} (sym) [1  1/2  1/6  0  -1/30  0  1/42]  (1×7 matrix)
 %% @end group
@@ -37,7 +37,7 @@
 %% recent SymPy library, we use the definition with positive one half:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(pycall_sympy__ ('return Version(spver) < Version("1.12.dev")'))
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
 %% bernoulli (sym(1))
 %%   @result{} (sym) 1/2
 %% @end group
