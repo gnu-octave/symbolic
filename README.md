@@ -3,10 +3,10 @@ Symbolic Package for GNU Octave
 
 An implementation of a symbolic toolbox using SymPy.
 
-[https://octave.sourceforge.io/symbolic]
+https://octave.sourceforge.io/symbolic
 
-<sub>Note: Development for most Octave packages tends to take place in sourceforge. However, unlike most other Octave packages, the main development repository for this package is on **github** (https://github.com/cbm755/octsympy), and only _mirrored_ on sourceforge (https://sourceforge.net/p/octave/symbolic/).
-If you are thinking of contributing and you're looking at this README file from the sourceforge website, please consider visiting our github page and contributing there instead, as we do not tend to monitor sourceforge for activity.</sub>
+https://github.com/gnu-octave/symbolic
+
 
 
 Goals
@@ -58,7 +58,7 @@ How to Install on Windows
 
 If you encounter any difficulties (even minor ones) please read and
 if possible help us improve the
-[wiki page on Windows Installation](https://github.com/cbm755/octsympy/wiki/Notes-on-Windows-installation).
+[wiki page on Windows Installation](https://github.com/gnu-octave/symbolic/wiki/Notes-on-Windows-installation).
 
 
 
@@ -81,7 +81,7 @@ How to Help
 -----------
 
 We have a list of things to work on tagged [help
-wanted](https://github.com/cbm755/octsympy/issues?q=is:open+is:issue+label:"help+wanted").
+wanted](https://github.com/gnu-octave/symbolic/issues?q=is:open+is:issue+label:"help+wanted").
 Some of these should be quite easy to fix and would be a great way to
 get involved.  Come join us!
 
@@ -90,7 +90,7 @@ How to hack on the code:
 1.  Clone the repo with git (preferred, but you can use the "Download
     ZIP" instead if you want).
 
-2.  Run Octave in the `octsympy/inst/` directory.  It should be safe
+2.  Run Octave in the `inst/` directory.  It should be safe
     to do this even if you have the released version of the package
     installed (but not loaded).
 

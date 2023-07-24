@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2023 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2021 Johannes Maria Frank
 %% Copyright (C) 2022 Chris Gorman
@@ -78,7 +78,7 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '# for sets'
                     'from sympy.utilities.iterables import uniq'
                     'try:'
-                    '    # quick fix for https://github.com/cbm755/octsympy/issues/1053'
+                    '    # quick fix for https://github.com/gnu-octave/symbolic/issues/1053'
                     '    # TODO: investigate the sym ctor in this case, likely a better fix in there'
                     '    from sympy.core.symbol import Str'
                     'except ImportError:'

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016-2017, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016-2017, 2019, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -28,7 +28,7 @@
 %%
 %% TODO: eventually we should drop this file altogether, and use
 %% @code{pkg test symbolic} instead, see
-%% @url{https://github.com/cbm755/octsympy/issues/1142}
+%% @url{https://github.com/gnu-octave/symbolic/issues/1142}
 %% and @url{https://savannah.gnu.org/bugs/?62681}.
 %%
 %% @seealso{test, runtests, doctest}

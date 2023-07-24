@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022-2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -50,7 +50,7 @@
 %% @code{limit(1/x, x, 0)}
 %% (and @code{+/-inf} if you specify @code{left/right}).  I'm not
 %% sure how to get this nicer behaviour from SymPy.
-%% FIXME: this is https://github.com/cbm755/octsympy/issues/74
+%% FIXME: this is https://github.com/gnu-octave/symbolic/issues/74
 %%
 %% @seealso{@@sym/diff}
 %% @end defmethod

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2015 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -128,8 +128,8 @@ function a = do_list(indent, in, varlist)
       % What should we do with double arrays?  Perhaps map them to numpy
       % arrays is the most useful in general.  For now, we map them to a
       % list-of-lists.  This could change in the future.  See also:
-      % https://github.com/cbm755/octsympy/issues/134
-      % https://github.com/cbm755/octsympy/pull/336
+      % https://github.com/gnu-octave/symbolic/issues/134
+      % https://github.com/gnu-octave/symbolic/pull/336
       c=c+1; a{c} = sprintf('%s%s.append(%s)', sp, in, sprintf(octave_array_to_python(x)));
 
     else

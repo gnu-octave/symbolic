@@ -155,7 +155,7 @@ jobs:
           # "py.collections.Callable" to "py.collections.abc.Callable" and
           # "py.collections.Sequence" to "py.collections.abc.Sequence"
           # See also https://gitlab.com/gnu-octave/octave-pythonic/-/issues/95
-          # and https://github.com/cbm755/octsympy/issues/1067
+          # and https://github.com/gnu-octave/symbolic/issues/1067
           docker exec oc find octave-pythonic -name '*.m' -execdir sed -i \
             's/py\.collections\.Callable/py.collections.abc.Callable/g' \
             '{}' ';'

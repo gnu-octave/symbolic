@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2016-2019, 2022-2023 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -83,7 +83,7 @@ function assert_have_python_and_sympy (pyexec, verbose)
     %   disp ('')
     %   disp ('  * Did you install the Symbolic bundle for Windows that includes Python?')
     %   disp ('    Please refer to the installation notes for Windows users at')
-    %   disp ('    <https://github.com/cbm755/octsympy/wiki/Notes-on-Windows-installation>')
+    %   disp ('    <https://github.com/gnu-octave/symbolic/wiki/Notes-on-Windows-installation>')
     % end
     return
   end
