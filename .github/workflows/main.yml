@@ -143,11 +143,57 @@ jobs:
           docker exec oc pip3 install sympy=="$SYMPY"
           docker exec oc octave-cli --eval "pkg install -forge doctest"
           docker exec oc octave-cli --eval "pkg install -forge pythonic"
-          # docker exec oc \
-          #   git clone https://gitlab.com/gnu-octave/octave-pythonic.git
-          # docker exec oc \
-          #   tar cvzf octave-pythonic.tar.gz --exclude='.git*' octave-pythonic
-          # docker exec oc octave-cli --eval "pkg install octave-pythonic.tar.gz"
+      - name: Run BIST
+        run: |
+          docker exec oc make -C /workdir/octsympy install
+          docker exec oc octave-cli --eval "pkg list"
+          docker exec oc octave-cli \
+            --eval "pkg load pythonic; pkg load symbolic; sympref diagnose; pkg unload symbolic"
+          docker exec oc octave-cli \
+            --eval "pkg load pythonic; pkg load symbolic; \
+            r = octsympy_tests; if r, type ('fntests.log') end; exit (r)"
+      - name: Run Doctests
+        run: |
+          docker exec oc octave-cli \
+            --eval "pkg load doctest; pkg load pythonic; pkg load symbolic; \
+            sym ('x'); success = doctest ('octsympy/inst/'); exit (!success)"
+      - name: Stop container
+        run: |
+          docker stop oc
+          docker rm oc
+
+
+  # Built-in Self Tests and Doctests using the Pythonic main branch
+  pythonic-dev-bist-doctest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        octave: [8.2.0]
+        sympy: [1.12]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Container setup
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          uname -a
+          docker pull docker.io/gnuoctave/octave:"$OCT"
+          docker run --name=oc --detach --init \
+            --volume="$PWD":/workdir/octsympy:rw \
+            gnuoctave/octave:"$OCT" sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc git config --global --add safe.directory /workdir/octsympy
+          docker exec oc apt-get update
+          docker exec oc apt-get install --no-install-recommends -y libpython3-dev
+          docker exec oc pip3 install packaging
+          docker exec oc pip3 install sympy=="$SYMPY"
+          docker exec oc octave-cli --eval "pkg install -forge doctest"
+          docker exec oc octave-cli --eval \
+            "pkg install https://gitlab.com/gnu-octave/octave-pythonic/-/archive/main/octave-pythonic-main.tar.gz"
       - name: Run BIST
         run: |
           docker exec oc make -C /workdir/octsympy install
