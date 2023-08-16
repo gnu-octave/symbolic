@@ -272,3 +272,90 @@ jobs:
       - name: uninstall package
         run: |
           octave --eval "pkg uninstall symbolic; pkg list"
+
+
+  windows_msys2_mingw:
+
+    runs-on: windows-latest
+
+    name: mingw-w64 ${{ matrix.msystem }}
+
+    defaults:
+      run:
+        # Use MSYS2 as default shell
+        shell: msys2 {0}
+
+    strategy:
+      # Allow other runners in the matrix to continue if some fail
+      fail-fast: false
+
+      matrix:
+        msystem: [MINGW64, UCRT64]
+        include:
+          - msystem: MINGW64
+            target-prefix: mingw-w64-x86_64
+          - msystem: UCRT64
+            target-prefix: mingw-w64-ucrt-x86_64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install packages from MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+
+          release: false
+
+          install: >-
+            base-devel
+            git
+            ${{ matrix.target-prefix }}-autotools
+            ${{ matrix.target-prefix }}-cc
+            ${{ matrix.target-prefix }}-fltk
+            ${{ matrix.target-prefix }}-octave
+            ${{ matrix.target-prefix }}-python
+            ${{ matrix.target-prefix }}-python-sympy
+
+          msystem: ${{ matrix.msystem }}
+
+      - name: Show package versions
+        run: |
+          uname -a
+          octave --version
+          python --version
+          python -c "import sympy; print(sympy.__version__)"
+
+      - name: Install package, verify
+        id: install-package
+        run: |
+          pwd
+          make install
+          octave --eval "pkg load symbolic; sympref diagnose; pkg unload symbolic"
+
+      - name: Load package, run tests
+        id: test-package
+        # For some reason, Octave distributed by MSYS2 crashes on the GitHub
+        # runner when trying to plot with qt. `--no-gui-libs` avoids that crash
+        # during the test for `@sym/ezplot.m`.
+        # For some reason, Octave exits with error 127 after the test suite.
+        # This is reproducible locally and not limited to the GitHub runner.
+        # Ignore that error for now.
+        run: |
+          ( octave --no-gui-libs --eval "pkg test symbolic" | tee ./test-suite.log ) || true
+          echo Checking test results...
+          [ -n "$(grep -e "FAIL\s*0" ./test-suite.log)" ] || \
+            ( echo "::error::At least one test failed" && exit 1 )
+          [ -z "$(grep -e "REGRESSION" ./test-suite.log)" ] || \
+            ( echo "::error::At least one regression in test suite" && exit 1 )
+          echo Test suite completed successfully
+
+      - name: Display test log
+        if: always() && (steps.test-package.outcome != 'skipped')
+        run: cat ./fntests.log
+
+      - name: Uninstall package
+        if: always() && (steps.install-package.outcome == 'success')
+        run: |
+          octave --eval "pkg uninstall symbolic; pkg list"
