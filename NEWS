@@ -2,6 +2,7 @@ octsympy 3.1.1+
 ===============
 
   * Move repo to https://github.com/gnu-octave/symbolic
+  * `sym(<array>, ratflag)` now respects `ratflag` (issue #1273).
   * Changed metainfo.xml ID and corrected long-standing "Addon"
     link to GNU Octave.
 
