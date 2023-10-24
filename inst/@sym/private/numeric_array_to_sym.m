@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2015, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2015, 2019, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,9 +16,15 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function z = numeric_array_to_sym(A)
+function z = numeric_array_to_sym(A, ratflag)
 %private helper for sym ctor
-%   convert an array to syms, currently on 1D, 2D.
+%   convert an array to syms, currently only 1D, 2D.
+
+  if nargin < 2
+    ratwarn = true;
+  else
+    ratwarn = false;
+  end
 
   [n, m] = size(A);
 
@@ -33,7 +39,11 @@ function z = numeric_array_to_sym(A)
     % we want all sym creation to go through the ctor.
     Ac{i} = cell(m,1);
     for j=1:m
-      Ac{i}{j} = sym(A(i,j));
+      if ratwarn
+        Ac{i}{j} = sym (A(i, j));
+      else
+        Ac{i}{j} = sym (A(i, j), ratflag);
+      end
     end
   end
 

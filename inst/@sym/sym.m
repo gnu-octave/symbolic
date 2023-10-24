@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022-2023 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -356,7 +356,11 @@ function s = sym(x, varargin)
   end
 
   if (~isscalar (x) && isnumber)  % Handle octave numeric matrix
-    s = numeric_array_to_sym (x);
+    if ratwarn
+      s = numeric_array_to_sym (x);
+    else
+      s = numeric_array_to_sym (x, ratflag);
+    end
     return
 
   elseif (isa (x, 'double'))  % Handle double/complex
@@ -841,6 +845,18 @@ end
 %! assert (isequal (x, sym(1)/10))
 
 %!test
+%! % sym(double) array with 'r': no warning
+%! a = [0.1 0.2];
+%! x = sym(a, 'r');
+%! assert (isequal (x, [sym(a(1), 'r') sym(a(2), 'r')]))
+
+%!test
+%! % sym(double) array with 'f': no warning
+%! a = [0.1 0.2];
+%! x = sym(a, 'f');
+%! assert (isequal (x, [sym(a(1), 'f') sym(a(2), 'f')]))
+
+%!test
 %! % sym(double, 'f')
 %! a = 0.1;
 %! x = sym(a, 'f');
@@ -916,6 +932,7 @@ end
 %!warning <dangerous> sym (10.33);
 %!warning <dangerous> sym (-5.23);
 %!warning <dangerous> sym (sqrt (1.4142135623731));
+%!warning <dangerous> sym ([1.2 1.3]);
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
