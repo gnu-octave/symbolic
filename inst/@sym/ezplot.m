@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -73,7 +73,7 @@
 %% The solution, as shown in the example, is to convert the sym to
 %% a double.
 %%
-%% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/function_handle}
+%% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/fplot, @@sym/function_handle}
 %% @end defmethod
 
 
