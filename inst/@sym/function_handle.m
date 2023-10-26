@@ -122,7 +122,7 @@ function f = function_handle(varargin)
     M.name = out{1}{1};
     M.code = out{1}{2};
 
-    assert (strcmp (M.name, [fcnname '.m']), 'sanity check failed: names should match');
+    assert (strcmp (M.name, [fcnname '.m']), 'correctness check failed: names should match');
 
     file_to_write = fullfile(fcnpath, [fcnname '.m']);
     [fid,msg] = fopen(file_to_write, 'w');

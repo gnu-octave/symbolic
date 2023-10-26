@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018 Colin B. Macdonald
+%% Copyright (C) 2014-2018, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -209,7 +209,7 @@ function success = convert_oct_2_ml (fname, foutname)
   N = Nfcn;
   fcn_line = ins{N};
 
-  % sanity checks
+  % correctness checks
   I = strfind(ins{N+1}, '%');
   if ~isempty(I) && I(1) == 1
     ins{N}
