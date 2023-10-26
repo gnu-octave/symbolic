@@ -45,6 +45,7 @@
 %% @group
 %% syms x
 %%
+%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% [xx, yy] = fplot (sin (x), [0 1])
 %%   @result{} xx =
 %%       0
