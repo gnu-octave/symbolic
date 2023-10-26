@@ -26,14 +26,36 @@
 %% @defmethodx @@sym {[@var{x}, @var{y}] =} fplot (@dots{})
 %% Plot a symbolic expression.
 %%
-%% Example parametric plot of a Lissajous Curve:
+%% Examples:
 %% @example
 %% @group
 %% syms x
 %% y = cos(3*x)
-%%   @result{} y = (sym) sin(3⋅x)
+%%   @result{} y = (sym) cos(3⋅x)
 %%
-%% ezplot(x, y)                                 % doctest: +SKIP
+%% fplot (y)                                 % doctest: +SKIP
+%%
+%% fplot (y, [0 pi])                         % doctest: +SKIP
+%% @end group
+%% @end example
+%%
+%% You can also grab the data that would be plotted and plot it
+%% yourself:
+%% @example
+%% @group
+%% syms x
+%%
+%% [xx, yy] = fplot (sin (x), [0 1])
+%%   @result{} xx =
+%%       0
+%%       ...
+%%       1.0000
+%%   @result{} yy =
+%%       0
+%%       ...
+%%       0.8415
+%%
+%% plot (xx, yy)                             % doctest: +SKIP
 %% @end group
 %% @end example
 %%
