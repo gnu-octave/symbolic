@@ -159,9 +159,12 @@ end
 
 %!test
 %! % bounds as syms, regular handle for function
-%! dom = [1 2 3 4];
-%! fplot (@cos, sym ([1 2]));
-%! assert (get (gca, 'xlim'), dom(1:2))
+%! % fails on 6.1.0, maybe earlier too?
+%! if (compare_versions (OCTAVE_VERSION (), '6.2.0', '>='))
+%!   dom = [1 2];
+%!   fplot (@cos, sym (dom));
+%!   assert (get (gca, 'xlim'), dom(1:2))
+%! end
 
 %!error <at most one>
 %! syms x y
