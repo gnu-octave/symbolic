@@ -33,9 +33,11 @@
 %% y = cos(3*x)
 %%   @result{} y = (sym) cos(3⋅x)
 %%
-%% fplot (y)                                 % doctest: +SKIP
+%% @c doctest: +SKIP
+%% fplot (y)
 %%
-%% fplot (y, [0 pi])                         % doctest: +SKIP
+%% @c doctest: +SKIP
+%% fplot (y, [0 pi])
 %% @end group
 %% @end example
 %%
@@ -56,7 +58,8 @@
 %%       ...
 %%       0.8415
 %%
-%% plot (xx, yy)                             % doctest: +SKIP
+%% @c doctest: +SKIP
+%% plot (xx, yy)
 %% @end group
 %% @end example
 %%
