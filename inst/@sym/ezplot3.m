@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -66,12 +66,10 @@ function varargout = ezplot3(varargin)
         assert(length(thissym) <= 1, ...
           'ezplot3: plotting curves: functions should have at most one input');
         if (isempty(thissym))
-          % a number, create a constant function in a dummy variable
-          % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
-          thisf = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
-          %thisf = @(t) 0*t + double(varargin{i});  % no
+          % constant function
+          thisf = function_handle (varargin{i}, 'vars', sym ('t'));
         else
-          % check variables match (sanity check)
+          % check variables match over each function
           if (isempty(firstsym))
             firstsym = thissym;
           else

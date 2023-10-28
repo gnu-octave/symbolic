@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2017 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -73,7 +73,7 @@
 %% The solution, as shown in the example, is to convert the sym to
 %% a double.
 %%
-%% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/function_handle}
+%% @seealso{ezplot, @@sym/ezplot3, @@sym/ezsurf, @@sym/fplot, @@sym/function_handle}
 %% @end defmethod
 
 
@@ -102,12 +102,10 @@ function varargout = ezplot(varargin)
         assert(length(thissym) <= 2, ...
           'ezplot: plotting curves: functions should have at most two inputs');
         if (isempty(thissym))
-          % a number, create a constant function in a dummy variable
-          % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
-          thisf = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
-          %thisf = @(t) 0*t + double(varargin{i});  % no
+          % constant function
+          thisf = function_handle (varargin{i}, 'vars', sym ('t'));
         else
-          % check variables match (sanity check)
+          % check variables match over each function
           if (isempty(firstsym))
             firstsym = thissym;
           else

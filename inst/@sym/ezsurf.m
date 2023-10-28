@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2017, 2019 Colin B. Macdonald
+%% Copyright (C) 2016-2017, 2019, 2023 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -80,13 +80,11 @@ function varargout = ezsurf(varargin)
         thissym = symvar(varargin{i});
         assert(length(thissym) <= 2, ...
           'ezsurf: parameterized: functions should have at most two inputs');
-        if (isempty(thissym))
-          % a number, create a constant function in a dummy variable
-          % (0*t works around some Octave oddity on 3.8 and hg Dec 2014)
-          thisf = inline(sprintf('%g + 0*t', double(varargin{i})), 't');
-          %thisf = @(t) 0*t + double(varargin{i});  % no
+        if (isempty (thissym))
+          % constant function
+          thisf = function_handle (varargin{i}, 'vars', sym ('t'));
         else
-          % check variables match (sanity check)
+          % check variables match over each function
           if (isempty(firstsym))
             firstsym = thissym;
           else
