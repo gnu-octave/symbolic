@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -100,8 +100,8 @@ function r = logical(p)
 
   cmd = vertcat(cmd, {
     '(x, unknown) = _ins'
-    'if x is not None and x.is_Matrix:'
-    '    r = [a for a in x.T]'  % note transpose
+    'if isinstance(x, (MatrixBase, NDimArray)):'
+    '    r = [a for a in flatten(transpose(x).tolist(), levels=1)]'  % note tranpose
     'else:'
     '    r = [x,]'
     'r = [scalar2tfn(a) for a in r]'
@@ -178,7 +178,7 @@ end
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true false true]))
-%! e = e';
+%! e = e.';
 %! w = logical(e);
 %! assert (islogical (w))
 %! assert (isequal (w, [true; false; true]))

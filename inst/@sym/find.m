@@ -132,8 +132,8 @@ function r = mylogical(p)
     '    return r'
     '#'
     'x, = _ins'
-    'if x is not None and x.is_Matrix:'
-    '    x = [a for a in x.T]'  % note transpose
+    'if isinstance(x, (MatrixBase, NDimArray)):'
+    '    x = [a for a in flatten(transpose(x).tolist(), levels=1)]'  % note transpose
     'else:'
     '    x = [x,]'
     'return [scalar2tf(a) for a in x],' };
