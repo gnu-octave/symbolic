@@ -99,12 +99,13 @@ jobs:
           # For more details, see https://stackoverflow.com/q/71901632
           # and https://github.com/actions/checkout/issues/760
           docker exec oc git config --global --add safe.directory /workdir/octsympy
-          # < 8.x containers don't have pip
+          # < 8.x containers don't have pip, must install
+          # Can just pip (not pip3) once we drop 5.x support
           docker exec oc apt-get update
           docker exec oc apt-get install -y python3-pip
-          docker exec oc pip --version
-          docker exec oc pip install packaging
-          docker exec oc pip install sympy==$SYMPY
+          docker exec oc pip3 --version
+          docker exec oc pip3 install packaging
+          docker exec oc pip3 install sympy==$SYMPY
           docker exec oc octave-cli --eval "pkg install -forge doctest"
       - name: Run BIST in-place
         run: docker exec oc make -C octsympy test
