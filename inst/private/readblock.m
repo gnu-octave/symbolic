@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2015 Colin B. Macdonald
+%% Copyright (C) 2014-2015, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,6 +33,8 @@ function [A, err] = readblock(fout, timeout)
   done = false;
   started = false;
   nwaits = 0;
+  lastdot = 0;
+  skip = 0;
   dispw = false;
   start = time();
 
@@ -59,14 +61,22 @@ function [A, err] = readblock(fout, timeout)
       end
 
     elseif (errno() == EAGAIN || errno() == EINVAL)
-      waitdelta = exp(nwaits/10)/1e4;
+      % with these coefficients, we check about 90 times before the display
+      % starts at 8 seconds; at that time the waitdelta is approx 1 second.
+      % We cap the waiting at 1 second (Issue #1255).
+      waitdelta = min(1, exp(nwaits/10)/1e4);
       if (time() - start <= wait_disp_thres)
-        %fprintf(stdout, 'W'); % debugging, in general do nothing
+        % no-op
       elseif (~dispw)
         fprintf(stdout, 'Waiting...')
         dispw = true;
       else
-        fprintf(stdout, '.')
+        if nwaits - skip >= lastdot
+          fprintf(stdout, '.')
+          lastdot = nwaits;
+          % Don't draw every second; increase the number of seconds to skip
+          skip = skip + 1;
+        end
       end
       fclear (fout);
       %if (ispc () && (~isunix ()))
@@ -75,14 +85,18 @@ function [A, err] = readblock(fout, timeout)
       pause (waitdelta);
       nwaits = nwaits + 1;
     elseif (errno() == 0)
-      waitdelta = exp(nwaits/10)/1e4;
+      waitdelta = min(1, exp(nwaits/10)/1e4);
       if (time() - start <= wait_disp_thres)
-        %fprintf(stdout, 'W'); % debugging, in general do nothing
+        % no-op
       elseif (~dispw)
         fprintf(stdout, '[usually something wrong if you see stars] Waiting***')
         dispw = true;
       else
-        fprintf(stdout, '*')
+        if nwaits - skip >= lastdot
+          fprintf(stdout, '*')
+          lastdot = nwaits;
+          skip = skip + 1;
+        end
       end
       fclear (fout);
       %if (ispc () && (~isunix ()))
