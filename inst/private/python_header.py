@@ -30,6 +30,7 @@ try:
     import mpmath
     import sympy as sp
     from sympy import __version__ as spver
+    from re import split as lib_re_split
     # need this to reactivate from srepr
     from sympy import *
     from sympy.logic.boolalg import Boolean, BooleanFunction
@@ -66,7 +67,6 @@ try:
                 return LooseVersion(v.replace('.dev', ''))
     import itertools
     import collections
-    from re import split as lib_re_split
     # patch pretty printer, issue #952
     try:
         from sympy.printing.pretty.pretty import PrettyPrinter
