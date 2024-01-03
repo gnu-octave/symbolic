@@ -3,6 +3,7 @@ octsympy 3.1.1+
 
   * New symbolic commands:
 
+          collect
           fplot
 
   * Move repo to https://github.com/gnu-octave/symbolic
