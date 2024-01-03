@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019, 2022-2023 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022-2024 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -541,7 +541,7 @@ function s = sym(x, varargin)
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
-             '        x2 = split("\(|\)| |,", x)'
+             '        x2 = lib_re_split(r"\(|\)| |,", x)'
              '        x2 = [p for p in x2 if p]'
              '        for i in x2:'
              '            try:'

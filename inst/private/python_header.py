@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017, 2019, 2021-2023 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2024 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
@@ -66,7 +66,7 @@ try:
                 return LooseVersion(v.replace('.dev', ''))
     import itertools
     import collections
-    from re import split
+    from re import split as lib_re_split
     # patch pretty printer, issue #952
     try:
         from sympy.printing.pretty.pretty import PrettyPrinter
