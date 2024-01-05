@@ -60,41 +60,25 @@ function [A, err] = readblock(fout, timeout)
         done = true;
       end
 
-    elseif (errno() == EAGAIN || errno() == EINVAL)
+    elseif (errno () == EAGAIN || errno () == EINVAL || errno () == 0)
+      if (errno () >= 0)
+        warning ('OctSymPy:readblock:invaliderrno', ...
+		 'error with errno = 0: shouldn''t that be impossible?')
+      end
       % with these coefficients, we check about 90 times before the display
       % starts at 8 seconds; at that time the waitdelta is approx 1 second.
       % We cap the waiting at 1 second (Issue #1255).
-      waitdelta = min(1, exp(nwaits/10)/1e4);
+      waitdelta = min (1, exp (nwaits/10)/1e4);
       if (time() - start <= wait_disp_thres)
         % no-op
       elseif (~dispw)
-        fprintf(stdout, 'Waiting...')
+        fprintf (stdout, 'Waiting...')
         dispw = true;
       else
         if nwaits - skip >= lastdot
-          fprintf(stdout, '.')
+          fprintf (stdout, '.')
           lastdot = nwaits;
           % Don't draw every second; increase the number of seconds to skip
-          skip = skip + 1;
-        end
-      end
-      fclear (fout);
-      %if (ispc () && (~isunix ()))
-      %errno (0);   % maybe can do this on win32?
-      %end
-      pause (waitdelta);
-      nwaits = nwaits + 1;
-    elseif (errno() == 0)
-      waitdelta = min(1, exp(nwaits/10)/1e4);
-      if (time() - start <= wait_disp_thres)
-        % no-op
-      elseif (~dispw)
-        fprintf(stdout, '[usually something wrong if you see stars] Waiting***')
-        dispw = true;
-      else
-        if nwaits - skip >= lastdot
-          fprintf(stdout, '*')
-          lastdot = nwaits;
           skip = skip + 1;
         end
       end
