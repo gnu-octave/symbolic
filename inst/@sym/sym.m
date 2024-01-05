@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2019, 2022-2023 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022-2024 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -527,6 +527,13 @@ function s = sym(x, varargin)
         %end
       end
 
+      % This routine tries to use SymPy's `sympify`, with various special casing
+      % for ff = FallingFactorial, N and other special symbols.
+      %
+      % On SymPy >= 1.10.1, can use `myclash = {v: "" ...}`.  The current
+      % `v: Function(v)` seems to work on old and new SymPy.
+      % TODO: once we support >= 1.10.1, probably we can make FF, ff match
+      % this stuff already in _clash1 (that is, use empty string).
       cmd = {'x, hint_symfun = _ins'
              'if hint_symfun:'
              '    from sympy.abc import _clash1'
@@ -541,7 +548,7 @@ function s = sym(x, varargin)
              'except Exception as e:'
              '    lis = set()'
              '    if "(" in x or ")" in x:'
-             '        x2 = split("\(|\)| |,", x)'
+             '        x2 = lib_re_split(r"\(|\)| |,", x)'
              '        x2 = [p for p in x2 if p]'
              '        for i in x2:'
              '            try:'
@@ -1116,3 +1123,11 @@ end
 %! s1 = sympy (f);
 %! s2 = 'FallingFactorial(Symbol(''x''), Symbol(''y''))';
 %! assert (strcmp (s1, s2))
+
+%!error <use another variable>
+%! % certain words cannot be used as variables
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.10.1")'))
+%!   f = sym ('f(x, y, print)')
+%! else
+%!   error ('use another variable')
+%! end

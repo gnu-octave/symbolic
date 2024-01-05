@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2017, 2019, 2021-2023 Colin B. Macdonald
+# Copyright (C) 2014-2017, 2019, 2021-2024 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
@@ -8,6 +8,9 @@
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
+#
+# Maintenance note: this code is largely duplicated with python_ipc_native
+# Ensure both are updated!
 
 import sys
 
@@ -30,6 +33,7 @@ try:
     import mpmath
     import sympy as sp
     from sympy import __version__ as spver
+    from re import split as lib_re_split
     # need this to reactivate from srepr
     from sympy import *
     from sympy.logic.boolalg import Boolean, BooleanFunction
@@ -66,7 +70,6 @@ try:
                 return LooseVersion(v.replace('.dev', ''))
     import itertools
     import collections
-    from re import split
     # patch pretty printer, issue #952
     try:
         from sympy.printing.pretty.pretty import PrettyPrinter

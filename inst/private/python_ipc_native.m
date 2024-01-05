@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019, 2023 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2023-2024 Colin B. Macdonald
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2021 Johannes Maria Frank
 %% Copyright (C) 2022 Chris Gorman
@@ -61,11 +61,13 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
   newl = sprintf('\n');
 
   if isempty(have_headers)
+    % Maintenance note: you must edit both this and python_header.py
     pyexec(strjoin({'import sys'
                     'import sympy'
                     'import mpmath'
                     'import sympy as sp'
                     'from sympy import __version__ as spver'
+                    'from re import split as lib_re_split'
                     'from sympy import *'
                     'from sympy.logic.boolalg import Boolean, BooleanFunction'
                     'from sympy.core.relational import Relational'
@@ -97,7 +99,6 @@ function [A, info] = python_ipc_native(what, cmd, varargin)
                     '            return LooseVersion(v.replace(".dev", ""))'
                     'import itertools'
                     'import collections'
-                    'from re import split'
                     '# patch pretty printer, issue #952'
                     'from sympy.printing.pretty.pretty import PrettyPrinter'
                     '_mypp = PrettyPrinter'
