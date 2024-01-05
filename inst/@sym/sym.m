@@ -1126,4 +1126,8 @@ end
 
 %!error <use another variable>
 %! % certain words cannot be used as variables
-%! f = sym ('f(x, y, print)')
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.10.1")'))
+%!   f = sym ('f(x, y, print)')
+%! else
+%!   error ('use another variable')
+%! end
