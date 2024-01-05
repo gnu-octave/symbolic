@@ -8,6 +8,9 @@
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
+#
+# Maintenance note: this code is largely duplicated with python_ipc_native
+# Ensure both are updated!
 
 import sys
 
