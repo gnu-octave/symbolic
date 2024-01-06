@@ -60,11 +60,7 @@ function [A, err] = readblock(fout, timeout)
         done = true;
       end
 
-    elseif (errno () == EAGAIN || errno () == EINVAL || errno () == 0)
-      if (errno () >= 0)
-        warning ('OctSymPy:readblock:invaliderrno', ...
-		 'error with errno = 0: shouldn''t that be impossible?')
-      end
+    elseif (errno () == EAGAIN || errno () == EINVAL)
       % with these coefficients, we check about 90 times before the display
       % starts at 8 seconds; at that time the waitdelta is approx 1 second.
       % We cap the waiting at 1 second (Issue #1255).
@@ -91,7 +87,7 @@ function [A, err] = readblock(fout, timeout)
     else
       warning ('OctSymPy:readblock:invaliderrno', ...
         sprintf('readblock: s=%d, errno=%d, perhaps error in the command?', s, errno()))
-      pause(0.1)  % FIXME; replace with waitdelta etc
+      pause (1)
     end
     %disp('paused'); pause
 
