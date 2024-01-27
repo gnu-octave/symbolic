@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2016, 2019, 2023 Colin B. Macdonald
+Copyright 2016, 2019, 2023-2024 Colin B. Macdonald
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -8,7 +8,7 @@ notice and this notice are preserved.  This file is offered as-is,
 without any warranty.
 -->
 <component type="addon">
-  <id>io.github.gnu_octave.symbolic.metainfo.xml</id>
+  <id>io.github.gnu_octave.symbolic</id>
   <extends>org.octave.Octave</extends>
   <name>Symbolic</name>
   <summary>Symbolic manipulation, calculus, variable precision arithmetic, and other computer algebra features</summary>
