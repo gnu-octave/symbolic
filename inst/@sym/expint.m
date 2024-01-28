@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,9 +26,9 @@
 %% @example
 %% @group
 %% syms x
-%% E1 = expint(x)
+%% E1 = expint (x)
 %%   @result{} E1 = (sym) E₁(x)
-%% rewrite(E1, 'Integral')            % doctest: +SKIP
+%% rewrite (E1, 'Integral')            % doctest: +XFAIL
 %%   @result{} (sym)
 %%       ∞
 %%       ⌠
@@ -39,6 +39,8 @@
 %%       ⌡
 %%       1
 %% @end group
+%% % See https://github.com/sympy/sympy/issues/26134
+%% @c Also, add rewrite to sinint/cosint once this is fixed upstream
 %% @end example
 %%
 %% This can also be written (using the substitution @code{u = t⋅x}) as:
@@ -68,9 +70,10 @@
 %% @example
 %% @group
 %% syms n x
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
 %% En = expint(n, x)
-%%   @result{} En = (sym) expint(n, x)
-%% rewrite(En, 'Integral')            % doctest: +SKIP
+%%   @result{} En = (sym) Eₙ(x)
+%% rewrite (En, 'Integral')            % doctest: +XFAIL
 %%   @result{} (sym)
 %%       ∞
 %%       ⌠
@@ -84,6 +87,8 @@
 %% Other example:
 %% @example
 %% @group
+%% syms n x
+%% En = expint(n, x);
 %% diff(En, x)
 %%   @result{} (sym) -expint(n - 1, x)
 %% @end group

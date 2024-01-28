@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Lagu
-%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -34,7 +34,6 @@
 %% The beta function is related to the gamma function:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% rewrite (beta (x,y), "gamma")
 %%   @result{}
 %%     ans = (sym)

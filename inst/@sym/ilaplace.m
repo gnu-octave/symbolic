@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2018-2019, 2022-2023 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018-2019, 2022-2024 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -49,7 +49,6 @@
 %% @group
 %% syms s t
 %% F = 1/s^2;
-%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ilaplace(F, s, t)
 %%   @result{} (sym) t⋅θ(t)
 %% @end group

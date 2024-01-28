@@ -1,4 +1,4 @@
-%% Copyright (C) 2017-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,7 +27,6 @@
 %% syms n integer
 %% y = harmonic (n)
 %%   @result{} y = (sym) harmonic(n)
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% rewrite (y, 'Sum')
 %%   @result{} (sym)
 %%

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
@@ -27,14 +27,13 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% y = heaviside (x)
 %%   @result{} y = (sym) θ(x)
 %% @end group
 %% @end example
 %%
 %% There are various conventions for 'heaviside(sym(0))'; this function
-%% returns the midpoint by default.
+%% returns the midpoint by default on recent enough SymPy:
 %% @example
 %% @group
 %% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))

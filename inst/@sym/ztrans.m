@@ -1,4 +1,5 @@
 %% Copyright (C) 2022 Alex Vong
+%% Copyright (C) 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -49,7 +50,6 @@
 %% @group
 %% syms n
 %% f = n^2;
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (f)
 %%   @result{} (sym)
 %%       ⎧        1
@@ -78,7 +78,6 @@
 %% @example
 %% @group
 %% syms n z w
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (exp (n))
 %%   @result{} (sym)
 %%       ⎧     1             ℯ
@@ -96,7 +95,6 @@
 %%       ⎪ ‾‾‾
 %%       ⎪n = 0
 %%       ⎩
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (exp (z))
 %%   @result{} (sym)
 %%       ⎧     1             ℯ
@@ -114,7 +112,6 @@
 %%       ⎪ ‾‾‾
 %%       ⎪z = 0
 %%       ⎩
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (exp (n), w)
 %%   @result{} (sym)
 %%       ⎧     1             ℯ
@@ -141,7 +138,6 @@
 %% @example
 %% @group
 %% syms a n y
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (n * exp (y))
 %%   @result{} (sym)
 %%       ⎛⎧    1             1     ⎞
@@ -159,7 +155,6 @@
 %%       ⎜⎪ ╱                      ⎟
 %%       ⎜⎪ ‾‾‾                    ⎟
 %%       ⎝⎩n = 0                   ⎠
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (a * exp (y))
 %%   @result{} (sym)
 %%         ⎛⎧     1             ℯ     ⎞
@@ -187,7 +182,6 @@
 %% @group
 %% syms n m k c z w u v
 %% f = [n^2 exp(n); 1/factorial(k) kroneckerDelta(c)];
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (f, [n m; k c], [z w; u v])
 %%   @result{} (sym 2×2 matrix)
 %%       ⎡⎧        1                                              ⎤
@@ -212,7 +206,6 @@
 %%       ⎢             ─                                          ⎥
 %%       ⎢             u                                          ⎥
 %%       ⎣            ℯ                            1              ⎦
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (f, [n m; k c], z)
 %%   @result{} (sym 2×2 matrix)
 %%       ⎡⎧        1                                              ⎤
@@ -255,7 +248,6 @@
 %%        ╱
 %%        ‾‾‾
 %%       n = 0
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% ztrans (heaviside (n - 3))
 %%   @result{} (sym)
 %%         ∞

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: FSFAP
-# Copyright (C) 2022-2023 Colin B. Macdonald
+# Copyright (C) 2022-2024 Colin B. Macdonald
 # Copyright (C) 2022 Chris Gorman
 # Copyright (C) 2022 Alex Vong
 # Copyright (C) 2023 Markus Mützel
@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         octave: [8.4.0]
-        sympy: [1.4, 1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12]
+        sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12]
         include:
           - octave: 5.1.0
             sympy: 1.8

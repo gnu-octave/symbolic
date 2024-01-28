@@ -1,6 +1,6 @@
 %% Copyright (C) 2016 Lagu
 %% Copyright (C) 2016 Mike Miller
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -31,9 +31,8 @@
 %% @end group
 %% @end example
 %%
-%% Note as of SymPy 1.5, this function rounds toward even:
+%% Note that this symbolic function rounds toward even:
 %% @example
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% @group
 %% round ([sym(5)/2 sym(7)/2])
 %%   @result{} (sym) [2  4]  (1×2 matrix)

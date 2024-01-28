@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018, 2023 Colin B. Macdonald
+%% Copyright (C) 2016, 2018, 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,19 +27,22 @@
 %% @example
 %% @group
 %% syms z
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12")'))
-%% polylog (-3, z)
-%%   @result{} ans = (sym) Li₋₃(z)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% polylog (3, z)
+%%   @result{} ans = (sym) Li₃(z)
 %% @end group
 %% @end example
 %%
-%% For more complicated expressions, the printing uses a functional form:
+%% Depending on the complexity of the expressions, the printing may use a
+%% two-argument form rather than the @code{Li} notation:
 %% @example
 %% @group
 %% syms z s
-%% polylog(s, z)
-%%   @result{} ans = (sym) polylog(s, z)
-%% diff(ans, z)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% polylog (s, z)
+%%   @result{} ans = (sym) Liₛ(z)
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% diff (ans, z)
 %%   @result{} (sym)
 %%       polylog(s - 1, z)
 %%       ─────────────────
@@ -51,9 +54,9 @@
 %% @example
 %% @group
 %% syms s positive
-%% polylog (s+1, 1)
+%% polylog (s + 1, 1)
 %%   @result{} (sym) ζ(s + 1)
-%% zeta (s+1)
+%% zeta (s + 1)
 %%   @result{} (sym) ζ(s + 1)
 %% @end group
 %% @end example
