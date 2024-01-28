@@ -26,9 +26,9 @@
 %% @example
 %% @group
 %% syms x
-%% E1 = expint(x)
+%% E1 = expint (x)
 %%   @result{} E1 = (sym) E₁(x)
-%% rewrite(E1, 'Integral')            % doctest: +SKIP
+%% rewrite (E1, 'Integral')            % doctest: +XFAIL
 %%   @result{} (sym)
 %%       ∞
 %%       ⌠
@@ -39,6 +39,7 @@
 %%       ⌡
 %%       1
 %% @end group
+%% % See https://github.com/sympy/sympy/issues/26134
 %% @end example
 %%
 %% This can also be written (using the substitution @code{u = t⋅x}) as:
@@ -71,8 +72,7 @@
 %% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
 %% En = expint(n, x)
 %%   @result{} En = (sym) Eₙ(x)
-%% @c doctest: +SKIP
-%% rewrite (En, 'Integral')
+%% rewrite (En, 'Integral')            % doctest: +XFAIL
 %%   @result{} (sym)
 %%       ∞
 %%       ⌠
