@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2019, 2022-2023 Colin B. Macdonald
+%% Copyright (C) 2016-2019, 2022-2024 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -27,7 +27,7 @@
 
 function assert_have_python_and_sympy (pyexec, verbose)
 
-  minsympyver = '1.4';
+  minsympyver = '1.5.1';
 
   if (nargin < 2)
     verbose = false;

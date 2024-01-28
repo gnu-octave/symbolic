@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2022 Chris Gorman
 %%
 %% This file is part of OctSymPy.
@@ -27,7 +27,6 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% y = heaviside (x)
 %%   @result{} y = (sym) θ(x)
 %% @end group
@@ -37,7 +36,6 @@
 %% returns the midpoint by default.
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% heaviside(sym(0))
 %%   @result{} (sym) 1/2
 %% @end group

@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2018-2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2018-2019, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -61,7 +61,6 @@
 %% @group
 %% syms x
 %% N = -3;
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% y = laguerreL(N, x)
 %%   @result{} y = (sym)
 %%       ⎛ 2          ⎞
@@ -73,10 +72,8 @@
 %% These satisfy Laguerre's differential equation:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% x*diff(y, x, x) + (1 - x)*diff(y, x) + N*y == 0
 %%   @result{} (sym) ...
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %% simplify(ans)
 %%   @result{} (sym) True
 %% @end group
@@ -114,10 +111,8 @@ end
 %!shared
 
 %!test
-%! if (pycall_sympy__ ('return Version(spver) > Version("1.4")'))
 %! syms x
 %! assert (isequal (laguerreL (-3, x), exp(x)*(x^2/2 + 2*x + 1)))
-%! end
 
 %!test
 %! syms x n
