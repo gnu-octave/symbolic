@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016, 2018 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2018, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -112,5 +112,5 @@ end
 %! n = 32;
 %! A = logspace(-vpa(1,n), 0, 3);
 %! B = [10^(-vpa(1,n)) 10^(-vpa(sym(1)/2,n)) vpa(1,n)];
-%! assert (isequal (A, B))
+%! assert (all (A == B))
 %! assert (max(abs(double(A) - logspace(-1, 0, 3))) < 1e-15)
