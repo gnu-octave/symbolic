@@ -33,9 +33,10 @@
 %% @end example
 %%
 %% There are various conventions for 'heaviside(sym(0))'; this function
-%% returns the midpoint by default.
+%% returns the midpoint by default on recent enough SymPy:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% heaviside(sym(0))
 %%   @result{} (sym) 1/2
 %% @end group
