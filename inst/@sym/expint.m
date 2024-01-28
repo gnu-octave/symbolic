@@ -40,6 +40,7 @@
 %%       1
 %% @end group
 %% % See https://github.com/sympy/sympy/issues/26134
+%% @c Also, add rewrite to sinint/cosint once this is fixed upstream
 %% @end example
 %%
 %% This can also be written (using the substitution @code{u = t⋅x}) as:
