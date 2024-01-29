@@ -352,6 +352,39 @@ end
 %! c = vpa('1524157877488187881');
 %! assert (isequal (b, c))
 
+%!test
+%! % isequal and other comparisons
+%! a = vpa ("2/3", 32);
+%! b = vpa ("2/3", 64);
+%! assert (~ logical (a == b))
+%! assert (~ isequal (a, b))
+%! a = vpa ("1/3", 32);
+%! b = vpa ("1/3", 64);
+%! assert (~ logical (a == b))
+%! assert (~ isequal (a, b))
+%! a = vpa ("0.1", 32);
+%! b = vpa ("0.1", 64);
+%! assert (~ logical (a == b))
+%! assert (~ isequal (a, b))
+
+%!test
+%! % isequal with array: Issue #1285
+%! a = vpa ("2/3", 32);
+%! b = vpa ("2/3", 64);
+%! assert (~ isequal ([a 2*a], [b 2*b]))
+
+%!xtest
+%! % non-equality of vpa that "might be" be integers: Issue #1285
+%! a = vpa ("123", 32);
+%! b = vpa ("123", 64);
+%! assert (~ logical (a == b))
+
+%!test
+%! % non-equality of vpa that "might be" be integers: Issue #1285
+%! a = vpa ("123", 32);
+%! b = vpa ("123", 64);
+%! assert (~ isequal (a, b))
+
 %!warning <dangerous> vpa ('sqrt(2.0)');
 
 %!warning <dangerous>
