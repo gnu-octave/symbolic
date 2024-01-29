@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run a one-line script
         run: echo Hello, world!
@@ -84,7 +84,7 @@ jobs:
           - octave: 8.3.0
             sympy: 1.12
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -132,7 +132,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.12]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -182,7 +182,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.12]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -227,7 +227,7 @@ jobs:
   ubuntu2204_ootb:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Octave, Python and SymPy
         run: |
           uname -a
@@ -309,7 +309,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install packages from MSYS2
         uses: msys2/setup-msys2@v2
