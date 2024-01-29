@@ -1,5 +1,5 @@
 %% Copyright (C) 2016-2017 Lagu
-%% Copyright (C) 2017, 2022 Colin B. Macdonald
+%% Copyright (C) 2017, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -33,15 +33,15 @@
 %% @end group
 %%
 %% @group
-%% rewrite (ans, 'Integral')         % doctest: +SKIP
+%% rewrite (ans, 'Integral')
 %%   @result{} ans = (sym)
 %%       φ
 %%       ⌠
 %%       ⎮                   1
-%%       ⎮ ────────────────────────────────────── dα
+%%       ⎮ ────────────────────────────────────── dt
 %%       ⎮    _________________
 %%       ⎮   ╱        2         ⎛       2       ⎞
-%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- ν⋅sin (α) + 1⎠
+%%       ⎮ ╲╱  - m⋅sin (t) + 1 ⋅⎝- ν⋅sin (t) + 1⎠
 %%       ⌡
 %%       0
 %% @end group
@@ -56,17 +56,17 @@
 %% @end group
 %%
 %% @group
-%% rewrite (ans, 'Integral')         % doctest: +SKIP
+%% rewrite (ans, 'Integral')
 %%   @result{} ans = (sym)
 %%       π
 %%       ─
 %%       2
 %%       ⌠
 %%       ⎮                   1
-%%       ⎮ ────────────────────────────────────── dα
+%%       ⎮ ────────────────────────────────────── dt
 %%       ⎮    _________________
 %%       ⎮   ╱        2         ⎛       2       ⎞
-%%       ⎮ ╲╱  - m⋅sin (α) + 1 ⋅⎝- ν⋅sin (α) + 1⎠
+%%       ⎮ ╲╱  - m⋅sin (t) + 1 ⋅⎝- ν⋅sin (t) + 1⎠
 %%       ⌡
 %%       0
 %% @end group
