@@ -1,4 +1,4 @@
-%% Copyright (C) 2015, 2016 Colin B. Macdonald
+%% Copyright (C) 2015, 2016, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -27,7 +27,7 @@
 %% syms x
 %% f = ei(x)
 %%   @result{} f = (sym) Ei(x)
-%% rewrite(f, 'Integral')         % doctest: +SKIP
+%% rewrite(f, 'Integral')         % doctest: +XFAIL
 %%   @result{} (sym)
 %%       x
 %%       ⌠
@@ -39,7 +39,8 @@
 %%       -∞
 %% @end group
 %% @end example
-%% (@strong{Note} rewriting as an integral is not yet supported.)
+%% (@strong{Note} rewriting as an integral is not yet supported)
+%% @c TODO: https://github.com/sympy/sympy/issues/26144
 %%
 %% Other examples:
 %% @example
