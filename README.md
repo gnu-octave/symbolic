@@ -40,7 +40,7 @@ How to install on Ubuntu
 -------------------------
 
 1.  Install the dependencies with
-    `sudo apt-get install octave liboctave-dev python-sympy`.
+    `sudo apt install octave python3-sympy`.
 2.  Follow steps 2--5 above.
 
 
