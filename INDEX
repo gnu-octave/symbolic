@@ -232,6 +232,7 @@ Methods for manipulating symbolic objects:
  @sym/char
  @sym/children
  @sym/coeffs
+ @sym/collect
  @sym/equationsToMatrix
  @sym/expand
  @sym/factor
@@ -313,6 +314,7 @@ Other methods for symbolic objects
  @sym/ezplot3
  @sym/ezplot
  @sym/ezsurf
+ @sym/fplot
  @sym/horzcat
  @sym/length
  @sym/linspace
