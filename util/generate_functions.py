@@ -1,7 +1,7 @@
 #!/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright 2014-2016, 2022 Colin B. Macdonald
+# Copyright 2014-2016, 2022, 2024 Colin B. Macdonald
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -61,8 +61,6 @@ erfinv||1/2
 erfcinv
 erfi||0,0|
 dirac|DiracDelta
-cosint|Ci|1,0.3374039229009681346626||2016
-sinint|Si|1,0.9460830703671830149414||2016
 coshint|Chi|1,0.8378669409802082408947||2016
 sinhint|Shi|1,1.057250875375728514572||2016
 logint|li|2,1.045163780117492784845||2016
