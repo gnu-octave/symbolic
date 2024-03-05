@@ -21,18 +21,44 @@
 %% @defmethod @@sym fresnels (@var{x})
 %% Symbolic Fresnel Sine function.
 %%
-%% Example:
+%% The Fresnel Sine function can be created with:
 %% @example
 %% @group
 %% syms x
 %% z = fresnels (x)
 %%   @result{} z = (sym) S(x)
+%% @end group
+%% @end example
+%%
+%% There are different definitions in the literative involving
+%% antiderivative of @code{sin(x^2)}.  Here we have the normalized
+%% Fresnel Sine integral where:
+%% @example
+%% @group
 %% diff (z)
 %%   @result{} (sym)
 %%          ⎛   2⎞
 %%          ⎜π⋅x ⎟
 %%       sin⎜────⎟
 %%          ⎝ 2  ⎠
+%% @end group
+%% @end example
+%%
+%% Specifically, the (normalized) Fresnel Sine function is given by
+%% the integral:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% rewrite (z, 'Integral')
+%%   @result{} (sym)
+%%       x
+%%       ⌠
+%%       ⎮    ⎛   2⎞
+%%       ⎮    ⎜π⋅t ⎟
+%%       ⎮ sin⎜────⎟ dt
+%%       ⎮    ⎝ 2  ⎠
+%%       ⌡
+%%       0
 %% @end group
 %% @end example
 %%

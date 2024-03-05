@@ -27,7 +27,8 @@
 %% syms x
 %% f = ei(x)
 %%   @result{} f = (sym) Ei(x)
-%% rewrite(f, 'Integral')         % doctest: +XFAIL
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% rewrite(f, 'Integral')
 %%   @result{} (sym)
 %%       x
 %%       ⌠
@@ -39,8 +40,6 @@
 %%       -∞
 %% @end group
 %% @end example
-%% (@strong{Note} rewriting as an integral is not yet supported)
-%% @c TODO: https://github.com/sympy/sympy/issues/26144
 %%
 %% Other examples:
 %% @example
