@@ -21,18 +21,44 @@
 %% @defmethod @@sym fresnelc (@var{x})
 %% Symbolic Fresnel Cosine function.
 %%
-%% Example:
+%% The Fresnel Cosine function can be created with:
 %% @example
 %% @group
 %% syms x
 %% z = fresnelc (x)
 %%   @result{} z = (sym) C(x)
+%% @end group
+%% @end example
+%%
+%% There are different definitions in the literative involving
+%% antiderivative of @code{cos(x^2)}.  Here we have the normalized
+%% Fresnel Cosine integral where:
+%% @example
+%% @group
 %% diff (z)
 %%   @result{} (sym)
 %%          ⎛   2⎞
 %%          ⎜π⋅x ⎟
 %%       cos⎜────⎟
 %%          ⎝ 2  ⎠
+%% @end group
+%% @end example
+%%
+%% Specifically, the (normalized) Fresnel Cosine function is given by
+%% the integral:
+%% @example
+%% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.12.1")'))
+%% rewrite (z, 'Integral')
+%%   @result{} (sym)
+%%       x
+%%       ⌠
+%%       ⎮    ⎛   2⎞
+%%       ⎮    ⎜π⋅t ⎟
+%%       ⎮ cos⎜────⎟ dt
+%%       ⎮    ⎝ 2  ⎠
+%%       ⌡
+%%       0
 %% @end group
 %% @end example
 %%
