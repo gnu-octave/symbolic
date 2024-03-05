@@ -37,6 +37,8 @@ without any warranty.
   <url type="bugtracker">https://github.com/gnu-octave/symbolic/issues/new</url>
   <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <developer_name>Octave Community</developer_name>
+  <developer id="octave.org">
+    <name>The Octave Community</name>
+  </developer>
   <update_contact>octave-maintainers@gnu.org</update_contact>
 </component>
