@@ -49,6 +49,27 @@ jobs:
           docker run --rm -v $PWD:/workdir:rw gnuoctave/octave octave-cli --eval "x=sym('x'); test @sym/qr"
 
 
+  appstream-validate:
+    # maybe a later Ubuntu will have appstream >= 1, for now we pull from flatpak
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Flatpak and add Flathub
+        run: |
+          whoami
+          uname -a
+          sudo apt-get update
+          sudo apt-get install -y flatpak
+          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.freedesktop.appstream.cli
+      - name: List appstream.cli version
+        run: |
+          flatpak run org.freedesktop.appstream.cli --version
+      - name: Validate
+        run: |
+          flatpak run org.freedesktop.appstream.cli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
+
+
   # Built-in Self Tests and Doctests for various supported Octave and SymPy
   # Test newest Octave and all supported SymPy
   # Test other supported Octave releases with latest available SymPy
