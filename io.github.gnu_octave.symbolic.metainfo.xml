@@ -11,7 +11,7 @@ without any warranty.
   <id>io.github.gnu_octave.symbolic</id>
   <extends>org.octave.Octave</extends>
   <name>Symbolic</name>
-  <summary>Symbolic manipulation, calculus, variable precision arithmetic, and other computer algebra features</summary>
+  <summary>Symbolic manipulation, variable precision arithmetic, and other computer algebra features</summary>
   <description>
     <p>Adds symbolic calculation features to GNU Octave.  These
     include common Computer Algebra System tools such as algebraic
