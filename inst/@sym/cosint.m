@@ -102,11 +102,11 @@ end
 %!test
 %! % rewrite
 %! syms x
-%! y1 = cosint (x)
-%! y2 = rewrite (y1, 'Integral')
-%! d1 = diff (y1, x)
-%! d2 = diff (y2, x)
+%! y1 = cosint (x);
+%! y2 = rewrite (y1, 'Integral');
+%! d1 = diff (y1, x);
+%! d2 = diff (y2, x);
 %! assert (isequal (d1, simplify(d2)))
-%! v1 = double (subs (d1, x, 2))
-%! v2 = double (subs (d2, x, 2))
+%! v1 = double (subs (d1, x, 2));
+%! v2 = double (subs (d2, x, 2));
 %! assert (v1, v2, -eps)
