@@ -133,10 +133,18 @@ function [A, info] = python_ipc_system(what, cmd, mktmpfile, varargin)
 	     tmpfilename, fd);
     end
 
+    % On Windows, tmp file is like C:\Users\Zoe\AppData\Local\Temp\oct-rZDdea
+    % and this causes issues for msys2 [1].  It seems the same files are available
+    % in /tmp/ (?) and cygpath translates them, but careful not to change the
+    % persistent variable [2].
+    % [1] https://github.com/gnu-octave/symbolic/issues/1182
+    % [2] https://savannah.gnu.org/bugs/index.php?65735
     if python_env_is_cygwin_like (pyexec)
-      tmpfilename = cygpath (tmpfilename);
+      _tmpfilename = cygpath (tmpfilename);
+    else
+      _tmpfilename = tmpfilename;
     end
-    [status, out] = system ([pyexec ' ' tmpfilename]);
+    [status, out] = system ([pyexec ' ' _tmpfilename]);
   end
 
   info.raw = out;
