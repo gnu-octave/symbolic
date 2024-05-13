@@ -79,7 +79,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        octave: [8.4.0]
+        octave: [9.1.0]
         sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12]
         include:
           - octave: 5.1.0
