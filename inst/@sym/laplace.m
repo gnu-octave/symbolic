@@ -1,5 +1,5 @@
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2019 Colin Macdonald
+%% Copyright (C) 2015-2016, 2019, 2024 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -214,3 +214,9 @@ end
 %! % SymPy cannot evaluate? (Issue #170)
 %! syms s f(t)
 %! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
+
+%!test
+%! % https://github.com/gnu-octave/symbolic/issues/1295
+%! syms t s
+%! L = simplify (laplace (3*t*sin (4*t)));
+%! assert (isAlways (L == 24*s / (s^2 + 16)^2))
