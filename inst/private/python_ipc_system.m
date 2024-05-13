@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.

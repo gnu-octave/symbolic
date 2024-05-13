@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2018, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2018-2019 Osella Giancarlo
 %%
 %% This file is part of OctSymPy.
@@ -161,14 +161,12 @@ function s = myesc(s)
     % dbl-quote is rather special here
     % /" -> ///////" -> ///" -> /" -> "
     s{i} = strrep(s{i}, '"', '\\\"');
-    
-  if (ispc () && (~isunix ()))
-    %Escape sequence for WIN (Octave & Matlab)
-    s{i} = strrep(s{i}, '>', '^>');
-    s{i} = strrep(s{i}, '<', '^<');
-  end
 
-
+    if (ispc () && (~isunix ()))
+      % escape sequence for Windows (Octave & Matlab)
+      s{i} = strrep(s{i}, '>', '^>');
+      s{i} = strrep(s{i}, '<', '^<');
+    end
 
   end
 end

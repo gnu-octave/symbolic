@@ -106,6 +106,8 @@ jobs:
             sympy: 1.12
           - octave: 8.3.0
             sympy: 1.12
+          - octave: 8.4.0
+            sympy: 1.12
     steps:
       - uses: actions/checkout@v4
       - name: Container setup
