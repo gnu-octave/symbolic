@@ -278,7 +278,7 @@ jobs:
   ubuntu2204_pip_sympy:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Octave and Python
         run: |
           uname -a
