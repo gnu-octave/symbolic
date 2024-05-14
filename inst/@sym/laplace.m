@@ -217,6 +217,9 @@ end
 
 %!test
 %! % https://github.com/gnu-octave/symbolic/issues/1295
-%! syms t s
-%! L = simplify (laplace (3*t*sin (4*t)));
-%! assert (isAlways (L == 24*s / (s^2 + 16)^2))
+%! % fails on SymPy 1.10.* and 1.11.*
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
+%!   syms t s
+%!   L = simplify (laplace (3*t*sin (4*t)));
+%!   assert (isAlways (L == 24*s / (s^2 + 16)^2))
+%! end
