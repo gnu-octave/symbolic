@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2018, 2020 Mike Miller
 %% Copyright (C) 2022 Alex Vong
 %%
@@ -32,6 +33,7 @@
 %%
 %% @code{@var{info}.raw}: the raw output, for debugging.
 %% @end deftypefun
+
 
 function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
@@ -138,7 +140,7 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
 
   %% load all the inputs into python as pickles
   % they will be in the list '_ins'
-  % there is a try-except block here, sends a block if sucessful
+  % there is a try-except block here, sends a block if successful
   loc = python_copy_vars_to('_ins', true, varargin{:});
   write_lines(fin, loc, true);
   fflush(fin);

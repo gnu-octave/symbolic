@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016, 2018 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2016, 2018, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -59,7 +60,7 @@ end
 %! assert (isequal (t & t, t))
 
 %!test
-%! % mix wih nonsym
+%! % mix with nonsym
 %! assert (isequal (t & false, f))
 %! assert (isequal (t & true, t))
 %! assert (isequal (t & 0, f))

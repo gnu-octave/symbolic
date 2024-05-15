@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2017, 2019, 2022-2023 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2017, 2019, 2022-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -164,7 +165,7 @@ function [c, t] = coeffs(p, x, all)
     c = fliplr(c);
   end
 
-  % if nargout == 1, its simplier to use 'p.coeffs()'
+  % if nargout == 1, its simpler to use 'p.coeffs()'
 end
 
 

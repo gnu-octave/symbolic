@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2019, 2023 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2019, 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -217,7 +218,7 @@ end
 %! assert(t1 == 30 && t2 == 8)
 
 %!test
-%! % cell arrays specfies order, overriding symvar order
+%! % cell arrays specify order, overriding symvar order
 %! h = function_handle(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)
@@ -226,7 +227,7 @@ end
 %! assert(t1 == 18 && t2 == 4)
 
 %!test
-%! % cell arrays specfies order, overriding symvar order
+%! % cell arrays specify order, overriding symvar order
 %! h = function_handle(x*y, 12/y, 'vars', {y x});
 %! [t1, t2] = h(3, 6);
 %! assert(t1 == 18 && t2 == 4)

@@ -1,4 +1,5 @@
-%% Copyright (C) 2016-2017, 2019, 2023 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2016-2017, 2019, 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -74,7 +75,7 @@ function varargout = ezsurf(varargin)
   for i = firstpotsym:nargin
     if (isa(varargin{i}, 'sym'))
       if (i < firstpotsym + maxnumsym)
-        % one of the fcns to plot, covert to handle fcn
+        % one of the fcns to plot, convert to handle fcn
 
         % Each is function of one var, and its the same var for all
         thissym = symvar(varargin{i});

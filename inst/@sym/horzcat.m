@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2017, 2019 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2017, 2019, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -21,7 +22,7 @@
 %% @defop  Method   @@sym {horzcat} {(@var{x}, @var{y}, @dots{})}
 %% @defopx Operator @@sym {[@var{x}, @var{y}, @dots{}]} {}
 %% @defopx Operator @@sym {[@var{x} @var{y} @dots{}]} {}
-%% Horizontally concatentate symbolic arrays.
+%% Horizontally concatenate symbolic arrays.
 %%
 %% Example:
 %% @example
@@ -42,11 +43,10 @@
 %% @seealso{@@sym/vertcat, @@sym/cat}
 %% @end defop
 
-
 function h = horzcat(varargin)
 
   % special case for 0x0 but other empties should be checked for
-  % compatibilty
+  % compatibility
   cmd = {
           '_proc = []'
           'for i in _ins:'

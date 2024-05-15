@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2019, 2021-2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2019, 2021-2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -84,7 +85,7 @@
 %% @end group
 %% @end example
 %%
-%% Instead, it is preferrable to use @code{sym} or @code{vpa} on the
+%% Instead, it is preferable to use @code{sym} or @code{vpa} on the
 %% inner-most parts of your expression:
 %% @example
 %% @group

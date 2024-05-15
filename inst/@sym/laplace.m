@@ -1,3 +1,4 @@
+%% SPDX-License-Identifier: AGPL-3.0-or-later
 %% Copyright (C) 2014-2016 Andrés Prieto
 %% Copyright (C) 2015-2016, 2019, 2024 Colin Macdonald
 %%
@@ -55,8 +56,8 @@
 %% @end group
 %% @end example
 %%
-%% By default the ouput is a function of @code{s} (or @code{z} if the Laplace
-%% transform happens to be with respect to @code{s}).  This can be overriden
+%% By default the output is a function of @code{s} (or @code{z} if the Laplace
+%% transform happens to be with respect to @code{s}).  This can be overridden
 %% by specifying @var{s}.  For example:
 %% @example
 %% @group
@@ -81,7 +82,7 @@
 %%
 %% If not specified by @var{t}, the independent variable is chosen by
 %% looking for a symbol named @code{t}.  If no such symbol is found,
-%% @pxref{@@sym/symvar} is used, which choses a variable close to @code{x}:
+%% @pxref{@@sym/symvar} is used, which chooses a variable close to @code{x}:
 %% @example
 %% @group
 %% syms a y

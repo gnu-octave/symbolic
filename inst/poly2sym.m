@@ -1,5 +1,6 @@
+%% SPDX-License-Identifier: AGPL-3.0-or-later
 %% Copyright (C) 2003 Willem J. Atsma
-%% Copyright (C) 2014-2016 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2024 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -88,7 +89,7 @@ end
 %!assert(isAlways(  poly2sym([1 2 3 4],5) == subs(p,x,5) ))
 %!assert(isequal(  poly2sym ([1]),  1  ))
 %!assert(isequal(  poly2sym ([]),  0  ))
-%% symbolic coefficents
+%% symbolic coefficients
 %!assert(isAlways(  poly2sym(sym([1 2 3 4]),x) == p  ))
 %!assert(isAlways(  poly2sym([a b c],x) == a*x^2 + b*x + c  ))
 %!assert(isAlways(  poly2sym([a b c]) == a*x^2 + b*x + c  ))

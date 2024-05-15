@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2016, 2019, 2024 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -176,7 +177,7 @@ end
 
 
 %!test
-%! % matlab SMT compatibiliy for arguments
+%! % matlab SMT compatibility for arguments
 %! syms r x u w v
 %! Pi=sym('pi');
 %! assert(logical( fourier(exp(-x^2)) == sqrt(Pi)/exp(w^2/4) ))

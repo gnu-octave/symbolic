@@ -1,3 +1,4 @@
+%% SPDX-License-Identifier: AGPL-3.0-or-later
 %% Copyright (C) 2014-2016 Andrés Prieto
 %% Copyright (C) 2015-2016, 2018-2019, 2022-2024 Colin Macdonald
 %%
@@ -63,9 +64,9 @@
 %% @end group
 %% @end example
 %%
-%% By default the ouput is a function of @code{t} (or @code{x} if the
+%% By default the output is a function of @code{t} (or @code{x} if the
 %% inverse transform happens to be with respect to @code{t}).  This can
-%% be overriden by specifying @var{t}.  For example:
+%% be overridden by specifying @var{t}.  For example:
 %% @example
 %% @group
 %% syms s
