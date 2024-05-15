@@ -1,10 +1,4 @@
-octsympy 3.2.0+ (unreleased)
-============================
-
-
-
-
-octsympy 3.2.0 (2024-05-13)
+octsympy 3.2.1 (2023-05-15)
 ===========================
 
   * New symbolic commands:
@@ -17,6 +11,7 @@ octsympy 3.2.0 (2024-05-13)
   * Changed metainfo.xml ID and corrected long-standing "Addon"
     link to GNU Octave.
   * Misc changes for SymPy development changes.
+  * v3.2.0 was incorrectly released.
 
 
 
