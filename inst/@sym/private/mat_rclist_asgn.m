@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2016-2017, 2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014, 2016-2017, 2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2020 Mike Miller
 %% Copyright (C) 2020 Fernando Alvarruiz
 %%
@@ -20,7 +21,7 @@
 
 %% -*- texinfo -*-
 %% @defun mat_rclist_asgn (@var{A}, @var{r}, @var{c}, @var{B})
-%% Private helper routine for sym array assigment using lists.
+%% Private helper routine for sym array assignment using lists.
 %%
 %% @code{(R(i),C(i))} specify entries of the matrix @var{A}.
 %% We execute @code{A(R(i),C(i)) = B(i)}.

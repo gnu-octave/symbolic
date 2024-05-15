@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014, 2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -163,7 +164,7 @@ end
 %! assert (isequal (findsymbols(f), {a y}))
 
 %!test
-%! % sorts lexigraphically, same as symvar *with single input*
+%! % sorts lexicographically, same as symvar *with single input*
 %! % (note symvar does something different with 2 inputs).
 %! syms A B a b x y X Y
 %! f = A*a*B*b*y*X*Y*x;

@@ -1,3 +1,4 @@
+%% SPDX-License-Identifier: AGPL-3.0-or-later
 %% Copyright (C) 2014-2019, 2022-2024 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
@@ -1087,9 +1088,9 @@ end
 %! assert (strcmp (s1, s2))
 
 %!test
-%! % For SMT 2014 compatibilty, I and E would become ImaginaryUnit and Exp(1)
+%! % For SMT 2014 compatibility, I and E would become ImaginaryUnit and Exp(1)
 %! % but I'm not sure this is by design.  This test would need to change if
-%! % we want stricter SMT compatibilty.
+%! % we want stricter SMT compatibility.
 %! f = sym ('f(x, I, E)');
 %! s1 = sympy (f);
 %! s2 = 'Function(''f'')(Symbol(''x''), Symbol(''I''), Symbol(''E''))';

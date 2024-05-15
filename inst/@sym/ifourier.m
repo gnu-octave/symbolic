@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2015-2016 Andrés Prieto
 %% Copyright (C) 2015 Alexander Misel
 %%
@@ -86,7 +87,7 @@ function f = ifourier(varargin)
   if (nargin == 3)
     k = sym(varargin{2});
   else
-    %% frequency domain variable not specifed
+    %% frequency domain variable not specified
     % if exactly one symbol has char(k) == 'k'...
     symbols = findsymbols (F);
     charsyms = cell (size (symbols));

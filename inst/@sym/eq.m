@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2016 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014, 2016, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -82,6 +83,7 @@
 %% @seealso{@@sym/logical, @@sym/isAlways, @@sym/isequal, @@sym/ne, @@sym/le}
 %% @end defop
 
+
 function t = eq(x, y)
 
   if (nargin ~= 2)
@@ -118,7 +120,7 @@ end
 %! assert (isa (e, 'sym'))
 
 %!test
-%! % ... except of course via cancelation
+%! % ... except of course via cancellation
 %! syms x
 %! e = x - x == 0;
 %! assert (logical (e))

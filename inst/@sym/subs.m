@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2017, 2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -123,7 +124,7 @@
 %% @end group
 %% @end example
 %%
-%% When using multiple variables and matrix substitions, it may be
+%% When using multiple variables and matrix substutions, it may be
 %% helpful to use cell arrays:
 %% @example
 %% @group
@@ -169,7 +170,6 @@
 %%
 %% @seealso{@@sym/symfun}
 %% @end defmethod
-
 
 function g = subs(f, in, out)
 
@@ -255,7 +255,7 @@ function g = subs(f, in, out)
     '# more complicated when dealing with matrix/vector'
     'sizes = {(a.shape if a.is_Matrix else (1, 1)) for a in yy}'
     'sizes.discard((1, 1))'
-    'assert len(sizes) == 1, "all substitions must be same size or scalar"'
+    'assert len(sizes) == 1, "all substitutions must be same size or scalar"'
     'size = sizes.pop()'
     'numel = prod(size)'
     'g = [0]*numel'

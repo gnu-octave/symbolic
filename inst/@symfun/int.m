@@ -1,4 +1,5 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014, 2016, 2019, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -49,9 +50,6 @@
 %%
 %% @seealso{@@sym/int, @@symfun/diff}
 %% @end defmethod
-
-%% Author: Colin B. Macdonald
-%% Keywords: symbolic, integration
 
 function F = int(f, varargin)
 
@@ -106,7 +104,7 @@ end
 %! assert (~isa(g, 'symfun'))
 
 %!test
-%! % ... even if the input is abstract funcion
+%! % ... even if the input is abstract function
 %! syms f(x)
 %! g = int(f, x, 0, 2);
 %! assert (isa(g, 'sym'))
