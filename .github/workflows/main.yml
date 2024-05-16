@@ -86,6 +86,8 @@ jobs:
   # Test newest Octave and all supported SymPy
   # Test other supported Octave releases with latest available SymPy
   # Note that 1.10.1 not supported on Python 3.6 (Ubuntu 18.04-based systems)
+  # Ubuntu 20.04: Octave 5.2.0
+  # Ubuntu 22.04: Octave 6.4.0
   bist_doc:
     runs-on: ubuntu-latest
     strategy:
@@ -94,9 +96,7 @@ jobs:
         octave: [9.1.0]
         sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12]
         include:
-          - octave: 5.1.0
-            sympy: 1.8
-          - octave: 5.2.0
+	  - octave: 5.2.0
             sympy: 1.8
           - octave: 6.1.0
             sympy: 1.12
