@@ -79,20 +79,20 @@ function r = isAlways(p, varargin)
 
   if (nargin == 3)
     assert(strcmpi(varargin{1}, 'unknown'))
-    cant = varargin{2};
-    if islogical(cant)
+    map_unknown_to = varargin{2};
+    if islogical(map_unknown_to)
       % SMT doesn't allow nonstring but it seems reasonable
-    elseif strcmpi(cant, 'true')
-      cant = true;
-    elseif strcmpi(cant, 'false')
-      cant = false;
-    elseif strcmpi(cant, 'error')
+    elseif strcmpi(map_unknown_to, 'true')
+      map_unknown_to = true;
+    elseif strcmpi(map_unknown_to, 'false')
+      map_unknown_to = false;
+    elseif strcmpi(map_unknown_to, 'error')
       % no-op
     else
       error('isAlways: invalid argument for "unknown" keyword')
     end
   else
-    cant = false;
+    map_unknown_to = false;
   end
 
   cmd = {
@@ -127,20 +127,20 @@ function r = isAlways(p, varargin)
   % could distinguish b/w None and return a string for this last case
 
   cmd = vertcat(cmd, {
-    '(x, unknown) = _ins'
+    '(x, map_unknown_to) = _ins'
     'if x is not None and x.is_Matrix:'
     '    r = [a for a in x.T]' % note transpose
     'else:'
     '    r = [x,]'
     'r = [simplify_true_false_none(a) for a in r]'
-    'r = [unknown if a is None else a for a in r]'
+    'r = [map_unknown_to if a is None else a for a in r]'
     'flag = True'
     'if r.count("error") > 0:'
     '    flag = False'
     '    r = "cannot reliably convert sym to bool"'
     'return (flag, r)' });
 
-  [flag, r] = pycall_sympy__ (cmd, p, cant);
+  [flag, r] = pycall_sympy__ (cmd, p, map_unknown_to);
 
   if (~flag)
     assert (ischar (r), 'isAlways: programming error?')
