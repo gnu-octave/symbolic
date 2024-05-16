@@ -1,4 +1,4 @@
-# TODO List, mostly historial now
+# TODO List, mostly historical now
 
 ## assumptions
 

@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2017, 2023 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2017, 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -16,10 +17,10 @@
 %% License along with this software; see the file COPYING.
 %% If not, see <http://www.gnu.org/licenses/>.
 
-function L = python_copy_vars_to(in, te, varargin)
+function L = python_copy_vars_to(in, try_except, varargin)
 %private function
 
-  if (~te)
+  if (~try_except)
     %% no error checking
     L = do_list(0, in, varargin);
     L = { sprintf('%s = []', in) ...

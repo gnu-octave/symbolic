@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2016, 2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -78,49 +79,45 @@ function r = isAlways(p, varargin)
 
   if (nargin == 3)
     assert(strcmpi(varargin{1}, 'unknown'))
-    cant = varargin{2};
-    if islogical(cant)
+    map_unknown_to = varargin{2};
+    if islogical(map_unknown_to)
       % SMT doesn't allow nonstring but it seems reasonable
-    elseif strcmpi(cant, 'true')
-      cant = true;
-    elseif strcmpi(cant, 'false')
-      cant = false;
-    elseif strcmpi(cant, 'error')
+    elseif strcmpi(map_unknown_to, 'true')
+      map_unknown_to = true;
+    elseif strcmpi(map_unknown_to, 'false')
+      map_unknown_to = false;
+    elseif strcmpi(map_unknown_to, 'error')
       % no-op
     else
       error('isAlways: invalid argument for "unknown" keyword')
     end
   else
-    cant = false;
+    map_unknown_to = false;
   end
 
   cmd = {
-    'def simplify_tfn(p):'
+    'def simplify_true_false_none(p):'
     '    if p in (S.true, S.false):'
     '        return bool(p)'
     '    r = simplify(p)'
     '    #FIXME; Boolean, simplify more than once?'
     '    if r in (S.true, S.false):'
     '        return bool(r)'
-    '    # FIXME: hopefully we get sympy patched for some of this'
-    '    #ver = sympy.__version__'
-    '    #if ver == "0.7.5" or ver.startswith("0.7.6") or ver.startswith("0.7.7"):'
-    '    if True:'
-    '        if isinstance(p, Equality):'
-    '            r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
-    '            r = simplify(r)'
-    '            if r in (S.true, S.false):'
-    '                 return bool(r)'
-    '        if isinstance(p, Unequality):'
-    '            r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
-    '            r = simplify(r)'
-    '            if r in (S.true, S.false):'
-    '                 return not bool(r)'
-    '        if isinstance(p, (Lt, Gt, Le, Ge)):'
-    '            r = p._eval_relation(sp.simplify(p.lhs - p.rhs), sp.S(0))'
-    '            r = simplify(r)'
-    '            if r in (S.true, S.false):'
-    '                 return bool(r)'
+    '    if isinstance(p, Equality):'
+    '        r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
+    '        r = simplify(r)'
+    '        if r in (S.true, S.false):'
+    '             return bool(r)'
+    '    if isinstance(p, Unequality):'
+    '        r = Eq(sp.simplify(p.lhs - p.rhs), 0)'
+    '        r = simplify(r)'
+    '        if r in (S.true, S.false):'
+    '             return not bool(r)'
+    '    if isinstance(p, (Lt, Gt, Le, Ge)):'
+    '        r = p._eval_relation(sp.simplify(p.lhs - p.rhs), sp.S(0))'
+    '        r = simplify(r)'
+    '        if r in (S.true, S.false):'
+    '             return bool(r)'
     '    # for SMT compat'
     '    if p.is_number:'
     '        r = p.is_zero'  % FIXME: return bool(r)?
@@ -130,20 +127,20 @@ function r = isAlways(p, varargin)
   % could distinguish b/w None and return a string for this last case
 
   cmd = vertcat(cmd, {
-    '(x, unknown) = _ins'
+    '(x, map_unknown_to) = _ins'
     'if x is not None and x.is_Matrix:'
     '    r = [a for a in x.T]' % note transpose
     'else:'
     '    r = [x,]'
-    'r = [simplify_tfn(a) for a in r]'
-    'r = [unknown if a is None else a for a in r]'
+    'r = [simplify_true_false_none(a) for a in r]'
+    'r = [map_unknown_to if a is None else a for a in r]'
     'flag = True'
     'if r.count("error") > 0:'
     '    flag = False'
     '    r = "cannot reliably convert sym to bool"'
     'return (flag, r)' });
 
-  [flag, r] = pycall_sympy__ (cmd, p, cant);
+  [flag, r] = pycall_sympy__ (cmd, p, map_unknown_to);
 
   if (~flag)
     assert (ischar (r), 'isAlways: programming error?')

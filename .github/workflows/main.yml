@@ -70,6 +70,18 @@ jobs:
           flatpak run org.freedesktop.appstream.cli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
 
 
+  codespell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: codespell-project/actions-codespell@v2
+        with:
+          ignore_words_file: .codespell-ignorewords
+          exclude_file: .codespell-ignorelines
+          check_filenames: true
+          check_hidden: true
+
+
   # Built-in Self Tests and Doctests for various supported Octave and SymPy
   # Test newest Octave and all supported SymPy
   # Test other supported Octave releases with latest available SymPy
