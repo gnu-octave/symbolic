@@ -230,7 +230,7 @@ octsympy 2.6.0 (2017-07-27)
   * `sym` now accepts function handles such as anonymous functions as
     inputs.
 
-  * `subs` is not approriate for numerical evaluation; add an example in
+  * `subs` is not appropriate for numerical evaluation; add an example in
     `help subs` which shows how to do this with `function_handle`.
 
   * Calling `sym(cell)` now creates a sym array instead of a cell array.

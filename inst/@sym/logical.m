@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% Copyright (C) 2014-2016, 2019, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -76,6 +77,7 @@ function r = logical(p)
 
   % do not simplify here
 
+  % convert a scalar expression to true/false/none
   cmd = {
     'def scalar2tfn(p):'
     '    if p in (S.true, S.false):'
@@ -116,7 +118,7 @@ function r = logical(p)
 
   % FIXME: oo, zoo error too in SMT
   %        '    elif p is nan:'
-  %        '        raise TE   # FIXME: check SMT'
+  %        '        raise TypeError   # FIXME: check SMT'
 
 
   if (~flag)

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2018, 2023 Colin B. Macdonald
+%% Copyright (C) 2014-2018, 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -240,7 +240,7 @@ function success = convert_oct_2_ml (fname, foutname)
   fprintf(f, '%%   %s\n', copyright_summary);
 
   %fdisp(f, '%');
-  %fdisp(f, '%   [Genereated from a GNU Octave .m file, edit that instead.]');
+  %fdisp(f, '%   [Generated from a GNU Octave .m file, edit that instead.]');
 
   %fprintf(f,(s)
 
