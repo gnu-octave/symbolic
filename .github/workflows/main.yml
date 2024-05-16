@@ -80,7 +80,6 @@ jobs:
           exclude_file: .codespell-ignorelines
           check_filenames: true
           check_hidden: true
-          path: inst
 
 
   # Built-in Self Tests and Doctests for various supported Octave and SymPy
