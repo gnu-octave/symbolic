@@ -1,3 +1,4 @@
+%% SPDX-License-Identifier: AGPL-3.0-or-later
 %% Copyright (C) 2019, 2022, 2024 Colin B. Macdonald
 %% Copyright (C) 2022-2023 Alex Vong
 %%
@@ -27,6 +28,8 @@
 
 function assert_pythonic_and_sympy (verbose)
 
+  % Ubuntu 20.04: 1.5.1, EOL Apr 2025
+  % Ubuntu 22.04: 1.9, EOL Apr 2027
   minsympyver = '1.5.1';
 
   if (nargin < 1)
