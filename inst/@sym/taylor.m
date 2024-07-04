@@ -26,12 +26,13 @@
 %% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}])
 %% @defmethodx @@sym taylor (@var{f}, [@var{x}, @var{y}], [@var{a}, @var{b}])
 %% @defmethodx @@sym taylor (@dots{}, @var{key}, @var{value})
-%% Symbolic Taylor series.
+%% Symbolic Taylor polynomial.
 %%
 %% If omitted, @var{x} is chosen with @code{symvar} and @var{a}
 %% defaults to zero.
 %%
-%% Key/value pairs can be used to set the order:
+%% The degree of the polynomial is controlled via the @var{order}
+%% of the remainder with a key/value pair which defaults to 6:
 %% @example
 %% @group
 %% syms x
@@ -44,6 +45,9 @@
 %%       120   24   6    2
 %% @end group
 %% @end example
+%% The degree of the returned Taylor polynomial will be (at most)
+%% one less than 'order'. In the above example, using big O notation,
+%% @code{f == p + O(x^6)}.
 %%
 %% Two-dimensional expansion:
 %% @example
