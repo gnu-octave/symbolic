@@ -1,6 +1,7 @@
 %% Copyright (C) 2014-2018, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Utkarsh Gautam
 %% Copyright (C) 2016 Lagu
+%% Copyright (C) 2024 Cédric M. Campos
 %%
 %% This file is part of OctSymPy.
 %%
