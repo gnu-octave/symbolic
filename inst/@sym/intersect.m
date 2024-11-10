@@ -98,7 +98,7 @@ end
 %! % empty input
 %! A = sym([1 2]);
 %! C = intersect(A, []);
-%! assert (isequal (C, sym([])))
+%! assert (isequal (size(C), [1, 0]))
 
 %!test
 %! % scalar
