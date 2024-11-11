@@ -1,4 +1,4 @@
-%% Copyright (C) 2024 Swayam Shah
+%% Copyright (C) 2024 Swayam Shah <swayamshah66@gmail.com>
 %% Copyright (C) 2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
