@@ -1,3 +1,4 @@
+%% Copyright (C) 2024 Swayam Shah <swayamshah66@gmail.com>
 %% Copyright (C) 2016, 2019 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
@@ -98,7 +99,7 @@ end
 %! % empty input
 %! A = sym([1 2]);
 %! C = intersect(A, []);
-%! assert (isequal (C, sym([])))
+%! assert (isempty (C))
 
 %!test
 %! % scalar
