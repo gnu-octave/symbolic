@@ -1,4 +1,5 @@
-%% Copyright (C) 2016, 2018-2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: GPL-3.0-or-later
+%% Copyright (C) 2016, 2018-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -48,7 +49,6 @@
 %% and does not effect operations on the results:
 %% @example
 %% @group
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% gammainc(3, 1)
 %%   @result{} ans = 0.9502
 %% gammainc(x, a)
@@ -56,7 +56,6 @@
 %%       γ(a, x)
 %%       ───────
 %%         Γ(a)
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double(subs(ans, [x a], [3 1]))
 %%   @result{} ans = 0.9502
 %% @end group

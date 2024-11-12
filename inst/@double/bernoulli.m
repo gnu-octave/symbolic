@@ -1,4 +1,5 @@
-%% Copyright (C) 2018-2019, 2022-2023 Colin B. Macdonald
+%% SPDX-License-Identifier: GPL-3.0-or-later
+%% Copyright (C) 2018-2019, 2022-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -36,8 +37,6 @@
 %% but for certain the absolute value is one half:
 %% @example
 %% @group
-%% @c Would render with an extra zero on earlier Octave
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% abs (bernoulli (1))
 %%   @result{} 0.5000
 %% @end group

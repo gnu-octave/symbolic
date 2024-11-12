@@ -1,5 +1,6 @@
+%% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2003 Willem J. Atsma
-%% Copyright (C) 2014-2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2024 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or
 %% modify it under the terms of the GNU General Public
@@ -44,7 +45,6 @@
 %% @example
 %% @group
 %% syms x
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double(sym2poly(pi*x^3 + 3*x/2 + exp(sym(1))))
 %%    @result{}     3.1416      0   1.5000   2.7183
 %% @end group
