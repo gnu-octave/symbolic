@@ -24,12 +24,14 @@
 %% Example:
 %% @example
 %% @group
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% A = [sym(4) 1; sym(0) 4]
 %%   @result{} A = (sym 2×2 matrix)
 %%       ⎡4  1⎤
 %%       ⎢    ⎥
 %%       ⎣0  4⎦
 %%
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% expm(A)
 %%   @result{} (sym 2×2 matrix)
 %%       ⎡ 4   4⎤
