@@ -163,7 +163,7 @@ end
 %!test
 %! % bounds as syms, regular handle for function
 %! % fails on 6.1.0, maybe earlier too?
-%! if (compare_versions (OCTAVE_VERSION (), '6.1.0', '<='))
+%! if (compare_versions (OCTAVE_VERSION (), '6.1.0', '>'))
 %!   dom = [1 2];
 %!   fplot (@cos, sym (dom));
 %!   assert (get (gca, 'xlim'), dom(1:2))
