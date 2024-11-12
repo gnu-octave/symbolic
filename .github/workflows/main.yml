@@ -84,17 +84,62 @@ jobs:
 
   # Built-in Self Tests and Doctests for various supported Octave and SymPy
   # Test newest Octave and all supported SymPy
-  # Test other supported Octave releases with latest available SymPy
-  # Note that 1.10.1 not supported on Python 3.6 (Ubuntu 18.04-based systems)
-  # Ubuntu 20.04: Octave 5.2.0
-  # Ubuntu 22.04: Octave 6.4.0
+  # Older Octave tend to need slightly different setup for pip setup
   bist_doc:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        octave: [9.1.0]
+        octave: [9.2.0]
         sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12]
+        include:
+          - octave: 9.1.0
+            sympy: 1.12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Container setup
+        env:
+          OCT: ${{ matrix.octave }}
+          SYMPY: ${{ matrix.sympy }}
+        run: |
+          uname -a
+          docker pull docker.io/gnuoctave/octave:$OCT
+          docker run --name=oc --detach --init \
+            --volume=$PWD:/workdir/octsympy:rw \
+            gnuoctave/octave:$OCT sleep inf
+          # FIXME: workaround "fatal: unsafe repository" error
+          # For more details, see https://stackoverflow.com/q/71901632
+          # and https://github.com/actions/checkout/issues/760
+          docker exec oc git config --global --add safe.directory /workdir/octsympy
+          docker exec oc pip --version
+          A=`docker exec oc pip --version | awk '{print $2}'`
+          echo $A
+          docker exec oc pip install --break-system-packages packaging
+          docker exec oc pip install --break-system-packages sympy==$SYMPY
+          docker exec oc octave-cli --eval "pkg install -forge doctest"
+      - name: Run BIST in-place
+        run: docker exec oc make -C octsympy test
+      - name: Run doctests in-place
+        run: docker exec oc make -C octsympy doctest
+      - name: Make package, then install-load-unload-uninstall
+        run: |
+          docker exec oc make -C octsympy install
+          docker exec oc octave --eval "pkg load symbolic; sympref diagnose; syms x; clear all; pkg unload symbolic; pkg uninstall symbolic"
+      - name: Stop container
+        run: |
+          docker stop oc
+          docker rm oc
+
+
+  # Test other supported Octave releases with latest available SymPy
+  # Note that 1.10.1 not supported on Python 3.6 (Ubuntu 18.04-based systems)
+  # Ubuntu 20.04: Octave 5.2.0
+  # Ubuntu 22.04: Octave 6.4.0
+  bist_doc_old:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
         include:
           - octave: 5.2.0
             sympy: 1.8
