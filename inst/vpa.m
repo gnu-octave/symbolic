@@ -382,7 +382,7 @@ end
 
 %!test
 %! % non-equality of vpa that "might be" be integers: Issue #1285
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.12.1")'))
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.13.0")'))
 %!   a = vpa ("123", 32);
 %!   b = vpa ("123", 64);
 %!   assert (~ isequal (a, b))
