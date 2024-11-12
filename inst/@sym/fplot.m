@@ -58,6 +58,7 @@
 %%       ...
 %%       0.8415
 %%
+%% @c doctest: +SKIP
 %% plot (xx, yy)
 %% @end group
 %% @end example
