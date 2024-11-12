@@ -1,4 +1,4 @@
-%% SPDX-License-Identifier: AGPL-3.0-or-later
+%% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2014-2017, 2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
@@ -96,7 +96,6 @@
 %%       @@(x) exp (sin (x))
 %% @end group
 %%
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% @group
 %% fh(linspace(0, 2*pi, 700)')
 %%   @result{} ans =

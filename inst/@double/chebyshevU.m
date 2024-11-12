@@ -1,4 +1,5 @@
-%% Copyright (C) 2018-2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: GPL-3.0-or-later
+%% Copyright (C) 2018-2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -45,7 +46,6 @@
 %%   @result{} C = (sym)
 %%             10         8         6        4       2
 %%       1024⋅x   - 2304⋅x  + 1792⋅x  - 560⋅x  + 60⋅x  - 1
-%% @c doctest: +XFAIL_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% value1 = polyval (sym2poly (C), 0.96105)
 %%   @result{} value1 = 0.2219
 %% @end group
@@ -53,7 +53,6 @@
 %% Instead, we could use the present function:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% value2 = chebyshevU (10, 0.96105)
 %%   @result{} value2 = 0.2219
 %% @end group

@@ -1,4 +1,5 @@
-%% Copyright (C) 2014-2017, 2019, 2022 Colin B. Macdonald
+%% SPDX-License-Identifier: GPL-3.0-or-later
+%% Copyright (C) 2014-2017, 2019, 2022, 2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -26,7 +27,6 @@
 %% @group
 %% x = sym(1) / 3
 %%   @result{} x = (sym) 1/3
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% double (x)
 %%   @result{} ans =  0.3333
 %% @end group

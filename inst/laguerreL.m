@@ -1,6 +1,7 @@
+%% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2008 Eric Chassande-Mottin
 %% Copyright (C) 2011 Carnë Draug
-%% Copyright (C) 2016, 2018, 2022 Colin B. Macdonald
+%% Copyright (C) 2016, 2018, 2022, 2024 Colin B. Macdonald
 %%
 %% This program is free software; you can redistribute it and/or modify it under
 %% the terms of the GNU General Public License as published by the Free Software
@@ -26,7 +27,6 @@
 %% the point 6 is
 %% @example
 %% @group
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% laguerreL (14, 6)
 %%   @result{} 0.9765
 %% @end group
@@ -52,7 +52,6 @@
 %% @example
 %% @group
 %% coeffs = sym2poly (L);
-%% @c doctest: +XFAIL_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% polyval (coeffs, 6)
 %%   @result{} 0.9765
 %% err = ans - double (exact);

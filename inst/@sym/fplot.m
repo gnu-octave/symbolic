@@ -1,4 +1,5 @@
-%% Copyright (C) 2023 Colin B. Macdonald
+%% SPDX-License-Identifier: GPL-3.0-or-later
+%% Copyright (C) 2023-2024 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -47,7 +48,6 @@
 %% @group
 %% syms x
 %%
-%% @c doctest: +SKIP_IF(compare_versions (OCTAVE_VERSION(), '6.0.0', '<'))
 %% [xx, yy] = fplot (sin (x), [0 1])
 %%   @result{} xx =
 %%       0
@@ -164,7 +164,7 @@ end
 %!test
 %! % bounds as syms, regular handle for function
 %! % fails on 6.1.0, maybe earlier too?
-%! if (compare_versions (OCTAVE_VERSION (), '6.1.0', '!='))
+%! if (compare_versions (OCTAVE_VERSION (), '6.1.0', '>'))
 %!   dom = [1 2];
 %!   fplot (@cos, sym (dom));
 %!   assert (get (gca, 'xlim'), dom(1:2))
