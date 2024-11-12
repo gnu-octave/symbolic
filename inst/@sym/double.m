@@ -46,6 +46,7 @@
 %% @example
 %% @group
 %% syms x
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.9")'))
 %% double (x)
 %%   @print{} ??? ... Cannot convert expression ...
 %% @end group
