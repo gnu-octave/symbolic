@@ -23,6 +23,7 @@ HTML_TARBALL := ${HTML_DIR}.tar.gz
 
 OCTAVE ?= octave
 MATLAB ?= matlab
+TAR ?= tar
 
 .PHONY: help clean install test doctest dist dist_zip html matlab_test matlab_pkg
 
@@ -46,7 +47,7 @@ define create_tarball
 $(shell cd $(dir $(1)) \
     && find $(notdir $(1)) -print0 \
     | LC_ALL=C sort -z \
-    | tar c --mtime="$(GIT_DATE)" \
+    | $(TAR) c --mtime="$(GIT_DATE)" \
             --owner=root --group=root --numeric-owner \
             --no-recursion --null -T - -f - \
     | gzip -9n > "$(2)")
@@ -61,7 +62,7 @@ endef
 $(OCTAVE_RELEASE): .git/index | $(BUILD_DIR)
 	@echo "Creating package version $(VERSION) release ..."
 	-$(RM) -r "$@"
-	git archive --format=tar --prefix="$@/" HEAD | tar -x
+	git archive --format=tar --prefix="$@/" HEAD | $(TAR) -x
 	$(RM) "$@/README.matlab.md" \
 	      "$@/HOWTO-release.md" \
 	      "$@/TODO.md" \
