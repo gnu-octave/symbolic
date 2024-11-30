@@ -1,6 +1,7 @@
 SHELL   := /bin/bash
 
 ## Copyright 2016-2019, 2022 Colin B. Macdonald
+## Copyright 2024 Swayam Shah
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright
