@@ -66,7 +66,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{cart2pol}
+%% @seealso{cart2pol, pol2cart}
 %% @end deftypemethod
 
 

@@ -185,6 +185,7 @@ Mathematical methods for symbolic objects
  @sym/piecewise
  @sym/pinv
  @sym/pochhammer
+ @sym/pol2cart
  @sym/polylog
  @sym/potential
  @sym/prevprime
