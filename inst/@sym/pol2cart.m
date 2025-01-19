@@ -117,19 +117,19 @@ end
 
 %!test
 %! % multiple non-scalar inputs
-% ! theta = sym ('theta', [2 2]);
-% ! assume (theta, 'real');
-% ! r = sym ('r', [2 2]);
-% ! assume (r, 'real');
-% ! [x, y] = pol2cart (theta, r);
-% ! assert (isequal (x, r .* cos (theta)));
-% ! assert (isequal (y, r .* sin (theta)));
-% ! % mixing scalar inputs with non-scalar inputs
-% ! syms z real
-% ! [x_2, y_2, z_2] = pol2cart (theta, r, z);
-% ! assert (isequal (x_2, r .* cos (theta)));
-% ! assert (isequal (y_2, r .* sin (theta)));
-% ! assert (isequal (z_2, z * ones (2, 2)));
+%! theta = sym ('theta', [2 2]);
+%! assume (theta, 'real');
+%! r = sym ('r', [2 2]);
+%! assume (r, 'real');
+%! [x, y] = pol2cart (theta, r);
+%! assert (isequal (x, r .* cos (theta)));
+%! assert (isequal (y, r .* sin (theta)));
+%! % mixing scalar inputs with non-scalar inputs
+%! syms z real
+%! [x_2, y_2, z_2] = pol2cart (theta, r, z);
+%! assert (isequal (x_2, r .* cos (theta)));
+%! assert (isequal (y_2, r .* sin (theta)));
+%! assert (isequal (z_2, z * ones (2, 2)));
 
 %!test
 %! % column vector with 2 entries
