@@ -50,24 +50,21 @@ jobs:
 
 
   appstream-validate:
-    # maybe a later Ubuntu will have appstream >= 1, for now we pull from flatpak
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Install Flatpak and add Flathub
+      - name: Install appstreamcli
         run: |
           whoami
           uname -a
           sudo apt-get update
-          sudo apt-get install -y flatpak
-          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install -y org.freedesktop.appstream.cli
-      - name: List appstream.cli version
+          sudo apt-get install -y appstream
+      - name: appstreamcli version
         run: |
-          flatpak run org.freedesktop.appstream.cli --version
+          appstreamcli --version
       - name: Validate
         run: |
-          flatpak run org.freedesktop.appstream.cli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
+          appstreamcli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
 
 
   codespell:
