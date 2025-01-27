@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: FSFAP
-# Copyright (C) 2022-2024 Colin B. Macdonald
+# Copyright (C) 2022-2025 Colin B. Macdonald
 # Copyright (C) 2022 Chris Gorman
 # Copyright (C) 2022 Alex Vong
 # Copyright (C) 2023 Markus Mützel
@@ -87,8 +87,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        octave: [9.2.0]
+        octave: [9.3.0]
         sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12.1, 1.13.0, 1.13.3]
+        include:
+          - octave: 9.2.0
+            sympy: 1.13.3
         include:
           - octave: 9.1.0
             sympy: 1.13.3
@@ -207,7 +210,7 @@ jobs:
       fail-fast: true
       matrix:
         octave: [8.4.0]
-        sympy: [1.12]
+        sympy: [1.13.3]
     steps:
       - uses: actions/checkout@v4
       - name: Container setup
@@ -257,7 +260,7 @@ jobs:
       fail-fast: true
       matrix:
         octave: [8.4.0]
-        sympy: [1.12]
+        sympy: [1.13.3]
     steps:
       - uses: actions/checkout@v4
       - name: Container setup
