@@ -304,8 +304,8 @@ jobs:
           docker rm oc
 
 
-  ubuntu2204_ootb:
-    runs-on: ubuntu-22.04
+  ubuntu-latest_ootb:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Octave, Python and SymPy
