@@ -59,12 +59,10 @@ jobs:
           uname -a
           sudo apt-get update
           sudo apt-get install -y appstream
-      - name: appstreamcli version
-        run: |
-          appstreamcli --version
+      - name: Version
+        run: appstreamcli --version
       - name: Validate
-        run: |
-          appstreamcli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
+        run: appstreamcli validate --strict --pedantic --explain io.github.gnu_octave.symbolic.metainfo.xml
 
 
   codespell:
@@ -92,7 +90,6 @@ jobs:
         include:
           - octave: 9.2.0
             sympy: 1.13.3
-        include:
           - octave: 9.1.0
             sympy: 1.13.3
     steps:
