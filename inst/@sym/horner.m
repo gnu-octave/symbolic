@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2022, 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -22,7 +22,7 @@
 %% @defmethodx @@sym horner (@var{p}, @var{x})
 %% Convert a symbolic polynomial to Horner form.
 %%
-%% The Horner form minimizes the number of arthimetic operators to
+%% The Horner form minimizes the number of arithmetic operators to
 %% evaluate the polynomial.
 %%
 %% Example:
