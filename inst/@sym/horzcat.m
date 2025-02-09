@@ -1,5 +1,6 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2014-2017, 2019, 2024 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -45,25 +46,8 @@
 
 function h = horzcat(varargin)
 
-  % special case for 0x0 but other empties should be checked for
-  % compatibility
-  cmd = {
-          '_proc = []'
-          'for i in _ins:'
-          '    if i is None or not i.is_Matrix:'
-          '        _proc.append(sp.Matrix([[i]]))'
-          '    else:'
-          '        if i.shape == (0, 0):'
-          '            pass'
-          '        else:'
-          '            _proc.append(i)'
-          'return sp.MatrixBase.hstack(*_proc),'
-          };
-
-  for i = 1:nargin
-    varargin{i} = sym(varargin{i});
-  end
-  h = pycall_sympy__ (cmd, varargin{:});
+  args = cellfun (@transpose, varargin, 'UniformOutput', false);
+  h = vertcat (args{:}).';
 
 end
 
@@ -133,8 +117,37 @@ end
 %! q = sym(ones(3, 0));
 %! w = horzcat(v, q);
 
+%!error <ShapeError>
+%! z30 = sym (zeros (3, 0));
+%! z40 = sym (zeros (4, 0));
+%! % Note Issue #1238: unclear error message:
+%! % [z30 z40];
+%! % but this gives the ShapeError
+%! horzcat(z30, z40);
+
+%!test
+%! % special case for the 0x0 empty: no error
+%! z00 = sym (zeros (0, 0));
+%! z30 = sym (zeros (3, 0));
+%! [z00 z30];
+
 %!test
 %! % issue #700
 %! A = sym ([1 2]);
 %! B = simplify (A);
 %! assert (isequal ([B A], [A B]))
+
+%!test
+%! % issue #1236, correct empty sizes
+%! syms x
+%! z00 = sym (zeros (0, 0));
+%! z30 = sym (zeros (3, 0));
+%! z03 = sym (zeros (0, 3));
+%! z04 = sym (zeros (0, 4));
+%! assert (size ([z00 z00]), [0 0])
+%! assert (size ([z00 z03]), [0 3])
+%! assert (size ([z03 z03]), [0 6])
+%! assert (size ([z03 z04]), [0 7])
+%! assert (size ([z03 z00 z04]), [0 7])
+%! assert (size ([z30 z30]), [3 0])
+%! assert (size ([z30 z30 z30]), [3 0])
