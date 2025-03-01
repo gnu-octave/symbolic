@@ -390,7 +390,9 @@ end
 
 %!warning <dangerous> vpa ('sqrt(2.0)');
 
-%!warning <dangerous>
+%!warning id=OctSymPy:vpa:precisionloss vpa ('sqrt(2.0)');
+
+%!warning id=OctSymPy:vpa:precisionloss
 %! a = vpa('2**0.5');
 %! b = vpa(sqrt(sym(2)));
 %! assert (isequal (a, b))

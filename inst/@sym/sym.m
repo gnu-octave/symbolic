@@ -1,5 +1,5 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2014-2019, 2022-2024 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022-2025 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -630,6 +630,7 @@ end
 %! assert (isequal (2*x, sym (1)))
 
 %!warning <dangerous> x = sym (1/2);
+%!warning id=OctSymPy:sym:rationalapprox x = sym (1/2);
 
 %!test
 %! % passing small rationals w/o quotes: despite the warning,
@@ -935,12 +936,12 @@ end
 
 %!assert (~ isequal (sym (exp(1)), sym (exp(1), 'f')))
 
-%!warning <dangerous> sym (1e16);
-%!warning <dangerous> sym (-1e16);
-%!warning <dangerous> sym (10.33);
-%!warning <dangerous> sym (-5.23);
-%!warning <dangerous> sym (sqrt (1.4142135623731));
-%!warning <dangerous> sym ([1.2 1.3]);
+%!warning id=OctSymPy:sym:rationalapprox sym (1e16);
+%!warning id=OctSymPy:sym:rationalapprox sym (-1e16);
+%!warning id=OctSymPy:sym:rationalapprox sym (10.33);
+%!warning id=OctSymPy:sym:rationalapprox sym (-5.23);
+%!warning id=OctSymPy:sym:rationalapprox sym (sqrt (1.4142135623731));
+%!warning id=OctSymPy:sym:rationalapprox sym ([1.2 1.3]);
 
 %!error <is not supported>
 %! x = sym ('x', 'positive2');
