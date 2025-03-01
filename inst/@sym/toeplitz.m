@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -121,12 +121,12 @@ end
 %! B = toeplitz([a,b,c]);
 %! assert (isequal( A, B))
 
-%!warning <diagonal conflict>
+%!warning id=OctSymPy:toeplitz:diagconflict
 %! % mismatch
 %! syms x
 %! B = toeplitz([10 x], [1 3 x]);
 
-%!warning <diagonal conflict>
+%!warning id=OctSymPy:toeplitz:diagconflict
 %! % scalar
 %! B = toeplitz(sym(2), 3);
 %! assert (isequal (B, sym(2)))

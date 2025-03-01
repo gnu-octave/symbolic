@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2022, 2025 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -162,7 +162,7 @@ end
 %! y = [-2*c1 + 5 nan -2*c5; c1 nan c5];
 %! assert (isequaln (x, y))
 
-%!warning <vpa backslash>
+%!warning id=octsympy:backslash:vpa
 %! % vpa, nearly singular matrix
 %! A = sym([1 2; 2 4]);
 %! A(1,1) = vpa('1.001');
@@ -171,7 +171,7 @@ end
 %! y = [sym(0); vpa('0.5')];
 %! assert (isequal (x, y))
 
-%!warning <vpa backslash>
+%!warning id=octsympy:backslash:vpa
 %! % vpa, singular rhs
 %! A = sym([1 2; 2 4]);
 %! b = [vpa('1.01'); vpa('2')];
