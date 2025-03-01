@@ -1,5 +1,5 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2014-2019, 2021-2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2021-2022, 2024-2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -355,36 +355,36 @@ end
 
 %!test
 %! % isequal and other comparisons
-%! a = vpa ("2/3", 32);
-%! b = vpa ("2/3", 64);
+%! a = vpa ('2/3', 32);
+%! b = vpa ('2/3', 64);
 %! assert (~ logical (a == b))
 %! assert (~ isequal (a, b))
-%! a = vpa ("1/3", 32);
-%! b = vpa ("1/3", 64);
+%! a = vpa ('1/3', 32);
+%! b = vpa ('1/3', 64);
 %! assert (~ logical (a == b))
 %! assert (~ isequal (a, b))
-%! a = vpa ("0.1", 32);
-%! b = vpa ("0.1", 64);
+%! a = vpa ('0.1', 32);
+%! b = vpa ('0.1', 64);
 %! assert (~ logical (a == b))
 %! assert (~ isequal (a, b))
 
 %!test
 %! % isequal with array: Issue #1285
-%! a = vpa ("2/3", 32);
-%! b = vpa ("2/3", 64);
+%! a = vpa ('2/3', 32);
+%! b = vpa ('2/3', 64);
 %! assert (~ isequal ([a 2*a], [b 2*b]))
 
 %!xtest
 %! % non-equality of vpa that "might be" be integers: Issue #1285
-%! a = vpa ("123", 32);
-%! b = vpa ("123", 64);
+%! a = vpa ('123', 32);
+%! b = vpa ('123', 64);
 %! assert (~ logical (a == b))
 
 %!test
 %! % non-equality of vpa that "might be" be integers: Issue #1285
 %! if (pycall_sympy__ ('return Version(spver) >= Version("1.13.0")'))
-%!   a = vpa ("123", 32);
-%!   b = vpa ("123", 64);
+%!   a = vpa ('123', 32);
+%!   b = vpa ('123', 64);
 %!   assert (~ isequal (a, b))
 %! end
 
