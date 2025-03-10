@@ -47,7 +47,7 @@
 function z = isconstant(x)
 
   cmd = { '(x,) = _ins'
-          'if x is not None and x.is_Matrix:'
+          'if isinstance(x, (MatrixBase, NDimArray)):'
           '    return x.applyfunc(lambda a: a.is_constant()),'
           'return x.is_constant(),' };
   z = pycall_sympy__ (cmd, sym(x));
@@ -68,3 +68,14 @@ end
 %! A = [x 2; 3 x];
 %! B = [false true; true false];
 %! assert (isequal (isconstant (A), B))
+
+%!error
+%! % semantically not an error, but is using SymPy's Array
+%! t = sym(true);
+%! A = [t t];
+%! isconstant (A);
+
+%!error
+%! syms x
+%! A = [x == 10; x <= 10];
+%! isconstant (A);

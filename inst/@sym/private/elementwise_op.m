@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2018-2019, 2021-2022 Colin B. Macdonald
 %% Copyright (C) 2016 Lagu
 %%
 %% This file is part of OctSymPy.
@@ -84,7 +84,7 @@ function z = elementwise_op(scalar_fcn, varargin)
           % Make sure all matrices in the input are the same size, and set q to one of them
           'q = None'
           'for A in _ins:'
-          '    if isinstance(A, MatrixBase):'
+          '    if isinstance(A, (MatrixBase, NDimArray)):'
           '        if q is None:'
           '            q = A'
           '        else:'
@@ -94,10 +94,13 @@ function z = elementwise_op(scalar_fcn, varargin)
           '    return _op(*_ins)'
           % at least one input was a matrix:
           '# dbout(f"at least one matrix param, shape={q.shape}")'
-          'elements = []'
-          'for i in range(0, len(q)):'
-          '    elements.append(_op(*[k[i] if isinstance(k, MatrixBase) else k for k in _ins]))'
-          'return Matrix(*q.shape, elements)' ];
+          'assert len(q.shape) == 2, "non-2D arrays/tensors not yet supported"'
+          'm, n = q.shape'
+          'g = []'
+          'for i in range(m):'
+          '    for j in range(n):'
+          '        g.append(_op(*[k[i, j] if isinstance(k, (MatrixBase, NDimArray)) else k for k in _ins]))'
+          'return _make_2d_sym(g, shape=q.shape)' ];
 
   z = pycall_sympy__ (cmd, varargin{:});
 
