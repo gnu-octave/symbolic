@@ -1,7 +1,11 @@
 octsympy 3.2.1+ (unreleased)
 ============================
 
+  * New symbolic commands:
 
+         pol2cart
+
+  * Misc minor changes and updates.
 
 
 octsympy 3.2.1 (2023-05-15)
