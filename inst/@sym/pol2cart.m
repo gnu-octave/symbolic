@@ -59,7 +59,7 @@
 %% @end group
 %% @end example
 %%
-%% @seealso{pol2cart, cart2pol}
+%% @seealso{pol2cart, cart2pol, cart2sph, sph2cart}
 %% @end deftypemethod
 
 function [x, y, z_out] = pol2cart (theta_in, r_in, z_in)
