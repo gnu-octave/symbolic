@@ -41,7 +41,7 @@
 %% @var{r} = @code{sqrt(@var{x}^2 + @var{y}^2 + @var{z}^2)}
 %%
 %% @seealso{cart2sph, sph2cart, cart2pol, pol2cart}
-%% @end deftypefn
+%% @end deftypemethod
 
 function [theta, phi, r] = cart2sph (x, y, z)
   if nargin == 1

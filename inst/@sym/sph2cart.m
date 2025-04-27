@@ -41,7 +41,7 @@
 %% @var{z} = @code{r * sin(@var{phi})}
 %%
 %% @seealso{sph2cart, cart2sph, cart2pol, pol2cart}
-%% @end deftypefn
+%% @end deftypemethod
 
 function [x, y, z] = sph2cart (theta, phi, r)
   if nargin == 1
