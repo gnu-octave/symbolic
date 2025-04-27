@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -32,15 +33,11 @@ function z = mat_rclist_access(A, r, c)
     error('this routine is for a list of rows and cols');
   end
 
-  cmd = { '(A, rr, cc) = _ins'
-          'if A is None or not A.is_Matrix:'
-          '    A = sp.Matrix([A])'
-          'n = len(rr)'
-          'M = [[0] for i in range(n)]'
-          'for i in range(0, n):'
-          '    M[i][0] = A[rr[i],cc[i]]'
-          'M = sp.Matrix(M)'
-          'return M,' };
+  cmd = {'(A, rr, cc) = _ins'
+         'AA = A.tolist() if isinstance(A, (MatrixBase, NDimArray)) else [[A]]'
+         'M = [AA[i][j] for i, j in zip(rr, cc)]'
+         'return _make_2d_sym(M, shape=(len(rr), 1)),'
+	};
 
   rr = num2cell(int32(r-1));
   cc = num2cell(int32(c-1));
