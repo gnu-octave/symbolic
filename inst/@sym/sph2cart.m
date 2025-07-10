@@ -1,4 +1,5 @@
 %% Copyright (C) 2025 Swayam Shah
+%% Copyright (C) 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -35,10 +36,17 @@
 %% vector with each row corresponding to that of the input matrix @var{S}.
 %%
 %% Given a point (@var{theta}, @var{phi}, @var{r}) in spherical coordinates,
-%% its corresponding Cartesian coordinates are:
-%% @var{x} = @code{r * cos(@var{phi}) * cos(@var{theta})}
-%% @var{y} = @code{r * cos(@var{phi}) * sin(@var{theta})}
-%% @var{z} = @code{r * sin(@var{phi})}
+%% the corresponding Cartesian coordinates are:
+%% @c annoyingly the y is in the "wrong" order...
+%% @example
+%% @group
+%% syms theta phi r real
+%% [x, y, z] = sph2cart (theta, phi, r)
+%%   @result{} x = (sym) r⋅cos(φ)⋅cos(θ)
+%%     y = (sym) r⋅sin(θ)⋅cos(φ)
+%%     z = (sym) r⋅sin(φ)
+%% @end group
+%% @end example
 %%
 %% @seealso{sph2cart, cart2sph, cart2pol, pol2cart}
 %% @end deftypemethod
@@ -132,7 +140,7 @@ end
 
 %!test
 %! % Mixing scalar and array inputs
-%! t = sym ([0, pi/2]);
+%! t = [0, sym(pi)/2];
 %! p = sym (0);
 %! r = sym (1);
 %! [x, y, z] = sph2cart (t, p, r);
@@ -142,7 +150,7 @@ end
 
 %!test
 %! % Numerical inputs
-%! [x, y, z] = sph2cart (0, 0, 1);
+%! [x, y, z] = sph2cart (sym(0), 0, 1);
 %! assert (isequal (x, sym(1)));
 %! assert (isequal (y, sym(0)));
 %! assert (isequal (z, sym(0)));
