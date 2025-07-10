@@ -3,7 +3,9 @@ octsympy 3.2.1+ (unreleased)
 
   * New symbolic commands:
 
+         cart2sph
          pol2cart
+         sph2cart
 
   * Misc minor changes and updates.
 
