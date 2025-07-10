@@ -1,4 +1,5 @@
 %% Copyright (C) 2025 Swayam Shah
+%% Copyright (C) 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -132,7 +133,7 @@ end
 
 %!test
 %! % Numerical inputs
-%! [theta, phi, r] = cart2sph (1, 0, 0);
+%! [theta, phi, r] = cart2sph (sym(1), 0, 0);
 %! assert (isequal (theta, sym(0)));
 %! assert (isequal (phi, sym(0)));
 %! assert (isequal (r, sym(1)));

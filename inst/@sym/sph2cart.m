@@ -1,4 +1,5 @@
 %% Copyright (C) 2025 Swayam Shah
+%% Copyright (C) 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -142,7 +143,7 @@ end
 
 %!test
 %! % Numerical inputs
-%! [x, y, z] = sph2cart (0, 0, 1);
+%! [x, y, z] = sph2cart (sym(0), 0, 1);
 %! assert (isequal (x, sym(1)));
 %! assert (isequal (y, sym(0)));
 %! assert (isequal (z, sym(0)));
