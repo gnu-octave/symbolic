@@ -133,7 +133,7 @@ end
 
 %!test
 %! % Mixing scalar and array inputs
-%! t = sym ([0, pi/2]);
+%! t = [0, sym(pi)/2];
 %! p = sym (0);
 %! r = sym (1);
 %! [x, y, z] = sph2cart (t, p, r);

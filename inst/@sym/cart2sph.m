@@ -127,7 +127,7 @@ end
 %! y = sym ([0, 1]);
 %! z = sym (0);
 %! [theta, phi, r] = cart2sph (x, y, z);
-%! assert (isequal (theta, [0, pi/2]));
+%! assert (isequal (theta, [0, sym(pi)/2]));
 %! assert (isequal (phi, [0, 0]));
 %! assert (isequal (r, [1, 1]));
 
