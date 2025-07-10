@@ -35,11 +35,25 @@
 %% a column vector with each row corresponding to that of the input matrix
 %% @var{C}.
 %%
-%% Given a point (@var{x}, @var{y}, @var{z}) in Cartesian coordinates, its
+%% Given a point (@var{x}, @var{y}, @var{z}) in Cartesian coordinates, the
 %% corresponding spherical coordinates are:
-%% @var{theta} = @code{atan2(@var{y}, @var{x})}
-%% @var{phi} = @code{atan2(@var{z}, sqrt(@var{x}^2 + @var{y}^2))}
-%% @var{r} = @code{sqrt(@var{x}^2 + @var{y}^2 + @var{z}^2)}
+%% @example
+%% @group
+%% syms x y z real
+%% [theta, phi, r] = cart2sph (x, y, z)
+%%   @result{} theta = (sym) atan2(y, x)
+%%     phi = (sym)
+%%
+%%            ⎛      _________⎞
+%%            ⎜     ╱  2    2 ⎟
+%%       atan2⎝z, ╲╱  x  + y  ⎠
+%%
+%%     r = (sym)
+%%          ______________
+%%         ╱  2    2    2
+%%       ╲╱  x  + y  + z
+%% @end group
+%% @end example
 %%
 %% @seealso{cart2sph, sph2cart, cart2pol, pol2cart}
 %% @end deftypemethod

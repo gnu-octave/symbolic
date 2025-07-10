@@ -36,10 +36,17 @@
 %% vector with each row corresponding to that of the input matrix @var{S}.
 %%
 %% Given a point (@var{theta}, @var{phi}, @var{r}) in spherical coordinates,
-%% its corresponding Cartesian coordinates are:
-%% @var{x} = @code{r * cos(@var{phi}) * cos(@var{theta})}
-%% @var{y} = @code{r * cos(@var{phi}) * sin(@var{theta})}
-%% @var{z} = @code{r * sin(@var{phi})}
+%% the corresponding Cartesian coordinates are:
+%% @c annoyingly the y is in the "wrong" order...
+%% @example
+%% @group
+%% syms theta phi r real
+%% [x, y, z] = sph2cart (theta, phi, r)
+%%   @result{} x = (sym) r⋅cos(φ)⋅cos(θ)
+%%     y = (sym) r⋅sin(θ)⋅cos(φ)
+%%     z = (sym) r⋅sin(φ)
+%% @end group
+%% @end example
 %%
 %% @seealso{sph2cart, cart2sph, cart2pol, pol2cart}
 %% @end deftypemethod
