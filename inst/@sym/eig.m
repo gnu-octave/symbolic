@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022, 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -37,7 +37,6 @@
 %% We can also compute the eigenvectors:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.8")'))
 %% [V, D] = eig(A)
 %%   @result{} V = (sym 2×2 matrix)
 %%       ⎡  √33   1    1   √33⎤
@@ -55,7 +54,6 @@
 %% and check:
 %% @example
 %% @group
-%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.8")'))
 %% v = V(:, 1)
 %%   @result{} v = (sym 2×1 matrix)
 %%       ⎡  √33   1⎤

@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022, 2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -58,7 +58,6 @@
 %% rectangular rank-revealing result is returned:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
 %% [Q, R] = qr (sym ([6 2; 6 2]))
 %%   @result{} Q = (sym 2×1 matrix)
 %%       ⎡√2⎤
@@ -75,7 +74,6 @@
 %% rank one:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
 %% Q*R
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡6  2⎤
@@ -87,13 +85,11 @@
 %% But what of the extreme case of a zero matrix?
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
 %% [Q, R] = qr (sym (zeros (2, 2)))
 %%   @result{} Q = (sym) []  (empty 2×0 matrix)
 %%   @result{} R = (sym) []  (empty 0×2 matrix)
 %% @end group
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.7.1")'))
 %% Q*R
 %%   @result{} ans = (sym 2×2 matrix)
 %%       ⎡0  0⎤

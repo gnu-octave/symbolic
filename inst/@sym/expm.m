@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019, 2024 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019, 2024-2025 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -24,14 +24,12 @@
 %% Example:
 %% @example
 %% @group
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% A = [sym(4) 1; sym(0) 4]
 %%   @result{} A = (sym 2×2 matrix)
 %%       ⎡4  1⎤
 %%       ⎢    ⎥
 %%       ⎣0  4⎦
 %%
-%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) > Version("1.8")'))
 %% expm(A)
 %%   @result{} (sym 2×2 matrix)
 %%       ⎡ 4   4⎤
@@ -63,35 +61,27 @@ end
 
 %!test
 %! % scalar
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.9")'))
 %! syms x
 %! assert (isequal (expm(x), exp(x)))
-%! end
 
 %!test
 %! % diagonal
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.9")'))
 %! A = [sym(1) 0; 0 sym(3)];
 %! B = [exp(sym(1)) 0; 0 exp(sym(3))];
 %! assert (isequal (expm(A), B))
-%! end
 
 %!test
 %! % diagonal w/ x
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.9")'))
 %! syms x positive
 %! A = [sym(1) 0; 0 x+2];
 %! B = [exp(sym(1)) 0; 0 exp(x+2)];
 %! assert (isequal (expm(A), B))
-%! end
 
 %!test
 %! % non-diagonal
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.9")'))
 %! syms x positive
 %! A = [sym(1) 2; 0 x+2];
 %! B = expm(A);
 %! C = double(subs(B, x, 4));
 %! D = expm(double(subs(A, x, 4)));
 %! assert (max (max (abs (C - D))) <= 1e-11)
-%! end
