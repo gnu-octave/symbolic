@@ -27,6 +27,14 @@
 
 function assert_have_python_and_sympy (pyexec, verbose)
 
+  % When bumping this, consider which SymPy versions are provided by popular OSes
+  % Ubuntu 20.04: 1.5.1
+  % Ubuntu 22.04: 1.9
+  % Ubuntu 24.04: 1.12
+  % Ubuntu 25.04: 1.13.3
+  % Fedora 41: 1.13.3
+  % Fedora 42: 1.14.0
+  % RHEL 8 via Fedora EPEL 10.1: 1.14.0
   minsympyver = '1.5.1';
 
   if (nargin < 2)
