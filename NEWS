@@ -1,5 +1,5 @@
-octsympy 3.2.1+ (unreleased)
-============================
+octsympy 3.2.2 (2025-09-11)
+===========================
 
   * New symbolic commands:
 
@@ -8,6 +8,8 @@ octsympy 3.2.1+ (unreleased)
          sph2cart
 
   * Misc minor changes and updates.
+
+  * Dropped support for Octave 5.
 
 
 octsympy 3.2.1 (2023-05-15)
