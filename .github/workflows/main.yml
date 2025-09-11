@@ -86,7 +86,7 @@ jobs:
       fail-fast: false
       matrix:
         octave: [10.2.0]
-        sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12.1, 1.13.0, 1.13.3, 1.14.0]
+        sympy: [1.9, 1.10.1, 1.11.1, 1.12.1, 1.13.0, 1.13.3, 1.14.0]
         include:
           - octave: 9.4.0
             sympy: 1.14.0
@@ -133,14 +133,14 @@ jobs:
 
 
   # Test other supported Octave releases with latest available SymPy
-  # Ubuntu 20.04: Octave 5.2.0, 6.x, 7.x; Python 3.8 (SymPy < 1.14)
+  # Ubuntu 20.04: Octave 7.x; Python 3.8 (SymPy < 1.14)
   # Ubuntu 22.04: Octave 8.x; Python 3.10
   bist_doc_old:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        octave: [6.1.0, 6.2.0, 6.3.0, 6.4.0, 7.1.0, 7.2.0, 7.3.0]
+        octave: [7.1.0, 7.2.0, 7.3.0]
         sympy: [1.13.3]
         include:
           - octave: 8.4.0
