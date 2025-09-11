@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run a one-line script
         run: echo Hello, world!
@@ -52,7 +52,7 @@ jobs:
   appstream-validate:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install appstreamcli
         run: |
           whoami
@@ -68,7 +68,7 @@ jobs:
   codespell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: codespell-project/actions-codespell@v2
         with:
           ignore_words_file: .codespell-ignorewords
@@ -97,7 +97,7 @@ jobs:
           - octave: 9.1.0
             sympy: 1.14.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -152,7 +152,7 @@ jobs:
           - octave: 8.1.0
             sympy: 1.14.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -199,7 +199,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.13.3]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -249,7 +249,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.13.3]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -294,7 +294,7 @@ jobs:
   ubuntu-latest_ootb:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Octave, Python and SymPy
         run: |
           uname -a
@@ -321,7 +321,7 @@ jobs:
   ubuntu2404_pip_sympy:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Octave and Python
         run: |
           uname -a
@@ -377,7 +377,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install packages from MSYS2
         uses: msys2/setup-msys2@v2
