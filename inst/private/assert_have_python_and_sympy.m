@@ -35,7 +35,7 @@ function assert_have_python_and_sympy (pyexec, verbose)
   % Fedora 41: 1.13.3
   % Fedora 42: 1.14.0
   % RHEL 8 via Fedora EPEL 10.1: 1.14.0
-  minsympyver = '1.5.1';
+  minsympyver = '1.9';
 
   if (nargin < 2)
     verbose = false;
