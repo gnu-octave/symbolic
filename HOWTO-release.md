@@ -1,7 +1,7 @@
 How to do a release
 ===================
 
-We use x.y.z.  Bump y for minor changes or z for "micro" changes (bug
+We use x.y.z.  Bump y for minor changes or z for "patch" changes (bug
 fixes etc).
 
 Old OctaveForge process: http://octave.sourceforge.net/developers.html
