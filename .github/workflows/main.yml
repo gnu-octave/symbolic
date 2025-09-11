@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run a one-line script
         run: echo Hello, world!
@@ -52,7 +52,7 @@ jobs:
   appstream-validate:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install appstreamcli
         run: |
           whoami
@@ -68,7 +68,7 @@ jobs:
   codespell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: codespell-project/actions-codespell@v2
         with:
           ignore_words_file: .codespell-ignorewords
@@ -86,7 +86,7 @@ jobs:
       fail-fast: false
       matrix:
         octave: [10.2.0]
-        sympy: [1.5.1, 1.6.2, 1.7.1, 1.8, 1.9, 1.10.1, 1.11.1, 1.12.1, 1.13.0, 1.13.3, 1.14.0]
+        sympy: [1.9, 1.10.1, 1.11.1, 1.12.1, 1.13.0, 1.13.3, 1.14.0]
         include:
           - octave: 9.4.0
             sympy: 1.14.0
@@ -97,7 +97,7 @@ jobs:
           - octave: 9.1.0
             sympy: 1.14.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -133,14 +133,14 @@ jobs:
 
 
   # Test other supported Octave releases with latest available SymPy
-  # Ubuntu 20.04: Octave 5.2.0, 6.x, 7.x; Python 3.8 (SymPy < 1.14)
+  # Ubuntu 20.04: Octave 7.x; Python 3.8 (SymPy < 1.14)
   # Ubuntu 22.04: Octave 8.x; Python 3.10
   bist_doc_old:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        octave: [6.1.0, 6.2.0, 6.3.0, 6.4.0, 7.1.0, 7.2.0, 7.3.0]
+        octave: [7.1.0, 7.2.0, 7.3.0]
         sympy: [1.13.3]
         include:
           - octave: 8.4.0
@@ -152,7 +152,7 @@ jobs:
           - octave: 8.1.0
             sympy: 1.14.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -168,12 +168,11 @@ jobs:
           # and https://github.com/actions/checkout/issues/760
           docker exec oc git config --global --add safe.directory /workdir/octsympy
           # < 8.x containers don't have pip, must install
-          # Can just pip (not pip3) once we drop 5.x support
           docker exec oc apt-get update
           docker exec oc apt-get install -y python3-pip
-          docker exec oc pip3 --version
-          docker exec oc pip3 install packaging
-          docker exec oc pip3 install sympy==$SYMPY
+          docker exec oc pip --version
+          docker exec oc pip install packaging
+          docker exec oc pip install sympy==$SYMPY
           docker exec oc octave-cli --eval "pkg install -forge doctest"
       - name: Run BIST in-place
         run: docker exec oc make -C octsympy test
@@ -200,7 +199,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.13.3]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -217,8 +216,8 @@ jobs:
           docker exec oc git config --global --add safe.directory /workdir/octsympy
           docker exec oc apt-get update
           docker exec oc apt-get install --no-install-recommends -y libpython3-dev
-          docker exec oc pip3 install packaging
-          docker exec oc pip3 install sympy=="$SYMPY"
+          docker exec oc pip install packaging
+          docker exec oc pip install sympy=="$SYMPY"
           docker exec oc octave-cli --eval "pkg install -forge doctest"
           docker exec oc octave-cli --eval "pkg install -forge pythonic"
       - name: Run BIST
@@ -250,7 +249,7 @@ jobs:
         octave: [8.4.0]
         sympy: [1.13.3]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Container setup
         env:
           OCT: ${{ matrix.octave }}
@@ -267,8 +266,8 @@ jobs:
           docker exec oc git config --global --add safe.directory /workdir/octsympy
           docker exec oc apt-get update
           docker exec oc apt-get install --no-install-recommends -y libpython3-dev
-          docker exec oc pip3 install packaging
-          docker exec oc pip3 install sympy=="$SYMPY"
+          docker exec oc pip install packaging
+          docker exec oc pip install sympy=="$SYMPY"
           docker exec oc octave-cli --eval "pkg install -forge doctest"
           docker exec oc octave-cli --eval \
             "pkg install https://gitlab.com/gnu-octave/octave-pythonic/-/archive/main/octave-pythonic-main.tar.gz"
@@ -295,7 +294,7 @@ jobs:
   ubuntu-latest_ootb:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Octave, Python and SymPy
         run: |
           uname -a
@@ -318,10 +317,11 @@ jobs:
           octave --eval "pkg uninstall symbolic; pkg list"
 
 
-  ubuntu2204_pip_sympy:
-    runs-on: ubuntu-22.04
+  # Make sure recent Ubuntu LTS works OOTB
+  ubuntu2404_pip_sympy:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Octave and Python
         run: |
           uname -a
@@ -329,10 +329,10 @@ jobs:
           sudo apt-get install --no-install-recommends -y octave python3 python3-pip
           octave --version
           python3 --version
-          pip3 --version
+          pip --version
       - name: Install SymPy from pip
         run: |
-          pip3 install sympy
+          pip install --break-system-packages sympy
           python3 -c "import sympy; print(sympy.__version__)"
       - name: Install package, verify
         run: |
@@ -377,7 +377,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install packages from MSYS2
         uses: msys2/setup-msys2@v2

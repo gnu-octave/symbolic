@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2019-2020, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2019-2020, 2022, 2025 Colin B. Macdonald
 %% Copyright (C) 2017 Mike Miller
 %%
 %% This file is part of OctSymPy.
@@ -33,10 +33,10 @@ function [A, db] = python_ipc_driver(what, cmd, varargin)
 
   %% version check
   if exist('OCTAVE_VERSION', 'builtin')
-    if (compare_versions (OCTAVE_VERSION (), '5.1', '<'))
+    if (compare_versions (OCTAVE_VERSION (), '7.1', '<'))
       fprintf(['\n********************************************************************\n' ...
                'Your Octave version is %s but Octsympy is currently untested on\n' ...
-               'anything before 5.1.\n\n'], OCTAVE_VERSION ())
+               'anything before 7.1.\n\n'], OCTAVE_VERSION ())
       warning('Old Octave version detected: probably trouble ahead!')
       fprintf('\n********************************************************************\n\n')
       fflush(stdout);

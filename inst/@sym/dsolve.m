@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022, 2025 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2020 Rafael Laboissière
 %% Copyright (C) 2020 Jing-Chen Peng
@@ -119,14 +119,12 @@
 %%        x = ...
 %%        y = ...
 %%
-%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.5.1")'))
 %% soln.x
 %%   @result{} ans =
 %%       (sym)
 %%               -2⋅t       2⋅t
 %%         - C₁⋅ℯ     + C₂⋅ℯ
 %%
-%% @c doctest: +SKIP_IF(pycall_sympy__ ('return Version(spver) <= Version("1.5.1")'))
 %% soln.y
 %%   @result{} ans =
 %%       (sym)
@@ -354,7 +352,6 @@ end
 
 %!test
 %! % forcing, Issue #183, broken in older sympy
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.7.1")'))
 %! syms x(t) y(t)
 %! ode1 = diff(x) == x + sin(t) + 2;
 %! ode2 = diff(y) == y - t - 3;
@@ -363,7 +360,6 @@ end
 %! Y = soln.y;
 %! assert (isequal (diff(X) - (X + sin(t) + 2), 0))
 %! assert (isequal (diff(Y) - (Y - t - 3), 0))
-%! end
 
 %!test
 %! syms f(x) a b
@@ -395,7 +391,6 @@ end
 
 %!test
 %! % array of ICs, Issue #1040.
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.7.1")'))
 %! syms x(t) y(t) z(t)
 %! syms x_0 y_0 z_0
 %! diffEqns = [diff(x, t) == -x + 1, diff(y, t) == -y, diff(z, t) == -z];
@@ -404,4 +399,3 @@ end
 %! soln = [soln.x, soln.y, soln.z];
 %! exact_soln = [(x_0 - 1)*exp(-t) + 1  y_0*exp(-t)  z_0*exp(-t)];
 %! assert (isequal (soln, exact_soln))
-%! end
