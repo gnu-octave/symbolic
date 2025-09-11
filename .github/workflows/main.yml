@@ -317,8 +317,9 @@ jobs:
           octave --eval "pkg uninstall symbolic; pkg list"
 
 
-  ubuntu2204_pip_sympy:
-    runs-on: ubuntu-22.04
+  # Make sure recent Ubuntu LTS works OOTB
+  ubuntu2404_pip_sympy:
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Install Octave and Python
@@ -331,7 +332,7 @@ jobs:
           pip --version
       - name: Install SymPy from pip
         run: |
-          pip install sympy
+          pip install --break-system-packages sympy
           python3 -c "import sympy; print(sympy.__version__)"
       - name: Install package, verify
         run: |
