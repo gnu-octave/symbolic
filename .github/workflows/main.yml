@@ -144,17 +144,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        octave: [7.1.0, 7.2.0, 7.3.0]
-        sympy: [1.13.3]
+        octave: [8.1.0, 8.2.0, 8.3.0, 8.4.0]
+        sympy: [1.14.0]
         include:
-          - octave: 8.4.0
-            sympy: 1.14.0
-          - octave: 8.3.0
-            sympy: 1.14.0
-          - octave: 8.2.0
-            sympy: 1.14.0
-          - octave: 8.1.0
-            sympy: 1.14.0
+          - octave: 7.3.0
+            sympy: 1.13.3
+          - octave: 7.2.0
+            sympy: 1.13.3
+          - octave: 7.1.0
+            sympy: 1.13.3
     steps:
       - uses: actions/checkout@v5
       - name: Container setup
