@@ -41,8 +41,17 @@
 %%   @result{} 0.5000
 %% @end group
 %% @end example
-%% As of 2023, this numerical evaluation function is in a state of flux
+%% As of 2026, this numerical evaluation function is in a state of flux
 %% about which one it takes, @pxref{@@sym/bernoulli}.
+%% With a sufficiently recent @code{mpmath} library, we use the definition
+%% with positive one half:
+%% @example
+%% @group
+%% @c doctest: +XFAIL_UNLESS(pycall_sympy__ ('return Version(mpmath.__version__) >= Version("1.4.0")'))
+%% bernoulli (1)
+%%   @result{} 0.5000
+%% @end group
+%% @end example
 %%
 %% Polynomial example:
 %% @example
@@ -65,7 +74,19 @@ function y = bernoulli (m, x)
   end
 
   if (nargin == 1)
-    x = 0;
+    cmd = { 'L = _ins[0]'
+            'if Version(mpmath.__version__) >= Version("1.4.0"):'
+            '    A = [complex(mpmath.bernoulli(n, plus=True)) for n in L]'
+            'else:'
+            '    A = [complex(mpmath.bernoulli(n)) for n in L]'
+            'return A,' };
+    c = pycall_sympy__ (cmd, num2cell(m(:)));
+    assert (numel (c) == numel (m))
+    y = m;
+    for i = 1:numel (c)
+      y(i) = c{i};
+    end
+    return
   end
 
   if (isequal (size (m), size (x)) || isscalar (m))
@@ -102,9 +123,11 @@ end
 %! % two different definitions in literature
 %! assert (abs (bernoulli (1)), 0.5, -eps)
 
-%!xtest
+%!test
 %! % we want to use B_1 = 1/2, possible with a version-specific filter
+%! if pycall_sympy__ ('return Version(mpmath.__version__) >= Version("1.4.0")')
 %! assert (bernoulli (1), 0.5, -eps)
+%! endif
 
 %!test
 %! n = sym(88);
