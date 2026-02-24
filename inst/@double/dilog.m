@@ -1,4 +1,4 @@
-%% Copyright (C) 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2016, 2019, 2026 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -82,8 +82,10 @@ end
 %! B = dilog (x);
 %! assert (A, B, -eps)
 
-%!xtest
+%!test
 %! % https://github.com/fredrik-johansson/mpmath/issues/473
+%! if pycall_sympy__ ('return Version(mpmath.__version__) >= Version("1.4.0")')
 %! assert (isinf (dilog (inf)))
+%! endif
 
 %!assert (isnan (dilog (-inf)))

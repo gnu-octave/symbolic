@@ -1,5 +1,5 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2018-2019, 2022-2024 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022-2024, 2026 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -132,10 +132,12 @@ end
 %!test
 %! assert (isequal (bernoulli (4, inf), inf))
 %! assert (isequal (bernoulli (4, -inf), inf))
-%!xtest
-%! % still broken?
+
+%!test
+%! if pycall_sympy__ ('return Version(mpmath.__version__) >= Version("1.4.0")')
 %! assert (isequal (bernoulli (3, inf), inf))
 %! assert (isequal (bernoulli (3, -inf), -inf))
+%! endif
 
 %!test
 %! assert (isnan (bernoulli(3, nan)))

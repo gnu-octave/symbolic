@@ -1,5 +1,5 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2018-2019, 2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2018-2019, 2022, 2024, 2026 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -130,9 +130,13 @@ end
 %! B = double (chebyshevT (t, y));
 %! assert (A, B, -eps);
 
-%!xtest
+%!test
 %! % https://github.com/fredrik-johansson/mpmath/issues/469
+%! if pycall_sympy__ ('return Version(mpmath.__version__) >= Version("1.4.0")')
 %! assert (chebyshevT (4, inf), inf)
-%! assert (chebyshevT (4, -inf), inf)
 %! assert (chebyshevT (3, inf), inf)
+%! endif
+
+%!xtest
+%! assert (chebyshevT (4, -inf), inf)
 %! assert (chebyshevT (3, -inf), -inf)
