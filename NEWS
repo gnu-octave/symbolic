@@ -1,6 +1,9 @@
 octsympy 3.2.2+ (unreleased)
 ============================
 
+  * Misc minor changes and updates.
+
+  * Dropped suppor for Octave 6 and old SymPy and mpmath.
 
 
 
