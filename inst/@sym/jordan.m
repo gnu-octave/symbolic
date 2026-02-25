@@ -1,5 +1,5 @@
 %% Copyright (C) 2016 Alex Vong
-%% Copyright (C) 2017-2019 Colin B. Macdonald
+%% Copyright (C) 2017-2019, 2026 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -135,13 +135,24 @@ end
 %! A = sym ([2 1 0 0; 0 2 1 0; 0 0 3 0; 0 1 -1 3]);
 %! [V, J] = jordan (A);
 %! assert (isequal (inv (V) * A * V, J));
-%! assert (isequal (J, sym ([2 1 0 0; 0 2 0 0; 0 0 3 0; 0 0 0 3])))
-%! % the first 2 generalized eigenvectors form a cycle
-%! assert (isequal ((A - J(1, 1) * eye (4)) * V(:, 1), zeros (4, 1)));
-%! assert (isequal ((A - J(2, 2) * eye (4)) * V(:, 2), V(:, 1)));
-%! % the last 2 generalized eigenvectors are eigenvectors
-%! assert (isequal ((A - J(3, 3) * eye (4)) * V(:, 3), zeros (4, 1)));
-%! assert (isequal ((A - J(4, 4) * eye (4)) * V(:, 4), zeros (4, 1)));
+%! % it might give J1 or J2: either answer is ok.
+%! J1 = sym ([2 1 0 0; 0 2 0 0; 0 0 3 0; 0 0 0 3]);
+%! J2 = sym ([3 0 0 0; 0 3 0 0; 0 0 2 1; 0 0 0 2]);
+%! assert (isequal (J, J1) | isequal (J, J2))
+%! if (isequal (J, J1))
+%!   % the first 2 generalized eigenvectors form a cycle
+%!   assert (isequal ((A - J(1, 1) * eye (4)) * V(:, 1), zeros (4, 1)));
+%!   assert (isequal ((A - J(2, 2) * eye (4)) * V(:, 2), V(:, 1)));
+%!   % the last 2 generalized eigenvectors are eigenvectors
+%!   assert (isequal ((A - J(3, 3) * eye (4)) * V(:, 3), zeros (4, 1)));
+%!   assert (isequal ((A - J(4, 4) * eye (4)) * V(:, 4), zeros (4, 1)));
+%! else
+%!   % opposite order as above
+%!   assert (isequal ((A - J(1, 1) * eye (4)) * V(:, 1), zeros (4, 1)));
+%!   assert (isequal ((A - J(2, 2) * eye (4)) * V(:, 2), zeros (4, 1)));
+%!   assert (isequal ((A - J(3, 3) * eye (4)) * V(:, 3), zeros (4, 1)));
+%!   assert (isequal ((A - J(4, 4) * eye (4)) * V(:, 4), V(:, 3)));
+%! end
 
 %!test
 %! % scalars
@@ -153,8 +164,10 @@ end
 %! A = diag (sym ([6 6 7]));
 %! [V1, D] = eig (A);
 %! [V2, J] = jordan (A);
-%! assert (isequal (V1, V2));
-%! assert (isequal (D, J));
+%! assert (isequal (A*V2, V2*J));
+%! assert (isequal (V1 * V1', sym (eye (3))))
+%! assert (isequal (V2 * V2', sym (eye (3))))
+%! assert (isempty (setdiff (diag (D), diag (J))))
 
 %!test
 %! % matrices of unknown entries

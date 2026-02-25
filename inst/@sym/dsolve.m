@@ -1,4 +1,4 @@
-%% Copyright (C) 2014-2016, 2018-2019, 2022, 2025 Colin B. Macdonald
+%% Copyright (C) 2014-2016, 2018-2019, 2022, 2025-2026 Colin B. Macdonald
 %% Copyright (C) 2014-2015 Andrés Prieto
 %% Copyright (C) 2020 Rafael Laboissière
 %% Copyright (C) 2020 Jing-Chen Peng
@@ -306,17 +306,22 @@ end
 %! ode1 = diff(x(t),t) == 2*y(t);
 %! ode2 = diff(y(t),t) == 2*x(t);
 %! soln = dsolve([ode1, ode2]);
+%! X = soln.x;
+%! Y = soln.y;
 %! soln = [soln.x, soln.y];
+%! % check its a soln
+%! assert (isequal (simplify (diff (X, t) - 2*Y), sym(0)))
 %! g1 = [C1*exp(-2*t) + C2*exp(2*t), -C1*exp(-2*t) + C2*exp(2*t)];
 %! g2 = [C1*exp(2*t) + C2*exp(-2*t), C1*exp(2*t) - C2*exp(-2*t)];
 %! g3 = [-C1*exp(-2*t) + C2*exp(2*t), C1*exp(-2*t) + C2*exp(2*t)];
 %! g4 = [C1*exp(2*t) - C2*exp(-2*t), C1*exp(2*t) + C2*exp(-2*t)];
 %! % old SymPy <= 1.5.1 had some extra twos
-%! g5 = [2*C1*exp(-2*t) + 2*C2*exp(2*t), -2*C1*exp(-2*t) + 2*C2*exp(2*t)];
-%! g6 = [2*C1*exp(2*t) + 2*C2*exp(-2*t), 2*C1*exp(2*t) - 2*C2*exp(-2*t)];
+%! % new SymPy >= 1.15.0 also has extra twos
+%! % so also try dividing by two
 %! assert (isequal (soln, g1) || isequal (soln, g2) || ...
 %!         isequal (soln, g3) || isequal (soln, g4) || ...
-%!         isequal (soln, g5) || isequal (soln, g6))
+%!         isequal (soln/2, g1) || isequal (soln/2, g2) ||
+%!         isequal (soln/2, g3) || isequal (soln/2, g4))
 
 %!test
 %! % System of ODEs (initial-value problem)
