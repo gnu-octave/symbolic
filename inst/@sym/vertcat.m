@@ -1,5 +1,6 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2014-2017, 2019, 2024 Colin B. Macdonald
+%% Copyright (C) 2014-2017, 2019, 2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -44,23 +45,27 @@ function h = vertcat(varargin)
 
   % special case for 0x0 but other empties should be checked for
   % compatibility
-  cmd = {
-          '_proc = []'
-          'for i in _ins:'
-          '    if i is None or not i.is_Matrix:'
-          '        _proc.append(sp.Matrix([[i]]))'
-          '    else:'
-          '        if i.shape == (0, 0):'
-          '            pass'
-          '        else:'
-          '            _proc.append(i)'
-          'return sp.MatrixBase.vstack(*_proc),'
-          };
+  cmd = {'def is_matrix_or_array(x):'
+         '    return isinstance(x, (MatrixBase, NDimArray))'
+         'def number_of_columns(x):'
+         '    return x.shape[1] if is_matrix_or_array(x) else 1'
+         'def number_of_rows(x):'
+         '    return x.shape[0] if is_matrix_or_array(x) else 1'
+         'def all_equal(*ls):'
+         '    return True if ls == [] else all(ls[0] == x for x in ls[1:])'
+         'args = [x for x in _ins if x != zeros(0, 0)] # remove 0x0 matrices'
+         'ncols = [number_of_columns(x) for x in args]'
+         'nrows = [number_of_rows(x) for x in args]'
+         'if not all_equal(*ncols):'
+         '    msg = "vertcat: all inputs must have the same number of columns"'
+         '    raise ShapeError(msg)'
+         'ncol = 0 if not ncols else ncols[0]'
+         'CCC = [flatten(x, levels=1) if is_matrix_or_array(x) else [x] for x in args]'
+         'CC = flatten(CCC, levels=1)'
+         'return _make_2d_sym(CC, shape=(sum(nrows), ncol))' };
 
-  for i = 1:nargin
-    varargin{i} = sym(varargin{i});
-  end
-  h = pycall_sympy__ (cmd, varargin{:});
+  args = cellfun (@sym, varargin, 'UniformOutput', false);
+  h = pycall_sympy__ (cmd, args{:});
 
 end
 
@@ -120,12 +125,6 @@ end
 %! a = [v; []; []];
 %! assert (isequal (a, v))
 
-%!xtest
-%! % FIXME: is this Octave bug? worth worrying about
-%! syms x
-%! a = [x; [] []];
-%! assert (isequal (a, x))
-
 %!test
 %! % more empty vectors
 %! v = [sym(1) sym(2)];
@@ -136,6 +135,25 @@ end
 %! v = [sym(1) sym(2)];
 %! q = sym(ones(0, 3));
 %! w = vertcat(v, q);
+
+%!error <ShapeError>
+%! z03 = sym (zeros (0, 3));
+%! z04 = sym (zeros (0, 4));
+%! % Note Issue #1238: unclear error message:
+%! % [z03; z04];
+%! % but this gives the ShapeError
+%! vertcat(z03, z04);
+
+%!test
+%! % special case for the 0x0 empty: no error
+%! z00 = sym (zeros (0, 0));
+%! z03 = sym (zeros (0, 3));
+%! [z00; z03];
+
+%!test
+%! syms x
+%! a = [x; sym([]) []];
+%! assert (isequal (a, x))
 
 %!test
 %! % Octave 3.6 bug: should pass on 3.8.1 and matlab
@@ -154,3 +172,18 @@ end
 %! A = sym ([1 2]);
 %! B = simplify (A);
 %! assert (isequal ([B; A], [A; B]))
+
+%!test
+%! % issue #1236, correct empty sizes
+%! syms x
+%! z00 = sym (zeros (0, 0));
+%! z30 = sym (zeros (3, 0));
+%! z40 = sym (zeros (4, 0));
+%! z03 = sym (zeros (0, 3));
+%! assert (size ([z00; z00]), [0 0])
+%! assert (size ([z00; z30]), [3 0])
+%! assert (size ([z30; z30]), [6 0])
+%! assert (size ([z30; z40]), [7 0])
+%! assert (size ([z30; z00; z30]), [6 0])
+%! assert (size ([z03; z03]), [0 3])
+%! assert (size ([z03; z03; z03]), [0 3])
