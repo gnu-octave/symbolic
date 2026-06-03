@@ -30,7 +30,7 @@ function assert_pythonic_and_sympy (verbose)
 
   % Ubuntu 20.04: 1.5.1, EOL Apr 2025
   % Ubuntu 22.04: 1.9, EOL Apr 2027
-  minsympyver = '1.5.1';
+  minsympyver = '1.9';
 
   if (nargin < 1)
     verbose = false;
