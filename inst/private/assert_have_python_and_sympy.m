@@ -1,4 +1,4 @@
-%% Copyright (C) 2016-2019, 2022-2024 Colin B. Macdonald
+%% Copyright (C) 2016-2019, 2022-2024, 2026 Colin B. Macdonald
 %% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -35,6 +35,7 @@ function assert_have_python_and_sympy (pyexec, verbose)
   % Fedora 41: 1.13.3
   % Fedora 42: 1.14.0
   % RHEL 8 via Fedora EPEL 10.1: 1.14.0
+  % Note: this is repeated in `assert_pythonic_and_sympy.m`: make sure you change both
   minsympyver = '1.9';
 
   if (nargin < 2)

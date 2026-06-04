@@ -1,5 +1,5 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2019, 2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2019, 2022, 2024, 2026 Colin B. Macdonald
 %% Copyright (C) 2022-2023 Alex Vong
 %%
 %% This file is part of OctSymPy.
@@ -28,8 +28,7 @@
 
 function assert_pythonic_and_sympy (verbose)
 
-  % Ubuntu 20.04: 1.5.1, EOL Apr 2025
-  % Ubuntu 22.04: 1.9, EOL Apr 2027
+  % Note: this is repeated in `assert_have_python_and_sympy.m`: make sure you change both
   minsympyver = '1.9';
 
   if (nargin < 1)
