@@ -97,19 +97,19 @@
 %% @end example
 %%
 %% Some systems can be solved, including initial-value problems
-%% involving linear systems of first order ODEs with constant
+%% involving linear systems of first-order ODEs with constant
 %% coefficients:
 %% @example
 %% @group
 %% syms x(t) y(t)
-%% ode_sys = [diff(x(t),t) == 2*y(t);  diff(y(t),t) == 2*x(t)]
+%% ode_sys = [diff(x(t),t) == 5*y(t);  diff(y(t),t) == 5*x(t)]
 %%   @result{} ode_sys = (sym 2×1 matrix)
 %%       ⎡d                ⎤
-%%       ⎢──(x(t)) = 2⋅y(t)⎥
+%%       ⎢──(x(t)) = 5⋅y(t)⎥
 %%       ⎢dt               ⎥
 %%       ⎢                 ⎥
 %%       ⎢d                ⎥
-%%       ⎢──(y(t)) = 2⋅x(t)⎥
+%%       ⎢──(y(t)) = 5⋅x(t)⎥
 %%       ⎣dt               ⎦
 %% @end group
 %%
@@ -118,18 +118,26 @@
 %%   @result{} soln = scalar structure containing ...
 %%        x = ...
 %%        y = ...
+%% @end group
+%%
+%% @group
+%% soln = dsolve (ode_sys, [x(0) == 1, y(0) == 3])
+%%   @result{} soln = scalar structure containing ...
+%%        x = ...
+%%        y = ...
 %%
 %% soln.x
 %%   @result{} ans =
 %%       (sym)
-%%               -2⋅t       2⋅t
-%%         - C₁⋅ℯ     + C₂⋅ℯ
+%%            5⋅t    -5⋅t
+%%         2⋅ℯ    - ℯ
 %%
 %% soln.y
 %%   @result{} ans =
 %%       (sym)
-%%             -2⋅t       2⋅t
-%%         C₁⋅ℯ     + C₂⋅ℯ
+%%            5⋅t    -5⋅t
+%%         2⋅ℯ    + ℯ
+%%
 %% @end group
 %% @end example
 %%
