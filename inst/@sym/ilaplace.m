@@ -1,6 +1,6 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2018-2019, 2022-2024 Colin Macdonald
+%% Copyright (C) 2015-2016, 2018-2019, 2022-2024, 2026 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -62,6 +62,19 @@
 %% ilaplace(1/s^2, s, t)
 %%   @result{} (sym) t
 %% @end group
+%% @end example
+%%
+%% If the underlying SymPy library is new enough,
+%% more abstract expressions can be transformed:
+%% @example
+%% syms s y(t)
+%% A = s*laplace (y(t), t, s) - y(0);
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
+%% ilaplace (A)
+%%   @result{} (sym)
+%%       d
+%%       ──(y(t))
+%%       dt
 %% @end example
 %%
 %% By default the output is a function of @code{t} (or @code{x} if the
@@ -209,3 +222,23 @@ end
 %! syms s real
 %! syms x t
 %! assert (isequal (ilaplace (x/s^2, t), x*t*heaviside(t)))
+
+%!test
+%! % first derivative round-trip
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
+%! syms t positive
+%! syms s f(t)
+%! A = laplace (diff (f));
+%! B = ilaplace (A);
+%! assert (isequal (B, diff (f(t))))
+%! end
+
+%!test
+%! % second derivative round-trip
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
+%! syms t positive
+%! syms s f(t)
+%! A = laplace (diff (f(t), 2));
+%! B = ilaplace (A);
+%! assert (isequal (B, diff (f(t), 2)))
+%! end

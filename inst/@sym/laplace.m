@@ -1,6 +1,6 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
 %% Copyright (C) 2014-2016 Andrés Prieto
-%% Copyright (C) 2015-2016, 2019, 2024 Colin Macdonald
+%% Copyright (C) 2015-2016, 2019, 2024, 2026 Colin Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -56,6 +56,21 @@
 %% @end group
 %% @end example
 %%
+%% You can take the Laplace transform of an abstract function:
+%% @example
+%% syms y(t)
+%% laplace (y(t))
+%%   @result{} (sym) LaplaceTransform(y(t), t, s)
+%% @end example
+%%
+%% The Laplace transform of a derivative results in an
+%% algebraic expression in the transformed function:
+%% @example
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
+%% laplace (diff (y(t)))
+%%   @result{} (sym) s⋅LaplaceTransform(y(t), t, s) - y(0)
+%% @end example
+%%
 %% By default the output is a function of @code{s} (or @code{z} if the Laplace
 %% transform happens to be with respect to @code{s}).  This can be overridden
 %% by specifying @var{s}.  For example:
@@ -101,7 +116,6 @@
 function F = laplace(varargin)
 
   % FIXME: it only works for scalar functions
-  % FIXME: it doesn't handle diff call (see SMT transform of diff calls)
 
   f = sym(varargin{1});
   if (nargin == 1 || nargin == 2)
@@ -210,11 +224,12 @@ end
 %! assert (isequal (laplace(dirac(t-3)), exp(-3*s)))
 %! assert (isequal (laplace((t-3)*heaviside(t-3)), exp(-3*s)/s^2))
 
-%!xtest
+%!test
 %! % Differential operator to algebraic
-%! % SymPy cannot evaluate? (Issue #170)
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
 %! syms s f(t)
-%! assert(logical( laplace(diff(f(t),t),t,s) == s*laplace(f(t),t,s)-f(0) ))
+%! assert (logical (laplace (diff (f(t),t),t,s) == s*laplace (f(t),t,s) - f(0) ))
+%! end
 
 %!test
 %! % https://github.com/gnu-octave/symbolic/issues/1295
