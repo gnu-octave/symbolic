@@ -66,6 +66,7 @@
 %% The Laplace transform of a derivative results in an
 %% algebraic expression in the transformed function:
 %% @example
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
 %% laplace (diff (y(t)))
 %%   @result{} (sym) s⋅LaplaceTransform(y(t), t, s) - y(0)
 %% @end example
@@ -225,7 +226,7 @@ end
 
 %!test
 %! % Differential operator to algebraic
-%! if (pycall_sympy__ ('return Version(spver) >= Version("1.10.1")'))
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.12")'))
 %! syms s f(t)
 %! assert (logical (laplace (diff (f(t),t),t,s) == s*laplace (f(t),t,s) - f(0) ))
 %! end

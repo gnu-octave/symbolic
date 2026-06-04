@@ -64,10 +64,12 @@
 %% @end group
 %% @end example
 %%
-%% More abstract expressions can be transformed:
+%% If the underlying SymPy library is new enough,
+%% more abstract expressions can be transformed:
 %% @example
 %% syms s y(t)
 %% A = s*laplace (y(t), t, s) - y(0);
+%% @c doctest: +SKIP_UNLESS(pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
 %% ilaplace (A)
 %%   @result{} (sym)
 %%       d
@@ -223,14 +225,20 @@ end
 
 %!test
 %! % first derivative round-trip
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
 %! syms t positive
 %! syms s f(t)
 %! A = laplace (diff (f));
-%! assert (isequal (ilaplace (A), diff (f(t))))
+%! B = ilaplace (A);
+%! assert (isequal (B, diff (f(t))))
+%! end
 
 %!test
 %! % second derivative round-trip
+%! if (pycall_sympy__ ('return Version(spver) >= Version("1.15.0")'))
 %! syms t positive
 %! syms s f(t)
 %! A = laplace (diff (f(t), 2));
-%! assert (isequal (ilaplace (A), diff (f(t), 2)))
+%! B = ilaplace (A);
+%! assert (isequal (B, diff (f(t), 2)))
+%! end
