@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -51,18 +52,21 @@ function B = repmat(A, n, m)
     print_usage ();
   end
 
-  cmd = { '(A, n, m) = _ins'
-          'if n == 0 or m == 0:'
-          '    return sp.Matrix(n, m, [])'
-          'if A is None or not A.is_Matrix:'
-          '    A = sp.Matrix([A])'
-          'L = [A]*m'
-          'B = sp.Matrix.hstack(*L)'
-          'L = [B]*n'
-          'B = sp.Matrix.vstack(*L)'
-          'return B' };
+  if n == 0 || m == 0
+    [nrows_A, ncols_A] = size (A);
+    B = sym (zeros (n * nrows_A, m * ncols_A));
+    return
+  end
 
-  B = pycall_sympy__ (cmd, sym(A), int32(n), int32(m));
+  %% duplicate A horizontally m times
+  MM = cellfun (@(varargin) A, cell (1, m), 'UniformOutput', false);
+  M = horzcat (MM{:});
+
+  %% now duplicate that result vertically n times
+  NN = cellfun (@(varargin) M, cell (1, n), 'UniformOutput', false);
+  N = vertcat (NN{:});
+
+  B = N;
 
 end
 
@@ -95,3 +99,11 @@ end
 %! assert (isequal (size(A), [0 3]))
 %! A = repmat(sym(pi), [2 0]);
 %! assert (isequal (size(A), [2 0]))
+
+%!test
+%! % even more empties, see also https://github.com/cbm755/octsympy/issues/1218
+%! A = randi (16, 5, 7);
+%! assert (isa (repmat (sym (A), [0 3]), 'sym'));
+%! assert (isa (repmat (sym (A), [2 0]), 'sym'));
+%! assert (isequal (sym (repmat (A, [0 3])), (repmat (sym (A), [0 3]))));
+%! assert (isequal (sym (repmat (A, [2 0])), (repmat (sym (A), [2 0]))));

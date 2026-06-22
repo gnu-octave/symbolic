@@ -3,6 +3,7 @@
 %% Copyright (C) 2016 Abhinav Tripathi
 %% Copyright (C) 2017 NVS Abhilash
 %% Copyright (C) 2020 Fernando Alvarruiz
+%% Copyright (C) 2022 Alex Vong
 %%
 %% This file is part of OctSymPy.
 %%
@@ -161,7 +162,8 @@ function z = delete_col(A, subs)
   if isscalar (A)
     z = sym(zeros (1, 0));
   else
-    cmd = { 'A, subs = _ins'
+    cmd = { 'AA, subs = _ins'
+            'A = AA.as_mutable()'
             'if isinstance(subs, Integer):'
             '    A.col_del(subs - 1)'
             '    return A,'
@@ -178,7 +180,8 @@ function z = delete_row(A, subs)
     % no test coverage: not sure how to hit this
     z = sym(zeros (0, 1));
   else
-    cmd = { 'A, subs = _ins'
+    cmd = { 'AA, subs = _ins'
+            'A = AA.as_mutable()'
             'if isinstance(subs, Integer):'
             '    A.row_del(subs - 1)'
             '    return A,'

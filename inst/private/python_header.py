@@ -155,7 +155,7 @@ try:
             f.text = str(OCTCODE_BOOL)
             f = ET.SubElement(a, "f")
             f.text = str(x)
-        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase)):
+        elif x is None or isinstance(x, (sp.Basic, sp.MatrixBase, sp.NDimArray)):
             # FIXME: is it weird to pretend None is a SymPy object?
             if isinstance(x, (sp.Matrix, sp.ImmutableMatrix)):
                 _d = x.shape
@@ -164,6 +164,9 @@ try:
                 _d = [float(r) if (isinstance(r, sp.Basic) and r.is_Integer)
                       else float('nan') if isinstance(r, sp.Basic)
                       else r for r in x.shape]
+            elif isinstance(x, sp.NDimArray):
+                _d = x.shape
+                dbout(f"I am here with an array with shape {_d}")
             elif x is None:
                 _d = (1,1)
             else:
@@ -237,6 +240,49 @@ try:
             raise ValueError("octoutput does not know how to export type " + str(type(x)))
 except:
     echo_exception_stdout("in python_header defining fcns block 4")
+    raise
+
+
+try:
+    def make_2d_sym(it_of_it, dbg_matrix_only=False):
+        # should be kept in sync with the same function
+        # defined in inst/private/python_ipc_native.m
+        # FIXME: dbg_matrix_only is used for debugging, remove
+        # it once sympy drops non-Expr support in Matrix
+        """
+        Given an iterable of iterables of syms IT_OF_IT.
+        If all elements of IT_OF_IT are Expr, construct the
+        corresponding Matrix. Otherwise, construct the
+        corresponding non-Matrix 2D sym.
+        """
+        ls_of_ls = [[elt for elt in it] for it in it_of_it]
+        elts = flatten(ls_of_ls, levels=1)
+        if Version(spver) <= Version("1.11.1"):
+            # never use Array on older SymPy
+            dbg_matrix_only = True
+        if (dbg_matrix_only
+            or all(isinstance(elt, Expr) for elt in elts)):
+            return Matrix(ls_of_ls)
+        else:
+            dbout(f"make_2d_sym: constructing 2D sym...")
+            return Array(ls_of_ls)
+    def _make_2d_sym(flat, shape, dbg_matrix_only=False):
+        """
+        If all elements of FLAT are Expr, construct the
+        corresponding Matrix. Otherwise, construct the
+        corresponding non-Matrix 2D sym.
+        """
+        flat = list(flat)
+        if Version(spver) <= Version("1.11.1"):
+            # never use Array on older SymPy
+            dbg_matrix_only = True
+        if (dbg_matrix_only
+            or all(isinstance(elt, Expr) for elt in flat)):
+            return Matrix(*shape, flat)
+        dbout(f"make_2d_sym: constructing 2D sym...")
+        return Array(flat, shape)
+except:
+    echo_exception_stdout("in python_header defining fcns block 5")
     raise
 # end of python header, now couple blank lines
 

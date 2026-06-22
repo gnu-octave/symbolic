@@ -1,4 +1,4 @@
-%% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2014, 2016, 2019, 2022 Colin B. Macdonald
 %%
 %% This file is part of OctSymPy.
 %%
@@ -75,9 +75,10 @@ function z = reshape(a, n, m)
 
   cmd = {
       '(A, n, m) = _ins'
-      'if A is not None and A.is_Matrix:'
-      '    #sympy is row-based'
-      '    return A.T.reshape(m,n).T'
+      'if isinstance(A, (MatrixBase, NDimArray)):'
+      '    #sympy is row-based, but Array does not have .T'
+      '    #return A.T.reshape(m,n).T'
+      '    return transpose(transpose(A).reshape(m, n))'
       'else:'
       '    if n != 1 or m != 1:'
       '        raise ValueError("cannot reshape scalar to non-1x1 size")'
