@@ -56,4 +56,4 @@ end
 %!test
 %! % issue #1338: trig expansion
 %! syms x y
-%! assert (isequal (expand (cos(x+y)), cos(x)*cos(y) - sin(x)*sin(y)))
+%! assert (isequal (expand (cos (x+y)), cos (x)*cos (y) - sin (x)*sin (y)))
