@@ -1,10 +1,11 @@
-# Copyright (C) 2014-2017, 2019, 2021-2024 Colin B. Macdonald
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2014-2017, 2019, 2021-2024, 2026 Colin B. Macdonald
 # Copyright (C) 2019 Mike Miller
 # Copyright (C) 2020 Tianyu Chen (billchenchina)
 # Copyright (C) 2021 Johannes Maria Frank
 # Copyright (C) 2022 Chris Gorman
 # Copyright (C) 2022 Alex Vong
-# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Dmitri A. Sergatskov
 
 # In some cases this code is fed into stdin: two blank lines between
 # try-except blocks, no blank lines within each block.
@@ -27,6 +28,10 @@ def echo_exception_stdout(mystr):
     print("<item>\n<f>1003</f>")
     print("<f>" + exception_str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") + "</f>\n</item>")
     print("</list>\n</output_block>\n")
+    # Python 3.13 and newer do not flush stdout when an exception escapes to
+    # the interactive interpreter, so callers that "raise" after us would
+    # leave this block stuck in the buffer (Octave then waits forever).
+    sys.stdout.flush()
 
 try:
     import sympy
