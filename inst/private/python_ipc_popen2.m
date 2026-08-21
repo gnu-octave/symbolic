@@ -1,7 +1,8 @@
 %% SPDX-License-Identifier: GPL-3.0-or-later
-%% Copyright (C) 2014-2019, 2022, 2024 Colin B. Macdonald
+%% Copyright (C) 2014-2019, 2022, 2024, 2026 Colin B. Macdonald
 %% Copyright (C) 2018, 2020 Mike Miller
 %% Copyright (C) 2022 Alex Vong
+%% Copyright (C) 2026 Dmitri A. Sergatskov
 %%
 %% This file is part of OctSymPy.
 %%
@@ -87,7 +88,11 @@ function [A, info] = python_ipc_popen2(what, cmd, varargin)
     assert_have_python_and_sympy (pyexec)
 
     % formatting matters
-    args = {'-i', '-c', 'import sys; sys.ps1=''''; sys.ps2='''''};
+    % '-u': unbuffered stdout: since Python 3.13, the interactive
+    % interpreter does not flush stdout when an exception escapes to
+    % the top level, so an output block could sit in the child's
+    % buffer while we wait forever for it (Issue: pipe deadlock).
+    args = {'-u', '-i', '-c', 'import sys; sys.ps1=''''; sys.ps2='''''};
     [fin, fout, pid] = popen2 (pyexec, args);
     fflush (stdout);
 
