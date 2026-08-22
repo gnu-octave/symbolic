@@ -1,4 +1,5 @@
 %% Copyright (C) 2014, 2016, 2019 Colin B. Macdonald
+%% Copyright (C) 2026 Swayam Shah
 %%
 %% This file is part of OctSymPy.
 %%
