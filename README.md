@@ -2,6 +2,8 @@ Symbolic Package for GNU Octave
 ===============================
 
 An implementation of a symbolic toolbox using SymPy.
+A lightweight interface that uses SymPy for symbolic math from Octave — suitable for experimenting with symbolic linear algebra, expressions and simple symbolic workflows.
+
 
 https://octave.sourceforge.io/symbolic
 
@@ -13,6 +15,12 @@ Goals
 -----
 
 Feature parity with the other symbolic toolboxes.
+
+Goals
+- Provide core symbolic functionality (diff, simplify, solve)
+- Maintain clean Python↔Octave communication using SymPy representations
+- Improve test coverage and cross-platform install experience
+
 
 ![Screenshot 1](/screenshot.png)
 
@@ -90,9 +98,13 @@ How to hack on the code:
 1.  Clone the repo with git (preferred, but you can use the "Download
     ZIP" instead if you want).
 
-2.  Run Octave in the `inst/` directory.  It should be safe
-    to do this even if you have the released version of the package
-    installed (but not loaded).
+2. Run Octave from the `inst/` directory so that Octave uses the package
+   source directly instead of an installed version. For example:
+
+   ```sh
+   cd symbolic/inst
+   octave
+
 
 
 
