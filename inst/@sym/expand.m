@@ -38,7 +38,7 @@
 
 function y = expand(x)
 
-  y = pycall_sympy__ ( 'return sympy.expand(*_ins),', sym(x));
+  y = pycall_sympy__ ( 'return sympy.expand(*_ins, trig=True),', sym(x));
 
 end
 
@@ -52,3 +52,8 @@ end
 %! % array
 %! syms x
 %! assert (isequal (expand ([x (x+1)*x]), [x x^2+x]))
+
+%!test
+%! % issue #1338: trig expansion
+%! syms x y
+%! assert (isequal (expand (cos (x+y)), cos (x)*cos (y) - sin (x)*sin (y)))
